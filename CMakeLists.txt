@@ -1,0 +1,9 @@
+cmake_minimum_required(VERSION 3.5)
+project(amo_library)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+set(SOURCE_FILES main.cpp Pump.cpp Pump.h Motor.cpp Motor.h FieldData.cpp FieldData.h Financial.cpp Financial.h calculator/PumpEfficiency.cpp calculator/PumpEfficiency.h calculator/MotorRatedPower.cpp calculator/MotorRatedPower.h calculator/MotorShaftPower.cpp calculator/MotorShaftPower.h calculator/MotorEfficiency.cpp calculator/MotorEfficiency.h calculator/MotorPowerFactor.cpp calculator/MotorPowerFactor.h calculator/MotorCurrent.cpp calculator/MotorCurrent.h calculator/AnnualEnergy.cpp calculator/AnnualEnergy.h calculator/AnnualSavingsPotential.cpp calculator/AnnualSavingsPotential.h calculator/OptimizationRating.cpp calculator/OptimizationRating.h calculator/MotorPower.cpp calculator/MotorPower.h calculator/PSATResult.cpp calculator/PSATResult.h)
+set(LIB_FILES Pump.cpp Pump.h Motor.cpp Motor.h FieldData.cpp FieldData.h Financial.cpp Financial.h calculator/PumpEfficiency.cpp calculator/PumpEfficiency.h calculator/MotorRatedPower.cpp calculator/MotorRatedPower.h calculator/MotorShaftPower.cpp calculator/MotorShaftPower.h calculator/MotorEfficiency.cpp calculator/MotorEfficiency.h calculator/MotorPowerFactor.cpp calculator/MotorPowerFactor.h calculator/MotorCurrent.cpp calculator/MotorCurrent.h calculator/AnnualEnergy.cpp calculator/AnnualEnergy.h calculator/AnnualSavingsPotential.cpp calculator/AnnualSavingsPotential.h calculator/OptimizationRating.cpp calculator/OptimizationRating.h calculator/MotorPower.cpp calculator/MotorPower.h calculator/PSATResult.cpp calculator/PSATResult.h)
+add_executable(amo_library_cmd_line ${SOURCE_FILES})
+add_library(amo_library SHARED ${LIB_FILES})
