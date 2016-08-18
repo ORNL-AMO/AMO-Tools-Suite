@@ -12,26 +12,26 @@
       <sourceFolder url="file://$MODULE_DIR$/Pump.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/FieldData.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/calculator/PSATResult.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorPower.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/calculator/PumpEfficiency.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/calculator/PSATResult.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorShaftPower.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/AnnualEnergy.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorCurrent.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/OptimizationRating.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorRatedPower.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorPowerFactor.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/calculator/MotorCurrent.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/calculator/PSATResult.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/calculator/PSATResult.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/AnnualSavingsPotential.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorEfficiency.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/AnnualEnergy.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/OptimizationRating.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/calculator/PumpEfficiency.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorEfficiency.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorShaftPower.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorRatedPower.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/PumpEfficiency.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/AnnualSavingsPotential.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/calculator/MotorCurrent.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorPowerFactor.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/calculator/MotorPower.cpp" isTestSource="false" />
     </content>
