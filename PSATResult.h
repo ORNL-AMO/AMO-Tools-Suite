@@ -8,7 +8,7 @@
 class PSATResult {
 
 public:
-    PSATResult() { }
+    PSATResult() = default;
 
     struct result_ {
         double pumpEfficiency_;

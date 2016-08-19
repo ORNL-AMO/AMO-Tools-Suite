@@ -12,54 +12,19 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f1ea0d3f-1a8a-404e-b3f7-bfb138bf4d7f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/AnnualCost.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/AnnualCost.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/AnnualEnergy.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorCurrent.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorCurrent.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorEfficiency.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorEfficiency.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorPower.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorPower.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorPowerFactor.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorPowerFactor.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorRatedPower.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorRatedPower.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorShaftPower.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalMotorShaftPower.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalPumpEfficiency.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalPumpEfficiency.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalPumpShaftPower.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/OptimalPumpShaftPower.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/PumpShaftPower.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/calculator/PumpShaftPower.h" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/calculator/AnnualEnergy.h" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/calculator/AnnualSavingsPotential.cpp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/calculator/AnnualSavingsPotential.h" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/calculator/OptimizationRating.cpp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/calculator/OptimizationRating.h" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/calculator/AnnualEnergy.cpp" afterPath="$PROJECT_DIR$/AnnualEnergy.cpp" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/calculator/PSATResult.cpp" afterPath="$PROJECT_DIR$/PSATResult.cpp" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/calculator/PSATResult.h" afterPath="$PROJECT_DIR$/PSATResult.h" />
+    <list default="true" id="f1ea0d3f-1a8a-404e-b3f7-bfb138bf4d7f" name="Default" comment="Fully stubbed out.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/Debug/amo_library_cmd_line" afterPath="$PROJECT_DIR$/bin/Debug/amo_library_cmd_line" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/Debug/libamo_library.dylib" afterPath="$PROJECT_DIR$/bin/Debug/libamo_library.dylib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/amo-library.iml" afterPath="$PROJECT_DIR$/.idea/amo-library.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FieldData.cpp" afterPath="$PROJECT_DIR$/FieldData.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FieldData.h" afterPath="$PROJECT_DIR$/FieldData.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Financial.cpp" afterPath="$PROJECT_DIR$/Financial.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Financial.h" afterPath="$PROJECT_DIR$/Financial.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Motor.cpp" afterPath="$PROJECT_DIR$/Motor.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Motor.h" afterPath="$PROJECT_DIR$/Motor.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PSATResult.h" afterPath="$PROJECT_DIR$/PSATResult.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pump.cpp" afterPath="$PROJECT_DIR$/Pump.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pump.h" afterPath="$PROJECT_DIR$/Pump.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorCurrent.cpp" afterPath="$PROJECT_DIR$/calculator/MotorCurrent.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorCurrent.h" afterPath="$PROJECT_DIR$/calculator/MotorCurrent.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" afterPath="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorEfficiency.h" afterPath="$PROJECT_DIR$/calculator/MotorEfficiency.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorPower.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPower.h" afterPath="$PROJECT_DIR$/calculator/MotorPower.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" afterPath="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPowerFactor.h" afterPath="$PROJECT_DIR$/calculator/MotorPowerFactor.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorRatedPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorRatedPower.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/PumpEfficiency.h" afterPath="$PROJECT_DIR$/calculator/PumpEfficiency.h" />
     </list>
     <ignored path="amo-library.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -78,25 +43,122 @@
     <favorites_list name="amo-library" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Financial.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Financial.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FieldData.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/FieldData.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="224">
+              <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Motor.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Motor.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" column="22" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OptimizationRating.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/OptimizationRating.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PSATResult.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PSATResult.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AnnualCost.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/AnnualCost.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PSATResult.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PSATResult.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Pump.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Pump.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="37" column="21" selection-start-line="37" selection-start-column="21" selection-end-line="37" selection-end-column="21" />
+              <folding>
+                <element signature="e#104#126#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Pump.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Pump.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Accawi, Gina K &lt;accawigk@ornl.gov&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/calculator/existing/PumpShaftPower.cpp" />
-        <option value="$PROJECT_DIR$/calculator/existing/PumpEfficiency.h" />
-        <option value="$PROJECT_DIR$/Motor.h" />
-        <option value="$PROJECT_DIR$/calculator/existing/MotorEfficiency.h" />
-        <option value="$PROJECT_DIR$/calculator/existing/MotorEfficiency.cpp" />
-        <option value="$PROJECT_DIR$/calculator/existing/MotorPowerFactor.h" />
-        <option value="$PROJECT_DIR$/calculator/existing/MotorPowerFactor.cpp" />
-        <option value="$PROJECT_DIR$/calculator/existing/MotorCurrent.h" />
-        <option value="$PROJECT_DIR$/calculator/existing/MotorCurrent.cpp" />
-        <option value="$PROJECT_DIR$/calculator/existing/MotorPower.h" />
-        <option value="$PROJECT_DIR$/calculator/existing/MotorPower.cpp" />
         <option value="$PROJECT_DIR$/calculator/existing/AnnualEnergy.h" />
         <option value="$PROJECT_DIR$/calculator/existing/AnnualEnergy.cpp" />
         <option value="$PROJECT_DIR$/calculator/AnnualCost.h" />
@@ -137,6 +199,17 @@
         <option value="$PROJECT_DIR$/calculator/PumpEfficiency.h" />
         <option value="$PROJECT_DIR$/calculator/OptimalPumpEfficiency.h" />
         <option value="$PROJECT_DIR$/calculator/OptimalPumpEfficiency.cpp" />
+        <option value="$PROJECT_DIR$/Motor.cpp" />
+        <option value="$PROJECT_DIR$/Financial.cpp" />
+        <option value="$PROJECT_DIR$/FieldData.cpp" />
+        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/Pump.cpp" />
+        <option value="$PROJECT_DIR$/Pump.h" />
+        <option value="$PROJECT_DIR$/FieldData.h" />
+        <option value="$PROJECT_DIR$/Motor.h" />
+        <option value="$PROJECT_DIR$/Financial.h" />
+        <option value="$PROJECT_DIR$/PSATResult.cpp" />
+        <option value="$PROJECT_DIR$/PSATResult.h" />
       </list>
     </option>
   </component>
@@ -183,6 +256,16 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="amo-library" />
               <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="amo-library" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="amo-library" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -404,7 +487,7 @@
       <workItem from="1471545013856" duration="10014000" />
       <workItem from="1471627604211" duration="619000" />
       <workItem from="1471628310633" duration="1935000" />
-      <workItem from="1471630365947" duration="1504000" />
+      <workItem from="1471630365947" duration="3602000" />
     </task>
     <task id="LOCAL-00001" summary="Compiled versions">
       <created>1466432983024</created>
@@ -427,35 +510,42 @@
       <option name="project" value="LOCAL" />
       <updated>1471549918626</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Fully stubbed out.">
+      <created>1471634229234</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1471634229234</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14072000" />
+    <option name="totallyTimeSpent" value="16170000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="314" y="145" width="1400" height="936" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24945612" sideWeight="0.49266246" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24945612" sideWeight="0.49266246" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5699052" sideWeight="0.48875996" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32819906" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Regex Tester" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43483412" sideWeight="0.51124" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32905984" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43483412" sideWeight="0.48875996" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32819906" sideWeight="0.49746192" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5073375" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3992891" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5699052" sideWeight="0.48875996" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39957264" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43483412" sideWeight="0.48875996" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32938388" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3992891" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -472,7 +562,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32819906" sideWeight="0.49746192" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24945612" sideWeight="0.49266246" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32978722" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32938388" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5073375" order="2" side_tool="true" content_ui="tabs" />
@@ -494,7 +584,8 @@
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
     <MESSAGE value="Different value than 0.0.&#10;" />
     <MESSAGE value="Compiled versions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Compiled versions" />
+    <MESSAGE value="Fully stubbed out." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fully stubbed out." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -504,58 +595,20 @@
           <line>7</line>
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/PSATResult.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorPower.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="8" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1425">
-          <caret line="95" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
-          <folding>
-            <element signature="e#126#147#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/PumpEfficiencyOptimal.h" />
-    <entry file="file://$PROJECT_DIR$/calculator/PumpEfficiencyOptimal.cpp" />
-    <entry file="file://$PROJECT_DIR$/calculator/AnnualCostOptimal.h" />
-    <entry file="file://$PROJECT_DIR$/calculator/AnnualCostOptimal.cpp" />
-    <entry file="file://$PROJECT_DIR$/calculator/optimal/AnnualCostOptimal.cpp" />
-    <entry file="file://$PROJECT_DIR$/calculator/optimal/AnnualCostOptimal.h" />
-    <entry file="file://$PROJECT_DIR$/calculator/optimal/AnnualCost.cpp" />
     <entry file="file://$PROJECT_DIR$/calculator/existing/AnnualCost.h" />
     <entry file="file://$PROJECT_DIR$/calculator/existing/AnnualCost.cpp" />
     <entry file="file://$PROJECT_DIR$/calculator/OptimalAnnualEnergy.cpp" />
     <entry file="file://$PROJECT_DIR$/calculator/OptimalAnnualEnergy.h" />
-    <entry file="file://$PROJECT_DIR$/AnnualSavingsPotential.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AnnualSavingsPotential.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -563,44 +616,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OptimizationRating.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/OptimalAnnualCost.cpp" />
     <entry file="file://$PROJECT_DIR$/calculator/OptimalAnnualCost.h" />
-    <entry file="file://$PROJECT_DIR$/AnnualCost.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AnnualCost.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AnnualEnergy.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AnnualEnergy.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -804,18 +830,140 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pump.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/calculator/OptimalPumpEfficiency.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Motor.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Financial.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FieldData.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AnnualSavingsPotential.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AnnualEnergy.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AnnualCost.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pump.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pump.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="37" column="21" selection-start-line="37" selection-start-column="21" selection-end-line="37" selection-end-column="21" />
+          <folding>
+            <element signature="e#104#126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FieldData.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Financial.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Motor.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="22" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OptimizationRating.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PSATResult.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PSATResult.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AnnualCost.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>

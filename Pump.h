@@ -35,31 +35,99 @@ public:
         NO_FIXED_SPECIFIC_SPEED
     };
 
-    Pump();
+    Pump() = default;
 
+    Pump(Style style, Drive drive, Speed speed, double achievableEfficiency, double rpm, int stageCount,
+         const FieldData &fieldData, const Motor &motor, const Financial &financial) : style_(style), drive_(drive),
+                                                                                       speed_(speed),
+                                                                                       achievableEfficiency_(
+                                                                                               achievableEfficiency),
+                                                                                       rpm_(rpm),
+                                                                                       stageCount_(stageCount),
+                                                                                       fieldData_(fieldData),
+                                                                                       motor_(motor),
+                                                                                       financial_(financial) {}
 
-    Pump(Style style, Drive drive, Speed speed, double achievableEfficiency, double rpm, int stageCount);
+    Style getStyle() const {
+        return style_;
+    }
 
-// Setters
-    void setStyle(Pump::Style style);
-    void setDrive(Pump::Drive drive);
-    void setSpeed(Pump::Speed speed);
-    void setAchievableEfficiency(double achievableEfficiency);
-    void setRpm(double rpm);
-    void setStageCount(int stageCount);
-    void setFieldData(FieldData fieldData);
-    void setMotor(Motor motor);
-    void setFinancial(Financial financial);
-// Getters
-    Pump::Style getStyle(void);
-    Pump::Speed getSpeed(void);
-    Pump::Drive getDrive(void);
-    double getAchievableEfficiency(void);
-    double getRpm(void);
-    int getStageCount(void);
-    FieldData getFieldData(void);
-    Motor getMotor(void);
-    Financial getFinancial(void);
+    void setStyle(Style style) {
+        style_ = style;
+    }
+
+    Drive getDrive() const {
+        return drive_;
+    }
+
+    void setDrive(Drive drive) {
+        drive_ = drive;
+    }
+
+    Speed getSpeed() const {
+        return speed_;
+    }
+
+    void setSpeed(Speed speed) {
+        speed_ = speed;
+    }
+
+    double getAchievableEfficiency() const {
+        return achievableEfficiency_;
+    }
+
+    void setAchievableEfficiency(double achievableEfficiency) {
+        achievableEfficiency_ = achievableEfficiency;
+    }
+
+    double getRpm() const {
+        return rpm_;
+    }
+
+    void setRpm(double rpm) {
+        rpm_ = rpm;
+    }
+
+    int getStageCount() const {
+        return stageCount_;
+    }
+
+    void setStageCount(int stageCount) {
+        stageCount_ = stageCount;
+    }
+
+    const FieldData &getFieldData() const {
+        return fieldData_;
+    }
+
+    void setFieldData(const FieldData &fieldData) {
+        fieldData_ = fieldData;
+    }
+
+    const Motor &getMotor() const {
+        return motor_;
+    }
+
+    void setMotor(const Motor &motor) {
+        motor_ = motor;
+    }
+
+    const Financial &getFinancial() const {
+        return financial_;
+    }
+
+    void setFinancial(const Financial &financial) {
+        financial_ = financial;
+    }
+
+    const PSATResult &getPsatResult() const {
+        return psatResult_;
+    }
+
+    void setPsatResult(const PSATResult &psatResult) {
+        psatResult_ = psatResult;
+    }
+
 // Calculate all results
     PSATResult calculate();
 private:
