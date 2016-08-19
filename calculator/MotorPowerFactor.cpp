@@ -3,3 +3,7 @@
 //
 
 #include "MotorPowerFactor.h"
+
+double MotorPowerFactor::calculate() {
+    return 76.46;
+}

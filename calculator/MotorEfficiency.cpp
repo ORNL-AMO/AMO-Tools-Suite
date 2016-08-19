@@ -3,3 +3,7 @@
 //
 
 #include "MotorEfficiency.h"
+
+double MotorEfficiency::calculate() {
+    return 94.36;
+}

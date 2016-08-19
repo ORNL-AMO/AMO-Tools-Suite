@@ -3,3 +3,7 @@
 //
 
 #include "AnnualSavingsPotential.h"
+
+double AnnualSavingsPotential::calculate() {
+    return 2.86;
+}

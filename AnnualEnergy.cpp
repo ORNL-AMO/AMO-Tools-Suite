@@ -3,3 +3,7 @@
 //
 
 #include "AnnualEnergy.h"
+
+double AnnualEnergy::calculate() {
+    return 643.6;
+}

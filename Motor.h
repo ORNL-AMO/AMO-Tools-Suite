@@ -14,6 +14,11 @@ public:
         AVERAGE,
         SPECIFIED
     };
+
+    enum class LoadEsimationMethod {
+
+    };
+
     Motor();
 
     Motor(EfficiencyClass efficiencyClass, double lineFrequency, double motorRatedPower, double fullLoadEfficiency,

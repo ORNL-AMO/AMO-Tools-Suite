@@ -5,5 +5,5 @@
 #include "MotorRatedPower.h"
 
 double MotorRatedPower::calculate() {
-    return 0.0;
+    return 200.0;
 }

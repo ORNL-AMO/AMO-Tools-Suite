@@ -5,5 +5,5 @@
 #include "MotorShaftPower.h"
 
 double MotorShaftPower::calculate() {
-    return 0.0;
+    return 101.19;
 }

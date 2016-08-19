@@ -3,3 +3,7 @@
 //
 
 #include "OptimizationRating.h"
+
+double OptimizationRating::calculate() {
+    return 91.84;
+}

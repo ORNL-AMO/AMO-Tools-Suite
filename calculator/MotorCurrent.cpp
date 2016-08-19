@@ -3,3 +3,7 @@
 //
 
 #include "MotorCurrent.h"
+
+double MotorCurrent::calculate() {
+    return 125.857;
+}

@@ -3,3 +3,7 @@
 //
 
 #include "MotorPower.h"
+
+double MotorPower::calculate() {
+    return 80.0;
+}

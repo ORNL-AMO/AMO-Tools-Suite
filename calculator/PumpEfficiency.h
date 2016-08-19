@@ -12,18 +12,7 @@ public:
     PumpEfficiency(double specificGravity, double flowRate, double head, double pumpShaftPower) : specificGravity_(
             specificGravity), flowRate_(flowRate), head_(head), pumpShaftPower_(pumpShaftPower) { }
 
-    PumpEfficiency() {
-        specificGravity_ = 0.0;
-        flowRate_ = 0.0;
-        head_ = 0.0;
-        pumpShaftPower_ = 0.0;
-    }
     double calculate();
-private:
-    double specificGravity_;
-    double flowRate_;
-    double head_;
-    double pumpShaftPower_;
 public:
     double getSpecificGravity() const {
         return specificGravity_;
@@ -56,6 +45,13 @@ public:
     void setPumpShaftPower(double pumpShaftPower) {
         pumpShaftPower_ = pumpShaftPower;
     }
+
+private:
+    double specificGravity_;
+    double flowRate_;
+    double head_;
+    double pumpShaftPower_;
+
 };
 
 
