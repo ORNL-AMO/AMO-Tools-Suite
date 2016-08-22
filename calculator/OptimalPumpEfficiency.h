@@ -16,6 +16,13 @@ public:
                                                             stageCount_(stageCount), flowRate_(flowRate), head_(head),
                                                             speed_(speed) {}
 
+    OptimalPumpEfficiency(double rpm, double kinematicViscosity, double stageCount, double flowRate, double head,
+                          Pump::Speed speed, double actualEfficiency) : rpm_(rpm),
+                                                                        kinematicViscosity_(kinematicViscosity),
+                                                                        stageCount_(stageCount), flowRate_(flowRate),
+                                                                        head_(head), speed_(speed),
+                                                                        actualEfficiency_(actualEfficiency) {}
+
     double calculate();
 
     Pump::Style getStyle() const {
@@ -74,6 +81,14 @@ public:
         speed_ = speed;
     }
 
+    double getActualEfficiency() const {
+        return actualEfficiency_;
+    }
+
+    void setActualEfficiency(double actualEfficiency) {
+        actualEfficiency_ = actualEfficiency;
+    }
+
 private:
     Pump::Style style_;
     double rpm_;
@@ -82,6 +97,7 @@ private:
     double flowRate_;
     double head_;
     Pump::Speed speed_;
+    double actualEfficiency_;
 };
 
 

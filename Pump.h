@@ -48,6 +48,12 @@ public:
                                                                                        motor_(motor),
                                                                                        financial_(financial) {}
 
+    Pump(Drive drive, Speed speed, double achievableEfficiency, double rpm, int stageCount, const FieldData &fieldData,
+         const Motor &motor, const Financial &financial, const PSATResult &psatResult, double actualEfficiency)
+            : drive_(drive), speed_(speed), achievableEfficiency_(achievableEfficiency), rpm_(rpm),
+              stageCount_(stageCount), fieldData_(fieldData), motor_(motor), financial_(financial),
+              psatResult_(psatResult), actualEfficiency_(actualEfficiency) {}
+
     Style getStyle() const {
         return style_;
     }
@@ -128,6 +134,14 @@ public:
         psatResult_ = psatResult;
     }
 
+    double getActualEfficiency() const {
+        return actualEfficiency_;
+    }
+
+    void setActualEfficiency(double actualEfficiency) {
+        actualEfficiency_ = actualEfficiency;
+    }
+
 // Calculate all results
     PSATResult calculate();
 private:
@@ -142,6 +156,7 @@ private:
     Motor motor_;
     Financial financial_;
     PSATResult psatResult_;
+    double actualEfficiency_;
 };
 
 

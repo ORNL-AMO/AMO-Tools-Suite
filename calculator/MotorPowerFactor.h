@@ -18,6 +18,13 @@ public:
                                        loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
                                        motorAmps_(motorAmps), voltage_(voltage) {}
 
+    MotorPowerFactor(double lineFrequency, double motorRpm, double hp,
+                     FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
+                     double voltage, double actualEfficiency) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
+                                                                hp_(hp), loadEstimationMethod_(loadEstimationMethod),
+                                                                motorKwh_(motorKwh), motorAmps_(motorAmps),
+                                                                voltage_(voltage),
+                                                                actualEfficiency_(actualEfficiency) {}
 
     double calculate();
 
@@ -85,6 +92,14 @@ public:
         voltage_ = voltage;
     }
 
+    double getActualEfficiency() const {
+        return actualEfficiency_;
+    }
+
+    void setActualEfficiency(double actualEfficiency) {
+        actualEfficiency_ = actualEfficiency;
+    }
+
 private:
     double lineFrequency_;
     double motorRpm_;
@@ -94,7 +109,7 @@ private:
     double motorKwh_;
     double motorAmps_;
     double voltage_;
-
+    double actualEfficiency_;
 };
 
 

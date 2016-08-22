@@ -23,6 +23,13 @@ public:
                                                          motorRatedVoltage_(motorRatedVoltage),
                                                          sizeMargin_(sizeMargin) {}
 
+    Motor(double lineFrequency, double motorRatedPower, double fullLoadEfficiency, double motorRatedVoltage,
+          double sizeMargin, double actualEfficiency) : lineFrequency_(lineFrequency),
+                                                        motorRatedPower_(motorRatedPower),
+                                                        fullLoadEfficiency_(fullLoadEfficiency),
+                                                        motorRatedVoltage_(motorRatedVoltage), sizeMargin_(sizeMargin),
+                                                        actualEfficiency_(actualEfficiency) {}
+
     Motor() = default;
 
     EfficiencyClass getEfficiencyClass() const {
@@ -73,6 +80,14 @@ public:
         sizeMargin_ = sizeMargin;
     }
 
+    double getActualEfficiency() const {
+        return actualEfficiency_;
+    }
+
+    void setActualEfficiency(double actualEfficiency) {
+        actualEfficiency_ = actualEfficiency;
+    }
+
 private:
     Motor::EfficiencyClass efficiencyClass_;
     double lineFrequency_;
@@ -80,7 +95,7 @@ private:
     double fullLoadEfficiency_;
     double motorRatedVoltage_;
     double sizeMargin_;
-
+    double actualEfficiency_;
 
 };
 
