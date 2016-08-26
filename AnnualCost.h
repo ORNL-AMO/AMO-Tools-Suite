@@ -6,6 +6,7 @@
 #define AMO_LIBRARY_ANNUALCOST_H
 
 class AnnualCost {
+    // mishras: Just adding a sample comment
 public:
     AnnualCost(double annualEnergy, double kwhRate) : annualEnergy_(annualEnergy), kwhRate_(kwhRate) {}
 
