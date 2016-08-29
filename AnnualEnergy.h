@@ -31,8 +31,9 @@ public:
     }
 
 private:
-    double motorPower_;
+    double motorPower_; // in kWe - kilo Watts electrical
     double operatingFraction_;
+    double annualEnergy_; // in MWh/year
 };
 
 
