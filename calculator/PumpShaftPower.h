@@ -37,7 +37,7 @@ public:
 private:
     double motorShaftPower_;
     Pump::Drive drive_;
-
+    double pumpShaftPower_;
 };
 
 #endif //AMO_LIBRARY_PUMPSHAFTPOWER_H
