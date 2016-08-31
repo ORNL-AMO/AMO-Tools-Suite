@@ -33,6 +33,7 @@ private:
     double motorEfficiency_;
     double motorPower_;
 
+    double motorShaftPower_;
 };
 
 
