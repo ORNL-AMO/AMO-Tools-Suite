@@ -5,13 +5,22 @@
 #ifndef AMO_LIBRARY_MOTORSHAFTPOWER_H
 #define AMO_LIBRARY_MOTORSHAFTPOWER_H
 
-
+#include <cmath>
+#include<iostream>
 class MotorShaftPower {
 
 
 public:
-    MotorShaftPower(double motorEfficiency, double motorPower) : motorEfficiency_(motorEfficiency),
-                                                                 motorPower_(motorPower) { }
+    enum class EfficiencyClass {
+        STANDARD,
+        ENERGY_EFFICIENT,
+        AVERAGE,
+        SPECIFIED
+    };
+
+    MotorShaftPower(double motorEfficiency, double motorPower, int motorRPM, EfficiencyClass efficiencyClass)
+            : motorEfficiency_(motorEfficiency),
+              motorPower_(motorPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass) {};
     double calculate();
     double getMotorEfficiency() const {
         return motorEfficiency_;
@@ -32,8 +41,10 @@ public:
 private:
     double motorEfficiency_;
     double motorPower_;
-
+    int motorRPM_;
+    EfficiencyClass efficiencyClass_;
     double motorShaftPower_;
+    double measuredPower_ = 80; // Hardcoded for now.
 };
 
 
