@@ -37,6 +37,10 @@ public:
         ycoord_ = ycoord;
     }
 
+    virtual ~CurveFit() {
+            delete xcoord_;
+            delete ycoord_;
+    }
     double *calculate();
 };
 
