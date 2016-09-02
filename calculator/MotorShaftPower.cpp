@@ -6,10 +6,10 @@
 
 
 double MotorShaftPower::calculate() {
-    /* Declaring local variables for now, will change later after I figure out everything !!
-     /*
-     * FLA Basic coefficients
-     */
+
+    /*
+    * FLA Basic coefficients, 2004
+    */
     double flaBasic_[5][6] = {
             {1.07000005, 1.07860196, 1.11131799, 1.20000005, 1.25399995, 1.296},
             {0.04457,    0.06776789, 0.1038059,  0.09800907, 0.10241948, 0.1058498},
@@ -40,7 +40,7 @@ double MotorShaftPower::calculate() {
     };
 
     /*
-     * Part load coefficients
+     * Part load coefficients, 2004
      */
     double p2Coeff_[5][6] = {
             {0.2385152,  0.31999999, 0.51999998, 0.75400001, 1, 1.253},
@@ -108,27 +108,27 @@ double MotorShaftPower::calculate() {
      * Calculate basic FLA value. There is better way to do this.
      * =$B13*(C$4+(C$5*EXP(-C$6*$B13))+(C$7*EXP(-C$8*$B13)))
      */
-    double basicFLAValue_ = motorPower_ * (flaBasic_[0][poleChooser_] +
-                                           (flaBasic_[1][poleChooser_] *
-                                            exp(-1 * flaBasic_[2][poleChooser_] * motorPower_)) +
-                                           (flaBasic_[3][poleChooser_] *
-                                            exp(-1 * flaBasic_[4][poleChooser_] * motorPower_)));
+    double basicFLAValue_ = motorRatedPower_ * (flaBasic_[0][poleChooser_] +
+                                                (flaBasic_[1][poleChooser_] *
+                                                 exp(-1 * flaBasic_[2][poleChooser_] * motorRatedPower_)) +
+                                                (flaBasic_[3][poleChooser_] *
+                                                 exp(-1 * flaBasic_[4][poleChooser_] * motorRatedPower_)));
     /*
      * Calculate EE multiplier
      */
     double eeMultiplier = (eeFlamultipliers_[0][poleChooser_] +
                            (eeFlamultipliers_[1][poleChooser_] *
-                            exp(-1 * eeFlamultipliers_[2][poleChooser_] * motorPower_)) +
+                            exp(-1 * eeFlamultipliers_[2][poleChooser_] * motorRatedPower_)) +
                            (eeFlamultipliers_[3][poleChooser_] *
-                            exp(-1 * eeFlamultipliers_[4][poleChooser_] * motorPower_)));
+                            exp(-1 * eeFlamultipliers_[4][poleChooser_] * motorRatedPower_)));
     /*
      * Calculate SE multiplier
      */
     double seMultiplier = (seFlamultipliers_[0][poleChooser_] +
                            (seFlamultipliers_[1][poleChooser_] *
-                            exp(-1 * seFlamultipliers_[2][poleChooser_] * motorPower_)) +
+                            exp(-1 * seFlamultipliers_[2][poleChooser_] * motorRatedPower_)) +
                            (seFlamultipliers_[3][poleChooser_] *
-                            exp(-1 * seFlamultipliers_[4][poleChooser_] * motorPower_)));
+                            exp(-1 * seFlamultipliers_[4][poleChooser_] * motorRatedPower_)));
 
     /*
      * Calculate EE or SE values
@@ -155,9 +155,9 @@ double MotorShaftPower::calculate() {
     for (int i = 0; i < 6; i++) {
         plMultiplier[i] = (tempCoeff[0][i] +
                            (tempCoeff[1][i] *
-                            exp(-1 * tempCoeff[2][i] * motorPower_)) +
+                            exp(-1 * tempCoeff[2][i] * motorRatedPower_)) +
                            (tempCoeff[3][i] *
-                            exp(-1 * tempCoeff[4][i] * motorPower_)));
+                            exp(-1 * tempCoeff[4][i] * motorRatedPower_)));
     }
 
     /*
@@ -179,6 +179,10 @@ double MotorShaftPower::calculate() {
     };
 
     /*
+     * Finding 1% interval values.
+     */
+
+    /*
      * ****************************************************************
      */
     double loadfraction_ = 0.5;//vlookup
@@ -186,7 +190,7 @@ double MotorShaftPower::calculate() {
     double loadfraction2_ = loadfraction_ + 0.01;
     double motorPowerKWe2_ = 80.626; //vlookup (loadfraction2_)
     double motorPowerdiff_ = motorPowerKWe2_ - motorPowerKWe_;
-    double measuredMotorPowerdiff_ = measuredPower_ - motorPowerKWe_;
+    double measuredMotorPowerdiff_ = motorMeasuredPower_ - motorPowerKWe_;
     double fractionalIndex_ = loadfraction_ + ((measuredMotorPowerdiff_ / motorPowerdiff_) / 100);
     /*
      * Calculate rest of the interpolated values as well as the motorShaftPower

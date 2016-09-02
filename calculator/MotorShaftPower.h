@@ -12,12 +12,15 @@
 class MotorShaftPower {
 public:
 
-    MotorShaftPower(double motorEfficiency, double motorPower, int motorRPM, Motor::EfficiencyClass efficiencyClass)
-            : motorEfficiency_(motorEfficiency),
-              motorPower_(motorPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass) {};
+    MotorShaftPower(//double motorEfficiency,
+            double motorRatedPower, double motorMeasuredPower, int motorRPM, Motor::EfficiencyClass efficiencyClass)
+            : //motorEfficiency_(motorEfficiency),
+            motorMeasuredPower_(motorMeasuredPower),
+            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass) {};
 
     double calculate();
 
+    /*
     double getMotorEfficiency() const {
         return motorEfficiency_;
     }
@@ -25,22 +28,22 @@ public:
     void setMotorEfficiency(double motorEfficiency) {
         motorEfficiency_ = motorEfficiency;
     }
-
+    */
     double getMotorPower() const {
-        return motorPower_;
+        return motorRatedPower_;
     }
 
     void setMotorPower(double motorPower) {
-        motorPower_ = motorPower;
+        motorRatedPower_ = motorPower;
     }
 
 private:
-    double motorEfficiency_;
-    double motorPower_;
+    //double motorEfficiency_;
+    double motorRatedPower_;
+    double motorMeasuredPower_;
     int motorRPM_;
     Motor::EfficiencyClass efficiencyClass_;
     double motorShaftPower_;
-    double measuredPower_ = 80; // Hardcoded for now.
 };
 
 
