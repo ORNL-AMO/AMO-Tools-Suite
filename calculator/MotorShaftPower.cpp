@@ -167,12 +167,12 @@ double MotorShaftPower::calculate() {
 
     // Have to figure out how to match efficiencies though !
 
-    if (efficiencyClass_ == EfficiencyClass::ENERGY_EFFICIENT) {
+    if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (int i = 0; i < 6; i++) {
             plValues[i] = eeFLAValue * plMultiplier[i];
         }
 
-    } else if (efficiencyClass_ == EfficiencyClass::STANDARD) {
+    } else if (efficiencyClass_ == Motor::EfficiencyClass::STANDARD) {
         for (int i = 0; i < 6; i++) {
             plValues[i] = seFLAValue * plMultiplier[i];
         }

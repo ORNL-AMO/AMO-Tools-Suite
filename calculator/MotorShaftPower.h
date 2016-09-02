@@ -7,21 +7,17 @@
 
 #include <cmath>
 #include<iostream>
+#include "../motor.h"
+
 class MotorShaftPower {
-
-
 public:
-    enum class EfficiencyClass {
-        STANDARD,
-        ENERGY_EFFICIENT,
-        AVERAGE,
-        SPECIFIED
-    };
 
-    MotorShaftPower(double motorEfficiency, double motorPower, int motorRPM, EfficiencyClass efficiencyClass)
+    MotorShaftPower(double motorEfficiency, double motorPower, int motorRPM, Motor::EfficiencyClass efficiencyClass)
             : motorEfficiency_(motorEfficiency),
               motorPower_(motorPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass) {};
+
     double calculate();
+
     double getMotorEfficiency() const {
         return motorEfficiency_;
     }
@@ -42,7 +38,7 @@ private:
     double motorEfficiency_;
     double motorPower_;
     int motorRPM_;
-    EfficiencyClass efficiencyClass_;
+    Motor::EfficiencyClass efficiencyClass_;
     double motorShaftPower_;
     double measuredPower_ = 80; // Hardcoded for now.
 };
