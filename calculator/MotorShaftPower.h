@@ -28,7 +28,7 @@ public:
     void setMotorEfficiency(double motorEfficiency) {
         motorEfficiency_ = motorEfficiency;
     }
-    */
+
     double getMotorPower() const {
         return motorRatedPower_;
     }
@@ -36,7 +36,7 @@ public:
     void setMotorPower(double motorPower) {
         motorRatedPower_ = motorPower;
     }
-
+    */
 private:
     //double motorEfficiency_;
     double motorRatedPower_;
