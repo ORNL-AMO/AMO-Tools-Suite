@@ -201,6 +201,8 @@ double MotorEfficiency::calculate() {
      * The 25%,50%,75%, and 100% load efficiencies are calculated using the above double-exponential calculation
      * At 0% load, the motor efficiency is, by definition, 0%
      */
+    double eeMotorEfficiency_[5];
+    double seMotorEfficiency_[5];
     double motorEfficiency_[5];
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (int i = 0; i < 4; ++i) { //cols
@@ -239,6 +241,45 @@ double MotorEfficiency::calculate() {
      * PSAT assumes that the efficiency at 125% load is 99% of the full load efficiency.
      */
     motorEfficiency_[4] = 0.99 * motorEfficiency_[3];
+
+    /*
+     * Corrections if the efficiency is specified
+     */
+
+    double loadFactor_ = 0;
+    /*
+     * Calculating the 1% interval values based on the load factor
+     * 0 - 25
+     * 1. Using the 0% and 25% kW loss values, develop a linear table of loss by 1% load
+     * Equation: kWloss (X) = kWloss (0) + X * (kWloss(25) - kWloss(0))/25      where X = 0,1,2,3…..25
+     * 2. Assemble an array of shaft power from 0 to 25
+     * Equation: kW shaft (X) = rated hp *0.746 * (X / 100)
+     * Assemble an array of kWe (input electric power
+     * Equation: kWe(X) = kWloss(x) + kWshaft(X)
+     * Calculate efficiency
+     * Equation: Eff(X) = kW shaft (X) / kWe (X)
+     */
+    if (loadFactor_ <= 25) {
+
+    }
+        /*
+         * 26 - 125
+         * Fitting tabular, 25% interval, motor efficiency data to assemble an overall curve with 1% interval data from 26 to 150%
+         * 25% load interval efficiency values come from "Adjusting 25 percent arrays for specified efficiency"
+         * Pick the 25,50,75,100,and 125% motor efficiency values and do a 4th order polynomial fit.
+         * Use the fit coefficients to popluate, in 1% load intervals, from 26 to 125% load
+         */
+    else if (loadFactor_ <= 125 && loadFactor_ > 25) {
+
+    }
+        /*
+         * 126 - 150
+         * Pick the 75, 100, and 125% motor efficiency values and do a 2nd order polynomial fit
+         * Use the fit coefficients to populate, in 1% load intervals, the current range from 126 to 150% load
+         */
+    else if (loadFactor_ <= 150 && loadFactor_ > 125) {
+
+    }
 
 
     return 94.36;
