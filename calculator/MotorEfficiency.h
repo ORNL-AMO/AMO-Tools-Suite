@@ -7,23 +7,30 @@
 
 #include "../Motor.h"
 #include "../FieldData.h"
+#include <cmath>
 
 class MotorEfficiency {
 public:
 
     MotorEfficiency(double lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass, double hp,
                     FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
-                    double voltage) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
-                                      efficiencyClass_(efficiencyClass), hp_(hp),
-                                      loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
-                                      motorAmps_(motorAmps), voltage_(voltage) {}
+                    double voltage, double motorRatedPower, double motorMeasuredPower) : lineFrequency_(lineFrequency),
+                                                                                         motorRpm_(motorRpm),
+                                                                                         efficiencyClass_(efficiencyClass), hp_(hp),
+                                                                                         loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
+                                                                                         motorAmps_(motorAmps),
+                                                                                         voltage_(voltage),
+                                                                                         motorMeasuredPower_(
+                                                                                                 motorMeasuredPower),
+                                                                                         motorRatedPower_(
+                                                                                                 motorRatedPower) {}
 
-    MotorEfficiency(double lineFrequency, double motorRpm, double hp,
+/*    MotorEfficiency(double lineFrequency, double motorRpm, double hp,
                     FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
                     double voltage, double actualEfficiency) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
                                                                hp_(hp), loadEstimationMethod_(loadEstimationMethod),
                                                                motorKwh_(motorKwh), motorAmps_(motorAmps),
-                                                               voltage_(voltage), actualEfficiency_(actualEfficiency) {}
+                                                               voltage_(voltage), actualEfficiency_(actualEfficiency) {}*/
 
     double calculate();
 
@@ -109,6 +116,8 @@ private:
     double motorAmps_;
     double voltage_;
     double actualEfficiency_;
+    double motorRatedPower_;
+    double motorMeasuredPower_;
 };
 
 

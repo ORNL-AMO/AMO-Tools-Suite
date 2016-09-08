@@ -8,7 +8,7 @@ double MotorEfficiency::calculate() {
     /*
      * Define the coefficients for various partial loads
      */
-    double eeLt125hp[6][5][4] = {
+    double eeLt125hp[6][5][5] = {
             {
                     {94.4693298, 95.1883316, 95.0271149, 94.9202652},
                     {-6.7603207, -4.4313388, -4.8838,    -5.922698},
@@ -196,9 +196,49 @@ double MotorEfficiency::calculate() {
     int polechooser = 0;
 
     /*
-     *
+     * Calculating Motor Efficiency
+     * On the EE and SE tabs are all the coefficient arrays. At the bottom of the sheets are calculated tables of efficiency vs load for each speed class.
+     * The 25%,50%,75%, and 100% load efficiencies are calculated using the above double-exponential calculation
+     * At 0% load, the motor efficiency is, by definition, 0%
      */
-
+    double motorEfficiency_[5];
+    if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
+        for (int i = 0; i < 4; ++i) { //cols
+            if (motorRatedPower_ <= 125) {
+                motorEfficiency_[i] = (eeLt125hp[polechooser][0][i] + (eeLt125hp[polechooser][1][i] *
+                                                                       exp(-1 * eeLt125hp[polechooser][2][i] *
+                                                                           motorRatedPower_)) +
+                                       (eeLt125hp[polechooser][3][i] *
+                                        exp(-1 * eeLt125hp[polechooser][4][i] * motorRatedPower_))) / 100;
+            } else {
+                motorEfficiency_[i] = (eeGt125hp[polechooser][0][i] + (eeGt125hp[polechooser][1][i] *
+                                                                       exp(-1 * eeGt125hp[polechooser][2][i] *
+                                                                           motorRatedPower_)) +
+                                       (eeGt125hp[polechooser][3][i] *
+                                        exp(-1 * eeGt125hp[polechooser][4][i] * motorRatedPower_))) / 100;
+            }
+        }
+    } else if (efficiencyClass_ == Motor::EfficiencyClass::STANDARD) {
+        for (int i = 0; i < 4; ++i) { //cols
+            if (motorRatedPower_ <= 125) {
+                motorEfficiency_[i] = (seLt125hp[polechooser][0][i] + (seLt125hp[polechooser][1][i] *
+                                                                       exp(-1 * seLt125hp[polechooser][2][i] *
+                                                                           motorRatedPower_)) +
+                                       (seLt125hp[polechooser][3][i] *
+                                        exp(-1 * seLt125hp[polechooser][4][i] * motorRatedPower_))) / 100;
+            } else {
+                motorEfficiency_[i] = (seGt125hp[polechooser][0][i] + (seGt125hp[polechooser][1][i] *
+                                                                       exp(-1 * seGt125hp[polechooser][2][i] *
+                                                                           motorRatedPower_)) +
+                                       (seGt125hp[polechooser][3][i] *
+                                        exp(-1 * seGt125hp[polechooser][4][i] * motorRatedPower_))) / 100;
+            }
+        }
+    }
+    /*
+     * PSAT assumes that the efficiency at 125% load is 99% of the full load efficiency.
+     */
+    motorEfficiency_[4] = 0.99 * motorEfficiency_[3];
 
 
     return 94.36;
