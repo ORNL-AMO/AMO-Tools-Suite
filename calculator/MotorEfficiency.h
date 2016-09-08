@@ -8,6 +8,7 @@
 #include "../Motor.h"
 #include "../FieldData.h"
 #include <cmath>
+#include "CurveFitVal.h"
 
 class MotorEfficiency {
 public:
