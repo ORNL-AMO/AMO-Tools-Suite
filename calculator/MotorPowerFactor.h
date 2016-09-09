@@ -7,6 +7,7 @@
 
 #include "../Motor.h"
 #include "../FieldData.h"
+#include <cmath>
 
 class MotorPowerFactor {
 
