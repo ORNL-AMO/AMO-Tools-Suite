@@ -5,6 +5,7 @@
 #ifndef AMO_LIBRARY_MOTORPOWER_H
 #define AMO_LIBRARY_MOTORPOWER_H
 
+#include <cmath>
 
 class MotorPower {
 public:
