@@ -11,7 +11,12 @@
 class MotorPowerFactor {
 
 public:
-    MotorPowerFactor(double lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass, double hp,
+    MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
+                     double ratedVoltage) :
+            motorRatedPower_(motorRatedPower), loadFactor_(loadFactor), motorCurrent_(motorCurrent),
+            motorEfficiency_(motorEfficiency), ratedVoltage_(ratedVoltage) {}
+
+    /*MotorPowerFactor(double lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass, double hp,
                      FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
                      double voltage) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
                                        efficiencyClass_(efficiencyClass), hp_(hp),
@@ -25,9 +30,10 @@ public:
                                                                 motorKwh_(motorKwh), motorAmps_(motorAmps),
                                                                 voltage_(voltage),
                                                                 actualEfficiency_(actualEfficiency) {}
-
+*/
     double calculate();
 
+/*
     double getLineFrequency() const {
         return lineFrequency_;
     }
@@ -99,6 +105,7 @@ public:
     void setActualEfficiency(double actualEfficiency) {
         actualEfficiency_ = actualEfficiency;
     }
+*/
 
 private:
     double lineFrequency_;
@@ -110,6 +117,15 @@ private:
     double motorAmps_;
     double voltage_;
     double actualEfficiency_;
+
+    /*
+     * 9/9/16: Added new variables for a changed constructor
+     */
+    double motorRatedPower_;
+    double loadFactor_;
+    double motorCurrent_;
+    double motorEfficiency_;
+    double ratedVoltage_;
 };
 
 
