@@ -260,8 +260,25 @@ double MotorEfficiency::calculate() {
      * Calculate efficiency
      * Equation: Eff(X) = kW shaft (X) / kWe (X)
      */
-    if (loadFactor_ <= 25) {
 
+    /*
+     * Setting up kWloss0 and kWloss25
+     * Make sure motoEfficiency is in decimal rather %.
+     * E.g.: 0.92 is correct, 92 is wrong.
+     */
+    double kWloss25 = ((1 / motorEfficiency_[0]) - 1) * motorRatedPower_ * 0.746 * 0.25;
+    double kWloss0 = 0.8 * kWloss25;
+
+    /*
+     * Note: Above is for EE or SE. More calculations are required for Specified Efficiency
+     */
+
+
+    if (loadFactor_ <= 25) {
+        double kWloss_ = kWloss0 + loadFactor_ * (kWloss25 - kWloss0) / 25;
+        double kWshaft_ = motorRatedPower_ * 0.746 * (loadFactor_ / 100); // Make sure motorRatedPower is in hp
+        double kWe_ = kWloss_ + kWshaft_; // Input electric power
+        motorEff_ = kWshaft_ / kWe_; //Final efficiency calculation
     }
         /*
          * 26 - 125
@@ -287,7 +304,9 @@ double MotorEfficiency::calculate() {
         CurveFitVal cfv(3, xCoord_, yCoord_, 2, loadFactor_);
         motorEff_ = cfv.calculate();
     }
-
-
+    /*
+     * When ready uncomment the below.
+     */
+    // return motorEff_;
     return 94.36;
 }
