@@ -8,13 +8,16 @@
 
 class MotorPower {
 public:
-    MotorPower(double motorKw, double motorAmps, double motorPowerFactor, double voltage) : motorKw_(motorKw),
+    MotorPower(double ratedVoltage, double motorCurrent, double powerFactor) :
+            ratedVoltage_(ratedVoltage), motorCurrent_(motorCurrent), powerFactor_(powerFactor) {};
+
+    /*MotorPower(double motorKw, double motorAmps, double motorPowerFactor, double voltage) : motorKw_(motorKw),
                                                                                             motorAmps_(motorAmps),
                                                                                             motorPowerFactor_(
                                                                                                     motorPowerFactor),
-                                                                                            voltage_(voltage) {}
+                                                                                            voltage_(voltage) {}*/
     double calculate();
-
+/*
     double getMotorKw() const {
         return motorKw_;
     }
@@ -46,12 +49,21 @@ public:
     void setVoltage(double voltage) {
         voltage_ = voltage;
     }
-
+*/
 private:
     double motorKw_;
     double motorAmps_;
     double motorPowerFactor_;
     double voltage_;
+
+    /*
+     * New variables for the updated constructor
+     */
+
+    double ratedVoltage_;
+    double motorCurrent_;
+    double powerFactor_;
+
 };
 
 
