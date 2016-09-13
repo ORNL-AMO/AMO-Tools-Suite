@@ -14,8 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f1ea0d3f-1a8a-404e-b3f7-bfb138bf4d7f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" afterPath="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPowerFactor.h" afterPath="$PROJECT_DIR$/calculator/MotorPowerFactor.h" />
     </list>
     <ignored path="amo-library.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -91,7 +89,7 @@
       <file leaf-file-name="MotorPowerFactor.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="533">
+            <state relative-caret-position="648">
               <caret line="24" column="49" selection-start-line="24" selection-start-column="49" selection-end-line="24" selection-end-column="49" />
               <folding>
                 <element signature="e#128#149#0" expanded="true" />
@@ -507,7 +505,7 @@
       <workItem from="1473424728611" duration="5180000" />
       <workItem from="1473440989433" duration="6384000" />
       <workItem from="1473765998037" duration="11246000" />
-      <workItem from="1473790037842" duration="22000" />
+      <workItem from="1473790037842" duration="58000" />
     </task>
     <task id="LOCAL-00001" summary="Compiled versions">
       <created>1466432983024</created>
@@ -754,11 +752,18 @@
       <option name="project" value="LOCAL" />
       <updated>1473788502526</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="public got removed somehow, corrected !">
+      <created>1473790083431</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1473790083431</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133160000" />
+    <option name="totallyTimeSpent" value="133196000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="-13" width="3866" height="2106" extended-state="6" />
@@ -800,7 +805,6 @@
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="The below is just a skeleton for the calculation of the motor shaft power. More has to be done." />
     <MESSAGE value="Curve Fitting algorithm helper class. Use of new keyword, will alter later to use vectors or something." />
     <MESSAGE value="Added a destructor." />
     <MESSAGE value="Completed until 25% Interval Motor current values. Resolved some of the precision issues. But still some there." />
@@ -825,7 +829,8 @@
     <MESSAGE value="Updated the percentage to decimal" />
     <MESSAGE value="Commented the destructor for now." />
     <MESSAGE value="    Removed Measured Power" />
-    <option name="LAST_COMMIT_MESSAGE" value="    Removed Measured Power" />
+    <MESSAGE value="public got removed somehow, corrected !" />
+    <option name="LAST_COMMIT_MESSAGE" value="public got removed somehow, corrected !" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1183,7 +1188,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="533">
+        <state relative-caret-position="648">
           <caret line="24" column="49" selection-start-line="24" selection-start-column="49" selection-end-line="24" selection-end-column="49" />
           <folding>
             <element signature="e#128#149#0" expanded="true" />
