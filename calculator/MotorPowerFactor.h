@@ -9,30 +9,29 @@
 #include "../FieldData.h"
 #include <cmath>
 
-class MotorPowerFactor {
+class MotorPowerFactor
+MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
+                 double ratedVoltage) :
 
-public:
-    MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
-                     double ratedVoltage) :
-            motorRatedPower_(motorRatedPower), loadFactor_(loadFactor), motorCurrent_(motorCurrent),
-            motorEfficiency_(motorEfficiency), ratedVoltage_(ratedVoltage) {}
+motorRatedPower_ (motorRatedPower), loadFactor_(loadFactor), motorCurrent_(motorCurrent),
+motorEfficiency_(motorEfficiency), ratedVoltage_(ratedVoltage) {}
 
-    /*MotorPowerFactor(double lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass, double hp,
-                     FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
-                     double voltage) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
-                                       efficiencyClass_(efficiencyClass), hp_(hp),
-                                       loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
-                                       motorAmps_(motorAmps), voltage_(voltage) {}
+/*MotorPowerFactor(double lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass, double hp,
+                 FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
+                 double voltage) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
+                                   efficiencyClass_(efficiencyClass), hp_(hp),
+                                   loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
+                                   motorAmps_(motorAmps), voltage_(voltage) {}
 
-    MotorPowerFactor(double lineFrequency, double motorRpm, double hp,
-                     FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
-                     double voltage, double actualEfficiency) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
-                                                                hp_(hp), loadEstimationMethod_(loadEstimationMethod),
-                                                                motorKwh_(motorKwh), motorAmps_(motorAmps),
-                                                                voltage_(voltage),
-                                                                actualEfficiency_(actualEfficiency) {}
+MotorPowerFactor(double lineFrequency, double motorRpm, double hp,
+                 FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
+                 double voltage, double actualEfficiency) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
+                                                            hp_(hp), loadEstimationMethod_(loadEstimationMethod),
+                                                            motorKwh_(motorKwh), motorAmps_(motorAmps),
+                                                            voltage_(voltage),
+                                                            actualEfficiency_(actualEfficiency) {}
 */
-    double calculate();
+double calculate();
 
 /*
     double getLineFrequency() const {
@@ -109,24 +108,28 @@ public:
 */
 
 private:
-    double lineFrequency_;
-    double motorRpm_;
-    Motor::EfficiencyClass efficiencyClass_;
-    double hp_;
-    FieldData::LoadEstimationMethod loadEstimationMethod_;
-    double motorKwh_;
-    double motorAmps_;
-    double voltage_;
-    double actualEfficiency_;
+double lineFrequency_;
+double motorRpm_;
+Motor::EfficiencyClass efficiencyClass_;
+double hp_;
+FieldData::LoadEstimationMethod loadEstimationMethod_;
+double motorKwh_;
+double motorAmps_;
+double voltage_;
+double actualEfficiency_;
 
-    /*
-     * 9/9/16: Added new variables for a changed constructor
-     */
-    double motorRatedPower_;
-    double loadFactor_;
-    double motorCurrent_;
-    double motorEfficiency_;
-    double ratedVoltage_;
+/*
+ * 9/9/16: Added new variables for a changed constructor
+ */
+double motorRatedPower_;
+double loadFactor_;
+double motorCurrent_;
+double motorEfficiency_;
+double ratedVoltage_;
+{
+
+public:
+
 };
 
 

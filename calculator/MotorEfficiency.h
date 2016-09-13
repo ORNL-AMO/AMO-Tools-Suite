@@ -15,16 +15,17 @@ public:
 
     MotorEfficiency(double lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass, double hp,
                     FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
-                    double voltage, double motorRatedPower, double motorMeasuredPower) : lineFrequency_(lineFrequency),
-                                                                                         motorRpm_(motorRpm),
-                                                                                         efficiencyClass_(efficiencyClass), hp_(hp),
-                                                                                         loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
-                                                                                         motorAmps_(motorAmps),
-                                                                                         voltage_(voltage),
-                                                                                         motorMeasuredPower_(
+                    double voltage, double motorRatedPower, double motorMeasuredPower, double loadFactor)
+            : lineFrequency_(lineFrequency),
+              motorRpm_(motorRpm),
+              efficiencyClass_(efficiencyClass), hp_(hp),
+              loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
+              motorAmps_(motorAmps),
+              voltage_(voltage),
+              motorMeasuredPower_(
                                                                                                  motorMeasuredPower),
-                                                                                         motorRatedPower_(
-                                                                                                 motorRatedPower) {}
+              motorRatedPower_(
+                      motorRatedPower), loadFactor_(loadFactor) {}
 
 /*    MotorEfficiency(double lineFrequency, double motorRpm, double hp,
                     FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
@@ -119,6 +120,7 @@ private:
     double actualEfficiency_;
     double motorRatedPower_;
     double motorMeasuredPower_;
+    double loadFactor_ = 0;
 };
 
 

@@ -246,7 +246,7 @@ double MotorEfficiency::calculate() {
      * Corrections if the efficiency is specified
      */
 
-    double loadFactor_ = 0;
+
     double motorEff_ = 0.0;
     /*
      * Calculating the 1% interval values based on the load factor
@@ -274,7 +274,7 @@ double MotorEfficiency::calculate() {
      */
 
 
-    if (loadFactor_ <= 25) {
+    if (loadFactor_ <= 0.25) {
         double kWloss_ = kWloss0 + loadFactor_ * (kWloss25 - kWloss0) / 25;
         double kWshaft_ = motorRatedPower_ * 0.746 * (loadFactor_ / 100); // Make sure motorRatedPower is in hp
         double kWe_ = kWloss_ + kWshaft_; // Input electric power

@@ -14,8 +14,11 @@
   <component name="ChangeListManager">
     <list default="true" id="f1ea0d3f-1a8a-404e-b3f7-bfb138bf4d7f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorPower.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPower.h" afterPath="$PROJECT_DIR$/calculator/MotorPower.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorCurrent.h" afterPath="$PROJECT_DIR$/calculator/MotorCurrent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" afterPath="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorEfficiency.h" afterPath="$PROJECT_DIR$/calculator/MotorEfficiency.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPowerFactor.h" afterPath="$PROJECT_DIR$/calculator/MotorPowerFactor.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" />
     </list>
     <ignored path="amo-library.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,65 +42,31 @@
       <file leaf-file-name="MotorEfficiency.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1166">
-              <caret line="53" column="13" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
+            <state relative-caret-position="1771">
+              <caret line="292" column="34" selection-start-line="292" selection-start-column="27" selection-end-line="292" selection-end-column="34" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MotorShaftPower.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.cpp">
+      <file leaf-file-name="MotorCurrent.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="15" column="11" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="11" />
+            <state relative-caret-position="1687">
+              <caret line="188" column="32" selection-start-line="188" selection-start-column="32" selection-end-line="188" selection-end-column="32" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MotorPowerFactor.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.h">
+      <file leaf-file-name="MotorCurrent.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+            <state relative-caret-position="1254">
+              <caret line="57" column="24" selection-start-line="57" selection-start-column="11" selection-end-line="57" selection-end-column="24" />
               <folding>
-                <element signature="e#128#149#0" expanded="true" />
-                <element signature="e#565#1858#0" expanded="false" />
-                <element signature="e#1884#3413#0" expanded="false" />
+                <element signature="e#121#137#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorPower.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorPower.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
-              <folding>
-                <element signature="e#938#1556#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorPower.cpp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorPower.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorPowerFactor.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -105,8 +74,8 @@
       <file leaf-file-name="MotorEfficiency.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="103" column="5" selection-start-line="103" selection-start-column="5" selection-end-line="103" selection-end-column="5" />
+            <state relative-caret-position="616">
+              <caret line="31" column="99" selection-start-line="31" selection-start-column="99" selection-end-line="31" selection-end-column="99" />
               <folding />
             </state>
           </provider>
@@ -159,23 +128,23 @@
         <option value="$PROJECT_DIR$/calculator/PolynomialFit.cpp" />
         <option value="$PROJECT_DIR$/calculator/CurveFit.cpp" />
         <option value="$PROJECT_DIR$/calculator/CurveFit.h" />
-        <option value="$PROJECT_DIR$/calculator/MotorCurrent.h" />
-        <option value="$PROJECT_DIR$/calculator/MotorCurrent.cpp" />
         <option value="$PROJECT_DIR$/calculator/MotorShaftPower.h" />
         <option value="$PROJECT_DIR$/calculator/CurveFit2.cpp" />
         <option value="$PROJECT_DIR$/calculator/CurveFit2.h" />
         <option value="$PROJECT_DIR$/calculator/CurveFitnew.h" />
         <option value="$PROJECT_DIR$/calculator/CurveFitnew.cpp" />
         <option value="$PROJECT_DIR$/calculator/CurveFitVal.h" />
-        <option value="$PROJECT_DIR$/calculator/MotorEfficiency.h" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/calculator/CurveFitVal.cpp" />
-        <option value="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" />
-        <option value="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" />
-        <option value="$PROJECT_DIR$/calculator/MotorPowerFactor.h" />
-        <option value="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" />
         <option value="$PROJECT_DIR$/calculator/MotorPower.h" />
         <option value="$PROJECT_DIR$/calculator/MotorPower.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorPowerFactor.h" />
+        <option value="$PROJECT_DIR$/calculator/MotorEfficiency.h" />
+        <option value="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorCurrent.h" />
+        <option value="$PROJECT_DIR$/calculator/MotorCurrent.cpp" />
       </list>
     </option>
   </component>
@@ -187,9 +156,10 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-10" />
-    <option name="width" value="980" />
-    <option name="height" value="1030" />
+    <option name="x" value="-11" />
+    <option name="y" value="-11" />
+    <option name="width" value="1462" />
+    <option name="height" value="2522" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -505,7 +475,8 @@
       <workItem from="1473344513544" duration="5689000" />
       <workItem from="1473350658181" duration="2136000" />
       <workItem from="1473424728611" duration="5180000" />
-      <workItem from="1473440989433" duration="5191000" />
+      <workItem from="1473440989433" duration="6384000" />
+      <workItem from="1473765998037" duration="4091000" />
     </task>
     <task id="LOCAL-00001" summary="Compiled versions">
       <created>1466432983024</created>
@@ -696,35 +667,56 @@
       <option name="project" value="LOCAL" />
       <updated>1473445980526</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Updated with the maths for motor power">
+      <created>1473446223178</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1473446223178</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Change to a name of a variable.">
+      <created>1473766516101</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1473766516101</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Updated 1% for current">
+      <created>1473771265115</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1473771265115</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="120699000" />
+    <option name="totallyTimeSpent" value="125983000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-10" y="0" width="980" height="1030" extended-state="0" />
+    <frame x="-11" y="-11" width="1462" height="2522" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21189979" sideWeight="0.49266246" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23819445" sideWeight="0.49266246" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12684032" sideWeight="0.47616062" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3204301" sideWeight="0.46907756" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.23910615" sideWeight="0.5238394" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33295584" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32905984" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30690828" sideWeight="0.4770355" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32819906" sideWeight="0.49746192" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5073375" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3992891" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12684032" sideWeight="0.47616062" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Regex Tester" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39957264" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30690828" sideWeight="0.4770355" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33295584" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3992891" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -742,9 +734,6 @@
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Compiled versions" />
-    <MESSAGE value="Fully stubbed out." />
-    <MESSAGE value="Modify root classes slightly." />
     <MESSAGE value="For efficiency, provide constructor and property for specified motor and pump efficiency values." />
     <MESSAGE value="Just added a comment to test my connection." />
     <MESSAGE value="1. Added equations for pump efficiency. &#10;2. However, still returning hard coded value, not compiled yet.&#10;3. Although some arguments and the way they are called/passed might change later." />
@@ -767,7 +756,10 @@
     <MESSAGE value="Updated the powerFactor header file to include the required variable as per the formula." />
     <MESSAGE value="Added the power factor equation." />
     <MESSAGE value="Updated the Motor Power Electric header file." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated the Motor Power Electric header file." />
+    <MESSAGE value="Updated with the maths for motor power" />
+    <MESSAGE value="Change to a name of a variable." />
+    <MESSAGE value="Updated 1% for current" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated 1% for current" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -789,13 +781,6 @@
     </PATH>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/calculator/OptimalPumpShaftPower.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/calculator/OptimalPumpShaftPower.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -929,24 +914,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorRatedPower.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/calculator/PumpShaftPower.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="580">
           <caret line="39" column="27" selection-start-line="39" selection-start-column="27" selection-end-line="39" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/PumpShaftPower.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -1022,24 +993,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/CurveFitValue.cpp" />
     <entry file="file://$PROJECT_DIR$/calculator/CurveFitValue.h" />
-    <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="27" column="5" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/calculator/CurveFitnew.h" />
     <entry file="file://$PROJECT_DIR$/calculator/CurveFitnew.cpp" />
-    <entry file="file://$PROJECT_DIR$/calculator/CurveFit.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/calculator/CurveFitVal.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1826">
@@ -1064,38 +1019,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="707">
-          <caret line="130" column="6" selection-start-line="130" selection-start-column="6" selection-end-line="130" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="103" column="5" selection-start-line="103" selection-start-column="5" selection-end-line="103" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1166">
-          <caret line="53" column="13" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" column="11" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1104,23 +1027,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.cpp">
+    <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        <state relative-caret-position="484">
+          <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.h">
+    <entry file="file://$PROJECT_DIR$/calculator/CurveFit.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding>
-            <element signature="e#128#149#0" expanded="true" />
-            <element signature="e#565#1858#0" expanded="false" />
-            <element signature="e#1884#3413#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorRatedPower.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorRatedPower.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/PumpShaftPower.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1138,6 +1089,51 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1144">
+          <caret line="124" column="21" selection-start-line="124" selection-start-column="21" selection-end-line="124" selection-end-column="21" />
+          <folding>
+            <element signature="e#128#149#0" expanded="true" />
+            <element signature="e#1808#3337#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="616">
+          <caret line="31" column="99" selection-start-line="31" selection-start-column="99" selection-end-line="31" selection-end-column="99" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1771">
+          <caret line="292" column="34" selection-start-line="292" selection-start-column="27" selection-end-line="292" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1254">
+          <caret line="57" column="24" selection-start-line="57" selection-start-column="11" selection-end-line="57" selection-end-column="24" />
+          <folding>
+            <element signature="e#121#137#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1687">
+          <caret line="188" column="32" selection-start-line="188" selection-start-column="32" selection-end-line="188" selection-end-column="32" />
           <folding />
         </state>
       </provider>

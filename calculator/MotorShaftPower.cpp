@@ -7,6 +7,7 @@
 
 double MotorShaftPower::calculate() {
 
+
     double loadfraction_ = 0.5;//vlookup
     double motorPowerKWe_ = 79.085;//vlookup (loadfraction_)
     double loadfraction2_ = loadfraction_ + 0.01;

@@ -9,14 +9,16 @@
 #include <cmath>
 #include<iostream>
 #include "../motor.h"
+#include "CurveFitVal.h"
 
 class MotorCurrent {
 public:
     //MotorCurrent(double motorAmps, double motorKw, double voltage) : motorAmps_(motorAmps), motorKw_(motorKw),voltage_(voltage) {}
     MotorCurrent(double motorRatedPower, double motorMeasuredPower, int motorRPM,
-                 Motor::EfficiencyClass efficiencyClass) : motorMeasuredPower_(motorMeasuredPower),
-                                                           motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
-                                                           efficiencyClass_(efficiencyClass) {};
+                 Motor::EfficiencyClass efficiencyClass, double loadFactor) : motorMeasuredPower_(motorMeasuredPower),
+                                                                              motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
+                                                                              efficiencyClass_(efficiencyClass),
+                                                                              loadFactor_(loadFactor) {};
     double calculate();
 
 /*    double getMotorAmps() const {
@@ -53,6 +55,7 @@ private:
     double motorMeasuredPower_;
     int motorRPM_;
     Motor::EfficiencyClass efficiencyClass_;
+    double loadFactor_;
     double motorCurrent_;
 };
 
