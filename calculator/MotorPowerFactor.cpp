@@ -12,6 +12,6 @@ double MotorPowerFactor::calculate() {
      */
     motorPowerFactor_ = (loadFactor_ * motorRatedPower_ * 0.746) /
                         (motorCurrent_ * motorEfficiency_ * ratedVoltage_ * sqrt(3) / 1000);
-    // return motorPowerFactor_;
-    return 76.46;
+     return motorPowerFactor_;
+    //return 76.46;
 }

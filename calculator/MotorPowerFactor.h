@@ -10,6 +10,7 @@
 #include <cmath>
 
 class MotorPowerFactor {
+public:
 MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
                  double ratedVoltage) :
 
