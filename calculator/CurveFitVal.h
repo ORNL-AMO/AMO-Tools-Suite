@@ -26,10 +26,10 @@ public:
         loadFactor_ = loadFactor;
     }
 
-    virtual ~CurveFitVal() {
-        delete xcoord_;
-        delete ycoord_;
-    }
+//    virtual ~CurveFitVal() {
+//        delete xcoord_;
+//        delete ycoord_;
+//    }
 
     double calculate();
 };
