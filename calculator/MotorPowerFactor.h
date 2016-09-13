@@ -9,7 +9,7 @@
 #include "../FieldData.h"
 #include <cmath>
 
-class MotorPowerFactor
+class MotorPowerFactor {
 MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
                  double ratedVoltage) :
 
@@ -126,9 +126,6 @@ double loadFactor_;
 double motorCurrent_;
 double motorEfficiency_;
 double ratedVoltage_;
-{
-
-public:
 
 };
 
