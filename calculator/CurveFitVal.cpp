@@ -79,7 +79,7 @@ double CurveFitVal::calculate() {
     /*
      * Returning the value instead of the coefficients
      */
-    double temp_;
+    double temp_ = 0;
     for (int l = 0; l < pdegreeplus; ++l) {
         temp_ += coeff_[l] * pow(loadFactor_, l);
     }
