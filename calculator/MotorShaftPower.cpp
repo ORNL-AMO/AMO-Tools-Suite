@@ -43,3 +43,19 @@ double MotorShaftPower::calculate() {
     double motorShaftPower_ = motorMeasuredPower_ * eff;
     return motorShaftPower_;
 }
+
+double MotorShaftPower::calculateCurrent() {
+    return current;
+}
+
+double MotorShaftPower::calculateEfficiency() {
+    return eff;
+}
+
+double MotorShaftPower::calculatePowerFactor() {
+    return pf;
+}
+
+double MotorShaftPower::calculateElectricPower() {
+    return power;
+}

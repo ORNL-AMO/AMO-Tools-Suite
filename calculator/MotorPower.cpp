@@ -11,7 +11,7 @@ double MotorPower::calculate() {
      */
     motorPowerElectric_ = ratedVoltage_ * motorCurrent_ * sqrt(3) * powerFactor_ / 1000;
 
-    //return motorPowerElectric_;
+    return motorPowerElectric_;
 
-    return 80.0;
+    //return 80.0;
 }

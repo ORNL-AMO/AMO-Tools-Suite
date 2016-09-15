@@ -27,6 +27,14 @@ public:
 
     double calculate();
 
+    double calculateCurrent();
+
+    double calculateEfficiency();
+
+    double calculatePowerFactor();
+
+    double calculateElectricPower();
+
     /*
     double getMotorEfficiency() const {
         return motorEfficiency_;

@@ -206,6 +206,6 @@ double MotorCurrent::calculate() {
         CurveFitVal cfv(3, xCoord_, yCoord_, 2, loadFactor_);
         motorCurrent_ = cfv.calculate();
     }
-    //return motorCurrent_;
-    return 125.857;
+    return motorCurrent_;
+    //return 125.857;
 }

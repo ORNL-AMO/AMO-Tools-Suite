@@ -309,6 +309,6 @@ double MotorEfficiency::calculate() {
     /*
      * When ready uncomment the below.
      */
-    // return motorEff_;
-    return 94.36;
+    return motorEff_;
+    //return 94.36;
 }
