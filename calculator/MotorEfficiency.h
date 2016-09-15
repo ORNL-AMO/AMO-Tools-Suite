@@ -13,15 +13,21 @@
 class MotorEfficiency {
 public:
 
-    MotorEfficiency(double lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass, double hp,
-                    FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
-                    double voltage, double motorRatedPower, double motorMeasuredPower, double loadFactor)
-            : lineFrequency_(lineFrequency),
+    MotorEfficiency(//double lineFrequency,
+            double motorRpm, Motor::EfficiencyClass efficiencyClass,
+            //double hp,
+            //FieldData::LoadEstimationMethod loadEstimationMethod,
+            //double motorKwh, double motorAmps,
+            //double ratedVoltage,
+            double motorRatedPower, double motorMeasuredPower, double loadFactor)
+            : //lineFrequency_(lineFrequency),
               motorRpm_(motorRpm),
-              efficiencyClass_(efficiencyClass), hp_(hp),
-              loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
-              motorAmps_(motorAmps),
-              voltage_(voltage),
+              efficiencyClass_(efficiencyClass),
+            //hp_(hp),
+            //loadEstimationMethod_(loadEstimationMethod),
+            //motorKwh_(motorKwh),
+            //motorAmps_(motorAmps),
+            //ratedVoltage_(ratedVoltage),
               motorMeasuredPower_(
                                                                                                  motorMeasuredPower),
               motorRatedPower_(
@@ -92,14 +98,6 @@ public:
         motorAmps_ = motorAmps;
     }
 
-    double getVoltage() const {
-        return voltage_;
-    }
-
-    void setVoltage(double voltage) {
-        voltage_ = voltage;
-    }
-
     double getActualEfficiency() const {
         return actualEfficiency_;
     }
@@ -116,7 +114,7 @@ private:
     FieldData::LoadEstimationMethod loadEstimationMethod_;
     double motorKwh_;
     double motorAmps_;
-    double voltage_;
+    //double ratedVoltage_;
     double actualEfficiency_;
     double motorRatedPower_;
     double motorMeasuredPower_;

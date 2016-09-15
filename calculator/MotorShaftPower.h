@@ -11,12 +11,19 @@
 
 class MotorShaftPower {
 public:
-
+    double tempLoadFraction_ = 0.01;
+    double power = 0.0, powerE1 = 0.0, powerE2 = 0.0;
+    double lf1 = 0.0, lf2 = 0.0;
+    double eff = 0.0, eff1 = 0.0, eff2 = 0.0;
+    double current = 0.0;
+    double pf = 0.0, pf1 = 0.0, pf2 = 0.0;
     MotorShaftPower(//double motorEfficiency,
-            double motorRatedPower, double motorMeasuredPower, int motorRPM, Motor::EfficiencyClass efficiencyClass)
+            double motorRatedPower, double motorMeasuredPower, int motorRPM, Motor::EfficiencyClass efficiencyClass,
+            double ratedVoltage)
             : //motorEfficiency_(motorEfficiency),
             motorMeasuredPower_(motorMeasuredPower),
-            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass) {};
+            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass),
+            ratedVoltage_(ratedVoltage) {};
 
     double calculate();
 
@@ -42,6 +49,7 @@ private:
     double motorRatedPower_;
     double motorMeasuredPower_;
     int motorRPM_;
+    double ratedVoltage_;
     Motor::EfficiencyClass efficiencyClass_;
     double motorShaftPower_;
 };
