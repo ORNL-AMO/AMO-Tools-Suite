@@ -11,15 +11,15 @@
 double MotorShaftPower::calculate() {
     tempLoadFraction_ = 0.01;
     while (true) {
-        MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT,
+        MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, efficiencyClass_,
                                   tempLoadFraction_);
         current = motorCurrent.calculate();
-        MotorEfficiency motorEfficiency(motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower_,
+        MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_, motorRatedPower_,
                                         motorMeasuredPower_, tempLoadFraction_);
         eff = motorEfficiency.calculate();
         MotorPowerFactor motorPowerFactor(motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
         pf = motorPowerFactor.calculate();
-        MotorPower motorPower(460, current, pf);
+        MotorPower motorPower(ratedVoltage_, current, pf);
         power = motorPower.calculate();
         if (power > 80 || tempLoadFraction_ > 1.5) {
             powerE2 = power;
