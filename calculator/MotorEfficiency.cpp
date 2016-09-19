@@ -289,7 +289,7 @@ double MotorEfficiency::calculate() {
          */
 
     else if (loadFactor_ <= 1.25 && loadFactor_ > 0.25) {
-        double xCoord_[5] = {25, 50, 75, 100, 125};
+        double xCoord_[5] = {.25, .50, .75, 1.00, 1.25};
         double yCoord_[5] = {motorEfficiency_[0], motorEfficiency_[1], motorEfficiency_[2], motorEfficiency_[3],
                              motorEfficiency_[4]};
         CurveFitVal cfv(5, xCoord_, motorEfficiency_, 4, loadFactor_);
@@ -301,7 +301,7 @@ double MotorEfficiency::calculate() {
          * Use the fit coefficients to populate, in 1% load intervals, the current range from 126 to 150% load
          */
     else if (loadFactor_ <= 1.50 && loadFactor_ > 1.25) {
-        double xCoord_[3] = {75, 100, 125};
+        double xCoord_[3] = {.75, 1.00, 1.25};
         double yCoord_[3] = {motorEfficiency_[2], motorEfficiency_[3], motorEfficiency_[4]};
         CurveFitVal cfv(3, xCoord_, yCoord_, 2, loadFactor_);
         motorEff_ = cfv.calculate();
