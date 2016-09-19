@@ -40,7 +40,10 @@ double MotorShaftPower::calculate() {
     double fractionalIndex_ = lf1 + ((measuredMotorPowerdiff_ / motorPowerdiff_) / 100);
     eff = eff1 + 100*(fractionalIndex_-lf1)*(eff2-eff1);
     pf = pf1 + 100*(fractionalIndex_-lf1)*(pf2-pf1);
+    // Output in kW
     double motorShaftPower_ = motorMeasuredPower_ * eff;
+    // Output in hP
+    motorShaftPower_ = motorShaftPower_ / 0.746;
     return motorShaftPower_;
 }
 
