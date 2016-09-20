@@ -201,9 +201,9 @@ double MotorEfficiency::calculate() {
      * The 25%,50%,75%, and 100% load efficiencies are calculated using the above double-exponential calculation
      * At 0% load, the motor efficiency is, by definition, 0%
      */
-    double eeMotorEfficiency_[5];
-    double seMotorEfficiency_[5];
-    double motorEfficiency_[5];
+    //double eeMotorEfficiency_[5] = {};
+    //double seMotorEfficiency_[5] = {};
+    double motorEfficiency_[5] = {};
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (int i = 0; i < 4; ++i) { //cols
             if (motorRatedPower_ <= 125) {

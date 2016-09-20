@@ -13,10 +13,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f1ea0d3f-1a8a-404e-b3f7-bfb138bf4d7f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/amo-library.iml" afterPath="$PROJECT_DIR$/.idea/amo-library.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorCurrent.cpp" afterPath="$PROJECT_DIR$/calculator/MotorCurrent.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorCurrent.h" afterPath="$PROJECT_DIR$/calculator/MotorCurrent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" afterPath="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorPower.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" afterPath="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorShaftPower.h" afterPath="$PROJECT_DIR$/calculator/MotorShaftPower.h" />
     </list>
     <ignored path="amo-library.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,31 +41,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MotorEfficiency.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="284" column="39" selection-start-line="284" selection-start-column="39" selection-end-line="284" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorEfficiency.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="33" column="51" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="51" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorShaftPower.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MotorShaftPower.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="946">
-              <caret line="43" column="28" selection-start-line="43" selection-start-column="28" selection-end-line="43" selection-end-column="28" />
+              <caret line="43" column="4" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="4" />
               <folding>
                 <element signature="e#49#77#0" expanded="true" />
               </folding>
@@ -69,71 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorCurrent.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="17" column="74" selection-start-line="17" selection-start-column="64" selection-end-line="17" selection-end-column="74" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorCurrent.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1021">
-              <caret line="205" column="39" selection-start-line="205" selection-start-column="39" selection-end-line="205" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorPower.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorPower.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorShaftPower.h" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MotorShaftPower.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="20" column="115" selection-start-line="20" selection-start-column="100" selection-end-line="20" selection-end-column="115" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MotorPower.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/calculator/MotorPower.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+            <state relative-caret-position="647">
+              <caret line="43" column="43" selection-start-line="43" selection-start-column="43" selection-end-line="43" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -190,18 +114,18 @@
         <option value="$PROJECT_DIR$/calculator/CurveFitnew.cpp" />
         <option value="$PROJECT_DIR$/calculator/MotorPower.h" />
         <option value="$PROJECT_DIR$/calculator/CurveFitVal.h" />
-        <option value="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" />
         <option value="$PROJECT_DIR$/calculator/MotorPowerFactor.h" />
-        <option value="$PROJECT_DIR$/calculator/MotorCurrent.h" />
         <option value="$PROJECT_DIR$/Motor.cpp" />
         <option value="$PROJECT_DIR$/calculator/CurveFitVal.cpp" />
         <option value="$PROJECT_DIR$/calculator/MotorEfficiency.h" />
-        <option value="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" />
-        <option value="$PROJECT_DIR$/calculator/MotorCurrent.cpp" />
-        <option value="$PROJECT_DIR$/calculator/MotorPower.cpp" />
-        <option value="$PROJECT_DIR$/calculator/MotorShaftPower.h" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorCurrent.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorCurrent.h" />
+        <option value="$PROJECT_DIR$/calculator/MotorEfficiency.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorPower.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorPowerFactor.cpp" />
+        <option value="$PROJECT_DIR$/calculator/MotorShaftPower.h" />
         <option value="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" />
       </list>
     </option>
@@ -538,7 +462,7 @@
       <workItem from="1473790037842" duration="1302000" />
       <workItem from="1473867904915" duration="489000" />
       <workItem from="1473878570193" duration="11598000" />
-      <workItem from="1474051192527" duration="3219000" />
+      <workItem from="1474051192527" duration="8433000" />
     </task>
     <task id="LOCAL-00001" summary="Compiled versions">
       <created>1466432983024</created>
@@ -848,11 +772,39 @@
       <option name="project" value="LOCAL" />
       <updated>1473966159515</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="Modified to block the infinite loop if there is a possibility..">
+      <created>1474295487989</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1474295487989</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Chnaged the loadFactor issue">
+      <created>1474303172149</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1474303172149</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Chnaged the loadFactor issue">
+      <created>1474303839277</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1474303839277</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Chnaged the loadFactor issue and Restored motorShaftpower in hp.">
+      <created>1474304057325</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1474304057325</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="149746000" />
+    <option name="totallyTimeSpent" value="154960000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="2902" height="1582" extended-state="6" />
@@ -894,8 +846,6 @@
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Changes for Measure Power and commented efficiency for now." />
-    <MESSAGE value="Moved current part from MotorShaftPower to MotorCurrent" />
     <MESSAGE value="Coefficients captured from excel." />
     <MESSAGE value="Added the coefficients for SE" />
     <MESSAGE value="Calculated the 25% Interval - Step 1" />
@@ -919,7 +869,9 @@
     <MESSAGE value="Corrected the undefined reference problem..." />
     <MESSAGE value="Updated to test !" />
     <MESSAGE value="Modified to block the infinite loop if there is a possibility.." />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified to block the infinite loop if there is a possibility.." />
+    <MESSAGE value="Chnaged the loadFactor issue" />
+    <MESSAGE value="Chnaged the loadFactor issue and Restored motorShaftpower in hp." />
+    <option name="LAST_COMMIT_MESSAGE" value="Chnaged the loadFactor issue and Restored motorShaftpower in hp." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -941,24 +893,10 @@
     </PATH>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/calculator/OptimalPumpShaftPower.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/calculator/OptimalMotorShaftPower.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/OptimalMotorShaftPower.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -987,13 +925,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OptimizationRating.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -1060,31 +991,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pump.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1584">
-          <caret line="28" column="20" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PSATResult.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pump.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PSATResult.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="10" column="26" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -1106,20 +1016,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorRatedPower.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorRatedPower.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/calculator/PumpShaftPower.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
@@ -1131,16 +1027,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="682">
           <caret line="31" column="7" selection-start-line="31" selection-start-column="7" selection-end-line="31" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="24" column="49" selection-start-line="24" selection-start-column="49" selection-end-line="24" selection-end-column="49" />
-          <folding>
-            <element signature="e#1797#3326#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1156,6 +1043,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
           <caret line="12" column="31" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1174,17 +1062,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Financial.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AnnualCost.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="572">
           <caret line="26" column="26" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1196,18 +1078,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.cpp">
+    <entry file="file://$PROJECT_DIR$/Pump.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+        <state relative-caret-position="22">
+          <caret line="28" column="20" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Motor.cpp">
+    <entry file="file://$PROJECT_DIR$/OptimizationRating.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+        <state relative-caret-position="352">
+          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OptimizationRating.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PSATResult.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PSATResult.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="10" column="26" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="26" />
           <folding />
         </state>
       </provider>
@@ -1220,66 +1126,116 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Financial.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Motor.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+        <state relative-caret-position="198">
+          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="284" column="39" selection-start-line="284" selection-start-column="39" selection-end-line="284" selection-end-column="39" />
+        <state relative-caret-position="22">
+          <caret line="129" column="6" selection-start-line="129" selection-start-column="6" selection-end-line="129" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/MotorEfficiency.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="33" column="51" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorPower.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="17" column="74" selection-start-line="17" selection-start-column="64" selection-end-line="17" selection-end-column="74" />
+        <state relative-caret-position="2530">
+          <caret line="118" column="19" selection-start-line="118" selection-start-column="19" selection-end-line="118" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1021">
-          <caret line="205" column="39" selection-start-line="205" selection-start-column="39" selection-end-line="205" selection-end-column="39" />
+        <state relative-caret-position="3872">
+          <caret line="176" column="6" selection-start-line="176" selection-start-column="6" selection-end-line="176" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorCurrent.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="933">
+          <caret line="53" column="33" selection-start-line="53" selection-start-column="33" selection-end-line="53" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorPower.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1219">
+          <caret line="65" column="17" selection-start-line="65" selection-start-column="17" selection-end-line="65" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/MotorPower.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+        <state relative-caret-position="242">
+          <caret line="11" column="46" selection-start-line="11" selection-start-column="46" selection-end-line="11" selection-end-column="46" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.h">
+    <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="20" column="115" selection-start-line="20" selection-start-column="100" selection-end-line="20" selection-end-column="115" />
+        <state relative-caret-position="154">
+          <caret line="7" column="34" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorPowerFactor.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1021">
+          <caret line="128" column="14" selection-start-line="128" selection-start-column="14" selection-end-line="128" selection-end-column="14" />
+          <folding>
+            <element signature="e#1797#3326#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/OptimalMotorShaftPower.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorRatedPower.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorRatedPower.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1287,10 +1243,18 @@
     <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="946">
-          <caret line="43" column="28" selection-start-line="43" selection-start-column="28" selection-end-line="43" selection-end-column="28" />
+          <caret line="43" column="4" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="4" />
           <folding>
             <element signature="e#49#77#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="647">
+          <caret line="43" column="43" selection-start-line="43" selection-start-column="43" selection-end-line="43" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -5,7 +5,7 @@
 #include "MotorPower.h"
 
 double MotorPower::calculate() {
-    double motorPowerElectric_;
+    double motorPowerElectric_ = 0.0;
     /*
      * kWe (x) = rated volts * amps (x) * sqrt (3) * pf (x) / 1000
      */

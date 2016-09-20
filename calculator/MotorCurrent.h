@@ -51,12 +51,12 @@ private:
     double motorKw_;
     double voltage_;
      */
-    double motorRatedPower_;
+    double motorRatedPower_ = 0.0;
 
-    int motorRPM_;
+    int motorRPM_ = 0;
     Motor::EfficiencyClass efficiencyClass_;
-    double loadFactor_;
-    double motorCurrent_;
+    double loadFactor_ = 0.0;
+    double motorCurrent_ = 0.0;
 };
 
 

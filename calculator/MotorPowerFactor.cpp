@@ -5,7 +5,7 @@
 #include "MotorPowerFactor.h"
 
 double MotorPowerFactor::calculate() {
-    double motorPowerFactor_;
+    double motorPowerFactor_ = 0.0;
     /*
      * Make sure the loadfactor comes not in %.
      * pf (X) = [(X/100) * rated hp * 0.746] / [Amps (X) * Eff (X) * Rated Voltage * Square root (3) / 1000]

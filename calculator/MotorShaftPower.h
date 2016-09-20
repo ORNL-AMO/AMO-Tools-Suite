@@ -54,12 +54,12 @@ public:
     */
 private:
     //double motorEfficiency_;
-    double motorRatedPower_;
-    double motorMeasuredPower_;
-    int motorRPM_;
-    double ratedVoltage_;
+    double motorRatedPower_ = 0.0;
+    double motorMeasuredPower_ = 0.0;
+    int motorRPM_ = 0;
+    double ratedVoltage_ = 0.0;
     Motor::EfficiencyClass efficiencyClass_;
-    double motorShaftPower_;
+    double motorShaftPower_ = 0.0;
 };
 
 

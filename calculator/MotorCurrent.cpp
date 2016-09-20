@@ -87,7 +87,7 @@ double MotorCurrent::calculate() {
     /*
      * Calculate the number of poles based on the RPM
      */
-    int poles;
+    int poles = 0;
     if (motorRPM_ > 3600) {
         poles = 2;
     } else {
@@ -148,7 +148,7 @@ double MotorCurrent::calculate() {
     /*
      * Calculating Multiplier for partial loads in 25% intervals
      */
-    double plMultiplier[6];
+    double plMultiplier[6] = {};
 
     for (int i = 0; i < 6; i++) {
         plMultiplier[i] = (tempCoeff[0][i] +
@@ -161,7 +161,7 @@ double MotorCurrent::calculate() {
     /*
      * Calculating the 25% interval Amps
      */
-    double plValues[6];
+    double plValues[6] = {};
 
     // Have to figure out how to match efficiencies though !
 
