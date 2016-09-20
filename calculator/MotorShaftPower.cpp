@@ -21,7 +21,7 @@ double MotorShaftPower::calculate() {
         pf = motorPowerFactor.calculate();
         MotorPower motorPower(ratedVoltage_, current, pf);
         power = motorPower.calculate();
-        if (power > 80 || tempLoadFraction_ > 1.5) {
+        if (power > motorMeasuredPower_ || tempLoadFraction_ > 1.5) {
             powerE2 = power;
             lf2 = tempLoadFraction_;
             eff2 = eff;
