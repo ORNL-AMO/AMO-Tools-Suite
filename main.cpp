@@ -1,7 +1,7 @@
 #include <iostream>
-//#include "Pump.h"
+#include "Pump.h"
 //#include "./calculator/MotorShaftPower.h"
-//#include "Motor.h"
+#include "Motor.h"
 using namespace std;
 
 int main() {
