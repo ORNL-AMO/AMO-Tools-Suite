@@ -21,6 +21,6 @@ double PumpEfficiency::calculate() {
     /*
      * Return pump efficiency
      */
-    //return pumpEfficiency_;
-    return 80.26;
+    return pumpEfficiency_;
+    //return 80.26;
 }
