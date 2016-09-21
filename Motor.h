@@ -5,7 +5,6 @@
 #ifndef AMO_LIBRARY_MOTOR_H
 #define AMO_LIBRARY_MOTOR_H
 
-
 class Motor {
 public:
     enum class EfficiencyClass {
@@ -88,6 +87,12 @@ public:
         actualEfficiency_ = actualEfficiency;
     }
 
+    /*
+     * This method calculates the motor shaft power, current, efficiency, power factor and electric power.
+     * This method needs to be invoked before you call methods to return current, efficiency, power factor and electric power.
+     */
+
+
 private:
     Motor::EfficiencyClass efficiencyClass_;
     double lineFrequency_;
@@ -96,7 +101,6 @@ private:
     double motorRatedVoltage_;
     double sizeMargin_;
     double actualEfficiency_;
-
 };
 
 
