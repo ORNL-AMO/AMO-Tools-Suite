@@ -9,17 +9,17 @@
 class AnnualEnergy {
 public:
 
-    AnnualEnergy(double motorPower, double operatingFraction) : motorPower_(motorPower),
+    AnnualEnergy(double fieldPower, double operatingFraction) : fieldPower_(fieldPower),
                                                                 operatingFraction_(operatingFraction) {}
 
     double calculate();
 
-    double getMotorPower() const {
-        return motorPower_;
+    double getFieldPower() const {
+        return fieldPower_;
     }
 
-    void setMotorPower(double motorPower) {
-        motorPower_ = motorPower;
+    void setFieldPower(double fieldPower) {
+        fieldPower_ = fieldPower;
     }
 
     double getOperatingFraction() const {
@@ -31,7 +31,7 @@ public:
     }
 
 private:
-    double motorPower_; // in kWe - kilo Watts electrical
+    double fieldPower_; // in kWe - kilo Watts electrical
     double operatingFraction_;
     double annualEnergy_; // in MWh/year
 };
