@@ -14,8 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f1ea0d3f-1a8a-404e-b3f7-bfb138bf4d7f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorShaftPower.h" afterPath="$PROJECT_DIR$/calculator/MotorShaftPower.h" />
     </list>
     <ignored path="amo-library.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,8 +69,8 @@
       <file leaf-file-name="CurveFitVal.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/calculator/CurveFitVal.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
+            <state relative-caret-position="1320">
+              <caret line="75" column="48" selection-start-line="75" selection-start-column="47" selection-end-line="75" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -542,14 +540,7 @@
       <workItem from="1474632230991" duration="16000" />
       <workItem from="1474632692205" duration="830000" />
       <workItem from="1474911654090" duration="300000" />
-      <workItem from="1474978878971" duration="1621000" />
-    </task>
-    <task id="LOCAL-00006" summary="For efficiency, provide constructor and property for specified motor and pump efficiency values.">
-      <created>1471896619942</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1471896619942</updated>
+      <workItem from="1474978878971" duration="1684000" />
     </task>
     <task id="LOCAL-00007" summary="Just added a comment to test my connection.">
       <created>1472238596711</created>
@@ -887,11 +878,18 @@
       <option name="project" value="LOCAL" />
       <updated>1474483223411</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="Changes for Adjusted Power factor.">
+      <created>1474982549413</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1474982549413</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="177057000" />
+    <option name="totallyTimeSpent" value="177120000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="2902" height="1582" extended-state="6" />
@@ -933,7 +931,6 @@
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Making changes for 1% intervals" />
     <MESSAGE value="Added a updated CurveFit, that gives the value instead of coefficients and MotorEfficiency" />
     <MESSAGE value="Efficiency is done for the most part. However the part for the specified efficiency will be coded later." />
     <MESSAGE value="Updated the powerFactor header file to include the required variable as per the formula." />
@@ -958,7 +955,8 @@
     <MESSAGE value="Initialized variables" />
     <MESSAGE value="No changes." />
     <MESSAGE value="Changes for existing values." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes for existing values." />
+    <MESSAGE value="Changes for Adjusted Power factor." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes for Adjusted Power factor." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1323,8 +1321,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/CurveFitVal.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
+        <state relative-caret-position="1320">
+          <caret line="75" column="48" selection-start-line="75" selection-start-column="47" selection-end-line="75" selection-end-column="48" />
           <folding />
         </state>
       </provider>
