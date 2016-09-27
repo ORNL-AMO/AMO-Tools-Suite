@@ -19,11 +19,11 @@ public:
     double pf = 0.0, pf1 = 0.0, pf2 = 0.0;
     MotorShaftPower(//double motorEfficiency,
             double motorRatedPower, double motorMeasuredPower, int motorRPM, Motor::EfficiencyClass efficiencyClass,
-            double ratedVoltage)
+            double ratedVoltage, double fieldVoltage)
             : //motorEfficiency_(motorEfficiency),
             motorMeasuredPower_(motorMeasuredPower),
             motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass),
-            ratedVoltage_(ratedVoltage) {};
+            ratedVoltage_(ratedVoltage), fieldVoltage_(fieldVoltage) {};
 
     double calculate();
 
@@ -58,9 +58,9 @@ private:
     double motorMeasuredPower_ = 0.0;
     int motorRPM_ = 0;
     double ratedVoltage_ = 0.0;
+    double fieldVoltage_ = 0.0;
     Motor::EfficiencyClass efficiencyClass_;
     double motorShaftPower_ = 0.0;
 };
-
 
 #endif //AMO_LIBRARY_MOTORSHAFTPOWER_H

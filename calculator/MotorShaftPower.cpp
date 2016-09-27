@@ -39,7 +39,11 @@ double MotorShaftPower::calculate() {
     double measuredMotorPowerdiff_ = motorMeasuredPower_ - powerE1;
     double fractionalIndex_ = lf1 + ((measuredMotorPowerdiff_ / motorPowerdiff_) / 100);
     eff = eff1 + 100*(fractionalIndex_-lf1)*(eff2-eff1);
-    pf = pf1 + 100*(fractionalIndex_-lf1)*(pf2-pf1);
+    double adjpf1 = pf1 / (((((fieldVoltage_ / ratedVoltage_) - 1) * (((-2) * lf1) + 1)) + 1) *
+                           (fieldVoltage_ / ratedVoltage_));
+    double adjpf2 = pf2 / (((((fieldVoltage_ / ratedVoltage_) - 1) * (((-2) * lf2) + 1)) + 1) *
+                           (fieldVoltage_ / ratedVoltage_));
+    pf = adjpf1 + 100 * (fractionalIndex_ - lf1) * (adjpf2 - adjpf1);
     // Output in kW
     motorShaftPower_ = motorMeasuredPower_ * eff;
     // Output in hP
@@ -56,6 +60,7 @@ double MotorShaftPower::calculateEfficiency() {
 }
 
 double MotorShaftPower::calculatePowerFactor() {
+    // Adjusted Pf
     return pf;
 }
 
