@@ -6,6 +6,7 @@
 #define AMO_LIBRARY_CURVEFITVAL_H
 
 #include <cmath>
+#include <vector>
 
 class CurveFitVal {
 private:

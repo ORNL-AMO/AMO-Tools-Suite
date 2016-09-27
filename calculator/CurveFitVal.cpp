@@ -4,6 +4,7 @@
 
 #include "CurveFitVal.h"
 
+using namespace std;
 double CurveFitVal::calculate() {
     /*
      * Iterators
@@ -12,16 +13,18 @@ double CurveFitVal::calculate() {
     /*
      * Array to store Sigma X values
      */
-    double sigmaX_[2 * pdegree_ + 1];
+
+    vector<double> sigmaX_(2 * pdegree_ + 1);
     for (i = 0; i < 2 * pdegree_ + 1; i++) {
         sigmaX_[i] = 0;
         for (j = 0; j < noIntervalPoints_; j++)
             sigmaX_[i] = sigmaX_[i] + pow(xcoord_[j], i);
     }
+
     /*
      * Array to store Sigma Y values
      */
-    double sigmaY_[2 * pdegree_ + 1];
+    vector<double> sigmaY_(2 * pdegree_ + 1);
     for (i = 0; i < pdegree_ + 1; i++) {
         sigmaY_[i] = 0;
         for (j = 0; j < noIntervalPoints_; j++)
@@ -30,7 +33,8 @@ double CurveFitVal::calculate() {
     /*
      * Array to store matrix which in turn store the equations
      */
-    double augMatrix[pdegree_ + 1][pdegree_ + 2];
+    std::vector<std::vector<double>> augMatrix(pdegree_ + 1, std::vector<double>(pdegree_ + 2, 0));
+    // double augMatrix[pdegree_ + 1][pdegree_ + 2];
     for (i = 0; i <= pdegree_; i++)
         for (j = 0; j <= pdegree_; j++)
             augMatrix[i][j] = sigmaX_[i + j];
@@ -40,12 +44,13 @@ double CurveFitVal::calculate() {
     /*
      * Array to store the coefficients of the curve.
      */
-    /*
-     * To new or not to new.
-     */
 
+    //double *coeff_ = new double[pdegree_ + 1];
     //double coeff_[pdegree_ + 1];
-    double *coeff_ = new double[pdegree_ + 1];
+    vector<double> coeff_(pdegree_ + 1);
+    for (int m = 0; m < pdegree_ + 1; ++m) {
+        coeff_[m] = 0;
+    }
 
     int pdegreeplus = pdegree_ + 1;
     /*
