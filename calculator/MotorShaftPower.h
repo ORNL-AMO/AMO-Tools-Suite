@@ -7,7 +7,7 @@
 
 #include <cmath>
 #include<iostream>
-#include "../motor.h"
+#include "../Motor.h"
 
 class MotorShaftPower {
 public:
