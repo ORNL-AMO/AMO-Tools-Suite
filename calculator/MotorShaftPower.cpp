@@ -59,6 +59,10 @@ double MotorShaftPower::calculateEfficiency() {
     return eff;
 }
 
+double MotorShaftPower::calculatePowerFactor() {
+    return pf;
+}
+
 /* Internal Calculation of motor electric power.
 double MotorShaftPower::calculateElectricPower() {
     return power;
