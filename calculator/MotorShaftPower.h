@@ -33,7 +33,7 @@ public:
 
     double calculatePowerFactor();
 
-    double calculateElectricPower();
+    //double calculateElectricPower();
 
     /*
     double getMotorEfficiency() const {
