@@ -14,7 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f1ea0d3f-1a8a-404e-b3f7-bfb138bf4d7f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" afterPath="$PROJECT_DIR$/calculator/MotorShaftPower.cpp" />
     </list>
     <ignored path="amo-library.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -68,8 +67,8 @@
       <file leaf-file-name="MotorShaftPower.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="33" column="11" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="34" />
+            <state relative-caret-position="330">
+              <caret line="42" column="45" selection-start-line="42" selection-start-column="45" selection-end-line="42" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -491,14 +490,7 @@
       <workItem from="1474911654090" duration="300000" />
       <workItem from="1474978878971" duration="3072000" />
       <workItem from="1475069671450" duration="748000" />
-      <workItem from="1475086166986" duration="4006000" />
-    </task>
-    <task id="LOCAL-00009" summary="1. Updated code for Annual energy and annual costs to match excel.&#10; 2. Havent compiled code though.">
-      <created>1472473089189</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1472473089189</updated>
+      <workItem from="1475086166986" duration="4057000" />
     </task>
     <task id="LOCAL-00010" summary="Updated code for PumpShaftPower for direct drive case, however the calculations for belt drive are confusing for now.">
       <created>1472490317919</created>
@@ -836,11 +828,18 @@
       <option name="project" value="LOCAL" />
       <updated>1475150569299</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Added motorpowerfactor">
+      <created>1475168388992</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1475168388992</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="183262000" />
+    <option name="totallyTimeSpent" value="183313000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="44" y="23" width="1396" height="877" extended-state="0" />
@@ -882,7 +881,6 @@
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Efficiency is done for the most part. However the part for the specified efficiency will be coded later." />
     <MESSAGE value="Updated the powerFactor header file to include the required variable as per the formula." />
     <MESSAGE value="Added the power factor equation." />
     <MESSAGE value="Updated the Motor Power Electric header file." />
@@ -907,7 +905,8 @@
     <MESSAGE value="Changes for existing values." />
     <MESSAGE value="Changes for Adjusted Power factor." />
     <MESSAGE value="Removed electric power for the confusion." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed electric power for the confusion." />
+    <MESSAGE value="Added motorpowerfactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added motorpowerfactor" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1261,8 +1260,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/calculator/MotorShaftPower.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="33" column="11" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="34" />
+        <state relative-caret-position="330">
+          <caret line="42" column="45" selection-start-line="42" selection-start-column="45" selection-end-line="42" selection-end-column="45" />
           <folding />
         </state>
       </provider>
