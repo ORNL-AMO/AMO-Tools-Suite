@@ -44,6 +44,8 @@ double MotorShaftPower::calculate() {
     double adjpf2 = pf2 / (((((fieldVoltage_ / ratedVoltage_) - 1) * (((-2) * lf2) + 1)) + 1) *
                            (fieldVoltage_ / ratedVoltage_));
     pf = adjpf1 + 100 * (fractionalIndex_ - lf1) * (adjpf2 - adjpf1);
+    //Current output
+    current = motorMeasuredPower_ / (fieldVoltage_ * sqrt(3) * pf / 1000);
     // Output in kW
     motorShaftPower_ = motorMeasuredPower_ * eff;
     // Output in hP
