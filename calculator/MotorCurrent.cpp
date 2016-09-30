@@ -176,6 +176,10 @@ double MotorCurrent::calculate() {
         }
     };
 
+    // Adjustment based on the rated voltage.
+    for (int i = 0; i < 6; i++) {
+        plValues[i] = plValues[i] * 460 / ratedVoltage_;
+    }
 
     /*
      * Given the load% calculate the Amps.

@@ -12,7 +12,7 @@ double MotorShaftPower::calculate() {
     tempLoadFraction_ = 0.01;
     while (true) {
         MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, efficiencyClass_,
-                                  tempLoadFraction_);
+                                  tempLoadFraction_, ratedVoltage_);
         current = motorCurrent.calculate();
         MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_, motorRatedPower_,
                                         motorMeasuredPower_, tempLoadFraction_);
