@@ -10,7 +10,7 @@ public:
     enum class EfficiencyClass {
         STANDARD,
         ENERGY_EFFICIENT,
-        AVERAGE,
+        //AVERAGE,
         SPECIFIED
     };
 
