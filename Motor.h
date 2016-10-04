@@ -5,45 +5,46 @@
 #ifndef AMO_LIBRARY_MOTOR_H
 #define AMO_LIBRARY_MOTOR_H
 
+#include <cmath>
+
 class Motor {
 public:
     enum class EfficiencyClass {
         STANDARD,
         ENERGY_EFFICIENT,
-        //AVERAGE,
         SPECIFIED
     };
+    enum class LineFrequency {
+        FREQ60,
+        FREQ50
+    };
 
-    Motor(EfficiencyClass efficiencyClass, double lineFrequency, double motorRatedPower, double fullLoadEfficiency,
-          double motorRatedVoltage, double sizeMargin) : efficiencyClass_(efficiencyClass),
-                                                         lineFrequency_(lineFrequency),
-                                                         motorRatedPower_(motorRatedPower),
-                                                         fullLoadEfficiency_(fullLoadEfficiency),
-                                                         motorRatedVoltage_(motorRatedVoltage),
-                                                         sizeMargin_(sizeMargin) {}
+    Motor(LineFrequency lineFrequency, double motorRatedPower, double motorRpm, EfficiencyClass efficiencyClass,
+          double fullLoadEfficiency,
+          double motorRatedVoltage, bool flAmps, double fullLoadAmps, double sizeMargin) :
+            lineFrequency_(
+                    lineFrequency),
+            motorRatedPower_(
+                    motorRatedPower),
+            motorRpm_(motorRpm),
+            efficiencyClass_(
+                    efficiencyClass),
+            fullLoadEfficiency_(
+                    fullLoadEfficiency),
+            motorRatedVoltage_(
+                    motorRatedVoltage),
+            flAmps_(flAmps),
+            fullLoadAmps_(fullLoadAmps),
+            sizeMargin_(sizeMargin) {};
 
-    Motor(double lineFrequency, double motorRatedPower, double fullLoadEfficiency, double motorRatedVoltage,
-          double sizeMargin, double actualEfficiency) : lineFrequency_(lineFrequency),
-                                                        motorRatedPower_(motorRatedPower),
-                                                        fullLoadEfficiency_(fullLoadEfficiency),
-                                                        motorRatedVoltage_(motorRatedVoltage), sizeMargin_(sizeMargin),
-                                                        actualEfficiency_(actualEfficiency) {}
 
     Motor() = default;
 
-    EfficiencyClass getEfficiencyClass() const {
-        return efficiencyClass_;
-    }
-
-    void setEfficiencyClass(EfficiencyClass efficiencyClass) {
-        efficiencyClass_ = efficiencyClass;
-    }
-
-    double getLineFrequency() const {
+    LineFrequency getLineFrequency() const {
         return lineFrequency_;
     }
 
-    void setLineFrequency(double lineFrequency) {
+    void setLineFrequency(LineFrequency lineFrequency) {
         lineFrequency_ = lineFrequency;
     }
 
@@ -53,6 +54,22 @@ public:
 
     void setMotorRatedPower(double motorRatedPower) {
         motorRatedPower_ = motorRatedPower;
+    }
+
+    int getMotorRpm() {
+        return std::round(motorRpm_);
+    }
+
+    void setMotorRpm(double motorRpm) {
+        motorRpm_ = motorRpm;
+    }
+
+    EfficiencyClass getEfficiencyClass() const {
+        return efficiencyClass_;
+    }
+
+    void setEfficiencyClass(EfficiencyClass efficiencyClass) {
+        efficiencyClass_ = efficiencyClass;
     }
 
     double getFullLoadEfficiency() const {
@@ -71,7 +88,23 @@ public:
         motorRatedVoltage_ = motorRatedVoltage;
     }
 
-    double getSizeMargin() const {
+    bool getFlAmps() {
+        return flAmps_;
+    }
+
+    void setFlAmps(bool flAmps) {
+        flAmps_ = flAmps;
+    }
+
+    double getFullLoadAmps() {
+        return fullLoadAmps_;
+    }
+
+    void setFullLoadAmps(double fullLoadAmps) {
+        fullLoadAmps_ = fullLoadAmps;
+    }
+
+    double getSizeMargin() {
         return sizeMargin_;
     }
 
@@ -79,28 +112,17 @@ public:
         sizeMargin_ = sizeMargin;
     }
 
-    double getActualEfficiency() const {
-        return actualEfficiency_;
-    }
-
-    void setActualEfficiency(double actualEfficiency) {
-        actualEfficiency_ = actualEfficiency;
-    }
-
-    /*
-     * This method calculates the motor shaft power, current, efficiency, power factor and electric power.
-     * This method needs to be invoked before you call methods to return current, efficiency, power factor and electric power.
-     */
-
-
 private:
-    Motor::EfficiencyClass efficiencyClass_;
-    double lineFrequency_;
+    LineFrequency lineFrequency_;
     double motorRatedPower_;
+    double motorRpm_;
+    Motor::EfficiencyClass efficiencyClass_;
     double fullLoadEfficiency_;
     double motorRatedVoltage_;
+    bool flAmps_;
+    double fullLoadAmps_;
     double sizeMargin_;
-    double actualEfficiency_;
+
 };
 
 

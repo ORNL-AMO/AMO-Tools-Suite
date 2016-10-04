@@ -1,15 +1,15 @@
 #include <iostream>
-#include "Pump.h"
-//#include "./calculator/MotorShaftPower.h"
-//#include "Motor.h"
+#include "PSATResult.h"
 using namespace std;
 
 int main() {
-    cout << "Hello" << endl;
-    //Pump *pump = new Pump();
-    //pump->setStyle(Pump::Style::API_DOUBLE_SUCTION);
-    /* For testing */
-    //MotorShaftPower *motorShaftPower = new MotorShaftPower(200,80,1780, Motor::EfficiencyClass::ENERGY_EFFICIENT, 460);
-    //cout << motorShaftPower->calculate() << endl;
-    return 0;
+    std::cout << "Hello, World!" << std::endl;
+    Pump pump(Pump::Style::API_DOUBLE_SUCTION, 1780, Pump::Drive::DIRECT_DRIVE, 1.00, 1.000, 1, false);
+    Motor motor(Motor::LineFrequency::FREQ60, 200, 1780, Motor::EfficiencyClass::ENERGY_EFFICIENT, 95, 460, false,
+                225.0, 0);
+    Financial financial(1.000, 0.05);
+    FieldData fieldData(2000, 277, FieldData::LoadEstimationMethod::POWER, 80, 0, 460);
+    PSATResult psatResult(pump, motor, financial, fieldData);
+    psatResult.calculate();
+    cout << "Motor SHaft power: " << psatResult.getExisting().motorShaftPower_ << endl;
 }

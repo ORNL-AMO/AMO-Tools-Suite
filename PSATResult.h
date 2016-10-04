@@ -5,10 +5,21 @@
 #ifndef AMO_LIBRARY_RESULTS_H
 #define AMO_LIBRARY_RESULTS_H
 
+#include "Motor.h"
+#include "Pump.h"
+#include "Financial.h"
+#include "FieldData.h"
+
 class PSATResult {
 
 public:
     PSATResult() = default;
+
+    PSATResult(Pump &pump, Motor &motor, Financial &financial, FieldData &fieldData) :
+            pump_(pump),
+            motor_(motor),
+            financial_(financial),
+            fieldData_(fieldData) {};
 
     struct result_ {
         double pumpEfficiency_;
@@ -24,7 +35,7 @@ public:
     };
 
 
-    int calculate();
+
 
     double getAnnualSavingsPotential() const {
         return annualSavingsPotential_;
@@ -43,10 +54,17 @@ public:
         return optimal_;
     }
 
+    double calculate();
 private:
+    // Out values
     result_ existing_, optimal_;
     double annualSavingsPotential_;
     double optimizationRating_;
+    // In values
+    Pump pump_;
+    Motor motor_;
+    Financial financial_;
+    FieldData fieldData_;
 };
 
 

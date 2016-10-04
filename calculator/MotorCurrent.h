@@ -8,7 +8,7 @@
 
 #include <cmath>
 #include<iostream>
-#include "../Motor.h"
+#include "../motor.h"
 #include "CurveFitVal.h"
 
 class MotorCurrent {

@@ -43,6 +43,14 @@ double MotorShaftPower::calculate() {
                            (fieldVoltage_ / ratedVoltage_));
     double adjpf2 = pf2 / (((((fieldVoltage_ / ratedVoltage_) - 1) * (((-2) * lf2) + 1)) + 1) *
                            (fieldVoltage_ / ratedVoltage_));
+    /*std::cout << (((((fieldVoltage_ / ratedVoltage_) - 1) * (((-2) * lf1) + 1)) + 1) *
+                  (fieldVoltage_ / ratedVoltage_)) << std::endl;
+    std::cout << (((((fieldVoltage_ / ratedVoltage_) - 1) * (((-2) * lf2) + 1)) + 1) *
+                  (fieldVoltage_ / ratedVoltage_))<< std::endl;
+
+    std::cout << pf1 <<std::endl;
+    std::cout << pf2 <<std::endl;
+     */
     pf = adjpf1 + 100 * (fractionalIndex_ - lf1) * (adjpf2 - adjpf1);
     //Current output
     current = motorMeasuredPower_ / (fieldVoltage_ * sqrt(3) * pf / 1000);
@@ -62,6 +70,7 @@ double MotorShaftPower::calculateEfficiency() {
 }
 
 double MotorShaftPower::calculatePowerFactor() {
+    // Adjusted Pf
     return pf;
 }
 
@@ -70,4 +79,3 @@ double MotorShaftPower::calculateElectricPower() {
     return power;
 }
  */
-

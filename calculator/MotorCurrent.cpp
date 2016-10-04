@@ -87,6 +87,7 @@ double MotorCurrent::calculate() {
     /*
      * Calculate the number of poles based on the RPM
      */
+
     int poles = 0;
     if (motorRPM_ > 3600) {
         poles = 2;

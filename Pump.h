@@ -5,10 +5,8 @@
 #ifndef AMO_LIBRARY_PUMP_H
 #define AMO_LIBRARY_PUMP_H
 
-#include "FieldData.h"
-#include "Motor.h"
-#include "Financial.h"
-#include "PSATResult.h"
+
+#include <cmath>
 
 class Pump {
 public:
@@ -29,32 +27,14 @@ public:
         DIRECT_DRIVE,
         BELT_DRIVE
     };
-    // Speed should be boolean or NO?
-    enum class Speed {
-        FIXED_SPECIFIC_SPEED,
-        NO_FIXED_SPECIFIC_SPEED
-    };
+
+    Pump(Style style, double rpm, Drive drive, double kviscosity, double sg, int stageCount, bool fixedSpeed) :
+            style_(style), rpm_(rpm), drive_(drive), kviscosity_(kviscosity), sg_(sg), stageCount_(stageCount),
+            fixedSpeed_(fixedSpeed) {};
 
     Pump() = default;
 
-    Pump(Style style, Drive drive, Speed speed, double achievableEfficiency, double rpm, int stageCount,
-         const FieldData &fieldData, const Motor &motor, const Financial &financial) : style_(style), drive_(drive),
-                                                                                       speed_(speed),
-                                                                                       achievableEfficiency_(
-                                                                                               achievableEfficiency),
-                                                                                       rpm_(rpm),
-                                                                                       stageCount_(stageCount),
-                                                                                       fieldData_(fieldData),
-                                                                                       motor_(motor),
-                                                                                       financial_(financial) {}
-
-    Pump(Drive drive, Speed speed, double achievableEfficiency, double rpm, int stageCount, const FieldData &fieldData,
-         const Motor &motor, const Financial &financial, const PSATResult &psatResult, double actualEfficiency)
-            : drive_(drive), speed_(speed), achievableEfficiency_(achievableEfficiency), rpm_(rpm),
-              stageCount_(stageCount), fieldData_(fieldData), motor_(motor), financial_(financial),
-              psatResult_(psatResult), actualEfficiency_(actualEfficiency) {}
-
-    Style getStyle() const {
+    Style getStyle() {
         return style_;
     }
 
@@ -62,7 +42,15 @@ public:
         style_ = style;
     }
 
-    Drive getDrive() const {
+    int getRpm() {
+        return std::round(rpm_);
+    }
+
+    void setRpm(double rpm) {
+        rpm_ = rpm;
+    }
+
+    Drive getDrive() {
         return drive_;
     }
 
@@ -70,31 +58,23 @@ public:
         drive_ = drive;
     }
 
-    Speed getSpeed() const {
-        return speed_;
+    double getKviscosity() {
+        return kviscosity_;
     }
 
-    void setSpeed(Speed speed) {
-        speed_ = speed;
+    void setKviscosity_(double kviscosity) {
+        kviscosity_ = kviscosity;
     }
 
-    double getAchievableEfficiency() const {
-        return achievableEfficiency_;
+    double getSg() {
+        return sg_;
     }
 
-    void setAchievableEfficiency(double achievableEfficiency) {
-        achievableEfficiency_ = achievableEfficiency;
+    void setSg(double sg) {
+        sg_ = sg;
     }
 
-    double getRpm() const {
-        return rpm_;
-    }
-
-    void setRpm(double rpm) {
-        rpm_ = rpm;
-    }
-
-    int getStageCount() const {
+    int getStageCount() {
         return stageCount_;
     }
 
@@ -102,61 +82,23 @@ public:
         stageCount_ = stageCount;
     }
 
-    const FieldData &getFieldData() const {
-        return fieldData_;
+    int getFixedSpeed() {
+        return fixedSpeed_;
     }
 
-    void setFieldData(const FieldData &fieldData) {
-        fieldData_ = fieldData;
-    }
+    void setFixedSpeed_(bool fixedSpeed) {
+        fixedSpeed_ = fixedSpeed;
+    };
 
-    const Motor &getMotor() const {
-        return motor_;
-    }
-
-    void setMotor(const Motor &motor) {
-        motor_ = motor;
-    }
-
-    const Financial &getFinancial() const {
-        return financial_;
-    }
-
-    void setFinancial(const Financial &financial) {
-        financial_ = financial;
-    }
-
-    const PSATResult &getPsatResult() const {
-        return psatResult_;
-    }
-
-    void setPsatResult(const PSATResult &psatResult) {
-        psatResult_ = psatResult;
-    }
-
-    double getActualEfficiency() const {
-        return actualEfficiency_;
-    }
-
-    void setActualEfficiency(double actualEfficiency) {
-        actualEfficiency_ = actualEfficiency;
-    }
-
-// Calculate all results
-    PSATResult calculate();
 private:
 // Input values
     Pump::Style style_;
-    Pump::Drive drive_;
-    Pump::Speed speed_;
-    double achievableEfficiency_;
     double rpm_;
+    Pump::Drive drive_;
+    double kviscosity_;
+    double sg_;
     int stageCount_;
-    FieldData fieldData_;
-    Motor motor_;
-    Financial financial_;
-    PSATResult psatResult_;
-    double actualEfficiency_;
+    bool fixedSpeed_;
 };
 
 
