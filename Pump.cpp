@@ -3,10 +3,3 @@
 //
 
 #include "Pump.h"
-
-
-
-PSATResult Pump::calculate() {
-
-    return getPsatResult();
-}

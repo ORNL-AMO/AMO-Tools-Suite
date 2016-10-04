@@ -42,11 +42,11 @@ public:
 
     double calculate();
 
-    double getLineFrequency() const {
+    Motor::LineFrequency getLineFrequency() const {
         return lineFrequency_;
     }
 
-    void setLineFrequency(double lineFrequency) {
+    void setLineFrequency(Motor::LineFrequency lineFrequency) {
         lineFrequency_ = lineFrequency;
     }
 
@@ -107,7 +107,7 @@ public:
     }
 
 private:
-    double lineFrequency_;
+    Motor::LineFrequency lineFrequency_;
     double motorRpm_;
     Motor::EfficiencyClass efficiencyClass_;
     double hp_;
