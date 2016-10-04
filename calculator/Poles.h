@@ -5,14 +5,15 @@
 #ifndef UNTITLED_POLECALCULATE_H
 #define UNTITLED_POLECALCULATE_H
 
+#include "../Motor.h"
 
 class Poles {
 public:
-    Poles(int motorRpm, int lineFreq) : motorRpm_(motorRpm), lineFreq_(lineFreq) {};
+    Poles(int motorRpm, Motor::LineFrequency lineFreq): motorRpm_(motorRpm), lineFreq_(lineFreq){};
     int calculate();
 private:
     int motorRpm_;
-    int lineFreq_;
+    Motor::LineFrequency lineFreq_;
     int poles_;
 };
 

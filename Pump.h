@@ -27,10 +27,14 @@ public:
         DIRECT_DRIVE,
         BELT_DRIVE
     };
+    enum class Speed {
+        FIXED_SPEED,
+        NOT_FIXED_SPEED
+    };
 
-    Pump(Style style, double rpm, Drive drive, double kviscosity, double sg, int stageCount, bool fixedSpeed) :
+    Pump(Style style, double rpm, Drive drive, double kviscosity, double sg, int stageCount, Speed speed) :
             style_(style), rpm_(rpm), drive_(drive), kviscosity_(kviscosity), sg_(sg), stageCount_(stageCount),
-            fixedSpeed_(fixedSpeed) {};
+            speed_(speed) {};
 
     Pump() = default;
 
@@ -82,12 +86,11 @@ public:
         stageCount_ = stageCount;
     }
 
-    int getFixedSpeed() {
-        return fixedSpeed_;
+    Speed getFixedSpeed(){
+        return speed_;
     }
-
-    void setFixedSpeed_(bool fixedSpeed) {
-        fixedSpeed_ = fixedSpeed;
+    void setFixedSpeed_(Speed speed){
+        speed_ = speed;
     };
 
 private:
@@ -98,7 +101,7 @@ private:
     double kviscosity_;
     double sg_;
     int stageCount_;
-    bool fixedSpeed_;
+    Speed speed_;
 };
 
 

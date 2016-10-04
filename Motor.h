@@ -14,7 +14,7 @@ public:
         ENERGY_EFFICIENT,
         SPECIFIED
     };
-    enum class LineFrequency {
+    enum class LineFrequency{
         FREQ60,
         FREQ50
     };
@@ -22,24 +22,23 @@ public:
     Motor(LineFrequency lineFrequency, double motorRatedPower, double motorRpm, EfficiencyClass efficiencyClass,
           double fullLoadEfficiency,
           double motorRatedVoltage, bool flAmps, double fullLoadAmps, double sizeMargin) :
-            lineFrequency_(
-                    lineFrequency),
-            motorRatedPower_(
-                    motorRatedPower),
-            motorRpm_(motorRpm),
-            efficiencyClass_(
-                    efficiencyClass),
-            fullLoadEfficiency_(
-                    fullLoadEfficiency),
-            motorRatedVoltage_(
-                    motorRatedVoltage),
-            flAmps_(flAmps),
-            fullLoadAmps_(fullLoadAmps),
-            sizeMargin_(sizeMargin) {};
+                                                                                            lineFrequency_(
+                                                                                                    lineFrequency),
+                                                                                            motorRatedPower_(
+                                                                                                    motorRatedPower),
+                                                                                            motorRpm_(motorRpm),
+                                                                                            efficiencyClass_(
+                                                                                                    efficiencyClass),
+                                                                                            fullLoadEfficiency_(
+                                                                                                    fullLoadEfficiency),
+                                                                                            motorRatedVoltage_(
+                                                                                                    motorRatedVoltage),
+                                                                                            flAmps_(flAmps),
+                                                                                            fullLoadAmps_(fullLoadAmps),
+                                                                                            sizeMargin_(sizeMargin) {};
 
 
     Motor() = default;
-
     LineFrequency getLineFrequency() const {
         return lineFrequency_;
     }
@@ -88,11 +87,11 @@ public:
         motorRatedVoltage_ = motorRatedVoltage;
     }
 
-    bool getFlAmps() {
+    bool getFlAmps(){
         return flAmps_;
     }
 
-    void setFlAmps(bool flAmps) {
+    void setFlAmps(bool flAmps){
         flAmps_ = flAmps;
     }
 

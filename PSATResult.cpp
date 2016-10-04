@@ -14,13 +14,14 @@ double PSATResult::calculate() {
 
     MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(),
                                     motor_.getEfficiencyClass(), motor_.getMotorRatedVoltage(),
-                                    fieldData_.getVoltage());
+                                    fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(), fieldData_.getMotorAmps());
     existing_.motorShaftPower_ = motorShaftPower.calculate();
     existing_.motorCurrent_ = motorShaftPower.calculateCurrent();
     existing_.motorPowerFactor_ = motorShaftPower.calculatePowerFactor();
-    existing_.motorEfficiency_= motorShaftPower.calculateEfficiency();
+    existing_.motorEfficiency_ = motorShaftPower.calculateEfficiency();
     //existing_.motorPower_ = motorShaftPower.calculateElectricPower();
-
+    existing_.motorRatedPower_ = motor_.getMotorRatedPower();
+    existing_.motorPower_ = motorShaftPower.calculatePower();
     // Calculate PumpShaftPower
     PumpShaftPower pumpShaftPower(existing_.motorShaftPower_, pump_.getDrive());
     existing_.pumpShaftPower_ = pumpShaftPower.calculate();
@@ -31,7 +32,7 @@ double PSATResult::calculate() {
     existing_.pumpEfficiency_ = pumpEfficiency.calculate();
 
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(fieldData_.getMotorPower(), financial_.getOperatingFraction());
+    AnnualEnergy annualEnergy(existing_.motorPower_, financial_.getOperatingFraction());
     existing_.annualEnergy_ = annualEnergy.calculate();
 
     // Calculate Annual Cost

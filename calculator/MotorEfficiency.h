@@ -14,31 +14,12 @@ class MotorEfficiency {
 public:
 
     MotorEfficiency(//double lineFrequency,
-            double motorRpm, Motor::EfficiencyClass efficiencyClass,
-            //double hp,
-            //FieldData::LoadEstimationMethod loadEstimationMethod,
-            //double motorKwh, double motorAmps,
-            //double ratedVoltage,
-            double motorRatedPower, double motorMeasuredPower, double loadFactor)
-            : //lineFrequency_(lineFrequency),
-              motorRpm_(motorRpm),
+            double motorRpm, Motor::EfficiencyClass efficiencyClass, double motorRatedPower,
+            double loadFactor)
+            : motorRpm_(motorRpm),
               efficiencyClass_(efficiencyClass),
-            //hp_(hp),
-            //loadEstimationMethod_(loadEstimationMethod),
-            //motorKwh_(motorKwh),
-            //motorAmps_(motorAmps),
-            //ratedVoltage_(ratedVoltage),
-              motorMeasuredPower_(
-                                                                                                 motorMeasuredPower),
               motorRatedPower_(
-                      motorRatedPower), loadFactor_(loadFactor) {}
-
-/*    MotorEfficiency(double lineFrequency, double motorRpm, double hp,
-                    FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
-                    double voltage, double actualEfficiency) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
-                                                               hp_(hp), loadEstimationMethod_(loadEstimationMethod),
-                                                               motorKwh_(motorKwh), motorAmps_(motorAmps),
-                                                               voltage_(voltage), actualEfficiency_(actualEfficiency) {}*/
+                      motorRatedPower), loadFactor_(loadFactor) {};
 
     double calculate();
 
@@ -117,7 +98,6 @@ private:
     //double ratedVoltage_;
     double actualEfficiency_;
     double motorRatedPower_;
-    double motorMeasuredPower_;
     double loadFactor_ = 0;
 };
 

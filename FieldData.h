@@ -13,7 +13,7 @@ public:
         CURRENT
     };
 
-    FieldData(double flowRate, double head, LoadEstimationMethod loadEstimationMethod, double motorPower,
+    FieldData( double flowRate, double head, LoadEstimationMethod loadEstimationMethod, double motorPower,
               double motorAmps, double voltage) : loadEstimationMethod_(loadEstimationMethod), flowRate_(flowRate),
                                                   head_(head), motorPower_(motorPower), motorAmps_(motorAmps),
                                                   voltage_(voltage) {}

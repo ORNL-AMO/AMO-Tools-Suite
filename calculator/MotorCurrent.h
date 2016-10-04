@@ -15,10 +15,10 @@ class MotorCurrent {
 public:
     //MotorCurrent(double motorAmps, double motorKw, double voltage) : motorAmps_(motorAmps), motorKw_(motorKw),voltage_(voltage) {}
     MotorCurrent(double motorRatedPower, int motorRPM,
-                 Motor::EfficiencyClass efficiencyClass, double loadFactor, double ratedVoltage) :
-            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
-            efficiencyClass_(efficiencyClass),
-            loadFactor_(loadFactor), ratedVoltage_(ratedVoltage) {};
+                 Motor::EfficiencyClass efficiencyClass, double loadFactor , double ratedVoltage) :
+                                                                              motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
+                                                                              efficiencyClass_(efficiencyClass),
+                                                                              loadFactor_(loadFactor), ratedVoltage_(ratedVoltage) {};
     double calculate();
 
 /*    double getMotorAmps() const {
@@ -57,7 +57,7 @@ private:
     Motor::EfficiencyClass efficiencyClass_;
     double loadFactor_ = 0.0;
     double motorCurrent_ = 0.0;
-    double ratedVoltage_ = 0.0;
+    double ratedVoltage_ =0.0;
 };
 
 

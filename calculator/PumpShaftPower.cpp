@@ -14,6 +14,5 @@ double PumpShaftPower::calculate() {
     } else {
         // Calculate using the sheet
     }
-    //return pumpShaftPower_;
-    return 101.19;
+    return pumpShaftPower_;
 }

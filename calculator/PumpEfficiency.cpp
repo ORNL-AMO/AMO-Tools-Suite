@@ -14,6 +14,7 @@ double PumpEfficiency::calculate() {
      * Calculate fluid power in hp
      */
     fluidPowerHp_ = fluidPower_ / 0.746;
+
     /*
      * Calculate pump efficiency
      */
