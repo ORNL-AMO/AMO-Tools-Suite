@@ -20,7 +20,7 @@ public:
     };
 
     Motor(LineFrequency lineFrequency, double motorRatedPower, double motorRpm, EfficiencyClass efficiencyClass,
-          double fullLoadEfficiency,
+          double specifiedEfficiency,
           double motorRatedVoltage, bool flAmps, double fullLoadAmps, double sizeMargin) :
                                                                                             lineFrequency_(
                                                                                                     lineFrequency),
@@ -29,8 +29,8 @@ public:
                                                                                             motorRpm_(motorRpm),
                                                                                             efficiencyClass_(
                                                                                                     efficiencyClass),
-                                                                                            fullLoadEfficiency_(
-                                                                                                    fullLoadEfficiency),
+                                                                                            specifiedEfficiency_(
+                                                                                                    specifiedEfficiency),
                                                                                             motorRatedVoltage_(
                                                                                                     motorRatedVoltage),
                                                                                             flAmps_(flAmps),
@@ -72,11 +72,11 @@ public:
     }
 
     double getFullLoadEfficiency() const {
-        return fullLoadEfficiency_;
+        return specifiedEfficiency_;
     }
 
     void setFullLoadEfficiency(double fullLoadEfficiency) {
-        fullLoadEfficiency_ = fullLoadEfficiency;
+        specifiedEfficiency_ = fullLoadEfficiency;
     }
 
     double getMotorRatedVoltage() const {
@@ -116,7 +116,7 @@ private:
     double motorRatedPower_;
     double motorRpm_;
     Motor::EfficiencyClass efficiencyClass_;
-    double fullLoadEfficiency_;
+    double specifiedEfficiency_;
     double motorRatedVoltage_;
     bool flAmps_;
     double fullLoadAmps_;
