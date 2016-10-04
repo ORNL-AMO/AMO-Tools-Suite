@@ -21,7 +21,7 @@ public:
 
     Motor(LineFrequency lineFrequency, double motorRatedPower, double motorRpm, EfficiencyClass efficiencyClass,
           double specifiedEfficiency,
-          double motorRatedVoltage, bool flAmps, double fullLoadAmps, double sizeMargin) :
+          double motorRatedVoltage, double fullLoadAmps, double sizeMargin) :
                                                                                             lineFrequency_(
                                                                                                     lineFrequency),
                                                                                             motorRatedPower_(
@@ -33,7 +33,6 @@ public:
                                                                                                     specifiedEfficiency),
                                                                                             motorRatedVoltage_(
                                                                                                     motorRatedVoltage),
-                                                                                            flAmps_(flAmps),
                                                                                             fullLoadAmps_(fullLoadAmps),
                                                                                             sizeMargin_(sizeMargin) {};
 
@@ -87,14 +86,6 @@ public:
         motorRatedVoltage_ = motorRatedVoltage;
     }
 
-    bool getFlAmps(){
-        return flAmps_;
-    }
-
-    void setFlAmps(bool flAmps){
-        flAmps_ = flAmps;
-    }
-
     double getFullLoadAmps() {
         return fullLoadAmps_;
     }
@@ -118,7 +109,6 @@ private:
     Motor::EfficiencyClass efficiencyClass_;
     double specifiedEfficiency_;
     double motorRatedVoltage_;
-    bool flAmps_;
     double fullLoadAmps_;
     double sizeMargin_;
 
