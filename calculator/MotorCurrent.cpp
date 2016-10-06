@@ -19,7 +19,7 @@ double MotorCurrent::calculate() {
      * Use the fit coefficients to populate, in 1% load intervals, the current range from 126 to 150% load
      *
      */
-    EstimateFLA estimateFLA(motorRatedPower_, motorRPM_, efficiencyClass_,ratedVoltage_, specifiedEfficiency_);
+    EstimateFLA estimateFLA(motorRatedPower_, motorRPM_, efficiencyClass_,specifiedEfficiency_, ratedVoltage_ );
     double *plValues = estimateFLA.calculate();
     estimatedFLA_ = estimateFLA.getEstimatedFLA();
     // Adjustment based on the specified FLA

@@ -10,9 +10,9 @@
 #include<iostream>
 class EstimateFLA {
 public:
-    EstimateFLA(double motorRatedPower, int motorRPM, Motor::EfficiencyClass efficiencyClass, double ratedVoltage, double specifiedEfficiency) :
-            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass),
-            ratedVoltage_(ratedVoltage), specifiedEfficiency_(specifiedEfficiency) {};
+    EstimateFLA(double motorRatedPower, int motorRPM, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double ratedVoltage) :
+            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass), specifiedEfficiency_(specifiedEfficiency),
+            ratedVoltage_(ratedVoltage) {};
 
     // Returns the 25% interval arrays.
     double *calculate();
