@@ -70,11 +70,11 @@ public:
         efficiencyClass_ = efficiencyClass;
     }
 
-    double getFullLoadEfficiency() const {
+    double getSpecifiedEfficiency() const {
         return specifiedEfficiency_;
     }
 
-    void setFullLoadEfficiency(double fullLoadEfficiency) {
+    void setSpecifiedEfficiency(double fullLoadEfficiency) {
         specifiedEfficiency_ = fullLoadEfficiency;
     }
 

@@ -9,15 +9,17 @@
 #include "../FieldData.h"
 #include <cmath>
 #include "CurveFitVal.h"
+#include "MotorEfficiency25.h"
 
 class MotorEfficiency {
 public:
 
     MotorEfficiency(//double lineFrequency,
-            double motorRpm, Motor::EfficiencyClass efficiencyClass, double motorRatedPower,
+            double motorRpm, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double motorRatedPower,
             double loadFactor)
             : motorRpm_(motorRpm),
               efficiencyClass_(efficiencyClass),
+              specifiedEfficiency_(specifiedEfficiency),
               motorRatedPower_(
                       motorRatedPower), loadFactor_(loadFactor) {};
 
@@ -89,8 +91,10 @@ public:
 
 private:
     Motor::LineFrequency lineFrequency_;
+    double motorEff_ = 0.0;
     double motorRpm_;
     Motor::EfficiencyClass efficiencyClass_;
+    double specifiedEfficiency_;
     double hp_;
     FieldData::LoadEstimationMethod loadEstimationMethod_;
     double motorKwh_;
@@ -99,6 +103,7 @@ private:
     double actualEfficiency_;
     double motorRatedPower_;
     double loadFactor_ = 0;
+    double *motorEfficiency_;
 };
 
 

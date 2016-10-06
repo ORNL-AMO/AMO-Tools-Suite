@@ -13,8 +13,9 @@
 double PSATResult::calculate() {
 
     MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(),
-                                    motor_.getEfficiencyClass(), motor_.getMotorRatedVoltage(),
-                                    fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(), fieldData_.getMotorAmps());
+                                    motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(), motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
+                                    fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
+                                    fieldData_.getMotorAmps());
     existing_.motorShaftPower_ = motorShaftPower.calculate();
     existing_.motorCurrent_ = motorShaftPower.calculateCurrent();
     existing_.motorPowerFactor_ = motorShaftPower.calculatePowerFactor();
@@ -22,6 +23,7 @@ double PSATResult::calculate() {
     //existing_.motorPower_ = motorShaftPower.calculateElectricPower();
     existing_.motorRatedPower_ = motor_.getMotorRatedPower();
     existing_.motorPower_ = motorShaftPower.calculatePower();
+    existing_.estimatedFLA_ = motorShaftPower.calculateEstimatedFLA();
     // Calculate PumpShaftPower
     PumpShaftPower pumpShaftPower(existing_.motorShaftPower_, pump_.getDrive());
     existing_.pumpShaftPower_ = pumpShaftPower.calculate();

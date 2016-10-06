@@ -32,6 +32,7 @@ public:
         double motorPower_;
         double annualEnergy_;
         double annualCost_;
+        double estimatedFLA_;
     };
 
 
