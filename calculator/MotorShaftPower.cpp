@@ -119,7 +119,7 @@ double MotorShaftPower::calculate() {
         //pf = power / (current * fieldPower_ * sqrt(3) / 1000);
         //std::cout << "PF: " << pf << std::endl;
         // Output in kW
-        motorShaftPower_ = fieldPower_ * eff;
+        motorShaftPower_ = power * eff;
         // Output in hP
         motorShaftPower_ = motorShaftPower_ / 0.746;
         return motorShaftPower_;
