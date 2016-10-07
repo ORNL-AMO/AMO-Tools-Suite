@@ -17,6 +17,7 @@ double MotorShaftPower::calculate() {
             MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_);
             eff = motorEfficiency.calculate();
             MotorPowerFactor motorPowerFactor(motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
+
             pf = motorPowerFactor.calculate();
             MotorPower motorPower(ratedVoltage_, current, pf);
             power = motorPower.calculate();
@@ -101,6 +102,7 @@ double MotorShaftPower::calculate() {
         // Adjust pf based on specified FLA
         pf = pf / (fullLoadAmps_/estimatedFLA);
 
+
         // Very similar to the Power case above. May be convert to a function?
 
         // Adjust current
@@ -113,7 +115,9 @@ double MotorShaftPower::calculate() {
         current = fieldCurrent_;
         eff = eff1 + 100 * (fractionalIndex_ - lf1) * (eff2 - eff1);
         power = powerE1 + 100 * (fractionalIndex_ - lf1) * (powerE2 - powerE1);
-        pf = power / (current * fieldPower_ * sqrt(3) / 1000);
+        // Below is not giving correct answer.
+        //pf = power / (current * fieldPower_ * sqrt(3) / 1000);
+        //std::cout << "PF: " << pf << std::endl;
         // Output in kW
         motorShaftPower_ = fieldPower_ * eff;
         // Output in hP

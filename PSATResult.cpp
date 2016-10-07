@@ -10,7 +10,7 @@
 #include "calculator/AnnualEnergy.h"
 
 
-double PSATResult::calculate() {
+double PSATResult::calculateExisting() {
 
     MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(),
                                     motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(), motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
@@ -40,6 +40,24 @@ double PSATResult::calculate() {
     // Calculate Annual Cost
     AnnualCost annualCost(existing_.annualEnergy_, financial_.getUnitCost());
     existing_.annualCost_ = annualCost.calculate();
+
+    return 0;
+}
+
+double PSATResult::calculateOptimal() {
+    /*
+    Calculate optimal pump efficiency, fluid power and pump shaft power
+    If a belt drive is specified, calculate the motor shaft power
+    If direct drive, motor shaft power = pump shaft power
+    Select motor size based on required motor shaft power
+    Develop 25% interval motor performance data for EE motor of the selected size *
+    Do curve fitting of current from 25% to 1% intervals
+    Do curve fitting of efficiency in 1% intervals
+    Using current and efficiency 1% interval data, calculate balance of motor data in 1% intervals
+    Calculate required power, motor eff., current, pf from shaft power
+    Calculate annual energy and energy cost
+    Calculate annual savings potential and optimization rating
+     */
 
     return 0;
 }

@@ -55,7 +55,8 @@ public:
         return optimal_;
     }
 
-    double calculate();
+    double calculateExisting();
+    double calculateOptimal();
 private:
     // Out values
     result_ existing_, optimal_;
