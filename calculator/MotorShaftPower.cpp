@@ -21,6 +21,7 @@ double MotorShaftPower::calculate() {
             pf = motorPowerFactor.calculate();
             MotorPower motorPower(ratedVoltage_, current, pf);
             power = motorPower.calculate();
+            std::cout << tempLoadFraction_ << ":" << current <<  ":" << eff <<":" << pf << ":" <<power<< std:: endl;
             if (power > fieldPower_ || tempLoadFraction_ > 1.5) {
                 powerE2 = power;
                 lf2 = tempLoadFraction_;
@@ -36,7 +37,7 @@ double MotorShaftPower::calculate() {
                 tempLoadFraction_ += 0.01;
             }
         }
-        std::cout << tempLoadFraction_ << std:: endl;
+
         double motorPowerdiff_ = powerE2 - powerE1;
         double measuredMotorPowerdiff_ = fieldPower_ - powerE1;
         double fractionalIndex_ = lf1 + ((measuredMotorPowerdiff_ / motorPowerdiff_) / 100);
