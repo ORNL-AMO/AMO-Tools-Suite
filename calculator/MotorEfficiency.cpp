@@ -28,8 +28,6 @@ double MotorEfficiency::calculate() {
          * E.g.: 0.92 is correct, 92 is wrong.
          */
 
-
-        std::cout << std::endl;
         if(efficiencyClass_==Motor::EfficiencyClass::ENERGY_EFFICIENT) {
             MotorEfficiency25 motorEfficiency25(efficiencyClass_, motorRatedPower_);
             motorEfficiency_ = motorEfficiency25.calculate();
@@ -66,12 +64,6 @@ double MotorEfficiency::calculate() {
             }
         }
 
-        for (int j = 0; j < 5; ++j) {
-            std::cout << motorEfficiency_[j] << ":";
-
-        }
-        std::cout << std::endl;
-
         double kWloss25 = ((1 / motorEfficiency_[0]) - 1) * motorRatedPower_ * 0.746 * 0.25;
         double kWloss0 = 0.8 * kWloss25;
 
@@ -85,7 +77,6 @@ double MotorEfficiency::calculate() {
             double kWshaft_ = motorRatedPower_ * 0.746 * (loadFactor_); // Make sure motorRatedPower is in hp
             double kWe_ = kWloss_ + kWshaft_; // Input electric power
             motorEff_ = kWshaft_ / kWe_; //Final efficiency calculation
-            std::cout << "In25 lf: " << loadFactor_ << "motoreff: " << motorEff_ << std::endl;
         }
             /*
              * 26 - 125
@@ -99,14 +90,8 @@ double MotorEfficiency::calculate() {
             double xCoord_[5] = {.25, .50, .75, 1.00, 1.25};
             double yCoord_[5] = {motorEfficiency_[0], motorEfficiency_[1], motorEfficiency_[2], motorEfficiency_[3],
                                  motorEfficiency_[4]};
-            std::cout << "Ycoord: ";
-            for (int i = 0; i < 5; ++i) {
-                std::cout << yCoord_[i] << "**";
-            }
-            std::cout << std::endl;
             CurveFitVal cfv(5, xCoord_, yCoord_, 4, loadFactor_);
             motorEff_ = cfv.calculate();
-            std::cout << "In125 lf: " << loadFactor_ << "motoreff: " << motorEff_ << std::endl;
         }
             /*
              * 126 - 150
@@ -126,7 +111,6 @@ double MotorEfficiency::calculate() {
 /*    else{
         motorEff_ = specifiedEfficiency_;
     }*/
-    std::cout << "Out lf: " << loadFactor_ << "motoreff: " << motorEff_ << std::endl;
     return motorEff_;
     //return 94.36;
 }

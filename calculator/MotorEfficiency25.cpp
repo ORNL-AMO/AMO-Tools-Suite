@@ -204,15 +204,7 @@ std::vector<double> MotorEfficiency25::calculate(){
       * At 0% load, the motor efficiency is, by definition,tion, 0%
       */
     std::vector <double> motorEfficiency_(5);
-    //double eeMotorEfficiency_[5] = {};
-    //double seMotorEfficiency_[5] = {};
-//    if(efficiencyClass_ != Motor::EfficiencyClass::SPECIFIED) {
 
-    for (int j = 0; j < 5; ++j) {
-        std::cout << motorEfficiency_[j] << ":";
-
-    }
-    cout << endl;
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (int i = 0; i < 4; ++i) { //cols
             if (motorRatedPower_ <= 125) {
@@ -259,10 +251,5 @@ std::vector<double> MotorEfficiency25::calculate(){
      * Corrections if the efficiency is specified
      */
 
-    for (int j = 0; j < 5; ++j) {
-        std::cout << motorEfficiency_[j] << ":";
-
-    }
-    cout << endl;
     return motorEfficiency_;
 };

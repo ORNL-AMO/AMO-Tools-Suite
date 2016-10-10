@@ -21,8 +21,6 @@ double MotorShaftPower::calculate() {
             pf = motorPowerFactor.calculate();
             MotorPower motorPower(ratedVoltage_, current, pf);
             power = motorPower.calculate();
-            std::cout << tempLoadFraction_ << ":" << current <<  ":" << eff <<":" << pf << ":" <<power<< std:: endl;
-            std::cout << "********************************************" << std::endl;
             if (power > fieldPower_ || tempLoadFraction_ > 1.5) {
                 powerE2 = power;
                 lf2 = tempLoadFraction_;
@@ -60,7 +58,6 @@ double MotorShaftPower::calculate() {
         motorShaftPower_ = motorShaftPower_ / 0.746;
         // Electric power is same as Field value when load estimation method is POWER
         power = fieldPower_;
-        motorShaftPower_ = 777;
         return motorShaftPower_;
     } else {
         // Load estimation method is current.

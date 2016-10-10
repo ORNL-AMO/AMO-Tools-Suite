@@ -13,10 +13,6 @@ double CurveFitVal::calculate() {
     /*
      * Array to store Sigma X values
      */
-    for (int n = 0; n < noIntervalPoints_; ++n) {
-        cout << n << ": Xcoord: " << xcoord_[n] << ": Ycoord:" <<ycoord_[n] << "***";
-    }
-    cout << endl;
     vector<double> sigmaX_(2 * pdegree_ + 1);
     for (i = 0; i < 2 * pdegree_ + 1; i++) {
         sigmaX_[i] = 0;
@@ -92,8 +88,6 @@ double CurveFitVal::calculate() {
     double temp_ = 0;
     for (int l = 0; l < pdegreeplus; ++l) {
         temp_ += coeff_[l] * pow(loadFactor_, l);
-       cout << "Coeff" << l << ": " << coeff_[l];
     }
-     cout << "temp_: " << temp_ << endl;
     return temp_;
 }
