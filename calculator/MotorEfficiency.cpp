@@ -41,10 +41,10 @@ double MotorEfficiency::calculate() {
         else if (efficiencyClass_==Motor::EfficiencyClass::SPECIFIED){
 
             MotorEfficiency25 eeMotorEfficiency(Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower_);
-            double *motorEfficiencyE_ = eeMotorEfficiency.calculate();
+            std::vector<double> motorEfficiencyE_ = eeMotorEfficiency.calculate();
             motorEfficiency_ = eeMotorEfficiency.calculate();
             MotorEfficiency25 seMotorEfficiency(Motor::EfficiencyClass::STANDARD, motorRatedPower_);
-            double *motorEfficiencyS_ = seMotorEfficiency.calculate();
+            std::vector<double> motorEfficiencyS_ = seMotorEfficiency.calculate();
 
 
             if(fabs(motorEfficiencyE_[3] - specifiedEfficiency_) > fabs(motorEfficiencyS_[3] - specifiedEfficiency_)){

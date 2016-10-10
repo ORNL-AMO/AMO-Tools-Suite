@@ -103,7 +103,7 @@ private:
     double actualEfficiency_;
     double motorRatedPower_;
     double loadFactor_ = 0;
-    double *motorEfficiency_;
+    std::vector<double> motorEfficiency_;
 };
 
 

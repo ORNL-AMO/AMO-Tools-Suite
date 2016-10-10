@@ -6,7 +6,7 @@
 #include <iostream>
 using namespace std;
 
-double * MotorEfficiency25::calculate(){
+std::vector<double> MotorEfficiency25::calculate(){
     /*
 * Define the coefficients for various partial loads
 */
@@ -203,6 +203,7 @@ double * MotorEfficiency25::calculate(){
       * The 25%,50%,75%, and 100% load efficiencies are calculated using the above double-exponential calculation
       * At 0% load, the motor efficiency is, by definition,tion, 0%
       */
+    std::vector <double> motorEfficiency_(5);
     //double eeMotorEfficiency_[5] = {};
     //double seMotorEfficiency_[5] = {};
 //    if(efficiencyClass_ != Motor::EfficiencyClass::SPECIFIED) {

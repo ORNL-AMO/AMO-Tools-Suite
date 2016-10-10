@@ -6,15 +6,17 @@
 #define UNTITLED_MOTOREFFICIENCY25_H
 
 #include "../Motor.h"
+#include <vector>
 
 class MotorEfficiency25 {
 public:
     MotorEfficiency25(Motor::EfficiencyClass efficiencyClass, double motorRatedPower):efficiencyClass_(efficiencyClass), motorRatedPower_(motorRatedPower){};
-    double *calculate();
+    std::vector<double> calculate();
 private:
     Motor::EfficiencyClass efficiencyClass_;
     double motorRatedPower_;
-    double motorEfficiency_[5] = {};
+
+    //double motorEfficiency_[5] = {};
 };
 
 
