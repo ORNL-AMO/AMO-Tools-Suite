@@ -3,7 +3,7 @@
 //
 
 #include "CurveFitVal.h"
-
+#include <iostream>
 using namespace std;
 double CurveFitVal::calculate() {
     /*
@@ -84,10 +84,13 @@ double CurveFitVal::calculate() {
     /*
      * Returning the value instead of the coefficients
      */
+
+
     double temp_ = 0;
     for (int l = 0; l < pdegreeplus; ++l) {
         temp_ += coeff_[l] * pow(loadFactor_, l);
+       cout << "Coeff" << l << ": " << coeff_[l];
     }
-
+     cout << "temp_: " << temp_ << endl;
     return temp_;
 }
