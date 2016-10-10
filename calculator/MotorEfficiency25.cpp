@@ -3,6 +3,8 @@
 //
 
 #include "MotorEfficiency25.h"
+#include <iostream>
+using namespace std;
 
 double * MotorEfficiency25::calculate(){
     /*
@@ -205,7 +207,9 @@ double * MotorEfficiency25::calculate(){
     //double seMotorEfficiency_[5] = {};
 //    if(efficiencyClass_ != Motor::EfficiencyClass::SPECIFIED) {
 
-
+    for (int j = 0; j < 5; ++j) {
+        std::cout << motorEfficiency_[j] << endl;
+    }
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (int i = 0; i < 4; ++i) { //cols
             if (motorRatedPower_ <= 125) {
@@ -251,5 +255,9 @@ double * MotorEfficiency25::calculate(){
     /*
      * Corrections if the efficiency is specified
      */
+
+    for (int j = 0; j < 5; ++j) {
+        std::cout << motorEfficiency_[j] << endl;
+    }
     return motorEfficiency_;
 };
