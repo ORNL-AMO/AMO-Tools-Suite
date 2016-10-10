@@ -208,8 +208,10 @@ double * MotorEfficiency25::calculate(){
 //    if(efficiencyClass_ != Motor::EfficiencyClass::SPECIFIED) {
 
     for (int j = 0; j < 5; ++j) {
-        std::cout << motorEfficiency_[j] << endl;
+        std::cout << motorEfficiency_[j] << ":";
+
     }
+    cout << endl;
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (int i = 0; i < 4; ++i) { //cols
             if (motorRatedPower_ <= 125) {
@@ -257,7 +259,9 @@ double * MotorEfficiency25::calculate(){
      */
 
     for (int j = 0; j < 5; ++j) {
-        std::cout << motorEfficiency_[j] << endl;
+        std::cout << motorEfficiency_[j] << ":";
+
     }
+    cout << endl;
     return motorEfficiency_;
 };

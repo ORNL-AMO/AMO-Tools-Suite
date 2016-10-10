@@ -22,6 +22,7 @@ double MotorShaftPower::calculate() {
             MotorPower motorPower(ratedVoltage_, current, pf);
             power = motorPower.calculate();
             std::cout << tempLoadFraction_ << ":" << current <<  ":" << eff <<":" << pf << ":" <<power<< std:: endl;
+            std::cout << "********************************************" << std::endl;
             if (power > fieldPower_ || tempLoadFraction_ > 1.5) {
                 powerE2 = power;
                 lf2 = tempLoadFraction_;
