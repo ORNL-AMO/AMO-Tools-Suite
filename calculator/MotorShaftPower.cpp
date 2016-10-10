@@ -36,7 +36,7 @@ double MotorShaftPower::calculate() {
                 tempLoadFraction_ += 0.01;
             }
         }
-
+        std::cout << tempLoadFraction_ << std:: endl;
         double motorPowerdiff_ = powerE2 - powerE1;
         double measuredMotorPowerdiff_ = fieldPower_ - powerE1;
         double fractionalIndex_ = lf1 + ((measuredMotorPowerdiff_ / motorPowerdiff_) / 100);
@@ -58,6 +58,7 @@ double MotorShaftPower::calculate() {
         motorShaftPower_ = motorShaftPower_ / 0.746;
         // Electric power is same as Field value when load estimation method is POWER
         power = fieldPower_;
+        motorShaftPower_ = 777;
         return motorShaftPower_;
     } else {
         // Load estimation method is current.

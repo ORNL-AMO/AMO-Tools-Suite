@@ -3,6 +3,7 @@
 using namespace std;
 
 int main() {
+
     std::cout << "Hello, World!" << std::endl;
     Pump pump(Pump::Style::API_DOUBLE_SUCTION, 1780, Pump::Drive::DIRECT_DRIVE, 1.00, 1.000, 1, Pump::Speed::NOT_FIXED_SPEED);
     Motor motor(Motor::LineFrequency::FREQ60, 200, 1780, Motor::EfficiencyClass::ENERGY_EFFICIENT, 95, 460, 225.0, 0);
@@ -23,7 +24,6 @@ int main() {
     cout << "Annual Energy: " << psatResult.getExisting().annualEnergy_ << endl;
     cout << "Annual Cost: " << psatResult.getExisting().annualCost_ << endl;
     cout << "Estimated FLA: " << psatResult.getExisting().estimatedFLA_ << endl;
-
 
     Pump pump1(Pump::Style::END_SUCTION_ANSI_API,1780,Pump::Drive::DIRECT_DRIVE,
               1,1,1,Pump::Speed::NOT_FIXED_SPEED);
