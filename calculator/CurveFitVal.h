@@ -17,14 +17,16 @@ private:
     double loadFactor_;
     // It is the output. Array to store coefficients of the polynomial curve
 public:
-    CurveFitVal(int noIntervalPoints, double xcoord[], double ycoord[], int pdegree, double loadFactor) {
-        noIntervalPoints_ = noIntervalPoints;
-        pdegree_ = pdegree;
-        xcoord_ = new double[noIntervalPoints_];
-        ycoord_ = new double[noIntervalPoints_];
-        xcoord_ = xcoord; // Copying the pointer to 1st element, will make a complete copy if it hampers later.
-        ycoord_ = ycoord;
-        loadFactor_ = loadFactor;
+    CurveFitVal(int noIntervalPoints, double xcoord[], double ycoord[], int pdegree, double loadFactor)
+            : noIntervalPoints_(noIntervalPoints), pdegree_(pdegree), xcoord_(xcoord), ycoord_(ycoord),
+              loadFactor_(loadFactor) {
+        /*       noIntervalPoints_ = noIntervalPoints;
+               pdegree_ = pdegree;
+               //xcoord_ = new double[noIntervalPoints_];
+               //ycoord_ = new double[noIntervalPoints_];
+               xcoord_ = xcoord; // Copying the pointer to 1st element, will make a complete copy if it hampers later.
+               ycoord_ = ycoord;
+               loadFactor_ = loadFactor;*/
     }
 
 //    virtual ~CurveFitVal() {
