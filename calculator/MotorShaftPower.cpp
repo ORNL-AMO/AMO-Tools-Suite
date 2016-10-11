@@ -8,10 +8,6 @@
 #include "MotorCurrent.h"
 #include "MotorPowerFactor.h"
 
-#include <iostream>
-#include <iomanip>
-using namespace std;
-
 double MotorShaftPower::calculate() {
     if (loadEstimationMethod_ == FieldData::LoadEstimationMethod::POWER) {
         tempLoadFraction_ = 0.01;
