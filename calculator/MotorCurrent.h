@@ -15,9 +15,10 @@
 class MotorCurrent {
 public:
     //MotorCurrent(double motorAmps, double motorKw, double voltage) : motorAmps_(motorAmps), motorKw_(motorKw),voltage_(voltage) {}
-    MotorCurrent(double motorRatedPower, int motorRPM,
+    MotorCurrent(double motorRatedPower, int motorRPM, Motor::LineFrequency lineFrequency,
                  Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor , double ratedVoltage, double fullLoadAmps) :
                                                                               motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
+                                                                              lineFrequency_(lineFrequency),
                                                                               efficiencyClass_(efficiencyClass),
                                                                               specifiedEfficiency_(specifiedEfficiency),
                                                                               loadFactor_(loadFactor), ratedVoltage_(ratedVoltage),
@@ -61,6 +62,7 @@ private:
     double motorRatedPower_ = 0.0;
 
     int motorRPM_ = 0;
+    Motor::LineFrequency lineFrequency_;
     Motor::EfficiencyClass efficiencyClass_;
     double specifiedEfficiency_ =0.0;
     double loadFactor_ = 0.0;
@@ -68,6 +70,7 @@ private:
     double ratedVoltage_ =0.0;
     double estimatedFLA_ = 0.0;
     double fullLoadAmps_ = 0.0;
+
 };
 
 
