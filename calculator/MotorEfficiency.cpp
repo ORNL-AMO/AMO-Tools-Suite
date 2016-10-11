@@ -29,19 +29,19 @@ double MotorEfficiency::calculate() {
          */
 
         if(efficiencyClass_==Motor::EfficiencyClass::ENERGY_EFFICIENT) {
-            MotorEfficiency25 motorEfficiency25(efficiencyClass_, motorRatedPower_);
+            MotorEfficiency25 motorEfficiency25(efficiencyClass_, motorRatedPower_, motorRpm_, lineFrequency_);
             motorEfficiency_ = motorEfficiency25.calculate();
         }
         else if (efficiencyClass_==Motor::EfficiencyClass::STANDARD){
-            MotorEfficiency25 motorEfficiency25(efficiencyClass_, motorRatedPower_);
+            MotorEfficiency25 motorEfficiency25(efficiencyClass_, motorRatedPower_, motorRpm_, lineFrequency_);
             motorEfficiency_ = motorEfficiency25.calculate();
         }
         else if (efficiencyClass_==Motor::EfficiencyClass::SPECIFIED){
 
-            MotorEfficiency25 eeMotorEfficiency(Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower_);
+            MotorEfficiency25 eeMotorEfficiency(Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower_, motorRpm_, lineFrequency_);
             std::vector<double> motorEfficiencyE_ = eeMotorEfficiency.calculate();
             motorEfficiency_ = eeMotorEfficiency.calculate();
-            MotorEfficiency25 seMotorEfficiency(Motor::EfficiencyClass::STANDARD, motorRatedPower_);
+            MotorEfficiency25 seMotorEfficiency(Motor::EfficiencyClass::STANDARD, motorRatedPower_, motorRpm_, lineFrequency_);
             std::vector<double> motorEfficiencyS_ = seMotorEfficiency.calculate();
 
 
