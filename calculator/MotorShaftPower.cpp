@@ -125,7 +125,7 @@ double MotorShaftPower::calculate() {
         eff = eff1 + 100 * (fractionalIndex_ - lf1) * (eff2 - eff1);
         power = powerE1 + 100 * (fractionalIndex_ - lf1) * (powerE2 - powerE1);
         // Below is not giving correct answer.
-        //pf = power / (current * fieldPower_ * sqrt(3) / 1000);
+        pf = power / (current * fieldVoltage_ * sqrt(3) / 1000);
         //std::cout << "PF: " << pf << std::endl;
         // Output in kW
         motorShaftPower_ = power * eff;
