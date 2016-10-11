@@ -5,6 +5,7 @@
 #include "Poles.h"
 
 int Poles::calculate() {
+    poles_ =0;
     if(lineFreq_ == Motor::LineFrequency::FREQ60) {
         if(motorRpm_ >= 3240 && motorRpm_ <= 3960) poles_ = 2;
         else if(motorRpm_ >= 1620 && motorRpm_ <= 1980) poles_ = 4;
@@ -20,6 +21,22 @@ int Poles::calculate() {
         else if(motorRpm_ >= 675 && motorRpm_ <= 825) poles_ = 8;
         else if(motorRpm_ >= 540 && motorRpm_ <= 660) poles_ = 10;
         else if(motorRpm_ >= 450 && motorRpm_ <= 550) poles_ = 12;
+    }
+
+    /*
+     * Backup case when the Rpm does not fall within any range. Currently the equation for 60 Hz is used. 50 Hz equation
+     * is not available at the time of implementing this.
+     */
+    if (poles_ == 0){
+        if (motorRpm_ > 3600) {
+            poles_ = 2;
+        } else {
+            if (floor(floor(7200 / motorRpm_) / 2) * 2 > 12) {
+                poles_ = 12;
+            } else {
+                poles_ = floor(floor(7200 / motorRpm_) / 2) * 2;
+            }
+        }
     }
     return poles_;
 }
