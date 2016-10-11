@@ -48,11 +48,7 @@ double MotorShaftPower::calculate() {
         double adjpf2 = pf2 / (((((fieldVoltage_ / ratedVoltage_) - 1) * (((-2) * lf2) + 1)) + 1) *
                                (fieldVoltage_ / ratedVoltage_));
         pf = adjpf1 + 100 * (fractionalIndex_ - lf1) * (adjpf2 - adjpf1);\
-//        cout << "FI: "<< fractionalIndex_ << endl;
-//        cout << "EF: " << eff1 << ":" << eff2 << endl;
-//        cout << setprecision (9) << "Current: " << current1 << ":" << current2 << endl;
-//        cout << "PF: " << pf1 << ":" << pf2 << endl;
-//        cout << "PF: " << adjpf1 << ":" << adjpf2 << endl;
+
         /*
          * Adjust pf based on specified FLA
          * This does not happen in the Excel sheet during the final calculations.
@@ -120,9 +116,9 @@ double MotorShaftPower::calculate() {
         current = fieldCurrent_;
         eff = eff1 + 100 * (fractionalIndex_ - lf1) * (eff2 - eff1);
         power = powerE1 + 100 * (fractionalIndex_ - lf1) * (powerE2 - powerE1);
-        // Below is not giving correct answer.
+
+        // Power Factor
         pf = power / (current * fieldVoltage_ * sqrt(3) / 1000);
-        //std::cout << "PF: " << pf << std::endl;
         // Output in kW
         motorShaftPower_ = power * eff;
         // Output in hP
