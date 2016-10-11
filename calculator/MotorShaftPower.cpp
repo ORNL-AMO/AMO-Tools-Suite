@@ -12,7 +12,7 @@ double MotorShaftPower::calculate() {
     if (loadEstimationMethod_ == FieldData::LoadEstimationMethod::POWER) {
         tempLoadFraction_ = 0.01;
         while (true) {
-            MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_ );
+            MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_ );
             current = motorCurrent.calculate();
             MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_);
             eff = motorEfficiency.calculate();
@@ -63,7 +63,7 @@ double MotorShaftPower::calculate() {
         // Load estimation method is current.
         tempLoadFraction_ = 0.01;
         while (true) {
-            MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
+            MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
             current = motorCurrent.calculate();
             if (current > fieldCurrent_ || tempLoadFraction_ > 1.5) {
                 MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_,  specifiedEfficiency_, motorRatedPower_, tempLoadFraction_);
@@ -85,7 +85,7 @@ double MotorShaftPower::calculate() {
         }
         //Dropping load fraction by 0.01
         tempLoadFraction_ -= 0.01;
-        MotorCurrent motorCurrent1(motorRatedPower_, motorRPM_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
+        MotorCurrent motorCurrent1(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
         current = motorCurrent1.calculate();
         MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_, specifiedEfficiency_, motorRatedPower_, tempLoadFraction_);
         eff = motorEfficiency.calculate();

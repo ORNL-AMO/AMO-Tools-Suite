@@ -21,13 +21,15 @@ public:
     double estimatedFLA;
 
     MotorShaftPower(double motorRatedPower, double motorMeasuredPower, int motorRPM,
+                    Motor::LineFrequency lineFrequency,
                     Motor::EfficiencyClass efficiencyClass,
                     double specifiedEfficiency,
                     double ratedVoltage, double fullLoadAmps, double fieldVoltage,
                     FieldData::LoadEstimationMethod loadEstimationMethod, double fieldCurrent)
             :
             fieldPower_(motorMeasuredPower),
-            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), efficiencyClass_(efficiencyClass), specifiedEfficiency_(specifiedEfficiency),
+            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), lineFrequency_(lineFrequency),
+            efficiencyClass_(efficiencyClass), specifiedEfficiency_(specifiedEfficiency),
             ratedVoltage_(ratedVoltage), fullLoadAmps_(fullLoadAmps), fieldVoltage_(fieldVoltage),
             loadEstimationMethod_(loadEstimationMethod), fieldCurrent_(fieldCurrent) {};
 
@@ -47,10 +49,12 @@ private:
     double motorRatedPower_ = 0.0;
     double fieldPower_ = 0.0;
     int motorRPM_ = 0;
+    Motor::LineFrequency lineFrequency_;
     double ratedVoltage_ = 0.0;
     double fullLoadAmps_ = 0.0;
     double fieldVoltage_ = 0.0;
     Motor::EfficiencyClass efficiencyClass_;
+
     double specifiedEfficiency_;
     double motorShaftPower_ = 0.0;
     double fieldCurrent_ = 0.0;
