@@ -6,9 +6,9 @@ int main() {
 
     std::cout << "Hello, World!" << std::endl;
     Pump pump(Pump::Style::API_DOUBLE_SUCTION, 1780, Pump::Drive::DIRECT_DRIVE, 1.00, 1.000, 1, Pump::Speed::NOT_FIXED_SPEED);
-    Motor motor(Motor::LineFrequency::FREQ60, 200, 1780, Motor::EfficiencyClass::ENERGY_EFFICIENT, 95, 460, 225.0, 0);
+    Motor motor(Motor::LineFrequency::FREQ60, 200, 1780, Motor::EfficiencyClass::SPECIFIED, 95, 460, 225.0, 0);
     Financial financial(1.000, 0.05);
-    FieldData fieldData(1840, 174.85, FieldData::LoadEstimationMethod::POWER, 80, 0, 480);
+    FieldData fieldData(1840, 174.85, FieldData::LoadEstimationMethod::POWER, 150, 0, 480);
 
     PSATResult psatResult(pump,motor,financial,fieldData);
     psatResult.calculateExisting();

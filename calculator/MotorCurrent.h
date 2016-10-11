@@ -11,6 +11,7 @@
 #include "../motor.h"
 #include "CurveFitVal.h"
 #include "EstimateFLA.h"
+#include <vector>
 
 class MotorCurrent {
 public:

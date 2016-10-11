@@ -4,7 +4,8 @@
 
 #include "EstimateFLA.h"
 
-double * EstimateFLA::calculate() {
+std::vector<double> EstimateFLA::calculate() {
+    std::vector<double> plValues(6);
     /*
      Estimating FLA methodology
 Note: values in blue are calculated
@@ -196,7 +197,7 @@ Estimated FLA (575)=	181.8
      * Calculating the 25% interval Amps
      */
 
-
+    double effVal = 0.0;
 
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (int i = 0; i < 6; i++) {
@@ -207,8 +208,7 @@ Estimated FLA (575)=	181.8
         for (int i = 0; i < 6; i++) {
             plValues[i] = seFLAValue * plMultiplier[i];
         }
-    }
-    else if(efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED){
+    } else if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
         /*
             For a case where the efficiency has been specified, there is a multiple step process:
             1. The absolute value of the differences between the specified efficiency and the efficiency values for EE and SE motors are calculated
@@ -216,34 +216,38 @@ Estimated FLA (575)=	181.8
             3. Divide the selected (EE or SE) efficiency by the specified efficiency and then multiply that by the FLA for the corresponding selection.
          */
         specifiedEfficiency_ = 95;
-        if(fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency_) > fabs(seFLAValue * plMultiplier[4] - specifiedEfficiency_) ){
-            MotorEfficiency motorEfficiency (motorRPM_, Motor::EfficiencyClass::STANDARD, specifiedEfficiency_, motorRatedPower_, 1);
-            double seEff = motorEfficiency.calculate();
+        if (fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency_) >
+            fabs(seFLAValue * plMultiplier[4] - specifiedEfficiency_)) {
+            MotorEfficiency motorEfficiency(motorRPM_, Motor::EfficiencyClass::STANDARD, specifiedEfficiency_,
+                                            motorRatedPower_, 1);
+            effVal = motorEfficiency.calculate();
             // SE is the nominal efficiency
             for (int i = 0; i < 6; i++) {
                 plValues[i] = seFLAValue * plMultiplier[i];
 
-                plValues[i] = seEff*plValues[i]*100/specifiedEfficiency_;
+                //plValues[i] = seEff * plValues[i] * 100 / specifiedEfficiency_;
             }
-        }
-        else{
+        } else {
             // EE is the nominal efficiency
-            MotorEfficiency motorEfficiency (motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_, motorRatedPower_, 1);
-            double eeEff = motorEfficiency.calculate();
+            MotorEfficiency motorEfficiency(motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
+                                            motorRatedPower_, 1);
+            effVal = motorEfficiency.calculate();
             for (int i = 0; i < 6; i++) {
                 plValues[i] = eeFLAValue * plMultiplier[i];
-                plValues[i] = eeEff*plValues[i]*100/specifiedEfficiency_;
+                //plValues[i] = eeEff * plValues[i] * 100 / specifiedEfficiency_;
             }
         }
     }
 
     // Adjustment based on the rated voltage.
     for (int i = 0; i < 6; i++) {
-        plValues[i] = plValues[i]*460/ratedVoltage_;
+        plValues[i] = plValues[i] * 460 / ratedVoltage_;
     }
-
     // Estimated FLA refers to the 100% value.
-    estimatedFLA_ = plValues[4];
+    if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
+        estimatedFLA_ = effVal * plValues[4] * 100 / specifiedEfficiency_;
+    } else
+        estimatedFLA_ = plValues[4];
 
     return plValues;
 }

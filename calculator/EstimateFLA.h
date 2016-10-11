@@ -8,6 +8,8 @@
 #include "../Motor.h"
 #include "MotorEfficiency.h"
 #include<iostream>
+#include <vector>
+
 class EstimateFLA {
 public:
     EstimateFLA(double motorRatedPower, int motorRPM, Motor::LineFrequency lineFrequency, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double ratedVoltage) :
@@ -15,7 +17,7 @@ public:
             ratedVoltage_(ratedVoltage) {};
 
     // Returns the 25% interval arrays.
-    double *calculate();
+    std::vector<double> calculate();
 
     // Returns the estimated 25% interval values
     double getEstimatedFLA() {
@@ -24,7 +26,7 @@ public:
 
 private:
     double estimatedFLA_;
-    double plValues[6] = {};
+
     double motorRatedPower_ = 0.0;
     int motorRPM_ = 0;
     Motor::LineFrequency lineFrequency_;

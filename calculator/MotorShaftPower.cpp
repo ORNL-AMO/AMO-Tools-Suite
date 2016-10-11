@@ -8,6 +8,10 @@
 #include "MotorCurrent.h"
 #include "MotorPowerFactor.h"
 
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
 double MotorShaftPower::calculate() {
     if (loadEstimationMethod_ == FieldData::LoadEstimationMethod::POWER) {
         tempLoadFraction_ = 0.01;
@@ -26,6 +30,7 @@ double MotorShaftPower::calculate() {
                 lf2 = tempLoadFraction_;
                 eff2 = eff;
                 pf2 = pf;
+                current2 = current;
                 estimatedFLA = motorCurrent.getEstimatedFLA();
                 break;
             } else {
@@ -33,6 +38,7 @@ double MotorShaftPower::calculate() {
                 lf1 = tempLoadFraction_;
                 eff1 = eff;
                 pf1 = pf;
+                current1 = current;
                 tempLoadFraction_ += 0.01;
             }
         }
@@ -45,11 +51,17 @@ double MotorShaftPower::calculate() {
                                (fieldVoltage_ / ratedVoltage_));
         double adjpf2 = pf2 / (((((fieldVoltage_ / ratedVoltage_) - 1) * (((-2) * lf2) + 1)) + 1) *
                                (fieldVoltage_ / ratedVoltage_));
-        pf = adjpf1 + 100 * (fractionalIndex_ - lf1) * (adjpf2 - adjpf1);
-
-        // Adjust pf based on specified FLA
-        pf = pf / (fullLoadAmps_/estimatedFLA);
-
+        pf = adjpf1 + 100 * (fractionalIndex_ - lf1) * (adjpf2 - adjpf1);\
+//        cout << "FI: "<< fractionalIndex_ << endl;
+//        cout << "EF: " << eff1 << ":" << eff2 << endl;
+//        cout << setprecision (9) << "Current: " << current1 << ":" << current2 << endl;
+//        cout << "PF: " << pf1 << ":" << pf2 << endl;
+//        cout << "PF: " << adjpf1 << ":" << adjpf2 << endl;
+        /*
+         * Adjust pf based on specified FLA
+         * This does not happen in the Excel sheet during the final calculations.
+         * pf = pf / (fullLoadAmps_/estimatedFLA);
+        */
         //Current output
         current = fieldPower_ / (fieldVoltage_ * sqrt(3) * pf / 1000);
         // Output in kW

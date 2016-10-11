@@ -20,13 +20,13 @@ double MotorCurrent::calculate() {
      *
      */
     EstimateFLA estimateFLA(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_,specifiedEfficiency_, ratedVoltage_ );
-    double *plValues = estimateFLA.calculate();
+    std::vector<double> plValues = estimateFLA.calculate();
     estimatedFLA_ = estimateFLA.getEstimatedFLA();
     // Adjustment based on the specified FLA
+    double temp_fullLoadAmps = plValues[4];
     for (int i = 0; i < 6; i++) {
-        plValues[i] = plValues[i]*fullLoadAmps_/plValues[4];
+        plValues[i] = plValues[i]*fullLoadAmps_/temp_fullLoadAmps;
     }
-
     if (loadFactor_ < 0.25) {
             double xCoord_[3] = {0, .25, .50};
             double yCoord_[3] = {plValues[0], plValues[1], plValues[2]};
