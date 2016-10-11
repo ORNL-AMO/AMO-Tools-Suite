@@ -128,17 +128,9 @@ Estimated FLA (575)=	181.8
     /*
      * Calculate the number of poles based on the RPM
      */
+    Poles polesobj(motorRPM_, lineFrequency_);
+    int poles = polesobj.calculate();
 
-    int poles = 0;
-    if (motorRPM_ > 3600) {
-        poles = 2;
-    } else {
-        if (floor(floor(7200 / motorRPM_) / 2) * 2 > 12) {
-            poles = 12;
-        } else {
-            poles = floor(floor(7200 / motorRPM_) / 2) * 2;
-        }
-    }
     /*
      * Index for the arrays based on the pole
      */
