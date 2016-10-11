@@ -102,9 +102,6 @@ double MotorShaftPower::calculate() {
         // Adjust pf based on specified FLA
         pf = pf / (fullLoadAmps_/estimatedFLA);
 
-
-        // Very similar to the Power case above. May be convert to a function?
-
         // Adjust current
         double adjCurrent1 = (((fieldVoltage_ / ratedVoltage_) - 1) * (1 - (2 * lf1)) + 1) * current1;
         double adjCurrent2 = (((fieldVoltage_ / ratedVoltage_) - 1) * (1 - (2 * lf2)) + 1) * current2;
