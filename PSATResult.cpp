@@ -12,7 +12,7 @@
 
 double PSATResult::calculateExisting() {
 
-    MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(),
+    MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(), motor_.getLineFrequency(),
                                     motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(), motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
                                     fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
                                     fieldData_.getMotorAmps());
