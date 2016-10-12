@@ -40,39 +40,43 @@ double OptimalPumpEfficiency::calculate() {
     /*
      * MULTISTAGE_BOILER_FEED
      */
-    double eCoeff[5][2] = {{84.286574, 87.129684},
-                           {-17.836167, -7.8144274},
+    double eCoeff[5][2] = {{84.286574,    87.129684},
+                           {-17.836167,   -7.8144274},
                            {0.0013236525, 0.00034998448},
-                           {-26.951966, -19.605637},
+                           {-26.951966,   -19.605637},
                            {0.0068256307, 0.0022387671}};
     /*
      * API_DOUBLE_SUCTION
      * and
      * END_SUCTION_STOCK
      */
-    double dhCoeff[5][2] = {{87.199887, 90.158464},
-                            {-10.580842, -4.8350009},
+    double dhCoeff[5][2] = {{87.199887,     90.158464},
+                            {-10.580842,    -4.8350009},
                             {0.00027878405, 0.000048652395},
-                            {-23.785033, -7.2881572},
-                            {0.0018831236, 0.00027630687}};
+                            {-23.785033,    -7.2881572},
+                            {0.0018831236,  0.00027630687}};
     /*
      * END_SUCTION_SUBMERSIBLE_SEWAGE
      * and
      * END_SUCTION_SEWAGE
      */
-    double bcCoeff[5][2] = {{83.528143, 89.704526},
-                            {-23.543231, -6.9708815},
+    double bcCoeff[5][2] = {{83.528143,     89.704526},
+                            {-23.543231,    -6.9708815},
                             {0.00071315587, 0.000057096295},
-                            {-37.584938, -13.868089},
-                            {0.005809375, 0.00046766436}};
+                            {-37.584938,    -13.868089},
+                            {0.005809375,   0.00046766436}};
     /*
      * END_SUCTION_SLURRY
      */
-    double aCoeff[5][2] = {{79.096487, 85.957484},
-                           {-32.006283, -15.256678},
+    double aCoeff[5][2] = {{79.096487,     85.957484},
+                           {-32.006283,    -15.256678},
                            {0.00084199445, 0.00017627657},
-                           {-23.100062, -24.920847},
-                           {0.0064912714, 0.0012055457}};
+                           {-23.100062,    -24.920847},
+                           {0.0064912714,  0.0012055457}};
+
+    /*
+     * Below format has been kept to mimic the excel sheet. There must be a better way to do this.
+     */
     double pumpEfficiency = 0.0;
     int range = 0;
     switch (style_) {
@@ -86,29 +90,92 @@ double OptimalPumpEfficiency::calculate() {
                                                   jCoeff[3][range] * exp(-jCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::VERTICAL_TURBINE:
+            if (flowRate_ < 2550) {
+                range = 0;
+            } else {
+                if (flowRate_ < 7220) {
+                    range = 1;
+                } else {
+                    range = 2;
+                }
+            }
+            pumpEfficiency = (vCoeff[0][range] + (vCoeff[1][range] * exp(-vCoeff[2][range] * flowRate_) +
+                                                  vCoeff[3][range] * exp(-vCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::LARGE_END_SUCTION:
+            pumpEfficiency = (gCoeff[0] + (gCoeff[1] * exp(-gCoeff[2] * flowRate_) +
+                                           gCoeff[3] * exp(-gCoeff[4] * flowRate_)));
             break;
         case Pump::Style::END_SUCTION_ANSI_API:
+            if (flowRate_ < 1030) {
+                range = 0;
+            } else {
+                range = 1;
+            }
+            pumpEfficiency = (fCoeff[0][range] + (fCoeff[1][range] * exp(-fCoeff[2][range] * flowRate_) +
+                                                  fCoeff[3][range] * exp(-fCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::MULTISTAGE_BOILER_FEED:
+            if (flowRate_ < 890) {
+                range = 0;
+            } else {
+                range = 1;
+            }
+            pumpEfficiency = (eCoeff[0][range] + (eCoeff[1][range] * exp(-eCoeff[2][range] * flowRate_) +
+                                                  eCoeff[3][range] * exp(-eCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::END_SUCTION_STOCK:
+            if (flowRate_ < 4440) {
+                range = 0;
+            } else {
+                range = 1;
+            }
+            pumpEfficiency = (dhCoeff[0][range] + (dhCoeff[1][range] * exp(-dhCoeff[2][range] * flowRate_) +
+                                                  dhCoeff[3][range] * exp(-dhCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::API_DOUBLE_SUCTION:
             //same as Pump::Style::END_SUCTION_STOCK
+            if (flowRate_ < 4440) {
+                range = 0;
+            } else {
+                range = 1;
+            }
+            pumpEfficiency = (dhCoeff[0][range] + (dhCoeff[1][range] * exp(-dhCoeff[2][range] * flowRate_) +
+                                                   dhCoeff[3][range] * exp(-dhCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::END_SUCTION_SEWAGE:
+            if (flowRate_ < 2170) {
+                range = 0;
+            } else {
+                range = 1;
+            }
+            pumpEfficiency = (bcCoeff[0][range] + (bcCoeff[1][range] * exp(-bcCoeff[2][range] * flowRate_) +
+                                                  bcCoeff[3][range] * exp(-bcCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::END_SUCTION_SUBMERSIBLE_SEWAGE:
             //same as Pump::Style::END_SUCTION_SEWAGE
+            if (flowRate_ < 2170) {
+                range = 0;
+            } else {
+                range = 1;
+            }
+            pumpEfficiency = (bcCoeff[0][range] + (bcCoeff[1][range] * exp(-bcCoeff[2][range] * flowRate_) +
+                                                   bcCoeff[3][range] * exp(-bcCoeff[4][range] * flowRate_)));
+
             break;
         case Pump::Style::END_SUCTION_SLURRY:
+            if (flowRate_ < 1690) {
+                range = 0;
+            } else {
+                range = 1;
+            }
+            pumpEfficiency = (aCoeff[0][range] + (aCoeff[1][range] * exp(-aCoeff[2][range] * flowRate_) +
+                                                  aCoeff[3][range] * exp(-aCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY:
+
             break;
     }
-    Pump::Style ::AXIAL_FLOW
     /*
      * You may have individual functions for each also.
      */
