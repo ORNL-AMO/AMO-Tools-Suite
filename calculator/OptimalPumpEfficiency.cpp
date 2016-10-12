@@ -38,7 +38,7 @@ double OptimalPumpEfficiency::calculate() {
                            {-20.655962,   -17.336122},
                            {0.0081197589, 0.0024096967}};
     /*
-     *
+     * MULTISTAGE_BOILER_FEED
      */
     double eCoeff[5][2] = {{84.286574, 87.129684},
                            {-17.836167, -7.8144274},
@@ -46,7 +46,9 @@ double OptimalPumpEfficiency::calculate() {
                            {-26.951966, -19.605637},
                            {0.0068256307, 0.0022387671}};
     /*
-     *
+     * API_DOUBLE_SUCTION
+     * and
+     * END_SUCTION_STOCK
      */
     double dhCoeff[5][2] = {{87.199887, 90.158464},
                             {-10.580842, -4.8350009},
@@ -54,7 +56,9 @@ double OptimalPumpEfficiency::calculate() {
                             {-23.785033, -7.2881572},
                             {0.0018831236, 0.00027630687}};
     /*
-     *
+     * END_SUCTION_SUBMERSIBLE_SEWAGE
+     * and
+     * END_SUCTION_SEWAGE
      */
     double bcCoeff[5][2] = {{83.528143, 89.704526},
                             {-23.543231, -6.9708815},
@@ -62,7 +66,7 @@ double OptimalPumpEfficiency::calculate() {
                             {-37.584938, -13.868089},
                             {0.005809375, 0.00046766436}};
     /*
-     *
+     * END_SUCTION_SLURRY
      */
     double aCoeff[5][2] = {{79.096487, 85.957484},
                            {-32.006283, -15.256678},
@@ -104,7 +108,7 @@ double OptimalPumpEfficiency::calculate() {
         case Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY:
             break;
     }
-
+    Pump::Style ::AXIAL_FLOW
     /*
      * You may have individual functions for each also.
      */
