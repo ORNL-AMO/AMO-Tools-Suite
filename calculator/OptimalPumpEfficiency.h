@@ -98,6 +98,7 @@ private:
     double head_;
     Pump::Speed speed_;
     double actualEfficiency_;
+    double optimalEfficiency_;
 };
 
 
