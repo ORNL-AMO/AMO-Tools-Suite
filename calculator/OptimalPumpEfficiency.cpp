@@ -176,6 +176,7 @@ double OptimalPumpEfficiency::calculate() {
 
             break;
     }
+
     /*
      * You may have individual functions for each also.
      */
@@ -204,6 +205,7 @@ double OptimalPumpEfficiency::calculate() {
                         {-2.4834106E-16,      -2.5380141E-19},
                         {1.3345507E-20,       4.007753E-24}};
     double specificSpeed = rpm_ * sqrt(flowRate_) / (pow((head_ / stageCount_), 0.75));
+
     double speedCorrection = 0;
     int speedCoeffChooser = 0;
     if (style_ == Pump::Style::VERTICAL_TURBINE) {
@@ -239,8 +241,8 @@ double OptimalPumpEfficiency::calculate() {
                          30.525232,
                          0.80684022};
     double positiveDeviationFactor =
-            1 + (pdCoeff[0] + (pdCoeff[1] * exp(-pdCoeff[2] * log(flowRate_))) +
-                 pdCoeff[3] * exp(-pdCoeff[4] * log(flowRate_))) / 100;
+            1 + (pdCoeff[0] + (pdCoeff[1] * exp(-pdCoeff[2] * log10(flowRate_))) +
+                 pdCoeff[3] * exp(-pdCoeff[4] * log10(flowRate_))) / 100;
     /*
      * Optimal Efficiency
      */
