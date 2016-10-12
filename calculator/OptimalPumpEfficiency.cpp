@@ -131,7 +131,7 @@ double OptimalPumpEfficiency::calculate() {
                 range = 1;
             }
             pumpEfficiency = (dhCoeff[0][range] + (dhCoeff[1][range] * exp(-dhCoeff[2][range] * flowRate_) +
-                                                  dhCoeff[3][range] * exp(-dhCoeff[4][range] * flowRate_)));
+                                                   dhCoeff[3][range] * exp(-dhCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::API_DOUBLE_SUCTION:
             //same as Pump::Style::END_SUCTION_STOCK
@@ -150,7 +150,7 @@ double OptimalPumpEfficiency::calculate() {
                 range = 1;
             }
             pumpEfficiency = (bcCoeff[0][range] + (bcCoeff[1][range] * exp(-bcCoeff[2][range] * flowRate_) +
-                                                  bcCoeff[3][range] * exp(-bcCoeff[4][range] * flowRate_)));
+                                                   bcCoeff[3][range] * exp(-bcCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::END_SUCTION_SUBMERSIBLE_SEWAGE:
             //same as Pump::Style::END_SUCTION_SEWAGE
@@ -233,7 +233,17 @@ double OptimalPumpEfficiency::calculate() {
     /*
      * positiveDeviationFactor
      */
-    double positiveDeviationFactor;
+    double pdCoeff[5] = {0.10805906,
+                         18.077243,
+                         0.78231304,
+                         30.525232,
+                         0.80684022};
+    double positiveDeviationFactor =
+            1 + (pdCoeff[0] + (pdCoeff[1] * exp(-pdCoeff[2] * log(flowRate_))) +
+                 pdCoeff[3] * exp(-pdCoeff[4] * log(flowRate_))) / 100;
+    /*
+     * Optimal Efficiency
+     */
     optimalEfficiency_ = (pumpEfficiency * viscosityCorrectionFactor - speedCorrection) * positiveDeviationFactor;
     return optimalEfficiency_;
 }

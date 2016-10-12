@@ -12,6 +12,7 @@ int main() {
 
     PSATResult psatResult(pump,motor,financial,fieldData);
     psatResult.calculateExisting();
+    psatResult.calculateOptimal();
     cout << "Pump Efficiency: " << psatResult.getExisting().pumpEfficiency_ << endl;
     cout << "Motor Rated power: " << psatResult.getExisting().motorRatedPower_ << endl;
     cout << "Motor Shaft power: " << psatResult.getExisting().motorShaftPower_ << endl;
@@ -23,5 +24,18 @@ int main() {
     cout << "Annual Energy: " << psatResult.getExisting().annualEnergy_ << endl;
     cout << "Annual Cost: " << psatResult.getExisting().annualCost_ << endl;
     cout << "Estimated FLA: " << psatResult.getExisting().estimatedFLA_ << endl;
+
+    cout << "Optimal **********************************" << endl;
+    cout << "Pump Efficiency: " << psatResult.getOptimal().pumpEfficiency_ << endl;
+    cout << "Motor Rated power: " << psatResult.getOptimal().motorRatedPower_ << endl;
+    cout << "Motor Shaft power: " << psatResult.getOptimal().motorShaftPower_ << endl;
+    cout << "Pump Shaft power: " << psatResult.getOptimal().pumpShaftPower_ << endl;
+    cout << "Motor Efficiency: " << psatResult.getOptimal().motorEfficiency_ << endl;
+    cout << "Motor power factor: " << psatResult.getOptimal().motorPowerFactor_ << endl;
+    cout << "Motor current: " << psatResult.getOptimal().motorCurrent_ << endl;
+    cout << "Motor power: " << psatResult.getOptimal().motorPower_ << endl;
+    cout << "Annual Energy: " << psatResult.getOptimal().annualEnergy_ << endl;
+    cout << "Annual Cost: " << psatResult.getOptimal().annualCost_ << endl;
+    cout << "Estimated FLA: " << psatResult.getOptimal().estimatedFLA_ << endl;
 
 }

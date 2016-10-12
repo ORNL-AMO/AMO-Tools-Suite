@@ -11,18 +11,17 @@ class OptimalPumpEfficiency {
 
 public:
     OptimalPumpEfficiency(Pump::Style style, double rpm, double kinematicViscosity, double stageCount, double flowRate,
-                          double head, Pump::Speed speed) : style_(style), rpm_(rpm),
-                                                            kinematicViscosity_(kinematicViscosity),
-                                                            stageCount_(stageCount), flowRate_(flowRate), head_(head),
-                                                            speed_(speed) {}
+                          double head) : style_(style), rpm_(rpm),
+                                         kinematicViscosity_(kinematicViscosity),
+                                         stageCount_(stageCount), flowRate_(flowRate), head_(head) {}
 
-    OptimalPumpEfficiency(double rpm, double kinematicViscosity, double stageCount, double flowRate, double head,
+    /*OptimalPumpEfficiency(double rpm, double kinematicViscosity, double stageCount, double flowRate, double head,
                           Pump::Speed speed, double actualEfficiency) : rpm_(rpm),
                                                                         kinematicViscosity_(kinematicViscosity),
                                                                         stageCount_(stageCount), flowRate_(flowRate),
                                                                         head_(head), speed_(speed),
                                                                         actualEfficiency_(actualEfficiency) {}
-
+*/
     double calculate();
 
     Pump::Style getStyle() const {
@@ -73,14 +72,6 @@ public:
         head_ = head;
     }
 
-    Pump::Speed getSpeed() const {
-        return speed_;
-    }
-
-    void setSpeed(Pump::Speed speed) {
-        speed_ = speed;
-    }
-
     double getActualEfficiency() const {
         return actualEfficiency_;
     }
@@ -96,7 +87,6 @@ private:
     double stageCount_;
     double flowRate_;
     double head_;
-    Pump::Speed speed_;
     double actualEfficiency_;
     double optimalEfficiency_;
 };

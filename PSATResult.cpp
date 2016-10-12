@@ -8,6 +8,7 @@
 #include "calculator/PumpEfficiency.h"
 #include "calculator/AnnualCost.h"
 #include "calculator/AnnualEnergy.h"
+#include "calculator/OptimalPumpEfficiency.h"
 
 
 double PSATResult::calculateExisting() {
@@ -58,6 +59,10 @@ double PSATResult::calculateOptimal() {
     Calculate annual energy and energy cost
     Calculate annual savings potential and optimization rating
      */
+
+    OptimalPumpEfficiency optimalPumpEfficiency(pump_.getStyle(),pump_.getRpm(),pump_.getKviscosity(),pump_.getStageCount(),fieldData_.getFlowRate(),fieldData_.getHead());
+    optimal_.pumpEfficiency_ = optimalPumpEfficiency.calculate();
+    optimal_.pumpShaftPower_;
 
     return 0;
 }
