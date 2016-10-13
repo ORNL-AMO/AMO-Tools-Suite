@@ -4,7 +4,7 @@
 
 #ifndef AMO_LIBRARY_PUMPEFFICIENCY_H
 #define AMO_LIBRARY_PUMPEFFICIENCY_H
-
+#include "FluidPower.h"
 
 class PumpEfficiency {
 
