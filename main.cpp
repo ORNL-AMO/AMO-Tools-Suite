@@ -38,4 +38,7 @@ int main() {
     cout << "Annual Cost: " << psatResult.getOptimal().annualCost_ << endl;
     cout << "Estimated FLA: " << psatResult.getOptimal().estimatedFLA_ << endl;
 
+    cout << "getAnnualSavingsPotential: " << psatResult.getAnnualSavingsPotential() << endl;
+    cout << "getOptimizationRating: " << psatResult.getOptimizationRating() << endl;
+
 }

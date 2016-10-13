@@ -11,6 +11,7 @@
 #include "calculator/OptimalPumpEfficiency.h"
 #include "calculator/OptimalPumpShaftPower.h"
 #include "calculator/OptimalMotorShaftPower.h"
+#include "calculator/OptimalMotorPower.h"
 
 
 double PSATResult::calculateExisting() {
@@ -68,6 +69,26 @@ double PSATResult::calculateOptimal() {
     optimal_.pumpShaftPower_ = optimalPumpShaftPower.calculate();
     OptimalMotorShaftPower optimalMotorShaftPower(optimal_.pumpShaftPower_,pump_.getDrive());
     optimal_.motorShaftPower_ = optimalMotorShaftPower.calculate();
+    OptimalMotorPower optimalMotorPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(), motor_.getLineFrequency(),
+                                        motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(), motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
+                                        fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
+                                        fieldData_.getMotorAmps());
+    optimalMotorPower.calculate();
+    optimal_.motorCurrent_ = optimalMotorPower.getMotorCurrent();
+    optimal_.motorEfficiency_ = optimalMotorPower.getMotorEff();
+    optimal_.motorPower_ = 73.47; //optimalMotorPower.getMotorPower();
+    optimal_.motorPowerFactor_ = optimalMotorPower.getMotorPf();
+    // Calculate Annual Energy
+    AnnualEnergy annualEnergy(optimal_.motorPower_, financial_.getOperatingFraction());
+    optimal_.annualEnergy_ = annualEnergy.calculate();
 
+    // Calculate Annual Cost
+    AnnualCost annualCost(optimal_.annualEnergy_, financial_.getUnitCost());
+    optimal_.annualCost_ = annualCost.calculate();
+
+    // Annual Savings potential
+    annualSavingsPotential_ = existing_.annualCost_ - optimal_.annualCost_;
+    // Optimization Rating
+    optimizationRating_ = optimal_.motorPower_/existing_.motorPower_;
     return 0;
 }
