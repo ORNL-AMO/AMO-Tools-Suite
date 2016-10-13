@@ -10,6 +10,11 @@
 #include "../motor.h"
 #include "../FieldData.h"
 
+#include "MotorEfficiency.h"
+#include "MotorPower.h"
+#include "MotorCurrent.h"
+#include "MotorPowerFactor.h"
+
 class MotorShaftPower {
 public:
     double tempLoadFraction_ = 0.01;

@@ -3,10 +3,7 @@
 //
 
 #include "MotorShaftPower.h"
-#include "MotorEfficiency.h"
-#include "MotorPower.h"
-#include "MotorCurrent.h"
-#include "MotorPowerFactor.h"
+
 
 double MotorShaftPower::calculate() {
     if (loadEstimationMethod_ == FieldData::LoadEstimationMethod::POWER) {
