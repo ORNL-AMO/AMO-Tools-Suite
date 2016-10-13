@@ -10,6 +10,7 @@
 #include "calculator/AnnualEnergy.h"
 #include "calculator/OptimalPumpEfficiency.h"
 #include "calculator/OptimalPumpShaftPower.h"
+#include "calculator/OptimalMotorShaftPower.h"
 
 
 double PSATResult::calculateExisting() {
@@ -65,6 +66,8 @@ double PSATResult::calculateOptimal() {
     optimal_.pumpEfficiency_ = optimalPumpEfficiency.calculate();
     OptimalPumpShaftPower optimalPumpShaftPower(fieldData_.getFlowRate(),fieldData_.getHead(),pump_.getSg(),optimal_.pumpEfficiency_);
     optimal_.pumpShaftPower_ = optimalPumpShaftPower.calculate();
+    OptimalMotorShaftPower optimalMotorShaftPower(optimal_.pumpShaftPower_,pump_.getDrive());
+    optimal_.motorShaftPower_ = optimalMotorShaftPower.calculate();
 
     return 0;
 }
