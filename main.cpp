@@ -36,7 +36,6 @@ int main() {
     cout << "Motor power: " << psatResult.getOptimal().motorPower_ << endl;
     cout << "Annual Energy: " << psatResult.getOptimal().annualEnergy_ << endl;
     cout << "Annual Cost: " << psatResult.getOptimal().annualCost_ << endl;
-    cout << "Estimated FLA: " << psatResult.getOptimal().estimatedFLA_ << endl;
 
     cout << "getAnnualSavingsPotential: " << psatResult.getAnnualSavingsPotential() << endl;
     cout << "getOptimizationRating: " << psatResult.getOptimizationRating() << endl;
