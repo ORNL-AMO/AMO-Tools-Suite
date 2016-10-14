@@ -79,7 +79,7 @@ double PSATResult::calculateOptimal() {
     optimalMotorPower.calculate();
     optimal_.motorCurrent_ = optimalMotorPower.getMotorCurrent();
     optimal_.motorEfficiency_ = optimalMotorPower.getMotorEff();
-    optimal_.motorPower_ = 73.47; //optimalMotorPower.getMotorPower();
+    optimal_.motorPower_ = optimalMotorPower.getMotorPower();
     optimal_.motorPowerFactor_ = optimalMotorPower.getMotorPf();
     // Calculate Annual Energy
     AnnualEnergy annualEnergy(optimal_.motorPower_, financial_.getOperatingFraction());
