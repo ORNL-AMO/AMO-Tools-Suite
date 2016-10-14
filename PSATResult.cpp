@@ -12,6 +12,7 @@
 #include "calculator/OptimalPumpShaftPower.h"
 #include "calculator/OptimalMotorShaftPower.h"
 #include "calculator/OptimalMotorPower.h"
+#include "calculator/OptimalMotorSize.h"
 
 
 double PSATResult::calculateExisting() {
@@ -69,6 +70,8 @@ double PSATResult::calculateOptimal() {
     optimal_.pumpShaftPower_ = optimalPumpShaftPower.calculate();
     OptimalMotorShaftPower optimalMotorShaftPower(optimal_.pumpShaftPower_,pump_.getDrive());
     optimal_.motorShaftPower_ = optimalMotorShaftPower.calculate();
+    OptimalMotorSize optimalMotorSize(optimal_.motorShaftPower_,motor_.getSizeMargin());
+    optimal_.motorRatedPower_ = optimalMotorSize.calculate();
     OptimalMotorPower optimalMotorPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(), motor_.getLineFrequency(),
                                         motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(), motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
                                         fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),

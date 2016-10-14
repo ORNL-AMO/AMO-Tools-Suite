@@ -7,7 +7,14 @@
 
 
 class OptimalMotorSize {
-
+public:
+    OptimalMotorSize(double optimalMotorShaftPower, double sizeMargin):
+            optimalMotorShaftPower_(optimalMotorShaftPower), sizeMargin_(sizeMargin){};
+    double calculate();
+private:
+    double optimalMotorShaftPower_;
+    double sizeMargin_;
+    double optimalMotorRatedPower_;
 };
 
 
