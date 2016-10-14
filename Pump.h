@@ -33,8 +33,8 @@ public:
         NOT_FIXED_SPEED
     };
 
-    Pump(Style style, double rpm, Drive drive, double kviscosity, double sg, int stageCount, Speed speed) :
-            style_(style), rpm_(rpm), drive_(drive), kviscosity_(kviscosity), sg_(sg), stageCount_(stageCount),
+    Pump(Style style, double achievableEfficiency, double rpm, Drive drive, double kviscosity, double sg, int stageCount, Speed speed) :
+            style_(style), achievableEfficiency_(achievableEfficiency), rpm_(rpm), drive_(drive), kviscosity_(kviscosity), sg_(sg), stageCount_(stageCount),
             speed_(speed) {};
 
     Pump() = default;
@@ -45,6 +45,12 @@ public:
 
     void setStyle(Style style) {
         style_ = style;
+    }
+    double getAchievableEfficiency(){
+        return achievableEfficiency_;
+    }
+    void setAchievableEfficiency(double achievableEfficiency){
+        achievableEfficiency_ = achievableEfficiency;
     }
 
     int getRpm() {
@@ -97,6 +103,7 @@ public:
 private:
 // Input values
     Pump::Style style_;
+    double achievableEfficiency_;
     double rpm_;
     Pump::Drive drive_;
     double kviscosity_;

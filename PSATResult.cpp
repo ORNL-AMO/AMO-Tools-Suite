@@ -63,7 +63,7 @@ double PSATResult::calculateOptimal() {
     Calculate annual savings potential and optimization rating
      */
 
-    OptimalPumpEfficiency optimalPumpEfficiency(pump_.getStyle(),pump_.getRpm(),pump_.getKviscosity(),pump_.getStageCount(),fieldData_.getFlowRate(),fieldData_.getHead());
+    OptimalPumpEfficiency optimalPumpEfficiency(pump_.getStyle(),pump_.getAchievableEfficiency(), pump_.getRpm(),pump_.getKviscosity(),pump_.getStageCount(),fieldData_.getFlowRate(),fieldData_.getHead());
     optimal_.pumpEfficiency_ = optimalPumpEfficiency.calculate();
     OptimalPumpShaftPower optimalPumpShaftPower(fieldData_.getFlowRate(),fieldData_.getHead(),pump_.getSg(),optimal_.pumpEfficiency_);
     optimal_.pumpShaftPower_ = optimalPumpShaftPower.calculate();
@@ -72,7 +72,7 @@ double PSATResult::calculateOptimal() {
     OptimalMotorPower optimalMotorPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(), motor_.getLineFrequency(),
                                         motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(), motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
                                         fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
-                                        fieldData_.getMotorAmps());
+                                        fieldData_.getMotorAmps(), optimal_.motorShaftPower_);
     optimalMotorPower.calculate();
     optimal_.motorCurrent_ = optimalMotorPower.getMotorCurrent();
     optimal_.motorEfficiency_ = optimalMotorPower.getMotorEff();
