@@ -10,8 +10,8 @@
 class OptimalPumpEfficiency {
 
 public:
-    OptimalPumpEfficiency(Pump::Style style, double rpm, double kinematicViscosity, double stageCount, double flowRate,
-                          double head) : style_(style), rpm_(rpm),
+    OptimalPumpEfficiency(Pump::Style style, double achievableEfficiency, double rpm, double kinematicViscosity, double stageCount, double flowRate,
+                          double head) : style_(style), achievableEfficiency_(achievableEfficiency),rpm_(rpm),
                                          kinematicViscosity_(kinematicViscosity),
                                          stageCount_(stageCount), flowRate_(flowRate), head_(head) {}
 
@@ -82,6 +82,7 @@ public:
 
 private:
     Pump::Style style_;
+    double achievableEfficiency_;
     double rpm_;
     double kinematicViscosity_;
     double stageCount_;

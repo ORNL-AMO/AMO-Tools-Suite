@@ -102,6 +102,20 @@ double OptimalPumpEfficiency::calculate() {
             pumpEfficiency = (vCoeff[0][range] + (vCoeff[1][range] * exp(-vCoeff[2][range] * flowRate_) +
                                                   vCoeff[3][range] * exp(-vCoeff[4][range] * flowRate_)));
             break;
+        case Pump::Style::AXIAL_FLOW:
+            //Same as Vertical Turbine
+            if (flowRate_ < 2550) {
+                range = 0;
+            } else {
+                if (flowRate_ < 7220) {
+                    range = 1;
+                } else {
+                    range = 2;
+                }
+            }
+            pumpEfficiency = (vCoeff[0][range] + (vCoeff[1][range] * exp(-vCoeff[2][range] * flowRate_) +
+                                                  vCoeff[3][range] * exp(-vCoeff[4][range] * flowRate_)));
+            break;
         case Pump::Style::LARGE_END_SUCTION:
             pumpEfficiency = (gCoeff[0] + (gCoeff[1] * exp(-gCoeff[2] * flowRate_) +
                                            gCoeff[3] * exp(-gCoeff[4] * flowRate_)));
@@ -173,7 +187,7 @@ double OptimalPumpEfficiency::calculate() {
                                                   aCoeff[3][range] * exp(-aCoeff[4][range] * flowRate_)));
             break;
         case Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY:
-
+            pumpEfficiency = achievableEfficiency_;
             break;
     }
 
@@ -247,5 +261,8 @@ double OptimalPumpEfficiency::calculate() {
      * Optimal Efficiency
      */
     optimalEfficiency_ = (pumpEfficiency * viscosityCorrectionFactor - speedCorrection) * positiveDeviationFactor;
-    return optimalEfficiency_;
+    if(style_ == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY){
+        optimalEfficiency_ = achievableEfficiency_;
+    }
+    return optimalEfficiency_/100;
 }
