@@ -260,9 +260,10 @@ double OptimalPumpEfficiency::calculate() {
     /*
      * Optimal Efficiency
      */
+    pumpEfficiency = pumpEfficiency/100;
     optimalEfficiency_ = (pumpEfficiency * viscosityCorrectionFactor - speedCorrection) * positiveDeviationFactor;
     if(style_ == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY){
         optimalEfficiency_ = achievableEfficiency_;
     }
-    return optimalEfficiency_/100;
+    return optimalEfficiency_;
 }

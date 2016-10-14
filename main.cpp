@@ -5,7 +5,7 @@ using namespace std;
 int main() {
 
     std::cout << "Hello, World!" << std::endl;
-    Pump pump(Pump::Style::LARGE_END_SUCTION, 90, 1780, Pump::Drive::DIRECT_DRIVE, 1.00, 1.000, 2, Pump::Speed::NOT_FIXED_SPEED);
+    Pump pump(Pump::Style::END_SUCTION_ANSI_API, 90, 1780, Pump::Drive::DIRECT_DRIVE, 1.00, 1.000, 2, Pump::Speed::NOT_FIXED_SPEED);
     Motor motor(Motor::LineFrequency::FREQ60, 100, 1780, Motor::EfficiencyClass::SPECIFIED, 95, 460, 225.0, 0);
     Financial financial(1.000, 0.05);
     FieldData fieldData(1840, 174.85, FieldData::LoadEstimationMethod::POWER, 80, 125.857, 480);
