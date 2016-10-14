@@ -239,15 +239,14 @@ Estimated FLA (575)=	181.8
         }
     }
 
-    // Adjustment based on the rated voltage.
-    for (int i = 0; i < 6; i++) {
-        plValues[i] = plValues[i] * 460 / ratedVoltage_;
-    }
+
     // Estimated FLA refers to the 100% value.
+    double tempAmp100 = plValues[4];
+    plValues[4] = plValues[4] * 460 / ratedVoltage_;
     if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
         estimatedFLA_ = effVal * plValues[4] * 100 / specifiedEfficiency_;
     } else
         estimatedFLA_ = plValues[4];
-
+    plValues[4] = tempAmp100;
     return plValues;
 }
