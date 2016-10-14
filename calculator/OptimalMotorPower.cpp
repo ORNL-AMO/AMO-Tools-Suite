@@ -5,21 +5,20 @@
 #include "OptimalMotorPower.h"
 #include "OptimalMotorCurrent.h"
 
-
-#include <iostream>
 using namespace std;
 
 double OptimalMotorPower::calculate() {
     double tempLoadFraction_ = 0.01;
-    double mspkW =0.0;
+    double mspkW = 0.0;
     while (true) {
         OptimalMotorCurrent optimalMotorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_,
                                                 specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fieldVoltage_,
                                                 fullLoadAmps_);
         current = optimalMotorCurrent.calculate();
         //Adjustment to current based on measured Voltage
-        current = current*((((fieldVoltage_/ratedVoltage_)-1)*(1+(-2*tempLoadFraction_)))+1);
-        MotorEfficiency motorEfficiency(motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_, motorRatedPower_,
+        current = current * ((((fieldVoltage_ / ratedVoltage_) - 1) * (1 + (-2 * tempLoadFraction_))) + 1);
+        MotorEfficiency motorEfficiency(motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
+                                        motorRatedPower_,
                                         tempLoadFraction_);
         eff = motorEfficiency.calculate();
         //Similar to motorpowerfactor in existing case instead of ratedVoltage
@@ -30,7 +29,9 @@ double OptimalMotorPower::calculate() {
         power = motorPower.calculate();
         tempMsp = power * eff;
         // Converting to KW for matching purpose.
-        mspkW = optimalMotorShaftPower_*0.746;
+
+        mspkW = optimalMotorShaftPower_ * 0.746;
+
         if (tempMsp > mspkW || tempLoadFraction_ > 1.5) {
             powerE2 = power;
             lf2 = tempLoadFraction_;
@@ -53,7 +54,7 @@ double OptimalMotorPower::calculate() {
      * Calculate Fractional Index
      */
     double motorMspdiff_ = tempMsp2 - tempMsp1;
-    double measuredMspdiff_ = mspkW - tempMsp2;
+    double measuredMspdiff_ = mspkW - tempMsp1;
     double fractionalIndex_ = lf1 + ((measuredMspdiff_ / motorMspdiff_) / 100);
     /*
      * Linear Interpolation of values
