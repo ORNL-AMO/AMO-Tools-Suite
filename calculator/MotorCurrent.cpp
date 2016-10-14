@@ -22,6 +22,12 @@ double MotorCurrent::calculate() {
     EstimateFLA estimateFLA(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_,specifiedEfficiency_, ratedVoltage_ );
     std::vector<double> plValues = estimateFLA.calculate();
     estimatedFLA_ = estimateFLA.getEstimatedFLA();
+
+    // Adjustment based on the rated voltage.
+    for (int i = 0; i < 6; i++) {
+        plValues[i] = plValues[i] * 460 / ratedVoltage_;
+    }
+
     // Adjustment based on the specified FLA
     double temp_fullLoadAmps = plValues[4];
     for (int i = 0; i < 6; i++) {
