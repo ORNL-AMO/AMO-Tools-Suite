@@ -22,22 +22,22 @@ public:
                         Motor::EfficiencyClass efficiencyClass,
                         double specifiedEfficiency,
                         double ratedVoltage, double fullLoadAmps, double fieldVoltage,
-                        FieldData::LoadEstimationMethod loadEstimationMethod, double fieldCurrent)
+                        FieldData::LoadEstimationMethod loadEstimationMethod, double fieldCurrent, double optimalMotorShaftPower)
             :
             fieldPower_(motorMeasuredPower),
             motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), lineFrequency_(lineFrequency),
             efficiencyClass_(efficiencyClass), specifiedEfficiency_(specifiedEfficiency),
             ratedVoltage_(ratedVoltage), fullLoadAmps_(fullLoadAmps), fieldVoltage_(fieldVoltage),
-            loadEstimationMethod_(loadEstimationMethod), fieldCurrent_(fieldCurrent) {};
+            loadEstimationMethod_(loadEstimationMethod), fieldCurrent_(fieldCurrent), optimalMotorShaftPower_(optimalMotorShaftPower) {};
 
     double calculate();
 
-    double getMotorShaftPower() const {
-        return motorShaftPower_;
+    double getOptimalMotorShaftPower_() const {
+        return optimalMotorShaftPower_;
     }
 
-    void setMotorShaftPower(double motorShaftPower) {
-        motorShaftPower_ = motorShaftPower;
+    void setMotorShaftPower(double optimalMotorShaftPower) {
+        optimalMotorShaftPower_ = optimalMotorShaftPower;
     }
 
     double getMotorEfficiency() const {
@@ -62,7 +62,7 @@ public:
     }
 
 private:
-    double motorShaftPower_;
+    double optimalMotorShaftPower_;
     double motorEfficiency_;
     double tempMsp = 0.0, tempMsp1 =0.0, tempMsp2 =0.0;
     double tempLoadFraction_ = 0.01;
