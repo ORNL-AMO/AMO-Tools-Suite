@@ -6,6 +6,7 @@
 #define AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 
 #include "../Pump.h"
+#include "OptimalPrePumpEff.h"
 
 class OptimalPumpEfficiency {
 
@@ -90,6 +91,7 @@ private:
     double head_;
     double actualEfficiency_;
     double optimalEfficiency_;
+    double pumpEfficiency = 0.0;
 };
 
 
