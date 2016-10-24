@@ -5,6 +5,8 @@
 #include "OptimalPumpEfficiency.h"
 #include "OptimalSpecificSpeed.h"
 #include "OptimalSpecificSpeedCorrection.h"
+#include <iostream>
+using namespace std;
 
 double OptimalPumpEfficiency::calculate() {
 

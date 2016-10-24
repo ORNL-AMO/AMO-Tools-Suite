@@ -1,10 +1,12 @@
 #include <iostream>
 #include "PSATResult.h"
+#include <iomanip>
 using namespace std;
 
 int main() {
 
     std::cout << "Hello, World!" << std::endl;
+    cout <<  setprecision(16);
     Pump pump(Pump::Style::END_SUCTION_ANSI_API, 90, 1780, Pump::Drive::DIRECT_DRIVE, 1.00, 1.000, 2, Pump::Speed::NOT_FIXED_SPEED);
     Motor motor(Motor::LineFrequency::FREQ60, 200, 1780, Motor::EfficiencyClass::SPECIFIED, 95, 460, 225.0, 0);
     Financial financial(1.000, 0.05);
@@ -13,6 +15,7 @@ int main() {
     PSATResult psatResult(pump,motor,financial,fieldData);
     psatResult.calculateExisting();
     psatResult.calculateOptimal();
+
     cout << "Pump Efficiency: " << psatResult.getExisting().pumpEfficiency_ << endl;
     cout << "Motor Rated power: " << psatResult.getExisting().motorRatedPower_ << endl;
     cout << "Motor Shaft power: " << psatResult.getExisting().motorShaftPower_ << endl;

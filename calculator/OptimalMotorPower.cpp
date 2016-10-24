@@ -5,13 +5,14 @@
 #include "OptimalMotorPower.h"
 #include "OptimalMotorCurrent.h"
 
+#include <iostream>
 using namespace std;
 
 double OptimalMotorPower::calculate() {
     double tempLoadFraction_ = 0.01;
     double mspkW = 0.0;
     while (true) {
-        OptimalMotorCurrent optimalMotorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_,
+        OptimalMotorCurrent optimalMotorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, Motor::EfficiencyClass::ENERGY_EFFICIENT,
                                                 specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fieldVoltage_,
                                                 fullLoadAmps_);
         current = optimalMotorCurrent.calculate();
@@ -29,7 +30,7 @@ double OptimalMotorPower::calculate() {
         power = motorPower.calculate();
         tempMsp = power * eff;
         // Converting to KW for matching purpose.
-
+        //cout << tempLoadFraction_ << ":" << current << ":" << eff <<":" << pf << ":" << power << ":" << endl;
         mspkW = optimalMotorShaftPower_ * 0.746;
 
         if (tempMsp > mspkW || tempLoadFraction_ > 1.5) {
@@ -53,6 +54,7 @@ double OptimalMotorPower::calculate() {
     /*
      * Calculate Fractional Index
      */
+
     double motorMspdiff_ = tempMsp2 - tempMsp1;
     double measuredMspdiff_ = mspkW - tempMsp1;
     double fractionalIndex_ = lf1 + ((measuredMspdiff_ / motorMspdiff_) / 100);
