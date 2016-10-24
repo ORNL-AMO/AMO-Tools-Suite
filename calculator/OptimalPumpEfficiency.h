@@ -7,6 +7,10 @@
 
 #include "../Pump.h"
 #include "OptimalPrePumpEff.h"
+#include "OptimalSpecificSpeed.h"
+#include "OptimalSpecificSpeedCorrection.h"
+#include "OptimalDeviationFactor.h"
+
 
 class OptimalPumpEfficiency {
 
