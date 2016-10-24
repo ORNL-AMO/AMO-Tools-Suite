@@ -218,7 +218,7 @@ Estimated FLA (575)=	181.8
         specifiedEfficiency_ = 95;
         if (fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency_) >
             fabs(seFLAValue * plMultiplier[4] - specifiedEfficiency_)) {
-            MotorEfficiency motorEfficiency(motorRPM_, Motor::EfficiencyClass::STANDARD, specifiedEfficiency_,
+            MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, Motor::EfficiencyClass::STANDARD, specifiedEfficiency_,
                                             motorRatedPower_, 1);
             effVal = motorEfficiency.calculate();
             // SE is the nominal efficiency
@@ -229,7 +229,7 @@ Estimated FLA (575)=	181.8
             }
         } else {
             // EE is the nominal efficiency
-            MotorEfficiency motorEfficiency(motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
+            MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
                                             motorRatedPower_, 1);
             effVal = motorEfficiency.calculate();
             for (int i = 0; i < 6; i++) {

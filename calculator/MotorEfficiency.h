@@ -14,10 +14,10 @@
 class MotorEfficiency {
 public:
 
-    MotorEfficiency(//double lineFrequency,
+    MotorEfficiency(Motor::LineFrequency lineFrequency,
             double motorRpm, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double motorRatedPower,
             double loadFactor)
-            : motorRpm_(motorRpm),
+            : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
               efficiencyClass_(efficiencyClass),
               specifiedEfficiency_(specifiedEfficiency),
               motorRatedPower_(

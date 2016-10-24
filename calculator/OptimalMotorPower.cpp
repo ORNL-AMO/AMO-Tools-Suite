@@ -5,9 +5,6 @@
 #include "OptimalMotorPower.h"
 #include "OptimalMotorCurrent.h"
 
-#include <iostream>
-using namespace std;
-
 double OptimalMotorPower::calculate() {
     double tempLoadFraction_ = 0.01;
     double mspkW = 0.0;
@@ -18,7 +15,7 @@ double OptimalMotorPower::calculate() {
         current = optimalMotorCurrent.calculate();
         //Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage_ / ratedVoltage_) - 1) * (1 + (-2 * tempLoadFraction_))) + 1);
-        MotorEfficiency motorEfficiency(motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
+        MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
                                         motorRatedPower_,
                                         tempLoadFraction_);
         eff = motorEfficiency.calculate();

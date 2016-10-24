@@ -4,29 +4,19 @@
 
 #include "MotorShaftPower.h"
 
-#include <iostream>
-#include <iomanip>
-using namespace std;
-
 double MotorShaftPower::calculate() {
     if (loadEstimationMethod_ == FieldData::LoadEstimationMethod::POWER) {
         tempLoadFraction_ = 0.01;
         while (true) {
             MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_ );
             current = motorCurrent.calculate();
-            MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_);
+            MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_);
             eff = motorEfficiency.calculate();
             MotorPowerFactor motorPowerFactor(motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
 
             pf = motorPowerFactor.calculate();
             MotorPower motorPower(ratedVoltage_, current, pf);
             power = motorPower.calculate();
-//            cout<< setprecision(8) << tempLoadFraction_ ;
-//            cout<< " current: " << current;
-//            cout<< " eff:" << eff;
-//            cout<< " pf:" << pf;
-//            cout<< " power:" << power;
-//            cout << endl;
             if (power > fieldPower_ || tempLoadFraction_ > 1.5) {
                 powerE2 = power;
                 lf2 = tempLoadFraction_;
@@ -76,7 +66,7 @@ double MotorShaftPower::calculate() {
             MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
             current = motorCurrent.calculate();
             if (current > fieldCurrent_ || tempLoadFraction_ > 1.5) {
-                MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_,  specifiedEfficiency_, motorRatedPower_, tempLoadFraction_);
+                MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, efficiencyClass_,  specifiedEfficiency_, motorRatedPower_, tempLoadFraction_);
                 eff = motorEfficiency.calculate();
                 MotorPowerFactor motorPowerFactor(motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
                 pf = motorPowerFactor.calculate();
@@ -97,7 +87,7 @@ double MotorShaftPower::calculate() {
         tempLoadFraction_ -= 0.01;
         MotorCurrent motorCurrent1(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
         current = motorCurrent1.calculate();
-        MotorEfficiency motorEfficiency(motorRPM_, efficiencyClass_, specifiedEfficiency_, motorRatedPower_, tempLoadFraction_);
+        MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, efficiencyClass_, specifiedEfficiency_, motorRatedPower_, tempLoadFraction_);
         eff = motorEfficiency.calculate();
         MotorPowerFactor motorPowerFactor(motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
         pf = motorPowerFactor.calculate();
