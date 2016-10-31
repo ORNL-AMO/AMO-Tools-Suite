@@ -17,21 +17,7 @@ MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent,
 motorRatedPower_ (motorRatedPower), loadFactor_(loadFactor), motorCurrent_(motorCurrent),
 motorEfficiency_(motorEfficiency), ratedVoltage_(ratedVoltage) {}
 
-/*MotorPowerFactor(double lineFrequency, double motorRpm, Motor::EfficiencyClass efficiencyClass, double hp,
-                 FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
-                 double voltage) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
-                                   efficiencyClass_(efficiencyClass), hp_(hp),
-                                   loadEstimationMethod_(loadEstimationMethod), motorKwh_(motorKwh),
-                                   motorAmps_(motorAmps), voltage_(voltage) {}
 
-MotorPowerFactor(double lineFrequency, double motorRpm, double hp,
-                 FieldData::LoadEstimationMethod loadEstimationMethod, double motorKwh, double motorAmps,
-                 double voltage, double actualEfficiency) : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
-                                                            hp_(hp), loadEstimationMethod_(loadEstimationMethod),
-                                                            motorKwh_(motorKwh), motorAmps_(motorAmps),
-                                                            voltage_(voltage),
-                                                            actualEfficiency_(actualEfficiency) {}
-*/
 double calculate();
 
 /*

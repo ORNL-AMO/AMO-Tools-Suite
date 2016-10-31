@@ -1,6 +1,6 @@
 #include <iostream>
 #include "PSATResult.h"
-#include "./calculator/MotorCurrent.h"
+#include "./calculator/MotorPowerFactor.h"
 #include <iomanip>
 using namespace std;
 
@@ -44,12 +44,8 @@ int main() {
 //    cout << "getAnnualSavingsPotential: " << psatResult.getAnnualSavingsPotential() << endl;
 //    cout << "getOptimizationRating: " << psatResult.getOptimizationRating() << endl;
 
-    MotorCurrent mc(200,1780,Motor::LineFrequency::FREQ60,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,.25,460,225.8);
-    cout << mc.calculate() << endl;
-    MotorCurrent mc1(200,1780,Motor::LineFrequency::FREQ60,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,1.25,460,225.8);
-    cout << mc1.calculate() << endl;
-    MotorCurrent mc2(200,1780,Motor::LineFrequency::FREQ60,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,1.5001,460,225.8);
-    cout << mc2.calculate() << endl;
+    MotorPowerFactor pf(200,0,.28*225.8,95,460);
+    cout << pf.calculate();
 
 }
 
