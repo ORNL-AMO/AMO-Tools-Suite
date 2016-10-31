@@ -5,6 +5,8 @@
 #include "MotorPowerFactor.h"
 #include "MotorEfficiency.h"
 
+#include <iostream>
+using namespace std;
 double MotorPowerFactor::calculate() {
     double motorPowerFactor_ = 0.0;
     /*
@@ -21,6 +23,9 @@ double MotorPowerFactor::calculate() {
          *  MotorPowerFactor (0) = motorKwInput (0) / motorkVA (0);
          */
         MotorEfficiency motorEfficiency(lineFrequency_,motorRpm_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, 0.25);
+        //double x = motorEfficiency.calculate();
+        //cout << "motorEfficiency.getKWloss0() : " <<motorEfficiency.getKWloss0() << endl;
+        //cout << "motorEfficiency.calculate() : " <<x << endl;
         double motorKwInput = 0.8 * (motorEfficiency.getKWloss0());
         double motorkVA = 460 * sqrt(3) * motorCurrent_/1000;
         motorPowerFactor_ = motorKwInput / motorkVA;
@@ -30,5 +35,5 @@ double MotorPowerFactor::calculate() {
                             (motorCurrent_ * motorEfficiency_ * ratedVoltage_ * sqrt(3) / 1000);
     }
      return motorPowerFactor_;
-    //return 76.46;
+
 }

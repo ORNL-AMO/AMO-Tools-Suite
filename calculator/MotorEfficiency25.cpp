@@ -195,8 +195,10 @@ std::vector<double> MotorEfficiency25::calculate(){
     /*
      * Find the poles
      */
+
     Poles poles(motorRpm_, lineFrequency_);
     int noPoles = poles.calculate();
+
     int polechooser = noPoles / 2 - 1;
 
     /*

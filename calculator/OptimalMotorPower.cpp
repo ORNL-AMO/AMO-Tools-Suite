@@ -6,7 +6,7 @@
 #include "OptimalMotorCurrent.h"
 
 double OptimalMotorPower::calculate() {
-    double tempLoadFraction_ = 0.01;
+    double tempLoadFraction_ = 0.00;
     double mspkW = 0.0;
     while (true) {
         OptimalMotorCurrent optimalMotorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, Motor::EfficiencyClass::ENERGY_EFFICIENT,
@@ -20,7 +20,7 @@ double OptimalMotorPower::calculate() {
                                         tempLoadFraction_);
         eff = motorEfficiency.calculate();
         //Similar to motorpowerfactor in existing case instead of ratedVoltage
-        MotorPowerFactor motorPowerFactor(motorRatedPower_, tempLoadFraction_, current, eff, fieldVoltage_);
+        MotorPowerFactor motorPowerFactor(lineFrequency_,motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_, current, eff, fieldVoltage_);
         pf = motorPowerFactor.calculate();
 
         MotorPower motorPower(fieldVoltage_, current, pf);
