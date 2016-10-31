@@ -3,8 +3,6 @@
 //
 
 #include "MotorCurrent.h"
-#include <iostream>
-using namespace std;
 
 double MotorCurrent::calculate() {
 
