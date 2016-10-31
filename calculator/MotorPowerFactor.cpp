@@ -20,7 +20,7 @@ double MotorPowerFactor::calculate() {
          *  motorkVA (0) = 460 * sqrt(3) * motorCurrent_ (0)/1000;
          *  MotorPowerFactor (0) = motorKwInput (0) / motorkVA (0);
          */
-        MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, 0.25);
+        MotorEfficiency motorEfficiency(lineFrequency_,motorRpm_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, 0.25);
         double motorKwInput = 0.8 * (motorEfficiency.getKWloss0());
         double motorkVA = 460 * sqrt(3) * motorCurrent_/1000;
         motorPowerFactor_ = motorKwInput / motorkVA;
