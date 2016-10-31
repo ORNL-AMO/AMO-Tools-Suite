@@ -30,12 +30,12 @@ public:
 
     double calculate();
 
-/*
-    double getLineFrequency() const {
+
+    Motor::LineFrequency getLineFrequency() const {
         return lineFrequency_;
     }
 
-    void setLineFrequency(double lineFrequency) {
+    void setLineFrequency(Motor::LineFrequency lineFrequency) {
         lineFrequency_ = lineFrequency;
     }
 
@@ -55,62 +55,14 @@ public:
         efficiencyClass_ = efficiencyClass;
     }
 
-    double getHp() const {
-        return hp_;
-    }
-
-    void setHp(double hp) {
-        hp_ = hp;
-    }
-
-    FieldData::LoadEstimationMethod getLoadEstimationMethod() const {
-        return loadEstimationMethod_;
-    }
-
-    void setLoadEstimationMethod(FieldData::LoadEstimationMethod loadEstimationMethod) {
-        loadEstimationMethod_ = loadEstimationMethod;
-    }
-
-    double getMotorKwh() const {
-        return motorKwh_;
-    }
-
-    void setMotorKwh(double motorKwh) {
-        motorKwh_ = motorKwh;
-    }
-
-    double getMotorAmps() const {
-        return motorAmps_;
-    }
-
-    void setMotorAmps(double motorAmps) {
-        motorAmps_ = motorAmps;
-    }
-
-    double getVoltage() const {
-        return voltage_;
-    }
-
-    void setVoltage(double voltage) {
-        voltage_ = voltage;
-    }
-
-    double getActualEfficiency() const {
-        return actualEfficiency_;
-    }
-
-    void setActualEfficiency(double actualEfficiency) {
-        actualEfficiency_ = actualEfficiency;
-    }
-*/
 
 private:
     Motor::LineFrequency lineFrequency_;
     double motorRpm_;
     Motor::EfficiencyClass efficiencyClass_;
-    double hp_;
-    FieldData::LoadEstimationMethod loadEstimationMethod_;
     double specifiedEfficiency_;
+    double motorKwInput =0.0;
+    double motorkVA = 0.0;
 
 /*
  * 9/9/16: Added new variables for a changed constructor

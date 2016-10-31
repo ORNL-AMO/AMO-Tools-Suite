@@ -89,7 +89,7 @@ public:
         actualEfficiency_ = actualEfficiency;
     }
 
-    double getKWloss0(){
+    double getKWloss0() const{
         return kWloss0;
     }
 
@@ -103,7 +103,7 @@ private:
     FieldData::LoadEstimationMethod loadEstimationMethod_;
     double motorKwh_;
     double motorAmps_;
-    double kWloss0;
+    double kWloss0 = 0.0;
     //double ratedVoltage_;
     double actualEfficiency_;
     double motorRatedPower_;

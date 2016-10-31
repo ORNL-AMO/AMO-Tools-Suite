@@ -3,6 +3,8 @@
 //
 
 #include "Poles.h"
+#include <iostream>
+using namespace std;
 
 int Poles::calculate() {
     poles_ =0;
@@ -27,6 +29,7 @@ int Poles::calculate() {
      * Backup case when the Rpm does not fall within any range. Currently the equation for 60 Hz is used. 50 Hz equation
      * is not available at the time of implementing this.
      */
+
     if (poles_ == 0){
         if (motorRpm_ > 3600) {
             poles_ = 2;
@@ -38,5 +41,6 @@ int Poles::calculate() {
             }
         }
     }
+
     return poles_;
 }
