@@ -7,8 +7,6 @@
 
 double MotorEfficiency::calculate() {
 
-
-
         /*
          * Calculating the 1% interval values based on the load factor
          * 0 - 25
@@ -104,13 +102,6 @@ double MotorEfficiency::calculate() {
             CurveFitVal cfv(3, xCoord_, yCoord_, 2, loadFactor_);
             motorEff_ = cfv.calculate();
         }
-        /*
-         * When ready uncomment the below.
-         */
-    //}
-/*    else{
-        motorEff_ = specifiedEfficiency_;
-    }*/
+
     return motorEff_;
-    //return 94.36;
 }
