@@ -47,7 +47,7 @@ double MotorCurrent::calculate() {
             double yCoord_[5] = {plValues[1], plValues[2], plValues[3], plValues[4], plValues[5]};
             CurveFitVal cfv(5, xCoord_, yCoord_, 4, loadFactor_);
             motorCurrent_ = cfv.calculate();
-    } else if (loadFactor_ > 1.25 && (loadFactor_ < 1.50) || loadFactor_ == 1.50 || std::abs(loadFactor_- 1.50) < 0.001) {
+    } else if (loadFactor_ > 1.25 && (loadFactor_ < 1.50 || loadFactor_ == 1.50 || std::abs(loadFactor_- 1.50) < 0.001)) {
         double xCoord_[3] = {.75, 1.00, 1.25};
         double yCoord_[3] = {plValues[3], plValues[4], plValues[5]};
         CurveFitVal cfv(3, xCoord_, yCoord_, 2, loadFactor_);
