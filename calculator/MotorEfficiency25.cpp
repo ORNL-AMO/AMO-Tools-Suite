@@ -3,7 +3,6 @@
 //
 
 #include "MotorEfficiency25.h"
-#include <iostream>
 using namespace std;
 
 std::vector<double> MotorEfficiency25::calculate(){
