@@ -45,7 +45,5 @@ int main() {
     cout << "getAnnualSavingsPotential: " << psatResult.getAnnualSavingsPotential() << endl;
     cout << "getOptimizationRating: " << psatResult.getOptimizationRating() << endl;
 
-//    MotorPowerFactor motorPowerFactor(Motor::LineFrequency::FREQ60,1750,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,200,0,62.25383653,0,460);
-//    cout << motorPowerFactor.calculate();
 }
 

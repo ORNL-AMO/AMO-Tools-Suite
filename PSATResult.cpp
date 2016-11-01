@@ -1,6 +1,15 @@
-//
-// Created by Accawi, Gina K. on 6/17/16.
-//
+/**
+ * @file
+ * @brief Contains the two main modules of PSATResult class.
+ * Contains 2 important functions:
+ *          calculateExisting : calculates the values for the exisiting data.
+ *          calculateOptimal : calculates the values for the optimal case.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 
 #include "PSATResult.h"
 #include "calculator/MotorShaftPower.h"
@@ -17,15 +26,16 @@
 
 double PSATResult::calculateExisting() {
 
-    MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(), motor_.getLineFrequency(),
-                                    motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(), motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
+    MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(),
+                                    motor_.getLineFrequency(),
+                                    motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(),
+                                    motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
                                     fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
                                     fieldData_.getMotorAmps());
     existing_.motorShaftPower_ = motorShaftPower.calculate();
     existing_.motorCurrent_ = motorShaftPower.calculateCurrent();
     existing_.motorPowerFactor_ = motorShaftPower.calculatePowerFactor();
     existing_.motorEfficiency_ = motorShaftPower.calculateEfficiency();
-    //existing_.motorPower_ = motorShaftPower.calculateElectricPower();
     existing_.motorRatedPower_ = motor_.getMotorRatedPower();
     existing_.motorPower_ = motorShaftPower.calculatePower();
     existing_.estimatedFLA_ = motorShaftPower.calculateEstimatedFLA();
@@ -64,16 +74,21 @@ double PSATResult::calculateOptimal() {
     Calculate annual savings potential and optimization rating
      */
 
-    OptimalPumpEfficiency optimalPumpEfficiency(pump_.getStyle(),pump_.getAchievableEfficiency(), pump_.getRpm(),pump_.getKviscosity(),pump_.getStageCount(),fieldData_.getFlowRate(),fieldData_.getHead());
+    OptimalPumpEfficiency optimalPumpEfficiency(pump_.getStyle(), pump_.getAchievableEfficiency(), pump_.getRpm(),
+                                                pump_.getKviscosity(), pump_.getStageCount(), fieldData_.getFlowRate(),
+                                                fieldData_.getHead());
     optimal_.pumpEfficiency_ = optimalPumpEfficiency.calculate();
-    OptimalPumpShaftPower optimalPumpShaftPower(fieldData_.getFlowRate(),fieldData_.getHead(),pump_.getSg(),optimal_.pumpEfficiency_);
+    OptimalPumpShaftPower optimalPumpShaftPower(fieldData_.getFlowRate(), fieldData_.getHead(), pump_.getSg(),
+                                                optimal_.pumpEfficiency_);
     optimal_.pumpShaftPower_ = optimalPumpShaftPower.calculate();
-    OptimalMotorShaftPower optimalMotorShaftPower(optimal_.pumpShaftPower_,pump_.getDrive());
+    OptimalMotorShaftPower optimalMotorShaftPower(optimal_.pumpShaftPower_, pump_.getDrive());
     optimal_.motorShaftPower_ = optimalMotorShaftPower.calculate();
-    OptimalMotorSize optimalMotorSize(optimal_.motorShaftPower_,motor_.getSizeMargin());
+    OptimalMotorSize optimalMotorSize(optimal_.motorShaftPower_, motor_.getSizeMargin());
     optimal_.motorRatedPower_ = optimalMotorSize.calculate();
-    OptimalMotorPower optimalMotorPower(optimal_.motorRatedPower_, fieldData_.getMotorPower(), motor_.getMotorRpm(), motor_.getLineFrequency(),
-                                        motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(), motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
+    OptimalMotorPower optimalMotorPower(optimal_.motorRatedPower_, fieldData_.getMotorPower(), motor_.getMotorRpm(),
+                                        motor_.getLineFrequency(),
+                                        motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(),
+                                        motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
                                         fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
                                         fieldData_.getMotorAmps(), optimal_.motorShaftPower_);
     optimalMotorPower.calculate();
@@ -92,6 +107,6 @@ double PSATResult::calculateOptimal() {
     // Annual Savings potential
     annualSavingsPotential_ = existing_.annualCost_ - optimal_.annualCost_;
     // Optimization Rating
-    optimizationRating_ = optimal_.motorPower_/existing_.motorPower_;
+    optimizationRating_ = optimal_.motorPower_ / existing_.motorPower_;
     return 0;
 }
