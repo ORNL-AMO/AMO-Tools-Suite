@@ -64,8 +64,8 @@ double MotorEfficiency::calculate() {
         }
 
         double kWloss25 = ((1 / motorEfficiency_[0]) - 1) * motorRatedPower_ * 0.746 * 0.25;
-        double kWloss0 = 0.8 * kWloss25;
-
+        kWloss0 = 0.8 * kWloss25;
+        cout << "kWloss0" << kWloss0 << endl;
         /*
          * Note: Above is for EE or SE. More calculations are required for Specified Efficiency
          */

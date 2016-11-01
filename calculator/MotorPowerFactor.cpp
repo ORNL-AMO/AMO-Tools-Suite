@@ -25,8 +25,10 @@ double MotorPowerFactor::calculate() {
         MotorEfficiency motorEfficiency(lineFrequency_,motorRpm_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, 0.25);
         motorEfficiency.calculate();
         cout << "motorEfficiency.getKWloss0() : " <<motorEfficiency.getKWloss0() << endl;
-        motorKwInput = 0.8 * (motorEfficiency.getKWloss0());
+        motorKwInput = motorEfficiency.getKWloss0();
         motorkVA = 460 * sqrt(3) * motorCurrent_/1000;
+        cout << "motorKwInput" << motorKwInput << endl;
+        cout << "motorkVA" << motorkVA << endl;
         motorPowerFactor_ = motorKwInput / motorkVA;
     }
     else {
