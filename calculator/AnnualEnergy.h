@@ -1,6 +1,15 @@
-//
-// Created by Accawi, Gina K. on 6/17/16.
-//
+/**
+ * @file
+ * @brief Function prototypes for the Annual Energy
+ *
+ * This contains the prototypes for the Annual Energy
+ * including getters and setters for the important fields.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 
 #ifndef AMO_LIBRARY_ANNUALENERGY_H
 #define AMO_LIBRARY_ANNUALENERGY_H
