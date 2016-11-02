@@ -11,6 +11,4 @@ double AnnualCost::calculate() {
      */
     annualEnergyCost_ = annualEnergy_ * kwhRate_;
     return annualEnergyCost_;
-    // Return value from sample
-    //return 32.18;
 }
