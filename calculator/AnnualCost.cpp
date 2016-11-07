@@ -1,5 +1,6 @@
 /**
- * @brief Calculates the annual energy cost
+ * @brief Contains the definition of functions of AnnualCost class.
+ *      calculate(): Calculates the annual energy cost
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
