@@ -1,5 +1,4 @@
 /**
- * @file
  * @brief Function prototypes for the Annual Energy
  *
  * This contains the prototypes for the Annual Energy calculator including getters and setters for the important fields.

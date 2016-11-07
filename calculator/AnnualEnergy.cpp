@@ -1,5 +1,4 @@
 /**
- * @file
  * @brief Contains the definition of functions of AnnualEnergy class.
  *      calculate(): Calculates the annual energy
  *
