@@ -1,55 +1,56 @@
+/**
+ * @brief Contains the definition of functions of EstimateFLA class.
+ *      calculate(): Calculates the estimated FLA and 25% interval values of Current.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
 //
 // Created by Mishra, Subhankar on 10/4/16.
 //
 
 #include "EstimateFLA.h"
 
+/**
+ * Estimating FLA methodology
+ * - PSAT has four different methods of estimating FLA, with the four methods corresponding to the four efficiency choices.
+ *  - For Standard Efficiency selection, it selects the FLA for the motor size and speed class that has been selected.  For example, the SE FLA for a 200 hp 4-pole motor is 228.6 amps.
+ *  - For Energy Efficient selection, it selects the FLA for the motor size and speed class that has been selected.  For example, the EE FLA for a 200 hp 4-pole motor is 225.8 amps.
+ *  - For Average Efficiency selection, it averages the FLA for Energy Efficient and Standard Efficiency choices.  The average of the two values listed above is 227.2 amps, which is what PSAT returns.
+ *  - For a case where the efficiency has been specified, there is a multiple step process:
+ *      1. The absolute value of the differences between the specified efficiency and the efficiency values for EE and SE motors are calculated
+ *      2. Pick the smaller of the two absolute values, and use the nominal efficiency of that selection going forward
+ *      3. Divide the selected (EE or SE) efficiency by the specified efficiency and then multiply that by the FLA for the corresponding selection.  See the example below.
+ *
+ * 	EE	SE	Specified		Choose:
+ * Full load efficiency	95.63	93.92	95.0		EE
+ * Full load amps (FLA)	225.8	228.6	227.3
+ *
+ * In this case, the specified efficiency is closer to the EE value, so the EE FLA and EE efficiency values are used.
+ *
+ * Equation for the calculation is:
+ * Estimated FLA (specified efficiency) =EE FLA * (EE full load efficiency / Specified efficiency)
+ * or, if the specified efficiency is closer to SE,
+ * Estimated FLA (specified efficiency) =SE FLA * (SE full load efficiency / Specified efficiency)
+ *
+ * Nameplate voltage adjustment
+ * If the motor nameplate is other than 460 V, the Estimate FLA process includes one more adjustment
+ * Use an example of a motor known to have a 575 volt rating, but the FLA is not readable and the user wants to Estimate the FLA
+ * The process is the same as above, except that the estimated FLA is adjusted in inverse proportion to the rated voltage.
+ *
+ * Estimated FLA (575) = Estimated FLA (460) * (460/575)
+ * Estimated FLA (575)=	181.8
+ *
+ * @return 25% interval values of current.
+ */
 std::vector<double> EstimateFLA::calculate() {
     std::vector<double> plValues(6);
     /*
-     Estimating FLA methodology
-Note: values in blue are calculated
-PSAT has four different methods of estimating FLA, with the four methods corresponding to the four efficiency choices.
-
-For Standard Efficiency selection, it selects the FLA for the motor size and speed class that has been selected.  For example, the SE FLA for a 200 hp 4-pole motor is 228.6 amps.
-
-For Energy Efficient selection, it selects the FLA for the motor size and speed class that has been selected.  For example, the EE FLA for a 200 hp 4-pole motor is 225.8 amps.
-
-For Average Efficiency selection, it averages the FLA for Energy Efficient and Standard Efficiency choices.  The average of the two values listed above is 227.2 amps, which is what PSAT returns.
-
-For a case where the efficiency has been specified, there is a multiple step process:
-	1. The absolute value of the differences between the specified efficiency and the efficiency values for EE and SE motors are calculated
-	2. Pick the smaller of the two absolute values, and use the nominal efficiency of that selection going forward
-	3. Divide the selected (EE or SE) efficiency by the specified efficiency and then multiply that by the FLA for the corresponding selection.  See the example below.
-
-
-	EE	SE	Specified		Choose:
-Full load efficiency	95.63	93.92	95.0		EE
-Full load amps (FLA)	225.8	228.6	227.3
-
-In this case, the specified efficiency is closer to the EE value, so the EE FLA and EE efficiency values are used.
-
-Equation for the calculation is:
-
-Estimated FLA (specified efficiency) =EE FLA * (EE full load efficiency / Specified efficiency)
-or, if the specified efficiency is closer to SE,
-Estimated FLA (specified efficiency) =SE FLA * (SE full load efficiency / Specified efficiency)
-
-Nameplate voltage adjustment
-If the motor nameplate is other than 460 V, the Estimate FLA process includes one more adjustment
-Use an example of a motor known to have a 575 volt rating, but the FLA is not readable and the user wants to Estimate the FLA
-The process is the same as above, except that the estimated FLA is adjusted in inverse proportion to the rated voltage.
-
-Estimated FLA (575) = Estimated FLA (460) * (460/575)
-
-Estimated FLA (575)=	181.8
+     * FLA Basic coefficients
      */
-
-
-
-    /*
-* FLA Basic coefficients, 2004
-*/
     double flaBasic_[5][6] = {
             {1.07000005, 1.07860196, 1.11131799, 1.20000005, 1.25399995, 1.296},
             {0.04457,    0.06776789, 0.1038059,  0.09800907, 0.10241948, 0.1058498},
@@ -126,18 +127,18 @@ Estimated FLA (575)=	181.8
     };
 
 
-    /*
+    /**
      * Calculate the number of poles based on the RPM
      */
     Poles polesobj(motorRPM_, lineFrequency_);
     int poles = polesobj.calculate();
 
-    /*
+    /**
      * Index for the arrays based on the pole
      */
     int poleChooser_ = poles / 2 - 1;
 
-    /*
+    /**
      * Calculate basic FLA value. There is better way to do this.
      * =$B13*(C$4+(C$5*EXP(-C$6*$B13))+(C$7*EXP(-C$8*$B13)))
      */
@@ -146,7 +147,7 @@ Estimated FLA (575)=	181.8
                                                  exp(-1 * flaBasic_[2][poleChooser_] * motorRatedPower_)) +
                                                 (flaBasic_[3][poleChooser_] *
                                                  exp(-1 * flaBasic_[4][poleChooser_] * motorRatedPower_)));
-    /*
+    /**
      * Calculate EE multiplier
      */
     double eeMultiplier = (eeFlamultipliers_[0][poleChooser_] +
@@ -154,7 +155,7 @@ Estimated FLA (575)=	181.8
                             exp(-1 * eeFlamultipliers_[2][poleChooser_] * motorRatedPower_)) +
                            (eeFlamultipliers_[3][poleChooser_] *
                             exp(-1 * eeFlamultipliers_[4][poleChooser_] * motorRatedPower_)));
-    /*
+    /**
      * Calculate SE multiplier
      */
     double seMultiplier = (seFlamultipliers_[0][poleChooser_] +
@@ -163,13 +164,13 @@ Estimated FLA (575)=	181.8
                            (seFlamultipliers_[3][poleChooser_] *
                             exp(-1 * seFlamultipliers_[4][poleChooser_] * motorRatedPower_)));
 
-    /*
+    /**
      * Calculate EE or SE values
      */
     double eeFLAValue = eeMultiplier * basicFLAValue_;
     double seFLAValue = seMultiplier * basicFLAValue_;
 
-    /*
+    /**
      * Select partial load multipliers based on pole. There is better way to do this.
      */
     double tempCoeff[5][6];
@@ -180,7 +181,7 @@ Estimated FLA (575)=	181.8
     if (poleChooser_ == 4) std::copy(&p10Coeff_[0][0], &p10Coeff_[0][0] + 5 * 6, &tempCoeff[0][0]);
     if (poleChooser_ == 5) std::copy(&p12Coeff_[0][0], &p12Coeff_[0][0] + 5 * 6, &tempCoeff[0][0]);
 
-    /*
+    /**
      * Calculating Multiplier for partial loads in 25% intervals
      */
     double plMultiplier[6] = {};
@@ -193,7 +194,7 @@ Estimated FLA (575)=	181.8
                             exp(-1 * tempCoeff[4][i] * motorRatedPower_)));
     }
 
-    /*
+    /**
      * Calculating the 25% interval Amps
      */
 
@@ -209,11 +210,11 @@ Estimated FLA (575)=	181.8
             plValues[i] = seFLAValue * plMultiplier[i];
         }
     } else if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
-        /*
-            For a case where the efficiency has been specified, there is a multiple step process:
-            1. The absolute value of the differences between the specified efficiency and the efficiency values for EE and SE motors are calculated
-            2. Pick the smaller of the two absolute values, and use the nominal efficiency of that selection going forward
-            3. Divide the selected (EE or SE) efficiency by the specified efficiency and then multiply that by the FLA for the corresponding selection.
+        /**
+         * For a case where the efficiency has been specified, there is a multiple step process:
+         * 1. The absolute value of the differences between the specified efficiency and the efficiency values for EE and SE motors are calculated
+         * 2. Pick the smaller of the two absolute values, and use the nominal efficiency of that selection going forward
+         * 3. Divide the selected (EE or SE) efficiency by the specified efficiency and then multiply that by the FLA for the corresponding selection.
          */
         specifiedEfficiency_ = 95;
         if (fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency_) >
@@ -221,14 +222,14 @@ Estimated FLA (575)=	181.8
             MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, Motor::EfficiencyClass::STANDARD, specifiedEfficiency_,
                                             motorRatedPower_, 1);
             effVal = motorEfficiency.calculate();
-            // SE is the nominal efficiency
+            /// SE is the nominal efficiency
             for (int i = 0; i < 6; i++) {
                 plValues[i] = seFLAValue * plMultiplier[i];
 
                 //plValues[i] = seEff * plValues[i] * 100 / specifiedEfficiency_;
             }
         } else {
-            // EE is the nominal efficiency
+            /// EE is the nominal efficiency
             MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
                                             motorRatedPower_, 1);
             effVal = motorEfficiency.calculate();
@@ -240,7 +241,7 @@ Estimated FLA (575)=	181.8
     }
 
 
-    // Estimated FLA refers to the 100% value.
+    /// Estimated FLA refers to the 100% value.
     double tempAmp100 = plValues[4];
     plValues[4] = plValues[4] * 460 / ratedVoltage_;
     if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
