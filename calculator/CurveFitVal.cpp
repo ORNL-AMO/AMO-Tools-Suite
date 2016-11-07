@@ -16,8 +16,6 @@
 //
 
 #include "CurveFitVal.h"
-#include <iostream>
-using namespace std;
 
 /**
  * Given a set of x and y coordinates and degree of polynomial curve to fit, it calculates the curve fit value
@@ -32,7 +30,7 @@ double CurveFitVal::calculate() {
     /**
      * Array to store Sigma X values
      */
-    vector<double> sigmaX_(2 * pdegree_ + 1);
+    std::vector<double> sigmaX_(2 * pdegree_ + 1);
     for (i = 0; i < 2 * pdegree_ + 1; i++) {
         sigmaX_[i] = 0;
         for (j = 0; j < noIntervalPoints_; j++)
@@ -42,7 +40,7 @@ double CurveFitVal::calculate() {
     /**
      * Array to store Sigma Y values
      */
-    vector<double> sigmaY_(2 * pdegree_ + 1);
+    std::vector<double> sigmaY_(2 * pdegree_ + 1);
     for (i = 0; i < pdegree_ + 1; i++) {
         sigmaY_[i] = 0;
         for (j = 0; j < noIntervalPoints_; j++)
@@ -63,7 +61,7 @@ double CurveFitVal::calculate() {
      * Array to store the coefficients of the curve.
      */
 
-    vector<double> coeff_(pdegree_ + 1);
+    std::vector<double> coeff_(pdegree_ + 1);
     for (int m = 0; m < pdegree_ + 1; ++m) {
         coeff_[m] = 0;
     }
