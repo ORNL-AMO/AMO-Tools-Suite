@@ -2,8 +2,7 @@
  * @file
  * @brief Function prototypes for the Annual Energy
  *
- * This contains the prototypes for the Annual Energy
- * including getters and setters for the important fields.
+ * This contains the prototypes for the Annual Energy calculator including getters and setters for the important fields.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
@@ -17,32 +16,66 @@
 
 class AnnualEnergy {
 public:
-
+    /**
+     * Constructor
+     * @param fieldPower Power from field data
+     * @param operatingFraction operating fraction
+     * @return nothing
+     */
     AnnualEnergy(double fieldPower, double operatingFraction) : fieldPower_(fieldPower),
                                                                 operatingFraction_(operatingFraction) {}
 
+    /**
+     * Calculates annual energy
+     * @return annual energy
+     */
     double calculate();
 
+    /**
+     * Getter for field power
+     * @return power from field data
+     */
     double getFieldPower() const {
         return fieldPower_;
     }
 
+    /**
+     * Setter for field power
+     * @param fieldPower
+     */
     void setFieldPower(double fieldPower) {
         fieldPower_ = fieldPower;
     }
 
+    /**
+     * Getter for operating fraction
+     * @return operating fraction
+     */
     double getOperatingFraction() const {
         return operatingFraction_;
     }
 
+    /**
+     * Setter for operating fraction
+     * @param operatingFraction
+     */
     void setOperatingFraction(double operatingFraction) {
         operatingFraction_ = operatingFraction;
     }
 
 private:
-    double fieldPower_; // in kWe - kilo Watts electrical
+    /**
+     * Power from field data in kWe: kilo Watts electrical
+     */
+    double fieldPower_;
+    /**
+     * Operating fraction
+     */
     double operatingFraction_;
-    double annualEnergy_; // in MWh/year
+    /**
+     * Annual energy in MWh/year
+     */
+    double annualEnergy_;
 };
 
 
