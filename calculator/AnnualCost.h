@@ -19,7 +19,7 @@ public:
      * Constructor
      * @param annualEnergy
      * @param kwhRate
-     * @return
+     * @return nothing
      */
     AnnualCost(double annualEnergy, double kwhRate) : annualEnergy_(annualEnergy), kwhRate_(kwhRate) {}
 
