@@ -21,15 +21,39 @@
 
 class FluidPower {
 public:
+    /**
+     * Constructor
+     * Below parameters have self explanatory nomenclature.
+     * @param specificGravity
+     * @param flowRate
+     * @param head
+     * @return nothing
+     */
     FluidPower(double specificGravity, double flowRate, double head) :
             specificGravity_(specificGravity), flowRate_(flowRate), head_(head) {};
 
+    /**
+     * Calculates fluid power
+     * @return Fluid Power
+     */
     double calculate();
 
 private:
-    double specificGravity_; // mishras: Is there any unit?
-    double flowRate_; // in gpm
-    double head_; // in ft
+    /**
+     * Specific Gravity
+     */
+    double specificGravity_;
+    /**
+     * Flow rate in GPM
+     */
+    double flowRate_;
+    /**
+     * Length of head in ft
+     */
+    double head_;
+    /**
+     * Returning fluid power
+     */
     double fluidPower_;
 };
 
