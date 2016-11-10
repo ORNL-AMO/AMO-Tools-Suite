@@ -1,3 +1,13 @@
+/**
+ * @brief Contains the declaration of MotorCurrent class including the getters and setters as well as the calculators for motor current.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
+
 //
 // Created by Accawi, Gina K. on 6/17/16.
 //
@@ -15,63 +25,46 @@
 
 class MotorCurrent {
 public:
-    //MotorCurrent(double motorAmps, double motorKw, double voltage) : motorAmps_(motorAmps), motorKw_(motorKw),voltage_(voltage) {}
+    /**
+     * Constructor
+     * @param motorRatedPower Rated power of motor
+     * @param motorRPM RPM of motor
+     * @param lineFrequency line Frequency of motor
+     * @param efficiencyClass Efficiency class of motor
+     * @param specifiedEfficiency Specified efficiency of motor when the efficiency class = SPECIFIED
+     * @param loadFactor
+     * @param ratedVoltage
+     * @param fullLoadAmps
+     * @return
+     */
     MotorCurrent(double motorRatedPower, int motorRPM, Motor::LineFrequency lineFrequency,
-                 Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor , double ratedVoltage, double fullLoadAmps) :
-                                                                              motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
-                                                                              lineFrequency_(lineFrequency),
-                                                                              efficiencyClass_(efficiencyClass),
-                                                                              specifiedEfficiency_(specifiedEfficiency),
-                                                                              loadFactor_(loadFactor), ratedVoltage_(ratedVoltage),
-                                                                              fullLoadAmps_(fullLoadAmps){};
+                 Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor,
+                 double ratedVoltage, double fullLoadAmps) :
+            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
+            lineFrequency_(lineFrequency),
+            efficiencyClass_(efficiencyClass),
+            specifiedEfficiency_(specifiedEfficiency),
+            loadFactor_(loadFactor), ratedVoltage_(ratedVoltage),
+            fullLoadAmps_(fullLoadAmps) {};
+
     double calculate();
 
-    double getEstimatedFLA(){
+    double getEstimatedFLA() {
         return estimatedFLA_;
     }
 
-/*    double getMotorAmps() const {
-        return motorAmps_;
-    }
-
-    void setMotorAmps(double motorAmps) {
-        motorAmps_ = motorAmps;
-    }
-
-    double getMotorKw() const {
-        return motorKw_;
-    }
-
-    void setMotorKw(double motorKw) {
-        motorKw_ = motorKw;
-    }
-
-    double getVoltage() const {
-        return voltage_;
-    }
-
-    void setVoltage(double voltage) {
-        voltage_ = voltage;
-    }*/
 
 private:
-    /* Commented for now
-    double motorAmps_;
-    double motorKw_;
-    double voltage_;
-     */
     double motorRatedPower_ = 0.0;
-
     int motorRPM_ = 0;
     Motor::LineFrequency lineFrequency_;
     Motor::EfficiencyClass efficiencyClass_;
-    double specifiedEfficiency_ =0.0;
+    double specifiedEfficiency_ = 0.0;
     double loadFactor_ = 0.0;
     double motorCurrent_ = 0.0;
-    double ratedVoltage_ =0.0;
+    double ratedVoltage_ = 0.0;
     double estimatedFLA_ = 0.0;
     double fullLoadAmps_ = 0.0;
-
 };
 
 
