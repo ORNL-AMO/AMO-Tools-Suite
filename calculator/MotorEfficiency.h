@@ -1,3 +1,12 @@
+/**
+ * @brief Contains the declaration of MotorEfficiency class including the getters and setters as well as the calculators for motor efficiency.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
 //
 // Created by Accawi, Gina K. on 6/17/16.
 //
@@ -13,7 +22,16 @@
 
 class MotorEfficiency {
 public:
-
+    /**
+     * Constructor
+     * @param lineFrequency
+     * @param motorRpm
+     * @param efficiencyClass
+     * @param specifiedEfficiency
+     * @param motorRatedPower
+     * @param loadFactor
+     * @return
+     */
     MotorEfficiency(Motor::LineFrequency lineFrequency,
             double motorRpm, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double motorRatedPower,
             double loadFactor)
