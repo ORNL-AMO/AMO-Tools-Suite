@@ -50,7 +50,7 @@ double CurveFitVal::calculate() {
      * Array to store matrix which in turn store the equations
      */
     std::vector<std::vector<double>> augMatrix(pdegree_ + 1, std::vector<double>(pdegree_ + 2, 0));
-    // double augMatrix[pdegree_ + 1][pdegree_ + 2];
+
     for (i = 0; i <= pdegree_; i++)
         for (j = 0; j <= pdegree_; j++)
             augMatrix[i][j] = sigmaX_[i + j];
