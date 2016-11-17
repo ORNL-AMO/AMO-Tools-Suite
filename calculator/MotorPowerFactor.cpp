@@ -1,3 +1,14 @@
+/**
+ * @brief Contains the definition of functions of MotorPower class.
+ *      calculate(): Calculates the motor power given rated voltage, motor current and power factor.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
+
 //
 // Created by Accawi, Gina K. on 6/17/16.
 //
@@ -9,7 +20,7 @@ double MotorPowerFactor::calculate() {
     double motorPowerFactor_ = 0.0;
 
     if (loadFactor_ == 0.0 || std::abs(loadFactor_ - 0.0) < 0.001) {
-        /*
+        /**
          * When the loadFactor is 0
          *  The powerFactor is calculated from the Motor KW loss and Motor kW Input development.
          *  MotorKWloss (0) = 0.8 * MotorKWloss (25)
@@ -24,7 +35,7 @@ double MotorPowerFactor::calculate() {
         motorkVA = 460 * sqrt(3) * motorCurrent_ / 1000;
         motorPowerFactor_ = motorKwInput / motorkVA;
     } else {
-        /*
+        /**
          *  Make sure the loadfactor comes not in %.
          *  pf (X) = [(X/100) * rated hp * 0.746] / [Amps (X) * Eff (X) * Rated Voltage * Square root (3) / 1000]
          */
