@@ -1,5 +1,6 @@
 /**
- * @brief Contains the declaration of MotorEfficiency class including the getters and setters as well as the calculators for motor efficiency.
+ * @brief Contains the declaration of MotorEfficiency class including the getters and setters as well as the
+ * calculators for motor efficiency.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
