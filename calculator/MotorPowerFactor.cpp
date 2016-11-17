@@ -1,6 +1,6 @@
 /**
- * @brief Contains the definition of functions of MotorPower class.
- *      calculate(): Calculates the motor power given rated voltage, motor current and power factor.
+ * @brief Contains the definition of functions of MotorPowerFactor class.
+ *      calculate(): Calculates the motor power factor given a load factor.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
