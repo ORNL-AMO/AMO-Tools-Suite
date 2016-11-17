@@ -1,14 +1,24 @@
+/**
+ * @brief Contains the definition of functions of MotorEfficiency25 class.
+ *      calculate(): Calculates the motor efficiency givenat 25% intervals of load factor.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @bug No known bugs.
+ *
+ */
+
 //
 // Created by Mishra, Subhankar on 10/6/16.
 //
 
 #include "MotorEfficiency25.h"
+
 using namespace std;
 
-std::vector<double> MotorEfficiency25::calculate(){
-    /*
-* Define the coefficients for various partial loads
-*/
+std::vector<double> MotorEfficiency25::calculate() {
+    /**
+     * Define the coefficients for various partial loads
+     */
     double eeLt125hp[6][5][5] = {
             {
                     {94.4693298, 95.1883316, 95.0271149, 94.9202652},
@@ -191,7 +201,7 @@ std::vector<double> MotorEfficiency25::calculate(){
             }
     };
 
-    /*
+    /**
      * Find the poles
      */
 
@@ -200,13 +210,13 @@ std::vector<double> MotorEfficiency25::calculate(){
 
     int polechooser = noPoles / 2 - 1;
 
-    /*
-      * Calculating Motor Efficiency
-      * On the EE and SE tabs are all the coefficient arrays. At the bottom of the sheets are calculated tables of efficiency vs load for each speed class.
-      * The 25%,50%,75%, and 100% load efficiencies are calculated using the above double-exponential calculation
-      * At 0% load, the motor efficiency is, by definition,tion, 0%
-      */
-    std::vector <double> motorEfficiency_(5);
+    /**
+     * Calculating Motor Efficiency
+     * On the EE and SE tabs are all the coefficient arrays. At the bottom of the sheets are calculated tables of efficiency vs load for each speed class.
+     * The 25%,50%,75%, and 100% load efficiencies are calculated using the above double-exponential calculation
+     * At 0% load, the motor efficiency is, by definition,tion, 0%
+     */
+    std::vector<double> motorEfficiency_(5);
 
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (int i = 0; i < 4; ++i) { //cols
@@ -242,17 +252,10 @@ std::vector<double> MotorEfficiency25::calculate(){
         }
     }
 
-
-
-
-    /*
+    /**
      * PSAT assumes that the efficiency at 125% load is 99% of the full load efficiency.
      */
     motorEfficiency_[4] = 0.99 * motorEfficiency_[3];
-
-    /*
-     * Corrections if the efficiency is specified
-     */
 
     return motorEfficiency_;
 };
