@@ -1,3 +1,13 @@
+/**
+ * @brief Contains the declaration of MotorPowerFactor class including the getters and setters as well as the calculators.
+ *          for motor efficiency.
+ *      calculate(): Calculates the motor power factor
+ *
+ * @author Subhankar Mishra (mishras)
+ * @bug No known bugs.
+ *
+ */
+
 //
 // Created by Accawi, Gina K. on 6/17/16.
 //
