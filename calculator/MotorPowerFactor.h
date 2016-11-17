@@ -48,7 +48,7 @@ public:
      * @param motorCurrent
      * @param motorEfficiency
      * @param ratedVoltage
-     * @return
+     * @return nothing
      */
 
     MotorPowerFactor(Motor::LineFrequency lineFrequency,
