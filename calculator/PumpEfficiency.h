@@ -47,10 +47,10 @@ public:
     }
 
 private:
-    double specificGravity_; // mishras: Is there any unit?
+    double specificGravity_;
     double flowRate_; // in gpm
     double head_; // in ft
-    double pumpShaftPower_; // mishras: Is it fixed at 0.746?
+    double pumpShaftPower_;
     double fluidPower_; //Fluid Power (in kW)
     double fluidPowerHp_; // Fluid Power in hP
     double pumpEfficiency_; // in %
