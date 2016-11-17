@@ -41,9 +41,21 @@ public:
     std::vector<double> calculate();
 
 private:
+    /**
+     * Efficiency class of motor
+     */
     Motor::EfficiencyClass efficiencyClass_;
+    /**
+     * Rated power of motor
+     */
     double motorRatedPower_;
+    /**
+     * Rpm of motor
+     */
     double motorRpm_;
+    /**
+     * Line Frequency of motor
+     */
     Motor::LineFrequency lineFrequency_;
 };
 
