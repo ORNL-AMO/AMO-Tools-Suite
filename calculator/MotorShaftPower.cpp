@@ -5,14 +5,20 @@
 #include "MotorShaftPower.h"
 
 double MotorShaftPower::calculate() {
+    /**
+     * When the load estimation is power
+     */
     if (loadEstimationMethod_ == FieldData::LoadEstimationMethod::POWER) {
         tempLoadFraction_ = 0.01;
         while (true) {
-            MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_ );
+            MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_,
+                                      specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
             current = motorCurrent.calculate();
-            MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_);
+            MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, efficiencyClass_, specifiedEfficiency_,
+                                            motorRatedPower_, tempLoadFraction_);
             eff = motorEfficiency.calculate();
-            MotorPowerFactor motorPowerFactor(lineFrequency_,motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
+            MotorPowerFactor motorPowerFactor(lineFrequency_, motorRPM_, efficiencyClass_, specifiedEfficiency_,
+                                              motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
             pf = motorPowerFactor.calculate();
             MotorPower motorPower(ratedVoltage_, current, pf);
             power = motorPower.calculate();
@@ -44,30 +50,32 @@ double MotorShaftPower::calculate() {
                                (fieldVoltage_ / ratedVoltage_));
         pf = adjpf1 + 100 * (fractionalIndex_ - lf1) * (adjpf2 - adjpf1);\
 
-        /*
+        /**
          * Adjust pf based on specified FLA
          * This does not happen in the Excel sheet during the final calculations.
          * pf = pf / (fullLoadAmps_/estimatedFLA);
         */
-        //Current output
+        /// Output current
         current = fieldPower_ / (fieldVoltage_ * sqrt(3) * pf / 1000);
-        // Output in kW
+        /// Output in kW
         motorShaftPower_ = fieldPower_ * eff;
-        // Output in hP
+        /// Output in hP
         motorShaftPower_ = motorShaftPower_ / 0.746;
-        // Electric power is same as Field value when load estimation method is POWER
+        /// Electric power is same as Field value when load estimation method is POWER
         power = fieldPower_;
         return motorShaftPower_;
-    } else {
-        // Load estimation method is current.
+    } else { /// When the load estimation method is Current.
         tempLoadFraction_ = 0.00;
         while (true) {
-            MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
+            MotorCurrent motorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_,
+                                      specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
             current = motorCurrent.calculate();
             if (current > fieldCurrent_ || tempLoadFraction_ > 1.5) {
-                MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, efficiencyClass_,  specifiedEfficiency_, motorRatedPower_, tempLoadFraction_);
+                MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, efficiencyClass_, specifiedEfficiency_,
+                                                motorRatedPower_, tempLoadFraction_);
                 eff = motorEfficiency.calculate();
-                MotorPowerFactor motorPowerFactor(lineFrequency_,motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
+                MotorPowerFactor motorPowerFactor(lineFrequency_, motorRPM_, efficiencyClass_, specifiedEfficiency_,
+                                                  motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
                 pf = motorPowerFactor.calculate();
                 MotorPower motorPower(ratedVoltage_, current, pf);
                 power = motorPower.calculate();
@@ -82,13 +90,16 @@ double MotorShaftPower::calculate() {
                 tempLoadFraction_ += 0.01;
             }
         }
-        //Dropping load fraction by 0.01
+        /// Dropping load fraction by 0.01
         tempLoadFraction_ -= 0.01;
-        MotorCurrent motorCurrent1(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
+        MotorCurrent motorCurrent1(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_,
+                                   tempLoadFraction_, ratedVoltage_, fullLoadAmps_);
         current = motorCurrent1.calculate();
-        MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, efficiencyClass_, specifiedEfficiency_, motorRatedPower_, tempLoadFraction_);
+        MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, efficiencyClass_, specifiedEfficiency_,
+                                        motorRatedPower_, tempLoadFraction_);
         eff = motorEfficiency.calculate();
-        MotorPowerFactor motorPowerFactor(lineFrequency_,motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
+        MotorPowerFactor motorPowerFactor(lineFrequency_, motorRPM_, efficiencyClass_, specifiedEfficiency_,
+                                          motorRatedPower_, tempLoadFraction_, current, eff, ratedVoltage_);
         pf = motorPowerFactor.calculate();
         MotorPower motorPower(ratedVoltage_, current, pf);
         power = motorPower.calculate();
@@ -98,10 +109,10 @@ double MotorShaftPower::calculate() {
         eff1 = eff;
         pf1 = pf;
 
-        // Adjust pf based on specified FLA
-        pf = pf / (fullLoadAmps_/estimatedFLA);
+        /// Adjust pf based on specified FLA
+        pf = pf / (fullLoadAmps_ / estimatedFLA);
 
-        // Adjust current
+        /// Adjust current
         double adjCurrent1 = (((fieldVoltage_ / ratedVoltage_) - 1) * (1 - (2 * lf1)) + 1) * current1;
         double adjCurrent2 = (((fieldVoltage_ / ratedVoltage_) - 1) * (1 - (2 * lf2)) + 1) * current2;
         double currentDiff = adjCurrent2 - adjCurrent1;
@@ -112,12 +123,13 @@ double MotorShaftPower::calculate() {
         eff = eff1 + 100 * (fractionalIndex_ - lf1) * (eff2 - eff1);
         power = powerE1 + 100 * (fractionalIndex_ - lf1) * (powerE2 - powerE1);
 
-        // Power Factor
+        /// Power Factor
         pf = power / (current * fieldVoltage_ * sqrt(3) / 1000);
-        // Output in kW
+        /// Output in kW
         motorShaftPower_ = power * eff;
-        // Output in hP
+        /// Output in hP
         motorShaftPower_ = motorShaftPower_ / 0.746;
+        /// Return motor Shaft power
         return motorShaftPower_;
     }
 }
@@ -131,15 +143,18 @@ double MotorShaftPower::calculateEfficiency() {
 }
 
 double MotorShaftPower::calculatePowerFactor() {
-    // Adjusted Pf
+    /// Adjusted Pf
     return pf;
 }
 
-double MotorShaftPower::calculatePower(){
-    //Returns motor power in kWe
+/**
+ * Returns the motor shaft power in kWe
+ * @return motor shaft power in Kwe
+ */
+double MotorShaftPower::calculatePower() {
     return power;
 }
 
-double MotorShaftPower::calculateEstimatedFLA(){
+double MotorShaftPower::calculateEstimatedFLA() {
     return estimatedFLA;
 }

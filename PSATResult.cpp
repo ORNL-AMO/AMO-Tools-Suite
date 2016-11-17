@@ -26,7 +26,15 @@
 
 
 double PSATResult::calculateExisting() {
-
+    /**
+     * 1a	Calculate motor shaft power from measured power, OR
+     * 1b	Calculate motor shaft power from measured current, voltage
+     * 2a	If a belt drive is specified, calculate the pump shaft power
+     * 2b	If direct drive, motor shaft power = pump shaft power
+     * 3	Calculate fluid power
+     * 4	Calculate pump efficiency
+     * 5	Calculate annual energy and energy cost
+     */
     MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(),
                                     motor_.getLineFrequency(),
                                     motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(),
