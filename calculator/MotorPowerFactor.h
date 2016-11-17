@@ -21,13 +21,35 @@
 
 class MotorPowerFactor {
 public:
+    /**
+     * Constructor
+     * @param motorRatedPower
+     * @param loadFactor
+     * @param motorCurrent
+     * @param motorEfficiency
+     * @param ratedVoltage
+     * @return nothing
+     */
     MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
                      double ratedVoltage) :
 
             motorRatedPower_(motorRatedPower), loadFactor_(loadFactor), motorCurrent_(motorCurrent),
             motorEfficiency_(motorEfficiency), ratedVoltage_(ratedVoltage) {}
 
-    // Use this constructor when the loadFraction is 0.
+    /**
+     * Constructor when the load factor is 0.
+     * When the load factor is zero, you need to calculate the efficiency 0.25 load factor, hence the extra parameters.
+     * @param lineFrequency
+     * @param motorRpm
+     * @param efficiencyClass
+     * @param specifiedEfficiency
+     * @param motorRatedPower
+     * @param loadFactor
+     * @param motorCurrent
+     * @param motorEfficiency
+     * @param ratedVoltage
+     * @return
+     */
 
     MotorPowerFactor(Motor::LineFrequency lineFrequency,
                      double motorRpm, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency,
@@ -74,9 +96,6 @@ private:
     double motorKwInput =0.0;
     double motorkVA = 0.0;
 
-/*
- * 9/9/16: Added new variables for a changed constructor
- */
     double motorRatedPower_;
     double loadFactor_;
     double motorCurrent_;
