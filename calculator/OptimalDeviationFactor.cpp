@@ -1,3 +1,14 @@
+/**
+ * @brief Contains the definition of functions of OptimalDeviationFactor class.
+ *      calculate(): Calculates the optinm
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
+
 //
 // Created by Mishra, Subhankar on 10/24/16.
 //
