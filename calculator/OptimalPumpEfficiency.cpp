@@ -1,3 +1,12 @@
+/**
+ * @brief Contains the definition of functions of OptimalPumpEfficiency class.
+ *      calculate(): Calculates the pump efficiency after correction
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 //
 // Created by Accawi, Gina K. on 8/19/16.
 //
