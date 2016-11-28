@@ -1,3 +1,13 @@
+/**
+ * @brief Contains the definition of functions of OptimalMotorSize class.
+ *      calculate(): Calculates the Optimal Motor Size
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
 //
 // Created by Mishra, Subhankar on 10/14/16.
 //
