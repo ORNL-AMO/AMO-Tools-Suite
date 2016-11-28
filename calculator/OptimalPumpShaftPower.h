@@ -1,3 +1,13 @@
+/**
+ * @brief Header file for OptimalPumpShaftPower class
+ *
+ * This contains the prototypes of OptimalPumpShaftPower calculator including getters and setters for the important fields.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 //
 // Created by Accawi, Gina K. on 8/19/16.
 //
