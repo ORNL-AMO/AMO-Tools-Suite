@@ -1,3 +1,12 @@
+/**
+ * @brief Contains the definition of functions of OptimalPrePumpEff class.
+ *      calculate(): Calculates the pump efficiency before correction
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 //
 // Created by Mishra, Subhankar on 10/17/16.
 //

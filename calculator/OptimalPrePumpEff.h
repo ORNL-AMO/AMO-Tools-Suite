@@ -1,3 +1,13 @@
+/**
+ * @brief Header file for OptimalPrePumpEff class
+ *
+ * This contains the prototypes of OptimalPrePumpEff calculator including getters and setters for the important fields.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 //
 // Created by Mishra, Subhankar on 10/17/16.
 //
