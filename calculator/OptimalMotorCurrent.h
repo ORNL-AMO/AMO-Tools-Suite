@@ -1,3 +1,15 @@
+/**
+ * @brief Header file for OptimalMotorCurrent class
+ *
+ * This contains the prototypes of OptimalMotorCurrent calculator including getters and setters for the important fields.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
+
 //
 // Created by Accawi, Gina K. on 8/19/16.
 //
@@ -11,7 +23,6 @@
 
 class OptimalMotorCurrent {
 public:
-    //OptimalMotorCurrent(double motorPower, double voltage) : motorPower_(motorPower), voltage_(voltage) {}
     OptimalMotorCurrent(double motorRatedPower, int motorRPM, Motor::LineFrequency lineFrequency,
                         Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor , double ratedVoltage, double fieldVoltage, double fullLoadAmps) :
             motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
