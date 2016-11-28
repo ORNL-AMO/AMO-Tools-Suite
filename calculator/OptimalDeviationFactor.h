@@ -1,3 +1,14 @@
+/**
+ * @brief Header file for OptimalDeviationFactor class
+ *
+ * This contains the prototypes of OptimalDeviationFactor calculator including getters and setters for the important fields.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
 //
 // Created by Mishra, Subhankar on 10/24/16.
 //
