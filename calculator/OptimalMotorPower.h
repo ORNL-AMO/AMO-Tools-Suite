@@ -1,6 +1,14 @@
-//
-// Created by Accawi, Gina K. on 8/19/16.
-//
+/**
+ * @brief Header file for OptimalMotorPower class
+ *
+ * This contains the prototypes of OptimalMotorPower calculator including getters and setters for the important fields.
+ *
+ * @author Subhankar Mishra (mishras)
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
 
 #ifndef AMO_LIBRARY_OPTIMALMOTORPOWER_H
 #define AMO_LIBRARY_OPTIMALMOTORPOWER_H
@@ -13,9 +21,6 @@
 
 class OptimalMotorPower {
 public:
-
-//    OptimalMotorPower(double motorShaftPower, double motorEfficiency) : motorShaftPower_(motorShaftPower),
-//                                                                        motorEfficiency_(motorEfficiency) {}
 
     OptimalMotorPower(double motorRatedPower, double motorMeasuredPower, int motorRPM,
                         Motor::LineFrequency lineFrequency,
