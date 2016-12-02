@@ -827,7 +827,6 @@ fabric.properties
 *.sig
 
 pkg/
-src/
 ### Emacs template
 # -*- mode: gitignore; -*-
 \#*\#
