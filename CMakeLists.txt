@@ -3,6 +3,14 @@ project(amo_library)
 
 set(CMAKE_MACOSX_RPATH 1)
 
+# Set a default build type if none was specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(cmake/ProjectMacros.cmake)
 include(cmake/CompilerFlags.cmake)
@@ -89,13 +97,22 @@ set(INCLUDE_FILES
     include/calculator/PumpShaftPower.h
     )
 
+set(TEST_FILES
+    tests/OptimalSpecificSpeedCorrection.unit.cpp
+    )
+
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 add_subdirectory(third_party)
 
+# Create amo_suite static library
 add_library(amo_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
-#add_executable(unit_tests tests/catch.hpp tests/unit_tests.cpp ${SOURCE_FILES} ${INCLUDE_FILES})
-add_executable(amo_suite_main main.cpp)
 
+# Create command line amo_suite program
+add_executable(amo_suite_main main.cpp)
 set_target_properties(amo_suite_main PROPERTIES OUTPUT_NAME "amo_suite")
 target_link_libraries( amo_suite_main amo_suite )
+
+# Create unit testing executable
+add_executable(amo_suite_tests tests/main.unit.cpp ${TEST_FILES})
+target_link_libraries( amo_suite_tests Catch amo_suite )
