@@ -8,8 +8,13 @@
 
 class OptimizationRating {
 public:
-    OptimizationRating(double existingAnnualCost, double optimalAnnualCost) : existingAnnualCost_(existingAnnualCost),
-                                                                              optimalAnnualCost_(optimalAnnualCost) {}
+    OptimizationRating(
+        double existingAnnualCost,
+        double optimalAnnualCost
+    ) :
+        existingAnnualCost_(existingAnnualCost),
+        optimalAnnualCost_(optimalAnnualCost)
+    {}
 
     double calculate();
 

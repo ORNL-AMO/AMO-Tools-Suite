@@ -14,6 +14,8 @@
 
 #include "OptimalSpecificSpeed.h"
 
+#include <cmath>
+
 double OptimalSpecificSpeed::calculate() {
     double specificSpeed = rpm_ * sqrt(flowRate_) / (pow((head_ / stageCount_), 0.75));
     return specificSpeed;

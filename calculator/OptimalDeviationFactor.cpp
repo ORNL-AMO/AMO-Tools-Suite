@@ -15,6 +15,7 @@
 
 #include "OptimalDeviationFactor.h"
 #include <cmath>
+
 double OptimalDeviationFactor::calculate() {
     double pdCoeff[5] = {0.10805906,
                          18.077243,

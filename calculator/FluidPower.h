@@ -26,8 +26,15 @@ public:
      * @param head
      * @return nothing
      */
-    FluidPower(double specificGravity, double flowRate, double head) :
-            specificGravity_(specificGravity), flowRate_(flowRate), head_(head) {};
+    FluidPower(
+        double specificGravity,
+        double flowRate,
+        double head
+    ) :
+        specificGravity_(specificGravity),
+        flowRate_(flowRate),
+        head_(head)
+    {};
 
     /**
      * Calculates fluid power

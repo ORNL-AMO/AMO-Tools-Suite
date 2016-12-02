@@ -14,6 +14,11 @@
 
 #include "OptimalMotorPower.h"
 #include "OptimalMotorCurrent.h"
+#include "MotorShaftPower.h"
+#include "MotorEfficiency.h"
+#include "MotorPowerFactor.h"
+#include "MotorPower.h"
+#include <cmath>
 
 double OptimalMotorPower::calculate() {
     double tempLoadFraction_ = 0.00;

@@ -16,11 +16,16 @@
 #ifndef AMO_LIBRARY_OPTIMALDEVIATIONFACTOR_H
 #define AMO_LIBRARY_OPTIMALDEVIATIONFACTOR_H
 
-
 class OptimalDeviationFactor {
 public:
-    OptimalDeviationFactor(double flowRate):flowRate_(flowRate){}
+    OptimalDeviationFactor(
+        double flowRate
+    ) :
+        flowRate_(flowRate)
+    {}
+
     double calculate();
+
 private:
     double flowRate_;
 };

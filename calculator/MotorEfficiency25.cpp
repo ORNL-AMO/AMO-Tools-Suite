@@ -12,8 +12,8 @@
 //
 
 #include "MotorEfficiency25.h"
-
-using namespace std;
+#include "Poles.h"
+#include <cmath>
 
 std::vector<double> MotorEfficiency25::calculate() {
     /**

@@ -24,7 +24,6 @@
 #include "calculator/OptimalMotorPower.h"
 #include "calculator/OptimalMotorSize.h"
 
-
 double PSATResult::calculateExisting() {
     /**
      * 1a	Calculate motor shaft power from measured power, OR

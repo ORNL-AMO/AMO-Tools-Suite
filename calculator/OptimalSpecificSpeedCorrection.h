@@ -9,8 +9,14 @@
 
 class OptimalSpecificSpeedCorrection {
 public:
-    OptimalSpecificSpeedCorrection(Pump::Style style, double specificSpeed):
-            style_(style), specificSpeed_(specificSpeed){};
+    OptimalSpecificSpeedCorrection(
+        Pump::Style style,
+        double specificSpeed
+    ):
+        specificSpeed_(specificSpeed),
+        style_(style)
+    {};
+
     double calculate();
 private:
     double specificSpeed_;

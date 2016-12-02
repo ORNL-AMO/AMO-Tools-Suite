@@ -4,15 +4,26 @@
 
 #ifndef AMO_LIBRARY_PUMPEFFICIENCY_H
 #define AMO_LIBRARY_PUMPEFFICIENCY_H
+
 #include "FluidPower.h"
 
 class PumpEfficiency {
 
 public:
-    PumpEfficiency(double specificGravity, double flowRate, double head, double pumpShaftPower) : specificGravity_(
-            specificGravity), flowRate_(flowRate), head_(head), pumpShaftPower_(pumpShaftPower) { }
+    PumpEfficiency(
+        double specificGravity,
+        double flowRate,
+        double head,
+        double pumpShaftPower
+    ) :
+        specificGravity_(specificGravity),
+         flowRate_(flowRate),
+         head_(head),
+         pumpShaftPower_(pumpShaftPower)
+    {}
 
     double calculate();
+
 public:
     double getSpecificGravity() const {
         return specificGravity_;

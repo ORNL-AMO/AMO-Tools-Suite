@@ -5,7 +5,6 @@
 #ifndef AMO_LIBRARY_FIELDDATA_H
 #define AMO_LIBRARY_FIELDDATA_H
 
-
 class FieldData {
 public:
     enum class LoadEstimationMethod {
@@ -13,10 +12,21 @@ public:
         CURRENT
     };
 
-    FieldData( double flowRate, double head, LoadEstimationMethod loadEstimationMethod, double motorPower,
-              double motorAmps, double voltage) : loadEstimationMethod_(loadEstimationMethod), flowRate_(flowRate),
-                                                  head_(head), motorPower_(motorPower), motorAmps_(motorAmps),
-                                                  voltage_(voltage) {}
+    FieldData(
+        double flowRate,
+        double head,
+        LoadEstimationMethod loadEstimationMethod,
+        double motorPower,
+        double motorAmps,
+        double voltage
+    ) :
+        loadEstimationMethod_(loadEstimationMethod),
+        flowRate_(flowRate),
+        head_(head),
+        motorPower_(motorPower),
+        motorAmps_(motorAmps),
+        voltage_(voltage)
+    {}
 
     FieldData() = default;
 

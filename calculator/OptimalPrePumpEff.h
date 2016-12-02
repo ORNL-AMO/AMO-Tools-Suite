@@ -19,8 +19,15 @@
 
 class OptimalPrePumpEff {
 public:
-    OptimalPrePumpEff(Pump::Style style, double achievableEfficiency, double flowRate) :
-            style_(style), achievableEfficiency_(achievableEfficiency), flowRate_(flowRate) {};
+    OptimalPrePumpEff(
+        Pump::Style style,
+        double achievableEfficiency,
+        double flowRate
+    ) :
+        achievableEfficiency_(achievableEfficiency),
+        style_(style),
+        flowRate_(flowRate)
+    {};
 
     double calculate();
 

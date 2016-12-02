@@ -20,7 +20,13 @@
 
 class OptimalMotorShaftPower {
 public:
-    OptimalMotorShaftPower(double pumpShaftPower, Pump::Drive drive) : pumpShaftPower_(pumpShaftPower), drive_(drive) {}
+    OptimalMotorShaftPower(
+        double pumpShaftPower,
+        Pump::Drive drive
+    ) :
+        pumpShaftPower_(pumpShaftPower),
+        drive_(drive)
+    {}
 
     double calculate();
 

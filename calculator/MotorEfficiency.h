@@ -17,9 +17,7 @@
 
 #include "../Motor.h"
 #include "../FieldData.h"
-#include <cmath>
-#include "CurveFitVal.h"
-#include "MotorEfficiency25.h"
+#include <vector>
 
 class MotorEfficiency {
 public:
@@ -33,14 +31,21 @@ public:
      * @param loadFactor
      * @return
      */
-    MotorEfficiency(Motor::LineFrequency lineFrequency,
-            double motorRpm, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double motorRatedPower,
-            double loadFactor)
-            : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
-              efficiencyClass_(efficiencyClass),
-              specifiedEfficiency_(specifiedEfficiency),
-              motorRatedPower_(
-                      motorRatedPower), loadFactor_(loadFactor) {};
+    MotorEfficiency(
+        Motor::LineFrequency lineFrequency,
+        double motorRpm,
+        Motor::EfficiencyClass efficiencyClass,
+        double specifiedEfficiency,
+        double motorRatedPower,
+        double loadFactor
+    ) :
+        lineFrequency_(lineFrequency),
+        motorRpm_(motorRpm),
+        efficiencyClass_(efficiencyClass),
+        specifiedEfficiency_(specifiedEfficiency),
+        motorRatedPower_(motorRatedPower),
+        loadFactor_(loadFactor)
+    {};
 
     double calculate();
 

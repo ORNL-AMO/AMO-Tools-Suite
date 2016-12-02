@@ -13,6 +13,9 @@
 //
 
 #include "MotorEfficiency.h"
+#include "CurveFitVal.h"
+#include "MotorEfficiency25.h"
+#include <cmath>
 
 double MotorEfficiency::calculate() {
 

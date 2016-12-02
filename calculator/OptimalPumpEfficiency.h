@@ -17,27 +17,35 @@
 #define AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 
 #include "../Pump.h"
-#include "OptimalPrePumpEff.h"
-#include "OptimalSpecificSpeed.h"
-#include "OptimalSpecificSpeedCorrection.h"
-#include "OptimalDeviationFactor.h"
-
 
 class OptimalPumpEfficiency {
 
 public:
-    OptimalPumpEfficiency(Pump::Style style, double achievableEfficiency, double rpm, double kinematicViscosity, double stageCount, double flowRate,
-                          double head) : style_(style), achievableEfficiency_(achievableEfficiency),rpm_(rpm),
-                                         kinematicViscosity_(kinematicViscosity),
-                                         stageCount_(stageCount), flowRate_(flowRate), head_(head) {}
+    OptimalPumpEfficiency(
+        Pump::Style style,
+        double achievableEfficiency,
+        double rpm,
+        double kinematicViscosity,
+        double stageCount,
+        double flowRate,
+        double head
+    ) :
+        style_(style),
+        achievableEfficiency_(achievableEfficiency),
+        rpm_(rpm),
+        kinematicViscosity_(kinematicViscosity),
+        stageCount_(stageCount),
+        flowRate_(flowRate),
+        head_(head)
+    {}
 
-    /*OptimalPumpEfficiency(double rpm, double kinematicViscosity, double stageCount, double flowRate, double head,
-                          Pump::Speed speed, double actualEfficiency) : rpm_(rpm),
-                                                                        kinematicViscosity_(kinematicViscosity),
-                                                                        stageCount_(stageCount), flowRate_(flowRate),
-                                                                        head_(head), speed_(speed),
-                                                                        actualEfficiency_(actualEfficiency) {}
-*/
+//    OptimalPumpEfficiency(double rpm, double kinematicViscosity, double stageCount, double flowRate, double head,
+//                          Pump::Speed speed, double actualEfficiency) : rpm_(rpm),
+//                                                                        kinematicViscosity_(kinematicViscosity),
+//                                                                        stageCount_(stageCount), flowRate_(flowRate),
+//                                                                        head_(head), speed_(speed),
+//                                                                        actualEfficiency_(actualEfficiency) {}
+
     double calculate();
 
     Pump::Style getStyle() const {

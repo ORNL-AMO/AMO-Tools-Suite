@@ -15,8 +15,6 @@
 #define UNTITLED_ESTIMATEFLA_H
 
 #include "../Motor.h"
-#include "MotorEfficiency.h"
-#include<iostream>
 #include <vector>
 
 class EstimateFLA {
@@ -31,9 +29,21 @@ public:
      * @param ratedVoltage Rated voltage of motor
      * @return nothing
      */
-    EstimateFLA(double motorRatedPower, int motorRPM, Motor::LineFrequency lineFrequency, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double ratedVoltage) :
-            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), lineFrequency_(lineFrequency), efficiencyClass_(efficiencyClass), specifiedEfficiency_(specifiedEfficiency),
-            ratedVoltage_(ratedVoltage) {};
+    EstimateFLA(
+        double motorRatedPower,
+        int motorRPM,
+        Motor::LineFrequency lineFrequency,
+        Motor::EfficiencyClass efficiencyClass,
+        double specifiedEfficiency,
+        double ratedVoltage
+    ) :
+        motorRatedPower_(motorRatedPower),
+        motorRPM_(motorRPM),
+        lineFrequency_(lineFrequency),
+        efficiencyClass_(efficiencyClass),
+        specifiedEfficiency_(specifiedEfficiency),
+        ratedVoltage_(ratedVoltage)
+    {};
 
     /**
      * Calculates the 25% interval

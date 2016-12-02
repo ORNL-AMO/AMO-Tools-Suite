@@ -9,13 +9,20 @@
 
 class Poles {
 public:
-    Poles(int motorRpm, Motor::LineFrequency lineFreq): motorRpm_(motorRpm), lineFreq_(lineFreq){};
+    Poles(
+        int motorRpm,
+        Motor::LineFrequency lineFreq
+    ) :
+        motorRpm_(motorRpm),
+        lineFreq_(lineFreq)
+    {};
+
     int calculate();
+
 private:
     int motorRpm_;
     Motor::LineFrequency lineFreq_;
     int poles_;
 };
-
 
 #endif //UNTITLED_POLECALCULATE_H

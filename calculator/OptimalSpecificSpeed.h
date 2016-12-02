@@ -16,11 +16,20 @@
 #ifndef AMO_LIBRARY_OPTIMALSPECIFICSPEED_H
 #define AMO_LIBRARY_OPTIMALSPECIFICSPEED_H
 
-#include <cmath>
-
 class OptimalSpecificSpeed {
 public:
-    OptimalSpecificSpeed(double rpm, double flowRate, double head, double stageCount): rpm_(rpm), flowRate_(flowRate), head_(head), stageCount_(stageCount){};
+    OptimalSpecificSpeed(
+        double rpm,
+        double flowRate,
+        double head,
+        double stageCount
+    ):
+        stageCount_(stageCount),
+        flowRate_(flowRate),
+        head_(head),
+        rpm_(rpm)
+    {};
+
     double calculate();
 private:
     double stageCount_;

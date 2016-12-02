@@ -5,8 +5,6 @@
 #ifndef AMO_LIBRARY_MOTOR_H
 #define AMO_LIBRARY_MOTOR_H
 
-#include <cmath>
-
 class Motor {
 public:
     enum class EfficiencyClass {
@@ -19,25 +17,28 @@ public:
         FREQ50
     };
 
-    Motor(LineFrequency lineFrequency, double motorRatedPower, double motorRpm, EfficiencyClass efficiencyClass,
-          double specifiedEfficiency,
-          double motorRatedVoltage, double fullLoadAmps, double sizeMargin) :
-                                                                                            lineFrequency_(
-                                                                                                    lineFrequency),
-                                                                                            motorRatedPower_(
-                                                                                                    motorRatedPower),
-                                                                                            motorRpm_(motorRpm),
-                                                                                            efficiencyClass_(
-                                                                                                    efficiencyClass),
-                                                                                            specifiedEfficiency_(
-                                                                                                    specifiedEfficiency),
-                                                                                            motorRatedVoltage_(
-                                                                                                    motorRatedVoltage),
-                                                                                            fullLoadAmps_(fullLoadAmps),
-                                                                                            sizeMargin_(sizeMargin) {};
-
+    Motor(
+        LineFrequency lineFrequency,
+        double motorRatedPower,
+        double motorRpm,
+        EfficiencyClass efficiencyClass,
+        double specifiedEfficiency,
+        double motorRatedVoltage,
+        double fullLoadAmps,
+        double sizeMargin
+    ) :
+        lineFrequency_(lineFrequency),
+        motorRatedPower_(motorRatedPower),
+        motorRpm_(motorRpm),
+        efficiencyClass_(efficiencyClass),
+        specifiedEfficiency_(specifiedEfficiency),
+        motorRatedVoltage_(motorRatedVoltage),
+        fullLoadAmps_(fullLoadAmps),
+        sizeMargin_(sizeMargin)
+    {};
 
     Motor() = default;
+
     LineFrequency getLineFrequency() const {
         return lineFrequency_;
     }
@@ -54,9 +55,7 @@ public:
         motorRatedPower_ = motorRatedPower;
     }
 
-    int getMotorRpm() {
-        return std::round(motorRpm_);
-    }
+    int getMotorRpm();
 
     void setMotorRpm(double motorRpm) {
         motorRpm_ = motorRpm;

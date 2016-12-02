@@ -3,3 +3,8 @@
 //
 
 #include "Pump.h"
+#include <cmath>
+
+int Pump::getRpm() {
+    return static_cast<int>(std::round(rpm_));
+}

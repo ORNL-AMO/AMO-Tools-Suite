@@ -12,6 +12,7 @@
 //
 
 #include "OptimalPrePumpEff.h"
+#include <cmath>
 
 double OptimalPrePumpEff::calculate() {
     /*

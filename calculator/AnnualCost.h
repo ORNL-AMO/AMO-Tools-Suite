@@ -21,7 +21,13 @@ public:
      * @param kwhRate
      * @return nothing
      */
-    AnnualCost(double annualEnergy, double kwhRate) : annualEnergy_(annualEnergy), kwhRate_(kwhRate) {}
+    AnnualCost(
+        double annualEnergy,
+        double kwhRate
+    ) :
+        annualEnergy_(annualEnergy),
+        kwhRate_(kwhRate)
+    {}
 
     /**
      * Calculates the annual energy cost.

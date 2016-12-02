@@ -15,6 +15,7 @@
 
 #include "MotorPowerFactor.h"
 #include "MotorEfficiency.h"
+#include <cmath>
 
 double MotorPowerFactor::calculate() {
     double motorPowerFactor_ = 0.0;

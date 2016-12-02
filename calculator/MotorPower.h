@@ -15,8 +15,6 @@
 #ifndef AMO_LIBRARY_MOTORPOWER_H
 #define AMO_LIBRARY_MOTORPOWER_H
 
-#include <cmath>
-
 class MotorPower {
 public:
     /**
@@ -26,8 +24,15 @@ public:
      * @param powerFactor Power factor of motor
      * @return nothing
      */
-    MotorPower(double ratedVoltage, double motorCurrent, double powerFactor) :
-            ratedVoltage_(ratedVoltage), motorCurrent_(motorCurrent), powerFactor_(powerFactor) {};
+    MotorPower(
+        double ratedVoltage,
+        double motorCurrent,
+        double powerFactor
+    ) :
+        ratedVoltage_(ratedVoltage),
+        motorCurrent_(motorCurrent),
+        powerFactor_(powerFactor)
+    {};
 
     /**
      * Calculates the motor power

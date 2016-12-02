@@ -12,14 +12,15 @@
 //
 
 #include "OptimalMotorShaftPower.h"
+#include <cmath>
 
 double OptimalMotorShaftPower::calculate() {
     if(drive_ == Pump::Drive::DIRECT_DRIVE){
         motorShaftPower_ = pumpShaftPower_;
-    }
-    else{
+    } else {
         //Case of Belt Drive
-        double BLPinPercentage = (0.7489574 * exp((pumpShaftPower_)*(-0.02067997))+4.136368*exp((pumpShaftPower_)*(-0.226025))+4.162707)/100;
+        double BLPinPercentage = (0.7489574 * exp((pumpShaftPower_) * (-0.02067997)) +
+            4.136368 * exp((pumpShaftPower_) * (-0.226025)) + 4.162707) / 100;
         double BLPinhp = BLPinPercentage * pumpShaftPower_;
         motorShaftPower_ = pumpShaftPower_ + BLPinhp;
     }

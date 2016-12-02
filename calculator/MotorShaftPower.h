@@ -5,15 +5,8 @@
 #ifndef AMO_LIBRARY_MOTORSHAFTPOWER_H
 #define AMO_LIBRARY_MOTORSHAFTPOWER_H
 
-#include <cmath>
-#include<iostream>
-#include "../motor.h"
+#include "../Motor.h"
 #include "../FieldData.h"
-
-#include "MotorEfficiency.h"
-#include "MotorPower.h"
-#include "MotorCurrent.h"
-#include "MotorPowerFactor.h"
 
 class MotorShaftPower {
 public:
@@ -25,18 +18,31 @@ public:
     double pf = 0.0, pf1 = 0.0, pf2 = 0.0;
     double estimatedFLA;
 
-    MotorShaftPower(double motorRatedPower, double motorMeasuredPower, int motorRPM,
-                    Motor::LineFrequency lineFrequency,
-                    Motor::EfficiencyClass efficiencyClass,
-                    double specifiedEfficiency,
-                    double ratedVoltage, double fullLoadAmps, double fieldVoltage,
-                    FieldData::LoadEstimationMethod loadEstimationMethod, double fieldCurrent)
-            :
-            fieldPower_(motorMeasuredPower),
-            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM), lineFrequency_(lineFrequency),
-            efficiencyClass_(efficiencyClass), specifiedEfficiency_(specifiedEfficiency),
-            ratedVoltage_(ratedVoltage), fullLoadAmps_(fullLoadAmps), fieldVoltage_(fieldVoltage),
-            loadEstimationMethod_(loadEstimationMethod), fieldCurrent_(fieldCurrent) {};
+    MotorShaftPower(
+		double motorRatedPower,
+		double motorMeasuredPower,
+		int motorRPM,
+		Motor::LineFrequency lineFrequency,
+		Motor::EfficiencyClass efficiencyClass,
+		double specifiedEfficiency,
+		double ratedVoltage,
+		double fullLoadAmps,
+		double fieldVoltage,
+		FieldData::LoadEstimationMethod loadEstimationMethod,
+		double fieldCurrent
+	) :
+		motorRatedPower_(motorRatedPower),
+		fieldPower_(motorMeasuredPower),
+		motorRPM_(motorRPM),
+		lineFrequency_(lineFrequency),
+		ratedVoltage_(ratedVoltage),
+		fullLoadAmps_(fullLoadAmps),
+		fieldVoltage_(fieldVoltage),
+		efficiencyClass_(efficiencyClass),
+		specifiedEfficiency_(specifiedEfficiency),
+		fieldCurrent_(fieldCurrent),
+		loadEstimationMethod_(loadEstimationMethod)
+	{};
 
     double calculate();
 

@@ -16,6 +16,8 @@
 //
 
 #include "CurveFitVal.h"
+#include <cmath>
+#include <vector>
 
 /**
  * Given a set of x and y coordinates and degree of polynomial curve to fit, it calculates the curve fit value

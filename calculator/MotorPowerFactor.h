@@ -17,7 +17,6 @@
 
 #include "../Motor.h"
 #include "../FieldData.h"
-#include <cmath>
 
 class MotorPowerFactor {
 public:
@@ -30,11 +29,19 @@ public:
      * @param ratedVoltage
      * @return nothing
      */
-    MotorPowerFactor(double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
-                     double ratedVoltage) :
-
-            motorRatedPower_(motorRatedPower), loadFactor_(loadFactor), motorCurrent_(motorCurrent),
-            motorEfficiency_(motorEfficiency), ratedVoltage_(ratedVoltage) {}
+    MotorPowerFactor(
+        double motorRatedPower,
+        double loadFactor,
+        double motorCurrent,
+        double motorEfficiency,
+        double ratedVoltage
+    ) :
+        motorRatedPower_(motorRatedPower),
+        loadFactor_(loadFactor),
+        motorCurrent_(motorCurrent),
+        motorEfficiency_(motorEfficiency),
+        ratedVoltage_(ratedVoltage)
+    {}
 
     /**
      * Constructor when the load factor is 0.
@@ -51,17 +58,29 @@ public:
      * @return nothing
      */
 
-    MotorPowerFactor(Motor::LineFrequency lineFrequency,
-                     double motorRpm, Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency,
-                     double motorRatedPower, double loadFactor, double motorCurrent, double motorEfficiency,
-                     double ratedVoltage)
-            : lineFrequency_(lineFrequency), motorRpm_(motorRpm),
-              efficiencyClass_(efficiencyClass), specifiedEfficiency_(specifiedEfficiency),
-              motorRatedPower_(motorRatedPower), loadFactor_(loadFactor), motorCurrent_(motorCurrent),
-              motorEfficiency_(motorEfficiency), ratedVoltage_(ratedVoltage) {};
+    MotorPowerFactor(
+        Motor::LineFrequency lineFrequency,
+        double motorRpm,
+        Motor::EfficiencyClass efficiencyClass,
+        double specifiedEfficiency,
+        double motorRatedPower,
+        double loadFactor,
+        double motorCurrent,
+        double motorEfficiency,
+        double ratedVoltage
+    ) :
+        lineFrequency_(lineFrequency),
+        motorRpm_(motorRpm),
+        efficiencyClass_(efficiencyClass),
+        specifiedEfficiency_(specifiedEfficiency),
+        motorRatedPower_(motorRatedPower),
+        loadFactor_(loadFactor),
+        motorCurrent_(motorCurrent),
+        motorEfficiency_(motorEfficiency),
+        ratedVoltage_(ratedVoltage)
+    {};
 
     double calculate();
-
 
     Motor::LineFrequency getLineFrequency() const {
         return lineFrequency_;

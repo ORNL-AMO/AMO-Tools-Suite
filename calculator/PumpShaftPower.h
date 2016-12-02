@@ -10,12 +10,16 @@
 class PumpShaftPower {
 public:
 
-    PumpShaftPower(double motorShaftPower, Pump::Drive drive) : motorShaftPower_(motorShaftPower), drive_(drive) { }
+    PumpShaftPower(
+        double motorShaftPower,
+        Pump::Drive drive
+    ) :
+        motorShaftPower_(motorShaftPower),
+        drive_(drive)
+    {}
 
-    PumpShaftPower() {
-        motorShaftPower_ = 0.0;
-        drive_ = Pump::Drive::DIRECT_DRIVE;
-    };
+    PumpShaftPower() = default;
+
     double calculate();
 
     double getMotorShaftPower() const {
@@ -35,9 +39,9 @@ public:
     }
 
 private:
-    double motorShaftPower_;
-    Pump::Drive drive_;
-    double pumpShaftPower_;
+    double motorShaftPower_ = 0.0;
+    Pump::Drive drive_ = Pump::Drive::DIRECT_DRIVE;
+    double pumpShaftPower_ = 0.0;
 };
 
 #endif //AMO_LIBRARY_PUMPSHAFTPOWER_H

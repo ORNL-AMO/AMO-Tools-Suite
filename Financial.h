@@ -8,7 +8,13 @@
 
 class Financial {
 public:
-    Financial(double operatingFraction, double unitCost) : operatingFraction_(operatingFraction), unitCost_(unitCost) {}
+    Financial(
+        double operatingFraction,
+        double unitCost
+    ) :
+        operatingFraction_(operatingFraction),
+        unitCost_(unitCost)
+    {}
 
     Financial() = default;
 

@@ -19,8 +19,17 @@
 
 class OptimalPumpShaftPower {
 public:
-    OptimalPumpShaftPower(double flowRate, double head, double specificGravity, double pumpEfficiency) : flowRate_(
-            flowRate), head_(head), specificGravity_(specificGravity), pumpEfficiency_(pumpEfficiency) {}
+    OptimalPumpShaftPower(
+        double flowRate,
+        double head,
+        double specificGravity,
+        double pumpEfficiency
+    ) :
+        flowRate_(flowRate),
+        head_(head),
+        specificGravity_(specificGravity),
+        pumpEfficiency_(pumpEfficiency)
+    {}
 
     double calculate();
 

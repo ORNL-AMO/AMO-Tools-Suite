@@ -12,8 +12,11 @@
 //
 
 #include "OptimalPumpEfficiency.h"
-
-using namespace std;
+#include "OptimalPrePumpEff.h"
+#include "OptimalSpecificSpeed.h"
+#include "OptimalSpecificSpeedCorrection.h"
+#include "OptimalDeviationFactor.h"
+#include <cmath>
 
 double OptimalPumpEfficiency::calculate() {
 

@@ -3,6 +3,7 @@
 //
 
 #include "OptimalSpecificSpeedCorrection.h"
+#include <cmath>
 
 double OptimalSpecificSpeedCorrection::calculate() {
     double notVTP[7][2] = {{14.884085,           6.5703317},

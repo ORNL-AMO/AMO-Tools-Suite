@@ -3,6 +3,11 @@
 //
 
 #include "MotorShaftPower.h"
+#include "MotorEfficiency.h"
+#include "MotorPower.h"
+#include "MotorCurrent.h"
+#include "MotorPowerFactor.h"
+#include <cmath>
 
 double MotorShaftPower::calculate() {
     /**

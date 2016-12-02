@@ -5,9 +5,6 @@
 #ifndef AMO_LIBRARY_PUMP_H
 #define AMO_LIBRARY_PUMP_H
 
-
-#include <cmath>
-
 class Pump {
 public:
     enum class Style {
@@ -33,9 +30,25 @@ public:
         NOT_FIXED_SPEED
     };
 
-    Pump(Style style, double achievableEfficiency, double rpm, Drive drive, double kviscosity, double sg, int stageCount, Speed speed) :
-            style_(style), achievableEfficiency_(achievableEfficiency), rpm_(rpm), drive_(drive), kviscosity_(kviscosity), sg_(sg), stageCount_(stageCount),
-            speed_(speed) {};
+    Pump(
+        Style style,
+        double achievableEfficiency,
+        double rpm,
+        Drive drive,
+        double kviscosity,
+        double sg,
+        int stageCount,
+        Speed speed
+    ) :
+        style_(style),
+        achievableEfficiency_(achievableEfficiency),
+        rpm_(rpm),
+        drive_(drive),
+        kviscosity_(kviscosity),
+        sg_(sg),
+        stageCount_(stageCount),
+        speed_(speed)
+    {};
 
     Pump() = default;
 
@@ -53,9 +66,7 @@ public:
         achievableEfficiency_ = achievableEfficiency;
     }
 
-    int getRpm() {
-        return std::round(rpm_);
-    }
+    int getRpm();
 
     void setRpm(double rpm) {
         rpm_ = rpm;

@@ -17,7 +17,6 @@
 
 #include "../Motor.h"
 #include <vector>
-#include "Poles.h"
 
 class MotorEfficiency25 {
 public:
@@ -29,10 +28,17 @@ public:
      * @param lineFrequency Line Frequency of motor
      * @return nothing
      */
-    MotorEfficiency25(Motor::EfficiencyClass efficiencyClass, double motorRatedPower, double motorRpm,
-                      Motor::LineFrequency lineFrequency) : efficiencyClass_(efficiencyClass),
-                                                            motorRatedPower_(motorRatedPower), motorRpm_(motorRpm),
-                                                            lineFrequency_(lineFrequency) {};
+    MotorEfficiency25(
+        Motor::EfficiencyClass efficiencyClass,
+        double motorRatedPower,
+        double motorRpm,
+        Motor::LineFrequency lineFrequency
+    ) :
+        efficiencyClass_(efficiencyClass),
+        motorRatedPower_(motorRatedPower),
+        motorRpm_(motorRpm),
+        lineFrequency_(lineFrequency)
+    {};
 
     /**
      *

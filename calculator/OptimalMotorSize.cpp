@@ -12,8 +12,8 @@
 // Created by Mishra, Subhankar on 10/14/16.
 //
 
-#include <vector>
 #include "OptimalMotorSize.h"
+#include <vector>
 
 double OptimalMotorSize::calculate() {
     // Motor Size collection in hp
@@ -82,7 +82,7 @@ double OptimalMotorSize::calculate() {
     motorSize[61] = 50000;
 
     double requiredShaftPower = optimalMotorShaftPower_ * (1 + sizeMargin_);
-    double previous = motorSize[0];
+//    double previous = motorSize[0];
     for (int i = 1; i < 62; ++i) {
         if (requiredShaftPower < motorSize[i]){
             optimalMotorRatedPower_ = motorSize[i];

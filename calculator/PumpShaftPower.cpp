@@ -3,6 +3,7 @@
 //
 
 #include "PumpShaftPower.h"
+#include <cmath>
 
 double PumpShaftPower::calculate() {
     /*
@@ -17,7 +18,7 @@ double PumpShaftPower::calculate() {
                                           3.7558 * exp((motorShaftPower_ / 0.746) * (-0.21507)) + 3.9963) / 100);
         // motorShaftPower_ is already in hp , so make BLM in hp
         BLM = BLM / 0.746;
-        double motorSheavePowerRatio = motorShaftPower_ / (motorShaftPower_ - BLM);
+//        double motorSheavePowerRatio = motorShaftPower_ / (motorShaftPower_ - BLM);
         pumpShaftPower_ = motorShaftPower_ - BLM;
     }
     return pumpShaftPower_;

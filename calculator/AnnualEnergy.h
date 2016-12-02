@@ -21,8 +21,13 @@ public:
      * @param operatingFraction operating fraction
      * @return nothing
      */
-    AnnualEnergy(double fieldPower, double operatingFraction) : fieldPower_(fieldPower),
-                                                                operatingFraction_(operatingFraction) {}
+    AnnualEnergy(
+        double fieldPower,
+        double operatingFraction
+    ) :
+        fieldPower_(fieldPower),
+        operatingFraction_(operatingFraction)
+    {}
 
     /**
      * Calculates annual energy

@@ -13,6 +13,9 @@
 //
 
 #include "EstimateFLA.h"
+#include "MotorEfficiency.h"
+#include "Poles.h"
+#include <cmath>
 
 /**
  * Estimating FLA methodology

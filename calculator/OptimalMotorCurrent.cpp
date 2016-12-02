@@ -13,6 +13,8 @@
 //
 
 #include "OptimalMotorCurrent.h"
+#include "CurveFitVal.h"
+#include "EstimateFLA.h"
 
 double OptimalMotorCurrent::calculate() {
     EstimateFLA estimateFLA(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_,specifiedEfficiency_, ratedVoltage_ );

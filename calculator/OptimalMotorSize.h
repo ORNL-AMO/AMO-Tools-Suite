@@ -16,7 +16,6 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORSIZE_H
 #define AMO_LIBRARY_OPTIMALMOTORSIZE_H
 
-
 class OptimalMotorSize {
 public:
     /**
@@ -25,9 +24,16 @@ public:
      * @param sizeMargin
      * @return nothing
      */
-    OptimalMotorSize(double optimalMotorShaftPower, double sizeMargin):
-            optimalMotorShaftPower_(optimalMotorShaftPower), sizeMargin_(sizeMargin){};
+    OptimalMotorSize(
+        double optimalMotorShaftPower,
+        double sizeMargin
+    ) :
+        optimalMotorShaftPower_(optimalMotorShaftPower),
+        sizeMargin_(sizeMargin)
+    {};
+
     double calculate();
+
 private:
     double optimalMotorShaftPower_;
     double sizeMargin_;

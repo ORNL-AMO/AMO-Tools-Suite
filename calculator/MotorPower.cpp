@@ -13,6 +13,7 @@
 //
 
 #include "MotorPower.h"
+#include <cmath>
 
 double MotorPower::calculate() {
     double motorPowerElectric_ = 0.0;

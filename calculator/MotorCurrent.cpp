@@ -14,6 +14,10 @@
 
 #include "MotorCurrent.h"
 
+#include <cmath>
+#include "CurveFitVal.h"
+#include "EstimateFLA.h"
+
 /**
  * Calculates the motor current for a given value of load factor.
  * Given the load% calculate the Amps.

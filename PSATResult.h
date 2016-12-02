@@ -29,11 +29,17 @@ class PSATResult {
 public:
     PSATResult() = default;
 
-    PSATResult(Pump &pump, Motor &motor, Financial &financial, FieldData &fieldData) :
-            pump_(pump),
-            motor_(motor),
-            financial_(financial),
-            fieldData_(fieldData) {};
+    PSATResult(
+        Pump &pump,
+        Motor &motor,
+        Financial &financial,
+        FieldData &fieldData
+    ) :
+        pump_(pump),
+        motor_(motor),
+        financial_(financial),
+        fieldData_(fieldData)
+    {};
 
     /**
      * A structure
@@ -65,14 +71,12 @@ public:
     };
 
     double getAnnualSavingsPotential() const {
-
         return annualSavingsPotential_;
     }
 
     double getOptimizationRating() const {
         return optimizationRating_;
     }
-
 
     const result_ &getExisting() const {
         return existing_;

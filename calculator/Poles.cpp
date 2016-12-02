@@ -3,8 +3,7 @@
 //
 
 #include "Poles.h"
-#include <iostream>
-using namespace std;
+#include <cmath>
 
 int Poles::calculate() {
     poles_ =0;
@@ -37,7 +36,7 @@ int Poles::calculate() {
             if (floor(floor(7200 / motorRpm_) / 2) * 2 > 12) {
                 poles_ = 12;
             } else {
-                poles_ = floor(floor(7200 / motorRpm_) / 2) * 2;
+                poles_ = static_cast<int>(floor(floor(7200 / motorRpm_) / 2) * 2);
             }
         }
     }

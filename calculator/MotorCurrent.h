@@ -15,13 +15,7 @@
 #ifndef AMO_LIBRARY_MOTORCURRENT_H
 #define AMO_LIBRARY_MOTORCURRENT_H
 
-
-#include <cmath>
-#include<iostream>
-#include "../motor.h"
-#include "CurveFitVal.h"
-#include "EstimateFLA.h"
-#include <vector>
+#include "../Motor.h"
 
 class MotorCurrent {
 public:
