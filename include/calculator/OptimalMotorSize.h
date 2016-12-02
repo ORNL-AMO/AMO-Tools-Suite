@@ -9,10 +9,6 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/14/16.
-//
-
 #ifndef AMO_LIBRARY_OPTIMALMOTORSIZE_H
 #define AMO_LIBRARY_OPTIMALMOTORSIZE_H
 

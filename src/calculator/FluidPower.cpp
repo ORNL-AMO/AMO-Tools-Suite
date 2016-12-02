@@ -8,11 +8,6 @@
  *
  */
 
-
-//
-// Created by Mishra, Subhankar on 10/13/16.
-//
-
 #include "calculator/FluidPower.h"
 
 /**

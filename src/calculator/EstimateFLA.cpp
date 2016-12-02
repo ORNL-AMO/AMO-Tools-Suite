@@ -8,14 +8,10 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/4/16.
-//
-
+#include <cmath>
 #include "calculator/EstimateFLA.h"
 #include "calculator/MotorEfficiency.h"
 #include "calculator/Poles.h"
-#include <cmath>
 
 /**
  * Estimating FLA methodology

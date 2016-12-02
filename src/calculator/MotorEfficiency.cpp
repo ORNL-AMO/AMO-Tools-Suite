@@ -8,14 +8,10 @@
  *
  */
 
-//
-// Created by Accawi, Gina K. on 6/17/16.
-//
-
+#include <cmath>
 #include "calculator/MotorEfficiency.h"
 #include "calculator/CurveFitVal.h"
 #include "calculator/MotorEfficiency25.h"
-#include <cmath>
 
 double MotorEfficiency::calculate() {
 

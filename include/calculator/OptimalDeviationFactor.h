@@ -9,10 +9,6 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/24/16.
-//
-
 #ifndef AMO_LIBRARY_OPTIMALDEVIATIONFACTOR_H
 #define AMO_LIBRARY_OPTIMALDEVIATIONFACTOR_H
 

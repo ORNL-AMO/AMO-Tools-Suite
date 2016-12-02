@@ -9,11 +9,6 @@
  *
  */
 
-
-//
-// Created by Accawi, Gina K. on 8/19/16.
-//
-
 #ifndef AMO_LIBRARY_OPTIMALMOTORCURRENT_H
 #define AMO_LIBRARY_OPTIMALMOTORCURRENT_H
 

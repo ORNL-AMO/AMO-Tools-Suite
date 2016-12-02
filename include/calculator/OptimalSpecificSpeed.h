@@ -9,10 +9,6 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/21/16.
-//
-
 #ifndef AMO_LIBRARY_OPTIMALSPECIFICSPEED_H
 #define AMO_LIBRARY_OPTIMALSPECIFICSPEED_H
 

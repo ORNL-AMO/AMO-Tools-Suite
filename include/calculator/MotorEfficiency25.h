@@ -8,15 +8,11 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/6/16.
-//
-
 #ifndef UNTITLED_MOTOREFFICIENCY25_H
 #define UNTITLED_MOTOREFFICIENCY25_H
 
-#include "../Motor.h"
 #include <vector>
+#include "../Motor.h"
 
 class MotorEfficiency25 {
 public:

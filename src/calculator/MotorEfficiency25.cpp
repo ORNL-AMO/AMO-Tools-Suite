@@ -7,13 +7,9 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/6/16.
-//
-
+#include <cmath>
 #include "calculator/MotorEfficiency25.h"
 #include "calculator/Poles.h"
-#include <cmath>
 
 std::vector<double> MotorEfficiency25::calculate() {
     /**

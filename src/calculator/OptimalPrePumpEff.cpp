@@ -7,9 +7,6 @@
  * @bug No known bugs.
  *
  */
-//
-// Created by Mishra, Subhankar on 10/17/16.
-//
 
 #include <cmath>
 #include "calculator/OptimalPrePumpEff.h"

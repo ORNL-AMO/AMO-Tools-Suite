@@ -8,10 +8,6 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/14/16.
-//
-
 #include <vector>
 #include "calculator/OptimalMotorSize.h"
 

@@ -8,10 +8,6 @@
  * @bug No known bugs.
  *
  */
-//
-// Created by Mishra, Subhankar on 10/17/16.
-//
-
 #ifndef AMO_LIBRARY_OPTIMALPREPUMPEFF_H
 #define AMO_LIBRARY_OPTIMALPREPUMPEFF_H
 

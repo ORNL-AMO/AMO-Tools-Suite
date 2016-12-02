@@ -8,11 +8,6 @@
  *
  */
 
-
-//
-// Created by Mishra, Subhankar on 10/24/16.
-//
-
 #include <cmath>
 #include "calculator/OptimalDeviationFactor.h"
 

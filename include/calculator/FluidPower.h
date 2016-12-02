@@ -8,13 +8,8 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/13/16.
-//
-
 #ifndef AMO_LIBRARY_FLUIDPOWER_H
 #define AMO_LIBRARY_FLUIDPOWER_H
-
 
 class FluidPower {
 public:
@@ -60,6 +55,5 @@ private:
      */
     double fluidPower_;
 };
-
 
 #endif //AMO_LIBRARY_FLUIDPOWER_H

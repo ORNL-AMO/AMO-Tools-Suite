@@ -9,10 +9,6 @@
  *
  */
 
-//
-// Created by ehm on 9/8/2016.
-//
-
 #ifndef AMO_LIBRARY_CURVEFITVAL_H
 #define AMO_LIBRARY_CURVEFITVAL_H
 

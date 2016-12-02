@@ -7,10 +7,6 @@
  *
  */
 
-//
-// Created by Mishra, Subhankar on 10/4/16.
-//
-
 #ifndef UNTITLED_ESTIMATEFLA_H
 #define UNTITLED_ESTIMATEFLA_H
 

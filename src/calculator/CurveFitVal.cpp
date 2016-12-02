@@ -11,10 +11,6 @@
  *
  */
 
-//
-// Created by ehm on 9/8/2016.
-//
-
 #include <cmath>
 #include <vector>
 #include "calculator/CurveFitVal.h"

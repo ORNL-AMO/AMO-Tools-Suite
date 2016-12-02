@@ -8,10 +8,6 @@
  *
  */
 
-//
-// Created by Accawi, Gina K. on 8/19/16.
-//
-
 #include "calculator/OptimalMotorCurrent.h"
 #include "calculator/CurveFitVal.h"
 #include "calculator/EstimateFLA.h"
