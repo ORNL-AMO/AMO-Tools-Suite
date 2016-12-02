@@ -24,69 +24,69 @@ else (WIN32)
 endif (WIN32)
 
 set(SOURCE_FILES
-#    FieldData.cpp
-#    Financial.cpp
-    Motor.cpp
-    OptimizationRating.cpp
-    PSATResult.cpp
-    Pump.cpp
-    calculator/AnnualCost.cpp
-    calculator/AnnualEnergy.cpp
-    calculator/CurveFitVal.cpp
-    calculator/EstimateFLA.cpp
-    calculator/FluidPower.cpp
-    calculator/MotorCurrent.cpp
-    calculator/MotorEfficiency.cpp
-    calculator/MotorEfficiency25.cpp
-    calculator/MotorPower.cpp
-    calculator/MotorPowerFactor.cpp
-    calculator/MotorShaftPower.cpp
-    calculator/OptimalDeviationFactor.cpp
-    calculator/OptimalMotorCurrent.cpp
-    calculator/OptimalMotorPower.cpp
-    calculator/OptimalMotorShaftPower.cpp
-    calculator/OptimalMotorSize.cpp
-    calculator/OptimalPrePumpEff.cpp
-    calculator/OptimalPumpEfficiency.cpp
-    calculator/OptimalPumpShaftPower.cpp
-    calculator/OptimalSpecificSpeed.cpp
-    calculator/OptimalSpecificSpeedCorrection.cpp
-    calculator/Poles.cpp
-    calculator/PumpEfficiency.cpp
-    calculator/PumpShaftPower.cpp
+#    src/FieldData.cpp
+#    src/Financial.cpp
+    src/Motor.cpp
+    src/OptimizationRating.cpp
+    src/PSATResult.cpp
+    src/Pump.cpp
+    src/calculator/AnnualCost.cpp
+    src/calculator/AnnualEnergy.cpp
+    src/calculator/CurveFitVal.cpp
+    src/calculator/EstimateFLA.cpp
+    src/calculator/FluidPower.cpp
+    src/calculator/MotorCurrent.cpp
+    src/calculator/MotorEfficiency.cpp
+    src/calculator/MotorEfficiency25.cpp
+    src/calculator/MotorPower.cpp
+    src/calculator/MotorPowerFactor.cpp
+    src/calculator/MotorShaftPower.cpp
+    src/calculator/OptimalDeviationFactor.cpp
+    src/calculator/OptimalMotorCurrent.cpp
+    src/calculator/OptimalMotorPower.cpp
+    src/calculator/OptimalMotorShaftPower.cpp
+    src/calculator/OptimalMotorSize.cpp
+    src/calculator/OptimalPrePumpEff.cpp
+    src/calculator/OptimalPumpEfficiency.cpp
+    src/calculator/OptimalPumpShaftPower.cpp
+    src/calculator/OptimalSpecificSpeed.cpp
+    src/calculator/OptimalSpecificSpeedCorrection.cpp
+    src/calculator/Poles.cpp
+    src/calculator/PumpEfficiency.cpp
+    src/calculator/PumpShaftPower.cpp
     )
 
 set(INCLUDE_FILES
-    FieldData.h
-    Financial.h
-    Motor.h
-    OptimizationRating.h
-    PSATResult.h
-    Pump.h
-    calculator/AnnualCost.h
-    calculator/AnnualEnergy.h
-    calculator/CurveFitVal.h
-    calculator/EstimateFLA.h
-    calculator/FluidPower.h
-    calculator/MotorCurrent.h
-    calculator/MotorEfficiency.h
-    calculator/MotorEfficiency25.h
-    calculator/MotorPower.h
-    calculator/MotorPowerFactor.h
-    calculator/MotorShaftPower.h
-    calculator/OptimalDeviationFactor.h
-    calculator/OptimalMotorCurrent.h
-    calculator/OptimalMotorPower.h
-    calculator/OptimalMotorShaftPower.h
-    calculator/OptimalMotorSize.h
-    calculator/OptimalPrePumpEff.h
-    calculator/OptimalPumpEfficiency.h
-    calculator/OptimalPumpShaftPower.h
-    calculator/OptimalSpecificSpeed.h
-    calculator/OptimalSpecificSpeedCorrection.h
-    calculator/Poles.h
-    calculator/PumpEfficiency.h
-    calculator/PumpShaftPower.h
+    include/FieldData.h
+    include/Financial.h
+    include/Motor.h
+    include/OptimizationRating.h
+    include/PSATResult.h
+    include/Pump.h
+    include/calculator/AnnualCost.h
+    include/calculator/AnnualEnergy.h
+    include/calculator/CurveFitVal.h
+    include/calculator/EstimateFLA.h
+    include/calculator/FluidPower.h
+    include/calculator/MotorCurrent.h
+    include/calculator/MotorEfficiency.h
+    include/calculator/MotorEfficiency25.h
+    include/calculator/MotorPower.h
+    include/calculator/MotorPowerFactor.h
+    include/calculator/MotorShaftPower.h
+    include/calculator/OptimalDeviationFactor.h
+    include/calculator/OptimalMotorCurrent.h
+    include/calculator/OptimalMotorPower.h
+    include/calculator/OptimalMotorShaftPower.h
+    include/calculator/OptimalMotorSize.h
+    include/calculator/OptimalPrePumpEff.h
+    include/calculator/OptimalPumpEfficiency.h
+    include/calculator/OptimalPumpShaftPower.h
+    include/calculator/OptimalSpecificSpeed.h
+    include/calculator/OptimalSpecificSpeedCorrection.h
+    include/calculator/Poles.h
+    include/calculator/PumpEfficiency.h
+    include/calculator/PumpShaftPower.h
     )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -98,10 +98,4 @@ add_library(amo_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
 add_executable(amo_suite_main main.cpp)
 
 set_target_properties(amo_suite_main PROPERTIES OUTPUT_NAME "amo_suite")
-
 target_link_libraries( amo_suite_main amo_suite )
-
-if (WIN32)
-  target_link_libraries( amo_suite Shlwapi )
-  target_link_libraries( amo_suite Shlwapi )
-endif()
