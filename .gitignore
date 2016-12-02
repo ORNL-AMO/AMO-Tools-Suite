@@ -1,4 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
+### Project Specific
+cmake-build-*
+
 ### Vim template
 # swap
 [._]*.s[a-w][a-z]

@@ -1,7 +1,25 @@
 cmake_minimum_required(VERSION 2.8.11.2)
-project(amo_library)
+project(amo_suite)
 
 set(CMAKE_MACOSX_RPATH 1)
+
+set( CMAKE_VERSION_MAJOR 0 )
+set( CMAKE_VERSION_MINOR 1 )
+set( CMAKE_VERSION_PATCH 0 )
+
+set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
+
+# Build package
+# Requires:
+option( BUILD_PACKAGE "Build package" OFF )
+
+# Build testing
+# Requires:
+option( BUILD_TESTING "Build testing targets" OFF )
+
+# Build C++ documentation using Doxygen
+# Requires: doxygen
+#option( BUILD_DOCUMENTATION "Build Documentation" OFF )
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -103,7 +121,10 @@ set(TEST_FILES
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-add_subdirectory(third_party)
+if (MINGW)
+  set(CMAKE_SHARED_LIBRARY_PREFIX "")
+  set(CMAKE_STATIC_LIBRARY_PREFIX "")
+endif ()
 
 # Create amo_suite static library
 add_library(amo_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
@@ -113,6 +134,23 @@ add_executable(amo_suite_main main.cpp)
 set_target_properties(amo_suite_main PROPERTIES OUTPUT_NAME "amo_suite")
 target_link_libraries( amo_suite_main amo_suite )
 
-# Create unit testing executable
-add_executable(amo_suite_tests tests/main.unit.cpp ${TEST_FILES})
-target_link_libraries( amo_suite_tests Catch amo_suite )
+if( BUILD_TESTING )
+    add_library(Catch INTERFACE)
+    target_include_directories(Catch INTERFACE third_party/catch/)
+
+    # Create unit testing executable
+    add_executable(amo_suite_tests tests/main.unit.cpp ${TEST_FILES})
+    target_link_libraries( amo_suite_tests Catch amo_suite )
+endif()
+
+# if(BUILD_DOCUMENTATION)
+#   find_package(Doxygen REQUIRED)
+# endif()
+
+if( BUILD_PACKAGE )
+  set(CPACK_INSTALL_CMAKE_PROJECTS
+    "${CMAKE_BINARY_DIR};amo_suite;ALL;/"
+  )
+
+  include(cmake/Install.cmake)
+endif()
