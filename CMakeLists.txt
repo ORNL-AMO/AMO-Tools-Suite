@@ -117,6 +117,7 @@ set(INCLUDE_FILES
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
+    tests/MotorEfficiency.unit.cpp
     )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)

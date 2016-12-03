@@ -109,8 +109,16 @@ public:
         actualEfficiency_ = actualEfficiency;
     }
 
-    double getKWloss0() const{
+    double getKWloss0() const {
         return kWloss0;
+    }
+
+    double getLoadFactor() const {
+        return loadFactor_;
+    }
+
+    void setLoadFactor(double loadFactor) {
+        loadFactor_ = loadFactor;
     }
 
 private:
