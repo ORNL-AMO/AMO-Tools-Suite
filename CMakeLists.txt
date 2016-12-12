@@ -80,7 +80,7 @@ set(SOURCE_FILES
     src/calculator/Poles.cpp
     src/calculator/PumpEfficiency.cpp
     src/calculator/PumpShaftPower.cpp
-    )
+        src/calculator/SolidLoadChargeMaterial.cpp)
 
 set(INCLUDE_FILES
     include/FieldData.h
@@ -113,11 +113,12 @@ set(INCLUDE_FILES
     include/calculator/Poles.h
     include/calculator/PumpEfficiency.h
     include/calculator/PumpShaftPower.h
-    )
+    include/calculator/SolidLoadChargeMaterial.h    )
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
     tests/MotorEfficiency.unit.cpp
+        tests/SolidLoadChargeMaterial.unit.cpp
     )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
