@@ -11,17 +11,15 @@
  *
  */
 
+#include "LoadChargeMaterial.h"
+
 #ifndef AMO_SUITE_SOLIDLOADCHARGEMATERIAL_H
 #define AMO_SUITE_SOLIDLOADCHARGEMATERIAL_H
 
 class SolidLoadChargeMaterial {
 public:
 
-    enum class ThermicReactionType {
-        ENDOTHERMIC,
-        EXOTHERMIC
-    };
-/**
+    /**
  * Constructor for the solid load/charge material with all inputs specified.
  *
  * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
@@ -42,7 +40,7 @@ public:
  *
  * */
     SolidLoadChargeMaterial(
-            ThermicReactionType thermicReactionType,
+            LoadChargeMaterial::ThermicReactionType thermicReactionType,
             double specificHeatSolid,
             double latentHeat,
             double specificHeatLiquid,
@@ -57,7 +55,7 @@ public:
             double chargedReacted,
             double reactionHeat,
             double additionalHeat
-    ) : thermicReactionType_(thermicReactionType),
+    ) : LoadChargeMaterial::ThermicReactionType (thermicReactionType),
         specificHeatSolid_(specificHeatSolid),
         latentHeat_(latentHeat),
         specificHeatLiquid_(specificHeatLiquid),
@@ -68,19 +66,19 @@ public:
         initialTemperature_(initialTemperature),
         dischargeTemperature_(dischargeTemperature),
         waterVaporDischargeTemperature_(waterVaporDischargeTemperature),
-        chargeMelted_(chargeMelted),
-        chargedReacted_(chargedReacted),
+        percentMelted_(chargeMelted),
+        percentReacted_(chargedReacted),
         reactionHeat_(reactionHeat),
         additionalHeat_(additionalHeat)
     {}
 
     SolidLoadChargeMaterial() = default;
 
-    ThermicReactionType getThermicReactionType() const {
+    LoadChargeMaterial::ThermicReactionType getThermicReactionType() const {
         return thermicReactionType_;
     }
 
-    void setThermicReactionType(ThermicReactionType thermicReactionType) {
+    void setThermicReactionType(LoadChargeMaterial::ThermicReactionType  thermicReactionType) {
         thermicReactionType_ = thermicReactionType;
     }
 
@@ -165,19 +163,19 @@ public:
     }
 
     double getChargeMelted() const {
-        return chargeMelted_;
+        return percentMelted_;
     }
 
     void setChargeMelted(double chargeMelted) {
-        chargeMelted_ = chargeMelted;
+        percentMelted_ = chargeMelted;
     }
 
     double getChargedReacted() const {
-        return chargedReacted_;
+        return percentReacted_;
     }
 
     void setChargedReacted(double chargedReacted) {
-        chargedReacted_ = chargedReacted;
+        percentReacted_ = chargedReacted;
     }
 
     double getReactionHeat() const {
@@ -203,7 +201,7 @@ public:
 
 private:
     // In values
-    SolidLoadChargeMaterial::ThermicReactionType thermicReactionType_;
+    LoadChargeMaterial::ThermicReactionType thermicReactionType_;
     double specificHeatSolid_;
     double latentHeat_;
     double specificHeatLiquid_;
@@ -214,8 +212,8 @@ private:
     double initialTemperature_;
     double dischargeTemperature_;
     double waterVaporDischargeTemperature_;
-    double chargeMelted_;
-    double chargedReacted_;
+    double percentMelted_;
+    double percentReacted_;
     double reactionHeat_;
     double additionalHeat_;
     // Out value

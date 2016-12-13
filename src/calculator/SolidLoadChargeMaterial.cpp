@@ -1,7 +1,11 @@
-//
-// Created by Accawi, Gina K. on 12/12/16.
-//
-
+/**
+ * @file
+ * @brief Contains the implementation of the solid load/charge material total heat.
+ *
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 #include "calculator/SolidLoadChargeMaterial.h"
 
 double SolidLoadChargeMaterial::getTotalHeat() {

@@ -113,7 +113,7 @@ set(INCLUDE_FILES
     include/calculator/Poles.h
     include/calculator/PumpEfficiency.h
     include/calculator/PumpShaftPower.h
-    include/calculator/SolidLoadChargeMaterial.h    )
+    include/calculator/SolidLoadChargeMaterial.h include/calculator/LiquidLoadChargeMaterial.h src/calculator/LiquidLoadChargeMaterial.cpp include/calculator/LoadChargeMaterial.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp

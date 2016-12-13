@@ -1,0 +1,168 @@
+/**
+ * @file
+ * @brief Calculator for total heat of liquid load/charge material
+ *
+ * This contains the inputs for calculating a liquid load/charge material's
+ * total heat.
+ *
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
+
+#include "LoadChargeMaterial.h"
+
+#ifndef AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
+#define AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
+
+class LiquidLoadChargeMaterial {
+
+public:
+    LiquidLoadChargeMaterial(
+            LoadChargeMaterial::ThermicReactionType thermicReactionType,
+            double specificHeatLiquid,
+            double vaporizingTemperature,
+            double latentHeat,
+            double specificHeatVapor,
+            double chargeFeedRate,
+            double initialTemperature,
+            double dischargeTemperature,
+            double percentVaporized,
+            double percentReacted,
+            double reactionHeat,
+            double additionalHeat)
+            : thermicReactionType_(thermicReactionType),
+              specificHeatLiquid_(specificHeatLiquid),
+              vaporizingTemperature_(vaporizingTemperature),
+              latentHeat_(latentHeat),
+              specificHeatVapor_(specificHeatVapor),
+              chargeFeedRate_(chargeFeedRate),
+              initialTemperature_(initialTemperature),
+              dischargeTemperature_(dischargeTemperature),
+              percentVaporized_(percentVaporized),
+              percentReacted_(percentReacted),
+              reactionHeat_(reactionHeat),
+              additionalHeat_(additionalHeat)
+    {}
+
+    LiquidLoadChargeMaterial() = default;
+
+    LoadChargeMaterial::ThermicReactionType getThermicReactionType() const {
+        return thermicReactionType_;
+    }
+
+    void setThermicReactionType(LoadChargeMaterial::ThermicReactionType thermicReactionType) {
+        thermicReactionType_ = thermicReactionType;
+    }
+
+    double getSpecificHeatLiquid() const {
+        return specificHeatLiquid_;
+    }
+
+    void setSpecificHeatLiquid(double specificHeatLiquid) {
+        specificHeatLiquid_ = specificHeatLiquid;
+    }
+
+    double getVaporizingTemperature() const {
+        return vaporizingTemperature_;
+    }
+
+    void setVaporizingTemperature(double vaporizingTemperature) {
+        vaporizingTemperature_ = vaporizingTemperature;
+    }
+
+    double getLatentHeat() const {
+        return latentHeat_;
+    }
+
+    void setLatentHeat(double latentHeat) {
+        latentHeat_ = latentHeat;
+    }
+
+    double getSpecificHeatVapor() const {
+        return specificHeatVapor_;
+    }
+
+    void setSpecificHeatVapor(double specificHeatVapor) {
+        specificHeatVapor_ = specificHeatVapor;
+    }
+
+    double getChargeFeedRate() const {
+        return chargeFeedRate_;
+    }
+
+    void setChargeFeedRate(double chargeFeedRate) {
+        chargeFeedRate_ = chargeFeedRate;
+    }
+
+    double getInitialTemperature() const {
+        return initialTemperature_;
+    }
+
+    void setInitialTemperature(double initialTemperature) {
+        initialTemperature_ = initialTemperature;
+    }
+
+    double getDischargeTemperature() const {
+        return dischargeTemperature_;
+    }
+
+    void setDischargeTemperature(double dischargeTemperature) {
+        dischargeTemperature_ = dischargeTemperature;
+    }
+
+    double getPercentVaporized() const {
+        return percentVaporized_;
+    }
+
+    void setPercentVaporized(double percentVaporized) {
+        percentVaporized_ = percentVaporized;
+    }
+
+    double getPercentReacted() const {
+        return percentReacted_;
+    }
+
+    void setPercentReacted(double percentReacted) {
+        percentReacted_ = percentReacted;
+    }
+
+    double getReactionHeat() const {
+        return reactionHeat_;
+    }
+
+    void setReactionHeat(double reactionHeat) {
+        reactionHeat_ = reactionHeat;
+    }
+
+    double getAdditionalHeat() const {
+        return additionalHeat_;
+    }
+
+    void setAdditionalHeat(double additionalHeat) {
+        additionalHeat_ = additionalHeat;
+    }
+
+    void setTotalHeat(double totalHeat) {
+        totalHeat_ = totalHeat;
+    }
+    double getTotalHeat();
+
+private:
+    // In values
+    LoadChargeMaterial::ThermicReactionType thermicReactionType_;
+    double specificHeatLiquid_;
+    double vaporizingTemperature_;
+    double latentHeat_;
+    double specificHeatVapor_;
+    double chargeFeedRate_;
+    double initialTemperature_;
+    double dischargeTemperature_;
+    double percentVaporized_;
+    double percentReacted_;
+    double reactionHeat_;
+    double additionalHeat_;
+    // Out value
+    double totalHeat_;
+};
+#endif //AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
