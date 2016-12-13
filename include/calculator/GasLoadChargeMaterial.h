@@ -9,10 +9,11 @@
  * @bug No known bugs.
  *
  */
-#import "calculator/LoadChargeMaterial.h"
 
 #ifndef AMO_SUITE_GASLOADCHARGEMATERIAL_H
 #define AMO_SUITE_GASLOADCHARGEMATERIAL_H
+
+#include "calculator/LoadChargeMaterial.h"
 
 class GasLoadChargeMaterial {
 public:
@@ -47,8 +48,8 @@ public:
             double additionalHeat)
             : thermicReactionType_(thermicReactionType),
               specificHeatGas_(specificHeatGas),
-              percentVapor_(percentVapor),
               feedRate_(feedRate),
+              percentVapor_(percentVapor),
               initialTemperature_(initialTemperature),
               dischargeTemperature_(dischargeTemperature),
               specificHeatVapor_(specificHeatVapor),
@@ -133,6 +134,14 @@ public:
 
     void setTotalHeat(double totalHeat) {
         totalHeat_ = totalHeat;
+    }
+
+    double getPercentVapor() const {
+        return percentVapor_;
+    }
+
+    void setPercentVapor(double percentVapor) {
+        percentVapor_ = percentVapor;
     }
 
     double getTotalHeat();

@@ -55,7 +55,7 @@ public:
             double chargedReacted,
             double reactionHeat,
             double additionalHeat
-    ) : LoadChargeMaterial::ThermicReactionType (thermicReactionType),
+    ) : thermicReactionType_ (thermicReactionType),
         specificHeatSolid_(specificHeatSolid),
         latentHeat_(latentHeat),
         specificHeatLiquid_(specificHeatLiquid),
@@ -192,6 +192,10 @@ public:
 
     void setAdditionalHeat(double additionalHeat) {
         additionalHeat_ = additionalHeat;
+    }
+
+    void setTotalHeat(double totalHeat) {
+        totalHeat_ = totalHeat;
     }
 
     /**
