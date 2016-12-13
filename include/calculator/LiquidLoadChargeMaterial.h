@@ -18,6 +18,25 @@
 class LiquidLoadChargeMaterial {
 
 public:
+
+    /**
+     * Constructor for liquid load/charge material with all inputs specified
+     *
+     * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
+     * @param specificHeatLiquid Specific Heat of Liquid in Btu/(lb-°F)
+     * @param vaporizingTemperature Vaporizing Temperature in °F
+     * @param latentHeat Latent Heat of Vaporization in Btu/lb
+     * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb-°F)
+     * @param chargeFeedRate Charge (Liquid)-Feed Rate in lb/h
+     * @param initialTemperature Initial Temperature in °F
+     * @param dischargeTemperature Discharge Temperature in °F
+     * @param percentVaporized Charge Liquid Vaporized  (% of Charge)
+     * @param percentReacted Charge Liquid Reacted (% of Charge)
+     * @param reactionHeat Heat of Reaction in Btu/lb
+     * @param additionalHeat Additional Heat Required in %
+     *
+     * */
+
     LiquidLoadChargeMaterial(
             LoadChargeMaterial::ThermicReactionType thermicReactionType,
             double specificHeatLiquid,
