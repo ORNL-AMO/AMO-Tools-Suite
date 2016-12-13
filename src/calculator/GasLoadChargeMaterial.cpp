@@ -10,5 +10,5 @@
 
 double GasLoadChargeMaterial::getTotalHeat() {
     // return the total net heat for the example case
-    return 383530;
+    return 383530.0;
 }

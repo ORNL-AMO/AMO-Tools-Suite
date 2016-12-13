@@ -29,7 +29,7 @@ double SolidLoadChargeMaterial::getTotalHeat() {
     }
 
     // Return the total net heat for the example case
-    return 3204056;
+    return 3204056.0;
 
 }
 

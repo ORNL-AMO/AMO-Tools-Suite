@@ -11,5 +11,5 @@
 double LiquidLoadChargeMaterial::getTotalHeat() {
 
     // Return the total net heat for the example case
-    return 364100;
+    return 364100.0;
 }

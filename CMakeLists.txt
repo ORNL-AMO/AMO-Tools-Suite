@@ -80,7 +80,10 @@ set(SOURCE_FILES
     src/calculator/Poles.cpp
     src/calculator/PumpEfficiency.cpp
     src/calculator/PumpShaftPower.cpp
-        src/calculator/SolidLoadChargeMaterial.cpp)
+        src/calculator/GasLoadChargeMaterial.cpp
+        src/calculator/LiquidLoadChargeMaterial.cpp
+        src/calculator/SolidLoadChargeMaterial.cpp
+        src/calculator/Atmosphere.cpp)
 
 set(INCLUDE_FILES
     include/FieldData.h
@@ -113,12 +116,17 @@ set(INCLUDE_FILES
     include/calculator/Poles.h
     include/calculator/PumpEfficiency.h
     include/calculator/PumpShaftPower.h
-    include/calculator/SolidLoadChargeMaterial.h include/calculator/LiquidLoadChargeMaterial.h src/calculator/LiquidLoadChargeMaterial.cpp include/calculator/LoadChargeMaterial.h include/calculator/GasLoadChargeMaterial.h src/calculator/GasLoadChargeMaterial.cpp)
+        include/calculator/LoadChargeMaterial.h
+        include/calculator/SolidLoadChargeMaterial.h
+        include/calculator/LiquidLoadChargeMaterial.h
+        include/calculator/GasLoadChargeMaterial.h
+        include/calculator/Atmosphere.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
     tests/MotorEfficiency.unit.cpp
         tests/SolidLoadChargeMaterial.unit.cpp
+        tests/LiquidLoadChargeMaterial.unit.cpp
     )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
