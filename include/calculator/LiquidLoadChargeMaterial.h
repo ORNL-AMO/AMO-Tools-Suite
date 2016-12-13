@@ -10,10 +10,10 @@
  *
  */
 
-#include "LoadChargeMaterial.h"
-
 #ifndef AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
 #define AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
+
+#include "LoadChargeMaterial.h"
 
 class LiquidLoadChargeMaterial {
 

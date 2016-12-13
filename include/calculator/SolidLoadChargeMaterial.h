@@ -11,10 +11,11 @@
  *
  */
 
-#include "LoadChargeMaterial.h"
 
 #ifndef AMO_SUITE_SOLIDLOADCHARGEMATERIAL_H
 #define AMO_SUITE_SOLIDLOADCHARGEMATERIAL_H
+
+#include "LoadChargeMaterial.h"
 
 class SolidLoadChargeMaterial {
 public:
