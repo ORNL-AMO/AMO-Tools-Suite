@@ -21,14 +21,12 @@ public:
             double outletTemperature,
             double flowRate,
             double correctionFactor,
-            double specificHeat,
-            double totalHeat)
+            double specificHeat)
             : inletTemperature_(inletTemperature),
               outletTemperature_(outletTemperature),
               flowRate_(flowRate),
               correctionFactor_(correctionFactor),
-              specificHeat_(specificHeat),
-              totalHeat_(totalHeat)
+              specificHeat_(specificHeat)
     {}
 
     Atmosphere() = default;

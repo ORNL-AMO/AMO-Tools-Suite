@@ -1,8 +1,10 @@
 #include <iostream>
 #include <iomanip>
+#include <calculator/FixtureLosses.h>
 #include "PSATResult.h"
 #include "calculator/MotorPowerFactor.h"
 #include "calculator/MotorEfficiency.h"
+#include "calculator/FixtureLosses.h"
 
 int main() {
 
@@ -16,6 +18,7 @@ int main() {
     PSATResult psatResult(pump,motor,financial,fieldData);
     psatResult.calculateExisting();
     psatResult.calculateOptimal();
+
 
     std::cout << "Pump Efficiency: " << psatResult.getExisting().pumpEfficiency_ << std::endl;
     std::cout << "Motor Rated power: " << psatResult.getExisting().motorRatedPower_ << std::endl;

@@ -83,7 +83,7 @@ set(SOURCE_FILES
         src/calculator/GasLoadChargeMaterial.cpp
         src/calculator/LiquidLoadChargeMaterial.cpp
         src/calculator/SolidLoadChargeMaterial.cpp
-        src/calculator/Atmosphere.cpp)
+        src/calculator/Atmosphere.cpp src/calculator/FixtureLosses.cpp)
 
 set(INCLUDE_FILES
     include/FieldData.h
@@ -120,14 +120,14 @@ set(INCLUDE_FILES
         include/calculator/SolidLoadChargeMaterial.h
         include/calculator/LiquidLoadChargeMaterial.h
         include/calculator/GasLoadChargeMaterial.h
-        include/calculator/Atmosphere.h)
+        include/calculator/Atmosphere.h include/calculator/GasCoolingLosses.h include/calculator/FixtureLosses.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
     tests/MotorEfficiency.unit.cpp
         tests/SolidLoadChargeMaterial.unit.cpp
         tests/LiquidLoadChargeMaterial.unit.cpp
-    )
+        tests/Atmosphere.unit.cpp tests/FixtureLosses.unit.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
