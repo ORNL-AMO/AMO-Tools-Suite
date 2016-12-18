@@ -14,7 +14,7 @@
 class LiquidCoolingLosses {
 public:
 
-    LiquidCoolingLosses::LiquidCoolingLosses(
+    LiquidCoolingLosses(
             double flowRate,
             double density,
             double initialTemperature,

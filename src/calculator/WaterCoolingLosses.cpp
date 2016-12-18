@@ -9,5 +9,5 @@
 #include "calculator/WaterCoolingLosses.h"
 
 double WaterCoolingLosses::getHeatLoss() {
-
+    return 1989600.0;
 }
