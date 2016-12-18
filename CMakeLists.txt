@@ -137,7 +137,7 @@ set(TEST_FILES
         tests/LiquidLoadChargeMaterial.unit.cpp
         tests/Atmosphere.unit.cpp
         tests/FixtureLosses.unit.cpp
-        tests/GasLoadChargeMaterial.unit.cpp)
+        tests/GasLoadChargeMaterial.unit.cpp tests/GasCoolingLoss.unit.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
