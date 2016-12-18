@@ -88,7 +88,8 @@ set(SOURCE_FILES
         src/calculator/GasCoolingLosses.cpp
         src/calculator/WaterCoolingLosses.cpp
         src/calculator/LiquidCoolingLosses.cpp
-        src/calculator/LeakageLosses.cpp)
+        src/calculator/LeakageLosses.cpp
+        src/calculator/WallLosses.cpp)
 
 set(INCLUDE_FILES
     include/FieldData.h
@@ -130,7 +131,8 @@ set(INCLUDE_FILES
         include/calculator/FixtureLosses.h
         include/calculator/WaterCoolingLosses.h
         include/calculator/LiquidCoolingLosses.h
-        include/calculator/LeakageLosses.h)
+        include/calculator/LeakageLosses.h
+        include/calculator/WallLosses.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -143,7 +145,8 @@ set(TEST_FILES
         tests/GasCoolingLosses.unit.cpp
         tests/LiquidCoolingLosses.unit.cpp
         tests/WaterCoolingLosses.unit.cpp
-        tests/LeakageLosses.unit.cpp)
+        tests/LeakageLosses.unit.cpp
+        tests/WallLosses.unit.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 

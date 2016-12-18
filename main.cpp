@@ -5,7 +5,7 @@
 #include "calculator/MotorPowerFactor.h"
 #include "calculator/MotorEfficiency.h"
 #include "calculator/FixtureLosses.h"
-
+#include "calculator/WallLosses.h"
 int main() {
 
     std::cout << "Hello, World!" << std::endl;
@@ -19,6 +19,9 @@ int main() {
     psatResult.calculateExisting();
     psatResult.calculateOptimal();
 
+    WallLosses wallLosses(500.0, 80.0, 225.0, 10.0, 0.9, 1.394, 1.0);
+
+    std::cout << "Wall Losses: " << wallLosses.getHeatLoss() << std::endl;
 
     std::cout << "Pump Efficiency: " << psatResult.getExisting().pumpEfficiency_ << std::endl;
     std::cout << "Motor Rated power: " << psatResult.getExisting().motorRatedPower_ << std::endl;
