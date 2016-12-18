@@ -83,7 +83,11 @@ set(SOURCE_FILES
         src/calculator/GasLoadChargeMaterial.cpp
         src/calculator/LiquidLoadChargeMaterial.cpp
         src/calculator/SolidLoadChargeMaterial.cpp
-        src/calculator/Atmosphere.cpp src/calculator/FixtureLosses.cpp src/calculator/GasCoolingLosses.cpp src/calculator/WaterCoolingLosses.cpp src/calculator/LiquidCoolingLosses.cpp)
+        src/calculator/Atmosphere.cpp
+        src/calculator/FixtureLosses.cpp
+        src/calculator/GasCoolingLosses.cpp
+        src/calculator/WaterCoolingLosses.cpp
+        src/calculator/LiquidCoolingLosses.cpp)
 
 set(INCLUDE_FILES
     include/FieldData.h
@@ -120,14 +124,20 @@ set(INCLUDE_FILES
         include/calculator/SolidLoadChargeMaterial.h
         include/calculator/LiquidLoadChargeMaterial.h
         include/calculator/GasLoadChargeMaterial.h
-        include/calculator/Atmosphere.h include/calculator/GasCoolingLosses.h include/calculator/FixtureLosses.h include/calculator/WaterCoolingLosses.h include/calculator/LiquidCoolingLosses.h)
+        include/calculator/Atmosphere.h
+        include/calculator/GasCoolingLosses.h
+        include/calculator/FixtureLosses.h
+        include/calculator/WaterCoolingLosses.h
+        include/calculator/LiquidCoolingLosses.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
     tests/MotorEfficiency.unit.cpp
         tests/SolidLoadChargeMaterial.unit.cpp
         tests/LiquidLoadChargeMaterial.unit.cpp
-        tests/Atmosphere.unit.cpp tests/FixtureLosses.unit.cpp)
+        tests/Atmosphere.unit.cpp
+        tests/FixtureLosses.unit.cpp
+        tests/GasLoadChargeMaterial.unit.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
