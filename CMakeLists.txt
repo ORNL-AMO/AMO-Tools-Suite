@@ -89,7 +89,7 @@ set(SOURCE_FILES
         src/calculator/WaterCoolingLosses.cpp
         src/calculator/LiquidCoolingLosses.cpp
         src/calculator/LeakageLosses.cpp
-        src/calculator/WallLosses.cpp)
+        src/calculator/WallLosses.cpp src/calculator/OpeningLosses.cpp)
 
 set(INCLUDE_FILES
     include/FieldData.h
@@ -132,7 +132,7 @@ set(INCLUDE_FILES
         include/calculator/WaterCoolingLosses.h
         include/calculator/LiquidCoolingLosses.h
         include/calculator/LeakageLosses.h
-        include/calculator/WallLosses.h)
+        include/calculator/WallLosses.h include/calculator/OpeningLosses.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
