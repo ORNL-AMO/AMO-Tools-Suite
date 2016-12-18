@@ -8,7 +8,7 @@
  */
 #include "calculator/FixtureLosses.h"
 
-double FixtureLosses::getTotalHeat() {
+double FixtureLosses::getHeatLoss() {
     // return example result
     return 228750.0;
 }

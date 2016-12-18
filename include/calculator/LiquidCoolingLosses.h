@@ -1,31 +1,33 @@
 /**
  * @file
- * @brief Calculator for total energy loss for gas, including air
+ * @brief Calculator for heat losses due to liquid (not water) cooling
  *
- * This contains the inputs for calculating energy loss due to air or gas
- * total heat.
+ * This contains the inputs for calculating a liquid cooling heat loss.
  *
  * @author Gina Accawi (accawigk)
  * @bug No known bugs.
  *
  */
 
-#ifndef AMO_SUITE_GASCOOLINGLOSSES_H
-#define AMO_SUITE_GASCOOLINGLOSSES_H
-class GasCoolingLosses {
+#ifndef AMO_SUITE_LIQUIDCOOLINGLOSSES_H
+#define AMO_SUITE_LIQUIDCOOLINGLOSSES_H
+class LiquidCoolingLosses {
 public:
-    GasCoolingLosses(
+
+    LiquidCoolingLosses::LiquidCoolingLosses(
             double flowRate,
+            double density,
             double initialTemperature,
-            double finalTemperature,
+            double outletTemperature,
             double specificHeat)
             : flowRate_(flowRate),
+              density_(density),
               initialTemperature_(initialTemperature),
-              finalTemperature_(finalTemperature),
+              outletTemperature_(outletTemperature),
               specificHeat_(specificHeat)
     {}
 
-    GasCoolingLosses() = default;
+    LiquidCoolingLosses() = default;
 
     double getFlowRate() const {
         return flowRate_;
@@ -33,6 +35,14 @@ public:
 
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
+    }
+
+    double getDensity() const {
+        return density_;
+    }
+
+    void setDensity(double density) {
+        density_ = density;
     }
 
     double getInitialTemperature() const {
@@ -43,12 +53,12 @@ public:
         initialTemperature_ = initialTemperature;
     }
 
-    double getFinalTemperature() const {
-        return finalTemperature_;
+    double getOutletTemperature() const {
+        return outletTemperature_;
     }
 
-    void setFinalTemperature(double finalTemperature) {
-        finalTemperature_ = finalTemperature;
+    void setOutletTemperature(double outletTemperature) {
+        outletTemperature_ = outletTemperature;
     }
 
     double getSpecificHeat() const {
@@ -64,9 +74,11 @@ public:
 private:
     // In values
     double flowRate_;
+    double density_;
     double initialTemperature_;
-    double finalTemperature_;
+    double outletTemperature_;
     double specificHeat_;
+    // Out value
     double heatLoss_;
 };
-#endif //AMO_SUITE_GASCOOLINGLOSSES_H
+#endif //AMO_SUITE_LIQUIDCOOLINGLOSSES_H

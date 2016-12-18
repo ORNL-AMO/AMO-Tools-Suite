@@ -17,66 +17,61 @@
 class FixtureLosses {
 public:
     FixtureLosses(
-            double specificHeat_,
-            double feedRate_,
-            double initialTemperature_,
-            double finalTemperature_,
-            double correctionFactor_)
-            : specificHeat_(specificHeat_),
-              feedRate_(feedRate_),
-              initialTemperature_(initialTemperature_),
-              finalTemperature_(finalTemperature_),
-              correctionFactor_(correctionFactor_)
+            double specificHeat,
+            double feedRate,
+            double initialTemperature,
+            double finalTemperature,
+            double correctionFactor)
+            : specificHeat_(specificHeat),
+              feedRate_(feedRate),
+              initialTemperature_(initialTemperature),
+              finalTemperature_(finalTemperature),
+              correctionFactor_(correctionFactor)
     {}
 
+    FixtureLosses() = default;
 
-private:
-public:
-    double getSpecificHeat_() const {
+    double getSpecificHeat() const {
         return specificHeat_;
     }
 
-    void setSpecificHeat_(double specificHeat_) {
-        FixtureLosses::specificHeat_ = specificHeat_;
+    void setSpecificHeat(double specificHeat) {
+        specificHeat_ = specificHeat;
     }
 
-    double getFeedRate_() const {
+    double getFeedRate() const {
         return feedRate_;
     }
 
-    void setFeedRate_(double feedRate_) {
-        FixtureLosses::feedRate_ = feedRate_;
+    void setFeedRate(double feedRate) {
+        feedRate_ = feedRate;
     }
 
-    double getInitialTemperature_() const {
+    double getInitialTemperature() const {
         return initialTemperature_;
     }
 
-    void setInitialTemperature_(double initialTemperature_) {
-        FixtureLosses::initialTemperature_ = initialTemperature_;
+    void setInitialTemperature(double initialTemperature) {
+        initialTemperature_ = initialTemperature;
     }
 
-    double getFinalTemperature_() const {
+    double getFinalTemperature() const {
         return finalTemperature_;
     }
 
-    void setFinalTemperature_(double finalTemperature_) {
-        FixtureLosses::finalTemperature_ = finalTemperature_;
+    void setFinalTemperature(double finalTemperature) {
+        finalTemperature_ = finalTemperature;
     }
 
-    double getCorrectionFactor_() const {
+    double getCorrectionFactor() const {
         return correctionFactor_;
     }
 
-    void setCorrectionFactor_(double correctionFactor_) {
-        FixtureLosses::correctionFactor_ = correctionFactor_;
+    void setCorrectionFactor(double correctionFactor) {
+        correctionFactor_ = correctionFactor;
     }
 
-    void setTotalHeat(double totalHeat) {
-        FixtureLosses::totalHeat_ = totalHeat;
-    }
-
-    double getTotalHeat();
+    double getHeatLoss();
 
 private:
     // In values
@@ -87,7 +82,7 @@ private:
     double correctionFactor_;
 
     // Out values
-    double totalHeat_;
+    double heatLoss_;
 };
 
 #endif //AMO_SUITE_FIXTURELOSSES_H
