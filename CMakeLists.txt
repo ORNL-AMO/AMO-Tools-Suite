@@ -80,10 +80,12 @@ set(SOURCE_FILES
     src/calculator/Poles.cpp
     src/calculator/PumpEfficiency.cpp
     src/calculator/PumpShaftPower.cpp
-        src/calculator/GasLoadChargeMaterial.cpp
-        src/calculator/LiquidLoadChargeMaterial.cpp
-        src/calculator/SolidLoadChargeMaterial.cpp
-        src/calculator/Atmosphere.cpp)
+    src/calculator/GasLoadChargeMaterial.cpp
+    src/calculator/LiquidLoadChargeMaterial.cpp
+    src/calculator/SolidLoadChargeMaterial.cpp
+    src/calculator/Atmosphere.cpp
+    src/sqlite/SQLite.cpp
+)
 
 set(INCLUDE_FILES
     include/FieldData.h
@@ -116,20 +118,26 @@ set(INCLUDE_FILES
     include/calculator/Poles.h
     include/calculator/PumpEfficiency.h
     include/calculator/PumpShaftPower.h
-        include/calculator/LoadChargeMaterial.h
-        include/calculator/SolidLoadChargeMaterial.h
-        include/calculator/LiquidLoadChargeMaterial.h
-        include/calculator/GasLoadChargeMaterial.h
-        include/calculator/Atmosphere.h)
+    include/calculator/LoadChargeMaterial.h
+    include/calculator/SolidLoadChargeMaterial.h
+    include/calculator/LiquidLoadChargeMaterial.h
+    include/calculator/GasLoadChargeMaterial.h
+    include/calculator/Atmosphere.h
+    include/sqlite/SQLite.h
+)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
     tests/MotorEfficiency.unit.cpp
-        tests/SolidLoadChargeMaterial.unit.cpp
-        tests/LiquidLoadChargeMaterial.unit.cpp
-    )
+    tests/SolidLoadChargeMaterial.unit.cpp
+    tests/LiquidLoadChargeMaterial.unit.cpp
+)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
+
+# Add SQLite project
+include_directories(${CMAKE_SOURCE_DIR}/third_party/sqlite/ SYSTEM)
+add_subdirectory(third_party/sqlite)
 
 if (MINGW)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
@@ -138,6 +146,8 @@ endif ()
 
 # Create amo_suite static library
 add_library(amo_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
+
+target_link_libraries( amo_suite sqlite )
 
 # Create command line amo_suite program
 add_executable(amo_suite_main main.cpp)

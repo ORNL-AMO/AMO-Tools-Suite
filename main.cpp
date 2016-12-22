@@ -3,6 +3,7 @@
 #include "PSATResult.h"
 #include "calculator/MotorPowerFactor.h"
 #include "calculator/MotorEfficiency.h"
+#include "sqlite/SQLite.h"
 
 int main() {
 
@@ -43,6 +44,11 @@ int main() {
 
     std::cout << "getAnnualSavingsPotential: " << psatResult.getAnnualSavingsPotential() << std::endl;
     std::cout << "getOptimizationRating: " << psatResult.getOptimizationRating() << std::endl;
+
+    SQLite test_db("test_db.sql");
+    test_db.insert_test_into_sqlite(1, "test1", "test_1", 0, 1);
+    test_db.insert_test_into_sqlite(2, "test2", "test_2", -100, 100);
+    test_db.insert_test_into_sqlite(3, "test3", "test_3", -0.5, 0.5);
 
 }
 
