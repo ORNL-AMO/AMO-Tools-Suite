@@ -254,4 +254,4 @@ std::vector<double> MotorEfficiency25::calculate() {
     motorEfficiency_[4] = 0.99 * motorEfficiency_[3];
 
     return motorEfficiency_;
-};
+}

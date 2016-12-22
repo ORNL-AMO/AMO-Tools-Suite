@@ -1,10 +1,16 @@
 #include <iostream>
 #include <iomanip>
+#include <calculator/FixtureLosses.h>
 #include "PSATResult.h"
 #include "calculator/MotorPowerFactor.h"
 #include "calculator/MotorEfficiency.h"
+<<<<<<< HEAD
 #include "sqlite/SQLite.h"
 
+=======
+#include "calculator/FixtureLosses.h"
+#include "calculator/WallLosses.h"
+>>>>>>> develop
 int main() {
 
     std::cout << "Hello, World!" << std::endl;
@@ -17,6 +23,10 @@ int main() {
     PSATResult psatResult(pump,motor,financial,fieldData);
     psatResult.calculateExisting();
     psatResult.calculateOptimal();
+
+    WallLosses wallLosses(500.0, 80.0, 225.0, 10.0, 0.9, 1.394, 1.0);
+
+    std::cout << "Wall Losses: " << wallLosses.getHeatLoss() << std::endl;
 
     std::cout << "Pump Efficiency: " << psatResult.getExisting().pumpEfficiency_ << std::endl;
     std::cout << "Motor Rated power: " << psatResult.getExisting().motorRatedPower_ << std::endl;
