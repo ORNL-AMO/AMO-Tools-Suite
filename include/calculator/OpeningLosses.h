@@ -17,6 +17,76 @@ public:
         RECTANGULAR
     };
 
+    OpeningLosses(double emissivity,
+                  double diameterWidth,
+                  double thickness,
+                  double ratio,
+                  double ambientTemperature,
+                  double insideTemperature,
+                  double percentTimeOpen,
+                  double viewFactor,
+                  OpeningShape openingShape)
+            : emissivity_(emissivity),
+              diameter_(diameterWidth),
+              thickness_(thickness), ratio_(ratio),
+              ambientTemperature_(ambientTemperature),
+              insideTemperature_(insideTemperature),
+              percentTimeOpen_(percentTimeOpen),
+              viewFactor_(viewFactor),
+              openingShape_(openingShape)
+    {
+        if (openingShape == OpeningShape::CIRCULAR) {
+            diameter_ = diameterWidth;
+        } else {
+            width_ = diameterWidth;
+        }
+    }
+
+    OpeningLosses(double diameterWidth,
+                  double thickness,
+                  double ratio,
+                  double ambientTemperature,
+                  double insideTemperature,
+                  double percentTimeOpen,
+                  double viewFactor,
+                  OpeningShape openingShape)
+            : diameter_(diameterWidth),
+              thickness_(thickness), ratio_(ratio),
+              ambientTemperature_(ambientTemperature),
+              insideTemperature_(insideTemperature),
+              percentTimeOpen_(percentTimeOpen),
+              viewFactor_(viewFactor),
+              openingShape_(openingShape)
+    {
+        if (openingShape == OpeningShape::CIRCULAR) {
+            diameter_ = diameterWidth;
+        } else {
+            width_ = diameterWidth;
+        }
+    }
+
+    OpeningLosses(double diameterWidth,
+                  double thickness,
+                  double ambientTemperature,
+                  double insideTemperature,
+                  double percentTimeOpen,
+                  OpeningShape openingShape)
+            : diameter_(diameterWidth),
+              thickness_(thickness),
+              ambientTemperature_(ambientTemperature),
+              insideTemperature_(insideTemperature),
+              percentTimeOpen_(percentTimeOpen),
+              openingShape_(openingShape)
+    {
+        if (openingShape == OpeningShape::CIRCULAR) {
+            diameter_ = diameterWidth;
+        } else {
+            width_ = diameterWidth;
+        }
+        ratio_ = diameterWidth / thickness_;
+    }
+
+
     OpeningLosses() = default;
 
     double getEmissivity() const {

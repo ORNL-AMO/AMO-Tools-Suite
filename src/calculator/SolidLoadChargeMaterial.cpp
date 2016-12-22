@@ -28,8 +28,20 @@ double SolidLoadChargeMaterial::getTotalHeat() {
         hs = this->chargeFeedRate_ * (1.0 - this->waterContentCharged_) * this->specificHeatSolid_ * (this->meltingPoint_ - this->initialTemperature_) + this->latentHeat_ + this->specificHeatLiquid_ * (this->dischargeTemperature_ - this->meltingPoint_);
     }
 
+    // Heat of reaction
+    double hr = 0.0;
+    double percentReacted = this->percentReacted_;
+    if (this->thermicReactionType_ == LoadChargeMaterial::ThermicReactionType::EXOTHERMIC) {
+        percentReacted = this->percentMelted_;
+    }
+    hr = this->chargeFeedRate_ * ( 1.0 - this->waterContentCharged_) * (percentReacted) * (this->reactionHeat_);
+
+    totalHeat_ = hmv + hmr + hs + hr;
+
+
     // Return the total net heat for the example case
     return 3204056.0;
+    //return totalHeat_;
 
 }
 

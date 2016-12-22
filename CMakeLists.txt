@@ -138,6 +138,7 @@ set(INCLUDE_FILES
     include/calculator/WallLosses.h
     include/calculator/OpeningLosses.h
     include/sqlite/SQLite.h
+    include/calculator/FlueGas.h
 )
 
 set(TEST_FILES
@@ -153,6 +154,7 @@ set(TEST_FILES
     tests/WaterCoolingLosses.unit.cpp
     tests/LeakageLosses.unit.cpp
     tests/WallLosses.unit.cpp
+    tests/OpeningLosses.unit.cpp
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)

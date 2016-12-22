@@ -17,6 +17,8 @@
 
 #include "LoadChargeMaterial.h"
 
+#define WATER_EVAPORATION 970.0
+
 class SolidLoadChargeMaterial {
 public:
 
