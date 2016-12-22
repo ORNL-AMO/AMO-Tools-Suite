@@ -80,25 +80,19 @@ set(SOURCE_FILES
     src/calculator/Poles.cpp
     src/calculator/PumpEfficiency.cpp
     src/calculator/PumpShaftPower.cpp
-<<<<<<< HEAD
     src/calculator/GasLoadChargeMaterial.cpp
     src/calculator/LiquidLoadChargeMaterial.cpp
     src/calculator/SolidLoadChargeMaterial.cpp
     src/calculator/Atmosphere.cpp
+    src/calculator/FixtureLosses.cpp
+    src/calculator/GasCoolingLosses.cpp
+    src/calculator/WaterCoolingLosses.cpp
+    src/calculator/LiquidCoolingLosses.cpp
+    src/calculator/LeakageLosses.cpp
+    src/calculator/WallLosses.cpp
+    src/calculator/OpeningLosses.cpp
     src/sqlite/SQLite.cpp
 )
-=======
-        src/calculator/GasLoadChargeMaterial.cpp
-        src/calculator/LiquidLoadChargeMaterial.cpp
-        src/calculator/SolidLoadChargeMaterial.cpp
-        src/calculator/Atmosphere.cpp
-        src/calculator/FixtureLosses.cpp
-        src/calculator/GasCoolingLosses.cpp
-        src/calculator/WaterCoolingLosses.cpp
-        src/calculator/LiquidCoolingLosses.cpp
-        src/calculator/LeakageLosses.cpp
-        src/calculator/WallLosses.cpp src/calculator/OpeningLosses.cpp)
->>>>>>> develop
 
 set(INCLUDE_FILES
     include/FieldData.h
@@ -131,47 +125,35 @@ set(INCLUDE_FILES
     include/calculator/Poles.h
     include/calculator/PumpEfficiency.h
     include/calculator/PumpShaftPower.h
-<<<<<<< HEAD
     include/calculator/LoadChargeMaterial.h
     include/calculator/SolidLoadChargeMaterial.h
     include/calculator/LiquidLoadChargeMaterial.h
     include/calculator/GasLoadChargeMaterial.h
     include/calculator/Atmosphere.h
+    include/calculator/GasCoolingLosses.h
+    include/calculator/FixtureLosses.h
+    include/calculator/WaterCoolingLosses.h
+    include/calculator/LiquidCoolingLosses.h
+    include/calculator/LeakageLosses.h
+    include/calculator/WallLosses.h
+    include/calculator/OpeningLosses.h
     include/sqlite/SQLite.h
 )
-=======
-        include/calculator/LoadChargeMaterial.h
-        include/calculator/SolidLoadChargeMaterial.h
-        include/calculator/LiquidLoadChargeMaterial.h
-        include/calculator/GasLoadChargeMaterial.h
-        include/calculator/Atmosphere.h
-        include/calculator/GasCoolingLosses.h
-        include/calculator/FixtureLosses.h
-        include/calculator/WaterCoolingLosses.h
-        include/calculator/LiquidCoolingLosses.h
-        include/calculator/LeakageLosses.h
-        include/calculator/WallLosses.h include/calculator/OpeningLosses.h)
->>>>>>> develop
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
     tests/MotorEfficiency.unit.cpp
-<<<<<<< HEAD
     tests/SolidLoadChargeMaterial.unit.cpp
     tests/LiquidLoadChargeMaterial.unit.cpp
+    tests/Atmosphere.unit.cpp
+    tests/FixtureLosses.unit.cpp
+    tests/GasLoadChargeMaterial.unit.cpp
+    tests/GasCoolingLosses.unit.cpp
+    tests/LiquidCoolingLosses.unit.cpp
+    tests/WaterCoolingLosses.unit.cpp
+    tests/LeakageLosses.unit.cpp
+    tests/WallLosses.unit.cpp
 )
-=======
-        tests/SolidLoadChargeMaterial.unit.cpp
-        tests/LiquidLoadChargeMaterial.unit.cpp
-        tests/Atmosphere.unit.cpp
-        tests/FixtureLosses.unit.cpp
-        tests/GasLoadChargeMaterial.unit.cpp
-        tests/GasCoolingLosses.unit.cpp
-        tests/LiquidCoolingLosses.unit.cpp
-        tests/WaterCoolingLosses.unit.cpp
-        tests/LeakageLosses.unit.cpp
-        tests/WallLosses.unit.cpp)
->>>>>>> develop
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 

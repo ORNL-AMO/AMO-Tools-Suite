@@ -4,13 +4,10 @@
 #include "PSATResult.h"
 #include "calculator/MotorPowerFactor.h"
 #include "calculator/MotorEfficiency.h"
-<<<<<<< HEAD
-#include "sqlite/SQLite.h"
-
-=======
 #include "calculator/FixtureLosses.h"
 #include "calculator/WallLosses.h"
->>>>>>> develop
+#include "sqlite/SQLite.h"
+
 int main() {
 
     std::cout << "Hello, World!" << std::endl;
