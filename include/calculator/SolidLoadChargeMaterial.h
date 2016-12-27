@@ -18,6 +18,8 @@
 #include "LoadChargeMaterial.h"
 
 #define WATER_EVAPORATION 970.0
+#define SPECIFIC_HEAT_WATER_VAPOR 0.481
+#define HEAT_REQUIRED_TEMP 212.0
 
 class SolidLoadChargeMaterial {
 public:
@@ -64,13 +66,13 @@ public:
         specificHeatLiquid_(specificHeatLiquid),
         meltingPoint_(meltingPoint),
         chargeFeedRate_(chargeFeedRate),
-        waterContentCharged_(waterContentCharged),
-        waterContentDischarged_(waterContentDischarged),
+        waterContentCharged_(waterContentCharged / 100.0),
+        waterContentDischarged_(waterContentDischarged / 100.0),
         initialTemperature_(initialTemperature),
         dischargeTemperature_(dischargeTemperature),
         waterVaporDischargeTemperature_(waterVaporDischargeTemperature),
-        percentMelted_(chargeMelted),
-        percentReacted_(chargedReacted),
+        percentMelted_(chargeMelted / 100.0),
+        percentReacted_(chargedReacted / 100.0),
         reactionHeat_(reactionHeat),
         additionalHeat_(additionalHeat)
     {}
@@ -126,19 +128,19 @@ public:
     }
 
     double getWaterContentCharged() const {
-        return waterContentCharged_;
+        return waterContentCharged_ * 100.0;
     }
 
     void setWaterContentCharged(double waterContentCharged) {
-        waterContentCharged_ = waterContentCharged;
+        waterContentCharged_ = waterContentCharged / 100.0;
     }
 
     double getWaterContentDischarged() const {
-        return waterContentDischarged_;
+        return waterContentDischarged_ * 100.0;
     }
 
     void setWaterContentDischarged(double waterContentDischarged) {
-        waterContentDischarged_ = waterContentDischarged;
+        waterContentDischarged_ = waterContentDischarged / 100.0;
     }
 
     double getInitialTemperature() const {
@@ -166,19 +168,19 @@ public:
     }
 
     double getChargeMelted() const {
-        return percentMelted_;
+        return percentMelted_ * 100.0;
     }
 
     void setChargeMelted(double chargeMelted) {
-        percentMelted_ = chargeMelted;
+        percentMelted_ = chargeMelted / 100.0;
     }
 
     double getChargedReacted() const {
-        return percentReacted_;
+        return percentReacted_ * 100.0;
     }
 
     void setChargedReacted(double chargedReacted) {
-        percentReacted_ = chargedReacted;
+        percentReacted_ = chargedReacted / 100.0;
     }
 
     double getReactionHeat() const {
