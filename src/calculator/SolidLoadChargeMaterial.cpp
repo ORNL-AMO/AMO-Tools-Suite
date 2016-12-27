@@ -35,14 +35,14 @@ double SolidLoadChargeMaterial::getTotalHeat() {
 
     // Heat of reaction
     double hr = 0.0;
+    // H_r=m_st (1-%w_i )×(%react)×h_react
+    // Hr ignored when exothermic
+
     double percentReacted = this->percentReacted_;
     if (this->thermicReactionType_ == LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC) {
         percentReacted = this->reactionHeat_;
         hr = this->chargeFeedRate_ * ( 1.0 - this->waterContentCharged_) * (percentReacted) * (this->reactionHeat_);
     }
-    // H_r=m_st (1-%w_i )×(%react)×h_react
-    // Hr ignored when exothermic
-    //hr = this->chargeFeedRate_ * ( 1.0 - this->waterContentCharged_) * (percentReacted) * (this->reactionHeat_);
     // H_t=H_mv+H_mr+H_s±H_r
     totalHeat_ = hmv + hmr + hs + hr + this->additionalHeat_;
     return totalHeat_;

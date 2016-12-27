@@ -14,6 +14,7 @@
 #define AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
 
 #include "LoadChargeMaterial.h"
+#define MOISTURE_BOILING_POINT 210.0
 
 class LiquidLoadChargeMaterial {
 
@@ -58,8 +59,8 @@ public:
               chargeFeedRate_(chargeFeedRate),
               initialTemperature_(initialTemperature),
               dischargeTemperature_(dischargeTemperature),
-              percentVaporized_(percentVaporized),
-              percentReacted_(percentReacted),
+              percentVaporized_(percentVaporized / 100.0),
+              percentReacted_(percentReacted / 100.0),
               reactionHeat_(reactionHeat),
               additionalHeat_(additionalHeat)
     {}
@@ -131,19 +132,19 @@ public:
     }
 
     double getPercentVaporized() const {
-        return percentVaporized_;
+        return percentVaporized_ * 100.0;
     }
 
     void setPercentVaporized(double percentVaporized) {
-        percentVaporized_ = percentVaporized;
+        percentVaporized_ = percentVaporized / 100.0;
     }
 
     double getPercentReacted() const {
-        return percentReacted_;
+        return percentReacted_ * 100.0;
     }
 
     void setPercentReacted(double percentReacted) {
-        percentReacted_ = percentReacted;
+        percentReacted_ = percentReacted / 100.0;
     }
 
     double getReactionHeat() const {

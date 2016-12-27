@@ -18,7 +18,6 @@
 #include "LoadChargeMaterial.h"
 
 #define WATER_EVAPORATION 970.0
-#define SPECIFIC_HEAT_WATER_VAPOR 0.481
 #define HEAT_REQUIRED_TEMP 212.0
 
 class SolidLoadChargeMaterial {
