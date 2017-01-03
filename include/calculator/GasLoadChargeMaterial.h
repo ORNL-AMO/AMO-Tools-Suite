@@ -49,11 +49,11 @@ public:
             : thermicReactionType_(thermicReactionType),
               specificHeatGas_(specificHeatGas),
               feedRate_(feedRate),
-              percentVapor_(percentVapor),
+              percentVapor_(percentVapor / 100.0),
               initialTemperature_(initialTemperature),
               dischargeTemperature_(dischargeTemperature),
               specificHeatVapor_(specificHeatVapor),
-              percentReacted_(percentReacted),
+              percentReacted_(percentReacted / 100.0),
               reactionHeat_(reactionHeat),
               additionalHeat_(additionalHeat)
     {}
@@ -109,11 +109,11 @@ public:
     }
 
     double getPercentReacted() const {
-        return percentReacted_;
+        return percentReacted_ * 100.0;
     }
 
     void setPercentReacted(double percentReacted) {
-        percentReacted_ = percentReacted;
+        percentReacted_ = percentReacted / 100.0;
     }
 
     double getReactionHeat() const {
@@ -137,11 +137,11 @@ public:
     }
 
     double getPercentVapor() const {
-        return percentVapor_;
+        return percentVapor_ * 100.0;
     }
 
     void setPercentVapor(double percentVapor) {
-        percentVapor_ = percentVapor;
+        percentVapor_ = percentVapor / 100.0;
     }
 
     double getTotalHeat();
