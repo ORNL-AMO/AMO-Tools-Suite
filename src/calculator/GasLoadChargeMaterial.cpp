@@ -10,5 +10,14 @@
 
 double GasLoadChargeMaterial::getTotalHeat() {
     // return the total net heat for the example case
-    return 383530.0;
+
+    double tempDiff = this->dischargeTemperature_ - this->initialTemperature_;
+    double hgas = (1.0 - this->percentVapor_) * this->feedRate_ * this->specificHeatGas_ * tempDiff;
+    double hvapor = this->percentVapor_ * this->feedRate_ * this->specificHeatVapor_ * tempDiff;
+    double hreact = this->feedRate_ * this->percentReacted_ * this->reactionHeat_;
+    if (this->thermicReactionType_ == LoadChargeMaterial::ThermicReactionType::EXOTHERMIC) {
+        hreact *= -1.0;
+    }
+
+    return hgas + hvapor + hreact + this->additionalHeat_;
 }
