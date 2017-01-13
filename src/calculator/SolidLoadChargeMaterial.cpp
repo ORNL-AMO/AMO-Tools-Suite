@@ -44,8 +44,8 @@ double SolidLoadChargeMaterial::getTotalHeat() {
         hr = this->chargeFeedRate_ * ( 1.0 - this->waterContentCharged_) * (percentReacted) * (this->reactionHeat_);
     }
     // H_t=H_mv+H_mr+H_s±H_r
-    totalHeat_ = hmv + hmr + hs + hr + this->additionalHeat_;
-    return totalHeat_;
+    this->totalHeat_ = hmv + hmr + hs + hr + this->additionalHeat_;
+    return this->totalHeat_;
 
 }
 
