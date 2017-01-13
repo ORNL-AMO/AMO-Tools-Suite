@@ -14,15 +14,16 @@
 #define AMO_SUITE_GASCOOLINGLOSSES_H
 class GasCoolingLosses {
 public:
-    GasCoolingLosses(
-            double flowRate,
-            double initialTemperature,
-            double finalTemperature,
-            double specificHeat)
+    GasCoolingLosses(double flowRate,
+                     double initialTemperature,
+                     double finalTemperature,
+                     double specificHeat,
+                     double correctionFactor)
             : flowRate_(flowRate),
               initialTemperature_(initialTemperature),
               finalTemperature_(finalTemperature),
-              specificHeat_(specificHeat)
+              specificHeat_(specificHeat),
+              correctionFactor_(correctionFactor)
     {}
 
     GasCoolingLosses() = default;
@@ -59,6 +60,14 @@ public:
         specificHeat_ = specificHeat;
     }
 
+    double getCorrectionFactor() const {
+        return correctionFactor_;
+    }
+
+    void setCorrectionFactor(double correctionFactor) {
+        correctionFactor_ = correctionFactor;
+    }
+
     double getHeatLoss();
 
 private:
@@ -67,6 +76,7 @@ private:
     double initialTemperature_;
     double finalTemperature_;
     double specificHeat_;
+    double correctionFactor_;
     double heatLoss_;
 };
 #endif //AMO_SUITE_GASCOOLINGLOSSES_H
