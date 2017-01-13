@@ -13,6 +13,8 @@
 #ifndef AMO_SUITE_ATMOSPHERE_H
 #define AMO_SUITE_ATMOSPHERE_H
 
+#define REFERENCE_TEMPERATURE 60.0
+
 class Atmosphere {
 public:
 

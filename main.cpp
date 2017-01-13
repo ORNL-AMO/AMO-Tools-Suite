@@ -7,7 +7,7 @@
 #include "calculator/FixtureLosses.h"
 #include "calculator/WallLosses.h"
 #include "sqlite/SQLite.h"
-#include "calculator/GasLoadChargeMaterial.h"
+#include "calculator/Atmosphere.h"
 
 int main() {
 
@@ -21,9 +21,8 @@ int main() {
     PSATResult psatResult(pump,motor,financial,fieldData);
     psatResult.calculateExisting();
     psatResult.calculateOptimal();
-
+    Atmosphere atmosphere(100.0, 1400.0, 1200.0, 1.0, 0.02);
     WallLosses wallLosses(500.0, 80.0, 225.0, 10.0, 0.9, 1.394, 1.0);
-    GasLoadChargeMaterial gasLoadChargeMaterial(LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC, 0.24, 1000.0, 15.0, 80.0, 1150.0, 0.5, 100.0, 80.0, 5000.0);
 
     std::cout << "Wall Losses: " << wallLosses.getHeatLoss() << std::endl;
 

@@ -26,7 +26,7 @@ double LiquidLoadChargeMaterial::getTotalHeat() {
     } else {
         hex = this->additionalHeat_;
     }
-    totalHeat_ = hliq + hr + hex;
+    this->totalHeat_ = hliq + hr + hex;
     // Return the total net heat for the example case
-    return totalHeat_;
+    return this->totalHeat_;
 }
