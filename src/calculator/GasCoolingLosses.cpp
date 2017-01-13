@@ -10,5 +10,6 @@
 
 double GasCoolingLosses::getHeatLoss() {
 // return the heat loss for the air test case
-    return 600000.0;
+    this->heatLoss_ = (this->flowRate_ * 60.0) * this->specificHeat_ * (this->finalTemperature_ - this->initialTemperature_) * this->correctionFactor_;
+    return this->heatLoss_;
 }
