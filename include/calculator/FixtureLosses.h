@@ -27,7 +27,9 @@ public:
               initialTemperature_(initialTemperature),
               finalTemperature_(finalTemperature),
               correctionFactor_(correctionFactor)
-    {}
+    {
+        heatLoss_ = 0.0;
+    }
 
     FixtureLosses() = default;
 

@@ -19,7 +19,7 @@ class GasLoadChargeMaterial {
 public:
 
     /**
-     * Constructor fort the gas load/charge material with all inputs specified
+     * Constructor for the gas load/charge material with all inputs specified
      *
      * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
      * @param specificHeatGas Specific Heat of Gas in Btu/(lb- °F)
@@ -56,7 +56,9 @@ public:
               percentReacted_(percentReacted / 100.0),
               reactionHeat_(reactionHeat),
               additionalHeat_(additionalHeat)
-    {}
+    {
+        totalHeat_ = 0.0;
+    }
 
     GasLoadChargeMaterial() = default;
 

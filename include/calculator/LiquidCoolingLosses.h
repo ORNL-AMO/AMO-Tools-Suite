@@ -25,7 +25,9 @@ public:
               initialTemperature_(initialTemperature),
               outletTemperature_(outletTemperature),
               specificHeat_(specificHeat)
-    {}
+    {
+        heatLoss_ = 0.0;
+    }
 
     LiquidCoolingLosses() = default;
 

@@ -19,7 +19,9 @@ public:
             : flowRate_(flowRate),
               initialTemperature_(initialTemperature),
               outletTemperature_( outletTemperature)
-    {}
+    {
+        heatLoss_ = 0.0;
+    }
 
     WaterCoolingLosses() = default;
 

@@ -30,7 +30,9 @@ public:
               surfaceEmissivity_(surfaceEmissivity),
               conditionFactor_(conditionFactor),
               correctionFactor_(correctionFactor)
-    {}
+    {
+        heatLoss_ = 0.0;
+    }
 
     WallLosses() = default;
 
