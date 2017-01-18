@@ -10,15 +10,17 @@
  */
 #ifndef AMO_SUITE_WATERCOOLINGLOSSES_H
 #define AMO_SUITE_WATERCOOLINGLOSSES_H
+
 class WaterCoolingLosses {
 public:
-    WaterCoolingLosses(
-            double flowRate,
-            double initialTemperature,
-            double outletTemperature)
+    WaterCoolingLosses(double flowRate,
+                       double initialTemperature,
+                       double outletTemperature,
+                       double correctionFactor)
             : flowRate_(flowRate),
               initialTemperature_(initialTemperature),
-              outletTemperature_( outletTemperature)
+              outletTemperature_( outletTemperature),
+              correctionFactor_(correctionFactor)
     {
         heatLoss_ = 0.0;
     }
@@ -56,6 +58,7 @@ private:
     double flowRate_;
     double initialTemperature_;
     double outletTemperature_;
+    double correctionFactor_;
     // Out value
     double heatLoss_;
 };
