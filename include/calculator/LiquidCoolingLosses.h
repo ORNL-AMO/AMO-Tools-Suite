@@ -14,18 +14,21 @@
 class LiquidCoolingLosses {
 public:
 
-    LiquidCoolingLosses(
-            double flowRate,
-            double density,
-            double initialTemperature,
-            double outletTemperature,
-            double specificHeat)
+    LiquidCoolingLosses(double flowRate,
+                        double density,
+                        double initialTemperature,
+                        double outletTemperature,
+                        double specificHeat,
+                        double correctionFactor)
             : flowRate_(flowRate),
               density_(density),
               initialTemperature_(initialTemperature),
               outletTemperature_(outletTemperature),
-              specificHeat_(specificHeat)
-    {}
+              specificHeat_(specificHeat),
+              correctionFactor_(correctionFactor)
+    {
+        heatLoss_ = 0.0;
+    }
 
     LiquidCoolingLosses() = default;
 
@@ -78,6 +81,7 @@ private:
     double initialTemperature_;
     double outletTemperature_;
     double specificHeat_;
+    double correctionFactor_;
     // Out value
     double heatLoss_;
 };

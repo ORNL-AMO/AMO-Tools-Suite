@@ -21,7 +21,7 @@ int main() {
     PSATResult psatResult(pump,motor,financial,fieldData);
     psatResult.calculateExisting();
     psatResult.calculateOptimal();
-    Atmosphere atmosphere(100.0, 1400.0, 1200.0, 1.0, 0.02);
+    Atmosphere atmosphere(100.0, 1400.0, 1200.0, 0.02, 1.0);
     WallLosses wallLosses(500.0, 80.0, 225.0, 10.0, 0.9, 1.394, 1.0);
 
     std::cout << "Wall Losses: " << wallLosses.getHeatLoss() << std::endl;
