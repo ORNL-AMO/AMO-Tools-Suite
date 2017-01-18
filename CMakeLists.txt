@@ -155,7 +155,7 @@ set(TEST_FILES
     tests/LeakageLosses.unit.cpp
     tests/WallLosses.unit.cpp
     tests/OpeningLosses.unit.cpp
-)
+        tests/FlueGas.unit.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
