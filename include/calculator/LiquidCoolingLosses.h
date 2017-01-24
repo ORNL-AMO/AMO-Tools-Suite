@@ -13,6 +13,7 @@
 #define AMO_SUITE_LIQUIDCOOLINGLOSSES_H
 class LiquidCoolingLosses {
 public:
+<<<<<<< HEAD
     /**
      * Constructor
      * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
@@ -28,12 +29,24 @@ public:
             double initialTemperature,
             double outletTemperature,
             double specificHeat)
+=======
+
+    LiquidCoolingLosses(double flowRate,
+                        double density,
+                        double initialTemperature,
+                        double outletTemperature,
+                        double specificHeat,
+                        double correctionFactor)
+>>>>>>> develop
             : flowRate_(flowRate),
               density_(density),
               initialTemperature_(initialTemperature),
               outletTemperature_(outletTemperature),
-              specificHeat_(specificHeat)
-    {}
+              specificHeat_(specificHeat),
+              correctionFactor_(correctionFactor)
+    {
+        heatLoss_ = 0.0;
+    }
 
     LiquidCoolingLosses() = default;
 
@@ -86,6 +99,7 @@ private:
     double initialTemperature_;
     double outletTemperature_;
     double specificHeat_;
+    double correctionFactor_;
     // Out value
     double heatLoss_;
 };

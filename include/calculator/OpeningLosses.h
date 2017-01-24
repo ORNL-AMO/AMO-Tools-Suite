@@ -52,6 +52,7 @@ public:
         } else {
             width_ = diameterWidth;
         }
+        heatLoss_ = 0.0;
     }
 
     OpeningLosses(double diameterWidth,
@@ -75,6 +76,7 @@ public:
         } else {
             width_ = diameterWidth;
         }
+        heatLoss_ = 0.0;
     }
 
     OpeningLosses(double diameterWidth,
@@ -96,6 +98,7 @@ public:
             width_ = diameterWidth;
         }
         ratio_ = diameterWidth / thickness_;
+        heatLoss_ = 0.0;
     }
 
 

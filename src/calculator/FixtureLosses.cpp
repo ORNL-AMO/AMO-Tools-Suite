@@ -9,6 +9,6 @@
 #include "calculator/FixtureLosses.h"
 
 double FixtureLosses::getHeatLoss() {
-    // return example result
-    return 228750.0;
+    this->heatLoss_ = this->feedRate_ * this->specificHeat_ * (this->finalTemperature_ - this->initialTemperature_) * this->correctionFactor_;
+    return this->heatLoss_;
 }

@@ -14,6 +14,7 @@
 #define AMO_SUITE_GASCOOLINGLOSSES_H
 class GasCoolingLosses {
 public:
+<<<<<<< HEAD
 
     /**
      * Constructor
@@ -28,11 +29,33 @@ public:
             double initialTemperature,
             double finalTemperature,
             double specificHeat)
+=======
+    /**
+     * Constructor for the gas cooling losses (including air) with all inputs specified
+     *
+     * @param flowRate Air or gas volumetric flow rate in SCFM (ft³/min)
+     * @param initialTemperature Inlet temperature of air or gas in °F
+     * @param finalTemperature Outlet temperature of air or gas in °F
+     * @param specificHeat Specific heat of gas or air at average air temperature in Btu/(scf F)
+     * @param correctionFactor Correction factor
+     *
+     * */
+
+
+    GasCoolingLosses(double flowRate,
+                     double initialTemperature,
+                     double finalTemperature,
+                     double specificHeat,
+                     double correctionFactor)
+>>>>>>> develop
             : flowRate_(flowRate),
               initialTemperature_(initialTemperature),
               finalTemperature_(finalTemperature),
-              specificHeat_(specificHeat)
-    {}
+              specificHeat_(specificHeat),
+              correctionFactor_(correctionFactor)
+    {
+        heatLoss_ = 0.0;
+    }
 
     GasCoolingLosses() = default;
 
@@ -68,6 +91,14 @@ public:
         specificHeat_ = specificHeat;
     }
 
+    double getCorrectionFactor() const {
+        return correctionFactor_;
+    }
+
+    void setCorrectionFactor(double correctionFactor) {
+        correctionFactor_ = correctionFactor;
+    }
+
     double getHeatLoss();
 
 private:
@@ -76,6 +107,7 @@ private:
     double initialTemperature_;
     double finalTemperature_;
     double specificHeat_;
+    double correctionFactor_;
     double heatLoss_;
 };
 #endif //AMO_SUITE_GASCOOLINGLOSSES_H

@@ -41,7 +41,9 @@ public:
               coefficient_(coefficient),
               specificGravity_(specificGravity),
               correctionFactor_(correctionFactor)
-    {}
+    {
+        exfiltratedGasesHeatContent_ = 0.0;
+    }
 
     LeakageLosses() = default;
 

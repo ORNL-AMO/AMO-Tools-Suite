@@ -19,5 +19,6 @@ double GasLoadChargeMaterial::getTotalHeat() {
         hreact *= -1.0;
     }
 
-    return hgas + hvapor + hreact + this->additionalHeat_;
+    this->totalHeat_ =  hgas + hvapor + hreact + this->additionalHeat_;
+    return this->totalHeat_;
 }

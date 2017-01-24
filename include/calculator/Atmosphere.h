@@ -2,7 +2,7 @@
  * @file
  * @brief Calculator for heat required for atmosphere
  *
- * This contains the inputs for calculating a the heat required for atmosphere
+ * This contains the inputs for calculating a the heat loss for atmosphere
  * total heat.
  *
  * @author Gina Accawi (accawigk)
@@ -13,9 +13,12 @@
 #ifndef AMO_SUITE_ATMOSPHERE_H
 #define AMO_SUITE_ATMOSPHERE_H
 
+#define REFERENCE_TEMPERATURE 60.0
+
 class Atmosphere {
 public:
     /**
+<<<<<<< HEAD
      * Constructor
      * @param inletTemperature
      * @param outletTemperature
@@ -30,12 +33,30 @@ public:
             double flowRate,
             double correctionFactor,
             double specificHeat)
+=======
+     * Constructor for the atmospheric heat loss with all inputs specified
+     *
+     * @param inletTemperature Inlet temperature of gasses in °F
+     * @param outletTemperature Outlet temperature of gasses in °F
+     * @param flowRate Flow rate of gasses in scfh
+     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @param correctionFactor Correction factor
+     *
+     * */
+    Atmosphere(double inletTemperature,
+               double outletTemperature,
+               double flowRate,
+               double specificHeat,
+               double correctionFactor)
+>>>>>>> develop
             : inletTemperature_(inletTemperature),
               outletTemperature_(outletTemperature),
               flowRate_(flowRate),
               correctionFactor_(correctionFactor),
               specificHeat_(specificHeat)
-    {}
+    {
+        totalHeat_ = 0.0;
+    }
 
     Atmosphere() = default;
 

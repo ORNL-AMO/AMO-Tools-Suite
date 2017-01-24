@@ -63,7 +63,9 @@ public:
               percentReacted_(percentReacted / 100.0),
               reactionHeat_(reactionHeat),
               additionalHeat_(additionalHeat)
-    {}
+    {
+        totalHeat_ = 0.0;
+    }
 
     LiquidLoadChargeMaterial() = default;
 
