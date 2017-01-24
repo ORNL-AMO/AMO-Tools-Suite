@@ -12,6 +12,14 @@
 #define AMO_SUITE_WATERCOOLINGLOSSES_H
 class WaterCoolingLosses {
 public:
+
+    /**
+     * Constructor
+     * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
+     * @param initialTemperature Initial temperature in °F.
+     * @param outletTemperature Outlet temperature in °F.
+     * @return nothing
+     */
     WaterCoolingLosses(
             double flowRate,
             double initialTemperature,

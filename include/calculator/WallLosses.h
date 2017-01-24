@@ -15,6 +15,17 @@
 class WallLosses {
 public:
 
+    /**
+     * Constructor
+     * @param surfaceArea
+     * @param ambientTemperature
+     * @param surfaceTemperature
+     * @param windVelocity
+     * @param surfaceEmissivity
+     * @param conditionFactor
+     * @param correctionFactor
+     * @return nothing
+     */
     WallLosses(
             double surfaceArea,
             double ambientTemperature,

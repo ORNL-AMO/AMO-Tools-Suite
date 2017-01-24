@@ -15,7 +15,15 @@
 
 class Atmosphere {
 public:
-
+    /**
+     * Constructor
+     * @param inletTemperature
+     * @param outletTemperature
+     * @param flowRate
+     * @param correctionFactor
+     * @param specificHeat
+     * @return nothing
+     */
     Atmosphere(
             double inletTemperature,
             double outletTemperature,

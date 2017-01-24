@@ -17,8 +17,8 @@ class AnnualEnergy {
 public:
     /**
      * Constructor
-     * @param fieldPower Power from field data
-     * @param operatingFraction operating fraction
+     * @param fieldPower Power from field data in hp kW.
+     * @param operatingFraction Operating fraction(%).
      * @return nothing
      */
     AnnualEnergy(

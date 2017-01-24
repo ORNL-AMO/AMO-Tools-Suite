@@ -16,6 +16,18 @@
 
 class OptimalMotorCurrent {
 public:
+
+   /**
+    * Constructor
+    * @param motorRatedPower Rated Power of motor in hp or Kw.
+    * @param motorRPM RPM of motor.
+    * @param lineFrequency Line frequency of motor in either 60Hz or 50Hz.
+    * @param efficiencyClass Efficiency class of motor.
+    * @param specifiedEfficiency Specified Efficiency of motor, if efficiency class is SPECIFIED.
+    * @param loadFactor Load factor as defined by %.
+    * @param ratedVoltage Rated voltage of the motor.
+    * @return nothing
+    */
     OptimalMotorCurrent(
         double motorRatedPower,
         int motorRPM,

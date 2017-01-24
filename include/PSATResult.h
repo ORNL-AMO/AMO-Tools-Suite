@@ -25,6 +25,14 @@ class PSATResult {
 public:
     PSATResult() = default;
 
+    /**
+     * Constructor
+     * @param Pump
+     * @param Motor
+     * @param Financial
+     * @param FieldData
+     * @return nothing
+     */
     PSATResult(
         Pump &pump,
         Motor &motor,

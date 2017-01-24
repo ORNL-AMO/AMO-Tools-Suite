@@ -15,6 +15,17 @@
 #define AMO_SUITE_LEAKAGELOSSES_H
 class LeakageLosses {
 public:
+    /**
+     * Constructor
+     * @param draftPressure
+     * @param openingArea
+     * @param leakageGasTemperature
+     * @param ambientTemperature
+     * @param coefficient
+     * @param specificGravity
+     * @param correctionFactor
+     * @return nothing
+     */
     LeakageLosses(
             double draftPressure,
             double openingArea,

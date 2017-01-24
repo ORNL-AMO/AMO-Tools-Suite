@@ -1,6 +1,12 @@
-//
-// Created by Accawi, Gina K. on 6/17/16.
-//
+/**
+ * @brief Header file for PumpEfficiency class
+ *
+ * This contains the prototypes of PumpEfficiency calculator including getters and setters for the important fields.
+ *
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 
 #ifndef AMO_LIBRARY_PUMPEFFICIENCY_H
 #define AMO_LIBRARY_PUMPEFFICIENCY_H
@@ -10,6 +16,14 @@
 class PumpEfficiency {
 
 public:
+    /**
+     * Constructor
+     * @param specificGravity Specific gravity.
+     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
+     * @param head Either measured or required pump head im feet or meters.
+     * @param pumpShaftPower Pump power as defined in hp or kW.
+     * @return nothing
+     */
     PumpEfficiency(
         double specificGravity,
         double flowRate,

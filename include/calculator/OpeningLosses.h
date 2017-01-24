@@ -13,10 +13,22 @@
 class OpeningLosses {
 public:
     enum class OpeningShape {
-        CIRCULAR,
-        RECTANGULAR
+        CIRCULAR,   ///<
+        RECTANGULAR ///<
     };
 
+   /**
+    * Constructor
+    * @param emissivity
+    * @param diameterWidth
+    * @param thickness
+    * @param ration
+    * @param ambientTemperature
+    * @param insideTemperature
+    * @param percentTimeOpen
+    * @param viewFactor
+    * @return nothing
+    */
     OpeningLosses(double emissivity,
                   double diameterWidth,
                   double thickness,
