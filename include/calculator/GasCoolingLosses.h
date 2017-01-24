@@ -14,22 +14,6 @@
 #define AMO_SUITE_GASCOOLINGLOSSES_H
 class GasCoolingLosses {
 public:
-<<<<<<< HEAD
-
-    /**
-     * Constructor
-     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
-     * @param initialTemperature Initial temperature in °F.
-     * @param finalTemperature Final temperature in °F.
-     * @param specificHeat Specific heat in °F.
-     * @return nothing
-     */
-    GasCoolingLosses(
-            double flowRate,
-            double initialTemperature,
-            double finalTemperature,
-            double specificHeat)
-=======
     /**
      * Constructor for the gas cooling losses (including air) with all inputs specified
      *
@@ -47,7 +31,6 @@ public:
                      double finalTemperature,
                      double specificHeat,
                      double correctionFactor)
->>>>>>> develop
             : flowRate_(flowRate),
               initialTemperature_(initialTemperature),
               finalTemperature_(finalTemperature),

@@ -13,25 +13,19 @@
 
 class WaterCoolingLosses {
 public:
-<<<<<<< HEAD
 
     /**
      * Constructor
      * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
      * @param initialTemperature Initial temperature in °F.
      * @param outletTemperature Outlet temperature in °F.
+     * @param correctionFactor Correction factor
      * @return nothing
      */
-    WaterCoolingLosses(
-            double flowRate,
-            double initialTemperature,
-            double outletTemperature)
-=======
     WaterCoolingLosses(double flowRate,
                        double initialTemperature,
                        double outletTemperature,
                        double correctionFactor)
->>>>>>> develop
             : flowRate_(flowRate),
               initialTemperature_(initialTemperature),
               outletTemperature_( outletTemperature),

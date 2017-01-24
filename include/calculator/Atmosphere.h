@@ -18,37 +18,21 @@
 class Atmosphere {
 public:
     /**
-<<<<<<< HEAD
-     * Constructor
-     * @param inletTemperature
-     * @param outletTemperature
-     * @param flowRate
-     * @param correctionFactor
-     * @param specificHeat
-     * @return nothing
-     */
-    Atmosphere(
-            double inletTemperature,
-            double outletTemperature,
-            double flowRate,
-            double correctionFactor,
-            double specificHeat)
-=======
      * Constructor for the atmospheric heat loss with all inputs specified
      *
      * @param inletTemperature Inlet temperature of gasses in °F
      * @param outletTemperature Outlet temperature of gasses in °F
      * @param flowRate Flow rate of gasses in scfh
-     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
      * @param correctionFactor Correction factor
+     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @return nothing
      *
      * */
     Atmosphere(double inletTemperature,
                double outletTemperature,
                double flowRate,
-               double specificHeat,
-               double correctionFactor)
->>>>>>> develop
+               double correctionFactor,
+               double specificHeat)
             : inletTemperature_(inletTemperature),
               outletTemperature_(outletTemperature),
               flowRate_(flowRate),
