@@ -70,9 +70,9 @@ public:
 
     double calculateEfficiency();
 
-    double calculateEfficiency();;
-
     double calculatePower();
+
+    double calculatePowerFactor();
 
     double calculateEstimatedFLA();
 
