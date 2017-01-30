@@ -11,11 +11,11 @@ set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VER
 
 # Build package
 # Requires:
-option( BUILD_PACKAGE "Build package" OFF )
+option( BUILD_PACKAGE "Build package" ON )
 
 # Build testing
 # Requires:
-option( BUILD_TESTING "Build testing targets" OFF )
+option( BUILD_TESTING "Build testing targets" ON )
 
 # Build C++ documentation using Doxygen
 # Requires: doxygen
