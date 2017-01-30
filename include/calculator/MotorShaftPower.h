@@ -1,6 +1,19 @@
-//
-// Created by Accawi, Gina K. on 6/17/16.
-//
+/**
+ * @file
+ * @brief MotorShaftPower class
+ *  This contains the prototypes for the MotorShaftPower.
+ *
+ * calculate(): Calculates the motor power factor
+ * calculateCurrent():
+ * calculateEfficiency():
+ * calculateEfficiency():
+ * calculatePower(): Returns the motor shaft power in kWe
+ * calculateEstimatedFLA()
+ *
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 
 #ifndef AMO_LIBRARY_MOTORSHAFTPOWER_H
 #define AMO_LIBRARY_MOTORSHAFTPOWER_H
@@ -10,14 +23,21 @@
 
 class MotorShaftPower {
 public:
-    double tempLoadFraction_ = 0.01;
-    double power = 0.0, powerE1 = 0.0, powerE2 = 0.0;
-    double lf1 = 0.0, lf2 = 0.0;
-    double eff = 0.0, eff1 = 0.0, eff2 = 0.0;
-    double current = 0.0, current1 = 0.0, current2 = 0.0;
-    double pf = 0.0, pf1 = 0.0, pf2 = 0.0;
-    double estimatedFLA;
 
+   /**
+    * Constructor
+    * @param motorRatedPower Rated Power of motor in hp or Kw.
+    * @param motorMeasuredPower Power of the motor.
+    * @param motorRPM RPM of motor.
+    * @param lineFrequency Line frequency of motor as either 50Hz or 60Hz.
+    * @param specifiedEfficiency Specified Efficiency of motor, if efficiency class is SPECIFIED.
+    * @param ratedVoltage Rated voltage of motor.
+    * @param fullLoadAmps Current at full load in amps.
+    * @param fieldVoltage Field voltage.
+    * @param loadEstimationMethod Estimated power or current on motor input.
+    * @param fieldCurrent Field current as defined in amps.
+    * @return nothing
+    */
     MotorShaftPower(
 		double motorRatedPower,
 		double motorMeasuredPower,
@@ -50,11 +70,19 @@ public:
 
     double calculateEfficiency();
 
-    double calculatePowerFactor();
+    double calculateEfficiency();;
 
     double calculatePower();
 
     double calculateEstimatedFLA();
+
+    double tempLoadFraction_ = 0.01;
+    double power = 0.0, powerE1 = 0.0, powerE2 = 0.0;
+    double lf1 = 0.0, lf2 = 0.0;
+    double eff = 0.0, eff1 = 0.0, eff2 = 0.0;
+    double current = 0.0, current1 = 0.0, current2 = 0.0;
+    double pf = 0.0, pf1 = 0.0, pf2 = 0.0;
+    double estimatedFLA;
 
 private:
     double motorRatedPower_ = 0.0;

@@ -23,15 +23,16 @@ public:
      * @param inletTemperature Inlet temperature of gasses in °F
      * @param outletTemperature Outlet temperature of gasses in °F
      * @param flowRate Flow rate of gasses in scfh
-     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
      * @param correctionFactor Correction factor
+     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @return nothing
      *
      * */
     Atmosphere(double inletTemperature,
                double outletTemperature,
                double flowRate,
-               double specificHeat,
-               double correctionFactor)
+               double correctionFactor,
+               double specificHeat)
             : inletTemperature_(inletTemperature),
               outletTemperature_(outletTemperature),
               flowRate_(flowRate),

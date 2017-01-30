@@ -19,6 +19,19 @@
 class OptimalMotorPower {
 public:
 
+    /**
+     * Constructor
+     * @param motorRatedPower Rated Power of motor
+     * @param motorRPM RPM of motor
+     * @param lineFrequency Line frequency of motor
+     * @param efficiencyClass Efficiency class of motor
+     * @param specifiedEfficiency Specified Efficiency of motor, if efficiency class is SPECIFIED
+     * @param ratedVoltage Rated voltage of the motor
+     * @param fullLoadAmps Current at full load.
+     * @param fieldVoltage Field voltage.
+     * @param optimalMotorShaftPower Optimal shaft power as defined in hp or Kw.
+     * @return nothing
+     */
     OptimalMotorPower(
         double motorRatedPower,
         double /*motorMeasuredPower*/,

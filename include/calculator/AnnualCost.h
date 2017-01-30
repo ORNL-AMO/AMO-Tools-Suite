@@ -17,7 +17,7 @@ class AnnualCost {
 public:
     /**
      * Constructor
-     * @param annualEnergy
+     * @param annualEnergy Annual energy consumption in MWk.
      * @param kwhRate
      * @return nothing
      */

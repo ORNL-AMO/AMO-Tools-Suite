@@ -1,12 +1,23 @@
-//
-// Created by Accawi, Gina K. on 6/15/16.
-//
+/**
+ * @file
+ * @brief Function prototypes for the Financial fields
+ *
+ * This contains the prototypes for the Pump structure
+ * including getters and setters for the important fields. Primary
+ * importance are methods for setting and getting data dealing with
+ * pump information.
+ *
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 
 #ifndef AMO_LIBRARY_PUMP_H
 #define AMO_LIBRARY_PUMP_H
 
 class Pump {
 public:
+
     enum class Style {
         END_SUCTION_SLURRY,
         END_SUCTION_SEWAGE,
@@ -30,6 +41,18 @@ public:
         NOT_FIXED_SPEED
     };
 
+    /**
+     * Constructor
+     * @param style Style of pump being used.
+     * @param achievableEfficiency Pump % efficiency at the specified operating conditions.
+     * @param rpm Pump RPM to define its operating speed.
+     * @param drive Type of drive the pump uses from either direct or belt drive.
+     * @param kviscosity Kinematic viscosity of the fluid being pumped, in centistokes.
+     * @param sg Specific gravity.
+     * @param stageCount The number of pump stages.
+     * @param speed Type of pump speed from either fixed or not fixed.
+     * @return nothing
+     */
     Pump(
         Style style,
         double achievableEfficiency,

@@ -15,6 +15,14 @@
 
 class OptimalPumpShaftPower {
 public:
+    /**
+     * Constructor
+     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
+     * @param head Either measured or required pump head im feet or meters.
+     * @param specificGravity Specific gravity.
+     * @param pumpEfficiency Pump efficiency at the specified operating conditions.
+     * @return nothing
+     */
     OptimalPumpShaftPower(
         double flowRate,
         double head,

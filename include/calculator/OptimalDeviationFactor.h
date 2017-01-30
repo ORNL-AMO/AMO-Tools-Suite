@@ -14,6 +14,11 @@
 
 class OptimalDeviationFactor {
 public:
+   /**
+    * Constructor
+    * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
+    * @return nothing
+    */
     OptimalDeviationFactor(
         double flowRate
     ) :

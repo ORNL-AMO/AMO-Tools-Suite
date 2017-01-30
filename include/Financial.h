@@ -1,6 +1,16 @@
-//
-// Created by Accawi, Gina K. on 6/15/16.
-//
+/**
+ * @file
+ * @brief Function prototypes for the Financial fields
+ *
+ * This contains the prototypes for the Financial structure
+ * including getters and setters for the important fields. Primary
+ * importance are methods for setting and getting data dealing with
+ * financial information.
+ *
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 
 #ifndef AMO_LIBRARY_FINANCIALS_H
 #define AMO_LIBRARY_FINANCIALS_H
@@ -8,6 +18,14 @@
 
 class Financial {
 public:
+
+    /**
+     * Constructor
+     * @param operatingFraction Fraction(%) of calender hours the equipment is operating.
+     * @param unitCost Per unit energy cost of electricity in $/kwhr.
+     * @return nothing
+     */
+
     Financial(
         double operatingFraction,
         double unitCost

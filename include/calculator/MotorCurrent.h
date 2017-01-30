@@ -16,13 +16,13 @@ class MotorCurrent {
 public:
     /**
      * Constructor
-     * @param motorRatedPower Rated power of motor
-     * @param motorRPM RPM of motor
-     * @param lineFrequency line Frequency of motor
-     * @param efficiencyClass Efficiency class of motor
-     * @param specifiedEfficiency Specified efficiency of motor when the efficiency class = SPECIFIED
-     * @param loadFactor load factor
-     * @param ratedVoltage Rated voltage of the motor
+     * @param motorRatedPower Rated power of motor.
+     * @param motorRPM RPM of motor.
+     * @param lineFrequency line Frequency of motor.
+     * @param efficiencyClass Efficiency class of motor.
+     * @param specifiedEfficiency Specified efficiency of motor when the efficiency class = SPECIFIED.
+     * @param loadFactor load factor.
+     * @param ratedVoltage Rated voltage of the motor.
      * @param fullLoadAmps Current at full load.
      * @return nothing
      */
