@@ -52,10 +52,10 @@ endif (WIN32)
 set(SOURCE_FILES
 #    src/FieldData.cpp
 #    src/Financial.cpp
-    src/Motor.cpp
+        src/Motor.cpp
     src/OptimizationRating.cpp
-    src/PSATResult.cpp
-    src/Pump.cpp
+        src/psat/PSATResult.cpp
+        src/psat/Pump.cpp
     src/calculator/AnnualCost.cpp
     src/calculator/AnnualEnergy.cpp
     src/calculator/CurveFitVal.cpp
@@ -95,12 +95,12 @@ set(SOURCE_FILES
 )
 
 set(INCLUDE_FILES
-    include/FieldData.h
+        include/psat/FieldData.h
     include/Financial.h
-    include/Motor.h
+        include/Motor.h
     include/OptimizationRating.h
-    include/PSATResult.h
-    include/Pump.h
+        include/psat/PSATResult.h
+        include/psat/Pump.h
     include/calculator/AnnualCost.h
     include/calculator/AnnualEnergy.h
     include/calculator/CurveFitVal.h
@@ -139,7 +139,7 @@ set(INCLUDE_FILES
     include/calculator/OpeningLosses.h
     include/sqlite/SQLite.h
     include/calculator/FlueGas.h
-)
+        include/phast/Furnace.h include/phast/ChargeMaterial.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp

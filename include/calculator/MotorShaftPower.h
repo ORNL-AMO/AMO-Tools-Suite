@@ -18,8 +18,8 @@
 #ifndef AMO_LIBRARY_MOTORSHAFTPOWER_H
 #define AMO_LIBRARY_MOTORSHAFTPOWER_H
 
-#include "../Motor.h"
-#include "../FieldData.h"
+#include "Motor.h"
+#include "psat/FieldData.h"
 
 class MotorShaftPower {
 public:

@@ -12,7 +12,7 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORCURRENT_H
 #define AMO_LIBRARY_OPTIMALMOTORCURRENT_H
 
-#include "../Motor.h"
+#include "Motor.h"
 
 class OptimalMotorCurrent {
 public:

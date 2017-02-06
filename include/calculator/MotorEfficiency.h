@@ -12,8 +12,8 @@
 #define AMO_LIBRARY_MOTOREFFICIENCY_H
 
 #include <vector>
-#include "../Motor.h"
-#include "../FieldData.h"
+#include "Motor.h"
+#include "psat/FieldData.h"
 
 class MotorEfficiency {
 public:
