@@ -12,7 +12,7 @@
 #define UNTITLED_MOTOREFFICIENCY25_H
 
 #include <vector>
-#include "../Motor.h"
+#include "Motor.h"
 
 class MotorEfficiency25 {
 public:

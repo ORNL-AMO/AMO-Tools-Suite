@@ -16,6 +16,15 @@
 
 class FixtureLosses {
 public:
+    /**
+     * Constructor
+     * @param specificHeat Specific heat in °F.
+     * @param feedRate Feed Rate for Gas Mixture.
+     * @param initialTemperature Initial temperature in °F.
+     * @param finalTemperature Final temperature in °F.
+     * @param correctionFactor % of correction.
+     * @return nothing
+     */
     FixtureLosses(
             double specificHeat,
             double feedRate,

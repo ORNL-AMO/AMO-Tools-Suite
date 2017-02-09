@@ -12,7 +12,7 @@
  *
  */
 
-#include "PSATResult.h"
+#include "psat/PSATResult.h"
 #include "calculator/MotorShaftPower.h"
 #include "calculator/PumpShaftPower.h"
 #include "calculator/PumpEfficiency.h"

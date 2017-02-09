@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <calculator/FixtureLosses.h>
-#include "PSATResult.h"
+#include "psat/PSATResult.h"
 #include "calculator/MotorPowerFactor.h"
 #include "calculator/MotorEfficiency.h"
 #include "calculator/FixtureLosses.h"

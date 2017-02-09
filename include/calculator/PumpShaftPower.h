@@ -1,15 +1,26 @@
-//
-// Created by Accawi, Gina K. on 8/19/16.
-//
+/**
+ * @brief Header file for PumpShaftPower class
+ *
+ * This contains the prototypes of PumpShaftPower calculator including getters and setters for the important fields.
+ *
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 
 #ifndef AMO_LIBRARY_PUMPSHAFTPOWER_H
 #define AMO_LIBRARY_PUMPSHAFTPOWER_H
 
-#include "../Pump.h"
+#include "psat/Pump.h"
 
 class PumpShaftPower {
 public:
-
+    /**
+     * Constructor
+     * @param motorShaftPower Motor shaft power as defined in hp or Kw.
+     * @param drive Type of drive the pump uses from either direct or belt drive.
+     * @return nothing
+     */
     PumpShaftPower(
         double motorShaftPower,
         Pump::Drive drive
