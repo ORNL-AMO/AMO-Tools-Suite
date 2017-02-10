@@ -14,10 +14,10 @@
 class MotorPower {
 public:
     /**
-     * Constrructor
-     * @param ratedVoltage Rated voltage of motor
-     * @param motorCurrent Motor current
-     * @param powerFactor Power factor of motor
+     * Constructor
+     * @param ratedVoltage Rated voltage of motor.
+     * @param motorCurrent Motor current as defined in amps.
+     * @param powerFactor Power factor of motor as defined in hp or kW.
      * @return nothing
      */
     MotorPower(

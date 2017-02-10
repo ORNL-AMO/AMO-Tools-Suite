@@ -1,16 +1,36 @@
-//
-// Created by Accawi, Gina K. on 6/15/16.
-//
-
+/**
+ * @file
+ * @brief Function prototypes for the FieldData fields
+ *
+ * This contains the prototypes for the FieldData structure
+ * including getters and setters for the important fields. Primary
+ * importance are methods for setting and getting important information
+ * used in further calculations from the data fields.
+ *
+ * @author Gina Accawi (accawigk)
+ * @bug No known bugs.
+ *
+ */
 #ifndef AMO_LIBRARY_FIELDDATA_H
 #define AMO_LIBRARY_FIELDDATA_H
 
 class FieldData {
 public:
+
     enum class LoadEstimationMethod {
         POWER,
         CURRENT
     };
+
+    /**
+     * Constructor
+     * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
+     * @param head Pump head measured in feet or meters.
+     * @param loadEstimationMethod Estimated power or current on motor input.
+     * @param motorPower Power output of the pump's motor in kw or hp.
+     * @param motorAmps Current measured from the pump's motor in amps.
+     * @return voltage The measured bus voltage.
+     */
 
     FieldData(
         double flowRate,

@@ -12,10 +12,17 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORSHAFTPOWER_H
 #define AMO_LIBRARY_OPTIMALMOTORSHAFTPOWER_H
 
-#include "../Pump.h"
+#include "psat/Pump.h"
 
 class OptimalMotorShaftPower {
 public:
+
+    /**
+     * Constructor
+     * @param pumpShaftPower Pump shaft power as defined in hp or Kw.
+     * @param drive Type of drive the pump uses from either direct or belt drive.
+     * @return nothing
+     */
     OptimalMotorShaftPower(
         double pumpShaftPower,
         Pump::Drive drive

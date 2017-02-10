@@ -11,10 +11,17 @@
 #ifndef AMO_LIBRARY_OPTIMALPREPUMPEFF_H
 #define AMO_LIBRARY_OPTIMALPREPUMPEFF_H
 
-#include "../Pump.h"
+#include "psat/Pump.h"
 
 class OptimalPrePumpEff {
 public:
+    /**
+     * Constructor
+     * @param style style Style of pump being used.
+     * @param achievableEfficiency Pump efficiency at the specified operating conditions.
+     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
+     * @return nothing
+     */
     OptimalPrePumpEff(
         Pump::Style style,
         double achievableEfficiency,

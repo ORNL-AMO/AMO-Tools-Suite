@@ -12,11 +12,22 @@
 #ifndef AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 #define AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 
-#include "../Pump.h"
+#include "psat/Pump.h"
 
 class OptimalPumpEfficiency {
 
 public:
+    /**
+     * Constructor
+     * @param style Style of pump being used.
+     * @param achievableEfficiency Pump efficiency at the specified operating conditions.
+     * @param rpm Pump RPM to define its operating speed.
+     * @param kinematicViscosity Kinematic viscosity of the fluid being pumped, in centistokes.
+     * @param stageCount The number of pump stages.
+     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
+     * @param head Either measured or required pump head im feet or meters.
+     * @return nothing
+     */
     OptimalPumpEfficiency(
         Pump::Style style,
         double achievableEfficiency,
