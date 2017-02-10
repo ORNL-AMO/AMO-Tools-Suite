@@ -11,7 +11,7 @@
 
 #ifndef AMO_SUITE_WALLLOSSES_H
 #define AMO_SUITE_WALLLOSSES_H
-#define STEPHEN_BOLTZMANS_CONSTANT 0.1713 * pow(10, -8);
+
 #define RAD_CONSTANT 460.0
 
 class WallLosses {
