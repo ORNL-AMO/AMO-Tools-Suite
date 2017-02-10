@@ -21,7 +21,7 @@ double WallLosses::getHeatLoss() {
     double hl_conv = (hl_conv1 * hl_conv2 * hl_conv3 * hl_conv4) * this->surfaceArea_ * (this->surfaceTemperature_ - this->ambientTemperature_);
     double hl_rad1 = pow((this->surfaceEmissivity_ + RAD_CONSTANT), 4.0);
     double hl_rad2 = pow((this->ambientTemperature_ + RAD_CONSTANT), 4.0);
-    double hl_rad3 = hl_rad1 * hl_rad2;
-    double hl_rad = this->surfaceEmissivity_ * boltzman * hl_rad3 * 500.0;
-    return 410414.0;
+    double hl_rad3 = hl_rad2 - hl_rad1;
+    double hl_rad = this->surfaceEmissivity_ * boltzman * hl_rad3 * this->surfaceArea_;
+    return hl_conv + hl_rad;
 }
