@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11.2)
-project(amo_suite)
+project(amo_tools_suite)
 
 set(CMAKE_MACOSX_RPATH 1)
 
@@ -37,6 +37,7 @@ include(cmake/CompilerFlags.cmake)
 if (WIN32)
   set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+  set(CMAKE_DATABASE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 else (WIN32)
@@ -44,10 +45,13 @@ else (WIN32)
   # necessary, otherwise they would all end up in
   # ${CMAKE_BINARY_DIR}/src/... or somewhere else random like that.
   set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+  set(CMAKE_DATABASE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/db)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif (WIN32)
+
+file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
 #    src/FieldData.cpp
@@ -157,34 +161,35 @@ set(TEST_FILES
     tests/OpeningLosses.unit.cpp
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-
-# Add SQLite project
-include_directories(${CMAKE_SOURCE_DIR}/third_party/sqlite/ SYSTEM)
-add_subdirectory(third_party/sqlite)
+find_package(PythonInterp 2.7 REQUIRED)
+execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
 
 if (MINGW)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
   set(CMAKE_STATIC_LIBRARY_PREFIX "")
 endif ()
 
-# Create amo_suite static library
-add_library(amo_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries( amo_suite sqlite )
+# Create amo_tools_suite static library
+add_library(amo_tools_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
 
-# Create command line amo_suite program
-add_executable(amo_suite_main main.cpp)
-set_target_properties(amo_suite_main PROPERTIES OUTPUT_NAME "amo_suite")
-target_link_libraries( amo_suite_main amo_suite )
+# Add SQLite project
+include_directories(${CMAKE_SOURCE_DIR}/third_party/sqlite/ SYSTEM)
+add_subdirectory(third_party/sqlite)
+
+# Create command line amo_tools_suite program
+add_executable(amo_tools_suite_main main.cpp)
+set_target_properties(amo_tools_suite_main PROPERTIES OUTPUT_NAME "amo_tools_suite")
+target_link_libraries( amo_tools_suite_main amo_tools_suite )
 
 if( BUILD_TESTING )
     add_library(Catch INTERFACE)
     target_include_directories(Catch INTERFACE third_party/catch/)
 
     # Create unit testing executable
-    add_executable(amo_suite_tests tests/main.unit.cpp ${TEST_FILES})
-    target_link_libraries( amo_suite_tests Catch amo_suite )
+    add_executable(amo_tools_suite_tests tests/main.unit.cpp ${TEST_FILES})
+    target_link_libraries( amo_tools_suite_tests Catch amo_tools_suite )
 endif()
 
 # if(BUILD_DOCUMENTATION)
@@ -193,7 +198,7 @@ endif()
 
 if( BUILD_PACKAGE )
   set(CPACK_INSTALL_CMAKE_PROJECTS
-    "${CMAKE_BINARY_DIR};amo_suite;ALL;/"
+    "${CMAKE_BINARY_DIR};amo_tools_suite;ALL;/"
   )
 
   include(cmake/Install.cmake)

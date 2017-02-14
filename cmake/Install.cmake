@@ -43,7 +43,7 @@ endif()
 # install(FILES "${CMAKE_SOURCE_DIR}/LICENSE.txt" DESTINATION "./")
 # set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
 
-install(TARGETS amo_suite
+install(TARGETS amo_tools_suite
         ARCHIVE
         DESTINATION lib
         COMPONENT libraries)
@@ -53,6 +53,8 @@ INSTALL(DIRECTORY include/ DESTINATION include/
         COMPONENT headers
         PATTERN CMakeLists.txt EXCLUDE
 )
+
+install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db" DESTINATION "./db/")
 
 set(CPACK_COMPONENTS_ALL libraries headers)
 set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")

@@ -1,5 +1,5 @@
 import sqlite3
-import scripts.seed_data as seed_data
+import seed_data
 
 
 def create_data_tables(db_conn):
