@@ -174,6 +174,10 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 # Create amo_tools_suite static library
 add_library(amo_tools_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
 
+if( UNIX )
+  target_link_libraries( amo_tools_suite dl )
+endif()
+
 # Add SQLite project
 include_directories(${CMAKE_SOURCE_DIR}/third_party/sqlite/ SYSTEM)
 add_subdirectory(third_party/sqlite)
