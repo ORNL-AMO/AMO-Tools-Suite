@@ -1,21 +1,23 @@
 
 
 # Ensure that we have a C++11 compiler.
-include(CheckCXXCompilerFlag)
-IF ( CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
-    (UNIX AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel") ) # g++/Clang/Intel
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-ELSEIF ( WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" )
-  CHECK_CXX_COMPILER_FLAG("/Qstd=c++11" COMPILER_SUPPORTS_CXX11)
-  CHECK_CXX_COMPILER_FLAG("/Qstd=c++0x" COMPILER_SUPPORTS_CXX0X)
-ELSE()
-  SET(COMPILER_SUPPORTS_CXX11 True)
-  SET(COMPILER_SUPPORTS_CXX0X True)
-ENDIF()
-if(NOT (COMPILER_SUPPORTS_CXX11 OR COMPILER_SUPPORTS_CXX0X))
-  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-endif()
+set( CMAKE_CXX_STANDARD 11 )
+set( CXX_STANDARD_REQUIRED ON )
+#include(CheckCXXCompilerFlag)
+#IF ( CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
+#    (UNIX AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel") ) # g++/Clang/Intel
+#  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+#  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+#ELSEIF ( WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" )
+#  CHECK_CXX_COMPILER_FLAG("/Qstd=c++11" COMPILER_SUPPORTS_CXX11)
+#  CHECK_CXX_COMPILER_FLAG("/Qstd=c++0x" COMPILER_SUPPORTS_CXX0X)
+#ELSE()
+#  SET(COMPILER_SUPPORTS_CXX11 True)
+#  SET(COMPILER_SUPPORTS_CXX0X True)
+#ENDIF()
+#if(NOT (COMPILER_SUPPORTS_CXX11 OR COMPILER_SUPPORTS_CXX0X))
+#  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+#endif()
 
 # If using clang, we have to link against libstdc++ or libc++ depending on the
 # OS (at least on some systems). Further, gcc sometimes optimizes calls to
