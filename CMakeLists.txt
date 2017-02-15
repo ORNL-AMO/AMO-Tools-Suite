@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11.2)
+cmake_minimum_required(VERSION 3.1)
 project(amo_tools_suite)
 
 set(CMAKE_MACOSX_RPATH 1)
@@ -174,7 +174,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 # Create amo_tools_suite static library
 add_library(amo_tools_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
 
-if( UNIX )
+if( UNIX AND NOT APPLE )
   target_link_libraries( amo_tools_suite dl )
 endif()
 
