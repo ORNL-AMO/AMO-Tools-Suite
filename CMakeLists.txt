@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 project(amo_tools_suite)
 
 set(CMAKE_MACOSX_RPATH 1)
