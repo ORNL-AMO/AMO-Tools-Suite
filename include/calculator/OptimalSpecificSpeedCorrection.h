@@ -11,7 +11,7 @@
 #ifndef AMO_LIBRARY_OPTIMALSPECIFICSPEEDCORRECTION_H
 #define AMO_LIBRARY_OPTIMALSPECIFICSPEEDCORRECTION_H
 
-#include "../Pump.h"
+#include "psat/Pump.h"
 
 class OptimalSpecificSpeedCorrection {
 public:

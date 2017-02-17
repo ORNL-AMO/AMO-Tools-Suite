@@ -56,10 +56,10 @@ file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 set(SOURCE_FILES
 #    src/FieldData.cpp
 #    src/Financial.cpp
-    src/Motor.cpp
+        src/Motor.cpp
     src/OptimizationRating.cpp
-    src/PSATResult.cpp
-    src/Pump.cpp
+        src/psat/PSATResult.cpp
+        src/psat/Pump.cpp
     src/calculator/AnnualCost.cpp
     src/calculator/AnnualEnergy.cpp
     src/calculator/CurveFitVal.cpp
@@ -96,15 +96,15 @@ set(SOURCE_FILES
     src/calculator/WallLosses.cpp
     src/calculator/OpeningLosses.cpp
     src/sqlite/SQLite.cpp
-)
+        src/calculator/FlueGas.cpp src/phast/furnace.cpp)
 
 set(INCLUDE_FILES
-    include/FieldData.h
+        include/psat/FieldData.h
     include/Financial.h
-    include/Motor.h
+        include/Motor.h
     include/OptimizationRating.h
-    include/PSATResult.h
-    include/Pump.h
+        include/psat/PSATResult.h
+        include/psat/Pump.h
     include/calculator/AnnualCost.h
     include/calculator/AnnualEnergy.h
     include/calculator/CurveFitVal.h
@@ -143,7 +143,7 @@ set(INCLUDE_FILES
     include/calculator/OpeningLosses.h
     include/sqlite/SQLite.h
     include/calculator/FlueGas.h
-)
+        include/phast/Furnace.h include/phast/ChargeMaterial.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -159,7 +159,7 @@ set(TEST_FILES
     tests/LeakageLosses.unit.cpp
     tests/WallLosses.unit.cpp
     tests/OpeningLosses.unit.cpp
-)
+        tests/FlueGas.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

@@ -11,6 +11,7 @@
 
 #ifndef AMO_SUITE_WALLLOSSES_H
 #define AMO_SUITE_WALLLOSSES_H
+#define RAD_CONSTANT 460.0
 
 class WallLosses {
 public:

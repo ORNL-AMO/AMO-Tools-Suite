@@ -16,7 +16,7 @@
 #define AMO_LIBRARY_RESULTS_H
 
 #include "Motor.h"
-#include "Pump.h"
+#include "psat/Pump.h"
 #include "Financial.h"
 #include "FieldData.h"
 

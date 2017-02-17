@@ -10,7 +10,7 @@
 #ifndef AMO_LIBRARY_MOTORCURRENT_H
 #define AMO_LIBRARY_MOTORCURRENT_H
 
-#include "../Motor.h"
+#include "Motor.h"
 
 class MotorCurrent {
 public:

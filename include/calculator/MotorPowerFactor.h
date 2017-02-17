@@ -11,8 +11,8 @@
 #ifndef AMO_LIBRARY_MOTORPOWERFACTOR_H
 #define AMO_LIBRARY_MOTORPOWERFACTOR_H
 
-#include "../Motor.h"
-#include "../FieldData.h"
+#include "Motor.h"
+#include "psat/FieldData.h"
 
 class MotorPowerFactor {
 public:
