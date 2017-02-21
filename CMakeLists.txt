@@ -96,7 +96,7 @@ set(SOURCE_FILES
     src/calculator/WallLosses.cpp
     src/calculator/OpeningLosses.cpp
     src/sqlite/SQLite.cpp
-        src/calculator/FlueGas.cpp src/phast/furnace.cpp )
+        src/calculator/FlueGas.cpp src/phast/Furnace.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h

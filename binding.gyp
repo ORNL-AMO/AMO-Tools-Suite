@@ -3,15 +3,16 @@
   	"targets": [
 		{
 	    	"target_name": "bridge",
-	    	'include_dirs': ['include', 'include/calculator', 'include/phast', 'include/psat'],
+	    	'include_dirs': ['include', 'include/calculator', 'include/phast', 'include/psat', '../cmake-build-debug/bin/test_db.sql',
+	    	    "<!(node -e \"require('nan')\")"
+	    	 ],
 			'sources' : [
-				'src/bridge.cpp',
+				'src/bindings/bridge.cpp',
 			],
 			"conditions": [
 		    	[ 'OS=="mac"', {
 		    	    'libraries': [
-                        '../cmake-build-debug/lib/libamo_tools_suite.a',
-                        '../cmake-build-debug/lib/libsqlite.a'
+                        '../cmake-build-debug/lib/libamo_tools_suite.a'
 		    	    ],
    		           	"xcode_settings": {
    					    'OTHER_CPLUSPLUSFLAGS' : ['-stdlib=libc++'],
