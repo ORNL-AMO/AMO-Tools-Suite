@@ -14,5 +14,8 @@
 
 #ifndef AMO_SUITE_FURNACEMATERIAL_H
 #define AMO_SUITE_FURNACEMATERIAL_H
-
+class ChargeMaterial {
+public:
+    ChargeMaterial() = default;
+};
 #endif //AMO_SUITE_FURNACEMATERIAL_H

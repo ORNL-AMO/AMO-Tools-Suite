@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ORNL-AMO/AMO-Tools-Suite.git"
+    "url": "git+https://github.com/ORNL-AMO/AMO-Tools-Suite.git#node-addon"
   },
   "author": "Gina Accawi <accawigk@ornl.gov>",
   "license": "MIT",
