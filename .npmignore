@@ -10,3 +10,8 @@ tests/
 /*.txt
 /*.cmake
 /MakeFile
+/.idea
+cmake-build-debug/
+cmake-build-minsizerel/
+cmake-build-release/
+cmake-build-relwithdebinfo/
