@@ -25,11 +25,12 @@
 			[ 'OS=="linux"', {
 				"link_settings": {
 					'libraries': ['../lib/libamo_tools_suite.a'],
-				}
+				},
+				"cflags": ["-std=c++11"],
 			}],
 			[ 'OS=="win"', {
 				"link_settings": {
-					'libraries': ['../build/Release/bridge.lib'],
+					'libraries': ['../build/Release/obj/bridge.lib'],
 					}
 			}]
 					
