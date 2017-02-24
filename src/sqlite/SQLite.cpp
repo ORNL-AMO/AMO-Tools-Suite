@@ -63,6 +63,7 @@ SQLiteWrapper::SQLiteWrapper( std::string const & db_name )
     int rc = -1;
     bool ok = true;
     bool in_memory = (db_name == ":memory:");
+    char *err_msg = 0;
 
     // Test if we can create a new file named db_name
     if ( !in_memory ) {
@@ -109,7 +110,8 @@ SQLiteWrapper::SQLiteWrapper( std::string const & db_name )
     }
 
     if ( !ok ) {
-        throw std::runtime_error("Failed to connect to SQLite database.");
+//        throw std::runtime_error("Failed to connect to SQLite database.");
+        std::cerr << "Failed to connect to SQLite database." << err_msg << std::endl;
     }
 }
 

@@ -14,5 +14,8 @@
 
 #ifndef AMO_SUITE_FURNACE_H
 #define AMO_SUITE_FURNACE_H
-
+class Furnace {
+public:
+    Furnace() = default;
+};
 #endif //AMO_SUITE_FURNACE_H
