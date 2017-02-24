@@ -1,0 +1,12 @@
+.git/
+.github/
+bin/
+cmake/
+CMakeFiles/
+scripts/
+tests/
+/.gitignore
+/.gitattributes
+/*.txt
+/*.cmake
+/MakeFile
