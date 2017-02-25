@@ -9,6 +9,7 @@ using namespace v8;
 #include "calculator/GasCoolingLosses.h"
 #include "calculator/GasLoadChargeMaterial.h"
 #include "calculator/LiquidCoolingLosses.h"
+#include "calculator/LiquidLoadChargeMaterial.h"
 
 
 NAN_METHOD(fixtureLosses) {
@@ -119,6 +120,51 @@ NAN_METHOD(liquidCoolingLosses) {
     double heatLoss = lcl.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(liquidLoadChargeMaterial) {
+        /**
+         * Constructor for liquid load/charge material with all inputs specified
+         *
+         * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
+         * @param specificHeatLiquid Specific Heat of Liquid in Btu/(lb-°F)
+         * @param vaporizingTemperature Vaporizing Temperature in °F
+         * @param latentHeat Latent Heat of Vaporization in Btu/lb
+         * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb-°F)
+         * @param chargeFeedRate Charge (Liquid)-Feed Rate in lb/h
+         * @param initialTemperature Initial Temperature in °F
+         * @param dischargeTemperature Discharge Temperature in °F
+         * @param percentVaporized Charge Liquid Vaporized  (% of Charge)
+         * @param percentReacted Charge Liquid Reacted (% of Charge)
+         * @param reactionHeat Heat of Reaction in Btu/lb
+         * @param additionalHeat Additional Heat Required in %
+         * @return heatLoss double
+         * */
+
+        LoadChargeMaterial::ThermicReactionType thermicReactionType;
+        int trt = info[0]->NumberValue();
+        if (trt == 0) {
+                thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
+        } else {
+                thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
+        }
+        double specificHeatLiquid = info[1]->NumberValue();
+        double vaporizingTemperature = info[2]->NumberValue();
+        double latentHeat = info[3]->NumberValue();
+        double specificHeatVapor = info[4]->NumberValue();
+        double chargeFeedRate = info[5]->NumberValue();
+        double initialTemperature = info[6]->NumberValue();
+        double dischargeTemperature = info[7]->NumberValue();
+        double percentVaporized = info[8]->NumberValue();
+        double percentReacted = info[9]->NumberValue();
+        double reactionHeat = info[10]->NumberValue();
+        double additionalHeat = info[11]->NumberValue();
+        LiquidLoadChargeMaterial llcm(thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat,
+        specificHeatVapor, chargeFeedRate, initialTemperature,
+        dischargeTemperature, percentVaporized, percentReacted, reactionHeat, additionalHeat);
+        double heatLoss = llcm.getTotalHeat();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(wallLosses) {
