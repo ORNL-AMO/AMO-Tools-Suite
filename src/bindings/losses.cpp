@@ -1,9 +1,103 @@
 #include <nan.h>
+
 using namespace Nan;
 using namespace v8;
 
 #include "calculator/WallLosses.h"
+#include "calculator/FixtureLosses.h"
+#include "calculator/LoadChargeMaterial.h"
+#include "calculator/GasCoolingLosses.h"
+#include "calculator/GasLoadChargeMaterial.h"
 
+
+NAN_METHOD(fixtureLosses) {
+
+/**
+    * Constructor for Fixture Losses
+    * @param specificHeat Specific heat in °F. double
+    * @param feedRate Feed Rate for Gas Mixture. double
+    * @param initialTemperature Initial temperature in °F. double
+    * @param finalTemperature Final temperature in °F. double
+    * @param correctionFactor % of correction. double
+    *
+    * @return heatLoss double
+    */
+        double specificHeat = info[0]->NumberValue();
+        double feedRate = info[1]->NumberValue();
+        double initialTemperature = info[2]->NumberValue();
+        double finalTemperature = info[3]->NumberValue();
+        double correctionFactor = info[4]->NumberValue();
+        FixtureLosses fl(specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor);
+        double heatLoss = fl.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(gasCoolingLosses) {
+/**
+  * Constructor for the gas cooling losses (including air) with all inputs specified
+  *
+  * @param flowRate Air or gas volumetric flow rate in SCFM (ft³/min)
+  * @param initialTemperature Inlet temperature of air or gas in °F
+  * @param finalTemperature Outlet temperature of air or gas in °F
+  * @param specificHeat Specific heat of gas or air at average air temperature in Btu/(scf F)
+  * @param correctionFactor Correction factor
+  *
+  * @return heatLoss double
+  * */
+        double flowRate = info[0]->NumberValue();
+        double initialTemperature = info[1]->NumberValue();
+        double finalTemperature = info[2]->NumberValue();
+        double specificHeat = info[3]->NumberValue();
+        double correctionFactor = info[4]->NumberValue();
+        GasCoolingLosses gcl(flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor);
+        double heatLoss = gcl.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(gasLoadChargeMaterial) {
+        /**
+ * Constructor for the gas load/charge material with all inputs specified
+ *
+ * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions 0 = Endo, else = Exo Int
+ * @param specificHeatGas Specific Heat of Gas in Btu/(lb- °F) double
+ * @param feedRate Feed Rate for Gas Mixture double
+ * @param percentVapor Vapor in Gas Mixture (% of Total) double
+ * @param initialTemperature Initial Temperature in °F double
+ * @param dischargeTemperature Discharge Temperature in °F double
+ * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb- °F) double
+ * @param percentReacted Feed Gas Reacted (% of Total) double
+ * @param reactionHeat Heat of Reaction in Btu/lb double
+ * @param additionalHeat Additional Heat Required in Btu/h double
+ *
+ * @return heatLoss double
+ *
+ * */
+        LoadChargeMaterial::ThermicReactionType thermicReactionType;
+        int trt = info[0]->NumberValue();
+        if (trt == 0) {
+                thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
+        } else {
+                thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
+        }
+        double specificHeatGas = info[1]->NumberValue();
+        double feedRate = info[2]->NumberValue();
+        double percentVapor = info[3]->NumberValue();
+        double initialTemperature = info[4]->NumberValue();
+        double dischargeTemperature = info[5]->NumberValue();
+        double specificHeatVapor = info[6]->NumberValue();
+        double percentReacted = info[7]->NumberValue();
+        double reactionHeat = info[8]->NumberValue();
+        double additionalHeat = info[9]->NumberValue();
+        GasLoadChargeMaterial glcm(thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor,
+        percentReacted, reactionHeat, additionalHeat);
+        double heatLoss = glcm.getTotalHeat();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(wallLosses) {
 /**
   * Wall Losses Arguments
   * @param surfaceArea double
@@ -15,23 +109,25 @@ using namespace v8;
   * @param correctionFactor double
   * @return heatLoss double
   */
-
-NAN_METHOD(wallLosses) {
-    double surfaceArea = info[0]->NumberValue();
-    double ambientTemperature = info[1]->NumberValue();
-    double surfaceTemperature = info[2]->NumberValue();
-    double windVelocity = info[3]->NumberValue();
-    double surfaceEmissivity = info[4]->NumberValue();
-    double conditionFactor = info[5]->NumberValue();
-    double correctionFactor = info[6]->NumberValue();
-    WallLosses wl(surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor);
-    double heatLoss = wl.getHeatLoss();
-    Local<Number> retval = Nan::New(heatLoss);
-    info.GetReturnValue().Set(retval);
+        double surfaceArea = info[0]->NumberValue();
+        double ambientTemperature = info[1]->NumberValue();
+        double surfaceTemperature = info[2]->NumberValue();
+        double windVelocity = info[3]->NumberValue();
+        double surfaceEmissivity = info[4]->NumberValue();
+        double conditionFactor = info[5]->NumberValue();
+        double correctionFactor = info[6]->NumberValue();
+        WallLosses wl(surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor);
+        double heatLoss = wl.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
 }
+
 
 NAN_MODULE_INIT(InitializeLosses) {
-    Nan::Set(target, New<String>("wallLosses").ToLocalChecked(), GetFunction(New<FunctionTemplate>(wallLosses)).ToLocalChecked());
+        Nan::Set(target, New<String>("wallLosses").ToLocalChecked(),
+                 GetFunction(New<FunctionTemplate>(wallLosses)).ToLocalChecked());
+        Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(), GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
 }
 
-NODE_MODULE(losses, InitializeLosses)
+NODE_MODULE(losses, InitializeLosses
+)
