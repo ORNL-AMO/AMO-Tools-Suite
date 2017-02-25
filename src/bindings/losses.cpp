@@ -8,6 +8,7 @@ using namespace v8;
 #include "calculator/LoadChargeMaterial.h"
 #include "calculator/GasCoolingLosses.h"
 #include "calculator/GasLoadChargeMaterial.h"
+#include "calculator/LiquidCoolingLosses.h"
 
 
 NAN_METHOD(fixtureLosses) {
@@ -97,6 +98,29 @@ NAN_METHOD(gasLoadChargeMaterial) {
         info.GetReturnValue().Set(retval);
 }
 
+NAN_METHOD(liquidCoolingLosses) {
+        /**
+ * Constructor
+ * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr. double
+ * @param density Density double
+ * @param initialTemperature Initial temperature in °F. double
+ * @param outletTemperature Outlet temperature in °F. double
+ * @param specificHeat Specific heat in °F. double
+ * @param correctionFactor Correction factor double
+ * @return heatLoss double
+ */
+    double flowRate = info[0]->NumberValue();
+    double density = info[1]->NumberValue();
+    double initialTemperature = info[2]->NumberValue();
+    double outletTemperature = info[3]->NumberValue();
+    double specificHeat = info[4]->NumberValue();
+    double correctionFactor = info[5]->NumberValue();
+    LiquidCoolingLosses lcl(flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor);
+    double heatLoss = lcl.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
+}
+
 NAN_METHOD(wallLosses) {
 /**
   * Wall Losses Arguments
@@ -126,7 +150,14 @@ NAN_METHOD(wallLosses) {
 NAN_MODULE_INIT(InitializeLosses) {
         Nan::Set(target, New<String>("wallLosses").ToLocalChecked(),
                  GetFunction(New<FunctionTemplate>(wallLosses)).ToLocalChecked());
-        Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(), GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
+        Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
+        Nan::Set(target, New<String>("gasCoolingLosses").ToLocalChecked(),
+            GetFunction(New<FunctionTemplate>(gasCoolingLosses)).ToLocalChecked());
+        Nan::Set(target, New<String>("gasLoadChargeMaterial").ToLocalChecked(),
+            GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
+
+
 }
 
 NODE_MODULE(losses, InitializeLosses
