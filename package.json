@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "dependencies": {
-    "nan": "^2.5.1"
+    "nan": "^2.5.1",
+    "node-gyp": "^3.5.0"
   },
   "devDependencies": {},
   "scripts": {
