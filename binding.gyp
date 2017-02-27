@@ -24,7 +24,6 @@
                         'OTHER_LDFLAGS': ['-stdlib=libc++'],
                         # 'MACOSX_DEPLOYMENT_TARGET': '10.9'
                     },
-                    "libraries"
 				}]
 	       	]
 	    }
