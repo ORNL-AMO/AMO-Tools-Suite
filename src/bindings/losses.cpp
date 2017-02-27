@@ -194,16 +194,24 @@ NAN_METHOD(wallLosses) {
 
 
 NAN_MODULE_INIT(InitializeLosses) {
-        Nan::Set(target, New<String>("wallLosses").ToLocalChecked(),
-                 GetFunction(New<FunctionTemplate>(wallLosses)).ToLocalChecked());
+
         Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(),
                 GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
+
         Nan::Set(target, New<String>("gasCoolingLosses").ToLocalChecked(),
-            GetFunction(New<FunctionTemplate>(gasCoolingLosses)).ToLocalChecked());
+                GetFunction(New<FunctionTemplate>(gasCoolingLosses)).ToLocalChecked());
+
         Nan::Set(target, New<String>("gasLoadChargeMaterial").ToLocalChecked(),
-            GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
+                GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
 
+        Nan::Set(target, New<String>("liquidCoolingLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
 
+        Nan::Set(target, New<String>("liquidLoadChargeMaterial").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("wallLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(wallLosses)).ToLocalChecked());
 }
 
 NODE_MODULE(losses, InitializeLosses
