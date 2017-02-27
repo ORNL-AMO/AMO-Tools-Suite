@@ -3,13 +3,13 @@
 using namespace Nan;
 using namespace v8;
 
-#include "calculator/WallLosses.h"
 #include "calculator/FixtureLosses.h"
 #include "calculator/LoadChargeMaterial.h"
 #include "calculator/GasCoolingLosses.h"
 #include "calculator/GasLoadChargeMaterial.h"
 #include "calculator/LiquidCoolingLosses.h"
 #include "calculator/LiquidLoadChargeMaterial.h"
+#include "calculator/WallLosses.h"
 
 
 NAN_METHOD(fixtureLosses) {
@@ -205,14 +205,13 @@ NAN_MODULE_INIT(InitializeLosses) {
                 GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
 
         Nan::Set(target, New<String>("liquidCoolingLosses").ToLocalChecked(),
-                GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
+                GetFunction(New<FunctionTemplate>(liquidCoolingLosses)).ToLocalChecked());
 
         Nan::Set(target, New<String>("liquidLoadChargeMaterial").ToLocalChecked(),
-                GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
+                GetFunction(New<FunctionTemplate>(liquidLoadChargeMaterial)).ToLocalChecked());
 
         Nan::Set(target, New<String>("wallLosses").ToLocalChecked(),
                 GetFunction(New<FunctionTemplate>(wallLosses)).ToLocalChecked());
 }
 
-NODE_MODULE(losses, InitializeLosses
-)
+NODE_MODULE(losses, InitializeLosses)
