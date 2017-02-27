@@ -1,0 +1,27 @@
+{
+  "name": "amo-tools-suite",
+  "version": "0.1.11",
+  "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
+  "main": "./build/Release/bridge",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "nan": "^2.5.1",
+    "node-gyp": "^3.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ORNL-AMO/AMO-Tools-Suite.git#node-addon"
+  },
+  "author": "Gina Accawi <accawigk@ornl.gov>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ORNL-AMO/AMO-Tools-Suite/issues"
+  },
+  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme"
+}
