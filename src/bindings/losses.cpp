@@ -13,7 +13,7 @@ using namespace v8;
 #include "calculator/SolidLoadChargeMaterial.h"
 #include "calculator/WallLosses.h"
 #include "calculator/WaterCoolingLosses.h"
-s
+
 
 NAN_METHOD(fixtureLosses) {
 
