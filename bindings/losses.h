@@ -1,7 +1,17 @@
+//
+// Created by Accawi, Gina K. on 3/7/17.
+//
+
+#ifndef AMO_TOOLS_SUITE_LOSSES_H
+#define AMO_TOOLS_SUITE_LOSSES_H
+
 #include <nan.h>
+#include <node.h>
 
 using namespace Nan;
 using namespace v8;
+
+
 
 #include "calculator/FixtureLosses.h"
 #include "calculator/LoadChargeMaterial.h"
@@ -10,7 +20,14 @@ using namespace v8;
 #include "calculator/LiquidCoolingLosses.h"
 #include "calculator/LiquidLoadChargeMaterial.h"
 #include "calculator/WallLosses.h"
+/**********************
+ * Test methods
+ */
 
+NAN_METHOD(initTest) {
+        Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
+        info.GetReturnValue().Set(temp);
+}
 
 NAN_METHOD(fixtureLosses) {
 
@@ -79,9 +96,9 @@ NAN_METHOD(gasLoadChargeMaterial) {
         LoadChargeMaterial::ThermicReactionType thermicReactionType;
         int trt = info[0]->NumberValue();
         if (trt == 0) {
-                thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
+            thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
         } else {
-                thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
+            thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
         }
         double specificHeatGas = info[1]->NumberValue();
         double feedRate = info[2]->NumberValue();
@@ -110,16 +127,16 @@ NAN_METHOD(liquidCoolingLosses) {
  * @param correctionFactor Correction factor double
  * @return heatLoss double
  */
-    double flowRate = info[0]->NumberValue();
-    double density = info[1]->NumberValue();
-    double initialTemperature = info[2]->NumberValue();
-    double outletTemperature = info[3]->NumberValue();
-    double specificHeat = info[4]->NumberValue();
-    double correctionFactor = info[5]->NumberValue();
-    LiquidCoolingLosses lcl(flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor);
-    double heatLoss = lcl.getHeatLoss();
-    Local<Number> retval = Nan::New(heatLoss);
-    info.GetReturnValue().Set(retval);
+        double flowRate = info[0]->NumberValue();
+        double density = info[1]->NumberValue();
+        double initialTemperature = info[2]->NumberValue();
+        double outletTemperature = info[3]->NumberValue();
+        double specificHeat = info[4]->NumberValue();
+        double correctionFactor = info[5]->NumberValue();
+        LiquidCoolingLosses lcl(flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor);
+        double heatLoss = lcl.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(liquidLoadChargeMaterial) {
@@ -144,9 +161,9 @@ NAN_METHOD(liquidLoadChargeMaterial) {
         LoadChargeMaterial::ThermicReactionType thermicReactionType;
         int trt = info[0]->NumberValue();
         if (trt == 0) {
-                thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
+            thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
         } else {
-                thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
+            thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
         }
         double specificHeatLiquid = info[1]->NumberValue();
         double vaporizingTemperature = info[2]->NumberValue();
@@ -191,27 +208,4 @@ NAN_METHOD(wallLosses) {
         Local<Number> retval = Nan::New(heatLoss);
         info.GetReturnValue().Set(retval);
 }
-
-
-NAN_MODULE_INIT(InitializeLosses) {
-
-        Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(),
-                GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
-
-        Nan::Set(target, New<String>("gasCoolingLosses").ToLocalChecked(),
-                GetFunction(New<FunctionTemplate>(gasCoolingLosses)).ToLocalChecked());
-
-        Nan::Set(target, New<String>("gasLoadChargeMaterial").ToLocalChecked(),
-                GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
-
-        Nan::Set(target, New<String>("liquidCoolingLosses").ToLocalChecked(),
-                GetFunction(New<FunctionTemplate>(liquidCoolingLosses)).ToLocalChecked());
-
-        Nan::Set(target, New<String>("liquidLoadChargeMaterial").ToLocalChecked(),
-                GetFunction(New<FunctionTemplate>(liquidLoadChargeMaterial)).ToLocalChecked());
-
-        Nan::Set(target, New<String>("wallLosses").ToLocalChecked(),
-                GetFunction(New<FunctionTemplate>(wallLosses)).ToLocalChecked());
-}
-
-NODE_MODULE(losses, InitializeLosses)
+#endif //AMO_TOOLS_SUITE_LOSSES_H
