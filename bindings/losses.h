@@ -19,7 +19,10 @@ using namespace v8;
 #include "calculator/GasLoadChargeMaterial.h"
 #include "calculator/LiquidCoolingLosses.h"
 #include "calculator/LiquidLoadChargeMaterial.h"
+#include "calculator/OpeningLosses.h"
+#include "calculator/SolidLoadChargeMaterial.h"
 #include "calculator/WallLosses.h"
+#include "calculator/WaterCoolingLosses.h"
 /**********************
  * Test methods
  */
@@ -183,6 +186,88 @@ NAN_METHOD(liquidLoadChargeMaterial) {
         Local<Number> retval = Nan::New(heatLoss);
         info.GetReturnValue().Set(retval);
 }
+NAN_METHOD(openingLosses) {
+    /**
+     * Constructor
+     * @param emissivity
+     * @param diameterWidth
+     * @param thickness
+     * @param ratio
+     * @param ambientTemperature
+     * @param insideTemperature
+     * @param percentTimeOpen
+     * @param viewFactor
+     * @return nothing
+     */
+
+    double emissivity = info[0]->NumberValue();
+    double diameterWidth = info[1]->NumberValue();
+    double thickness = info[2]->NumberValue();
+    double ratio = info[3]->NumberValue();
+    double ambientTemperature = info[4]->NumberValue();
+    double insideTemperature = info[5]->NumberValue();
+    double percentTimeOpen = info[6]->NumberValue();
+    double viewFactor = info[7]->NumberValue();
+    OpeningLosses::OpeningShape openingShape;
+    int trt = info[8]->NumberValue();
+    if (trt == 8) {
+        openingShape = OpeningLosses::OpeningShape::CIRCULAR;
+    } else {
+        openingShape = OpeningLosses::OpeningShape::RECTANGULAR;
+    }
+    OpeningLosses ol(emissivity, diameterWidth, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor, openingShape);
+    double heatLoss = ol.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(solidLoadChargeMaterial) {
+    /**
+ * Constructor for the solid load/charge material with all inputs specified.
+ *
+ * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
+ * @param specificHeatSolid Average specific heat of the solid material (dry) in Btu/(lb-°F)
+ * @param latentHeat Latent heat of fusion in Btu/(lb)
+ * @param specificHeatLiquid Specific heat of liquid from molten material in Btu/(lb-°F)
+ * @param meltingPoint The melting point of the material in °F
+ * @param chargeFeedRate Charge (wet)-feed rate in lb/h
+ * @param waterContentCharged Water content as charged (%) in %
+ * @param waterContentDischarged Water content as discharged (%) in %
+ * @param initialTemperature Initial temperature in °F
+ * @param dischargeTemperature Charge material discharge temperature in °F
+ * @param waterVaporDischargeTemperature Water vapor discharge temperature in °F
+ * @param chargeMelted Charge melted (% of dry charge) in %
+ * @param chargedReacted Charge Reacted (% of dry charge) in %
+ * @param reactionHeat Heat of reaction in Btu/lb
+ * @param additionalHeat Additional heat required in Btu/h
+ *
+ * */
+    LoadChargeMaterial::ThermicReactionType thermicReactionType;
+    int trt = info[0]->NumberValue();
+    if (trt == 0) {
+        thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
+    } else {
+        thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
+    }
+    double specificHeatSolid = info[1]->NumberValue();
+    double latentHeat = info[2]->NumberValue();
+    double specificHeatLiquid = info[3]->NumberValue();
+    double meltingPoint = info[4]->NumberValue();
+    double chargeFeedRate = info[5]->NumberValue();
+    double waterContentCharged = info[6]->NumberValue();
+    double waterContentDischarged = info[7]->NumberValue();
+    double initialTemperature = info[8]->NumberValue();
+    double dischargeTemperature = info[9]->NumberValue();
+    double waterVaporDischargeTemperature = info[10]->NumberValue();
+    double chargeMelted = info[11]->NumberValue();
+    double chargedReacted = info[12]->NumberValue();
+    double reactionHeat = info[13]->NumberValue();
+    double additionalHeat = info[14]->NumberValue();
+    SolidLoadChargeMaterial slcm(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat);
+    double heatLoss = slcm.getTotalHeat();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
+}
 
 NAN_METHOD(wallLosses) {
 /**
@@ -196,16 +281,35 @@ NAN_METHOD(wallLosses) {
   * @param correctionFactor double
   * @return heatLoss double
   */
-        double surfaceArea = info[0]->NumberValue();
-        double ambientTemperature = info[1]->NumberValue();
-        double surfaceTemperature = info[2]->NumberValue();
-        double windVelocity = info[3]->NumberValue();
-        double surfaceEmissivity = info[4]->NumberValue();
-        double conditionFactor = info[5]->NumberValue();
-        double correctionFactor = info[6]->NumberValue();
-        WallLosses wl(surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor);
-        double heatLoss = wl.getHeatLoss();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+    double surfaceArea = info[0]->NumberValue();
+    double ambientTemperature = info[1]->NumberValue();
+    double surfaceTemperature = info[2]->NumberValue();
+    double windVelocity = info[3]->NumberValue();
+    double surfaceEmissivity = info[4]->NumberValue();
+    double conditionFactor = info[5]->NumberValue();
+    double correctionFactor = info[6]->NumberValue();
+    WallLosses wl(surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor);
+    double heatLoss = wl.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(waterCoolingLosses) {
+    /**
+     * Constructor
+     * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
+     * @param initialTemperature Initial temperature in °F.
+     * @param outletTemperature Outlet temperature in °F.
+     * @param correctionFactor Correction factor
+     * @return nothing
+     */
+    double flowRate = info[0]->NumberValue();
+    double initialTemperature = info[1]->NumberValue();
+    double outletTemperature = info[2]->NumberValue();
+    double correctionFactor = info[3]->NumberValue();
+    WaterCoolingLosses wcl(flowRate, initialTemperature, outletTemperature, correctionFactor);
+    double heatLoss = wcl.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 #endif //AMO_TOOLS_SUITE_LOSSES_H
