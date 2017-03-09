@@ -186,6 +186,7 @@ NAN_METHOD(liquidLoadChargeMaterial) {
         Local<Number> retval = Nan::New(heatLoss);
         info.GetReturnValue().Set(retval);
 }
+
 NAN_METHOD(openingLosses) {
     /**
      * Constructor

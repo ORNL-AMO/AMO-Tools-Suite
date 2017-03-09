@@ -7,7 +7,9 @@ using namespace Nan;
 
 NAN_MODULE_INIT(InitAll) {
 
-
+    // PSAT
+    Nan::Set(target, New<String>("achievableEfficiency").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(achievableEfficiency)).ToLocalChecked());
 
 
     // PHAST Losses

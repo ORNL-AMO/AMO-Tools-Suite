@@ -25,8 +25,8 @@ using namespace v8;
 //// Setup
 //
 //Isolate* iso;
-//Local<Object> inp;
-//Local<Object> r;
+Local<Object> inp;
+Local<Object> r;
 //
 //void Setup(const FunctionCallbackInfo<Value>& args) {
 //    iso = args.GetIsolate();
@@ -133,6 +133,13 @@ using namespace v8;
 //    SetR("max",v*OptimalDeviationFactor(Get("flow")).calculate());
 //}
 //
+
+NAN_METHOD(achievableEfficiency) {
+        inp = info[0]->ToObject();
+        r = Nan::New<Object>();
+        info.GetReturnValue().Set(r);
+}
+
 //void AchievableEfficiency(const FunctionCallbackInfo<Value>& args) {
 //    Setup(args);
 //    args.GetReturnValue().Set(
