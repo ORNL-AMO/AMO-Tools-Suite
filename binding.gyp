@@ -2,13 +2,12 @@
 {
   	"targets": [
 		{
-	    	"target_name": "bridge",
+	    	"target_name": "amo_tools_suite",
 	    	'include_dirs': ['include', 'include/calculator', 'include/phast', 'include/psat', 'include/sqlite', 'third_party/sqlite',
 	    	    "<!(node -e \"require('nan')\")"
 	    	 ],
 			'sources' : [
-				'src/bindings/bridge.cpp',
-				'src/bindings/losses.cpp',
+				'bindings/amo_tools_suite.cpp',
 				"<!@(node -e \"console.log(require('fs').readdirSync('src/').map(f=>'src/'+f).join(' '))\")",
 				"<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/').map(f=>'src/calculator/'+f).join(' '))\")",
 				"<!@(node -e \"console.log(require('fs').readdirSync('src/psat/').map(f=>'src/psat/'+f).join(' '))\")",
