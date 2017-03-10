@@ -23,9 +23,12 @@ using namespace v8;
 #include "calculator/SolidLoadChargeMaterial.h"
 #include "calculator/WallLosses.h"
 #include "calculator/WaterCoolingLosses.h"
+<<<<<<< HEAD:bindings/losses.h
 /**********************
  * Test methods
  */
+=======
+>>>>>>> develop:src/bindings/losses.cpp
 
 NAN_METHOD(initTest) {
         Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
@@ -188,6 +191,7 @@ NAN_METHOD(liquidLoadChargeMaterial) {
 }
 
 NAN_METHOD(openingLosses) {
+<<<<<<< HEAD:bindings/losses.h
     /**
      * Constructor
      * @param emissivity
@@ -220,6 +224,40 @@ NAN_METHOD(openingLosses) {
     double heatLoss = ol.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
+=======
+   /**
+    * Constructor
+    * @param emissivity
+    * @param diameterWidth
+    * @param thickness
+    * @param ratio
+    * @param ambientTemperature
+    * @param insideTemperature
+    * @param percentTimeOpen
+    * @param viewFactor
+    * @return nothing
+    */
+
+	double emissivity = info[0]->NumberValue();
+	double diameterWidth = info[1]->NumberValue();
+	double thickness = info[2]->NumberValue();
+	double ratio = info[3]->NumberValue();
+	double ambientTemperature = info[4]->NumberValue();
+	double insideTemperature = info[5]->NumberValue();
+	double percentTimeOpen = info[6]->NumberValue();
+	double viewFactor = info[7]->NumberValue();
+	OpeningLosses::OpeningShape openingShape;        
+	int trt = info[8]->NumberValue();
+        if (trt == 8) {
+                openingShape = OpeningLosses::OpeningShape::CIRCULAR;
+        } else {
+                openingShape = OpeningLosses::OpeningShape::RECTANGULAR;
+        }
+	OpeningLosses ol(emissivity, diameterWidth, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor, openingShape);
+        double heatLoss = ol.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
+>>>>>>> develop:src/bindings/losses.cpp
 }
 
 NAN_METHOD(solidLoadChargeMaterial) {
@@ -243,6 +281,7 @@ NAN_METHOD(solidLoadChargeMaterial) {
  * @param additionalHeat Additional heat required in Btu/h
  *
  * */
+<<<<<<< HEAD:bindings/losses.h
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
     int trt = info[0]->NumberValue();
     if (trt == 0) {
@@ -268,6 +307,33 @@ NAN_METHOD(solidLoadChargeMaterial) {
     double heatLoss = slcm.getTotalHeat();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
+=======
+	LoadChargeMaterial::ThermicReactionType thermicReactionType;
+        int trt = info[0]->NumberValue();
+        if (trt == 0) {
+                thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
+        } else {
+                thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
+        }
+	double specificHeatSolid = info[1]->NumberValue();
+	double latentHeat = info[2]->NumberValue();
+	double specificHeatLiquid = info[3]->NumberValue();
+	double meltingPoint = info[4]->NumberValue();
+	double chargeFeedRate = info[5]->NumberValue();
+	double waterContentCharged = info[6]->NumberValue();
+	double waterContentDischarged = info[7]->NumberValue();
+	double initialTemperature = info[8]->NumberValue();
+	double dischargeTemperature = info[9]->NumberValue();
+	double waterVaporDischargeTemperature = info[10]->NumberValue();
+	double chargeMelted = info[11]->NumberValue();
+	double chargedReacted = info[12]->NumberValue();
+	double reactionHeat = info[13]->NumberValue();
+	double additionalHeat = info[14]->NumberValue();
+	SolidLoadChargeMaterial slcm(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat);
+        double heatLoss = slcm.getTotalHeat();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
+>>>>>>> develop:src/bindings/losses.cpp
 }
 
 NAN_METHOD(wallLosses) {
@@ -304,6 +370,7 @@ NAN_METHOD(waterCoolingLosses) {
      * @param correctionFactor Correction factor
      * @return nothing
      */
+<<<<<<< HEAD:bindings/losses.h
     double flowRate = info[0]->NumberValue();
     double initialTemperature = info[1]->NumberValue();
     double outletTemperature = info[2]->NumberValue();
@@ -314,3 +381,47 @@ NAN_METHOD(waterCoolingLosses) {
     info.GetReturnValue().Set(retval);
 }
 #endif //AMO_TOOLS_SUITE_LOSSES_H
+=======
+	double flowRate = info[0]->NumberValue();
+	double initialTemperature = info[1]->NumberValue();
+	double outletTemperature = info[2]->NumberValue();
+	double correctionFactor = info[3]->NumberValue();
+	WaterCoolingLosses wcl(flowRate, initialTemperature, outletTemperature, correctionFactor);
+        double heatLoss = wcl.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
+}
+
+NAN_MODULE_INIT(InitializeLosses) {
+
+        Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("gasCoolingLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(gasCoolingLosses)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("gasLoadChargeMaterial").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(gasLoadChargeMaterial)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("liquidCoolingLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(liquidCoolingLosses)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("liquidLoadChargeMaterial").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(liquidLoadChargeMaterial)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("openingLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(openingLosses)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("solidLoadChargeMaterial").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(solidLoadChargeMaterial)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("wallLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(wallLosses)).ToLocalChecked());
+
+        Nan::Set(target, New<String>("waterCoolingLosses").ToLocalChecked(),
+                GetFunction(New<FunctionTemplate>(waterCoolingLosses)).ToLocalChecked());
+
+}
+
+NODE_MODULE(losses, InitializeLosses)
+>>>>>>> develop:src/bindings/losses.cpp
