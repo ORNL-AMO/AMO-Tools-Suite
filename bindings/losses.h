@@ -23,12 +23,7 @@ using namespace v8;
 #include "calculator/SolidLoadChargeMaterial.h"
 #include "calculator/WallLosses.h"
 #include "calculator/WaterCoolingLosses.h"
-<<<<<<< HEAD:bindings/losses.h
-/**********************
- * Test methods
- */
-=======
->>>>>>> develop:src/bindings/losses.cpp
+
 
 NAN_METHOD(initTest) {
         Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
