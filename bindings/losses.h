@@ -23,7 +23,9 @@ using namespace v8;
 #include "calculator/SolidLoadChargeMaterial.h"
 #include "calculator/WallLosses.h"
 #include "calculator/WaterCoolingLosses.h"
-
+/**********************
+ * Test methods
+ */
 
 NAN_METHOD(initTest) {
         Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
@@ -316,5 +318,6 @@ NAN_METHOD(waterCoolingLosses) {
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
 }
+
 #endif //AMO_TOOLS_SUITE_LOSSES_H
 
