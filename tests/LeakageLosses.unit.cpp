@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <calculator/LeakageLosses.h>
+#include <calculator/losses/LeakageLosses.h>
 
 TEST_CASE( "Calculate Heat Loss for gas leakage", "[Heat Loss]" ) {
 

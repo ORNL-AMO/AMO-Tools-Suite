@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <calculator/MotorEfficiency.h>
+#include <calculator/motor/MotorEfficiency.h>
 
 TEST_CASE( "Calculate Motor Efficiency - 200 HP", "[MotorEfficiency]" ) {
     MotorEfficiency motorEff(Motor::LineFrequency::FREQ60, 1785, Motor::EfficiencyClass::ENERGY_EFFICIENT, 0, 200, 0);

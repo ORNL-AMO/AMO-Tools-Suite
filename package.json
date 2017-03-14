@@ -6,9 +6,9 @@
   "directories": {
     "test": "tests"
   },
+  "gypfile": true,
   "dependencies": {
-    "nan": "^2.5.1",
-    "node-gyp": "^3.5.0"
+    "nan": "^2.5.1"
   },
   "devDependencies": {},
   "scripts": {

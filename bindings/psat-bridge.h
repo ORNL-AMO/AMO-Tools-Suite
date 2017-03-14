@@ -13,13 +13,13 @@ using namespace v8;
 
 
 #include "psat/PSATResult.h"
-#include "calculator/EstimateFLA.h"
-#include "calculator/MotorCurrent.h"
-#include "calculator/MotorEfficiency.h"
-#include "calculator/MotorPowerFactor.h"
-#include "calculator/OptimalPrePumpEff.h"
-#include "calculator/OptimalSpecificSpeedCorrection.h"
-#include "calculator/OptimalDeviationFactor.h"
+#include "calculator/motor/EstimateFLA.h"
+#include "calculator/motor/MotorCurrent.h"
+#include "calculator/motor/MotorEfficiency.h"
+#include "calculator/motor/MotorPowerFactor.h"
+#include "calculator/pump/OptimalPrePumpEff.h"
+#include "calculator/pump/OptimalSpecificSpeedCorrection.h"
+#include "calculator/pump/OptimalDeviationFactor.h"
 
 //
 //// Setup

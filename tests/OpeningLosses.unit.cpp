@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <calculator/OpeningLosses.h>
+#include <calculator/losses/OpeningLosses.h>
 
 TEST_CASE( "Calculate Heat Loss for opening Losses", "[Heat Loss]" ) {
 

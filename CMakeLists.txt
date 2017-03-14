@@ -57,94 +57,94 @@ file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 set(SOURCE_FILES
 #    src/FieldData.cpp
 #    src/Financial.cpp
-        src/Motor.cpp
-    src/OptimizationRating.cpp
+        src/psat/Motor.cpp
+        src/psat/OptimizationRating.cpp
         src/psat/PSATResult.cpp
         src/psat/Pump.cpp
-    src/calculator/AnnualCost.cpp
-    src/calculator/AnnualEnergy.cpp
-    src/calculator/CurveFitVal.cpp
-    src/calculator/EstimateFLA.cpp
-    src/calculator/FluidPower.cpp
-    src/calculator/MotorCurrent.cpp
-    src/calculator/MotorEfficiency.cpp
-    src/calculator/MotorEfficiency25.cpp
-    src/calculator/MotorPower.cpp
-    src/calculator/MotorPowerFactor.cpp
-    src/calculator/MotorShaftPower.cpp
-    src/calculator/OptimalDeviationFactor.cpp
-    src/calculator/OptimalMotorCurrent.cpp
-    src/calculator/OptimalMotorPower.cpp
-    src/calculator/OptimalMotorShaftPower.cpp
-    src/calculator/OptimalMotorSize.cpp
-    src/calculator/OptimalPrePumpEff.cpp
-    src/calculator/OptimalPumpEfficiency.cpp
-    src/calculator/OptimalPumpShaftPower.cpp
-    src/calculator/OptimalSpecificSpeed.cpp
-    src/calculator/OptimalSpecificSpeedCorrection.cpp
-    src/calculator/Poles.cpp
-    src/calculator/PumpEfficiency.cpp
-    src/calculator/PumpShaftPower.cpp
-    src/calculator/GasLoadChargeMaterial.cpp
-    src/calculator/LiquidLoadChargeMaterial.cpp
-    src/calculator/SolidLoadChargeMaterial.cpp
-    src/calculator/Atmosphere.cpp
-    src/calculator/FixtureLosses.cpp
-    src/calculator/GasCoolingLosses.cpp
-    src/calculator/WaterCoolingLosses.cpp
-    src/calculator/LiquidCoolingLosses.cpp
-    src/calculator/LeakageLosses.cpp
-    src/calculator/WallLosses.cpp
-    src/calculator/OpeningLosses.cpp
+        src/calculator/util/AnnualCost.cpp
+        src/calculator/util/AnnualEnergy.cpp
+        src/calculator/util/CurveFitVal.cpp
+        src/calculator/motor/EstimateFLA.cpp
+        src/calculator/pump/FluidPower.cpp
+        src/calculator/motor/MotorCurrent.cpp
+        src/calculator/motor/MotorEfficiency.cpp
+        src/calculator/motor/MotorEfficiency25.cpp
+        src/calculator/motor/MotorPower.cpp
+        src/calculator/motor/MotorPowerFactor.cpp
+        src/calculator/motor/MotorShaftPower.cpp
+        src/calculator/pump/OptimalDeviationFactor.cpp
+        src/calculator/motor/OptimalMotorCurrent.cpp
+        src/calculator/motor/OptimalMotorPower.cpp
+        src/calculator/motor/OptimalMotorShaftPower.cpp
+        src/calculator/motor/OptimalMotorSize.cpp
+        src/calculator/pump/OptimalPrePumpEff.cpp
+        src/calculator/pump/OptimalPumpEfficiency.cpp
+        src/calculator/pump/OptimalPumpShaftPower.cpp
+        src/calculator/pump/OptimalSpecificSpeed.cpp
+        src/calculator/pump/OptimalSpecificSpeedCorrection.cpp
+        src/calculator/motor/Poles.cpp
+        src/calculator/pump/PumpEfficiency.cpp
+        src/calculator/pump/PumpShaftPower.cpp
+        src/calculator/losses/GasLoadChargeMaterial.cpp
+        src/calculator/losses/LiquidLoadChargeMaterial.cpp
+        src/calculator/losses/SolidLoadChargeMaterial.cpp
+        src/calculator/losses/Atmosphere.cpp
+        src/calculator/losses/FixtureLosses.cpp
+        src/calculator/losses/GasCoolingLosses.cpp
+        src/calculator/losses/WaterCoolingLosses.cpp
+        src/calculator/losses/LiquidCoolingLosses.cpp
+        src/calculator/losses/LeakageLosses.cpp
+        src/calculator/losses/WallLosses.cpp
+        src/calculator/losses/OpeningLosses.cpp
     src/sqlite/SQLite.cpp
-        src/calculator/FlueGas.cpp src/phast/Furnace.cpp src/phast/ChargeMaterial.cpp)
+        src/calculator/losses/FlueGas.cpp src/phast/Furnace.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
-    include/Financial.h
-        include/Motor.h
-    include/OptimizationRating.h
+        include/psat/Financial.h
+        include/psat/Motor.h
+        include/psat/OptimizationRating.h
         include/psat/PSATResult.h
         include/psat/Pump.h
-    include/calculator/AnnualCost.h
-    include/calculator/AnnualEnergy.h
-    include/calculator/CurveFitVal.h
-    include/calculator/EstimateFLA.h
-    include/calculator/FluidPower.h
-    include/calculator/MotorCurrent.h
-    include/calculator/MotorEfficiency.h
-    include/calculator/MotorEfficiency25.h
-    include/calculator/MotorPower.h
-    include/calculator/MotorPowerFactor.h
-    include/calculator/MotorShaftPower.h
-    include/calculator/OptimalDeviationFactor.h
-    include/calculator/OptimalMotorCurrent.h
-    include/calculator/OptimalMotorPower.h
-    include/calculator/OptimalMotorShaftPower.h
-    include/calculator/OptimalMotorSize.h
-    include/calculator/OptimalPrePumpEff.h
-    include/calculator/OptimalPumpEfficiency.h
-    include/calculator/OptimalPumpShaftPower.h
-    include/calculator/OptimalSpecificSpeed.h
-    include/calculator/OptimalSpecificSpeedCorrection.h
-    include/calculator/Poles.h
-    include/calculator/PumpEfficiency.h
-    include/calculator/PumpShaftPower.h
-    include/calculator/LoadChargeMaterial.h
-    include/calculator/SolidLoadChargeMaterial.h
-    include/calculator/LiquidLoadChargeMaterial.h
-    include/calculator/GasLoadChargeMaterial.h
-    include/calculator/Atmosphere.h
-    include/calculator/GasCoolingLosses.h
-    include/calculator/FixtureLosses.h
-    include/calculator/WaterCoolingLosses.h
-    include/calculator/LiquidCoolingLosses.h
-    include/calculator/LeakageLosses.h
-    include/calculator/WallLosses.h
-    include/calculator/OpeningLosses.h
+        include/calculator/util/AnnualCost.h
+        include/calculator/util/AnnualEnergy.h
+        include/calculator/util/CurveFitVal.h
+        include/calculator/motor/EstimateFLA.h
+        include/calculator/pump/FluidPower.h
+        include/calculator/motor/MotorCurrent.h
+        include/calculator/motor/MotorEfficiency.h
+        include/calculator/motor/MotorEfficiency25.h
+        include/calculator/motor/MotorPower.h
+        include/calculator/motor/MotorPowerFactor.h
+        include/calculator/motor/MotorShaftPower.h
+        include/calculator/pump/OptimalDeviationFactor.h
+        include/calculator/motor/OptimalMotorCurrent.h
+        include/calculator/motor/OptimalMotorPower.h
+        include/calculator/motor/OptimalMotorShaftPower.h
+        include/calculator/motor/OptimalMotorSize.h
+        include/calculator/pump/OptimalPrePumpEff.h
+        include/calculator/pump/OptimalPumpEfficiency.h
+        include/calculator/pump/OptimalPumpShaftPower.h
+        include/calculator/pump/OptimalSpecificSpeed.h
+        include/calculator/pump/OptimalSpecificSpeedCorrection.h
+        include/calculator/motor/Poles.h
+        include/calculator/pump/PumpEfficiency.h
+        include/calculator/pump/PumpShaftPower.h
+        include/calculator/losses/LoadChargeMaterial.h
+        include/calculator/losses/SolidLoadChargeMaterial.h
+        include/calculator/losses/LiquidLoadChargeMaterial.h
+        include/calculator/losses/GasLoadChargeMaterial.h
+        include/calculator/losses/Atmosphere.h
+        include/calculator/losses/GasCoolingLosses.h
+        include/calculator/losses/FixtureLosses.h
+        include/calculator/losses/WaterCoolingLosses.h
+        include/calculator/losses/LiquidCoolingLosses.h
+        include/calculator/losses/LeakageLosses.h
+        include/calculator/losses/WallLosses.h
+        include/calculator/losses/OpeningLosses.h
     include/sqlite/SQLite.h
-    include/calculator/FlueGas.h
-        include/phast/Furnace.h include/phast/ChargeMaterial.h)
+        include/calculator/losses/FlueGas.h
+        include/phast/Furnace.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
