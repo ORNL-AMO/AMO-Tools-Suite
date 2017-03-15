@@ -97,7 +97,8 @@ set(SOURCE_FILES
         src/calculator/losses/WallLosses.cpp
         src/calculator/losses/OpeningLosses.cpp
     src/sqlite/SQLite.cpp
-        src/calculator/losses/FlueGas.cpp src/phast/Furnace.cpp)
+        src/calculator/losses/FlueGas.cpp src/phast/Furnace.cpp
+        src/calculator/pump/HeadTool.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -144,7 +145,9 @@ set(INCLUDE_FILES
         include/calculator/losses/OpeningLosses.h
     include/sqlite/SQLite.h
         include/calculator/losses/FlueGas.h
-        include/phast/Furnace.h)
+        include/phast/Furnace.h
+        include/calculator/pump/HeadTool.h
+        include/calculator/pump/HeadTool.h)
 
 set(TEST_FILES
     tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -160,7 +163,8 @@ set(TEST_FILES
     tests/LeakageLosses.unit.cpp
     tests/WallLosses.unit.cpp
     tests/OpeningLosses.unit.cpp
-        tests/FlueGas.unit.cpp)
+        tests/FlueGas.unit.cpp
+        tests/HeadTool.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
