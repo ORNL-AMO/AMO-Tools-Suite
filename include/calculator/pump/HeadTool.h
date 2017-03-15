@@ -1,6 +1,6 @@
 /**
  * @brief Contains the skeleton of HeadTool class.
- *      ***********calculate(): Calculates the Head? ***************
+ *      calculate(): Calculates the operating pump head
  *
  * @author Preston Shires (pshires)
  * @bug No known bugs.
@@ -10,7 +10,62 @@
 #ifndef AMO_TOOLS_SUITE_HEADTOOL_H
 #define AMO_TOOLS_SUITE_HEADTOOL_H
 
-class HeadToolSuctionTank {
+class HeadToolBase {
+protected:
+	/**
+    * Constructor for Suction Tank HeadTool with all inputs specified
+    *
+    * @param specificGravity no units
+    * @param flowRate units in meters cubed per hour (m^3/hour)
+    * @param suctionPipeDiameter units in millimeters
+    * @param suctionTankGasOverPressure units in kPa
+    * @param suctionTankFluidSurfaceElevation units in meters
+    * @param suctionLineLossCoefficients no units
+    * @param dischargePipeDiameter units in millimeters
+    * @param dischargeGaugePressure units in kPa
+    * @param dischargeGaugeElevation units in meters
+    * @param dischargeLineLossCoefficients no units
+	*
+ * */
+
+	HeadToolBase(
+			const double specificGravity,
+			const double flowRate,
+			const double suctionPipeDiameter,
+			const double suctionLineLossCoefficients,
+			const double dischargePipeDiameter,
+			const double dischargeGaugePressure,
+			const double dischargeGaugeElevation,
+			const double dischargeLineLossCoefficients
+	) :
+			specificGravity_(specificGravity),
+			flowRate_(flowRate),
+			suctionPipeDiameter_(suctionPipeDiameter),
+			suctionLineLossCoefficients_(suctionLineLossCoefficients),
+			dischargePipeDiameter_(dischargePipeDiameter),
+			dischargeGaugePressure_(dischargeGaugePressure),
+			dischargeGaugeElevation_(dischargeGaugeElevation),
+			dischargeLineLossCoefficients_(dischargeLineLossCoefficients)
+	{}
+
+	virtual double calculate() = 0;
+
+	double velocity(const double diameter, const double flow);
+
+	double velocityHead(const double velocity, const double gravity);
+
+	const double specificGravity_, flowRate_;
+
+	const double suctionPipeDiameter_, suctionLineLossCoefficients_;
+
+	const double dischargePipeDiameter_, dischargeGaugePressure_;
+
+	const double dischargeGaugeElevation_, dischargeLineLossCoefficients_;
+
+	const double gravity_ = 9.8065, PI_ = 3.141592653589793238463;
+};
+
+class HeadToolSuctionTank : private HeadToolBase {
 public:
 
 	/**
@@ -30,51 +85,36 @@ public:
  * */
 
 	HeadToolSuctionTank(
-			double specificGravity,
-			double flowRate,
-			double suctionPipeDiameter,
-			double suctionTankGasOverPressure,
-			double suctionTankFluidSurfaceElevation,
-			double suctionLineLossCoefficients,
-			double dischargePipeDiameter,
-			double dischargeGaugePressure,
-			double dischargeGaugeElevation,
-			double dischargeLineLossCoefficients
+			const double specificGravity,
+			const double flowRate,
+			const double suctionPipeDiameter,
+			const double suctionTankGasOverPressure,
+			const double suctionTankFluidSurfaceElevation,
+			const double suctionLineLossCoefficients,
+			const double dischargePipeDiameter,
+			const double dischargeGaugePressure,
+			const double dischargeGaugeElevation,
+			const double dischargeLineLossCoefficients
 	) :
-			specificGravity_(specificGravity),
-			flowRate_(flowRate),
-			suctionPipeDiameter_(suctionPipeDiameter),
+			HeadToolBase( specificGravity,
+			              flowRate,
+			              suctionPipeDiameter,
+			              suctionLineLossCoefficients,
+			              dischargePipeDiameter,
+			              dischargeGaugePressure,
+			              dischargeGaugeElevation,
+			              dischargeLineLossCoefficients),
 			suctionTankGasOverPressure_(suctionTankGasOverPressure),
-			suctionTankFluidSurfaceElevation_(suctionTankFluidSurfaceElevation),
-			suctionLineLossCoefficients_(suctionLineLossCoefficients),
-			dischargePipeDiameter_(dischargePipeDiameter),
-			dischargeGaugePressure_(dischargeGaugePressure),
-			dischargeGaugeElevation_(dischargeGaugeElevation),
-			dischargeLineLossCoefficients_(dischargeLineLossCoefficients)
+			suctionTankFluidSurfaceElevation_(suctionTankFluidSurfaceElevation)
 	{}
 
 	double calculate();
 
 private:
-
-	double velocity(double diameter, double flow);
-
-	double velocityHead(double velocity, double gravity);
-
-	const double specificGravity_, flowRate_;
-
-	const double suctionPipeDiameter_, suctionTankGasOverPressure_;
-
-	const double suctionTankFluidSurfaceElevation_, suctionLineLossCoefficients_;
-
-	const double dischargePipeDiameter_, dischargeGaugePressure_;
-
-	const double dischargeGaugeElevation_, dischargeLineLossCoefficients_;
-
-	const double gravity_ = 9.8065, PI_ = 3.141592653589793238463, distF_ = 1000;
+	const double suctionTankGasOverPressure_, suctionTankFluidSurfaceElevation_;
 };
 
-class HeadTool {
+class HeadTool : private HeadToolBase {
 public:
 
 /**
@@ -94,48 +134,33 @@ public:
 * */
 
 	HeadTool(
-			double specificGravity,
-			double flowRate,
-			double suctionPipeDiameter,
-			double suctionGaugePressure,
-			double suctionGaugeElevation,
-			double suctionLineLossCoefficients,
-			double dischargePipeDiameter,
-			double dischargeGaugePressure,
-			double dischargeGaugeElevation,
-			double dischargeLineLossCoefficients
+			const double specificGravity,
+			const double flowRate,
+			const double suctionPipeDiameter,
+			const double suctionGaugePressure,
+			const double suctionGaugeElevation,
+			const double suctionLineLossCoefficients,
+			const double dischargePipeDiameter,
+			const double dischargeGaugePressure,
+			const double dischargeGaugeElevation,
+			const double dischargeLineLossCoefficients
 	) :
-			specificGravity_(specificGravity),
-			flowRate_(flowRate),
-			suctionPipeDiameter_(suctionPipeDiameter),
+			HeadToolBase( specificGravity,
+			              flowRate,
+			              suctionPipeDiameter,
+			              suctionLineLossCoefficients,
+			              dischargePipeDiameter,
+			              dischargeGaugePressure,
+			              dischargeGaugeElevation,
+			              dischargeLineLossCoefficients),
 			suctionGaugePressure_(suctionGaugePressure),
-			suctionGaugeElevation_(suctionGaugeElevation),
-			suctionLineLossCoefficients_(suctionLineLossCoefficients),
-			dischargePipeDiameter_(dischargePipeDiameter),
-			dischargeGaugePressure_(dischargeGaugePressure),
-			dischargeGaugeElevation_(dischargeGaugeElevation),
-			dischargeLineLossCoefficients_(dischargeLineLossCoefficients) {}
+			suctionGaugeElevation_(suctionGaugeElevation)
+	{}
 
 	double calculate();
 
 private:
-
-	double velocity(double diameter, double flow);
-
-	double velocityHead(double velocity, double gravity);
-
-	const double specificGravity_, flowRate_;
-
-	const double suctionPipeDiameter_, suctionGaugePressure_;
-
-	const double suctionGaugeElevation_, suctionLineLossCoefficients_;
-
-	const double dischargePipeDiameter_, dischargeGaugePressure_;
-
-	const double dischargeGaugeElevation_, dischargeLineLossCoefficients_;
-
-	const double gravity_ = 9.8065, PI_ = 3.141592653589793238463, distF_ = 1000;
+	const double suctionGaugePressure_, suctionGaugeElevation_;
 };
-
 
 #endif //AMO_TOOLS_SUITE_HEADTOOL_H
