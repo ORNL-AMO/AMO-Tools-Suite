@@ -40,6 +40,12 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("initTest").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(initTest)).ToLocalChecked());
 
+	Nan::Set(target, New<String>("headToolSuctionTank").ToLocalChecked(),
+			GetFunction(New<FunctionTemplate>(headToolSuctionTank)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("headTool").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(headTool)).ToLocalChecked());
+
 }
 
 NODE_MODULE(phast, InitPhast)
