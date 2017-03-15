@@ -21,11 +21,11 @@ public:
     * @param suctionPipeDiameter units in millimeters
     * @param suctionTankGasOverPressure units in kPa
     * @param suctionTankFluidSurfaceElevation units in meters
-    * @param suctionLineLossCoefficients TODO no units ?
+    * @param suctionLineLossCoefficients no units
     * @param dischargePipeDiameter units in millimeters
     * @param dischargeGaugePressure units in kPa
     * @param dischargeGaugeElevation units in meters
-    * @param dischargeLineLossCoefficients TODO no units ?
+    * @param dischargeLineLossCoefficients no units
 	*
  * */
 
@@ -53,10 +53,7 @@ public:
 			dischargeLineLossCoefficients_(dischargeLineLossCoefficients)
 	{}
 
-
-
 	double calculate();
-
 
 private:
 
@@ -88,11 +85,11 @@ public:
 * @param suctionPipeDiameter units in millimeters
 * @param suctionTankGaugePressure units in kPa
 * @param suctionTankFluidSurfaceElevation units in meters
-* @param suctionLineLossCoefficients TODO no units ?
+* @param suctionLineLossCoefficients no units
 * @param dischargePipeDiameter units in millimeters
 * @param dischargeGaugePressure units in kPa
 * @param dischargeGaugeElevation units in meters
-* @param dischargeLineLossCoefficients TODO no units ?
+* @param dischargeLineLossCoefficients no units
 *
 * */
 
