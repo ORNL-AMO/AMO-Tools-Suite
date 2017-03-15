@@ -1,5 +1,5 @@
 /**
- * @brief Contains the skeleton of HeadTool class.
+ * @brief Contains the implementations of the HeadTool hierarchy methods.
  *      calculate(): Calculates the operating pump head
  *
  * @author Preston Shires (pshires)

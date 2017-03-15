@@ -1,5 +1,5 @@
 /**
- * @brief Contains the skeleton of HeadTool class.
+ * @brief Contains the entire hierarchy of the HeadTool classes.
  *      calculate(): Calculates the operating pump head
  *
  * @author Preston Shires (pshires)
@@ -13,13 +13,11 @@
 class HeadToolBase {
 protected:
 	/**
-    * Constructor for Suction Tank HeadTool with all inputs specified
+    * Constructor for the abstract HeadToolBase class with all inputs specified
     *
     * @param specificGravity no units
     * @param flowRate units in meters cubed per hour (m^3/hour)
     * @param suctionPipeDiameter units in millimeters
-    * @param suctionTankGasOverPressure units in kPa
-    * @param suctionTankFluidSurfaceElevation units in meters
     * @param suctionLineLossCoefficients no units
     * @param dischargePipeDiameter units in millimeters
     * @param dischargeGaugePressure units in kPa
@@ -69,7 +67,7 @@ class HeadToolSuctionTank : private HeadToolBase {
 public:
 
 	/**
-    * Constructor for Suction Tank HeadTool with all inputs specified
+    * Constructor for the HeadToolSuctionTank class with all inputs specified
     *
     * @param specificGravity no units
     * @param flowRate units in meters cubed per hour (m^3/hour)
@@ -123,8 +121,8 @@ public:
 * @param specificGravity no units
 * @param flowRate units in meters cubed per hour (m^3/hour)
 * @param suctionPipeDiameter units in millimeters
-* @param suctionTankGaugePressure units in kPa
-* @param suctionTankFluidSurfaceElevation units in meters
+* @param suctionGaugePressure units in kPa
+* @param suctionGaugeElevation units in meters
 * @param suctionLineLossCoefficients no units
 * @param dischargePipeDiameter units in millimeters
 * @param dischargeGaugePressure units in kPa
