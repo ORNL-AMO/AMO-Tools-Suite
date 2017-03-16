@@ -61,8 +61,7 @@ NAN_METHOD(headToolSuctionTank) {
                                  suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter,
                                  dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
 
-        double head = htst.calculate();
-        Local<Number> retval = Nan::New(head);
+        Local<Number> retval = Nan::New(htst.calculate());
         info.GetReturnValue().Set(retval);
 }
 
@@ -99,8 +98,7 @@ NAN_METHOD(headTool) {
                     suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter,
                     dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
 
-        double head = ht.calculate();
-        Local<Number> retval = Nan::New(head);
+        Local<Number> retval = Nan::New(ht.calculate());
         info.GetReturnValue().Set(retval);
 }
 //
