@@ -10,6 +10,31 @@
 #ifndef AMO_TOOLS_SUITE_HEADTOOL_H
 #define AMO_TOOLS_SUITE_HEADTOOL_H
 
+/**
+* Used to return the calculation made in both HeadTool classes, should not be used otherwise
+* */
+class ReturnCalcValues {
+public:
+	ReturnCalcValues(
+			const double differentialElevationHead,
+			const double differentialPressureHead,
+			const double differentialVelocityHead,
+			const double estimatedSuctionFrictionHead,
+			const double estimatedDischargeFrictionHead,
+			const double pumpHead
+	) :
+			differentialElevationHead(differentialElevationHead),
+			differentialPressureHead(differentialPressureHead),
+			differentialVelocityHead(differentialVelocityHead),
+			estimatedSuctionFrictionHead(estimatedSuctionFrictionHead),
+			estimatedDischargeFrictionHead(estimatedDischargeFrictionHead),
+			pumpHead(pumpHead)
+	{}
+
+	const double differentialElevationHead, differentialPressureHead, differentialVelocityHead;
+	const double estimatedSuctionFrictionHead, estimatedDischargeFrictionHead, pumpHead;
+};
+
 class HeadToolBase {
 protected:
 	/**
@@ -46,7 +71,7 @@ protected:
 			dischargeLineLossCoefficients_(dischargeLineLossCoefficients)
 	{}
 
-	virtual double calculate() = 0;
+	virtual ReturnCalcValues calculate() = 0;
 
 	double velocity(const double diameter, const double flow);
 
@@ -106,7 +131,7 @@ public:
 			suctionTankFluidSurfaceElevation_(suctionTankFluidSurfaceElevation)
 	{}
 
-	double calculate();
+	ReturnCalcValues calculate();
 
 private:
 	const double suctionTankGasOverPressure_, suctionTankFluidSurfaceElevation_;
@@ -155,7 +180,7 @@ public:
 			suctionGaugeElevation_(suctionGaugeElevation)
 	{}
 
-	double calculate();
+	ReturnCalcValues calculate();
 
 private:
 	const double suctionGaugePressure_, suctionGaugeElevation_;

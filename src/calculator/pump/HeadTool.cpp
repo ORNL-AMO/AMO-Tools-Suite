@@ -17,7 +17,7 @@ double HeadToolBase::velocityHead(const double velocity, const double gravity) {
 	return ( ( velocity * velocity ) / 2.0 )  / gravity;
 }
 
-double HeadToolSuctionTank::calculate() {
+ReturnCalcValues HeadToolSuctionTank::calculate() {
 	const double flow = flowRate_ * 4.402867544 / 15850.32316;
 	const double elevationHead = dischargeGaugeElevation_ - suctionTankFluidSurfaceElevation_;
 	const double pressureHead =
@@ -31,10 +31,10 @@ double HeadToolSuctionTank::calculate() {
 
 	const double head = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
 
-	return head;
+	return ReturnCalcValues(elevationHead, pressureHead, velocityHeadDifferential, suctionHead, dischargeHead, head);
 }
 
-double HeadTool::calculate() {
+ReturnCalcValues HeadTool::calculate() {
 	const double flow = flowRate_ * 4.402867544 / 15850.32316;
 	const double elevationHead = dischargeGaugeElevation_ - suctionGaugeElevation_;
 	const double pressureHead =
@@ -48,6 +48,6 @@ double HeadTool::calculate() {
 
 	const double head = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
 
-	return head;
+	return ReturnCalcValues(elevationHead, pressureHead, velocityHeadDifferential, suctionHead, dischargeHead, head);
 }
 
