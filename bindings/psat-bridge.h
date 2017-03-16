@@ -20,13 +20,89 @@ using namespace v8;
 #include "calculator/pump/OptimalPrePumpEff.h"
 #include "calculator/pump/OptimalSpecificSpeedCorrection.h"
 #include "calculator/pump/OptimalDeviationFactor.h"
-
+#include "calculator/pump/HeadTool.h"
 //
 //// Setup
 //
 //Isolate* iso;
 Local<Object> inp;
 Local<Object> r;
+
+NAN_METHOD(headToolSuctionTank) {
+
+/**
+    * Constructor for the HeadToolSuctionTank class with all inputs specified
+    *
+    * @param specificGravity no units
+    * @param flowRate units in meters cubed per hour (m^3/hour)
+    * @param suctionPipeDiameter units in millimeters
+    * @param suctionTankGasOverPressure units in kPa
+    * @param suctionTankFluidSurfaceElevation units in meters
+    * @param suctionLineLossCoefficients no units
+    * @param dischargePipeDiameter units in millimeters
+    * @param dischargeGaugePressure units in kPa
+    * @param dischargeGaugeElevation units in meters
+    * @param dischargeLineLossCoefficients no units
+    *
+    * */
+
+        const double specificGravity = info[0]->NumberValue();
+        const double flowRate = info[1]->NumberValue();
+        const double suctionPipeDiameter = info[2]->NumberValue();
+        const double suctionTankGasOverPressure = info[3]->NumberValue();
+        const double suctionTankFluidSurfaceElevation = info[4]->NumberValue();
+        const double suctionLineLossCoefficients = info[5]->NumberValue();
+        const double dischargePipeDiameter = info[6]->NumberValue();
+        const double dischargeGaugePressure = info[7]->NumberValue();
+        const double dischargeGaugeElevation = info[8]->NumberValue();
+        const double dischargeLineLossCoefficients = info[9]->NumberValue();
+
+        HeadToolSuctionTank htst(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure,
+                                 suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter,
+                                 dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+
+        double head = htst.calculate();
+        Local<Number> retval = Nan::New(head);
+        info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(headTool) {
+
+/**
+    * Constructor for HeadTool with no Suction Tank, all inputs specified
+    *
+    * @param specificGravity no units
+    * @param flowRate units in meters cubed per hour (m^3/hour)
+    * @param suctionPipeDiameter units in millimeters
+    * @param suctionGaugePressure units in kPa
+    * @param suctionGaugeElevation units in meters
+    * @param suctionLineLossCoefficients no units
+    * @param dischargePipeDiameter units in millimeters
+    * @param dischargeGaugePressure units in kPa
+    * @param dischargeGaugeElevation units in meters
+    * @param dischargeLineLossCoefficients no units
+    *
+    * */
+
+        const double specificGravity = info[0]->NumberValue();
+        const double flowRate = info[1]->NumberValue();
+        const double suctionPipeDiameter = info[2]->NumberValue();
+        const double suctionGaugePressure = info[3]->NumberValue();
+        const double suctionGaugeElevation = info[4]->NumberValue();
+        const double suctionLineLossCoefficients = info[5]->NumberValue();
+        const double dischargePipeDiameter = info[6]->NumberValue();
+        const double dischargeGaugePressure = info[7]->NumberValue();
+        const double dischargeGaugeElevation = info[8]->NumberValue();
+        const double dischargeLineLossCoefficients = info[9]->NumberValue();
+
+        HeadTool ht(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure,
+                    suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter,
+                    dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+
+        double head = ht.calculate();
+        Local<Number> retval = Nan::New(head);
+        info.GetReturnValue().Set(retval);
+}
 //
 //void Setup(const FunctionCallbackInfo<Value>& args) {
 //    iso = args.GetIsolate();

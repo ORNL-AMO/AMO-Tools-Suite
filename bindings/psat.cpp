@@ -10,6 +10,12 @@ NAN_MODULE_INIT(InitPsat) {
     Nan::Set(target, New<String>("achievableEfficiency").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(achievableEfficiency)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("headToolSuctionTank").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(headToolSuctionTank)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("headTool").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(headTool)).ToLocalChecked());
+
 }
 
 NODE_MODULE(psat, InitPsat)
