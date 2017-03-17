@@ -239,6 +239,10 @@ public:
     double getTotalHeat();
 
 private:
+
+    // In/Out values
+    int id_;
+    std::string substance_;
     // In values
     LoadChargeMaterial::ThermicReactionType thermicReactionType_;
     double specificHeatSolid_;
@@ -255,9 +259,7 @@ private:
     double percentReacted_;
     double reactionHeat_;
     double additionalHeat_;
-    // Out value
-    int id_;
-    std::string substance_;
+    // Out values
     double totalHeat_;
 
 };
