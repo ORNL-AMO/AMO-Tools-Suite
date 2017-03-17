@@ -36,7 +36,29 @@ NAN_METHOD(initTest) {
         info.GetReturnValue().Set(temp);
 }
 
+NAN_METHOD(atmosphere) {
 
+    /**
+     * Constructor for the atmospheric heat loss with all inputs specified
+     *
+     * @param inletTemperature Inlet temperature of gasses in °F
+     * @param outletTemperature Outlet temperature of gasses in °F
+     * @param flowRate Flow rate of gasses in scfh
+     * @param correctionFactor Correction factor
+     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @return nothing
+     *
+     * */
+     double inletTemperature = info[0]->NumberValue();
+     double outletTemperature = info[1]->NumberValue();
+     double flowRate = info[2]->NumberValue();
+     double correctionFactor = info[3]->NumberValue();
+     double specificHeat = info[4]->NumberValue();
+     Atmosphere a(inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat);
+     double heatLoss = a.getTotalHeat();
+     Local<Number> retval = Nan::New(heatLoss);
+     info.GetReturnValue().Set(retval);
+}
 
 NAN_METHOD(fixtureLosses) {
 
@@ -66,12 +88,12 @@ NAN_METHOD(flueGas) {
      * Constructor for the flue gas losses with all inputs specified
      *
      * @param furnaceDraft Furnace daft in inch W.C
-     * @param leakageTemperature Leakage temperature of gasses in °F
+     * @param leakageTemperature Leakage temperature of gases in °F
      * @param openingArea Opening area of flue in ft²
-     * @param leakageTemperature Temperature of leakage gasses in °F
-     * @param ambientTemperature Ambient temparture of gasses in °F
+     * @param leakageTemperature Temperature of leakage gases in °F
+     * @param ambientTemperature Ambient temparture of gases in °F
      * @param flowCoeeficient Coefficient of discharge double
-     * @param specificGravity Specific gravity of flue gasses
+     * @param specificGravity Specific gravity of flue gases
      * @param correction Factor
      * @return nothing
      *
@@ -173,7 +195,7 @@ NAN_METHOD(leakageLosses) {
         double specificGravity = info[5]->NumberValue();
         double correctionFactor = info[6]->NumberValue();
         LeakageLosses ll(draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor);
-        double heatLoss = ll.getHeatLoss();
+        double heatLoss = ll.getExfiltratedGasesHeatContent();
         Local<Number> retval = Nan::New(heatLoss);
         info.GetReturnValue().Set(retval);
 }
