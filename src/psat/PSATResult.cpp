@@ -13,16 +13,16 @@
  */
 
 #include "psat/PSATResult.h"
-#include "calculator/MotorShaftPower.h"
-#include "calculator/PumpShaftPower.h"
-#include "calculator/PumpEfficiency.h"
-#include "calculator/AnnualCost.h"
-#include "calculator/AnnualEnergy.h"
-#include "calculator/OptimalPumpEfficiency.h"
-#include "calculator/OptimalPumpShaftPower.h"
-#include "calculator/OptimalMotorShaftPower.h"
-#include "calculator/OptimalMotorPower.h"
-#include "calculator/OptimalMotorSize.h"
+#include "calculator/motor/MotorShaftPower.h"
+#include "calculator/pump/PumpShaftPower.h"
+#include "calculator/pump/PumpEfficiency.h"
+#include "calculator/util/AnnualCost.h"
+#include "calculator/util/AnnualEnergy.h"
+#include "calculator/pump/OptimalPumpEfficiency.h"
+#include "calculator/pump/OptimalPumpShaftPower.h"
+#include "calculator/motor/OptimalMotorShaftPower.h"
+#include "calculator/motor/OptimalMotorPower.h"
+#include "calculator/motor/OptimalMotorSize.h"
 
 double PSATResult::calculateExisting() {
     /**

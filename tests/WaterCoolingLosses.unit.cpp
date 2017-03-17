@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <calculator/WaterCoolingLosses.h>
+#include <calculator/losses/WaterCoolingLosses.h>
 
 TEST_CASE( "Calculate Heat Loss for liquid cooling Losses Water", "[Heat Loss]" ) {
 

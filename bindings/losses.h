@@ -13,21 +13,51 @@ using namespace v8;
 
 
 
-#include "calculator/FixtureLosses.h"
-#include "calculator/LoadChargeMaterial.h"
-#include "calculator/GasCoolingLosses.h"
-#include "calculator/GasLoadChargeMaterial.h"
-#include "calculator/LiquidCoolingLosses.h"
-#include "calculator/LiquidLoadChargeMaterial.h"
-#include "calculator/OpeningLosses.h"
-#include "calculator/SolidLoadChargeMaterial.h"
-#include "calculator/WallLosses.h"
-#include "calculator/WaterCoolingLosses.h"
+#include "calculator/losses/Atmosphere.h"
+#include "calculator/losses/FixtureLosses.h"
+#include "calculator/losses/FlueGas.h"
+#include "calculator/losses/LoadChargeMaterial.h"
+#include "calculator/losses/GasCoolingLosses.h"
+#include "calculator/losses/GasLoadChargeMaterial.h"
+#include "calculator/losses/LeakageLosses.h"
+#include "calculator/losses/LiquidCoolingLosses.h"
+#include "calculator/losses/LiquidLoadChargeMaterial.h"
+#include "calculator/losses/OpeningLosses.h"
+#include "calculator/losses/SolidLoadChargeMaterial.h"
+#include "calculator/losses/WallLosses.h"
+#include "calculator/losses/WaterCoolingLosses.h"
 
+/**********************
+ * Test methods
+ */
 
 NAN_METHOD(initTest) {
         Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
         info.GetReturnValue().Set(temp);
+}
+
+NAN_METHOD(atmosphere) {
+
+    /**
+     * Constructor for the atmospheric heat loss with all inputs specified
+     *
+     * @param inletTemperature Inlet temperature of gasses in °F
+     * @param outletTemperature Outlet temperature of gasses in °F
+     * @param flowRate Flow rate of gasses in scfh
+     * @param correctionFactor Correction factor
+     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @return nothing
+     *
+     * */
+     double inletTemperature = info[0]->NumberValue();
+     double outletTemperature = info[1]->NumberValue();
+     double flowRate = info[2]->NumberValue();
+     double correctionFactor = info[3]->NumberValue();
+     double specificHeat = info[4]->NumberValue();
+     Atmosphere a(inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat);
+     double heatLoss = a.getTotalHeat();
+     Local<Number> retval = Nan::New(heatLoss);
+     info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(fixtureLosses) {
@@ -49,6 +79,34 @@ NAN_METHOD(fixtureLosses) {
         double correctionFactor = info[4]->NumberValue();
         FixtureLosses fl(specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor);
         double heatLoss = fl.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(flueGas) {
+    /**
+     * Constructor for the flue gas losses with all inputs specified
+     *
+     * @param furnaceDraft Furnace daft in inch W.C
+     * @param leakageTemperature Leakage temperature of gases in °F
+     * @param openingArea Opening area of flue in ft²
+     * @param leakageTemperature Temperature of leakage gases in °F
+     * @param ambientTemperature Ambient temparture of gases in °F
+     * @param flowCoeeficient Coefficient of discharge double
+     * @param specificGravity Specific gravity of flue gases
+     * @param correction Factor
+     * @return nothing
+     *
+     * */
+        double furnaceDraft = info[0]->NumberValue();
+        double openingArea = info[1]->NumberValue();
+        double leakageTemperature = info[2]->NumberValue();
+        double ambientTemperature = info[3]->NumberValue();
+        double flowCoefficient = info[4]->NumberValue();
+        double specificGravity = info[5]->NumberValue();
+        double correctionFactor = info[6]->NumberValue();
+        FlueGas fg(furnaceDraft, openingArea, leakageTemperature, ambientTemperature, flowCoefficient, specificGravity, correctionFactor);
+        double heatLoss = fg.getHeatLoss();
         Local<Number> retval = Nan::New(heatLoss);
         info.GetReturnValue().Set(retval);
 }
@@ -113,6 +171,31 @@ NAN_METHOD(gasLoadChargeMaterial) {
         GasLoadChargeMaterial glcm(thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor,
         percentReacted, reactionHeat, additionalHeat);
         double heatLoss = glcm.getTotalHeat();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(leakageLosses) {
+    /**
+     * Constructor
+     * @param draftPressure
+     * @param openingArea
+     * @param leakageGasTemperature
+     * @param ambientTemperature
+     * @param coefficient
+     * @param specificGravity
+     * @param correctionFactor
+     * @return nothing
+     */
+        double draftPressure = info[0]->NumberValue();
+        double openingArea = info[1]->NumberValue();
+        double leakageGasTemperature = info[2]->NumberValue();
+        double ambientTemperature = info[3]->NumberValue();
+        double coefficient = info[4]->NumberValue();
+        double specificGravity = info[5]->NumberValue();
+        double correctionFactor = info[6]->NumberValue();
+        LeakageLosses ll(draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor);
+        double heatLoss = ll.getExfiltratedGasesHeatContent();
         Local<Number> retval = Nan::New(heatLoss);
         info.GetReturnValue().Set(retval);
 }
@@ -210,7 +293,7 @@ NAN_METHOD(openingLosses) {
     double viewFactor = info[7]->NumberValue();
     OpeningLosses::OpeningShape openingShape;
     int trt = info[8]->NumberValue();
-    if (trt == 8) {
+    if (trt == 0) {
         openingShape = OpeningLosses::OpeningShape::CIRCULAR;
     } else {
         openingShape = OpeningLosses::OpeningShape::RECTANGULAR;
@@ -316,5 +399,6 @@ NAN_METHOD(waterCoolingLosses) {
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
 }
+
 #endif //AMO_TOOLS_SUITE_LOSSES_H
 

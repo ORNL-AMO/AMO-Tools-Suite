@@ -1,13 +1,13 @@
 #include <iostream>
 #include <iomanip>
-#include <calculator/FixtureLosses.h>
+#include <calculator/losses/FixtureLosses.h>
 #include "psat/PSATResult.h"
-#include "calculator/MotorPowerFactor.h"
-#include "calculator/MotorEfficiency.h"
-#include "calculator/FixtureLosses.h"
-#include "calculator/WallLosses.h"
+#include "calculator/motor/MotorPowerFactor.h"
+#include "calculator/motor/MotorEfficiency.h"
+#include "calculator/losses/FixtureLosses.h"
+#include "calculator/losses/WallLosses.h"
 #include "sqlite/SQLite.h"
-#include "calculator/Atmosphere.h"
+#include "calculator/losses/Atmosphere.h"
 
 int main() {
 

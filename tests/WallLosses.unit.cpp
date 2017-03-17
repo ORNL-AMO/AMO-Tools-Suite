@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <calculator/WallLosses.h>
+#include <calculator/losses/WallLosses.h>
 
 TEST_CASE( "Calculate Heat Loss for furnace walls", "[Heat Loss]" ) {
 

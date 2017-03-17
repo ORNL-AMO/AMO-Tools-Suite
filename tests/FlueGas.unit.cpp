@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <calculator/FlueGas.h>
+#include <calculator/losses/FlueGas.h>
 
 TEST_CASE( "Calculate Heat Loss for flue gas Losses", "[Heat Loss]" ) {
 

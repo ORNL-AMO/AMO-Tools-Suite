@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <calculator/OptimalSpecificSpeedCorrection.h>
+#include <calculator/pump/OptimalSpecificSpeedCorrection.h>
 
 TEST_CASE( "Calculate Optimal Specific Speed Correction NotVTP", "[optimal][SpecificSpeedCorrection][NotVTP]" ) {
 
