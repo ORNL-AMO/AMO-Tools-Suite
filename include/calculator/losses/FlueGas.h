@@ -13,6 +13,20 @@
 #define AMO_SUITE_FLUEGAS_H
 class FlueGas {
 public:
+    /**
+     * Constructor for the flue gas losses with all inputs specified
+     *
+     * @param furnaceDraft Furnace daft in inch W.C
+     * @param leakageTemperature Leakage temperature of gasses in °F
+     * @param openingArea Opening area of flue in ft²
+     * @param leakageTemperature Temperature of leakage gasses in °F
+     * @param ambientTemperature Ambient temparture of gasses in °F
+     * @param flowCoeeficient Coefficient of discharge double
+     * @param specificGravity Specific gravity of flue gasses
+     * @param correction Factor
+     * @return nothing
+     *
+     * */
     FlueGas(double furnaceDraft,
             double openingArea,
             double leakageTemperature,
