@@ -13,22 +13,27 @@ using namespace v8;
 
 
 
-#include "calculator/FixtureLosses.h"
-#include "calculator/LoadChargeMaterial.h"
-#include "calculator/GasCoolingLosses.h"
-#include "calculator/GasLoadChargeMaterial.h"
-#include "calculator/LiquidCoolingLosses.h"
-#include "calculator/LiquidLoadChargeMaterial.h"
-#include "calculator/OpeningLosses.h"
-#include "calculator/SolidLoadChargeMaterial.h"
-#include "calculator/WallLosses.h"
-#include "calculator/WaterCoolingLosses.h"
+#include "calculator/losses/FixtureLosses.h"
+#include "calculator/losses/LoadChargeMaterial.h"
+#include "calculator/losses/GasCoolingLosses.h"
+#include "calculator/losses/GasLoadChargeMaterial.h"
+#include "calculator/losses/LiquidCoolingLosses.h"
+#include "calculator/losses/LiquidLoadChargeMaterial.h"
+#include "calculator/losses/OpeningLosses.h"
+#include "calculator/losses/SolidLoadChargeMaterial.h"
+#include "calculator/losses/WallLosses.h"
+#include "calculator/losses/WaterCoolingLosses.h"
 
+/**********************
+ * Test methods
+ */
 
 NAN_METHOD(initTest) {
         Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
         info.GetReturnValue().Set(temp);
 }
+
+
 
 NAN_METHOD(fixtureLosses) {
 
@@ -210,7 +215,7 @@ NAN_METHOD(openingLosses) {
     double viewFactor = info[7]->NumberValue();
     OpeningLosses::OpeningShape openingShape;
     int trt = info[8]->NumberValue();
-    if (trt == 8) {
+    if (trt == 0) {
         openingShape = OpeningLosses::OpeningShape::CIRCULAR;
     } else {
         openingShape = OpeningLosses::OpeningShape::RECTANGULAR;
@@ -316,5 +321,6 @@ NAN_METHOD(waterCoolingLosses) {
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
 }
+
 #endif //AMO_TOOLS_SUITE_LOSSES_H
 
