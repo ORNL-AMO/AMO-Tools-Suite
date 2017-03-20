@@ -17,10 +17,45 @@ public:
         RECTANGULAR ///<
     };
 
+    /**
+	 * Constructor for a rectangular opening
+	 * @param emissivity
+	 * @param diameterLength
+     * @param widthHeight
+	 * @param thickness
+	 * @param ration
+	 * @param ambientTemperature
+	 * @param insideTemperature
+	 * @param percentTimeOpen
+	 * @param viewFactor
+	 * @return nothing
+	 */
+    OpeningLosses(double emissivity,
+                  double diameterLength,
+                  double widthHeight,
+                  double thickness,
+                  double ratio,
+                  double ambientTemperature,
+                  double insideTemperature,
+                  double percentTimeOpen,
+                  double viewFactor,
+                  OpeningShape openingShape)
+            : emissivity_(emissivity),
+              diameter_(diameterLength),
+              width_(widthHeight),
+              thickness_(thickness), ratio_(ratio),
+              ambientTemperature_(ambientTemperature),
+              insideTemperature_(insideTemperature),
+              percentTimeOpen_(percentTimeOpen),
+              viewFactor_(viewFactor),
+              openingShape_(openingShape),
+              heatLoss_(0.0)
+    {}
+
    /**
-    * Constructor
+    * Constructor for a circular opening
     * @param emissivity
-    * @param diameterWidth
+    * @param diameterLength
     * @param thickness
     * @param ration
     * @param ambientTemperature
@@ -30,7 +65,7 @@ public:
     * @return nothing
     */
     OpeningLosses(double emissivity,
-                  double diameterWidth,
+                  double diameterLength,
                   double thickness,
                   double ratio,
                   double ambientTemperature,
@@ -39,23 +74,24 @@ public:
                   double viewFactor,
                   OpeningShape openingShape)
             : emissivity_(emissivity),
-              diameter_(diameterWidth),
+              diameter_(diameterLength),
               thickness_(thickness), ratio_(ratio),
               ambientTemperature_(ambientTemperature),
               insideTemperature_(insideTemperature),
               percentTimeOpen_(percentTimeOpen),
               viewFactor_(viewFactor),
-              openingShape_(openingShape)
+              openingShape_(openingShape),
+              heatLoss_(0.0)
     {
         if (openingShape == OpeningShape::CIRCULAR) {
-            diameter_ = diameterWidth;
+            diameter_ = diameterLength;
         } else {
-            width_ = diameterWidth;
+            width_ = diameterLength;
+	        // TODO error here ? Rectangles must use the rectangle constructor?
         }
-        heatLoss_ = 0.0;
     }
 
-    OpeningLosses(double diameterWidth,
+    OpeningLosses(double diameterLength,
                   double thickness,
                   double ratio,
                   double ambientTemperature,
@@ -63,42 +99,43 @@ public:
                   double percentTimeOpen,
                   double viewFactor,
                   OpeningShape openingShape)
-            : diameter_(diameterWidth),
+            : diameter_(diameterLength),
               thickness_(thickness), ratio_(ratio),
               ambientTemperature_(ambientTemperature),
               insideTemperature_(insideTemperature),
               percentTimeOpen_(percentTimeOpen),
               viewFactor_(viewFactor),
-              openingShape_(openingShape)
+              openingShape_(openingShape),
+              heatLoss_(0.0)
     {
         if (openingShape == OpeningShape::CIRCULAR) {
-            diameter_ = diameterWidth;
+            diameter_ = diameterLength;
         } else {
-            width_ = diameterWidth;
+            width_ = diameterLength;
         }
-        heatLoss_ = 0.0;
     }
 
-    OpeningLosses(double diameterWidth,
+    OpeningLosses(double diameterLength,
                   double thickness,
                   double ambientTemperature,
                   double insideTemperature,
                   double percentTimeOpen,
                   OpeningShape openingShape)
-            : diameter_(diameterWidth),
+            : diameter_(diameterLength),
               thickness_(thickness),
               ambientTemperature_(ambientTemperature),
               insideTemperature_(insideTemperature),
               percentTimeOpen_(percentTimeOpen),
-              openingShape_(openingShape)
+              openingShape_(openingShape),
+              heatLoss_(0.0)
     {
         if (openingShape == OpeningShape::CIRCULAR) {
-            diameter_ = diameterWidth;
+            diameter_ = diameterLength;
         } else {
-            width_ = diameterWidth;
+            width_ = diameterLength;
         }
-        ratio_ = diameterWidth / thickness_;
-        heatLoss_ = 0.0;
+        ratio_ = diameterLength / thickness_;
+//        ratio_ = minimumOf(diameterLength, width) / thickness_ ?
     }
 
 
