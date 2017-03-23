@@ -2,22 +2,29 @@
 #include <calculator/pump/HeadTool.h>
 
 TEST_CASE( "Calculate Pump Head with and without suction tanks", "[HeadToolCalculations]" ) {
-	const double flowRate = 454.24941359535023; // this is the default flow rate when 454.2 is entered in the electron app
-	REQUIRE(HeadToolSuctionTank(1, flowRate, 455.6, 792.9, 0, 1, 254, 854.9, 0, 1).calculate().pumpHead ==
-	        Approx(6.9867498670003165));
-	REQUIRE(HeadToolSuctionTank(1, flowRate, 255.6, 792.9, 0, 1, 254, 854.9, 0, 1).calculate().pumpHead ==
-	        Approx(7.264536476019559));
-	REQUIRE(HeadToolSuctionTank(1, flowRate, 255.6, 692.9, 0, 1, 254, 854.9, 0, 1).calculate().pumpHead ==
-	        Approx(17.464309816021647));
-	REQUIRE(HeadToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 854.9, 0, 1).calculate().pumpHead ==
-	        Approx(15.464309816021645));
-	REQUIRE(HeadToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 854.9, 3, 1).calculate().pumpHead ==
-	        Approx(18.464309816021647));
-	REQUIRE(HeadToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 954.9, 3, 1).calculate().pumpHead ==
-	        Approx(28.664083156023732));
+	const double flowRate = 2000;
+	REQUIRE(HeadToolSuctionTank(1, flowRate, 17.9, 115, 0, 1, 10, 124, 0, 1).calculate().pumpHead ==
+	        Approx(22.972865551821844));
+	REQUIRE(HeadToolSuctionTank(1, flowRate, 17.9, 105, 0, 1, 10, 124, 0, 1).calculate().pumpHead ==
+	        Approx(46.080895538862784));
+	REQUIRE(HeadToolSuctionTank(1, flowRate, 17.9, 105, 5, 1, 10, 124, 0, 1).calculate().pumpHead ==
+	        Approx(41.080895538862784));
+	REQUIRE(HeadToolSuctionTank(1, flowRate, 17.9, 105, 5, 0.5, 10, 124, 0, 1).calculate().pumpHead ==
+	        Approx(41.03037569241383));
+	REQUIRE(HeadToolSuctionTank(1, flowRate, 17.9, 105, 5, 1, 15, 124, 0, 1).calculate().pumpHead ==
+	        Approx(39.41609397604601));
+	REQUIRE(HeadToolSuctionTank(1, flowRate, 17.9, 105, 5, 1, 15, 135, 0, 1).calculate().pumpHead ==
+	        Approx(64.83492696179103));
+	REQUIRE(HeadToolSuctionTank(1, flowRate, 17.9, 105, 5, 1, 15, 135, 4, 0.1).calculate().pumpHead ==
+	        Approx(68.6505181732944));
 
-	REQUIRE( HeadTool(1, flowRate, 355.6, 34.5, 0, 1, 254, 854.9, 0, 1 ).calculate().pumpHead == Approx(84.3112869348736) );
-	REQUIRE( HeadTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 854.9, 0, 1 ).calculate().pumpHead == Approx(79.3112869348736) );
-	REQUIRE( HeadTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 554.9, 0, 1 ).calculate().pumpHead == Approx(48.711966914867354) );
-	REQUIRE( HeadTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 554.9, 3, 1 ).calculate().pumpHead == Approx(51.711966914867354) );
+
+	REQUIRE( HeadTool(1, flowRate, 17.9, 5, 5, 1, 15, 50, 1, 1 ).calculate().pumpHead == Approx(100.39593224945455) );
+	REQUIRE( HeadTool(1, flowRate, 17.9, 10, 5, 1, 15, 50, 1, 1 ).calculate().pumpHead == Approx(88.84191725593406) );
+	REQUIRE( HeadTool(1, flowRate, 17.9, 10, 15, 1, 15, 50, 1, 1 ).calculate().pumpHead == Approx(78.84191725593406) );
+	REQUIRE( HeadTool(1, flowRate, 17.9, 10, 15, 0.1, 15, 50, 1, 1 ).calculate().pumpHead == Approx(78.75098153232594) );
+	REQUIRE( HeadTool(1, flowRate, 17.9, 10, 15, 0.1, 60, 50, 1, 1 ).calculate().pumpHead == Approx(78.34278499528914) );
+	REQUIRE( HeadTool(1, flowRate, 17.9, 10, 15, 0.1, 60, 20, 1, 1 ).calculate().pumpHead == Approx(9.018695034166301) );
+	REQUIRE( HeadTool(1, flowRate, 17.9, 10, 15, 0.1, 60, 20, 10, 1 ).calculate().pumpHead == Approx(18.0186950341663) );
+	REQUIRE( HeadTool(1, flowRate, 17.9, 10, 15, 0.1, 60, 20, 10, 0.9 ).calculate().pumpHead == Approx(18.018614995629626) );
 }

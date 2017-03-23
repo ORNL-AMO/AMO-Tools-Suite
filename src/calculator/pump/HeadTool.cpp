@@ -18,12 +18,18 @@ double HeadToolBase::velocityHead(const double velocity, const double gravity) {
 }
 
 ReturnCalcValues HeadToolSuctionTank::calculate() {
-	const double flow = flowRate_ * 4.402867544 / 15850.32316;
+	// this flow and pressure head should be used when units are metric, and the number 12 should be replaced with 1000
+	// in the velocityHead Suction and Discharge calculations
+//	const double flow = flowRate_ * 4.402867544 / 15850.32316;
+//	const double pressureHead =
+//			(((dischargeGaugePressure_ - suctionTankGasOverPressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
+
+	const double flow = flowRate_ / 448.8311693;
 	const double elevationHead = dischargeGaugeElevation_ - suctionTankFluidSurfaceElevation_;
 	const double pressureHead =
-			(((dischargeGaugePressure_ - suctionTankGasOverPressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
-	const double velocityHeadSuction = velocityHead( velocity( suctionPipeDiameter_ / 1000, flow ), gravity_ );
-	const double velocityHeadDischarge = velocityHead( velocity( dischargePipeDiameter_ / 1000, flow ), gravity_ );
+			((dischargeGaugePressure_ - suctionTankGasOverPressure_) / 0.432750001) / specificGravity_;
+	const double velocityHeadSuction = velocityHead( velocity( suctionPipeDiameter_ / 12, flow ), gravity_ );
+	const double velocityHeadDischarge = velocityHead( velocity( dischargePipeDiameter_ / 12, flow ), gravity_ );
 
 	const double velocityHeadDifferential = velocityHeadDischarge;
 	const double suctionHead = suctionLineLossCoefficients_ * velocityHeadSuction;
@@ -35,12 +41,16 @@ ReturnCalcValues HeadToolSuctionTank::calculate() {
 }
 
 ReturnCalcValues HeadTool::calculate() {
-	const double flow = flowRate_ * 4.402867544 / 15850.32316;
+//	const double flow = flowRate_ * 4.402867544 / 15850.32316;
+//	const double pressureHead =
+//			(((dischargeGaugePressure_ - suctionGaugePressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
+
+	const double flow = flowRate_ / 448.8311693;
 	const double elevationHead = dischargeGaugeElevation_ - suctionGaugeElevation_;
 	const double pressureHead =
-			(((dischargeGaugePressure_ - suctionGaugePressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
-	const double velocityHeadSuction = velocityHead( velocity( suctionPipeDiameter_ / 1000, flow ), gravity_ );
-	const double velocityHeadDischarge = velocityHead( velocity( dischargePipeDiameter_ / 1000, flow ), gravity_ );
+			((dischargeGaugePressure_ - suctionGaugePressure_) / 0.432750001) / specificGravity_;
+	const double velocityHeadSuction = velocityHead( velocity( suctionPipeDiameter_ / 12, flow ), gravity_ );
+	const double velocityHeadDischarge = velocityHead( velocity( dischargePipeDiameter_ / 12, flow ), gravity_ );
 
 	const double velocityHeadDifferential = velocityHeadDischarge - velocityHeadSuction;
 	const double suctionHead = suctionLineLossCoefficients_ * velocityHeadSuction;
