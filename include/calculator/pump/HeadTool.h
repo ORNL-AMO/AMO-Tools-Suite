@@ -41,12 +41,12 @@ protected:
     * Constructor for the abstract HeadToolBase class with all inputs specified
     *
     * @param specificGravity no units
-    * @param flowRate units in meters cubed per hour (m^3/hour)
-    * @param suctionPipeDiameter units in millimeters
+    * @param flowRate units in gpm (gallons per minute)
+    * @param suctionPipeDiameter units in inches
     * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in millimeters
-    * @param dischargeGaugePressure units in kPa
-    * @param dischargeGaugeElevation units in meters
+    * @param dischargePipeDiameter units in inches
+    * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
+    * @param dischargeGaugeElevation units in feet
     * @param dischargeLineLossCoefficients no units
 	*
  * */
@@ -85,7 +85,7 @@ protected:
 
 	const double dischargeGaugeElevation_, dischargeLineLossCoefficients_;
 
-	const double gravity_ = 9.8065, PI_ = 3.141592653589793238463;
+	const double gravity_ = 32.1740, PI_ = 3.141592653589793238463;
 };
 
 class HeadToolSuctionTank : private HeadToolBase {
@@ -95,14 +95,14 @@ public:
     * Constructor for the HeadToolSuctionTank class with all inputs specified
     *
     * @param specificGravity no units
-    * @param flowRate units in meters cubed per hour (m^3/hour)
-    * @param suctionPipeDiameter units in millimeters
-    * @param suctionTankGasOverPressure units in kPa
-    * @param suctionTankFluidSurfaceElevation units in meters
+    * @param flowRate units in gpm (gallons per minute)
+    * @param suctionPipeDiameter units in inches
+    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauage)
+    * @param suctionTankFluidSurfaceElevation units in feet
     * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in millimeters
-    * @param dischargeGaugePressure units in kPa
-    * @param dischargeGaugeElevation units in meters
+    * @param dischargePipeDiameter units in inches
+    * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
+    * @param dischargeGaugeElevation units in inches
     * @param dischargeLineLossCoefficients no units
 	*
  * */
@@ -144,14 +144,14 @@ public:
 * Constructor for HeadTool with no Suction Tank, all inputs specified
 *
 * @param specificGravity no units
-* @param flowRate units in meters cubed per hour (m^3/hour)
-* @param suctionPipeDiameter units in millimeters
-* @param suctionGaugePressure units in kPa
-* @param suctionGaugeElevation units in meters
+* @param flowRate units in gpm (gallons per minute)
+* @param suctionPipeDiameter units in inches
+* @param suctionGaugePressure units in psig (pounds per square inch guage)
+* @param suctionGaugeElevation units in feet
 * @param suctionLineLossCoefficients no units
-* @param dischargePipeDiameter units in millimeters
-* @param dischargeGaugePressure units in kPa
-* @param dischargeGaugeElevation units in meters
+* @param dischargePipeDiameter units in inches
+* @param dischargeGaugePressure units in psig (pounds per square inch guage)
+* @param dischargeGaugeElevation units in feet
 * @param dischargeLineLossCoefficients no units
 *
 * */
