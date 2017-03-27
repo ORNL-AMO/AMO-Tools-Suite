@@ -31,8 +31,12 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("liquidLoadChargeMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(liquidLoadChargeMaterial)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("openingLosses").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(openingLosses)).ToLocalChecked());
+    Nan::Set(target, New<String>("openingLossesCircular").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(openingLossesCircular)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("openingLossesQuad").ToLocalChecked(),
+    GetFunction(New<FunctionTemplate>(openingLossesQuad)).ToLocalChecked());
+
 
     Nan::Set(target, New<String>("solidLoadChargeMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(solidLoadChargeMaterial)).ToLocalChecked());

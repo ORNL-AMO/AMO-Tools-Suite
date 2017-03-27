@@ -268,40 +268,64 @@ NAN_METHOD(liquidLoadChargeMaterial) {
         info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(openingLosses) {
+NAN_METHOD(openingLossesCircular) {
 
-    /**
-     * Constructor
-     * @param emissivity
-     * @param diameterWidth
-     * @param thickness
-     * @param ratio
-     * @param ambientTemperature
-     * @param insideTemperature
-     * @param percentTimeOpen
-     * @param viewFactor
-     * @return nothing
-     */
+        /**
+         * Constructor for a circular opening
+         * @param emissivity
+         * @param diameterLength
+         * @param thickness
+         * @param ratio
+         * @param ambientTemperature
+         * @param insideTemperature
+         * @param percentTimeOpen
+         * @param viewFactor
+         * @return nothing
+         */
 
     double emissivity = info[0]->NumberValue();
-    double diameterWidth = info[1]->NumberValue();
+    double diameterLength = info[1]->NumberValue();
     double thickness = info[2]->NumberValue();
     double ratio = info[3]->NumberValue();
     double ambientTemperature = info[4]->NumberValue();
     double insideTemperature = info[5]->NumberValue();
     double percentTimeOpen = info[6]->NumberValue();
     double viewFactor = info[7]->NumberValue();
-    OpeningLosses::OpeningShape openingShape;
-    int trt = info[8]->NumberValue();
-    if (trt == 0) {
-        openingShape = OpeningLosses::OpeningShape::CIRCULAR;
-    } else {
-        openingShape = OpeningLosses::OpeningShape::RECTANGULAR;
-    }
-    OpeningLosses ol(emissivity, diameterWidth, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor, openingShape);
+    OpeningLosses ol(emissivity, diameterLength, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
     double heatLoss = ol.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
+
+}
+NAN_METHOD(openingLossesQuad) {
+
+        /**
+         * Constructor for a rectangular opening
+         * @param emissivity
+         * @param length
+         * @param widthHeight
+         * @param thickness
+         * @param ration
+         * @param ambientTemperature
+         * @param insideTemperature
+         * @param percentTimeOpen
+         * @param viewFactor
+         * @return nothing
+         */
+
+        double emissivity = info[0]->NumberValue();
+        double length = info[1]->NumberValue();
+        double widthHeight = info[2]->NumberValue();
+        double thickness = info[3]->NumberValue();
+        double ratio = info[4]->NumberValue();
+        double ambientTemperature = info[5]->NumberValue();
+        double insideTemperature = info[6]->NumberValue();
+        double percentTimeOpen = info[7]->NumberValue();
+        double viewFactor = info[8]->NumberValue();
+        OpeningLosses ol(emissivity, length, widthHeight, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
+        double heatLoss = ol.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
 
 }
 
