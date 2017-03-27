@@ -38,8 +38,7 @@ public:
                   double ambientTemperature,
                   double insideTemperature,
                   double percentTimeOpen,
-                  double viewFactor,
-                  OpeningShape openingShape)
+                  double viewFactor)
             : emissivity_(emissivity),
               diameter_(diameterLength),
               width_(widthHeight),
@@ -48,7 +47,7 @@ public:
               insideTemperature_(insideTemperature),
               percentTimeOpen_(percentTimeOpen),
               viewFactor_(viewFactor),
-              openingShape_(openingShape),
+              openingShape_(OpeningShape::RECTANGULAR),
               heatLoss_(0.0)
     {}
 
@@ -71,8 +70,7 @@ public:
                   double ambientTemperature,
                   double insideTemperature,
                   double percentTimeOpen,
-                  double viewFactor,
-                  OpeningShape openingShape)
+                  double viewFactor)
             : emissivity_(emissivity),
               diameter_(diameterLength),
               thickness_(thickness), ratio_(ratio),
@@ -80,16 +78,9 @@ public:
               insideTemperature_(insideTemperature),
               percentTimeOpen_(percentTimeOpen),
               viewFactor_(viewFactor),
-              openingShape_(openingShape),
+              openingShape_(OpeningShape::CIRCULAR),
               heatLoss_(0.0)
-    {
-        if (openingShape == OpeningShape::CIRCULAR) {
-            diameter_ = diameterLength;
-        } else {
-            width_ = diameterLength;
-	        // TODO error here ? Rectangles must use the rectangle constructor?
-        }
-    }
+    {   }
 
     OpeningLosses(double diameterLength,
                   double thickness,
