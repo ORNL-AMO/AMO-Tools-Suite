@@ -305,7 +305,7 @@ NAN_METHOD(openingLossesQuad) {
          * @param length
          * @param widthHeight
          * @param thickness
-         * @param ration
+         * @param ratio
          * @param ambientTemperature
          * @param insideTemperature
          * @param percentTimeOpen
