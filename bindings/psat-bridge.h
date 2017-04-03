@@ -240,6 +240,7 @@ NAN_METHOD(headTool) {
 NAN_METHOD(achievableEfficiency) {
         inp = info[0]->ToObject();
         r = Nan::New<Object>();
+
         info.GetReturnValue().Set(r);
 }
 
