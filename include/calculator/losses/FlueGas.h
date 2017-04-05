@@ -23,7 +23,7 @@ public:
 	{};
 
 	std::function< double ( double t ) > specificHeat;
-	// TODO rename userInput to something better (it's just user definied gas percentage), use xBar, x double bar etc
+	// TODO rename userInput to something better (it's just user defined gas percentage), use xBar, x double bar etc
 	double userInput, xBar, xBarBar, molecularWeight, specificWeight;
 };
 
@@ -32,18 +32,17 @@ public:
 	gasComposition(const double CH4, const double C2H6, const double N2, const double H2,
 	               const double C3H8, const double C4H10_CnH2n, const double H2O, const double CO,
 	               const double CO2, const double SO2, const double O2) :
-			CH4(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417) ),
-			C2H6(gasProperties([] (double t) { return 4.04 + 0.01636 * t; }, 30.068, 0.079503) ),
-			N2(gasProperties([] (double t){ return 9.47 - 3.47 * 1000 / t + 1.07 * pow(10, 6) / (t * t); }, 28.016, 0.074077) ),
-			// TODO finish lambda functions, and check order of operations on above lambda expression
-			H2(gasProperties([] (double t){ return 4.23 + 0.01177 * t; }, 10, 10) ),
-			C3H8(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 10, 10) ),
-			C4H10_CnH2n(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 10, 10) ),
-			H2O(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 10, 10) ),
-			CO(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 10, 10) ),
-			CO2(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 10, 10) ),
-			SO2(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 10, 10) ),
-			O2(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 10, 10) )
+			CH4(gasProperties([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417)),
+			C2H6(gasProperties([] (double t) { return 4.04 + 0.01636 * t; }, 30.068, 0.079503)),
+			N2(gasProperties([] (double t) { return 9.47 - 3.47 * 1000 / t + 1.07 * 1000000 / (t * t); }, 28.016, 0.074077)),
+			H2(gasProperties([] (double t) { return 5.76 + 0.578 * t / 1000 + 20 / pow(t, 0.5); }, 2.016, 0.005331)),
+			C3H8(gasProperties([] (double t = 0) { return 17.108; }, 44.094, 0.116589)),
+			C4H10_CnH2n(gasProperties([] (double t = 0) { return 22.202; }, 58.12, 0.153675)),
+			H2O(gasProperties([] (double t) { return 19.86 - 597 / pow(t, 0.5) + 7500 / t; }, 18.016, 0.047636)),
+			CO(gasProperties([] (double t) { return 9.46 - 3.29 * 1000 / t + 1.07 * 1000000 / (t * t); }, 28.01, 0.074061)),
+			CO2(gasProperties([] (double t) { return 16.2 - 6.53 * 1000 / t + 1.41 * 1000000 / (t * t); }, 44.01, 0.116367)),
+			SO2(gasProperties([] (double t = 0) { return 17.472; }, 64.06, 0.169381)),
+			O2(gasProperties([] (double t) { return 11.515 - 172 / pow(t, 0.5) + 1530 / t; }, 32.00, 0.084611))
 
 
 //			CH4(CH4), C2H6(C2H6), N2(N2), H2(H2), C3H8(C3H8), C4H10_CnH2n(C4H10_CnH2n), H2O(H2O),
