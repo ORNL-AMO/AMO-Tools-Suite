@@ -13,6 +13,8 @@ using namespace v8;
 
 
 #include "psat/PSATResult.h"
+#include "psat/Motor.h"
+#include "psat/Pump.h"
 #include "calculator/motor/EstimateFLA.h"
 #include "calculator/motor/MotorCurrent.h"
 #include "calculator/motor/MotorEfficiency.h"
@@ -130,41 +132,36 @@ NAN_METHOD(headTool) {
     Nan::Set(obj, pumpHead, Nan::New<Number>(retval.pumpHead));
         info.GetReturnValue().Set(obj);
 }
-//
-//void Setup(const FunctionCallbackInfo<Value>& args) {
-//    iso = args.GetIsolate();
-//    inp = args[0]->ToObject();
-//    r = Object::New(iso);
-//    args.GetReturnValue().Set(r);
-//}
-//
-//double Get(const char *nm) {
-//    auto rObj = inp->ToObject()->Get(String::NewFromUtf8(iso,nm));
-//    if (rObj->IsUndefined()) {
-//        cout << nm << endl;;
-//        assert(!"defined");
-//    }
-//    return rObj->NumberValue();
-//}
-//
-//void SetR(const char *nm, double n) {
-//    r->Set(String::NewFromUtf8(iso,nm),Number::New(iso,n));
-//}
-//
-//// Fields
-//
-//Motor::LineFrequency line() {
-//    return (Motor::LineFrequency)(int)(!Get("line"));
-//}
-//Motor::EfficiencyClass effCls() {
-//    return (Motor::EfficiencyClass)(int)Get("efficiency_class");
-//}
-//Pump::Drive drive() {
-//    return (Pump::Drive)(int)Get("drive");
-//}
-//Pump::Style style() {
-//    return (Pump::Style)(int)Get("pump_style");
-//}
+
+double Get(const char *nm) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    auto rObj = inp->ToObject()->Get(getName);
+    if (rObj->IsUndefined()) {
+        assert(!"defined");
+    }
+    return rObj->NumberValue();
+}
+
+void SetR(const char *nm, double n) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    Local<Number> getNum = Nan::New<Number>(n);
+    r->Set(getName,getNum);
+}
+
+// Fields
+
+Motor::LineFrequency line() {
+    return (Motor::LineFrequency)(int)(!Get("line"));
+}
+Motor::EfficiencyClass effCls() {
+    return (Motor::EfficiencyClass)(int)Get("efficiency_class");
+}
+Pump::Drive drive() {
+    return (Pump::Drive)(int)Get("drive");
+}
+Pump::Style style() {
+    return (Pump::Style)(int)Get("pump_style");
+}
 //
 //// Operations
 //
@@ -238,25 +235,27 @@ NAN_METHOD(headTool) {
 //
 
 NAN_METHOD(achievableEfficiency) {
-        inp = info[0]->ToObject();
-        r = Nan::New<Object>();
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
 
-        info.GetReturnValue().Set(r);
+    double specific_speed = Get("specific_speed");
+    Pump::Style s = style();
+    info.GetReturnValue().Set(OptimalSpecificSpeedCorrection(s, specific_speed).calculate()*100);
 }
 
-//void AchievableEfficiency(const FunctionCallbackInfo<Value>& args) {
-//    Setup(args);
-//    args.GetReturnValue().Set(
-//            OptimalSpecificSpeedCorrection(style(), Get("specific_speed")).calculate()*100);
-//}
-//
-//void Nema(const FunctionCallbackInfo<Value>& args) {
-//    Setup(args);
-//
-//    args.GetReturnValue().Set(
-//            MotorEfficiency(line(),Get("motor_rated_speed"),effCls(),Get("efficiency"),Get("motor_rated_power"),1).calculate()*100
-//    );
-//}
+NAN_METHOD(nema) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    Motor::LineFrequency l = line();
+    double motor_rated_speed = Get("motor_rated_speed");
+    Motor::EfficiencyClass efficiencyClass = effCls();
+    double efficiency = Get("efficiency");
+    double motor_rated_power = Get("motor_rated_power");
+    double load_factor = Get("load_factor");
+    info.GetReturnValue().Set(MotorEfficiency(l, motor_rated_speed, efficiencyClass, efficiency, motor_rated_power,load_factor).calculate()*100);
+}
+
+
 //
 //// Test
 //
@@ -299,12 +298,6 @@ NAN_METHOD(achievableEfficiency) {
 //        Check100(84.82,pf.calculate());
 //    }
 //
-//// nema
-//
-//    {
-//        MotorEfficiency mef(Motor::LineFrequency::FREQ60,1200, Motor::EfficiencyClass::ENERGY_EFFICIENT,0,200,1);
-//        //Check100(95,mef.calculate());
-//    }
 //
 //// pump eff
 //
