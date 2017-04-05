@@ -202,6 +202,20 @@ Pump::Style style() {
 //    }
 //}
 //
+
+NAN_METHOD(estFLA) {
+    inp = info[0]->ToObject();
+    double motor_rated_power = Get("motor_rated_power");
+    double motor_rated_speed = Get("motor_rated_speed");
+    Motor::LineFrequency l = line();
+    Motor::EfficiencyClass e = effCls();
+    double efficiency = Get("efficiency");
+    double motor_rated_voltage = Get("motor_rated_voltage");
+    EstimateFLA fla(motor_rated_power, motor_rated_speed, l, e, efficiency, motor_rated_voltage);
+    fla.calculate();
+    info.GetReturnValue().Set(fla.getEstimatedFLA());
+}
+
 //void EstFLA(const FunctionCallbackInfo<Value>& args) {
 //    Setup(args);
 //    EstimateFLA fla(Get("motor_rated_power"),Get("motor_rated_speed"),line(),effCls(),
@@ -236,8 +250,6 @@ Pump::Style style() {
 
 NAN_METHOD(achievableEfficiency) {
     inp = info[0]->ToObject();
-    r = Nan::New<Object>();
-
     double specific_speed = Get("specific_speed");
     Pump::Style s = style();
     info.GetReturnValue().Set(OptimalSpecificSpeedCorrection(s, specific_speed).calculate()*100);
@@ -245,7 +257,6 @@ NAN_METHOD(achievableEfficiency) {
 
 NAN_METHOD(nema) {
     inp = info[0]->ToObject();
-    r = Nan::New<Object>();
     Motor::LineFrequency l = line();
     double motor_rated_speed = Get("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
