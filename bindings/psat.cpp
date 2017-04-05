@@ -13,7 +13,6 @@ NAN_MODULE_INIT(InitPsat) {
     Nan::Set(target, New<String>("estFLA").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(estFLA)).ToLocalChecked());
 
-
     Nan::Set(target, New<String>("headToolSuctionTank").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(headToolSuctionTank)).ToLocalChecked());
 
@@ -22,6 +21,9 @@ NAN_MODULE_INIT(InitPsat) {
 
     Nan::Set(target, New<String>("nema").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(nema)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("pumpEfficiency").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(pumpEfficiency)).ToLocalChecked());
 
 }
 

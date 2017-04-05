@@ -145,7 +145,7 @@ double Get(const char *nm) {
 void SetR(const char *nm, double n) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     Local<Number> getNum = Nan::New<Number>(n);
-    r->Set(getName,getNum);
+    Nan::Set(r, getName, getNum);
 }
 
 // Fields
@@ -216,14 +216,7 @@ NAN_METHOD(estFLA) {
     info.GetReturnValue().Set(fla.getEstimatedFLA());
 }
 
-//void EstFLA(const FunctionCallbackInfo<Value>& args) {
-//    Setup(args);
-//    EstimateFLA fla(Get("motor_rated_power"),Get("motor_rated_speed"),line(),effCls(),
-//                    Get("efficiency"),Get("motor_rated_voltage"));
-//    fla.calculate();
-//    args.GetReturnValue().Set(fla.getEstimatedFLA());
-//}
-//
+
 //void MotorPerformance(const FunctionCallbackInfo<Value>& args) {
 //    Setup(args);
 //
@@ -238,15 +231,20 @@ NAN_METHOD(estFLA) {
 //    MotorPowerFactor pf(Get("motor_rated_power"),Get("load_factor"),mcVal,mefVal,Get("motor_rated_voltage"));
 //    SetR("pf",pf.calculate()*100);
 //}
-//
-//void PumpEfficiency(const FunctionCallbackInfo<Value>& args) {
-//    Setup(args);
-//    OptimalPrePumpEff pef(style(), 0, Get("flow"));
-//    auto v = pef.calculate();
-//    SetR("average",v);
-//    SetR("max",v*OptimalDeviationFactor(Get("flow")).calculate());
-//}
-//
+
+NAN_METHOD(pumpEfficiency)  {
+    inp = info[0]->ToObject();
+    Pump::Style s = style();
+    double flow = Get("flow");
+    OptimalPrePumpEff pef(s, 0, flow);
+    double v = pef.calculate();
+    r = Nan::New<Object>();
+    SetR("average",v);
+    double odf = OptimalDeviationFactor(flow).calculate();
+    SetR("max",v*odf);
+    info.GetReturnValue().Set(r);
+}
+
 
 NAN_METHOD(achievableEfficiency) {
     inp = info[0]->ToObject();
