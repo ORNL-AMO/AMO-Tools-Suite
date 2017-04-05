@@ -43,6 +43,26 @@ def create_data_tables(db_conn):
          '''
     )
 
+    c.execute(
+        '''CREATE TABLE IF NOT EXISTS gaseous_fuel_composition (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             fuel_name text NOT NULL DEFAULT "",
+             us_state text NOT NULL DEFAULT "",
+             ch4 real NOT NULL, -- methane %
+             c2h6 real NOT NULL, -- ethane %
+             n2 real NOT NULL, -- nitrogen %
+             c3h8 real NOT NULL, -- propane %
+             c4h10_cnh2n real NOT NULL, -- butane, other alkane %
+             h2o real NOT NULL, -- water %
+             co real NOT NULL, -- carbon monoxide %
+             co2 real NOT NULL, -- carbon dioxide %
+             so2 real NOT NULL, -- sulfur dioxide %
+             o2 real NOT NULL, -- oxygen %             
+             UNIQUE (fuel_name, us_state, ch4, c2h6, n2, c3h8, c4h10_cnh2n, h2o, co, co2, so2, o2)
+          );
+         '''
+    )
+
     db_conn.commit()
 
 
