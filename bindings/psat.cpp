@@ -28,6 +28,9 @@ NAN_MODULE_INIT(InitPsat) {
     Nan::Set(target, New<String>("pumpEfficiency").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(pumpEfficiency)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("results").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(results)).ToLocalChecked());
+
 }
 
 NODE_MODULE(psat, InitPsat)

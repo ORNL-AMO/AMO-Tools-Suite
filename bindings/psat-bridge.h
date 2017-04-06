@@ -5,8 +5,10 @@
 #ifndef AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 #define AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 
+#include <map>
 #include <nan.h>
 #include <node.h>
+#include <vector>
 
 using namespace Nan;
 using namespace v8;
@@ -162,9 +164,83 @@ Pump::Drive drive() {
 Pump::Style style() {
     return (Pump::Style)(int)Get("pump_style");
 }
+FieldData::LoadEstimationMethod  loadEstimationMethod() {
+    return (FieldData::LoadEstimationMethod)(int)Get("load_estimation_method");
+}
+Pump::Speed speed() {
+    return (Pump::Speed)(int)(!Get("fixed_speed"));
+}
 //
 //// Operations
 //
+
+NAN_METHOD(results) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    Pump::Style style1 = style();
+    Pump::Drive drive1 = drive();
+    double viscosity = Get("viscosity");
+    double specifc_gravity = Get("specific_gravity");
+    double stages = Get("stages");
+    Pump::Speed fixed_speed = speed();
+    double pump_specified = Get("pump_specified")/100;
+    double pump_rated_speed = Get("pump_rated_speed");
+
+    Motor::LineFrequency lineFrequency = line();
+    double motor_rated_power = Get("motor_rated_power");
+    double motor_rated_speed = Get("motor_rated_speed");
+    Motor::EfficiencyClass efficiencyClass = effCls();
+    double efficiency = Get("efficiency");
+    double motor_rated_voltage = Get("motor_rated_voltage");
+    double fla = Get("fla");
+    double margin = Get("margin");
+
+    double fraction = Get("fraction");
+    double cost = Get("cost");
+
+    double flow = Get("flow");
+    double head = Get("head");
+    FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+    double motor_field_power = Get("motor_field_power");
+    double motor_field_current = Get("motor_field_current");
+    double motor_field_voltage = Get("motor_field_voltage");
+
+    Pump pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed);
+    Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, fla, margin);
+    Financial fin(fraction, cost);
+    FieldData fd(flow, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+    PSATResult psat(pump, motor, fin, fd);
+    psat.calculateExisting();
+    psat.calculateOptimal();
+    auto ex = psat.getExisting();
+    auto opt = psat.getOptimal();
+    std::map<const char *,std::vector<double>> out = {
+            {"Pump Efficiency",{ex.pumpEfficiency_ * 100, opt.pumpEfficiency_ * 100}},
+            {"Motor Rated Power",{ex.motorRatedPower_,  opt.motorRatedPower_}},
+            {"Motor Shaft Power",{ex.motorShaftPower_,opt.motorShaftPower_}},
+            {"Pump Shaft Power",{ex.pumpShaftPower_, opt.pumpShaftPower_}},
+            {"Motor Efficiency",{ex.motorEfficiency_* 100, opt.motorEfficiency_ * 100}},
+            {"Motor Power Factor",{ex.motorPowerFactor_ * 100, opt.motorPowerFactor_ * 100}},
+            {"Motor Current",{ex.motorCurrent_, opt.motorCurrent_}},
+            {"Motor Power", {ex.motorPower_, opt.motorPower_}},
+            {"Annual Energy", {ex.annualEnergy_  ,opt.annualEnergy_}},
+            {"Annual Cost", {ex.annualCost_*1000,opt.annualCost_ * 1000}},
+            {"Savings Potential", {psat.getAnnualSavingsPotential()  * 1000, -1}},
+            {"Optimization Rating", {psat.getOptimizationRating(), -1}}
+    };
+    for(auto p: out) {
+        auto a = Nan::New<v8::Array>();
+        a->Set(0,Nan::New<Number>(p.second[0]));
+        a->Set(1,Nan::New<Number>(p.second[1]));
+        Local<String> nm = Nan::New<String>(p.first).ToLocalChecked();
+        //SetR(nm,a);
+        Nan::Set(r, nm, a);
+    }
+    info.GetReturnValue().Set(r);
+}
+
+
 //void Results(const FunctionCallbackInfo<Value>& args) {
 //    Setup(args);
 //
@@ -241,20 +317,6 @@ NAN_METHOD(motorPerformance) {
     info.GetReturnValue().Set(r);
 
 }
-//void MotorPerformance(const FunctionCallbackInfo<Value>& args) {
-//    Setup(args);
-//
-//    MotorEfficiency mef(line(),Get("motor_rated_speed"),effCls(),Get("efficiency"),Get("motor_rated_power"),Get("load_factor"));
-//    auto mefVal = mef.calculate();
-//    SetR("efficiency",mefVal*100);
-//
-//    MotorCurrent mc(Get("motor_rated_power"),Get("motor_rated_speed"),line(),effCls(),Get("efficiency"),Get("load_factor"),Get("motor_rated_voltage"),Get("flc"));
-//    auto mcVal = mc.calculate();
-//    SetR("current",mcVal/Get("flc")*100);
-//
-//    MotorPowerFactor pf(Get("motor_rated_power"),Get("load_factor"),mcVal,mefVal,Get("motor_rated_voltage"));
-//    SetR("pf",pf.calculate()*100);
-//}
 
 NAN_METHOD(pumpEfficiency)  {
     inp = info[0]->ToObject();
