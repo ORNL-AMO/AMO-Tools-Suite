@@ -19,6 +19,9 @@ NAN_MODULE_INIT(InitPsat) {
     Nan::Set(target, New<String>("headTool").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(headTool)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("motorPerformance").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(motorPerformance)).ToLocalChecked());
+
     Nan::Set(target, New<String>("nema").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(nema)).ToLocalChecked());
 

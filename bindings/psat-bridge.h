@@ -216,7 +216,31 @@ NAN_METHOD(estFLA) {
     info.GetReturnValue().Set(fla.getEstimatedFLA());
 }
 
+NAN_METHOD(motorPerformance) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    Motor::LineFrequency l = line();
+    double motor_rated_speed = Get("motor_rated_speed");
+    Motor::EfficiencyClass efficiencyClass = effCls();
+    double efficiency = Get("efficiency");
+    double motor_rated_power = Get("motor_rated_power");
+    double load_factor = Get("load_factor");
+    MotorEfficiency mef(l, motor_rated_speed, efficiencyClass, efficiency, motor_rated_power, load_factor);
+    double mefVal = mef.calculate();
+    SetR("efficiency", mefVal * 100);
 
+    double motor_rated_voltage = Get("motor_rated_voltage");
+    double fla = Get("fla");
+    MotorCurrent mc(motor_rated_power, motor_rated_speed, l, efficiencyClass, efficiency, load_factor, motor_rated_voltage, fla);
+    double mcVal = mc.calculate();
+    SetR("current", mcVal/fla * 100);
+
+    MotorPowerFactor motorPowerFactor(motor_rated_power, load_factor, mcVal, mefVal, motor_rated_voltage);
+    SetR("pf", motorPowerFactor.calculate() * 100);
+
+    info.GetReturnValue().Set(r);
+
+}
 //void MotorPerformance(const FunctionCallbackInfo<Value>& args) {
 //    Setup(args);
 //
@@ -234,11 +258,11 @@ NAN_METHOD(estFLA) {
 
 NAN_METHOD(pumpEfficiency)  {
     inp = info[0]->ToObject();
+    r = Nan::New<Object>();
     Pump::Style s = style();
     double flow = Get("flow");
     OptimalPrePumpEff pef(s, 0, flow);
     double v = pef.calculate();
-    r = Nan::New<Object>();
     SetR("average",v);
     double odf = OptimalDeviationFactor(flow).calculate();
     SetR("max",v*odf);
