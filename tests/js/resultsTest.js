@@ -99,7 +99,7 @@ test('psat', function (t) {
      //t.equal(psatResult.get("pump_efficiency")[0], 0.8026203812559545, 'existing pump efficiency is ' + psatResult[pump_efficiency][0]);
     // t.equal(psatResult["pump_efficiency"][1], 0.8675480583084275, 'optimal pump efficiency is ' + psatResult[pump_efficiency][0]);
     //
-    console.log(psatResult.get('pump_efficiency'));
+
     for (var key in psatResult) {
         console.log(key,psatResult[key][0]);
     }
