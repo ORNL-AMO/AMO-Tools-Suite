@@ -216,18 +216,18 @@ NAN_METHOD(results) {
     auto ex = psat.getExisting();
     auto opt = psat.getOptimal();
     std::map<const char *,std::vector<double>> out = {
-            {"Pump Efficiency",{ex.pumpEfficiency_ * 100, opt.pumpEfficiency_ * 100}},
-            {"Motor Rated Power",{ex.motorRatedPower_,  opt.motorRatedPower_}},
-            {"Motor Shaft Power",{ex.motorShaftPower_,opt.motorShaftPower_}},
-            {"Pump Shaft Power",{ex.pumpShaftPower_, opt.pumpShaftPower_}},
-            {"Motor Efficiency",{ex.motorEfficiency_* 100, opt.motorEfficiency_ * 100}},
-            {"Motor Power Factor",{ex.motorPowerFactor_ * 100, opt.motorPowerFactor_ * 100}},
-            {"Motor Current",{ex.motorCurrent_, opt.motorCurrent_}},
-            {"Motor Power", {ex.motorPower_, opt.motorPower_}},
-            {"Annual Energy", {ex.annualEnergy_  ,opt.annualEnergy_}},
-            {"Annual Cost", {ex.annualCost_*1000,opt.annualCost_ * 1000}},
-            {"Savings Potential", {psat.getAnnualSavingsPotential()  * 1000, -1}},
-            {"Optimization Rating", {psat.getOptimizationRating(), -1}}
+            {"pump_efficiency",{ex.pumpEfficiency_ * 100, opt.pumpEfficiency_ * 100}},
+            {"motor_rated_power",{ex.motorRatedPower_,  opt.motorRatedPower_}},
+            {"motor_shaft_power",{ex.motorShaftPower_,opt.motorShaftPower_}},
+            {"pump_shaft_power",{ex.pumpShaftPower_, opt.pumpShaftPower_}},
+            {"motor_efficiency",{ex.motorEfficiency_* 100, opt.motorEfficiency_ * 100}},
+            {"motor_power_factor",{ex.motorPowerFactor_ * 100, opt.motorPowerFactor_ * 100}},
+            {"motor_current",{ex.motorCurrent_, opt.motorCurrent_}},
+            {"motor_power", {ex.motorPower_, opt.motorPower_}},
+            {"annual_energy", {ex.annualEnergy_  ,opt.annualEnergy_}},
+            {"annual_cost", {ex.annualCost_*1000,opt.annualCost_ * 1000}},
+            {"annual_savings_potential", {psat.getAnnualSavingsPotential()  * 1000, -1}},
+            {"optimization_rating", {psat.getOptimizationRating(), -1}}
     };
     for(auto p: out) {
         auto a = Nan::New<v8::Array>();
