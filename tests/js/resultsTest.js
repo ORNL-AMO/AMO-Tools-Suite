@@ -101,7 +101,8 @@ test('psat', function (t) {
     //
 
     for (var key in psatResult) {
-        console.log(key,psatResult[key][0]);
+        console.log(key,psatResult[key][0] + " existing.");
+        console.log(key, psatResult[key][1] + " optimal.");
     }
     //t.equal(psatResult[0], 86.99584193768345, 'res max is ' + psatResult[0]);
 
