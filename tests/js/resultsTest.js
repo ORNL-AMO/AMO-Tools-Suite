@@ -6,7 +6,7 @@ const test = require('tap').test
 , bindings = require('bindings')({ module_root: testRoot, bindings: 'psat'});
 
 test('psat', function (t) {
-    t.plan(1);
+    t.plan(23);
     t.type(bindings.results, 'function');
     var inp = {};
     // PUMP INFORMATION
@@ -96,14 +96,37 @@ test('psat', function (t) {
 
     var psatResult = bindings.results(inp);
 
-     //t.equal(psatResult.get("pump_efficiency")[0], 0.8026203812559545, 'existing pump efficiency is ' + psatResult[pump_efficiency][0]);
-    // t.equal(psatResult["pump_efficiency"][1], 0.8675480583084275, 'optimal pump efficiency is ' + psatResult[pump_efficiency][0]);
-    //
+    t.equal(psatResult.pump_efficiency[0], 80.26203812559545, 'existing pump efficiency is ' + psatResult.pump_efficiency[0]);
+    t.equal(psatResult.pump_efficiency[1], 86.75480583084276 , 'optimal pump efficiency is ' + psatResult.pump_efficiency[1]);
 
-    for (var key in psatResult) {
-        console.log(key,psatResult[key][0] + " existing.");
-        console.log(key, psatResult[key][1] + " optimal.");
-    }
-    //t.equal(psatResult[0], 86.99584193768345, 'res max is ' + psatResult[0]);
+    t.equal(psatResult.motor_rated_power[0], 200, 'existing motor rated power is ' + psatResult.motor_rated_power[0]);
+    t.equal(psatResult.motor_rated_power[1], 100 , 'optimal motor rated power is ' + psatResult.motor_rated_power[1]);
+
+    t.equal(psatResult.motor_shaft_power[0], 101.18747791246317, 'existing motor shaft power is ' + psatResult.motor_shaft_power[0]);
+    t.equal(psatResult.motor_shaft_power[1], 93.61456270075166, 'optimal motor shaft power is ' + psatResult.motor_shaft_power[1]);
+
+    t.equal(psatResult.pump_shaft_power[0], 101.18747791246317, 'existing pump shaft power is ' + psatResult.pump_shaft_power[0]);
+    t.equal(psatResult.pump_shaft_power[1], 93.61456270075166, 'optimal pump power is ' + psatResult.pump_shaft_power[1]);
+
+    t.equal(psatResult.motor_efficiency[0], 94.35732315337191, 'existing motor efficiency is ' + psatResult.motor_efficiency[0]);
+    t.equal(psatResult.motor_efficiency[1], 95.02783605700556, 'optimal motor efficiency is ' + psatResult.motor_efficiency[1]);
+
+    t.equal(psatResult.motor_power_factor[0], 76.45602656178534, 'existing motor power factor is ' + psatResult.motor_power_factor[0]);
+    t.equal(psatResult.motor_power_factor[1], 85.97645176630047, 'optimal motor power factor is ' + psatResult.motor_power_factor[1]);
+
+    t.equal(psatResult.motor_current[0], 125.85671685040634, 'existing motor current is ' + psatResult.motor_current[0]);
+    t.equal(psatResult.motor_current[1], 102.81349971661015, 'optimal motor current is ' + psatResult.motor_current[1]);
+
+    t.equal(psatResult.motor_power[0], 80, 'existing motor power is ' + psatResult.motor_power[0]);
+    t.equal(psatResult.motor_power[1], 73.49055466145589, 'optimal motor power is ' + psatResult.motor_power[1]);
+
+    t.equal(psatResult.annual_energy[0], 700.8, 'existing annual energy is ' + psatResult.annual_energy[0]);
+    t.equal(psatResult.annual_energy[1], 643.7772588343536, 'optimal annual energy is ' + psatResult.annual_energy[1]);
+
+    t.equal(psatResult.annual_cost[0], 35040, 'existing annual cost is ' + psatResult.annual_cost[0]);
+    t.equal(psatResult.annual_cost[1], 32188.86294171768, 'optimal annual cost is ' + psatResult.annual_cost[1]);
+
+    t.equal(psatResult.annual_savings_potential[0], 2851.1370582823192, 'annual savings potential is ' + psatResult.annual_savings_potential[0]);
+    t.equal(psatResult.optimization_rating[0], 0.9186319332681986, 'optimization rating is ' + psatResult.optimization_rating[0]);
 
 });
