@@ -11,7 +11,7 @@ test('psat', function (t) {
     var inp = {};
     // Pump Style End suction ansi API
     inp.pump_style = 6;
-    inp.flow = 2000;
+    inp.flow_rate = 2000;
     var res = bindings.pumpEfficiency(inp);
     t.equal(res.average, 83.97084437955112, 'res average is ' + res.average);
     t.equal(res.max, 86.99584193768345, 'res max is ' + res.max);

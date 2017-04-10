@@ -65,7 +65,7 @@ void Results(const FunctionCallbackInfo<Value>& args) {
     Pump pump(style(),Get("pump_specified")/100,Get("pump_rated_speed"),drive(),
               Get("viscosity"),Get("specific_gravity"),Get("stages"),(Pump::Speed)(int)(!Get("fixed_speed")));
     Motor motor(line(),Get("motor_rated_power"),Get("motor_rated_speed"),effCls(),
-                Get("efficiency"),Get("motor_rated_voltage"),Get("motor_rated_flc"),Get("margin"));
+                Get("efficiency"),Get("motor_rated_voltage"),Get("motor_rated_fla"),Get("margin"));
     Financial fin(Get("fraction")/100,Get("cost"));
     FieldData fd(Get("flow"),Get("head"),(FieldData::LoadEstimationMethod)(Get("motor_field_power")>0?0:1),
                  Get("motor_field_power"),Get("motor_field_current"),Get("motor_field_voltage"));

@@ -11,7 +11,7 @@
 #include "calculator/losses/LeakageLosses.h"
 
 double LeakageLosses::getExfiltratedGasesHeatContent() {
-    const double tFurnace = specificGravity_ * ( 520.0 / ( 460 + leakageGasTemperature_ ) );
+//    const double tFurnace = specificGravity_ * ( 520.0 / ( 460 + leakageGasTemperature_ ) );
 //    const double specificHeatGassesAvgTemp = (leakageGasTemperature_ + 60.0) / 2.0;
 
 	const double cfh = 1655 * coefficient_ * ( openingArea_ * 144 ) * pow( draftPressure_ / specificGravity_, 0.5 );

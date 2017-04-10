@@ -12,7 +12,8 @@ NAN_MODULE_INIT(InitDb) {
     Nan::Set(target, New<String>("selectSolidMaterial").ToLocalChecked(),
     GetFunction(New<FunctionTemplate>(selectSolidMaterial)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("selectSolidMaterialById"))
+    Nan::Set(target, New<String>("selectSolidMaterialById").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectSolidMaterial)).ToLocalChecked());
 
 }
 

@@ -11,7 +11,7 @@ test('psat', function (t) {
     var inp = {};
     inp.motor_rated_power = 200;
     inp.motor_rated_speed = 1780;
-    inp.line = 1;
+    inp.line_frequency = 1;
     // Either specify an efficiency class OR provide efficiency percentage
     inp.efficiency_class = 1;
     inp.efficiency = 0;

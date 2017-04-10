@@ -25,7 +25,7 @@ test('psat', function (t) {
 
     var inp = {};
     // Line frequency 60
-    inp.line = 0;
+    inp.line_frequency = 0;
     // Energy efficient
     inp.efficiency_class = 1;
     inp.motor_rated_power = 200;
@@ -33,11 +33,11 @@ test('psat', function (t) {
     inp.efficiency = 0;
     inp.load_factor = .25;
     inp.motor_rated_voltage = 460;
-    inp.fla = 225.8;
+    inp.motor_rated_fla = 225.8;
 
     var res = bindings.motorPerformance(inp);
-    t.equal(res.current, 36.1065805345533, 'res.current is ' + res.current);
+    t.equal(res.motor_current, 36.1065805345533, 'res.motor_current is ' + res.motor_current);
     t.equal(res.efficiency, 93.03933838910918, 'res.efficiency is ' + res.efficiency);
-    t.equal(res.pf, 61.718229798145316, 'res.pf is ' + res.pf);
+    t.equal(res.motor_power_factor, 61.718229798145316, 'res.motor_power_factor is ' + res.motor_power_factor);
 
 });

@@ -15,11 +15,11 @@ test('psat', function (t) {
     // Achievable pump efficiency
     inp.pump_specified = 90;
     inp.pump_rated_speed = 1780;
-    inp.motor_rated_speed = 1780;
+
     // Pump Drive : Direct
     inp.drive = 0;
     // kinematic viscosity
-    inp.viscosity = 1.0;
+    inp.kinematic_viscosity = 1.0;
     // specific gravity
     inp.specific_gravity = 1.000;
     // stages count
@@ -29,7 +29,7 @@ test('psat', function (t) {
 
     // MOTOR INFORMATION
     // Line frequency 60
-    inp.line = 0;
+    inp.line_frequency = 0;
     // motor rated power
     inp.motor_rated_power = 200;
     // motor speed
@@ -41,17 +41,17 @@ test('psat', function (t) {
     // motor rated voltage
     inp.motor_rated_voltage = 460;
     // Full load amps
-    inp.fla = 225.0;
+    inp.motor_rated_fla = 225.0;
     // Size margin
     inp.margin = 0;
 
     // FINANCIALS
-    inp.fraction = 1.00;
+    inp.operating_fraction = 1.00;
     inp.cost = 0.05;
 
     // FIELD DATA
     // Flow rate
-    inp.flow = 1840;
+    inp.flow_rate = 1840;
     // Head
     inp.head = 174.85;
     // enum class LoadEstimationMethod {
