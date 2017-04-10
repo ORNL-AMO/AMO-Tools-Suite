@@ -41,7 +41,7 @@ test('psat', function (t) {
     // motor rated voltage
     inp.motor_rated_voltage = 460;
     // Full load amps
-    inp.motor_rated_flc = 225.0;
+    inp.motor_rated_fla = 225.0;
     // Size margin
     inp.margin = 0;
 

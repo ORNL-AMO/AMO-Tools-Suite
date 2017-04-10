@@ -193,7 +193,7 @@ NAN_METHOD(results) {
     Motor::EfficiencyClass efficiencyClass = effCls();
     double efficiency = Get("efficiency");
     double motor_rated_voltage = Get("motor_rated_voltage");
-    double motor_rated_flc = Get("motor_rated_flc");
+    double motor_rated_fla = Get("motor_rated_fla");
     double margin = Get("margin");
 
     double fraction = Get("operating_fraction");
@@ -207,7 +207,7 @@ NAN_METHOD(results) {
     double motor_field_voltage = Get("motor_field_voltage");
 
     Pump pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed);
-    Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_flc, margin);
+    Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
     Financial fin(fraction, cost);
     FieldData fd(flow, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
     PSATResult psat(pump, motor, fin, fd);
@@ -267,7 +267,7 @@ NAN_METHOD(motorPerformance) {
     SetR("efficiency", mefVal * 100);
 
     double motor_rated_voltage = Get("motor_rated_voltage");
-    double fla = Get("motor_rated_flc");
+    double fla = Get("motor_rated_fla");
     MotorCurrent mc(motor_rated_power, motor_rated_speed, l, efficiencyClass, efficiency, load_factor, motor_rated_voltage, fla);
     double mcVal = mc.calculate();
     SetR("motor_current", mcVal/fla * 100);

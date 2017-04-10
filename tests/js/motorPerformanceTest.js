@@ -33,7 +33,7 @@ test('psat', function (t) {
     inp.efficiency = 0;
     inp.load_factor = .25;
     inp.motor_rated_voltage = 460;
-    inp.motor_rated_flc = 225.8;
+    inp.motor_rated_fla = 225.8;
 
     var res = bindings.motorPerformance(inp);
     t.equal(res.motor_current, 36.1065805345533, 'res.motor_current is ' + res.motor_current);
