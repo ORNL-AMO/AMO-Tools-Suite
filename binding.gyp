@@ -24,27 +24,7 @@
                         },
                     }]
                 ]
-            },            {
-                              "target_name": "db",
-                                  'include_dirs': ['include', 'include/sqlite'
-                           ],
-                          'sources' : [
-                              'bindings/db.cpp',
-                              "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite').map(f=>'src/sqlite'+f).join(' '))\")",
-                          ],
-                                          "conditions": [
-                                  [ 'OS=="mac"', {
-                                      "xcode_settings": {
-                                          'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
-                                          'OTHER_LDFLAGS': ['-stdlib=libc++'],
-                                          'MACOSX_DEPLOYMENT_TARGET': '10.9',
-                                          'CLANG_CXX_LIBRARY': 'libc++',
-                                          'GCC_ENABLE_CPP_RTTI': 'YES',
-                                          'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
-                                      },
-                                  }]
-                              ]
-                          },
+            },
         {
             "target_name": "phast",
             'include_dirs': ['include', 'include/calculator/losses', 'include/phast',
