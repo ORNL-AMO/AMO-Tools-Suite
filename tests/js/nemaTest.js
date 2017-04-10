@@ -10,7 +10,7 @@ test('psat', function (t) {
     t.type(bindings.nema, 'function');
     var inp = {};
     // Line frequency 60
-    inp.line = 0;
+    inp.line_frequency = 0;
     inp.motor_rated_speed = 1200;
     // Efficiency class = Energy efficient
     inp.efficiency_class = 1;
