@@ -47,7 +47,7 @@ test('psat', function (t) {
 
     // FINANCIALS
     inp.operating_fraction = 1.00;
-    inp.cost = 0.05;
+    inp.cost_kw_hour = 0.05;
 
     // FIELD DATA
     // Flow rate

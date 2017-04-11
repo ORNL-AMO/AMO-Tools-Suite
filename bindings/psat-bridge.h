@@ -197,7 +197,7 @@ NAN_METHOD(results) {
     double margin = Get("margin");
 
     double fraction = Get("operating_fraction");
-    double cost = Get("cost");
+    double cost = Get("cost_kw_hour");
 
     double flow = Get("flow_rate");
     double head = Get("head");
