@@ -1,6 +1,6 @@
 
 #include <nan.h>
-#include "psat-bridge.h"
+#include "psat.h"
 
 using namespace Nan;
 
