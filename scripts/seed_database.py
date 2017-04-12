@@ -64,9 +64,9 @@ def create_data_tables(db_conn):
              id integer PRIMARY KEY AUTOINCREMENT,
              substance text NOT NULL DEFAULT "",             
              hydrogen real NOT NULL, -- H2
-             methane real NOT NULL, -- CH
+             methane real NOT NULL, -- CH4
              ethylene real NOT NULL, -- C2H4
-             ethane real NOT NULL, -- H2H6             
+             ethane real NOT NULL, -- C2H6             
              carbon_monoxide real NOT NULL, -- CO
              carbon_dioxide real NOT NULL, -- CO2
              nitrogen real NOT NULL, -- N2            
