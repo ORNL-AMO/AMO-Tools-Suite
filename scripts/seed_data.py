@@ -102,7 +102,8 @@ def add_solid_liquid_flue_gas_materials(db_conn):
     ]
 
     c = db_conn.cursor()
-    c.executemany('INSERT INTO solid_liquid_flue_gas_materials(substance,carbon,hydrogen,nitrogen,sulfur,oxygen,moisture,ash) VALUES (?,?,?,?,?,?,?,?)',
+    c.executemany('INSERT INTO solid_liquid_flue_gas_materials(substance,carbon,hydrogen,nitrogen,sulfur,oxygen,'
+                  'moisture,ash) VALUES (?,?,?,?,?,?,?,?)',
                   materials)
     db_conn.commit()
 
@@ -113,6 +114,8 @@ def add_gas_flue_gas_materials(db_conn):
     ]
 
     c = db_conn.cursor()
-    c.executemany('INSERT INTO gas_flue_gas_materials(substance,hydrogen,methane,ethylene,ethane,sulfur_dioxide,carbon_monoxide,carbon_dioxide,nitrogen,oxygen,hydrogen_sulfide,benzene,moisture) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    c.executemany('INSERT INTO gas_flue_gas_materials(substance,hydrogen,methane,ethylene,ethane,sulfur_dioxide,'
+                  'carbon_monoxide,carbon_dioxide,nitrogen,oxygen,hydrogen_sulfide,benzene,moisture) '
+                  'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
                   materials)
     db_conn.commit()
