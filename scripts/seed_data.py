@@ -93,3 +93,26 @@ def add_solid_load_charge_materials(db_conn):
                   'latent_heat_of_fusion, mean_specific_heat_of_liquid, melting_point) VALUES (?,?,?,?,?)',
                   materials)
     db_conn.commit()
+
+def add_solid_liquid_flue_gas_materials(db_conn):
+    materials = [
+
+        ('Anthracite', 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5),
+        ('Pittsburgh #8 Bituminous, Oh or Pa', 74.0, 5.1, 1.6, 2.3, 7.9, 0, 9.1)
+    ]
+
+    c = db_conn.cursor()
+    c.executemany('INSERT INTO solid_liquid_flue_gas_materials(substance,carbon,hydrogen,nitrogen,sulfur,oxygen,moisture,ash) VALUES (?,?,?,?,?,?,?,?)',
+                  materials)
+    db_conn.commit()
+
+def add_gas_flue_gas_materials(db_conn):
+    materials = [
+
+        ('Coke Oven Gas', 47.9, 33.9, 5.2, 0, 0, 6.1, 2.6, 3.7, 0.6, 0, 0, 0)
+    ]
+
+    c = db_conn.cursor()
+    c.executemany('INSERT INTO gas_flue_gas_materials(substance,hydrogen,methane,ethylene,ethane,sulfur_dioxide,carbon_monoxide,carbon_dioxide,nitrogen,oxygen,hydrogen_sulfide,benzene,moisture) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                  materials)
+    db_conn.commit()

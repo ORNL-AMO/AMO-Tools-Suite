@@ -66,7 +66,8 @@ def create_data_tables(db_conn):
              hydrogen real NOT NULL, -- H2
              methane real NOT NULL, -- CH4
              ethylene real NOT NULL, -- C2H4
-             ethane real NOT NULL, -- C2H6             
+             ethane real NOT NULL, -- C2H6   
+             sulfur_dioxide real NOT NULL, -- SO2                          
              carbon_monoxide real NOT NULL, -- CO
              carbon_dioxide real NOT NULL, -- CO2
              nitrogen real NOT NULL, -- N2            
@@ -88,6 +89,8 @@ def drop_all_tables(db_conn):
     c.execute('DROP TABLE IF EXISTS gas_load_charge_materials')
     c.execute('DROP TABLE IF EXISTS liquid_load_charge_materials')
     c.execute('DROP TABLE IF EXISTS solid_load_charge_materials')
+    c.execute('DROP TABLE IF EXISTS solid_liquid_flue_gas_materials')
+    c.execute('DROP TABLE IF EXISTS gas_flue_gas_materials')
     db_conn.commit()
 
 
@@ -98,6 +101,8 @@ def init_db(db_conn):
     seed_data.add_gas_load_charge_materials(db_conn)
     seed_data.add_liquid_load_charge_materials(db_conn)
     seed_data.add_solid_load_charge_materials(db_conn)
+    seed_data.add_solid_liquid_flue_gas_materials(db_conn)
+    seed_data.add_gas_flue_gas_materials(db_conn)
 
 
 if __name__ == '__main__':
