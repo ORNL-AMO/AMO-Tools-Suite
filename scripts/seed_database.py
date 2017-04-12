@@ -43,6 +43,43 @@ def create_data_tables(db_conn):
          '''
     )
 
+    c.execute(
+        '''CREATE TABLE IF NOT EXISTS solid_liquid_flue_gas_materials (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             substance text NOT NULL DEFAULT "",             
+             carbon real NOT NULL, --C
+             hydrogen real NOT NULL, -- H2
+             nitrogen real NOT NULL, -- N2
+             sulfur real NOT NULL, -- S
+             oxygen real NOT NULL, -- O2
+             moisture real NOT NULL, -- H20
+             ash real NOT NULL, -- ash             
+             UNIQUE (substance)
+          );
+         '''
+    )
+
+    c.execute(
+        '''CREATE TABLE IF NOT EXISTS gas_flue_gas_materials (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             substance text NOT NULL DEFAULT "",             
+             hydrogen real NOT NULL, -- H2
+             methane real NOT NULL, -- CH
+             ethylene real NOT NULL, -- C2H4
+             ethane real NOT NULL, -- H2H6             
+             carbon_monoxide real NOT NULL, -- CO
+             carbon_dioxide real NOT NULL, -- CO2
+             nitrogen real NOT NULL, -- N2            
+             oxygen real NOT NULL, -- O2
+             hydrogen_sulfide real NOT NULL, -- H2S
+             benzene real NOT NULL, -- C2H4
+             moisture real NOT NULL, -- H20                          s        
+             UNIQUE (substance)
+          );
+         '''
+    )
+
+
     db_conn.commit()
 
 

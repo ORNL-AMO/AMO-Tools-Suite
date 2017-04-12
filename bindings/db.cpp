@@ -27,16 +27,16 @@ NAN_MODULE_INIT(InitDb) {
     Nan::Set(target, New<String>("selectGasMaterialById").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectGasMaterialById)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("selectFlueGasMaterialSolid").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(selectFlueGasMaterialSolid)).ToLocalChecked());
+    Nan::Set(target, New<String>("selectFlueGasMaterialSolidLiquid").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectFlueGasMaterialSolidLiquid)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("selectFlueGasMaterialSolidById").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(selectFlueGasMaterialSolidById)).ToLocalChecked());
+    Nan::Set(target, New<String>("selectFlueGasMaterialSolidLiquidById").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectFlueGasMaterialSolidLiquidById)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("selectFlueGasMaterialLiquidGas").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(selectFlueGasMaterialLiquidGas)).ToLocalChecked());
+    Nan::Set(target, New<String>("selectFlueGasMaterialGas").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectFlueGasMaterialGas)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("selectFlueGasMaterialLiquidGasById").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(selectFlueGasMaterialLiquidGasById)).ToLocalChecked());
+    Nan::Set(target, New<String>("selectFlueGasMaterialGasById").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectFlueGasMaterialGasById)).ToLocalChecked());
 }
 
