@@ -33,11 +33,26 @@ class db {
         Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
         info.GetReturnValue().Set(temp);
     }
-    NAN_METHOD(selectGasßMaterialById) {
+    NAN_METHOD(selectGasMaterialById) {
         Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
         info.GetReturnValue().Set(temp);
     }
-
+    NAN_METHOD(selectFlueGasMaterialSolid) {
+        Local<Object> obj = Nan::New<Object>();
+        info.GetReturnValue().Set(obj);
+    };
+    NAN_METHOD(selectFlueGasMaterialSolidById) {
+        Local<Object> obj = Nan::New<Object>();
+        info.GetReturnValue().Set(obj);
+    };
+    NAN_METHOD(selectFlueGasMaterialLiquidGas) {
+        Local<Object> obj = Nan::New<Object>();
+        info.GetReturnValue().Set(obj);
+    };
+    NAN_METHOD(selectFlueGasMaterialLiquidGasById) {
+        Local<Object> obj = Nan::New<Object>();
+        info.GetReturnValue().Set(obj);
+    };
 };
 
 
