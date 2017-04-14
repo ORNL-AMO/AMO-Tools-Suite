@@ -151,7 +151,9 @@ set(INCLUDE_FILES
         include/calculator/pump/HeadTool.h
         include/sqlite/SolidLoadChargeMaterialData.h
         include/sqlite/GasLoadChargeMaterialData.h
-        include/sqlite/LiquidLoadChargeMaterialData.h)
+        include/sqlite/LiquidLoadChargeMaterialData.h
+        include/sqlite/SolidLiquidFlueGasMaterialData.h
+        include/sqlite/GasFlueGasMaterial.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

@@ -5,6 +5,8 @@
 #include <sqlite/SolidLoadChargeMaterialData.h>
 #include <sqlite/GasLoadChargeMaterialData.h>
 #include <sqlite/LiquidLoadChargeMaterialData.h>
+#include <sqlite/GasFlueGasMaterial.h>
+#include <sqlite/SolidLiquidFlueGasMaterialData.h>
 
 #include <fstream>
 #include <iostream>
@@ -40,6 +42,12 @@ SQLite::~SQLite()
     sqlite3_finalize(m_liquid_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_single_stmt);
+    sqlite3_finalize(m_solid_liquid_flue_gas_materials_insert_stmt);
+    sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_stmt);
+    sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_single_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_insert_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_select_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_select_single_stmt);
 }
 
 std::string SQLiteWrapper::convert_text( const unsigned char * text ) {
@@ -118,6 +126,42 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterial(int const id) const
     return get_object<LiquidLoadChargeMaterial>(m_liquid_load_charge_materials_select_single_stmt, id, cb);
 }
 
+//std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials() const
+//{
+//    auto cb = [] (sqlite3_stmt * stmt) {
+//        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+//        return SolidLiquidFlueGasMaterial(substance);
+//    };
+//    return get_all_objects<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_stmt, cb);
+//}
+//
+//SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterial(int const id) const
+//{
+//    auto cb = [] (sqlite3_stmt * stmt) {
+//        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+//        return SolidLiquidFlueGasMaterial(substance);
+//    };
+//    return get_object<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_single_stmt, id, cb);
+//}
+//
+//std::vector<GasFlueGasMaterial> SQLite::getGasFlueGasMaterials() const
+//{
+//    auto cb = [] (sqlite3_stmt * stmt) {
+//        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+//        return GasFlueGasMaterial(substance);
+//    };
+//    return get_all_objects<GasFlueGasMaterial>(m_gas_flue_gas_materials_select_stmt, cb);
+//}
+//
+//GasFlueGasMaterial SQLite::getGasFlueGasMaterial(int const id) const
+//{
+//    auto cb = [] (sqlite3_stmt * stmt) {
+//        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+//        return GasFlueGasMaterial(substance);
+//    };
+//    return get_object<GasFlueGasMaterial>(m_gas_flue_gas_materials_select_single_stmt, id, cb);
+//}
+
 void SQLite::create_select_stmt()
 {
     std::string const select_solid_load_charge_materials =
@@ -162,6 +206,36 @@ void SQLite::create_select_stmt()
            WHERE id = ?)";
 
     prepare_statement(m_liquid_load_charge_materials_select_single_stmt, select_single_liquid_load_charge_materials);
+
+    std::string const select_solid_liquid_flue_gas_materials =
+            R"(SELECT id, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, moisture
+           FROM solid_liquid_flue_gas_materials)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_select_stmt, select_solid_liquid_flue_gas_materials);
+
+    std::string const select_single_solid_liquid_flue_gas_materials =
+            R"(SELECT id, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, moisture
+           FROM solid_liquid_flue_gas_materials
+           WHERE id = ?)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_select_single_stmt, select_single_solid_liquid_flue_gas_materials);
+
+    std::string const select_gas_flue_gas_materials =
+            R"(SELECT id, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, moisture
+           FROM gas_flue_gas_materials)";
+
+    prepare_statement(m_gas_flue_gas_materials_select_stmt, select_gas_flue_gas_materials);
+
+    std::string const select_single_gas_flue_gas_materials =
+            R"(SELECT id, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, moisture
+           FROM gas_flue_gas_materials
+           WHERE id = ?)";
+
+    prepare_statement(m_gas_flue_gas_materials_select_single_stmt, select_single_gas_flue_gas_materials);
 }
 
 void SQLite::create_tables()
@@ -223,6 +297,58 @@ void SQLite::create_tables()
            VALUES (?,?,?,?,?))";
 
     prepare_statement(m_liquid_load_charge_materials_insert_stmt, liquid_load_charge_materials_insert_sql);
+
+    const std::string solid_liquid_flue_gas_materials_table_sql =
+        R"(CREATE TABLE IF NOT EXISTS solid_liquid_flue_gas_materials (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             substance text NOT NULL DEFAULT "",
+             carbon real NOT NULL, --C
+             hydrogen real NOT NULL, -- H2
+             nitrogen real NOT NULL, -- N2
+             sulfur real NOT NULL, -- S
+             oxygen real NOT NULL, -- O2
+             moisture real NOT NULL, -- H20
+             ash real NOT NULL, -- ash
+             UNIQUE (substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash)
+      );)";
+
+    execute_command(solid_liquid_flue_gas_materials_table_sql);
+
+    const std::string solid_liquid_flue_gas_materials_insert_sql =
+        R"(INSERT INTO solid_liquid_flue_gas_materials(substance, carbon, hydrogen, nitrogen, sulfur, oxygen,
+                                                       moisture, ash)
+           VALUES (?,?,?,?,?,?,?,?))";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_insert_stmt, solid_liquid_flue_gas_materials_insert_sql);
+
+    const std::string gas_flue_gas_materials_table_sql =
+        R"(CREATE TABLE IF NOT EXISTS gas_flue_gas_materials (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             substance text NOT NULL DEFAULT "",
+             hydrogen real NOT NULL, -- H2
+             methane real NOT NULL, -- CH4
+             ethylene real NOT NULL, -- C2H4
+             ethane real NOT NULL, -- C2H6
+             sulfur_dioxide real NOT NULL, -- SO2
+             carbon_monoxide real NOT NULL, -- CO
+             carbon_dioxide real NOT NULL, -- CO2
+             nitrogen real NOT NULL, -- N2
+             oxygen real NOT NULL, -- O2
+             hydrogen_sulfide real NOT NULL, -- H2S
+             benzene real NOT NULL, -- C2H4
+             moisture real NOT NULL, -- H20
+             UNIQUE (substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide, carbon_monoxide, carbon_dioxide,
+                     nitrogen, oxygen, hydrogen_sulfide, benzene, moisture)
+      );)";
+
+    execute_command(gas_flue_gas_materials_table_sql);
+
+    const std::string gas_flue_gas_materials_insert_sql =
+        R"(INSERT INTO gas_flue_gas_materials(substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, moisture)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?))";
+
+    prepare_statement(m_gas_flue_gas_materials_insert_stmt, gas_flue_gas_materials_insert_sql);
 }
 
 void SQLite::insert_default_data()
@@ -236,6 +362,12 @@ void SQLite::insert_default_data()
     for( auto const & material : get_default_liquid_load_charge_materials() ) {
         insert_liquid_load_charge_materials(material);
     }
+//    for( auto const & material : get_default_solid_liquid_flue_gas_materials() ) {
+//        insert_solid_liquid_flue_gas_materials(material);
+//    }
+//    for( auto const & material : get_default_gas_flue_gas_materials() ) {
+//        insert_gas_flue_gas_materials(material);
+//    }
 }
 
 bool SQLite::insert_solid_load_charge_materials(SolidLoadChargeMaterial const & material)
@@ -276,6 +408,26 @@ bool SQLite::insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const 
     reset_command(m_liquid_load_charge_materials_insert_stmt);
     return valid_insert;
 }
+
+//bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLoadChargeMaterial const & material)
+//{
+//    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 1, material.getSubstance());
+//
+//    int rc = step_command(m_solid_liquid_flue_gas_materials_insert_stmt);
+//    bool valid_insert = step_validity(rc);
+//    reset_command(m_solid_liquid_flue_gas_materials_insert_stmt);
+//    return valid_insert;
+//}
+//
+//bool SQLite::insert_gas_flue_gas_materials(SolidLoadChargeMaterial const & material)
+//{
+//    bind_value(m_gas_flue_gas_materials_insert_stmt, 1, material.getSubstance());
+//
+//    int rc = step_command(m_gas_flue_gas_materials_insert_stmt);
+//    bool valid_insert = step_validity(rc);
+//    reset_command(m_gas_flue_gas_materials_insert_stmt);
+//    return valid_insert;
+//}
 
 SQLiteWrapper::SQLiteWrapper( std::shared_ptr<sqlite3> const & db )
     :
