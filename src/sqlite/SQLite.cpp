@@ -208,15 +208,13 @@ void SQLite::create_select_stmt()
     prepare_statement(m_liquid_load_charge_materials_select_single_stmt, select_single_liquid_load_charge_materials);
 
     std::string const select_solid_liquid_flue_gas_materials =
-            R"(SELECT id, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
-                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, moisture
+            R"(SELECT id, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
            FROM solid_liquid_flue_gas_materials)";
 
     prepare_statement(m_solid_liquid_flue_gas_materials_select_stmt, select_solid_liquid_flue_gas_materials);
 
     std::string const select_single_solid_liquid_flue_gas_materials =
-            R"(SELECT id, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
-                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, moisture
+            R"(SELECT id, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
            FROM solid_liquid_flue_gas_materials
            WHERE id = ?)";
 
