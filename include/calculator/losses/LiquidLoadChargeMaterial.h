@@ -13,6 +13,7 @@
 #ifndef AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
 #define AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H
 
+#include <string>
 #include "LoadChargeMaterial.h"
 #define MOISTURE_BOILING_POINT 210.0
 
@@ -63,9 +64,7 @@ public:
               percentReacted_(percentReacted / 100.0),
               reactionHeat_(reactionHeat),
               additionalHeat_(additionalHeat)
-    {
-        totalHeat_ = 0.0;
-    }
+    {}
 
     LiquidLoadChargeMaterial() = default;
 
@@ -165,26 +164,74 @@ public:
         additionalHeat_ = additionalHeat;
     }
 
+    std::string getSubstance() const {
+        return substance_;
+    }
+
+    void setSubstance(std::string const & substance) {
+        substance_ = substance;
+    }
+
     void setTotalHeat(double totalHeat) {
         totalHeat_ = totalHeat;
     }
+
     double getTotalHeat();
+
+    bool operator == (const LiquidLoadChargeMaterial& rhs) const
+    {
+        return specificHeatLiquid_ == rhs.specificHeatLiquid_ &&
+               latentHeat_ == rhs.latentHeat_ &&
+               specificHeatVapor_ == rhs.specificHeatVapor_ &&
+               vaporizingTemperature_ == rhs.vaporizingTemperature_ &&
+               substance_ == rhs.substance_;
+    }
+
+    bool operator != (const LiquidLoadChargeMaterial& rhs) const
+    {
+        return !(*this == rhs);
+    }
 
 private:
     // In values
-    LoadChargeMaterial::ThermicReactionType thermicReactionType_;
-    double specificHeatLiquid_;
-    double vaporizingTemperature_;
-    double latentHeat_;
-    double specificHeatVapor_;
-    double chargeFeedRate_;
-    double initialTemperature_;
-    double dischargeTemperature_;
-    double percentVaporized_;
-    double percentReacted_;
-    double reactionHeat_;
-    double additionalHeat_;
+    LoadChargeMaterial::ThermicReactionType thermicReactionType_ = LoadChargeMaterial::ThermicReactionType::NONE;
+    double specificHeatLiquid_ = 0.0;
+    double vaporizingTemperature_ = 0.0;
+    double latentHeat_ = 0.0;
+    double specificHeatVapor_ = 0.0;
+    double chargeFeedRate_ = 0.0;
+    double initialTemperature_ = 0.0;
+    double dischargeTemperature_ = 0.0;
+    double percentVaporized_ = 0.0;
+    double percentReacted_ = 0.0;
+    double reactionHeat_ = 0.0;
+    double additionalHeat_ = 0.0;
+    std::string substance_ = "Unknown";
     // Out value
-    double totalHeat_;
+    double totalHeat_ = 0.0;
+
+    friend class SQLite;
+
+    /**
+     * Constructor for liquid load/charge material with subset of inputs specified.
+     *
+     * @param substance Name of substance
+     * @param specificHeatLiquid Specific Heat of Liquid in Btu/(lb-°F)
+     * @param vaporizingTemperature Vaporizing Temperature in °F
+     * @param latentHeat Latent Heat of Vaporization in Btu/lb
+     *
+     * */
+    LiquidLoadChargeMaterial(
+            std::string const & substance,
+            double specificHeatLiquid,
+            double vaporizingTemperature,
+            double latentHeat,
+            double specificHeatVapor)
+            : substance_(substance),
+              specificHeatLiquid_(specificHeatLiquid),
+              vaporizingTemperature_(vaporizingTemperature),
+              latentHeat_(latentHeat),
+              specificHeatVapor_(specificHeatVapor)
+    {}
 };
 #endif //AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H

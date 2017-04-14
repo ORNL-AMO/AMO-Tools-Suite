@@ -13,6 +13,7 @@
 #ifndef AMO_SUITE_GASLOADCHARGEMATERIAL_H
 #define AMO_SUITE_GASLOADCHARGEMATERIAL_H
 
+#include <string>
 #include "LoadChargeMaterial.h"
 
 class GasLoadChargeMaterial {
@@ -33,8 +34,6 @@ public:
      * @param additionalHeat Additional Heat Required in Btu/h
      *
      * */
-
-
     GasLoadChargeMaterial(
             LoadChargeMaterial::ThermicReactionType thermicReactionType,
             double specificHeatGas,
@@ -56,9 +55,7 @@ public:
               percentReacted_(percentReacted / 100.0),
               reactionHeat_(reactionHeat),
               additionalHeat_(additionalHeat)
-    {
-        totalHeat_ = 0.0;
-    }
+    {}
 
     GasLoadChargeMaterial() = default;
 
@@ -134,10 +131,6 @@ public:
         additionalHeat_ = additionalHeat;
     }
 
-    void setTotalHeat(double totalHeat) {
-        totalHeat_ = totalHeat;
-    }
-
     double getPercentVapor() const {
         return percentVapor_ * 100.0;
     }
@@ -146,21 +139,61 @@ public:
         percentVapor_ = percentVapor / 100.0;
     }
 
+    std::string getSubstance() const {
+        return substance_;
+    }
+
+    void setSubstance(std::string const & substance) {
+        substance_ = substance;
+    }
+
+    void setTotalHeat(double totalHeat) {
+        totalHeat_ = totalHeat;
+    }
+
     double getTotalHeat();
 
+    bool operator == (const GasLoadChargeMaterial& rhs) const
+    {
+        return specificHeatVapor_ == rhs.specificHeatVapor_ &&
+               substance_ == rhs.substance_;
+    }
+
+    bool operator != (const GasLoadChargeMaterial& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 private:
-    LoadChargeMaterial::ThermicReactionType thermicReactionType_;
-    double specificHeatGas_;
-    double feedRate_;
-    double percentVapor_;
-    double initialTemperature_;
-    double dischargeTemperature_;
-    double specificHeatVapor_;
-    double percentReacted_;
-    double reactionHeat_;
-    double additionalHeat_;
+    LoadChargeMaterial::ThermicReactionType thermicReactionType_ = LoadChargeMaterial::ThermicReactionType::NONE;
+    double specificHeatGas_ = 0.0;
+    double feedRate_ = 0.0;
+    double percentVapor_ = 0.0;
+    double initialTemperature_ = 0.0;
+    double dischargeTemperature_ = 0.0;
+    double specificHeatVapor_ = 0.0;
+    double percentReacted_ = 0.0;
+    double reactionHeat_ = 0.0;
+    double additionalHeat_ = 0.0;
+    std::string substance_ = "Unknown";
     // Out value
-    double totalHeat_;
+    double totalHeat_ = 0.0;
+
+    friend class SQLite;
+
+    /**
+     * Constructor for the gas load/charge material with subset of inputs specified.
+     *
+     * @param substance Name of substance
+     * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb- °F)
+     *
+     * */
+    GasLoadChargeMaterial(
+            std::string const & substance,
+            double specificHeatVapor)
+            : substance_(substance),
+              specificHeatVapor_(specificHeatVapor)
+    {}
 };
 
 #endif //AMO_SUITE_GASLOADCHARGEMATERIAL_H
