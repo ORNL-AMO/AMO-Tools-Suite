@@ -97,8 +97,16 @@ def add_solid_load_charge_materials(db_conn):
 def add_solid_liquid_flue_gas_materials(db_conn):
     materials = [
 
-        ('Anthracite', 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5),
-        ('Pittsburgh #8 Bituminous, Oh or Pa', 74.0, 5.1, 1.6, 2.3, 7.9, 0, 9.1)
+        ('Anthracite', 83.7, 1.9, 0.9, 0.7, 2.3, 7.7, 10.5),
+        ('Pittsburgh #8 Bituminous, Oh or Pa', 74.0, 5.1, 1.6, 2.3, 7.9, 5.2, 9.1),
+        ('Illinois #6 Bituminous, Illinois', 69.0, 4.9, 1.0, 4.3, 10.0, 17.6, 10.8),
+        ('Upper Freeport Bituminous, Pennsylvania', 74.9, 4.7, 1.27, 0.76, 4.97, 2.2, 13.4),
+        ('SpringCreek Subbituminous, Wyoming', 70.3, 5.0, 0.96, 0.35, 17.69, 24.1, 5.7),
+        ('Decker Subbituminous, Montana', 72.0, 5.0, 0.95, 0.44, 16.41, 23.4, 5.2),
+        ('Lignite, North Dakota', 63.3, 4.5, 1.0, 1.1, 19.0, 33.3, 11.1),
+        ('Lignite (S. Hallsville), Texas', 66.3, 4.9, 1.0, 1.2, 16.2, 37.7, 10.4),
+        ('Lignite (Bryan), Texas', 33.8, 3.3, 0.4, 1.0, 11.1, 34.1, 50.4),
+        ('Lignite (San Miguel), Texas', 18.4, 2.3, 0.29, 1.2, 9.01, 14.2, 68.8)
     ]
 
     c = db_conn.cursor()
