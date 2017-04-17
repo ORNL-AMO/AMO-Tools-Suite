@@ -106,7 +106,16 @@ def add_solid_liquid_flue_gas_materials(db_conn):
         ('Lignite, North Dakota', 63.3, 4.5, 1.0, 1.1, 19.0, 0, 11.1),
         ('Lignite (S. Hallsville), Texas', 66.3, 4.9, 1.0, 1.2, 16.2, 0, 10.4),
         ('Lignite (Bryan), Texas', 33.8, 3.3, 0.4, 1.0, 11.1, 0, 50.4),
-        ('Lignite (San Miguel), Texas', 18.4, 2.3, 0.29, 1.2, 9.01, 0, 68.8)
+        ('Lignite (San Miguel), Texas', 18.4, 2.3, 0.29, 1.2, 9.01, 0, 68.8),
+        ('Fuel Oil No. 1 - Average', 86.30, 13.70, 0.05, 0.26, 0, 0, 0),
+        ('Fuel Oil No. 2 - Average', 87.15, 12.85, 0.05, 0.53, 0, 0, 0),
+        ('Fuel Oil No. 4 - Average', 87.85, 11.80, 0, 1.01, 0, 0, 0.05),
+        ('Fuel Oil No. 5 - Average', 87.85, 11.25, 0, 1.75, 0, 0, 0.05),
+        ('Fuel Oil No. 6 - Average', 88.35, 10.75, 0, 2.10, 0, 0, 0.26),
+        ('Pine Bark', 53.4, 5.6, 0.1, 0.1, 37.9, 0, 2.9),
+        ('Oak Bark', 49.7, 5.4, 0.2, 0.1, 39.3, 0, 5.3),
+        ('Spruce Bark*', 51.8, 5.7, 0.2, 0.1, 38.4, 0, 3.8),
+        ('Redwood Bark*', 51.9, 5.1, 0.1, 0.1, 42.4, 0, 0.4)
     ]
 
     c = db_conn.cursor()
@@ -122,6 +131,7 @@ def add_gas_flue_gas_materials(db_conn):
         ('Blast Furnace Gas', 2.4, 0.1, 0, 0, 0, 23.3, 14.4, 56.4, 0, 0, 0, 0),
         ('Carbureted Water Gas', 34.0, 15.5, 4.7, 0, 0, 32.0, 4.3, 6.5, 0.7, 0, 2.3, 0),
         ('Producer Gas', 14.0, 3.0, 0, 0, 0, 27.0, 4.5, 50.9, 0.6, 0, 0, 0),
+        ('Natural Gas East Ohio', 0.01, 94.10, 0, 3.01, 0, 0, 0, 1.41, 0.01, 0, 0, 0),
         ('Bagasse', 2.8, 0, 0, 0, 0, 0, 0, 0.1, 20.0, 0, 0, 52.0),
         ('Coke Breeze', 0.3, 0, 0, 0, 0, 0, 0, 0.3, 0.5, 0, 0, 7.3),
         ('Pa.', 0, 83.40, 0, 15.80, 0, 0, 0, 0.80, 0, 0, 0, 0),
