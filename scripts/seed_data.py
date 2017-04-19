@@ -93,3 +93,57 @@ def add_solid_load_charge_materials(db_conn):
                   'latent_heat_of_fusion, mean_specific_heat_of_liquid, melting_point) VALUES (?,?,?,?,?)',
                   materials)
     db_conn.commit()
+
+def add_solid_liquid_flue_gas_materials(db_conn):
+    materials = [
+
+        ('Anthracite', 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5),
+        ('Pittsburgh #8 Bituminous, Oh or Pa', 74.0, 5.1, 1.6, 2.3, 7.9, 0, 9.1),
+        ('Illinois #6 Bituminous, Illinois', 69.0, 4.9, 1.0, 4.3, 10.0, 0, 10.8),
+        ('Upper Freeport Bituminous, Pennsylvania', 74.9, 4.7, 1.27, 0.76, 4.97, 0, 13.4),
+        ('SpringCreek Subbituminous, Wyoming', 70.3, 5.0, 0.96, 0.35, 17.69, 0, 5.7),
+        ('Decker Subbituminous, Montana', 72.0, 5.0, 0.95, 0.44, 16.41, 0, 5.2),
+        ('Lignite, North Dakota', 63.3, 4.5, 1.0, 1.1, 19.0, 0, 11.1),
+        ('Lignite (S. Hallsville), Texas', 66.3, 4.9, 1.0, 1.2, 16.2, 0, 10.4),
+        ('Lignite (Bryan), Texas', 33.8, 3.3, 0.4, 1.0, 11.1, 0, 50.4),
+        ('Lignite (San Miguel), Texas', 18.4, 2.3, 0.29, 1.2, 9.01, 0, 68.8),
+        ('Fuel oil no.1 (average)', 86.30, 13.70, 0.05, 0.26, 0, 0, 0),
+        ('Fuel oil no.2 (average)', 87.15, 12.85, 0.05, 0.53, 0, 0, 0),
+        ('Fuel oil no.4 (average)', 87.85, 11.80, 0, 1.01, 0, 0, 0.05),
+        ('Fuel oil no.5 (average)', 87.85, 11.25, 0, 1.75, 0, 0, 0.05),
+        ('Fuel oil no.6 (average)', 88.35, 10.75, 0, 2.10, 0, 0, 0.26),
+        ('Pine Bark', 53.4, 5.6, 0.1, 0.1, 37.9, 0, 2.9),
+        ('Oak Bark', 49.7, 5.4, 0.2, 0.1, 39.3, 0, 5.3),
+        ('Spruce Bark*', 51.8, 5.7, 0.2, 0.1, 38.4, 0, 3.8),
+        ('Redwood Bark*', 51.9, 5.1, 0.1, 0.1, 42.4, 0, 0.4)
+    ]
+
+    c = db_conn.cursor()
+    c.executemany('INSERT INTO solid_liquid_flue_gas_materials(substance,carbon,hydrogen,nitrogen,sulfur,oxygen,'
+                  'moisture,ash) VALUES (?,?,?,?,?,?,?,?)',
+                  materials)
+    db_conn.commit()
+
+def add_gas_flue_gas_materials(db_conn):
+    materials = [
+
+        ('Coke Oven Gas', 47.9, 33.9, 5.2, 0, 0, 6.1, 2.6, 3.7, 0.6, 0, 0, 0),
+        ('Blast Furnace Gas', 2.4, 0.1, 0, 0, 0, 23.3, 14.4, 56.4, 0, 0, 0, 0),
+        ('Carbureted Water Gas', 34.0, 15.5, 4.7, 0, 0, 32.0, 4.3, 6.5, 0.7, 0, 2.3, 0),
+        ('Producer Gas', 14.0, 3.0, 0, 0, 0, 27.0, 4.5, 50.9, 0.6, 0, 0, 0),
+        ('Natural Gas East Ohio', 0.01, 94.10, 0, 3.01, 0, 0, 0, 1.41, 0.01, 0, 0, 0),
+        ('Bagasse', 2.8, 0, 0, 0, 0, 0, 0, 0.1, 20.0, 0, 0, 52.0),
+        ('Coke Breeze', 0.3, 0, 0, 0, 0, 0, 0, 0.3, 0.5, 0, 0, 7.3),
+        ('Pa.', 0, 83.40, 0, 15.80, 0, 0, 0, 0.80, 0, 0, 0, 0),
+        ('S.C.', 0, 84.00, 0, 14.80, 0, 0, 0.70, 0.50, 0, 0, 0, 0),
+        ('Ohio', 1.82, 93.33, 0.25, 0, 0, 0.45, 0.22, 3.40, 0.35, 0.18, 0, 0),
+        ('La.', 0, 90.00, 0, 5.00, 0, 0, 0, 5.00, 0, 0, 0, 0),
+        ('Ok.', 0, 84.1, 0, 6.70, 0, 0, 0.80, 8.40, 0, 0, 0, 0)
+    ]
+
+    c = db_conn.cursor()
+    c.executemany('INSERT INTO gas_flue_gas_materials(substance,hydrogen,methane,ethylene,ethane,sulfur_dioxide,'
+                  'carbon_monoxide,carbon_dioxide,nitrogen,oxygen,hydrogen_sulfide,benzene,moisture) '
+                  'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                  materials)
+    db_conn.commit()
