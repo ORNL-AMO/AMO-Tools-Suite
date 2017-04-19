@@ -49,10 +49,16 @@ install(TARGETS amo_tools_suite
         COMPONENT libraries)
 
 # Install header files
-INSTALL(DIRECTORY include/ DESTINATION include/
+INSTALL(DIRECTORY include/
+        DESTINATION include/
         COMPONENT headers
         PATTERN CMakeLists.txt EXCLUDE
 )
+
+INSTALL(FILES third_party/sqlite/sqlite3.h
+        DESTINATION include/sqlite
+        COMPONENT headers
+        )
 
 install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db" DESTINATION "./db/")
 
