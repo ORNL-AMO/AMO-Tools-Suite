@@ -23,6 +23,7 @@ using namespace v8;
 #include "calculator/losses/LiquidCoolingLosses.h"
 #include "calculator/losses/LiquidLoadChargeMaterial.h"
 #include "calculator/losses/OpeningLosses.h"
+#include "calculator/losses/SlagOtherMaterial.h"
 #include "calculator/losses/SolidLoadChargeMaterial.h"
 #include "calculator/losses/WallLosses.h"
 #include "calculator/losses/WaterCoolingLosses.h"
@@ -310,7 +311,7 @@ NAN_METHOD(openingLossesQuad) {
          * @param insideTemperature
          * @param percentTimeOpen
          * @param viewFactor
-         * @return nothing
+         * @return heatLoss
          */
 
         double emissivity = info[0]->NumberValue();
@@ -327,6 +328,29 @@ NAN_METHOD(openingLossesQuad) {
         Local<Number> retval = Nan::New(heatLoss);
         info.GetReturnValue().Set(retval);
 
+}
+
+NAN_METHOD(slagOtherMaterialLosses) {
+
+/**     * Constructor for the slag - other material heat loss with all inputs specified
+        *
+        * @param weight Lb/cycle
+        * @param inletTemperature Inlet temperature of gasses in °F
+        * @param outletTemperature Outlet temperature of gasses in °F
+        * @param specificHeat Specific heat of material at average air temperature in Btu/(lb - °F)
+        * @param correctionFactor Correction factor
+        * @return heatLoss
+        *
+        * */
+        double weight = info[0]->NumberValue();
+        double inletTemperature = info[1]->NumberValue();
+        double outletTemperature = info[2]->NumberValue();
+        double specificHeat = info[3]->NumberValue();
+        double correctionFactor = info[4]->NumberValue();
+        SlagOtherMaterialLosses sl(weight, inletTemperature, outletTemperature, specificHeat, correctionFactor);
+        double heatLoss = sl.getHeatLoss();
+        Local<Number> retval = Nan::New(heatLoss);
+        info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(solidLoadChargeMaterial) {
