@@ -154,7 +154,7 @@ set(INCLUDE_FILES
         include/sqlite/GasLoadChargeMaterialData.h
         include/sqlite/LiquidLoadChargeMaterialData.h
         include/sqlite/SolidLiquidFlueGasMaterialData.h
-        include/sqlite/GasFlueGasMaterial.h,
+        include/sqlite/GasFlueGasMaterial.h
         include/calculator/losses/SlagOtherMaterial.h)
 
 set(TEST_FILES
