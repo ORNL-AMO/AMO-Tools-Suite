@@ -174,6 +174,45 @@ Pump::Speed speed() {
 //// Operations
 //
 
+/**
+ * Constructor Pump
+ * @param pump_style Style of pump being used.
+ * @param pump_specified Pump % efficiency at the specified operating conditions.
+ * @param rpm Pump RPM to define its operating speed.
+ * @param drive Type of drive the pump uses from either direct or belt drive.
+ * @param kinematic_viscosity Kinematic viscosity of the fluid being pumped, in centistokes.
+ * @param specific_gravity Specific gravity.
+ * @param stages The number of pump stages.
+ * @param speed Type of pump speed from either fixed or not fixed.
+ */
+/**
+ * Constructor motor
+ * @param line_frequency Mains supply frequency at either 50Hz or 60Hz.
+ * @param motor_rated_power Rated power for the motor in hp or kw.
+ * @param motor_rated_speed Motor RPM.
+ * @param efficiency_class Classification of motor efficiency.
+ * @param efficiency Specified % Efficiency of motor, if efficiency class is SPECIFIED
+ * @param motor_rated_voltage Motor nameplate design voltage.
+ * @param motor_rated_fla Current at full load in amps.
+ * @param margin The size margin as defined in %.
+ */
+
+/**
+ * Constructor financial
+ * @param operating_fraction Fraction(%) of calender hours the equipment is operating.
+ * @param cost_kw_hour Per unit energy cost of electricity in $/kwhr.
+ */
+
+/**
+ * Constructor field data
+ * @param flow_rate Rate of flow. GPM
+ * @param head Pump head measured in feet
+ * @param load_estimation_method Estimated power or current on motor input.
+ * @param motor_field_power Power output of the pump's motor in hp.
+ * @param motor_field_current Current measured from the pump's motor in amps.
+ * @param motor_field_voltage The measured bus voltage.
+ */
+
 NAN_METHOD(results) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
@@ -239,7 +278,16 @@ NAN_METHOD(results) {
     }
     info.GetReturnValue().Set(r);
 }
+/**
+ * Constructor estimate fla
+ * @param motor_rated_power Rated Power of motor in hp
+ * @param motor_rated_speed RPM of motor.
+ * @param line_frequency Line frequency of motor in 50Hz or 60Hz.
+ * @param efficiency_class Efficiency class of motor.
+ * @param efficiency Specified Efficiency of motor as defined by %.
+ * @param motor_rated_voltage Rated voltage of motor.
 
+ */
 NAN_METHOD(estFLA) {
     inp = info[0]->ToObject();
     double motor_rated_power = Get("motor_rated_power");
@@ -252,7 +300,18 @@ NAN_METHOD(estFLA) {
     fla.calculate();
     info.GetReturnValue().Set(fla.getEstimatedFLA());
 }
+/**
+ * Constructor motor performance
+ * @param motor_rated_power Rated Power of motor in hp
+ * @param motor_rated_speed RPM of motor.
+ * @param line_frequency Line frequency of motor in 50Hz or 60Hz.
+ * @param efficiency_class Efficiency class of motor.
+ * @param efficiency Specified Efficiency of motor as defined by %.
+ * @param load_factor between 0.0001 and 1.25
+ * @param motor_rated_voltage Rated voltage of motor
+ * @param motor_rated_fla Motor rated full load amps
 
+ */
 NAN_METHOD(motorPerformance) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
@@ -278,7 +337,11 @@ NAN_METHOD(motorPerformance) {
     info.GetReturnValue().Set(r);
 
 }
-
+/**
+ * Constructor
+ * @param style style Style of pump being used.
+ * @param flow_rate GPM
+ */
 NAN_METHOD(pumpEfficiency)  {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
@@ -292,14 +355,26 @@ NAN_METHOD(pumpEfficiency)  {
     info.GetReturnValue().Set(r);
 }
 
-
+/**
+ * Constructor
+ * @param style style Style of pump being used.
+ * @param specific_speed rpm
+ */
 NAN_METHOD(achievableEfficiency) {
     inp = info[0]->ToObject();
     double specific_speed = Get("specific_speed");
     Pump::Style s = style();
     info.GetReturnValue().Set(OptimalSpecificSpeedCorrection(s, specific_speed).calculate()*100);
 }
-
+/**
+ * Constructor nema
+ * @param motor_rated_power Rated Power of motor in hp
+ * @param motor_rated_speed RPM of motor.
+ * @param line_frequency Line frequency of motor in 50Hz or 60Hz.
+ * @param efficiency_class Efficiency class of motor.
+ * @param efficiency Specified Efficiency of motor as defined by %.
+ * @param load_factor between 0.0001 and 1.25
+ */
 NAN_METHOD(nema) {
     inp = info[0]->ToObject();
     Motor::LineFrequency l = line();

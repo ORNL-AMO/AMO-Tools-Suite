@@ -17,8 +17,8 @@ public:
      * Constructor
      * Below parameters have self explanatory nomenclature.
      * @param specificGravity Specified Gravity.
-     * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
-     * @param head Pump head measured in feet or meters.
+     * @param flowRate Rate of flow. Units are gpm
+     * @param head Pump head measured in feet
      * @return nothing
      */
     FluidPower(
