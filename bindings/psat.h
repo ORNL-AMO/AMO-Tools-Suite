@@ -33,22 +33,21 @@ Local<Object> inp;
 Local<Object> r;
 
 NAN_METHOD(headToolSuctionTank) {
-
-/**
+    /**
     * Constructor for the HeadToolSuctionTank class with all inputs specified
     *
     * @param specificGravity no units
-    * @param flowRate units in meters cubed per hour (m^3/hour)
-    * @param suctionPipeDiameter units in millimeters
-    * @param suctionTankGasOverPressure units in kPa
-    * @param suctionTankFluidSurfaceElevation units in meters
+    * @param flowRate units in gpm (gallons per minute)
+    * @param suctionPipeDiameter units in feet
+    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauage)
+    * @param suctionTankFluidSurfaceElevation units in feet
     * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in millimeters
-    * @param dischargeGaugePressure units in kPa
-    * @param dischargeGaugeElevation units in meters
+    * @param dischargePipeDiameter units in feet
+    * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
+    * @param dischargeGaugeElevation units in inches
     * @param dischargeLineLossCoefficients no units
     *
-    * */
+ * */
 
         const double specificGravity = info[0]->NumberValue();
         const double flowRate = info[1]->NumberValue();
@@ -86,21 +85,21 @@ NAN_METHOD(headToolSuctionTank) {
 
 NAN_METHOD(headTool) {
 
-/**
-    * Constructor for HeadTool with no Suction Tank, all inputs specified
+    /**
+    * Constructor for the HeadToolSuctionTank class with all inputs specified
     *
     * @param specificGravity no units
-    * @param flowRate units in meters cubed per hour (m^3/hour)
-    * @param suctionPipeDiameter units in millimeters
-    * @param suctionGaugePressure units in kPa
-    * @param suctionGaugeElevation units in meters
+    * @param flowRate units in gpm (gallons per minute)
+    * @param suctionPipeDiameter units in feet
+    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauage)
+    * @param suctionTankFluidSurfaceElevation units in feet
     * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in millimeters
-    * @param dischargeGaugePressure units in kPa
-    * @param dischargeGaugeElevation units in meters
+    * @param dischargePipeDiameter units in feet
+    * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
+    * @param dischargeGaugeElevation units in inches
     * @param dischargeLineLossCoefficients no units
     *
-    * */
+ * */
 
         const double specificGravity = info[0]->NumberValue();
         const double flowRate = info[1]->NumberValue();

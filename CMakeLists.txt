@@ -99,7 +99,8 @@ set(SOURCE_FILES
         src/sqlite/SQLite.cpp
         src/calculator/losses/FlueGas.cpp
         src/phast/Furnace.cpp
-        src/calculator/pump/HeadTool.cpp)
+        src/calculator/pump/HeadTool.cpp
+        src/calculator/losses/SlagOtherMaterial.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -153,7 +154,8 @@ set(INCLUDE_FILES
         include/sqlite/GasLoadChargeMaterialData.h
         include/sqlite/LiquidLoadChargeMaterialData.h
         include/sqlite/SolidLiquidFlueGasMaterialData.h
-        include/sqlite/GasFlueGasMaterial.h)
+        include/sqlite/GasFlueGasMaterial.h
+        include/calculator/losses/SlagOtherMaterial.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

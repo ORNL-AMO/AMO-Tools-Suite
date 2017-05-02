@@ -96,11 +96,11 @@ public:
     *
     * @param specificGravity no units
     * @param flowRate units in gpm (gallons per minute)
-    * @param suctionPipeDiameter units in inches
+    * @param suctionPipeDiameter units in feet
     * @param suctionTankGasOverPressure units in psig (pounds per square inch gauage)
     * @param suctionTankFluidSurfaceElevation units in feet
     * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in inches
+    * @param dischargePipeDiameter units in feet
     * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
     * @param dischargeGaugeElevation units in inches
     * @param dischargeLineLossCoefficients no units
@@ -145,11 +145,11 @@ public:
 *
 * @param specificGravity no units
 * @param flowRate units in gpm (gallons per minute)
-* @param suctionPipeDiameter units in inches
+* @param suctionPipeDiameter units in feet
 * @param suctionGaugePressure units in psig (pounds per square inch guage)
 * @param suctionGaugeElevation units in feet
 * @param suctionLineLossCoefficients no units
-* @param dischargePipeDiameter units in inches
+* @param dischargePipeDiameter units in feet
 * @param dischargeGaugePressure units in psig (pounds per square inch guage)
 * @param dischargeGaugeElevation units in feet
 * @param dischargeLineLossCoefficients no units
