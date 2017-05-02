@@ -18,7 +18,7 @@ public:
     /**
      * Constructor
      * @param style Type of pump speed from either fixed or not fixed.
-     * @param specificSpeed Style of pump being used.
+     * @param specificSpeed
      * @return nothing
      */
     OptimalSpecificSpeedCorrection(
