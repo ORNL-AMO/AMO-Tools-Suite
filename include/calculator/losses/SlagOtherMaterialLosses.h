@@ -19,7 +19,7 @@
 #define AMO_SUITE_SLAGOTHERMATERIAL_H
 
 
-class SlagOtherMaterial {
+class SlagOtherMaterialLosses {
 public:
     /**
      * Constructor for the slag - other material heat loss with all inputs specified
@@ -32,7 +32,7 @@ public:
      * @return nothing
      *
      * */
-    SlagOtherMaterial(double weight,
+    SlagOtherMaterialLosses(double weight,
                double inletTemperature,
                double outletTemperature,
                double specificHeat,
@@ -46,7 +46,7 @@ public:
         totalHeat_ = 0.0;
     }
 
-    SlagOtherMaterial() = default;
+    SlagOtherMaterialLosses() = default;
 
     double getWeight() const {
         return weight_;
@@ -89,11 +89,11 @@ public:
         specificHeat_ = specificHeat;
     }
 
-    void setTotalHeat(double totalHeat) {
+    void setHeatLoss(double totalHeat) {
         totalHeat_ = totalHeat;
     }
 
-    double getTotalHeat();
+    double getHeatLoss();
 
 
 private:

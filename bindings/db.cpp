@@ -9,6 +9,12 @@ using namespace Nan;
 NAN_MODULE_INIT(InitDb) {
 
     // PHAST
+    Nan::Set(target, New<String>("startup").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(startup)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("update").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(update)).ToLocalChecked());
+
     Nan::Set(target, New<String>("selectSolidMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectSolidMaterial)).ToLocalChecked());
 
