@@ -102,7 +102,7 @@ private:
     double inletTemperature_;
     double outletTemperature_;
     double specificHeat_;
-    double correctionFactor_;
+    double correctionFactor_ = 1.0;
     // Out value
     double totalHeat_;
 };
