@@ -5,7 +5,8 @@
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
-    auto sqlite = SQLite(":memory:", true);
+    bool ok;
+    auto sqlite = SQLite(":memory:", ok, true);
 
     {
         auto const outputs = sqlite.getSolidLoadChargeMaterials();
@@ -27,7 +28,8 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
 }
 
 TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
-    auto sqlite = SQLite(":memory:", true);
+    bool ok;
+    auto sqlite = SQLite(":memory:", ok, true);
 
     {
         auto const outputs = sqlite.getGasLoadChargeMaterials();
@@ -46,7 +48,8 @@ TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
 }
 
 TEST_CASE( "SQLite - getLiquidLoadChargeMaterials", "[sqlite]" ) {
-    auto sqlite = SQLite(":memory:", true);
+    bool ok;
+    auto sqlite = SQLite(":memory:", ok, true);
 
     {
         auto const outputs = sqlite.getLiquidLoadChargeMaterials();

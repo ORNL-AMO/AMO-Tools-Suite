@@ -12,10 +12,12 @@
 #include <iostream>
 #include <stdexcept>
 
-SQLite::SQLite(std::string const & db_name, bool init_db)
+SQLite::SQLite(std::string const & db_name, bool & ok, bool init_db)
         :
-        SQLiteWrapper(db_name, init_db)
+        SQLiteWrapper(db_name, ok, init_db)
 {
+    if ( ! ok ) return;
+
     execute_command("PRAGMA locking_mode = EXCLUSIVE;");
     execute_command("PRAGMA journal_mode = OFF;");
     execute_command("PRAGMA synchronous = OFF;");
@@ -432,12 +434,12 @@ SQLiteWrapper::SQLiteWrapper( std::shared_ptr<sqlite3> const & db )
     m_db(db)
 {}
 
-SQLiteWrapper::SQLiteWrapper( std::string const & db_name, bool init_db )
+SQLiteWrapper::SQLiteWrapper( std::string const & db_name, bool & ok, bool init_db )
 {
-    int rc = -1;
-    bool ok = true;
+    ok = true;
     bool in_memory = (db_name == ":memory:");
     char *err_msg = 0;
+	int rc;
 
     if ( init_db ) {
         // Test if we can create a new file named db_name

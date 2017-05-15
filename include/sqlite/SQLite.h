@@ -16,7 +16,7 @@ class SQLiteWrapper
 protected:
     SQLiteWrapper( std::shared_ptr<sqlite3> const & db );
 
-    SQLiteWrapper( std::string const & db_name, bool init_db = false );
+    SQLiteWrapper( std::string const & db_name, bool & ok, bool init_db = false );
 
     virtual ~SQLiteWrapper() {};
 
@@ -89,7 +89,7 @@ class SQLite : SQLiteWrapper
 public:
     // Open the DB and prepare for writing data
     // Create all of the tables on construction
-    SQLite(std::string const & db_name, bool init_db = false);
+    SQLite(std::string const & db_name, bool & ok, bool init_db = false);
 
     // Close database and free prepared statements
     virtual ~SQLite();

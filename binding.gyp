@@ -79,7 +79,7 @@
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
-                'bindings/psat.cpp',
+                'bindings/db.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
             ],
             "conditions": [
