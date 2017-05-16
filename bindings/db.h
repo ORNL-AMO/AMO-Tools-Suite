@@ -11,6 +11,7 @@
 #include <memory>
 #include <calculator/losses/SolidLoadChargeMaterial.h>
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
+#include <calculator/losses/GasLoadChargeMaterial.h>
 
 using namespace Nan;
 using namespace v8;
@@ -114,12 +115,34 @@ std::unique_ptr<SQLite> sql;
     }
 
     NAN_METHOD(selectGasMaterial) {
-        Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
-        info.GetReturnValue().Set(temp);
+        Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
+        Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
+
+        auto const glcms = sql->getGasLoadChargeMaterials();
+
+        auto objs = Nan::New<v8::Array>();
+        for ( size_t i = 0; i < glcms.size(); i++ ) {
+            auto const glcm = glcms[i];
+            Local<Object> obj = Nan::New<Object>();
+            Nan::Set(obj, substance, Nan::New<String>(glcm.getSubstance()).ToLocalChecked());
+            Nan::Set(obj, specificHeatVapor, Nan::New<Number>(glcm.getSpecificHeatVapor()));
+            Nan::Set(objs, i, obj);
+        }
+
+        info.GetReturnValue().Set(objs);
     }
+
     NAN_METHOD(selectGasMaterialById) {
-        Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
-        info.GetReturnValue().Set(temp);
+	    Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
+	    Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
+
+	    auto const glcm = sql->getGasLoadChargeMaterial(1);
+
+	    Local<Object> obj = Nan::New<Object>();
+	    Nan::Set(obj, substance, Nan::New<String>(glcm.getSubstance()).ToLocalChecked());
+	    Nan::Set(obj, specificHeatVapor, Nan::New<Number>(glcm.getSpecificHeatVapor()));
+
+	    info.GetReturnValue().Set(obj);
     }
     NAN_METHOD(selectFlueGasMaterialSolidLiquid) {
         Local<Object> obj = Nan::New<Object>();

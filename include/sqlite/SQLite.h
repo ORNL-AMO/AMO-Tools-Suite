@@ -10,6 +10,7 @@
 class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;
 class GasLoadChargeMaterial;
+class GasFlueGasMaterial;
 
 class SQLiteWrapper
 {
