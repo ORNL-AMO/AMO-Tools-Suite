@@ -434,10 +434,10 @@ SQLiteWrapper::SQLiteWrapper( std::shared_ptr<sqlite3> const & db )
 
 SQLiteWrapper::SQLiteWrapper( std::string const & db_name, bool init_db )
 {
-    int rc = -1;
     bool ok = true;
     bool in_memory = (db_name == ":memory:");
     char *err_msg = 0;
+	int rc;
 
     if ( init_db ) {
         // Test if we can create a new file named db_name

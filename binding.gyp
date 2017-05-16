@@ -73,13 +73,15 @@
                 }]
             ]
         },
-{
+		{
             "target_name": "db",
-            'include_dirs': ['include', 'include/sqlite',
+            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
-                'bindings/psat.cpp',
+                'bindings/db.cpp',
+                'third_party/sqlite/sqlite3.c',
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
             ],
             "conditions": [

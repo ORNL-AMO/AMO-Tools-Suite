@@ -7,65 +7,65 @@
 #include <nan.h>
 #include <node.h>
 #include <sqlite/SQLite.h>
+#include <fstream>
+#include <memory>
+#include <calculator/losses/SolidLoadChargeMaterial.h>
+#include <calculator/losses/LiquidLoadChargeMaterial.h>
+#include <calculator/losses/GasLoadChargeMaterial.h>
 
 using namespace Nan;
 using namespace v8;
 
+std::unique_ptr<SQLite> sql;
 
-
-class db {
     NAN_METHOD(startup) {
-//	    std::string dbName = info[0]->
+	    std::string dbName = "amo-tools-suite.db";
+	    std::ifstream f(dbName.c_str());
+	    sql = std::unique_ptr<SQLite>(new SQLite(dbName, !f.good()));
     }
 
     NAN_METHOD(update) {
-//        std::string
+//        db migration code goes here
     }
 
     NAN_METHOD(selectSolidMaterial) {
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> specificHeatSolid = Nan::New<String>("specificHeatSolid").ToLocalChecked();
         Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
+        Local<String> specificHeatLiquid = Nan::New<String>("specificHeatLiquid").ToLocalChecked();
         Local<String> meltingPoint = Nan::New<String>("meltingPoint").ToLocalChecked();
 
-	    // TODO database name?
-//        SQLite sql("DB_Name?", true);
-        auto const & slcms = sql.getSolidLoadChargeMaterials();
+        auto const slcms = sql->getSolidLoadChargeMaterials();
 
         auto objs = Nan::New<v8::Array>();
-        for ( auto const & slcm : slcms) {
+        for ( size_t i = 0; i < slcms.size(); i++ ) {
+            auto const slcm = slcms[i];
             Local<Object> obj = Nan::New<Object>();
-            Nan::Set(obj, substance, Nan::New<String>(slcm.getSubstance()));
+            Nan::Set(obj, substance, Nan::New<String>(slcm.getSubstance()).ToLocalChecked());
             Nan::Set(obj, specificHeatSolid, Nan::New<Number>(slcm.getSpecificHeatSolid()));
             Nan::Set(obj, latentHeat, Nan::New<Number>(slcm.getLatentHeat()));
+            Nan::Set(obj, specificHeatLiquid, Nan::New<Number>(slcm.getSpecificHeatLiquid()));
             Nan::Set(obj, meltingPoint, Nan::New<Number>(slcm.getMeltingPoint()));
-	        Nan::Set(objs, sclm, obj); // TODO this is probably not correct
+	        Nan::Set(objs, i, obj);
         }
 
-        Local<Object> obj = Nan::New<Object>();
-        Nan::Set(obj, substance, Nan::New<String>(slcm.getSubstance()));
-        Nan::Set(obj, specificHeatSolid, Nan::New<Number>(slcm.getSpecificHeatSolid()));
-        Nan::Set(obj, latentHeat, Nan::New<Number>(slcm.getLatentHeat()));
-        Nan::Set(obj, meltingPoint, Nan::New<Number>(slcm.getMeltingPoint()));
-
-        info.GetReturnValue().Set(obj);
+        info.GetReturnValue().Set(objs);
     }
 
     NAN_METHOD(selectSolidMaterialById) {
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> specificHeatSolid = Nan::New<String>("specificHeatSolid").ToLocalChecked();
         Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
+        Local<String> specificHeatLiquid = Nan::New<String>("specificHeatLiquid").ToLocalChecked();
         Local<String> meltingPoint = Nan::New<String>("meltingPoint").ToLocalChecked();
 
-        // TODO
-//        SQLite sql("DB_Name?", true);
-	    int id = 0; // TODO id comes in as an argument, info[0]->NumberValueSomething()
-        SolidLoadChargeMaterial const & slcm = sql.getSolidLoadChargeMaterial(id);
+	    auto const slcm = sql->getSolidLoadChargeMaterial(1);
 
         Local<Object> obj = Nan::New<Object>();
-        Nan::Set(obj, substance, Nan::New<String>(slcm.getSubstance()));
+        Nan::Set(obj, substance, Nan::New<String>(slcm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, specificHeatSolid, Nan::New<Number>(slcm.getSpecificHeatSolid()));
         Nan::Set(obj, latentHeat, Nan::New<Number>(slcm.getLatentHeat()));
+        Nan::Set(obj, specificHeatLiquid, Nan::New<Number>(slcm.getSpecificHeatLiquid()));
         Nan::Set(obj, meltingPoint, Nan::New<Number>(slcm.getMeltingPoint()));
 
         info.GetReturnValue().Set(obj);
@@ -75,21 +75,21 @@ class db {
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> specificHeatLiquid = Nan::New<String>("specificHeatLiquid").ToLocalChecked();
         Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
-        Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
         Local<String> vaporizationTemperature = Nan::New<String>("vaporizationTemperature").ToLocalChecked();
+        Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
 
-//        SQLite sql("DB_Name?", true);
-        auto const & llcms = sql.getLiquidLoadChargeMaterials();
+        auto const llcms = sql->getLiquidLoadChargeMaterials();
 
         auto objs = Nan::New<v8::Array>();
-        for ( auto const & llcm : llcms ) {
+        for ( size_t i = 0; i < llcms.size(); i++ ) {
+	        auto const llcm = llcms[i];
             Local<Object> obj = Nan::New<Object>();
-            Nan::Set(obj, substance, Nan::New<String>(llcm.getSubstance()));
+            Nan::Set(obj, substance, Nan::New<String>(llcm.getSubstance()).ToLocalChecked());
             Nan::Set(obj, specificHeatLiquid, Nan::New<Number>(llcm.getSpecificHeatLiquid()));
             Nan::Set(obj, specificHeatVapor, Nan::New<Number>(llcm.getSpecificHeatVapor()));
+            Nan::Set(obj, vaporizationTemperature, Nan::New<Number>(llcm.getVaporizingTemperature()));
             Nan::Set(obj, latentHeat, Nan::New<Number>(llcm.getLatentHeat()));
-            Nan::Set(obj, vaporizationTemperature, Nan::New<Number>(llcm.getVaporizationTemperature()));
-            Nan::Set(objs, sclm, obj); // TODO this is probably not correct
+            Nan::Set(objs, i, obj);
         }
 
         info.GetReturnValue().Set(objs);
@@ -99,32 +99,50 @@ class db {
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> specificHeatLiquid = Nan::New<String>("specificHeatLiquid").ToLocalChecked();
         Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
-        Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
         Local<String> vaporizationTemperature = Nan::New<String>("vaporizationTemperature").ToLocalChecked();
+        Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
 
-        SQLite sql("DB_Name?", true);
-	    int id = 0;
-        auto const & llcm = sql.getLiquidLoadChargeMaterial();
+        auto const llcm = sql->getLiquidLoadChargeMaterial(1);
 
         Local<Object> obj = Nan::New<Object>();
-        Nan::Set(obj, substance, Nan::New<String>(llcm.getSubstance()));
+        Nan::Set(obj, substance, Nan::New<String>(llcm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, specificHeatLiquid, Nan::New<Number>(llcm.getSpecificHeatLiquid()));
         Nan::Set(obj, specificHeatVapor, Nan::New<Number>(llcm.getSpecificHeatVapor()));
+        Nan::Set(obj, vaporizationTemperature, Nan::New<Number>(llcm.getVaporizingTemperature()));
         Nan::Set(obj, latentHeat, Nan::New<Number>(llcm.getLatentHeat()));
-        Nan::Set(obj, vaporizationTemperature, Nan::New<Number>(llcm.getVaporizationTemperature()));
-        objs.push_back(obj);
+
+        info.GetReturnValue().Set(obj);
+    }
+
+    NAN_METHOD(selectGasMaterial) {
+        Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
+        Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
+
+        auto const glcms = sql->getGasLoadChargeMaterials();
+
+        auto objs = Nan::New<v8::Array>();
+        for ( size_t i = 0; i < glcms.size(); i++ ) {
+            auto const glcm = glcms[i];
+            Local<Object> obj = Nan::New<Object>();
+            Nan::Set(obj, substance, Nan::New<String>(glcm.getSubstance()).ToLocalChecked());
+            Nan::Set(obj, specificHeatVapor, Nan::New<Number>(glcm.getSpecificHeatVapor()));
+            Nan::Set(objs, i, obj);
+        }
 
         info.GetReturnValue().Set(objs);
-        Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
-        info.GetReturnValue().Set(temp);
     }
-    NAN_METHOD(selectGasMaterial) {
-        Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
-        info.GetReturnValue().Set(temp);
-    }
+
     NAN_METHOD(selectGasMaterialById) {
-        Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
-        info.GetReturnValue().Set(temp);
+	    Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
+	    Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
+
+	    auto const glcm = sql->getGasLoadChargeMaterial(1);
+
+	    Local<Object> obj = Nan::New<Object>();
+	    Nan::Set(obj, substance, Nan::New<String>(glcm.getSubstance()).ToLocalChecked());
+	    Nan::Set(obj, specificHeatVapor, Nan::New<Number>(glcm.getSpecificHeatVapor()));
+
+	    info.GetReturnValue().Set(obj);
     }
     NAN_METHOD(selectFlueGasMaterialSolidLiquid) {
         Local<Object> obj = Nan::New<Object>();
@@ -142,7 +160,6 @@ class db {
         Local<Object> obj = Nan::New<Object>();
         info.GetReturnValue().Set(obj);
     };
-};
 
 
 #endif //AMO_TOOLS_SUITE_DB_H

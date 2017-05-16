@@ -5,6 +5,7 @@
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
+    bool ok;
     auto sqlite = SQLite(":memory:", true);
 
     {
@@ -27,6 +28,7 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
 }
 
 TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
+    bool ok;
     auto sqlite = SQLite(":memory:", true);
 
     {
@@ -46,6 +48,7 @@ TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
 }
 
 TEST_CASE( "SQLite - getLiquidLoadChargeMaterials", "[sqlite]" ) {
+    bool ok;
     auto sqlite = SQLite(":memory:", true);
 
     {
