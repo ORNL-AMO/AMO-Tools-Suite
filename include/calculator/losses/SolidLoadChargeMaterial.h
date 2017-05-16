@@ -75,37 +75,7 @@ public:
         percentReacted_(chargedReacted / 100.0),
         reactionHeat_(reactionHeat),
         additionalHeat_(additionalHeat)
-    {
-        id_ = 0;
-        substance_ = "Unknown";
-    }
-
-    SolidLoadChargeMaterial(
-            int id,
-            const std::string & substance,
-            double specificHeatSolid,
-            double latentHeat,
-            double specificHeatLiquid,
-            double meltingPoint
-    ) : id_ (id),
-        substance_ (substance),
-        specificHeatSolid_ (specificHeatSolid),
-        latentHeat_ (latentHeat),
-        specificHeatLiquid_ (specificHeatLiquid),
-        meltingPoint_ (meltingPoint)
-    {
-        thermicReactionType_ = LoadChargeMaterial::ThermicReactionType ::NONE;
-        chargeFeedRate_ = 0.0;
-        waterContentCharged_ = 0.0;
-        waterContentDischarged_ = 0.0;
-        initialTemperature_ = 0.0;
-        dischargeTemperature_ = 0.0;
-        waterVaporDischargeTemperature_ = 0.0;
-        percentMelted_ = 0;
-        percentReacted_ = 0.0;
-        reactionHeat_ = 0.0;
-        additionalHeat_ = 0.0;
-    }
+    {}
 
     SolidLoadChargeMaterial() = default;
 
@@ -113,7 +83,7 @@ public:
         return thermicReactionType_;
     }
 
-    void setThermicReactionType(LoadChargeMaterial::ThermicReactionType  thermicReactionType) {
+    void setThermicReactionType(LoadChargeMaterial::ThermicReactionType thermicReactionType) {
         thermicReactionType_ = thermicReactionType;
     }
 
@@ -229,8 +199,30 @@ public:
         additionalHeat_ = additionalHeat;
     }
 
+    std::string getSubstance() const {
+        return substance_;
+    }
+
+    void setSubstance(std::string const & substance) {
+        substance_ = substance;
+    }
+
     void setTotalHeat(double totalHeat) {
         totalHeat_ = totalHeat;
+    }
+
+    bool operator == (const SolidLoadChargeMaterial& rhs) const
+    {
+        return specificHeatSolid_ == rhs.specificHeatSolid_ &&
+                latentHeat_ == rhs.latentHeat_ &&
+                specificHeatLiquid_ == rhs.specificHeatLiquid_ &&
+                meltingPoint_ == rhs.meltingPoint_ &&
+                substance_ == rhs.substance_;
+    }
+
+    bool operator != (const SolidLoadChargeMaterial& rhs) const
+    {
+        return !(*this == rhs);
     }
 
     /**
@@ -241,26 +233,50 @@ public:
 private:
 
     // In/Out values
-    int id_;
-    std::string substance_;
+    std::string substance_ = "Unknown";
     // In values
-    LoadChargeMaterial::ThermicReactionType thermicReactionType_;
-    double specificHeatSolid_;
-    double latentHeat_;
-    double specificHeatLiquid_;
-    double meltingPoint_;
-    double chargeFeedRate_;
-    double waterContentCharged_;
-    double waterContentDischarged_;
-    double initialTemperature_;
-    double dischargeTemperature_;
-    double waterVaporDischargeTemperature_;
-    double percentMelted_;
-    double percentReacted_;
-    double reactionHeat_;
-    double additionalHeat_;
+    LoadChargeMaterial::ThermicReactionType thermicReactionType_ = LoadChargeMaterial::ThermicReactionType::NONE;
+    double specificHeatSolid_ = 0.0;
+    double latentHeat_ = 0.0;
+    double specificHeatLiquid_ = 0.0;
+    double meltingPoint_ = 0.0;
+    double chargeFeedRate_ = 0.0;
+    double waterContentCharged_ = 0.0;
+    double waterContentDischarged_ = 0.0;
+    double initialTemperature_ = 0.0;
+    double dischargeTemperature_ = 0.0;
+    double waterVaporDischargeTemperature_ = 0.0;
+    double percentMelted_ = 0.0;
+    double percentReacted_ = 0.0;
+    double reactionHeat_ = 0.0;
+    double additionalHeat_ = 0.0;
     // Out values
-    double totalHeat_;
+    double totalHeat_ = 0.0;
+
+    friend class SQLite;
+
+    /**
+    * Constructor for the solid load/charge material with subset of inputs specified.
+    *
+    * @param substance Name of substance
+    * @param specificHeatSolid Average specific heat of the solid material (dry) in Btu/(lb-°F)
+    * @param latentHeat Latent heat of fusion in Btu/(lb)
+    * @param specificHeatLiquid Specific heat of liquid from molten material in Btu/(lb-°F)
+    * @param meltingPoint The melting point of the material in °F
+    *
+    * */
+    SolidLoadChargeMaterial(
+            const std::string & substance,
+            double specificHeatSolid,
+            double latentHeat,
+            double specificHeatLiquid,
+            double meltingPoint
+    ) : substance_ (substance),
+        specificHeatSolid_ (specificHeatSolid),
+        latentHeat_ (latentHeat),
+        specificHeatLiquid_ (specificHeatLiquid),
+        meltingPoint_ (meltingPoint)
+    {}
 
 };
 

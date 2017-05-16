@@ -44,24 +44,42 @@ def create_data_tables(db_conn):
     )
 
     c.execute(
-        '''CREATE TABLE IF NOT EXISTS gaseous_fuel_composition (
+        '''CREATE TABLE IF NOT EXISTS solid_liquid_flue_gas_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
-             fuel_name text NOT NULL DEFAULT "",
-             us_state text NOT NULL DEFAULT "",
-             ch4 real NOT NULL, -- methane %
-             c2h6 real NOT NULL, -- ethane %
-             n2 real NOT NULL, -- nitrogen %
-             c3h8 real NOT NULL, -- propane %
-             c4h10_cnh2n real NOT NULL, -- butane, other alkane %
-             h2o real NOT NULL, -- water %
-             co real NOT NULL, -- carbon monoxide %
-             co2 real NOT NULL, -- carbon dioxide %
-             so2 real NOT NULL, -- sulfur dioxide %
-             o2 real NOT NULL, -- oxygen %             
-             UNIQUE (fuel_name, us_state, ch4, c2h6, n2, c3h8, c4h10_cnh2n, h2o, co, co2, so2, o2)
+             substance text NOT NULL DEFAULT "",             
+             carbon real NOT NULL, --C
+             hydrogen real NOT NULL, -- H2
+             nitrogen real NOT NULL, -- N2
+             sulfur real NOT NULL, -- S
+             oxygen real NOT NULL, -- O2
+             moisture real NOT NULL, -- H20
+             ash real NOT NULL, -- ash             
+             UNIQUE (substance)
           );
          '''
     )
+
+    c.execute(
+        '''CREATE TABLE IF NOT EXISTS gas_flue_gas_materials (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             substance text NOT NULL DEFAULT "",             
+             hydrogen real NOT NULL, -- H2
+             methane real NOT NULL, -- CH4
+             ethylene real NOT NULL, -- C2H4
+             ethane real NOT NULL, -- C2H6   
+             sulfur_dioxide real NOT NULL, -- SO2                          
+             carbon_monoxide real NOT NULL, -- CO
+             carbon_dioxide real NOT NULL, -- CO2
+             nitrogen real NOT NULL, -- N2            
+             oxygen real NOT NULL, -- O2
+             hydrogen_sulfide real NOT NULL, -- H2S
+             benzene real NOT NULL, -- C2H4
+             moisture real NOT NULL, -- H20                          s        
+             UNIQUE (substance)
+          );
+         '''
+    )
+
 
     db_conn.commit()
 
@@ -71,6 +89,8 @@ def drop_all_tables(db_conn):
     c.execute('DROP TABLE IF EXISTS gas_load_charge_materials')
     c.execute('DROP TABLE IF EXISTS liquid_load_charge_materials')
     c.execute('DROP TABLE IF EXISTS solid_load_charge_materials')
+    c.execute('DROP TABLE IF EXISTS solid_liquid_flue_gas_materials')
+    c.execute('DROP TABLE IF EXISTS gas_flue_gas_materials')
     db_conn.commit()
 
 
@@ -81,6 +101,8 @@ def init_db(db_conn):
     seed_data.add_gas_load_charge_materials(db_conn)
     seed_data.add_liquid_load_charge_materials(db_conn)
     seed_data.add_solid_load_charge_materials(db_conn)
+    seed_data.add_solid_liquid_flue_gas_materials(db_conn)
+    seed_data.add_gas_flue_gas_materials(db_conn)
 
 
 if __name__ == '__main__':

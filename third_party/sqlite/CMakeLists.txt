@@ -9,7 +9,7 @@
 #    ADD_DEFINITIONS("-w")
 #ENDIF () # COMPILER TYPE
 
-SET(SRC
+SET(SQLITE_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/sqlite3.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sqlite3.c
 )
@@ -18,4 +18,4 @@ SET(SRC
 #  ADD_DEFINITIONS( " -fPIC " )
 #endif()
 
-target_sources( amo_tools_suite PUBLIC ${SRC})
+target_sources( amo_tools_suite PUBLIC ${SQLITE_SRC})
