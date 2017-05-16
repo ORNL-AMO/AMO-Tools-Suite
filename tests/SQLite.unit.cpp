@@ -6,7 +6,7 @@
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     bool ok;
-    auto sqlite = SQLite(":memory:", ok, true);
+    auto sqlite = SQLite(":memory:", true);
 
     {
         auto const outputs = sqlite.getSolidLoadChargeMaterials();
@@ -29,7 +29,7 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
 
 TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
     bool ok;
-    auto sqlite = SQLite(":memory:", ok, true);
+    auto sqlite = SQLite(":memory:", true);
 
     {
         auto const outputs = sqlite.getGasLoadChargeMaterials();
@@ -49,7 +49,7 @@ TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
 
 TEST_CASE( "SQLite - getLiquidLoadChargeMaterials", "[sqlite]" ) {
     bool ok;
-    auto sqlite = SQLite(":memory:", ok, true);
+    auto sqlite = SQLite(":memory:", true);
 
     {
         auto const outputs = sqlite.getLiquidLoadChargeMaterials();

@@ -46,3 +46,4 @@ NAN_MODULE_INIT(InitDb) {
              GetFunction(New<FunctionTemplate>(selectFlueGasMaterialGasById)).ToLocalChecked());
 }
 
+NODE_MODULE(db, InitDb)
