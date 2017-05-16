@@ -3,7 +3,7 @@ const test = require('tap').test
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'db'});
 
 test('dbSelectSolidMaterial', function (t) {
-    t.plan(12);
+    t.plan(13);
     bindings.startup();
     t.type(bindings.selectSolidMaterialById, 'function');
 
@@ -34,6 +34,7 @@ test('dbSelectSolidMaterial', function (t) {
     };
 
     res = bindings.selectSolidMaterial();
+    t.equal(res.length, 40, "array is not of size 40");
     t.equal(res[39].substance, obj2.substance, res[39].substance + " != " + obj2.substance);
     t.equal(res[39].specificHeatSolid, obj2.specificHeatSolid, res[39].specificHeatSolid + " != " + obj2.specificHeatSolid);
     t.equal(res[39].latentHeat, obj2.latentHeat, res[39].latentHeat + " != " + obj2.latentHeat);
@@ -42,7 +43,7 @@ test('dbSelectSolidMaterial', function (t) {
 });
 
 test('dbSelectLiquidMaterial', function (t) {
-    t.plan(12);
+    t.plan(13);
     bindings.startup();
     t.type(bindings.selectLiquidMaterialById, 'function');
 
@@ -73,6 +74,7 @@ test('dbSelectLiquidMaterial', function (t) {
     };
 
     res = bindings.selectLiquidMaterial();
+    t.equal(res.length, 13, "array is not of size 13");
     t.equal(res[12].substance, obj2.substance, res[12].substance + " != " + obj2.substance);
     t.equal(res[12].specificHeatVapor, obj2.specificHeatVapor, res[12].specificHeatVapor + " != " + obj2.specificHeatVapor);
     t.equal(res[12].latentHeat, obj2.latentHeat, res[12].latentHeat + " != " + obj2.latentHeat);
@@ -81,7 +83,7 @@ test('dbSelectLiquidMaterial', function (t) {
 });
 
 test('dbSelectGasMaterial', function (t) {
-    t.plan(6);
+    t.plan(7);
     bindings.startup();
 
     t.type(bindings.selectGasMaterialById, 'function');
@@ -101,6 +103,7 @@ test('dbSelectGasMaterial', function (t) {
         specificHeatVapor: 3.45
     };
 
+    t.equal(res.length, 10, "array is not of size 10");
     t.equal(res[9].substance, obj2.substance, res[9].substance + " != " + obj2.substance);
     t.equal(res[9].specificHeatVapor, obj2.specificHeatVapor, res[9].specificHeatVapor + " != " + obj2.specificHeatVapor);
 });

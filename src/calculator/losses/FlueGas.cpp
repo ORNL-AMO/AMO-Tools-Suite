@@ -43,7 +43,7 @@ double gasCompositions::calculateHeatCombustionAir(const double combustionAirTem
     auto const & N2 = gasses["N2"];
 
     double cpCombustionAir = 0.231 * (O2->specificHeat(rAir) / O2->molecularWeight)
-                             + 0.769 * (N2->specificHeat(rAir) / O2->molecularWeight);
+                             + 0.769 * (N2->specificHeat(rAir) / N2->molecularWeight);
 
     return mCombustionAir * cpCombustionAir * (combustionAirTemp - 32);
 }
@@ -99,23 +99,23 @@ double gasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
     const double hH2O = mH2O
                         * (hH2Osat
                            + 0.5 * ((H2O->specificHeat(flueGasTemp + 460) / H2O->molecularWeight)
-                                    * (H2O->specificHeat(520) / H2O->molecularWeight)) * (flueGasTemp - tH2Osat));
+                                    + (H2O->specificHeat(520) / H2O->molecularWeight)) * (flueGasTemp - tH2Osat));
 
-    std::array<double, 4> results;
 
     std::array<std::tuple<gasProperties *, const double>, 4> gasArray = {
             std::make_tuple(gasses["CO2"], mCO2), std::make_tuple(gasses["N2"], mN2),
             std::make_tuple(gasses["O2"], mO2), std::make_tuple(gasses["SO2"], mSO2)
     };
 
+	double result = 0.0;
     for ( int i = 0; i < gasArray.size(); i++ ) {
 	    auto const & tup = gasArray[i];
 	    auto const & c = std::get<0>(tup);
         const double mass = std::get<1>(tup);
-        results[i] = mass * (0.5 * ((c->specificHeat(flueGasTemp + 460) / c->molecularWeight) + (c->specificHeat(520) / c->molecularWeight)) * (flueGasTemp - 32));
+        result += mass * (0.5 * ((c->specificHeat(flueGasTemp + 460) / c->molecularWeight) + (c->specificHeat(520) / c->molecularWeight)) * (flueGasTemp - 32));
     }
 
-    return hH2O + results[0] + results[1] + results[2] + results[3];
+    return hH2O + result;
 }
 
 double FlueGas::getHeatLoss() {
