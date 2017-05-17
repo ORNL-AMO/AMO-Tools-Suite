@@ -1,31 +1,5 @@
 #include "calculator/losses/SolidLiquidFlueGasMaterial.h"
-
-//SolidLiquidFlueGasMaterial::SolidLiquidFlueGasMaterial(
-//		const double flueGasTemperature,
-//		const double excessAirPercentage,
-//		const double combustionAirTemperature,
-//		const double fuelTemperature,
-//		const double moistureInAirCombustion,
-//		const double ashDischargeTemperature,
-//		const double unburnedCarbonInAsh) :
-//		flueGasTemperature(flueGasTemperature),
-//		excessAirPercentage(excessAirPercentage / 100.0),
-//		combustionAirTemperature(combustionAirTemperature),
-//		fuelTemperature(fuelTemperature),
-//		moistureInAirCombustion(moistureInAirCombustion),
-//		ashDischargeTemperature(ashDischargeTemperature),
-//		unburnedCarbonInAsh(unburnedCarbonInAsh)
-//{
-
-//	compounds = {
-//			{"CO2", compound([] (double t) { return 16.2 - 6.53 * 1000 / t + 1.41 * 1000000 / (t * t); }, 44.01)}
-//	};
-//		compounds["CO2"] = compound([] (double t) { return 16.2 - 6.53 * 1000 / t + 1.41 * 1000000 / (t * t); }, 44.01);
-//	compounds["H2O"] = compound([] (double t) { return 19.86 - 597 / pow(t, 0.5) + 7500 / t; }, 18.016);
-//	compounds["SO2"] = compound([] (double t = 0) { return 17.472; }, 64.06);
-//	compounds["O2"] = compound([] (double t) { return 11.515 - 172 / pow(t, 0.5) + 1530 / t; }, 32.00);
-//	compounds["N2"] = compound([] (double t) { return 9.47 - 3.47 * 1000 / t + 1.07 * 1000000 / (t * t); }, 28.016);
-//}
+#include <cmath>
 
 double SolidLiquidFlueGasMaterial::getHeatLoss() {
 	// adjust input by weight - step 1
