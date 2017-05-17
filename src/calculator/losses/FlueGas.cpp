@@ -48,7 +48,7 @@ double gasCompositions::calculateHeatCombustionAir(const double combustionAirTem
     return mCombustionAir * cpCombustionAir * (combustionAirTemp - 32);
 }
 
-double gasCompositions::calculateHeatingValueFuel(){
+double gasCompositions::calculateHeatingValueFuel() {
     double heatValueFuel = 0;
 	for ( auto const & comp : gasses ) {
         heatValueFuel += comp.second->compByWeight * comp.second->heatingValue;
@@ -68,11 +68,10 @@ void gasCompositions::calculateMassFlueGasComponents(const double excessAir) {
     for ( auto const & comp : gasses ) {
         auto const & c = comp.second;
         mN2 += ((c->o2Generated * c->compByWeight) / c->molecularWeight);
-
     }
+
     mN2 = ((1 - 0.231) / 0.231) * mN2 + mO2 * (1 - 0.231) / 0.231 + N2->compByWeight;
 
-    // TODO this formula was taken from page 7 of the doc, which is NOT included in example 3
     for ( auto const & comp : gasses ) {
         mSO2 += comp.second->so2Generated * comp.second->compByWeight / comp.second->molecularWeight;
     }
@@ -100,7 +99,6 @@ double gasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
                         * (hH2Osat
                            + 0.5 * ((H2O->specificHeat(flueGasTemp + 460) / H2O->molecularWeight)
                                     + (H2O->specificHeat(520) / H2O->molecularWeight)) * (flueGasTemp - tH2Osat));
-
 
     std::array<std::tuple<gasProperties *, const double>, 4> gasArray = {
             std::make_tuple(gasses["CO2"], mCO2), std::make_tuple(gasses["N2"], mN2),
