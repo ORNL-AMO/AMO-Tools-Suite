@@ -99,7 +99,7 @@ public:
 	}
 
 private:
-	friend class FlueGas;
+	friend class GasFlueGasMaterial;
 
 	void calculateCompByWeight();
 	double calculateSensibleHeat(const double combustionAirTemp);
@@ -117,7 +117,7 @@ private:
 	gasProperties CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
 };
 
-class FlueGas {
+class GasFlueGasMaterial {
 public:
     /**
      * Constructor for the flue gas losses with all inputs specified
@@ -129,7 +129,7 @@ public:
      * @return nothing
      *
      * */
-    FlueGas(const double flueGasTemperature,
+    GasFlueGasMaterial(const double flueGasTemperature,
             const double excessAirPercentage,
             const double combustionAirTemperature,
             gasCompositions & compositions) :

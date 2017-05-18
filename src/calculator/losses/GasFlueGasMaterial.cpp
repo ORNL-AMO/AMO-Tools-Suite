@@ -8,7 +8,7 @@
  */
 
 #include <array>
-#include "calculator/losses/FlueGas.h"
+#include "calculator/losses/GasFlueGasMaterial.h"
 
 void gasCompositions::calculateCompByWeight() {
     double summationDenom = 0;
@@ -116,7 +116,7 @@ double gasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
     return hH2O + result;
 }
 
-double FlueGas::getHeatLoss() {
+double GasFlueGasMaterial::getHeatLoss() {
 	compositions_.calculateCompByWeight();
     double heatInFlueGasses = compositions_.calculateSensibleHeat(combustionAirTemperature_);
     double hCombustionAir = compositions_.calculateHeatCombustionAir(combustionAirTemperature_, excessAirPercentage_);

@@ -5,12 +5,13 @@
 #include <sqlite/SolidLoadChargeMaterialData.h>
 #include <sqlite/GasLoadChargeMaterialData.h>
 #include <sqlite/LiquidLoadChargeMaterialData.h>
-#include <sqlite/GasFlueGasMaterial.h>
+#include <sqlite/GasFlueGasMaterialData.h>
 #include <sqlite/SolidLiquidFlueGasMaterialData.h>
 
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <calculator/losses/GasFlueGasMaterial.h>
 
 SQLite::SQLite(std::string const & db_name, bool init_db)
         :
@@ -155,9 +156,24 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterial(int const id) const
 //
 //GasFlueGasMaterial SQLite::getGasFlueGasMaterial(int const id) const
 //{
+//
 //    auto cb = [] (sqlite3_stmt * stmt) {
 //        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
-//        return GasFlueGasMaterial(substance);
+//        auto const CH4 = sqlite3_column_double(stmt, 2);
+//        auto const C2H6 = sqlite3_column_double(stmt, 3);
+//        auto const N2 = sqlite3_column_double(stmt, 4);
+//        auto const H2 = sqlite3_column_double(stmt, 5);
+//        auto const C3H8 = sqlite3_column_double(stmt, 6);
+//        auto const C4H10_CnH2n = sqlite3_column_double(stmt, 7);
+//        auto const H2O = sqlite3_column_double(stmt, 8);
+//        auto const CO = sqlite3_column_double(stmt, 9);
+//        auto const CO2 = sqlite3_column_double(stmt, 10);
+//        auto const SO2 = sqlite3_column_double(stmt, 11);
+//        auto const O2 = sqlite3_column_double(stmt, 12);
+//	    gasCompositions comps(CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+//        // TODO how to deal with flueGasTemp, excess air percentage, and combustion air temperature? also
+//        // TODO there are excess elements in the databse, what are they? check GasFlueGasMaterialData.h
+//        return GasFlueGasMaterial();
 //    };
 //    return get_object<GasFlueGasMaterial>(m_gas_flue_gas_materials_select_single_stmt, id, cb);
 //}

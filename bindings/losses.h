@@ -15,7 +15,7 @@ using namespace v8;
 
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/FixtureLosses.h"
-#include "calculator/losses/FlueGas.h"
+#include "calculator/losses/GasFlueGasMaterial.h"
 #include "calculator/losses/SolidLiquidFlueGasMaterial.h"
 #include "calculator/losses/LoadChargeMaterial.h"
 #include "calculator/losses/GasCoolingLosses.h"
@@ -112,7 +112,7 @@ NAN_METHOD(flueGasLossesByVolume) {
     gasCompositions comps(Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"), Get("C4H10_CnH2n"), Get("H2O"),
                           Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
-    FlueGas fg(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"), comps);
+    GasFlueGasMaterial fg(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"), comps);
 
     double heatLoss = fg.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);

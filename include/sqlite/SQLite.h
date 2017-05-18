@@ -113,7 +113,7 @@ public:
 //
 //    std::vector<GasFlueGasMaterial> getGasFlueGasMaterials() const;
 //
-//    GasFlueGasMaterial getGasFlueGasMaterial(int id) const;
+    GasFlueGasMaterial getGasFlueGasMaterial(int id) const;
 
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
@@ -156,7 +156,7 @@ private:
 
 //    std::vector<SolidLiquidFlueGasMaterial> get_default_solid_liquid_flue_gas_materials();
 
-//    std::vector<GasFlueGasMaterial> get_default_gas_flue_gas_materials();
+    std::vector<GasFlueGasMaterial> get_default_gas_flue_gas_materials();
 };
 
 
