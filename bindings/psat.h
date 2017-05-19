@@ -38,13 +38,13 @@ NAN_METHOD(headToolSuctionTank) {
     *
     * @param specificGravity no units
     * @param flowRate units in gpm (gallons per minute)
-    * @param suctionPipeDiameter units in feet
-    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauage)
-    * @param suctionTankFluidSurfaceElevation units in feet
+    * @param suctionPipeDiameter units in inches
+    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauge)
+    * @param suctionTankFluidSurfaceElevation units in inches
     * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in feet
+    * @param dischargePipeDiameter units in inches
     * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation units in inches
+    * @param dischargeGaugeElevation units in feet
     * @param dischargeLineLossCoefficients no units
     *
  * */
@@ -86,17 +86,17 @@ NAN_METHOD(headToolSuctionTank) {
 NAN_METHOD(headTool) {
 
     /**
-    * Constructor for the HeadToolSuctionTank class with all inputs specified
+    * Constructor for the HeadTool class with all inputs specified
     *
     * @param specificGravity no units
     * @param flowRate units in gpm (gallons per minute)
-    * @param suctionPipeDiameter units in feet
-    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauage)
-    * @param suctionTankFluidSurfaceElevation units in feet
+    * @param suctionPipeDiameter units in inches
+    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauge)
+    * @param suctionTankFluidSurfaceElevation units in inches
     * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in feet
+    * @param dischargePipeDiameter units in inches
     * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation units in inches
+    * @param dischargeGaugeElevation units in feet
     * @param dischargeLineLossCoefficients no units
     *
  * */
