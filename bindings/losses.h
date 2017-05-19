@@ -109,8 +109,9 @@ NAN_METHOD(flueGasLossesByVolume) {
      * */
 
     inp = info[0]->ToObject();
-    gasCompositions comps(Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"), Get("C4H10_CnH2n"), Get("H2O"),
-                          Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
+    // TODO find a way to get substance name legitimately
+    GasCompositions comps("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
     GasFlueGasMaterial fg(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"), comps);
 

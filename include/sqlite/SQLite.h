@@ -10,7 +10,7 @@
 class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;
 class GasLoadChargeMaterial;
-class GasFlueGasMaterial;
+class GasCompositions;
 
 class SQLiteWrapper
 {
@@ -64,19 +64,19 @@ protected:
 
     template< typename T >
     T get_object(sqlite3_stmt * stmt, int const id, std::function< T(sqlite3_stmt *) > cb) const {
-        T retVal;
-        if (m_db)
-        {
+        if (m_db) {
             bind_value(stmt, 1, id );
             int rc = step_command(stmt);
             bool valid_step = step_validity(rc);
-            if( rc == SQLITE_ROW )
-            {
-                retVal = cb(stmt);
+            if( rc == SQLITE_ROW ) {
+                T retVal = cb(stmt);
+                reset_command(stmt);
+                return retVal;
             }
             reset_command(stmt);
+            throw std::runtime_error("Invalid command during get_object");
         }
-        return retVal;
+        throw std::runtime_error("No valid database connection");
     }
 
 private:
@@ -111,9 +111,9 @@ public:
 //
 //    SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterial(int id) const;
 //
-//    std::vector<GasFlueGasMaterial> getGasFlueGasMaterials() const;
+    std::vector<GasCompositions> getGasFlueGasMaterials() const;
 //
-    GasFlueGasMaterial getGasFlueGasMaterial(int id) const;
+    GasCompositions getGasFlueGasMaterial(int id) const;
 
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
@@ -144,7 +144,7 @@ private:
 
 //    bool insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material);
 
-//    bool insert_gas_flue_gas_materials(GasFlueGasMaterial const & material);
+    bool insert_gas_flue_gas_materials(GasCompositions const & comps);
 
     void insert_default_data();
 
@@ -156,7 +156,7 @@ private:
 
 //    std::vector<SolidLiquidFlueGasMaterial> get_default_solid_liquid_flue_gas_materials();
 
-    std::vector<GasFlueGasMaterial> get_default_gas_flue_gas_materials();
+    std::vector<GasCompositions> get_default_gas_flue_gas_materials();
 };
 
 

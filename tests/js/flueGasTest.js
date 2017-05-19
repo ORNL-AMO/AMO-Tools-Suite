@@ -9,6 +9,7 @@ test('flueGasByVolume', function (t) {
         flueGasTemperature: 700,
         excessAirPercentage: 9.0,
         combustionAirTemperature: 125,
+        substance: 'js test substance',
         CH4: 94.1,
         C2H6: 2.4,
         N2: 1.41,
