@@ -102,7 +102,7 @@ public:
 	double getGasByVol(const std::string & gasName) const {
 		auto const & gas = gasses.find(gasName);
 		if (gas == gasses.end()) {
-			throw std::runtime_error("Cannot find " + gasName + " in gasses");
+			//throw std::runtime_error("Cannot find " + gasName + " in gasses");
 		}
 		return gas->second->compByVol;
 	}
