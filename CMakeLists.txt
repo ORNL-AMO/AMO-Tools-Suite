@@ -97,7 +97,7 @@ set(SOURCE_FILES
         src/calculator/losses/WallLosses.cpp
         src/calculator/losses/OpeningLosses.cpp
         src/sqlite/SQLite.cpp
-        src/calculator/losses/FlueGas.cpp
+        src/calculator/losses/GasFlueGasMaterial.cpp
         src/phast/Furnace.cpp
         src/calculator/pump/HeadTool.cpp
         src/calculator/losses/SlagOtherMaterialLosses.cpp src/calculator/losses/SolidLiquidFlueGasMaterial.cpp)
@@ -146,7 +146,7 @@ set(INCLUDE_FILES
         include/calculator/losses/WallLosses.h
         include/calculator/losses/OpeningLosses.h
         include/sqlite/SQLite.h
-        include/calculator/losses/FlueGas.h
+        include/calculator/losses/GasFlueGasMaterial.h
         include/phast/Furnace.h
         include/calculator/pump/HeadTool.h
         include/calculator/pump/HeadTool.h
@@ -154,7 +154,7 @@ set(INCLUDE_FILES
         include/sqlite/GasLoadChargeMaterialData.h
         include/sqlite/LiquidLoadChargeMaterialData.h
         include/sqlite/SolidLiquidFlueGasMaterialData.h
-        include/sqlite/GasFlueGasMaterial.h
+        include/sqlite/GasFlueGasMaterialData.h
         include/calculator/losses/SlagOtherMaterialLosses.h include/calculator/losses/SolidLiquidFlueGasMaterial.h)
 
 set(TEST_FILES
@@ -171,7 +171,7 @@ set(TEST_FILES
         tests/LeakageLosses.unit.cpp
         tests/WallLosses.unit.cpp
         tests/OpeningLosses.unit.cpp
-        tests/FlueGas.unit.cpp
+        tests/GasFlueGasMaterial.unit.cpp
         tests/HeadTool.unit.cpp
         tests/SQLite.unit.cpp tests/SolidLiquidFlueGasMaterial.unit.cpp)
 
