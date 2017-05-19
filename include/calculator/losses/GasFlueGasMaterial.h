@@ -15,6 +15,7 @@
 #include <unordered_map>
 #include <functional>
 #include <string>
+#include <cmath>
 
 class GasProperties {
 private:
