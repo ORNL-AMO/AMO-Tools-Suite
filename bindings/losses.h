@@ -15,7 +15,8 @@ using namespace v8;
 
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/FixtureLosses.h"
-#include "calculator/losses/FlueGas.h"
+#include "calculator/losses/GasFlueGasMaterial.h"
+#include "calculator/losses/SolidLiquidFlueGasMaterial.h"
 #include "calculator/losses/LoadChargeMaterial.h"
 #include "calculator/losses/GasCoolingLosses.h"
 #include "calculator/losses/GasLoadChargeMaterial.h"
@@ -27,6 +28,17 @@ using namespace v8;
 #include "calculator/losses/SolidLoadChargeMaterial.h"
 #include "calculator/losses/WallLosses.h"
 #include "calculator/losses/WaterCoolingLosses.h"
+
+Local<Object> inp;
+
+double Get(const char *nm) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    auto rObj = inp->ToObject()->Get(getName);
+    if (rObj->IsUndefined()) {
+        assert(!"defined");
+    }
+    return rObj->NumberValue();
+}
 
 /**********************
  * Test methods
@@ -84,32 +96,55 @@ NAN_METHOD(fixtureLosses) {
         info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(flueGas) {
+NAN_METHOD(flueGasLossesByVolume) {
     /**
-     * Constructor for the flue gas losses with all inputs specified
+     * Constructor for the flue gas losses by volume with all inputs specified
      *
-     * @param furnaceDraft Furnace daft in inch W.C
-     * @param leakageTemperature Leakage temperature of gases in °F
-     * @param openingArea Opening area of flue in ft²
-     * @param leakageTemperature Temperature of leakage gases in °F
-     * @param ambientTemperature Ambient temparture of gases in °F
-     * @param flowCoeeficient Coefficient of discharge double
-     * @param specificGravity Specific gravity of flue gases
-     * @param correction Factor
+     * @param flueGasTemperature in °F
+     * @param excessAirPercentage %
+     * @param combustionAirTemperature °F
+     * @param gasComposition - percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
      * @return nothing
      *
      * */
-        double furnaceDraft = info[0]->NumberValue();
-        double openingArea = info[1]->NumberValue();
-        double leakageTemperature = info[2]->NumberValue();
-        double ambientTemperature = info[3]->NumberValue();
-        double flowCoefficient = info[4]->NumberValue();
-        double specificGravity = info[5]->NumberValue();
-        double correctionFactor = info[6]->NumberValue();
-        FlueGas fg(furnaceDraft, openingArea, leakageTemperature, ambientTemperature, flowCoefficient, specificGravity, correctionFactor);
-        double heatLoss = fg.getHeatLoss();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+
+    inp = info[0]->ToObject();
+    // TODO find a way to get substance name legitimately
+    GasCompositions comps("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
+
+    GasFlueGasMaterial fg(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"), comps);
+
+    double heatLoss = fg.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(flueGasLossesByMass) {
+    /**
+     * Constructor for the flue gas losses by weight with all inputs specified
+     *
+     * @param flueGasTemperature in °F
+     * @param excessAirPercentage %
+     * @param combustionAirTemperature °F
+     * @param fuelTemperature °F
+     * @param moistureInAirComposition
+     * @param ashDischargeTemperature
+     * @param unburnedCarbonInAsh %
+     * @param fuel composition of: carbon, hydrogen, sulphur, inertAsh, o2, moisture and nitrogen (in %)
+     * @return nothing
+     *
+     * */
+
+    inp = info[0]->ToObject();
+    SolidLiquidFlueGasMaterial slfgm(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"),
+                                     Get("fuelTemperature"), Get("moistureInAirComposition"), Get("ashDischargeTemperature"),
+                                     Get("unburnedCarbonInAsh"), Get("carbon"), Get("hydrogen"), Get("sulphur"),
+                                     Get("inertAsh"), Get("o2"), Get("moisture"), Get("nitrogen"));
+
+    double heatLoss = slfgm.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(gasCoolingLosses) {

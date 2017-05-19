@@ -8,9 +8,13 @@
  */
 
 #include <array>
-#include "calculator/losses/FlueGas.h"
+#include "calculator/losses/GasFlueGasMaterial.h"
 
-void gasCompositions::calculateCompByWeight() {
+std::string GasCompositions::getSubstance() const {
+    return substance;
+}
+
+void GasCompositions::calculateCompByWeight() {
     double summationDenom = 0;
     for ( auto const & compound : gasses ) {
         summationDenom += compound.second->compAdjByVol * compound.second->specificWeight;
@@ -21,7 +25,7 @@ void gasCompositions::calculateCompByWeight() {
     }
 }
 
-double gasCompositions::calculateSensibleHeat(const double combustionAirTemp) {
+double GasCompositions::calculateSensibleHeat(const double combustionAirTemp) {
     double specificHeatFuel = 0;
     for ( auto const & comp : gasses ) {
         specificHeatFuel += comp.second->compByWeight * (comp.second->specificHeat(520) / comp.second->molecularWeight);
@@ -30,7 +34,7 @@ double gasCompositions::calculateSensibleHeat(const double combustionAirTemp) {
     return 1 * specificHeatFuel * (combustionAirTemp - 32);
 }
 
-double gasCompositions::calculateHeatCombustionAir(const double combustionAirTemp, const double excessAir) {
+double GasCompositions::calculateHeatCombustionAir(const double combustionAirTemp, const double excessAir) {
     double o2Air = 0;
     for ( auto const & comp : gasses ) {
         o2Air += comp.second->compByWeight * (comp.second->o2Generated / comp.second->molecularWeight);
@@ -48,7 +52,7 @@ double gasCompositions::calculateHeatCombustionAir(const double combustionAirTem
     return mCombustionAir * cpCombustionAir * (combustionAirTemp - 32);
 }
 
-double gasCompositions::calculateHeatingValueFuel() {
+double GasCompositions::calculateHeatingValueFuel() {
     double heatValueFuel = 0;
 	for ( auto const & comp : gasses ) {
         heatValueFuel += comp.second->compByWeight * comp.second->heatingValue;
@@ -56,7 +60,7 @@ double gasCompositions::calculateHeatingValueFuel() {
     return heatValueFuel;
 }
 
-void gasCompositions::calculateMassFlueGasComponents(const double excessAir) {
+void GasCompositions::calculateMassFlueGasComponents(const double excessAir) {
     for ( auto const & comp : gasses ) {
         mH2O += (comp.second->h2oGenerated * comp.second->compByWeight) / comp.second->molecularWeight;
         mCO2 += (comp.second->co2Generated * comp.second->compByWeight) / comp.second->molecularWeight;
@@ -77,7 +81,7 @@ void gasCompositions::calculateMassFlueGasComponents(const double excessAir) {
     }
 }
 
-void gasCompositions::calculateEnthalpy() {
+void GasCompositions::calculateEnthalpy() {
     auto const & H2O = gasses["H2O"];
     auto const & CO2 = gasses["CO2"];
     auto const & N2 = gasses["N2"];
@@ -92,7 +96,7 @@ void gasCompositions::calculateEnthalpy() {
     tH2Osat = 36.009 * log(ppH2O * 29.926) + 81.054;
 }
 
-double gasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTemp) {
+double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTemp) {
     auto const & H2O = gasses["H2O"];
 
     const double hH2O = mH2O
@@ -100,7 +104,7 @@ double gasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
                            + 0.5 * ((H2O->specificHeat(flueGasTemp + 460) / H2O->molecularWeight)
                                     + (H2O->specificHeat(520) / H2O->molecularWeight)) * (flueGasTemp - tH2Osat));
 
-    std::array<std::tuple<gasProperties *, const double>, 4> gasArray = {
+    std::array<std::tuple<GasProperties *, const double>, 4> gasArray = {
             std::make_tuple(gasses["CO2"], mCO2), std::make_tuple(gasses["N2"], mN2),
             std::make_tuple(gasses["O2"], mO2), std::make_tuple(gasses["SO2"], mSO2)
     };
@@ -116,7 +120,7 @@ double gasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
     return hH2O + result;
 }
 
-double FlueGas::getHeatLoss() {
+double GasFlueGasMaterial::getHeatLoss() {
 	compositions_.calculateCompByWeight();
     double heatInFlueGasses = compositions_.calculateSensibleHeat(combustionAirTemperature_);
     double hCombustionAir = compositions_.calculateHeatCombustionAir(combustionAirTemperature_, excessAirPercentage_);
