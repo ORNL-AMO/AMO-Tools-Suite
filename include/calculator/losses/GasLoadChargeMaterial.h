@@ -191,8 +191,8 @@ private:
     GasLoadChargeMaterial(
             std::string const & substance,
             double specificHeatVapor)
-            : substance_(substance),
-              specificHeatVapor_(specificHeatVapor)
+            : specificHeatVapor_(specificHeatVapor),
+              substance_(substance)
     {}
 };
 

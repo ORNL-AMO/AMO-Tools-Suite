@@ -24,7 +24,7 @@ test('flueGasByVolume', function (t) {
     };
 
     var res = bindings.flueGasLossesByVolume(inp);
-    t.equal(res, 0.7689954663391212, res + ' != 0.7689954663391212');
+    t.equal(res, 0.7689954663391211, res + ' != 0.7689954663391211');
 });
 
 test('flueGasByMass', function (t) {
