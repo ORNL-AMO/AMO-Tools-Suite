@@ -22,6 +22,9 @@
                             'GCC_ENABLE_CPP_RTTI': 'YES',
                             'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
                         },
+                    }],
+                    [ 'OS=="linux"', {
+                        'cflags_cc': ['-fexceptions']
                     }]
                 ]
             },
@@ -45,6 +48,9 @@
                         'GCC_ENABLE_CPP_RTTI': 'YES',
                         'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
                     },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
                 }]
             ]
         },
@@ -70,6 +76,9 @@
                         'GCC_ENABLE_CPP_RTTI': 'YES',
                         'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
                     },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
                 }]
             ]
         },
@@ -94,6 +103,9 @@
                         'GCC_ENABLE_CPP_RTTI': 'YES',
                         'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
                     },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
                 }]
             ]
         },
@@ -116,6 +128,9 @@
                         'GCC_ENABLE_CPP_RTTI': 'YES',
                         'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
                     },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
                 }]
             ]
         }
