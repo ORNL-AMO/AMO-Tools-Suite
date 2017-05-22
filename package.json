@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-suite",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
   "main": "./build/Release/bridge",
   "directories": {
@@ -11,7 +11,7 @@
     "nan": "^2.5.1"
   },
   "devDependencies": {
-    "bindings": "^1.2.7",
+    "bindings": "^1.2.1",
     "tap": "^10.3.1"
   },
   "scripts": {
