@@ -105,12 +105,16 @@ double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
                                     + (H2O->specificHeat(520) / H2O->molecularWeight)) * (flueGasTemp - tH2Osat));
 
     std::array<std::tuple<GasProperties *, const double>, 4> gasArray = {
-            std::make_tuple(gasses["CO2"], mCO2), std::make_tuple(gasses["N2"], mN2),
-            std::make_tuple(gasses["O2"], mO2), std::make_tuple(gasses["SO2"], mSO2)
+            {
+                    std::make_tuple(gasses["CO2"], mCO2),
+                    std::make_tuple(gasses["N2"], mN2),
+                    std::make_tuple(gasses["O2"], mO2),
+                    std::make_tuple(gasses["SO2"], mSO2)
+            }
     };
 
 	double result = 0.0;
-    for ( int i = 0; i < gasArray.size(); i++ ) {
+    for ( size_t i = 0; i < gasArray.size(); i++ ) {
 	    auto const & tup = gasArray[i];
 	    auto const & c = std::get<0>(tup);
         const double mass = std::get<1>(tup);

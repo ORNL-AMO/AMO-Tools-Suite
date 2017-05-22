@@ -227,11 +227,11 @@ private:
             double vaporizingTemperature,
             double latentHeat,
             double specificHeatVapor)
-            : substance_(substance),
-              specificHeatLiquid_(specificHeatLiquid),
+            : specificHeatLiquid_(specificHeatLiquid),
               vaporizingTemperature_(vaporizingTemperature),
               latentHeat_(latentHeat),
-              specificHeatVapor_(specificHeatVapor)
+              specificHeatVapor_(specificHeatVapor),
+              substance_(substance)
     {}
 };
 #endif //AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H

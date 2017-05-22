@@ -32,8 +32,8 @@ private:
 	               const double co2Generated
 	) :
 			specificHeat(specificHeat), molecularWeight(molecularWeight), specificWeight(specificWeight),
-	        compByVol(compPercent), compAdjByVol(compByVol), o2Generated(o2Generated), heatingValue(heatingValue),
-	        h2oGenerated(h2oGenerated), co2Generated(co2Generated)
+	        compByVol(compPercent), compAdjByVol(compByVol), h2oGenerated(h2oGenerated), co2Generated(co2Generated),
+			o2Generated(o2Generated), heatingValue(heatingValue)
 	{};
 
 	const std::function< double ( double t ) > specificHeat;

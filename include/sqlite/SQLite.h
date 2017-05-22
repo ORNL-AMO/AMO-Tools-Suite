@@ -67,7 +67,7 @@ protected:
         if (m_db) {
             bind_value(stmt, 1, id );
             int rc = step_command(stmt);
-            bool valid_step = step_validity(rc);
+            step_validity(rc);
             if( rc == SQLITE_ROW ) {
                 T retVal = cb(stmt);
                 reset_command(stmt);
