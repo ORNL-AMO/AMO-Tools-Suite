@@ -168,3 +168,53 @@ test('dbGasFlueGasMaterial', function (t) {
     t.equal(res[6].SO2, obj2.SO2, res[6].SO2 + " != " + obj2.SO2);
     t.equal(res[6].O2, obj2.O2, res[6].O2 + " != " + obj2.O2);
 });
+
+test('dbSolidLiquidFlueGasMaterial', function (t) {
+    t.plan(19);
+    bindings.startup();
+    t.type(bindings.selectFlueGasMaterialSolidLiquidById, 'function');
+
+    res = bindings.selectFlueGasMaterialSolidLiquidById(1);
+    var obj = {
+        substance: 'Anthracite',
+        carbon: 83.7 / 100,
+        hydrogen: 1.9 / 100,
+        sulphur: 0.9 / 100,
+        inertAsh: 0.7 / 100,
+        o2: 2.3 / 100,
+        moisture: 0 / 100,
+        nitrogen: 10.5 / 100
+    };
+
+    t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
+    t.equal(res.carbon, obj.carbon, res.carbon + " != " + obj.carbon);
+    t.equal(res.hydrogen, obj.hydrogen, res.hydrogen + " != " + obj.hydrogen);
+    t.equal(res.sulphur, obj.sulphur, res.sulphur + " != " + obj.sulphur);
+    t.equal(res.inertAsh, obj.inertAsh, res.inertAsh + " != " + obj.inertAsh);
+    t.equal(res.o2, obj.o2, res.o2 + " != " + obj.o2);
+    t.equal(res.moisture, obj.moisture, res.moisture + " != " + obj.moisture);
+    t.equal(res.nitrogen, obj.nitrogen, res.nitrogen + " != " + obj.nitrogen);
+
+    t.type(bindings.selectFlueGasMaterialSolidLiquid, 'function');
+    res = bindings.selectFlueGasMaterialSolidLiquid();
+    var obj2 = {
+        substance: 'Anthracite',
+        carbon: 83.7 / 100,
+        hydrogen: 1.9 / 100,
+        sulphur: 0.9 / 100,
+        inertAsh: 0.7 / 100,
+        o2: 2.3 / 100,
+        moisture: 0 / 100,
+        nitrogen: 10.5 / 100
+    };
+
+    t.equal(res.length, 19, "array is not of size 19");
+    t.equal(res[0].substance, obj2.substance, res[0].substance + " != " + obj2.substance);
+    t.equal(res[0].carbon, obj2.carbon, res[0].carbon + " != " + obj2.carbon);
+    t.equal(res[0].hydrogen, obj2.hydrogen, res[0].hydrogen + " != " + obj2.hydrogen);
+    t.equal(res[0].sulphur, obj2.sulphur, res[0].sulphur + " != " + obj2.sulphur);
+    t.equal(res[0].inertAsh, obj2.inertAsh, res[0].inertAsh + " != " + obj2.inertAsh);
+    t.equal(res[0].o2, obj2.o2, res[0].o2 + " != " + obj2.o2);
+    t.equal(res[0].moisture, obj2.moisture, res[0].moisture + " != " + obj2.moisture);
+    t.equal(res[0].nitrogen, obj2.nitrogen, res[0].nitrogen + " != " + obj2.nitrogen);
+});

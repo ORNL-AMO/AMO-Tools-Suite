@@ -4,6 +4,7 @@
 #include <calculator/losses/GasLoadChargeMaterial.h>
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
 #include <calculator/losses/GasFlueGasMaterial.h>
+#include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
@@ -68,7 +69,7 @@ TEST_CASE( "SQLite - getLiquidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
-TEST_CASE( "SQLite - getGasChargeMaterials", "[sqlite]" ) {
+TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
 
     {
@@ -102,5 +103,38 @@ TEST_CASE( "SQLite - getGasChargeMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+    }
+}
+
+TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
+        CHECK( outputs.size() == 19 );
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 63.3, 4.5, 1.0, 1.1, 19.0, 0, 11.1);
+	    expected.setSubstance("Lignite, North Dakota");
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getCarbon() == outputs[6].getCarbon() );
+        CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
+        CHECK( expected.getSulphur() == outputs[6].getSulphur() );
+        CHECK( expected.getInertAsh() == outputs[6].getInertAsh() );
+        CHECK( expected.getO2() == outputs[6].getO2() );
+        CHECK( expected.getMoisture() == outputs[6].getMoisture() );
+        CHECK( expected.getNitrogen() == outputs[6].getNitrogen() );
+    }
+
+    {
+        auto const output = sqlite.getSolidLiquidFlueGasMaterial(1);
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5);
+        expected.setSubstance("Anthracite");
+        CHECK( expected.getSubstance() == output.getSubstance() );
+        CHECK( expected.getCarbon() == output.getCarbon() );
+        CHECK( expected.getHydrogen() == output.getHydrogen() );
+        CHECK( expected.getSulphur() == output.getSulphur() );
+        CHECK( expected.getInertAsh() == output.getInertAsh() );
+        CHECK( expected.getO2() == output.getO2() );
+        CHECK( expected.getMoisture() == output.getMoisture() );
+        CHECK( expected.getNitrogen() == output.getNitrogen() );
     }
 }

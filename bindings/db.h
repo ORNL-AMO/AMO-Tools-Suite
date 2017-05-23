@@ -13,6 +13,7 @@
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
 #include <calculator/losses/GasLoadChargeMaterial.h>
 #include <calculator/losses/GasFlueGasMaterial.h>
+#include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 
 using namespace Nan;
 using namespace v8;
@@ -146,11 +147,56 @@ std::unique_ptr<SQLite> sql;
     }
 
     NAN_METHOD(selectFlueGasMaterialSolidLiquid) {
-        Local<Object> obj = Nan::New<Object>();
-        info.GetReturnValue().Set(obj);
+        Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
+        Local<String> carbon = Nan::New<String>("carbon").ToLocalChecked();
+        Local<String> hydrogen = Nan::New<String>("hydrogen").ToLocalChecked();
+        Local<String> sulphur = Nan::New<String>("sulphur").ToLocalChecked();
+        Local<String> inertAsh = Nan::New<String>("inertAsh").ToLocalChecked();
+        Local<String> o2 = Nan::New<String>("o2").ToLocalChecked();
+        Local<String> moisture = Nan::New<String>("moisture").ToLocalChecked();
+        Local<String> nitrogen = Nan::New<String>("nitrogen").ToLocalChecked();
+
+        auto const fgMaterials = sql->getSolidLiquidFlueGasMaterials();
+
+        auto objs = Nan::New<v8::Array>();
+        for ( size_t i = 0; i < fgMaterials.size(); i++ ) {
+            auto const fgm = fgMaterials[i];
+            Local<Object> obj = Nan::New<Object>();
+            Nan::Set(obj, substance, Nan::New<String>(fgm.getSubstance()).ToLocalChecked());
+            Nan::Set(obj, carbon, Nan::New<Number>(fgm.getCarbon()));
+            Nan::Set(obj, hydrogen, Nan::New<Number>(fgm.getHydrogen()));
+            Nan::Set(obj, sulphur, Nan::New<Number>(fgm.getSulphur()));
+            Nan::Set(obj, inertAsh, Nan::New<Number>(fgm.getInertAsh()));
+            Nan::Set(obj, o2, Nan::New<Number>(fgm.getO2()));
+            Nan::Set(obj, moisture, Nan::New<Number>(fgm.getMoisture()));
+            Nan::Set(obj, nitrogen, Nan::New<Number>(fgm.getNitrogen()));
+            Nan::Set(objs, i, obj);
+        }
+
+        info.GetReturnValue().Set(objs);
     };
+
     NAN_METHOD(selectFlueGasMaterialSolidLiquidById) {
+        Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
+        Local<String> carbon = Nan::New<String>("carbon").ToLocalChecked();
+        Local<String> hydrogen = Nan::New<String>("hydrogen").ToLocalChecked();
+        Local<String> sulphur = Nan::New<String>("sulphur").ToLocalChecked();
+        Local<String> inertAsh = Nan::New<String>("inertAsh").ToLocalChecked();
+        Local<String> o2 = Nan::New<String>("o2").ToLocalChecked();
+        Local<String> moisture = Nan::New<String>("moisture").ToLocalChecked();
+        Local<String> nitrogen = Nan::New<String>("nitrogen").ToLocalChecked();
+
+        auto const fgm = sql->getSolidLiquidFlueGasMaterial(1);
         Local<Object> obj = Nan::New<Object>();
+        Nan::Set(obj, substance, Nan::New<String>(fgm.getSubstance()).ToLocalChecked());
+        Nan::Set(obj, carbon, Nan::New<Number>(fgm.getCarbon()));
+        Nan::Set(obj, hydrogen, Nan::New<Number>(fgm.getHydrogen()));
+        Nan::Set(obj, sulphur, Nan::New<Number>(fgm.getSulphur()));
+        Nan::Set(obj, inertAsh, Nan::New<Number>(fgm.getInertAsh()));
+        Nan::Set(obj, o2, Nan::New<Number>(fgm.getO2()));
+        Nan::Set(obj, moisture, Nan::New<Number>(fgm.getMoisture()));
+        Nan::Set(obj, nitrogen, Nan::New<Number>(fgm.getNitrogen()));
+
         info.GetReturnValue().Set(obj);
     };
 
