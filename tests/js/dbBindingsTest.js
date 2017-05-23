@@ -107,3 +107,64 @@ test('dbSelectGasMaterial', function (t) {
     t.equal(res[9].substance, obj2.substance, res[9].substance + " != " + obj2.substance);
     t.equal(res[9].specificHeatVapor, obj2.specificHeatVapor, res[9].specificHeatVapor + " != " + obj2.specificHeatVapor);
 });
+
+test('dbGasFlueGasMaterial', function (t) {
+    t.plan(21);
+    bindings.startup();
+
+    t.type(bindings.selectFlueGasMaterialGasById, 'function');
+    var res = bindings.selectFlueGasMaterialGasById(1);
+
+    var obj = {
+        substance: 'Natural Gas Pennsylvania',
+        CH4: 83.4,
+        C2H6: 15.8,
+        N2: 0.8,
+        H2: 0.0,
+        C3H8: 0.0,
+        C4H10_CnH2n: 0.0,
+        H2O: 0.0,
+        CO: 0.0,
+        CO2: 0.0,
+        SO2: 0.0,
+        O2: 0.0
+    };
+
+    t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
+    t.equal(res.CH4, obj.CH4, res.CH4 + " != " + obj.CH4);
+    t.equal(res.C2H6, obj.C2H6, res.C2H6 + " != " + obj.C2H6);
+    t.equal(res.N2, obj.N2, res.N2 + " != " + obj.N2);
+    t.equal(res.H2, obj.H2, res.H2 + " != " + obj.H2);
+    t.equal(res.O2, obj.O2, res.O2 + " != " + obj.O2);
+
+    t.type(bindings.selectFlueGasMaterialGas, 'function');
+    res = bindings.selectFlueGasMaterialGas();
+    var obj2 = {
+        substance: 'Blast Furnace Gas',
+        CH4: 0.1,
+        C2H6: 0.0,
+        N2: 56.4,
+        H2: 2.4,
+        C3H8: 0.0,
+        C4H10_CnH2n: 0.0,
+        H2O: 3.4,
+        CO: 23.3,
+        CO2: 14.4,
+        SO2: 0.0,
+        O2: 0.0
+    };
+
+    t.equal(res.length, 7, "array is not of size 7");
+    t.equal(res[6].substance, obj2.substance, res[6].substance + " != " + obj2.substance);
+    t.equal(res[6].CH4, obj2.CH4, res[6].CH4 + " != " + obj2.CH4);
+    t.equal(res[6].C2H6, obj2.C2H6, res[6].C2H6 + " != " + obj2.C2H6);
+    t.equal(res[6].N2, obj2.N2, res[6].N2 + " != " + obj2.N2);
+    t.equal(res[6].H2, obj2.H2, res[6].H2 + " != " + obj2.H2);
+    t.equal(res[6].C3H8, obj2.C3H8, res[6].C3H8 + " != " + obj2.C3H8);
+    t.equal(res[6].C4H10_CnH2n, obj2.C4H10_CnH2n, res[6].C4H10_CnH2n + " != " + obj2.C4H10_CnH2n);
+    t.equal(res[6].H2O, obj2.H2O, res[6].H2O + " != " + obj2.H2O);
+    t.equal(res[6].CO, obj2.CO, res[6].CO + " != " + obj2.CO);
+    t.equal(res[6].CO2, obj2.CO2, res[6].CO2 + " != " + obj2.CO2);
+    t.equal(res[6].SO2, obj2.SO2, res[6].SO2 + " != " + obj2.SO2);
+    t.equal(res[6].O2, obj2.O2, res[6].O2 + " != " + obj2.O2);
+});
