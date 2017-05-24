@@ -11,6 +11,7 @@ class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;
 class GasLoadChargeMaterial;
 class GasCompositions;
+class SolidLiquidFlueGasMaterial;
 
 class SQLiteWrapper
 {
@@ -107,12 +108,12 @@ public:
 
     LiquidLoadChargeMaterial getLiquidLoadChargeMaterial(int id) const;
 
-//    std::vector<SolidLiquidFlueGasMaterial> getSolidLiquidFlueGasMaterials() const;
-//
-//    SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterial(int id) const;
-//
+    std::vector<SolidLiquidFlueGasMaterial> getSolidLiquidFlueGasMaterials() const;
+
+    SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterial(int id) const;
+
     std::vector<GasCompositions> getGasFlueGasMaterials() const;
-//
+
     GasCompositions getGasFlueGasMaterial(int id) const;
 
 private:
@@ -142,7 +143,7 @@ private:
 
     bool insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const & material);
 
-//    bool insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material);
+    bool insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material);
 
     bool insert_gas_flue_gas_materials(GasCompositions const & comps);
 
@@ -154,7 +155,7 @@ private:
 
     std::vector<LiquidLoadChargeMaterial> get_default_liquid_load_charge_materials();
 
-//    std::vector<SolidLiquidFlueGasMaterial> get_default_solid_liquid_flue_gas_materials();
+    std::vector<SolidLiquidFlueGasMaterial> get_default_solid_liquid_flue_gas_materials();
 
     std::vector<GasCompositions> get_default_gas_flue_gas_materials();
 };

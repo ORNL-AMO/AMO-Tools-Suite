@@ -7,11 +7,12 @@
 #include <sqlite/GasLoadChargeMaterialData.h>
 #include <sqlite/LiquidLoadChargeMaterialData.h>
 #include <sqlite/GasFlueGasMaterialData.h>
-#include <sqlite/SolidLiquidFlueGasMaterialData.h>
 
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <calculator/losses/SolidLiquidFlueGasMaterial.h>
+#include <sqlite/SolidLiquidFlueGasMaterialData.h>
 
 SQLite::SQLite(std::string const & db_name, bool init_db)
         :
@@ -127,24 +128,40 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterial(int const id) const
     return get_object<LiquidLoadChargeMaterial>(m_liquid_load_charge_materials_select_single_stmt, id, cb);
 }
 
-//std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials() const
-//{
-//    auto cb = [] (sqlite3_stmt * stmt) {
-//        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
-//        return SolidLiquidFlueGasMaterial(substance);
-//    };
-//    return get_all_objects<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_stmt, cb);
-//}
-//
-//SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterial(int const id) const
-//{
-//    auto cb = [] (sqlite3_stmt * stmt) {
-//        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
-//        return SolidLiquidFlueGasMaterial(substance);
-//    };
-//    return get_object<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_single_stmt, id, cb);
-//}
-//
+std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        auto const carbon = sqlite3_column_double(stmt, 2);
+        auto const hydrogen = sqlite3_column_double(stmt, 3);
+        auto const sulphur = sqlite3_column_double(stmt, 4);
+        auto const inertAsh = sqlite3_column_double(stmt, 5);
+        auto const o2 = sqlite3_column_double(stmt, 6);
+        auto const moisture = sqlite3_column_double(stmt, 7);
+        auto const nitrogen = sqlite3_column_double(stmt, 8);
+        return SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
+                                          o2 * 100, moisture * 100, nitrogen * 100);
+    };
+    return get_all_objects<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_stmt, cb);
+}
+
+SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterial(int const id) const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        auto const carbon = sqlite3_column_double(stmt, 2);
+        auto const hydrogen = sqlite3_column_double(stmt, 3);
+        auto const sulphur = sqlite3_column_double(stmt, 4);
+        auto const inertAsh = sqlite3_column_double(stmt, 5);
+        auto const o2 = sqlite3_column_double(stmt, 6);
+        auto const moisture = sqlite3_column_double(stmt, 7);
+        auto const nitrogen = sqlite3_column_double(stmt, 8);
+        return SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
+                                          o2 * 100, moisture * 100, nitrogen * 100);
+    };
+    return get_object<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_single_stmt, id, cb);
+}
+
 std::vector<GasCompositions> SQLite::getGasFlueGasMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
@@ -383,9 +400,9 @@ void SQLite::insert_default_data()
     for( auto const & material : get_default_liquid_load_charge_materials() ) {
         insert_liquid_load_charge_materials(material);
     }
-//    for( auto const & material : get_default_solid_liquid_flue_gas_materials() ) {
-//        insert_solid_liquid_flue_gas_materials(material);
-//    }
+    for( auto const & material : get_default_solid_liquid_flue_gas_materials() ) {
+        insert_solid_liquid_flue_gas_materials(material);
+    }
     for( auto const & material : get_default_gas_flue_gas_materials() ) {
         insert_gas_flue_gas_materials(material);
     }
@@ -430,16 +447,23 @@ bool SQLite::insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const 
     return valid_insert;
 }
 
-//bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLoadChargeMaterial const & material)
-//{
-//    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 1, material.getSubstance());
-//
-//    int rc = step_command(m_solid_liquid_flue_gas_materials_insert_stmt);
-//    bool valid_insert = step_validity(rc);
-//    reset_command(m_solid_liquid_flue_gas_materials_insert_stmt);
-//    return valid_insert;
-//}
-//
+bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material)
+{
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 1, material.getSubstance());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 2, material.getCarbon());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 3, material.getHydrogen());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 4, material.getSulphur());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 5, material.getInertAsh());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 6, material.getO2());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 7, material.getMoisture());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 8, material.getNitrogen());
+
+    int rc = step_command(m_solid_liquid_flue_gas_materials_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_solid_liquid_flue_gas_materials_insert_stmt);
+    return valid_insert;
+}
+
 bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
 {
     bind_value(m_gas_flue_gas_materials_insert_stmt, 1, comps.getSubstance());
