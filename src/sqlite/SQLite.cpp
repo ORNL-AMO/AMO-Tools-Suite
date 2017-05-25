@@ -65,7 +65,9 @@ std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
         auto const latentHeat = sqlite3_column_double(stmt, 3);
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
         auto const meltingPoint = sqlite3_column_double(stmt, 5);
-        return SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, ID);
+        auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
+        slcm.setID(ID);
+	    return slcm;
     };
     return get_all_objects<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_stmt, cb);
 }
@@ -78,7 +80,9 @@ SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterial(int const id) const
         auto const latentHeat = sqlite3_column_double(stmt, 3);
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
         auto const meltingPoint = sqlite3_column_double(stmt, 5);
-        return SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, id);
+        auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
+	    slcm.setID(id);
+        return slcm;
     };
     return get_object<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_single_stmt, id, cb);
 }

@@ -119,6 +119,10 @@ public:
         return ID;
     }
 
+    void setID(const int id) {
+        ID = id;
+    }
+
     void setMeltingPoint(double meltingPoint) {
         meltingPoint_ = meltingPoint;
     }
@@ -254,7 +258,7 @@ private:
     double percentReacted_ = 0.0;
     double reactionHeat_ = 0.0;
     double additionalHeat_ = 0.0;
-    const int ID = 0;
+    int ID = 0;
     // Out values
     double totalHeat_ = 0.0;
 
@@ -275,14 +279,12 @@ private:
             double specificHeatSolid,
             double latentHeat,
             double specificHeatLiquid,
-            double meltingPoint,
-            const int ID
+            double meltingPoint
     ) : substance_ (substance),
         specificHeatSolid_ (specificHeatSolid),
         latentHeat_ (latentHeat),
         specificHeatLiquid_ (specificHeatLiquid),
-        meltingPoint_ (meltingPoint),
-        ID(ID)
+        meltingPoint_ (meltingPoint)
     {}
 
 };
