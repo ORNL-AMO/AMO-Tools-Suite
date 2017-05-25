@@ -23,6 +23,7 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
         expected.setLatentHeat(169);
         expected.setSpecificHeatLiquid(0.2601);
         expected.setMeltingPoint(1215);
+        expected.setID(1);
 
         CHECK( expected == output );
     }
@@ -42,6 +43,7 @@ TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
         GasLoadChargeMaterial expected;
         expected.setSubstance("Water vapor - near atm. pressure");
         expected.setSpecificHeatVapor(0.47);
+	    expected.setID(1);
 
         CHECK( expected == output );
     }
@@ -76,6 +78,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         auto const outputs = sqlite.getGasFlueGasMaterials();
         CHECK( outputs.size() == 7 );
 	    GasCompositions expected("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
+        expected.setID(7);
+	    CHECK( expected.getID() == outputs[6].getID() );
 	    CHECK( expected.getSubstance() == outputs[6].getSubstance() );
 	    CHECK( expected.getGasByVol("C2H6") == outputs[6].getGasByVol("C2H6") );
 	    CHECK( expected.getGasByVol("N2") == outputs[6].getGasByVol("N2") );
@@ -92,6 +96,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
     {
         auto const output = sqlite.getGasFlueGasMaterial(3);
         GasCompositions expected("Natural Gas Ohio", 93.33, 0.25, 3.4, 1.82, 0, 0, 0, 0.45, 0.22, 0, 0.35);
+        expected.setID(3);
+        CHECK( expected.getID() == output.getID() );
 	    CHECK( expected.getSubstance() == output.getSubstance() );
         CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
         CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );

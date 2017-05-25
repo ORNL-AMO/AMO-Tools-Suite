@@ -74,7 +74,8 @@ std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
 
 SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterial(int const id) const
 {
-    auto cb = [id] (sqlite3_stmt * stmt) {
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
         auto const latentHeat = sqlite3_column_double(stmt, 3);
@@ -90,9 +91,12 @@ SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterial(int const id) const
 std::vector<GasLoadChargeMaterial> SQLite::getGasLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
+        auto const ID = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatVapor = sqlite3_column_double(stmt, 2);
-        return GasLoadChargeMaterial(substance, specificHeatVapor);
+        auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
+        glcm.setID(ID);
+        return glcm;
     };
     return get_all_objects<GasLoadChargeMaterial>(m_gas_load_charge_materials_select_stmt, cb);
 }
@@ -100,9 +104,12 @@ std::vector<GasLoadChargeMaterial> SQLite::getGasLoadChargeMaterials() const
 GasLoadChargeMaterial SQLite::getGasLoadChargeMaterial(int const id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatVapor = sqlite3_column_double(stmt, 2);
-        return GasLoadChargeMaterial(substance, specificHeatVapor);
+        auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
+        glcm.setID(id);
+        return glcm;
     };
     return get_object<GasLoadChargeMaterial>(m_gas_load_charge_materials_select_single_stmt, id, cb);
 }
@@ -170,6 +177,7 @@ SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterial(int const id) c
 std::vector<GasCompositions> SQLite::getGasFlueGasMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const CH4 = sqlite3_column_double(stmt, 2);
         auto const C2H6 = sqlite3_column_double(stmt, 3);
@@ -182,7 +190,9 @@ std::vector<GasCompositions> SQLite::getGasFlueGasMaterials() const
         auto const CO2 = sqlite3_column_double(stmt, 10);
         auto const SO2 = sqlite3_column_double(stmt, 11);
         auto const O2 = sqlite3_column_double(stmt, 12);
-        return GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+        comp.setID(id);
+        return comp;
     };
     return get_all_objects<GasCompositions>(m_gas_flue_gas_materials_select_stmt, cb);
 }
@@ -191,6 +201,7 @@ GasCompositions SQLite::getGasFlueGasMaterial(int const id) const
 {
 
     auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const CH4 = sqlite3_column_double(stmt, 2);
         auto const C2H6 = sqlite3_column_double(stmt, 3);
@@ -203,7 +214,9 @@ GasCompositions SQLite::getGasFlueGasMaterial(int const id) const
         auto const CO2 = sqlite3_column_double(stmt, 10);
         auto const SO2 = sqlite3_column_double(stmt, 11);
         auto const O2 = sqlite3_column_double(stmt, 12);
-        return GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+        comp.setID(id);
+        return comp;
     };
     return get_object<GasCompositions>(m_gas_flue_gas_materials_select_single_stmt, id, cb);
 }

@@ -87,39 +87,44 @@ test('dbSelectLiquidMaterial', function (t) {
 });
 
 test('dbSelectGasMaterial', function (t) {
-    t.plan(7);
+    t.plan(8);
     bindings.startup();
 
     t.type(bindings.selectGasMaterialById, 'function');
     var res = bindings.selectGasMaterialById(1);
     var obj = {
+        id: 1,
         substance: 'Water vapor - near atm. pressure',
         specificHeatVapor: 0.47
     };
 
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
     t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
     t.equal(res.specificHeatVapor, obj.specificHeatVapor, res.specificHeatVapor + " != " + obj.specificHeatVapor);
 
     t.type(bindings.selectGasMaterial, 'function');
     res = bindings.selectGasMaterial();
     var obj2 = {
+        id: 10,
         substance: 'Hydrogen - low pressure',
         specificHeatVapor: 3.45
     };
 
     t.equal(res.length, 10, "array is not of size 10");
+    t.equal(res[9].id, obj2.id, res[9].id + " != " + obj2.id);
     t.equal(res[9].substance, obj2.substance, res[9].substance + " != " + obj2.substance);
     t.equal(res[9].specificHeatVapor, obj2.specificHeatVapor, res[9].specificHeatVapor + " != " + obj2.specificHeatVapor);
 });
 
 test('dbGasFlueGasMaterial', function (t) {
-    t.plan(21);
+    t.plan(23);
     bindings.startup();
 
     t.type(bindings.selectFlueGasMaterialGasById, 'function');
     var res = bindings.selectFlueGasMaterialGasById(1);
 
     var obj = {
+        id: 1,
         substance: 'Natural Gas Pennsylvania',
         CH4: 83.4,
         C2H6: 15.8,
@@ -134,6 +139,7 @@ test('dbGasFlueGasMaterial', function (t) {
         O2: 0.0
     };
 
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
     t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
     t.equal(res.CH4, obj.CH4, res.CH4 + " != " + obj.CH4);
     t.equal(res.C2H6, obj.C2H6, res.C2H6 + " != " + obj.C2H6);
@@ -144,6 +150,7 @@ test('dbGasFlueGasMaterial', function (t) {
     t.type(bindings.selectFlueGasMaterialGas, 'function');
     res = bindings.selectFlueGasMaterialGas();
     var obj2 = {
+        id: 7,
         substance: 'Blast Furnace Gas',
         CH4: 0.1,
         C2H6: 0.0,
@@ -159,6 +166,7 @@ test('dbGasFlueGasMaterial', function (t) {
     };
 
     t.equal(res.length, 7, "array is not of size 7");
+    t.equal(res[6].id, obj2.id, res[6].id + " != " + obj2.id);
     t.equal(res[6].substance, obj2.substance, res[6].substance + " != " + obj2.substance);
     t.equal(res[6].CH4, obj2.CH4, res[6].CH4 + " != " + obj2.CH4);
     t.equal(res[6].C2H6, obj2.C2H6, res[6].C2H6 + " != " + obj2.C2H6);

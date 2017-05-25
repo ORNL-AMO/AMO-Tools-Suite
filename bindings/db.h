@@ -120,6 +120,7 @@ std::unique_ptr<SQLite> sql;
     }
 
     NAN_METHOD(selectGasMaterial) {
+        Local<String> id = Nan::New<String>("id").ToLocalChecked();
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
 
@@ -129,6 +130,7 @@ std::unique_ptr<SQLite> sql;
         for ( size_t i = 0; i < glcms.size(); i++ ) {
             auto const glcm = glcms[i];
             Local<Object> obj = Nan::New<Object>();
+            Nan::Set(obj, id, Nan::New<Number>(glcm.getID()));
             Nan::Set(obj, substance, Nan::New<String>(glcm.getSubstance()).ToLocalChecked());
             Nan::Set(obj, specificHeatVapor, Nan::New<Number>(glcm.getSpecificHeatVapor()));
             Nan::Set(objs, i, obj);
@@ -138,12 +140,14 @@ std::unique_ptr<SQLite> sql;
     }
 
     NAN_METHOD(selectGasMaterialById) {
+        Local<String> id = Nan::New<String>("id").ToLocalChecked();
 	    Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
 	    Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
 
 	    auto const glcm = sql->getGasLoadChargeMaterial(info[0]->NumberValue());
 
 	    Local<Object> obj = Nan::New<Object>();
+        Nan::Set(obj, id, Nan::New<Number>(glcm.getID()));
 	    Nan::Set(obj, substance, Nan::New<String>(glcm.getSubstance()).ToLocalChecked());
 	    Nan::Set(obj, specificHeatVapor, Nan::New<Number>(glcm.getSpecificHeatVapor()));
 
@@ -205,6 +209,7 @@ std::unique_ptr<SQLite> sql;
     };
 
     NAN_METHOD(selectFlueGasMaterialGas) {
+	    Local<String> id = Nan::New<String>("id").ToLocalChecked();
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> CH4 = Nan::New<String>("CH4").ToLocalChecked();
         Local<String> C2H6 = Nan::New<String>("C2H6").ToLocalChecked();
@@ -224,6 +229,7 @@ std::unique_ptr<SQLite> sql;
         for ( size_t i = 0; i < fgMaterials.size(); i++ ) {
             auto const fgm = fgMaterials[i];
             Local<Object> obj = Nan::New<Object>();
+            Nan::Set(obj, id, Nan::New<Number>(fgm.getID()));
             Nan::Set(obj, substance, Nan::New<String>(fgm.getSubstance()).ToLocalChecked());
             Nan::Set(obj, CH4, Nan::New<Number>(fgm.getGasByVol("CH4")));
             Nan::Set(obj, C2H6, Nan::New<Number>(fgm.getGasByVol("C2H6")));
@@ -243,6 +249,7 @@ std::unique_ptr<SQLite> sql;
     };
 
     NAN_METHOD(selectFlueGasMaterialGasById) {
+        Local<String> id = Nan::New<String>("id").ToLocalChecked();
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> CH4 = Nan::New<String>("CH4").ToLocalChecked();
         Local<String> C2H6 = Nan::New<String>("C2H6").ToLocalChecked();
@@ -259,6 +266,7 @@ std::unique_ptr<SQLite> sql;
         auto const fgm = sql->getGasFlueGasMaterial(info[0]->NumberValue());
 
         Local<Object> obj = Nan::New<Object>();
+        Nan::Set(obj, id, Nan::New<Number>(fgm.getID()));
         Nan::Set(obj, substance, Nan::New<String>(fgm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, CH4, Nan::New<Number>(fgm.getGasByVol("CH4")));
         Nan::Set(obj, C2H6, Nan::New<Number>(fgm.getGasByVol("C2H6")));
