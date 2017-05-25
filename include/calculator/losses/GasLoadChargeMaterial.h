@@ -151,7 +151,7 @@ public:
         totalHeat_ = totalHeat;
     }
 
-    double getID() {
+    double getID() const {
         return this->id;
     }
 

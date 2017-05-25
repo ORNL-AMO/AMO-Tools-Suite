@@ -66,6 +66,7 @@ TEST_CASE( "SQLite - getLiquidLoadChargeMaterials", "[sqlite]" ) {
         expected.setLatentHeat(105);
         expected.setSpecificHeatVapor(0.55);
         expected.setVaporizingTemperature(900);
+        expected.setID(1);
 
         CHECK( expected == output );
     }
@@ -120,6 +121,8 @@ TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
         CHECK( outputs.size() == 19 );
         auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 63.3, 4.5, 1.0, 1.1, 19.0, 0, 11.1);
 	    expected.setSubstance("Lignite, North Dakota");
+	    expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
         CHECK( expected.getSubstance() == outputs[6].getSubstance() );
         CHECK( expected.getCarbon() == outputs[6].getCarbon() );
         CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
@@ -133,7 +136,9 @@ TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
     {
         auto const output = sqlite.getSolidLiquidFlueGasMaterial(1);
         auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5);
+        expected.setID(1);
         expected.setSubstance("Anthracite");
+        CHECK( expected.getID() == output.getID() );
         CHECK( expected.getSubstance() == output.getSubstance() );
         CHECK( expected.getCarbon() == output.getCarbon() );
         CHECK( expected.getHydrogen() == output.getHydrogen() );

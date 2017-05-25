@@ -117,12 +117,15 @@ GasLoadChargeMaterial SQLite::getGasLoadChargeMaterial(int const id) const
 std::vector<LiquidLoadChargeMaterial> SQLite::getLiquidLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 2);
         auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto const vaporizingTemperature = sqlite3_column_double(stmt, 4);
         auto const latentHeat = sqlite3_column_double(stmt, 5);
-        return LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        llcm.setID(id);
+        return llcm;
     };
     return get_all_objects<LiquidLoadChargeMaterial>(m_liquid_load_charge_materials_select_stmt, cb);
 }
@@ -130,12 +133,15 @@ std::vector<LiquidLoadChargeMaterial> SQLite::getLiquidLoadChargeMaterials() con
 LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterial(int const id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 2);
         auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto const vaporizingTemperature = sqlite3_column_double(stmt, 4);
         auto const latentHeat = sqlite3_column_double(stmt, 5);
-        return LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        llcm.setID(id);
+        return llcm;
     };
     return get_object<LiquidLoadChargeMaterial>(m_liquid_load_charge_materials_select_single_stmt, id, cb);
 }
@@ -143,6 +149,7 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterial(int const id) const
 std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const carbon = sqlite3_column_double(stmt, 2);
         auto const hydrogen = sqlite3_column_double(stmt, 3);
@@ -151,8 +158,10 @@ std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials()
         auto const o2 = sqlite3_column_double(stmt, 6);
         auto const moisture = sqlite3_column_double(stmt, 7);
         auto const nitrogen = sqlite3_column_double(stmt, 8);
-        return SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
+        auto slfgm = SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
                                           o2 * 100, moisture * 100, nitrogen * 100);
+	    slfgm.setID(id);
+        return slfgm;
     };
     return get_all_objects<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_stmt, cb);
 }
@@ -160,6 +169,7 @@ std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials()
 SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterial(int const id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const carbon = sqlite3_column_double(stmt, 2);
         auto const hydrogen = sqlite3_column_double(stmt, 3);
@@ -168,8 +178,10 @@ SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterial(int const id) c
         auto const o2 = sqlite3_column_double(stmt, 6);
         auto const moisture = sqlite3_column_double(stmt, 7);
         auto const nitrogen = sqlite3_column_double(stmt, 8);
-        return SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
+        auto slfgm = SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
                                           o2 * 100, moisture * 100, nitrogen * 100);
+        slfgm.setID(id);
+        return slfgm;
     };
     return get_object<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_single_stmt, id, cb);
 }

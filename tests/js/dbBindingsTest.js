@@ -47,12 +47,13 @@ test('dbSelectSolidMaterial', function (t) {
 });
 
 test('dbSelectLiquidMaterial', function (t) {
-    t.plan(13);
+    t.plan(15);
     bindings.startup();
     t.type(bindings.selectLiquidMaterialById, 'function');
 
     var res = bindings.selectLiquidMaterialById(1);
     var obj = {
+        id: 1,
         substance: 'Crude',
         specificHeatLiquid: 0.6501,
         specificHeatVapor: 0.55,
@@ -60,6 +61,7 @@ test('dbSelectLiquidMaterial', function (t) {
         vaporizationTemperature: 900
     };
 
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
     t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
     t.equal(res.specificHeatLiquid, obj.specificHeatLiquid, res.specificHeatLiquid + " != " + obj.specificHeatLiquid);
     t.equal(res.specificHeatVapor, obj.specificHeatVapor, res.specificHeatVapor + " != " + obj.specificHeatVapor);
@@ -70,6 +72,7 @@ test('dbSelectLiquidMaterial', function (t) {
     t.type(bindings.selectLiquidMaterial, 'function');
 
     var obj2 = {
+        id: 13,
         substance: 'Kerosene',
         specificHeatLiquid: 0.5701,
         specificHeatVapor: 0.62,
@@ -79,6 +82,7 @@ test('dbSelectLiquidMaterial', function (t) {
 
     res = bindings.selectLiquidMaterial();
     t.equal(res.length, 13, "array is not of size 13");
+    t.equal(res[12].id, obj2.id, res[12].id + " != " + obj2.id);
     t.equal(res[12].substance, obj2.substance, res[12].substance + " != " + obj2.substance);
     t.equal(res[12].specificHeatVapor, obj2.specificHeatVapor, res[12].specificHeatVapor + " != " + obj2.specificHeatVapor);
     t.equal(res[12].latentHeat, obj2.latentHeat, res[12].latentHeat + " != " + obj2.latentHeat);
@@ -87,7 +91,7 @@ test('dbSelectLiquidMaterial', function (t) {
 });
 
 test('dbSelectGasMaterial', function (t) {
-    t.plan(8);
+    t.plan(9);
     bindings.startup();
 
     t.type(bindings.selectGasMaterialById, 'function');
@@ -182,12 +186,13 @@ test('dbGasFlueGasMaterial', function (t) {
 });
 
 test('dbSolidLiquidFlueGasMaterial', function (t) {
-    t.plan(19);
+    t.plan(21);
     bindings.startup();
     t.type(bindings.selectFlueGasMaterialSolidLiquidById, 'function');
 
     res = bindings.selectFlueGasMaterialSolidLiquidById(1);
     var obj = {
+        id: 1,
         substance: 'Anthracite',
         carbon: 83.7 / 100,
         hydrogen: 1.9 / 100,
@@ -198,6 +203,7 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
         nitrogen: 10.5 / 100
     };
 
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
     t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
     t.equal(res.carbon, obj.carbon, res.carbon + " != " + obj.carbon);
     t.equal(res.hydrogen, obj.hydrogen, res.hydrogen + " != " + obj.hydrogen);
@@ -209,24 +215,15 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
 
     t.type(bindings.selectFlueGasMaterialSolidLiquid, 'function');
     res = bindings.selectFlueGasMaterialSolidLiquid();
-    var obj2 = {
-        substance: 'Anthracite',
-        carbon: 83.7 / 100,
-        hydrogen: 1.9 / 100,
-        sulphur: 0.9 / 100,
-        inertAsh: 0.7 / 100,
-        o2: 2.3 / 100,
-        moisture: 0 / 100,
-        nitrogen: 10.5 / 100
-    };
 
     t.equal(res.length, 19, "array is not of size 19");
-    t.equal(res[0].substance, obj2.substance, res[0].substance + " != " + obj2.substance);
-    t.equal(res[0].carbon, obj2.carbon, res[0].carbon + " != " + obj2.carbon);
-    t.equal(res[0].hydrogen, obj2.hydrogen, res[0].hydrogen + " != " + obj2.hydrogen);
-    t.equal(res[0].sulphur, obj2.sulphur, res[0].sulphur + " != " + obj2.sulphur);
-    t.equal(res[0].inertAsh, obj2.inertAsh, res[0].inertAsh + " != " + obj2.inertAsh);
-    t.equal(res[0].o2, obj2.o2, res[0].o2 + " != " + obj2.o2);
-    t.equal(res[0].moisture, obj2.moisture, res[0].moisture + " != " + obj2.moisture);
-    t.equal(res[0].nitrogen, obj2.nitrogen, res[0].nitrogen + " != " + obj2.nitrogen);
+    t.equal(res[0].id, obj.id, res[0].id + " != " + obj.id);
+    t.equal(res[0].substance, obj.substance, res[0].substance + " != " + obj.substance);
+    t.equal(res[0].carbon, obj.carbon, res[0].carbon + " != " + obj.carbon);
+    t.equal(res[0].hydrogen, obj.hydrogen, res[0].hydrogen + " != " + obj.hydrogen);
+    t.equal(res[0].sulphur, obj.sulphur, res[0].sulphur + " != " + obj.sulphur);
+    t.equal(res[0].inertAsh, obj.inertAsh, res[0].inertAsh + " != " + obj.inertAsh);
+    t.equal(res[0].o2, obj.o2, res[0].o2 + " != " + obj.o2);
+    t.equal(res[0].moisture, obj.moisture, res[0].moisture + " != " + obj.moisture);
+    t.equal(res[0].nitrogen, obj.nitrogen, res[0].nitrogen + " != " + obj.nitrogen);
 });

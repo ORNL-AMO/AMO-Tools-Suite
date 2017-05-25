@@ -176,6 +176,14 @@ public:
         totalHeat_ = totalHeat;
     }
 
+    double getID() const {
+        return id;
+    }
+
+    void setID(int const id) {
+        this->id = id;
+    }
+
     double getTotalHeat();
 
     bool operator == (const LiquidLoadChargeMaterial& rhs) const
@@ -184,7 +192,7 @@ public:
                latentHeat_ == rhs.latentHeat_ &&
                specificHeatVapor_ == rhs.specificHeatVapor_ &&
                vaporizingTemperature_ == rhs.vaporizingTemperature_ &&
-               substance_ == rhs.substance_;
+               substance_ == rhs.substance_ && id == rhs.id;
     }
 
     bool operator != (const LiquidLoadChargeMaterial& rhs) const
@@ -207,6 +215,7 @@ private:
     double reactionHeat_ = 0.0;
     double additionalHeat_ = 0.0;
     std::string substance_ = "Unknown";
+    int id = 0;
     // Out value
     double totalHeat_ = 0.0;
 
