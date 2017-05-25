@@ -115,6 +115,14 @@ public:
         return meltingPoint_;
     }
 
+    double getID() const {
+        return ID;
+    }
+
+    void setID(const int id) {
+        ID = id;
+    }
+
     void setMeltingPoint(double meltingPoint) {
         meltingPoint_ = meltingPoint;
     }
@@ -250,6 +258,7 @@ private:
     double percentReacted_ = 0.0;
     double reactionHeat_ = 0.0;
     double additionalHeat_ = 0.0;
+    int ID = 0;
     // Out values
     double totalHeat_ = 0.0;
 

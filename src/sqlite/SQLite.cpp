@@ -59,25 +59,30 @@ std::string SQLiteWrapper::convert_text( const unsigned char * text ) {
 std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
+	    auto const ID = sqlite3_column_int(stmt, 0);
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
         auto const latentHeat = sqlite3_column_double(stmt, 3);
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
         auto const meltingPoint = sqlite3_column_double(stmt, 5);
-        return SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
+        auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
+        slcm.setID(ID);
+	    return slcm;
     };
     return get_all_objects<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_stmt, cb);
 }
 
 SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterial(int const id) const
 {
-    auto cb = [] (sqlite3_stmt * stmt) {
+    auto cb = [id] (sqlite3_stmt * stmt) {
         std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
         auto const latentHeat = sqlite3_column_double(stmt, 3);
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
         auto const meltingPoint = sqlite3_column_double(stmt, 5);
-        return SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
+        auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
+	    slcm.setID(id);
+        return slcm;
     };
     return get_object<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_single_stmt, id, cb);
 }
