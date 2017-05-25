@@ -30,6 +30,7 @@ std::unique_ptr<SQLite> sql;
     }
 
     NAN_METHOD(selectSolidMaterial) {
+	    Local<String> id = Nan::New<String>("id").ToLocalChecked();
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> specificHeatSolid = Nan::New<String>("specificHeatSolid").ToLocalChecked();
         Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
@@ -42,6 +43,7 @@ std::unique_ptr<SQLite> sql;
         for ( size_t i = 0; i < slcms.size(); i++ ) {
             auto const slcm = slcms[i];
             Local<Object> obj = Nan::New<Object>();
+            Nan::Set(obj, id, Nan::New<Number>(slcm.getID()));
             Nan::Set(obj, substance, Nan::New<String>(slcm.getSubstance()).ToLocalChecked());
             Nan::Set(obj, specificHeatSolid, Nan::New<Number>(slcm.getSpecificHeatSolid()));
             Nan::Set(obj, latentHeat, Nan::New<Number>(slcm.getLatentHeat()));
@@ -54,15 +56,17 @@ std::unique_ptr<SQLite> sql;
     }
 
     NAN_METHOD(selectSolidMaterialById) {
+        Local<String> id = Nan::New<String>("id").ToLocalChecked();
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
         Local<String> specificHeatSolid = Nan::New<String>("specificHeatSolid").ToLocalChecked();
         Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
         Local<String> specificHeatLiquid = Nan::New<String>("specificHeatLiquid").ToLocalChecked();
         Local<String> meltingPoint = Nan::New<String>("meltingPoint").ToLocalChecked();
 
-	    auto const slcm = sql->getSolidLoadChargeMaterial(1);
+	    auto const slcm = sql->getSolidLoadChargeMaterial(info[0]->NumberValue());
 
         Local<Object> obj = Nan::New<Object>();
+        Nan::Set(obj, id, Nan::New<Number>(slcm.getID()));
         Nan::Set(obj, substance, Nan::New<String>(slcm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, specificHeatSolid, Nan::New<Number>(slcm.getSpecificHeatSolid()));
         Nan::Set(obj, latentHeat, Nan::New<Number>(slcm.getLatentHeat()));
@@ -103,7 +107,7 @@ std::unique_ptr<SQLite> sql;
         Local<String> vaporizationTemperature = Nan::New<String>("vaporizationTemperature").ToLocalChecked();
         Local<String> latentHeat = Nan::New<String>("latentHeat").ToLocalChecked();
 
-        auto const llcm = sql->getLiquidLoadChargeMaterial(1);
+        auto const llcm = sql->getLiquidLoadChargeMaterial(info[0]->NumberValue());
 
         Local<Object> obj = Nan::New<Object>();
         Nan::Set(obj, substance, Nan::New<String>(llcm.getSubstance()).ToLocalChecked());
@@ -137,7 +141,7 @@ std::unique_ptr<SQLite> sql;
 	    Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
 	    Local<String> specificHeatVapor = Nan::New<String>("specificHeatVapor").ToLocalChecked();
 
-	    auto const glcm = sql->getGasLoadChargeMaterial(1);
+	    auto const glcm = sql->getGasLoadChargeMaterial(info[0]->NumberValue());
 
 	    Local<Object> obj = Nan::New<Object>();
 	    Nan::Set(obj, substance, Nan::New<String>(glcm.getSubstance()).ToLocalChecked());
@@ -186,7 +190,7 @@ std::unique_ptr<SQLite> sql;
         Local<String> moisture = Nan::New<String>("moisture").ToLocalChecked();
         Local<String> nitrogen = Nan::New<String>("nitrogen").ToLocalChecked();
 
-        auto const fgm = sql->getSolidLiquidFlueGasMaterial(1);
+        auto const fgm = sql->getSolidLiquidFlueGasMaterial(info[0]->NumberValue());
         Local<Object> obj = Nan::New<Object>();
         Nan::Set(obj, substance, Nan::New<String>(fgm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, carbon, Nan::New<Number>(fgm.getCarbon()));
@@ -252,7 +256,7 @@ std::unique_ptr<SQLite> sql;
         Local<String> SO2 = Nan::New<String>("SO2").ToLocalChecked();
         Local<String> O2 = Nan::New<String>("O2").ToLocalChecked();
 
-        auto const fgm = sql->getGasFlueGasMaterial(1);
+        auto const fgm = sql->getGasFlueGasMaterial(info[0]->NumberValue());
 
         Local<Object> obj = Nan::New<Object>();
         Nan::Set(obj, substance, Nan::New<String>(fgm.getSubstance()).ToLocalChecked());

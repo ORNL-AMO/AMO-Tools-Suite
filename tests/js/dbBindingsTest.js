@@ -3,12 +3,13 @@ const test = require('tap').test
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'db'});
 
 test('dbSelectSolidMaterial', function (t) {
-    t.plan(13);
+    t.plan(15);
     bindings.startup();
     t.type(bindings.selectSolidMaterialById, 'function');
 
     var res = bindings.selectSolidMaterialById(1);
     var obj = {
+        id: 1,
         substance: 'Aluminum',
         specificHeatSolid: 0.2479,
         latentHeat: 169,
@@ -16,6 +17,7 @@ test('dbSelectSolidMaterial', function (t) {
         meltingPoint: 1215
     };
 
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
     t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
     t.equal(res.specificHeatSolid, obj.specificHeatSolid, res.specificHeatSolid + " != " + obj.specificHeatSolid);
     t.equal(res.latentHeat, obj.latentHeat, res.latentHeat + " != " + obj.latentHeat);
@@ -26,6 +28,7 @@ test('dbSelectSolidMaterial', function (t) {
     t.type(bindings.selectSolidMaterial, 'function');
 
     var obj2 = {
+        id: 40,
         substance: 'Ladle Refractory',
         specificHeatSolid: 0.2501,
         latentHeat: 425,
@@ -35,6 +38,7 @@ test('dbSelectSolidMaterial', function (t) {
 
     res = bindings.selectSolidMaterial();
     t.equal(res.length, 40, "array is not of size 40");
+    t.equal(res[39].id, obj2.id, res[39].id + " != " + obj2.id);
     t.equal(res[39].substance, obj2.substance, res[39].substance + " != " + obj2.substance);
     t.equal(res[39].specificHeatSolid, obj2.specificHeatSolid, res[39].specificHeatSolid + " != " + obj2.specificHeatSolid);
     t.equal(res[39].latentHeat, obj2.latentHeat, res[39].latentHeat + " != " + obj2.latentHeat);
