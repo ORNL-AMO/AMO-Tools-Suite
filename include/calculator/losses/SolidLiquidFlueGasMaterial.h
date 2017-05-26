@@ -51,6 +51,7 @@ public:
 	{}
 
 	double getHeatLoss();
+	int getID() const { return id; }
 	std::string getSubstance() const { return substance; }
 	double getFlueGasTemperature() const { return flueGasTemperature; }
 	double getExcessAirPercentage() const { return excessAirPercentage; }
@@ -67,6 +68,7 @@ public:
 	double getMoisture() const { return moisture; }
 	double getNitrogen() const { return nitrogen; }
 
+	void setID( int const id ) { this->id = id; }
 	void setSubstance( std::string const & substanceName ) { substance = substanceName; }
 	void setFlueGasTemperature( const double temperature ) { flueGasTemperature = temperature; }
 	void setExcessAirPercentage( const double excessAir ) { excessAirPercentage = excessAir; }
@@ -98,6 +100,7 @@ private:
 			nitrogen(nitrogen / 100)
 	{}
 
+	int id = 0;
 	std::string substance = "UndefinedSubstance";
 	double flueGasTemperature, excessAirPercentage, combustionAirTemperature;
 	double fuelTemperature, moistureInAirCombustion, ashDischargeTemperature, unburnedCarbonInAsh;

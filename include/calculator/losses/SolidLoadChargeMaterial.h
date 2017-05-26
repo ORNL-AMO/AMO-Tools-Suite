@@ -116,11 +116,11 @@ public:
     }
 
     double getID() const {
-        return ID;
+        return this->id;
     }
 
     void setID(const int id) {
-        ID = id;
+        this->id = id;
     }
 
     void setMeltingPoint(double meltingPoint) {
@@ -225,7 +225,7 @@ public:
                 latentHeat_ == rhs.latentHeat_ &&
                 specificHeatLiquid_ == rhs.specificHeatLiquid_ &&
                 meltingPoint_ == rhs.meltingPoint_ &&
-                substance_ == rhs.substance_;
+                substance_ == rhs.substance_ && id == rhs.id;
     }
 
     bool operator != (const SolidLoadChargeMaterial& rhs) const
@@ -258,7 +258,7 @@ private:
     double percentReacted_ = 0.0;
     double reactionHeat_ = 0.0;
     double additionalHeat_ = 0.0;
-    int ID = 0;
+    int id = 0;
     // Out values
     double totalHeat_ = 0.0;
 

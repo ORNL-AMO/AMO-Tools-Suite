@@ -111,6 +111,12 @@ public:
 	}
 
 	std::string getSubstance() const;
+	int getID() const {
+		return this->id;
+	}
+	void setID(const int id) {
+		this->id = id;
+	}
 
 private:
 	friend class GasFlueGasMaterial;
@@ -126,6 +132,7 @@ private:
 
 	// the hash map holds a reference to the GasProperties below for easier iterable summations
 	std::unordered_map <std::string, std::shared_ptr<GasProperties>> gasses;
+	int id;
 	const std::string substance;
 	const double totalPercent;
 	double hH2Osat, tH2Osat;
