@@ -5,9 +5,9 @@ const test = require('tap').test
 test('dbSelectSolidMaterial', function (t) {
     t.plan(15);
     bindings.startup();
-    t.type(bindings.selectSolidMaterialById, 'function');
+    t.type(bindings.selectSolidLoadChargeMaterialById, 'function');
 
-    var res = bindings.selectSolidMaterialById(1);
+    var res = bindings.selectSolidLoadChargeMaterialById(1);
     var obj = {
         id: 1,
         substance: 'Aluminum',
@@ -25,7 +25,7 @@ test('dbSelectSolidMaterial', function (t) {
     t.equal(res.meltingPoint, obj.meltingPoint, res.meltingPoint + " != " + obj.meltingPoint);
 
 
-    t.type(bindings.selectSolidMaterial, 'function');
+    t.type(bindings.selectSolidLoadChargeMaterials, 'function');
 
     var obj2 = {
         id: 40,
@@ -36,7 +36,7 @@ test('dbSelectSolidMaterial', function (t) {
         meltingPoint: 5000
     };
 
-    res = bindings.selectSolidMaterial();
+    res = bindings.selectSolidLoadChargeMaterials();
     t.equal(res.length, 40, "array is not of size 40");
     t.equal(res[39].id, obj2.id, res[39].id + " != " + obj2.id);
     t.equal(res[39].substance, obj2.substance, res[39].substance + " != " + obj2.substance);
@@ -49,9 +49,9 @@ test('dbSelectSolidMaterial', function (t) {
 test('dbSelectLiquidMaterial', function (t) {
     t.plan(15);
     bindings.startup();
-    t.type(bindings.selectLiquidMaterialById, 'function');
+    t.type(bindings.selectLiquidLoadChargeMaterialById, 'function');
 
-    var res = bindings.selectLiquidMaterialById(1);
+    var res = bindings.selectLiquidLoadChargeMaterialById(1);
     var obj = {
         id: 1,
         substance: 'Crude',
@@ -69,7 +69,7 @@ test('dbSelectLiquidMaterial', function (t) {
     t.equal(res.vaporizationTemperature, obj.vaporizationTemperature, res.vaporizationTemperature + " != " + obj.vaporizationTemperature);
 
 
-    t.type(bindings.selectLiquidMaterial, 'function');
+    t.type(bindings.selectLiquidLoadChargeMaterials, 'function');
 
     var obj2 = {
         id: 13,
@@ -80,7 +80,7 @@ test('dbSelectLiquidMaterial', function (t) {
         vaporizationTemperature:260
     };
 
-    res = bindings.selectLiquidMaterial();
+    res = bindings.selectLiquidLoadChargeMaterials();
     t.equal(res.length, 13, "array is not of size 13");
     t.equal(res[12].id, obj2.id, res[12].id + " != " + obj2.id);
     t.equal(res[12].substance, obj2.substance, res[12].substance + " != " + obj2.substance);
@@ -94,11 +94,11 @@ test('dbSelectGasMaterial', function (t) {
     t.plan(9);
     bindings.startup();
 
-    t.type(bindings.selectGasMaterialById, 'function');
-    var res = bindings.selectGasMaterialById(1);
+    t.type(bindings.selectGasLoadChargeMaterialById, 'function');
+    var res = bindings.selectGasLoadChargeMaterialById(1);
     var obj = {
         id: 1,
-        substance: 'Water vapor - near atm. pressure',
+        substance: 'Water vapor - Near Atm. Pressure',
         specificHeatVapor: 0.47
     };
 
@@ -106,11 +106,11 @@ test('dbSelectGasMaterial', function (t) {
     t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
     t.equal(res.specificHeatVapor, obj.specificHeatVapor, res.specificHeatVapor + " != " + obj.specificHeatVapor);
 
-    t.type(bindings.selectGasMaterial, 'function');
-    res = bindings.selectGasMaterial();
+    t.type(bindings.selectGasLoadChargeMaterials, 'function');
+    res = bindings.selectGasLoadChargeMaterials();
     var obj2 = {
         id: 10,
-        substance: 'Hydrogen - low pressure',
+        substance: 'Hydrogen - Low Pressure',
         specificHeatVapor: 3.45
     };
 
@@ -124,8 +124,8 @@ test('dbGasFlueGasMaterial', function (t) {
     t.plan(23);
     bindings.startup();
 
-    t.type(bindings.selectFlueGasMaterialGasById, 'function');
-    var res = bindings.selectFlueGasMaterialGasById(1);
+    t.type(bindings.selectGasFlueGasMaterialById, 'function');
+    var res = bindings.selectGasFlueGasMaterialById(1);
 
     var obj = {
         id: 1,
@@ -151,8 +151,8 @@ test('dbGasFlueGasMaterial', function (t) {
     t.equal(res.H2, obj.H2, res.H2 + " != " + obj.H2);
     t.equal(res.O2, obj.O2, res.O2 + " != " + obj.O2);
 
-    t.type(bindings.selectFlueGasMaterialGas, 'function');
-    res = bindings.selectFlueGasMaterialGas();
+    t.type(bindings.selectGasFlueGasMaterials, 'function');
+    res = bindings.selectGasFlueGasMaterials();
     var obj2 = {
         id: 7,
         substance: 'Blast Furnace Gas',
@@ -188,9 +188,9 @@ test('dbGasFlueGasMaterial', function (t) {
 test('dbSolidLiquidFlueGasMaterial', function (t) {
     t.plan(21);
     bindings.startup();
-    t.type(bindings.selectFlueGasMaterialSolidLiquidById, 'function');
+    t.type(bindings.selectSolidLiquidFlueGasMaterialById, 'function');
 
-    res = bindings.selectFlueGasMaterialSolidLiquidById(1);
+    res = bindings.selectSolidLiquidFlueGasMaterialById(1);
     var obj = {
         id: 1,
         substance: 'Anthracite',
@@ -213,8 +213,8 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
     t.equal(res.moisture, obj.moisture, res.moisture + " != " + obj.moisture);
     t.equal(res.nitrogen, obj.nitrogen, res.nitrogen + " != " + obj.nitrogen);
 
-    t.type(bindings.selectFlueGasMaterialSolidLiquid, 'function');
-    res = bindings.selectFlueGasMaterialSolidLiquid();
+    t.type(bindings.selectSolidLiquidFlueGasMaterials, 'function');
+    res = bindings.selectSolidLiquidFlueGasMaterials();
 
     t.equal(res.length, 19, "array is not of size 19");
     t.equal(res[0].id, obj.id, res[0].id + " != " + obj.id);

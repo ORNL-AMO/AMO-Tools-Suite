@@ -15,7 +15,7 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     }
 
     {
-        auto const output = sqlite.getSolidLoadChargeMaterial(1);
+        auto const output = sqlite.getSolidLoadChargeMaterialById(1);
 
         SolidLoadChargeMaterial expected;
         expected.setSubstance("Aluminum");
@@ -38,10 +38,10 @@ TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
     }
 
     {
-        auto const output = sqlite.getGasLoadChargeMaterial(1);
+        auto const output = sqlite.getGasLoadChargeMaterialById(1);
 
         GasLoadChargeMaterial expected;
-        expected.setSubstance("Water vapor - near atm. pressure");
+        expected.setSubstance("Water vapor - Near Atm. Pressure");
         expected.setSpecificHeatVapor(0.47);
 	    expected.setID(1);
 
@@ -58,7 +58,7 @@ TEST_CASE( "SQLite - getLiquidLoadChargeMaterials", "[sqlite]" ) {
     }
 
     {
-        auto const output = sqlite.getLiquidLoadChargeMaterial(1);
+        auto const output = sqlite.getLiquidLoadChargeMaterialById(1);
 
         LiquidLoadChargeMaterial expected;
         expected.setSubstance("Crude");
@@ -95,7 +95,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
     }
 
     {
-        auto const output = sqlite.getGasFlueGasMaterial(3);
+        auto const output = sqlite.getGasFlueGasMaterialById(3);
         GasCompositions expected("Natural Gas Ohio", 93.33, 0.25, 3.4, 1.82, 0, 0, 0, 0.45, 0.22, 0, 0.35);
         expected.setID(3);
         CHECK( expected.getID() == output.getID() );
@@ -134,7 +134,7 @@ TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
     }
 
     {
-        auto const output = sqlite.getSolidLiquidFlueGasMaterial(1);
+        auto const output = sqlite.getSolidLiquidFlueGasMaterialById(1);
         auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5);
         expected.setID(1);
         expected.setSubstance("Anthracite");

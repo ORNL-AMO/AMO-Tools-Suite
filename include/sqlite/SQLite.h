@@ -98,23 +98,23 @@ public:
 
     std::vector<SolidLoadChargeMaterial> getSolidLoadChargeMaterials() const;
 
-    SolidLoadChargeMaterial getSolidLoadChargeMaterial(int id) const;
+    SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
 
     std::vector<GasLoadChargeMaterial> getGasLoadChargeMaterials() const;
 
-    GasLoadChargeMaterial getGasLoadChargeMaterial(int id) const;
+    GasLoadChargeMaterial getGasLoadChargeMaterialById(int id) const;
 
     std::vector<LiquidLoadChargeMaterial> getLiquidLoadChargeMaterials() const;
 
-    LiquidLoadChargeMaterial getLiquidLoadChargeMaterial(int id) const;
+    LiquidLoadChargeMaterial getLiquidLoadChargeMaterialById(int id) const;
 
     std::vector<SolidLiquidFlueGasMaterial> getSolidLiquidFlueGasMaterials() const;
 
-    SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterial(int id) const;
+    SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterialById(int id) const;
 
     std::vector<GasCompositions> getGasFlueGasMaterials() const;
 
-    GasCompositions getGasFlueGasMaterial(int id) const;
+    GasCompositions getGasFlueGasMaterialById(int id) const;
 
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
