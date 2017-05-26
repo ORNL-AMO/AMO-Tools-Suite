@@ -312,7 +312,7 @@ void SQLite::create_tables()
     const std::string solid_load_charge_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS solid_load_charge_materials (
            id integer PRIMARY KEY AUTOINCREMENT,
-           substance text NOT NULL DEFAULT "",
+           substance text NOT NULL DEFAULT "" UNIQUE,
            mean_specific_heat_of_solid real NOT NULL, -- Btu/lb.F
            latent_heat_of_fusion real NOT NULL, -- Btu/lb.
            mean_specific_heat_of_liquid real NOT NULL, -- Btu/lb.F
@@ -333,7 +333,7 @@ void SQLite::create_tables()
     const std::string gas_load_charge_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS gas_load_charge_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
-             substance text NOT NULL DEFAULT "",
+             substance text NOT NULL DEFAULT "" UNIQUE,
              mean_specific_heat_of_vapor real NOT NULL, -- Btu/lb.F
              UNIQUE (substance, mean_specific_heat_of_vapor)
             );)";
@@ -348,7 +348,7 @@ void SQLite::create_tables()
     const std::string liquid_load_charge_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS liquid_load_charge_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
-             substance text NOT NULL DEFAULT "",
+             substance text NOT NULL DEFAULT "" UNIQUE,
              mean_specific_heat_of_liquid real NOT NULL, -- kJ/kg.F
              latent_heat_of_vaporisation real NOT NULL, -- Btu/lb.
              mean_specific_heat_of_vapor real NOT NULL, -- Btu/lb.F
@@ -370,7 +370,7 @@ void SQLite::create_tables()
     const std::string solid_liquid_flue_gas_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS solid_liquid_flue_gas_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
-             substance text NOT NULL DEFAULT "",
+             substance text NOT NULL DEFAULT "" UNIQUE,
              carbon real NOT NULL, --C
              hydrogen real NOT NULL, -- H2
              nitrogen real NOT NULL, -- N2
@@ -393,7 +393,7 @@ void SQLite::create_tables()
     const std::string gas_flue_gas_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS gas_flue_gas_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
-             substance text NOT NULL DEFAULT "",
+             substance text NOT NULL DEFAULT "" UNIQUE,
              hydrogen real NOT NULL, -- H2
              methane real NOT NULL, -- CH4
              ethylene real NOT NULL, -- C2H4
