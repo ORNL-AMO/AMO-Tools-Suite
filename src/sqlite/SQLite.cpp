@@ -72,7 +72,7 @@ std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
     return get_all_objects<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_stmt, cb);
 }
 
-SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterial(int const id) const
+SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
@@ -101,7 +101,7 @@ std::vector<GasLoadChargeMaterial> SQLite::getGasLoadChargeMaterials() const
     return get_all_objects<GasLoadChargeMaterial>(m_gas_load_charge_materials_select_stmt, cb);
 }
 
-GasLoadChargeMaterial SQLite::getGasLoadChargeMaterial(int const id) const
+GasLoadChargeMaterial SQLite::getGasLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
@@ -130,7 +130,7 @@ std::vector<LiquidLoadChargeMaterial> SQLite::getLiquidLoadChargeMaterials() con
     return get_all_objects<LiquidLoadChargeMaterial>(m_liquid_load_charge_materials_select_stmt, cb);
 }
 
-LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterial(int const id) const
+LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
@@ -166,7 +166,7 @@ std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials()
     return get_all_objects<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_stmt, cb);
 }
 
-SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterial(int const id) const
+SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
@@ -209,7 +209,7 @@ std::vector<GasCompositions> SQLite::getGasFlueGasMaterials() const
     return get_all_objects<GasCompositions>(m_gas_flue_gas_materials_select_stmt, cb);
 }
 
-GasCompositions SQLite::getGasFlueGasMaterial(int const id) const
+GasCompositions SQLite::getGasFlueGasMaterialById(int id) const
 {
 
     auto cb = [] (sqlite3_stmt * stmt) {
