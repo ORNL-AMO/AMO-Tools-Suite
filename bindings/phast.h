@@ -7,12 +7,6 @@
 
 #include <nan.h>
 #include <node.h>
-
-using namespace Nan;
-using namespace v8;
-
-
-
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/FixtureLosses.h"
 #include "calculator/losses/GasFlueGasMaterial.h"
@@ -28,6 +22,10 @@ using namespace v8;
 #include "calculator/losses/SolidLoadChargeMaterial.h"
 #include "calculator/losses/WallLosses.h"
 #include "calculator/losses/WaterCoolingLosses.h"
+#include "calculator/losses/AuxiliaryPower.h"
+
+using namespace Nan;
+using namespace v8;
 
 Local<Object> inp;
 
@@ -71,6 +69,23 @@ NAN_METHOD(atmosphere) {
      double heatLoss = a.getTotalHeat();
      Local<Number> retval = Nan::New(heatLoss);
      info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(auxiliaryPowerLoss) {
+/**
+ * Constructor
+ * @param motorPhase current motor phase - this option is greyed out in PHAST 3.0
+ * @param supplyVoltage Volts
+ * @param avgCurrent average current in Amperes
+ * @param powerFactor average power factor value
+ * @param operatingTime percent operating time
+ * @return nothing
+ */
+    inp = info[0]->ToObject();
+    auto const ap = AuxiliaryPower(Get("motorPhase"), Get("supplyVoltage"), Get("avgCurrent"), Get("powerFactor"), Get("operatingTime"));
+    const double powerUsed = ap.getPowerUsed();
+    Local<Number> retval = Nan::New(powerUsed);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(fixtureLosses) {
