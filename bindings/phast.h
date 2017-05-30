@@ -60,15 +60,12 @@ NAN_METHOD(atmosphere) {
      * @return nothing
      *
      * */
-     double inletTemperature = info[0]->NumberValue();
-     double outletTemperature = info[1]->NumberValue();
-     double flowRate = info[2]->NumberValue();
-     double correctionFactor = info[3]->NumberValue();
-     double specificHeat = info[4]->NumberValue();
-     Atmosphere a(inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat);
-     double heatLoss = a.getTotalHeat();
-     Local<Number> retval = Nan::New(heatLoss);
-     info.GetReturnValue().Set(retval);
+
+    inp = info[0]->ToObject();
+    Atmosphere a(Get("inletTemperature"), Get("outletTemperature"), Get("flowRate"), Get("correctionFactor"), Get("specificHeat"));
+    double heatLoss = a.getTotalHeat();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(auxiliaryPowerLoss) {
@@ -100,15 +97,11 @@ NAN_METHOD(fixtureLosses) {
     *
     * @return heatLoss double
     */
-        double specificHeat = info[0]->NumberValue();
-        double feedRate = info[1]->NumberValue();
-        double initialTemperature = info[2]->NumberValue();
-        double finalTemperature = info[3]->NumberValue();
-        double correctionFactor = info[4]->NumberValue();
-        FixtureLosses fl(specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor);
-        double heatLoss = fl.getHeatLoss();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+    inp = info[0]->ToObject();
+    FixtureLosses fl(Get("specificHeat"), Get("feedRate"), Get("initialTemperature"), Get("finalTemperature"), Get("correctionFactor"));
+    double heatLoss = fl.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(flueGasLossesByVolume) {
@@ -174,15 +167,11 @@ NAN_METHOD(gasCoolingLosses) {
   *
   * @return heatLoss double
   * */
-        double flowRate = info[0]->NumberValue();
-        double initialTemperature = info[1]->NumberValue();
-        double finalTemperature = info[2]->NumberValue();
-        double specificHeat = info[3]->NumberValue();
-        double correctionFactor = info[4]->NumberValue();
-        GasCoolingLosses gcl(flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor);
-        double heatLoss = gcl.getHeatLoss();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+    inp = info[0]->ToObject();
+    GasCoolingLosses gcl(Get("flowRate"), Get("initialTemperature"), Get("finalTemperature"), Get("specificHeat"), Get("correctionFactor"));
+    double heatLoss = gcl.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(gasLoadChargeMaterial) {
@@ -203,27 +192,18 @@ NAN_METHOD(gasLoadChargeMaterial) {
  * @return heatLoss double
  *
  * */
-        LoadChargeMaterial::ThermicReactionType thermicReactionType;
-        int trt = info[0]->NumberValue();
-        if (trt == 0) {
-            thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
-        } else {
-            thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
-        }
-        double specificHeatGas = info[1]->NumberValue();
-        double feedRate = info[2]->NumberValue();
-        double percentVapor = info[3]->NumberValue();
-        double initialTemperature = info[4]->NumberValue();
-        double dischargeTemperature = info[5]->NumberValue();
-        double specificHeatVapor = info[6]->NumberValue();
-        double percentReacted = info[7]->NumberValue();
-        double reactionHeat = info[8]->NumberValue();
-        double additionalHeat = info[9]->NumberValue();
-        GasLoadChargeMaterial glcm(thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor,
-        percentReacted, reactionHeat, additionalHeat);
-        double heatLoss = glcm.getTotalHeat();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+    inp = info[0]->ToObject();
+    LoadChargeMaterial::ThermicReactionType thermicReactionType;
+    if (Get("thermicReactionType") == 0) {
+        thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
+    } else {
+        thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
+    }
+    GasLoadChargeMaterial glcm(thermicReactionType, Get("specificHeatGas"), Get("feedRate"), Get("percentVapor"), Get("initialTemperature"),
+                               Get("dischargeTemperature"), Get("specificHeatVapor"), Get("percentReacted"), Get("reactionHeat"), Get("additionalHeat"));
+    double heatLoss = glcm.getTotalHeat();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(leakageLosses) {
@@ -238,17 +218,12 @@ NAN_METHOD(leakageLosses) {
      * @param correctionFactor
      * @return nothing
      */
-        double draftPressure = info[0]->NumberValue();
-        double openingArea = info[1]->NumberValue();
-        double leakageGasTemperature = info[2]->NumberValue();
-        double ambientTemperature = info[3]->NumberValue();
-        double coefficient = info[4]->NumberValue();
-        double specificGravity = info[5]->NumberValue();
-        double correctionFactor = info[6]->NumberValue();
-        LeakageLosses ll(draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor);
-        double heatLoss = ll.getExfiltratedGasesHeatContent();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+    inp = info[0]->ToObject();
+    LeakageLosses ll(Get("draftPressure"), Get("openingArea"), Get("leakageGasTemperature"), Get("ambientTemperature"),
+                     Get("coefficient"), Get("specificGravity"), Get("correctionFactor"));
+    double heatLoss = ll.getExfiltratedGasesHeatContent();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(liquidCoolingLosses) {
@@ -262,16 +237,12 @@ NAN_METHOD(liquidCoolingLosses) {
  * @param correctionFactor Correction factor double
  * @return heatLoss double
  */
-        double flowRate = info[0]->NumberValue();
-        double density = info[1]->NumberValue();
-        double initialTemperature = info[2]->NumberValue();
-        double outletTemperature = info[3]->NumberValue();
-        double specificHeat = info[4]->NumberValue();
-        double correctionFactor = info[5]->NumberValue();
-        LiquidCoolingLosses lcl(flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor);
-        double heatLoss = lcl.getHeatLoss();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+    inp = info[0]->ToObject();
+    LiquidCoolingLosses lcl(Get("flowRate"), Get("density"), Get("initialTemperature"), Get("outletTemperature"),
+                            Get("specificHeat"), Get("correctionFactor"));
+    double heatLoss = lcl.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(liquidLoadChargeMaterial) {
@@ -293,30 +264,19 @@ NAN_METHOD(liquidLoadChargeMaterial) {
          * @return heatLoss double
          * */
 
-        LoadChargeMaterial::ThermicReactionType thermicReactionType;
-        int trt = info[0]->NumberValue();
-        if (trt == 0) {
-            thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
-        } else {
-            thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
-        }
-        double specificHeatLiquid = info[1]->NumberValue();
-        double vaporizingTemperature = info[2]->NumberValue();
-        double latentHeat = info[3]->NumberValue();
-        double specificHeatVapor = info[4]->NumberValue();
-        double chargeFeedRate = info[5]->NumberValue();
-        double initialTemperature = info[6]->NumberValue();
-        double dischargeTemperature = info[7]->NumberValue();
-        double percentVaporized = info[8]->NumberValue();
-        double percentReacted = info[9]->NumberValue();
-        double reactionHeat = info[10]->NumberValue();
-        double additionalHeat = info[11]->NumberValue();
-        LiquidLoadChargeMaterial llcm(thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat,
-        specificHeatVapor, chargeFeedRate, initialTemperature,
-        dischargeTemperature, percentVaporized, percentReacted, reactionHeat, additionalHeat);
-        double heatLoss = llcm.getTotalHeat();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+    inp = info[0]->ToObject();
+    LoadChargeMaterial::ThermicReactionType thermicReactionType;
+    if (Get("thermicReactionType") == 0) {
+        thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
+    } else {
+        thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
+    }
+    LiquidLoadChargeMaterial llcm(thermicReactionType, Get("specificHeatLiquid"), Get("vaporizingTemperature"), Get("latentHeat"),
+                                  Get("specificHeatVapor"), Get("chargeFeedRate"), Get("initialTemperature"), Get("dischargeTemperature"),
+                                  Get("percentVaporized"), Get("percentReacted"), Get("reactionHeat"), Get("additionalHeat"));
+    double heatLoss = llcm.getTotalHeat();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(openingLossesCircular) {
@@ -333,16 +293,9 @@ NAN_METHOD(openingLossesCircular) {
          * @param viewFactor
          * @return nothing
          */
-
-    double emissivity = info[0]->NumberValue();
-    double diameterLength = info[1]->NumberValue();
-    double thickness = info[2]->NumberValue();
-    double ratio = info[3]->NumberValue();
-    double ambientTemperature = info[4]->NumberValue();
-    double insideTemperature = info[5]->NumberValue();
-    double percentTimeOpen = info[6]->NumberValue();
-    double viewFactor = info[7]->NumberValue();
-    OpeningLosses ol(emissivity, diameterLength, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
+    inp = info[0]->ToObject();
+    OpeningLosses ol(Get("emissivity"), Get("diameterLength"), Get("thickness"), Get("ratio"), Get("ambientTemperature"),
+                     Get("insideTemperature"), Get("percentTimeOpen"), Get("viewFactor"));
     double heatLoss = ol.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
@@ -363,21 +316,12 @@ NAN_METHOD(openingLossesQuad) {
          * @param viewFactor
          * @return heatLoss
          */
-
-        double emissivity = info[0]->NumberValue();
-        double length = info[1]->NumberValue();
-        double widthHeight = info[2]->NumberValue();
-        double thickness = info[3]->NumberValue();
-        double ratio = info[4]->NumberValue();
-        double ambientTemperature = info[5]->NumberValue();
-        double insideTemperature = info[6]->NumberValue();
-        double percentTimeOpen = info[7]->NumberValue();
-        double viewFactor = info[8]->NumberValue();
-        OpeningLosses ol(emissivity, length, widthHeight, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
-        double heatLoss = ol.getHeatLoss();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
-
+    inp = info[0]->ToObject();
+    OpeningLosses ol(Get("emissivity"), Get("length"), Get("widthHeight"), Get("thickness"), Get("ratio"),
+                     Get("ambientTemperature"), Get("insideTemperature"), Get("percentTimeOpen"), Get("viewFactor"));
+    double heatLoss = ol.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(slagOtherMaterialLosses) {
@@ -392,15 +336,12 @@ NAN_METHOD(slagOtherMaterialLosses) {
         * @return heatLoss
         *
         * */
-        double weight = info[0]->NumberValue();
-        double inletTemperature = info[1]->NumberValue();
-        double outletTemperature = info[2]->NumberValue();
-        double specificHeat = info[3]->NumberValue();
-        double correctionFactor = info[4]->NumberValue();
-        SlagOtherMaterialLosses sl(weight, inletTemperature, outletTemperature, specificHeat, correctionFactor);
-        double heatLoss = sl.getHeatLoss();
-        Local<Number> retval = Nan::New(heatLoss);
-        info.GetReturnValue().Set(retval);
+// TODO add a c++ unit test for this
+    inp = info[0]->ToObject();
+    SlagOtherMaterialLosses sl(Get("weight"), Get("inletTemperature"), Get("outletTemperature"), Get("specificHeat"), Get("correctionFactor"));
+    double heatLoss = sl.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(solidLoadChargeMaterial) {
@@ -425,28 +366,14 @@ NAN_METHOD(solidLoadChargeMaterial) {
  *
  * */
 
+    inp = info[0]->ToObject();
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
-    int trt = info[0]->NumberValue();
-    if (trt == 0) {
+    if (Get("thermicReactionType") == 0) {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
     }
-    double specificHeatSolid = info[1]->NumberValue();
-    double latentHeat = info[2]->NumberValue();
-    double specificHeatLiquid = info[3]->NumberValue();
-    double meltingPoint = info[4]->NumberValue();
-    double chargeFeedRate = info[5]->NumberValue();
-    double waterContentCharged = info[6]->NumberValue();
-    double waterContentDischarged = info[7]->NumberValue();
-    double initialTemperature = info[8]->NumberValue();
-    double dischargeTemperature = info[9]->NumberValue();
-    double waterVaporDischargeTemperature = info[10]->NumberValue();
-    double chargeMelted = info[11]->NumberValue();
-    double chargedReacted = info[12]->NumberValue();
-    double reactionHeat = info[13]->NumberValue();
-    double additionalHeat = info[14]->NumberValue();
-    SolidLoadChargeMaterial slcm(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat);
+    SolidLoadChargeMaterial slcm(thermicReactionType, Get("specificHeatSolid"), Get("latentHeat"), Get("specificHeatLiquid"), Get("meltingPoint"), Get("chargeFeedRate"), Get("waterContentCharged"), Get("waterContentDischarged"), Get("initialTemperature"), Get("dischargeTemperature"), Get("waterVaporDischargeTemperature"), Get("chargeMelted"), Get("chargedReacted"), Get("reactionHeat"), Get("additionalHeat"));
     double heatLoss = slcm.getTotalHeat();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
@@ -465,14 +392,9 @@ NAN_METHOD(wallLosses) {
   * @param correctionFactor double
   * @return heatLoss double
   */
-    double surfaceArea = info[0]->NumberValue();
-    double ambientTemperature = info[1]->NumberValue();
-    double surfaceTemperature = info[2]->NumberValue();
-    double windVelocity = info[3]->NumberValue();
-    double surfaceEmissivity = info[4]->NumberValue();
-    double conditionFactor = info[5]->NumberValue();
-    double correctionFactor = info[6]->NumberValue();
-    WallLosses wl(surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor);
+    inp = info[0]->ToObject();
+    WallLosses wl(Get("surfaceArea"), Get("ambientTemperature"), Get("surfaceTemperature"), Get("windVelocity"),
+                  Get("surfaceEmissivity"), Get("conditionFactor"), Get("correctionFactor"));
     double heatLoss = wl.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
@@ -487,12 +409,8 @@ NAN_METHOD(waterCoolingLosses) {
      * @param correctionFactor Correction factor
      * @return nothing
      */
-
-    double flowRate = info[0]->NumberValue();
-    double initialTemperature = info[1]->NumberValue();
-    double outletTemperature = info[2]->NumberValue();
-    double correctionFactor = info[3]->NumberValue();
-    WaterCoolingLosses wcl(flowRate, initialTemperature, outletTemperature, correctionFactor);
+    inp = info[0]->ToObject();
+    WaterCoolingLosses wcl(Get("flowRate"), Get("initialTemperature"), Get("outletTemperature"), Get("correctionFactor"));
     double heatLoss = wcl.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
