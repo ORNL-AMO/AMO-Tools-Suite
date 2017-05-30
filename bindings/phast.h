@@ -336,7 +336,6 @@ NAN_METHOD(slagOtherMaterialLosses) {
         * @return heatLoss
         *
         * */
-// TODO add a c++ unit test for this
     inp = info[0]->ToObject();
     SlagOtherMaterialLosses sl(Get("weight"), Get("inletTemperature"), Get("outletTemperature"), Get("specificHeat"), Get("correctionFactor"));
     double heatLoss = sl.getHeatLoss();

@@ -174,6 +174,24 @@ test('openingLosses - both circular and quad', function (t) {
     t.equal(res, 18670.2258869289, res + ' != 18670.2258869289');
 });
 
+test('slagOtherMaterialLosses', function (t) {
+    t.plan(3);
+    t.type(bindings.slagOtherMaterialLosses, 'function');
+
+    var inp = {
+        weight: 3, inletTemperature: 500, outletTemperature: 550, specificHeat: 0.2479, correctionFactor: 1.0
+    };
+
+    var res = bindings.slagOtherMaterialLosses(inp);
+    t.equal(res, 37.185, res + ' != 37.185');
+
+    inp = {
+        weight: 10, inletTemperature: 725, outletTemperature: 850, specificHeat: 0.033, correctionFactor: 0.8
+    };
+    res = bindings.slagOtherMaterialLosses(inp);
+    t.equal(res, 33.0, res + ' != 33.0');
+});
+
 test('solidLoadChargeMaterial', function (t) {
     t.plan(2);
     t.type(bindings.solidLoadChargeMaterial, 'function');
