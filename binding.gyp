@@ -108,31 +108,6 @@
                     'cflags_cc': ['-fexceptions']
                 }]
             ]
-        },
-		{
-            "target_name": "losses",
-            'include_dirs': ['include', 'include/calculator/losses',
-                "<!(node -e \"require('nan')\")"
-             ],
-            'sources' : [
-                'bindings/phast.cpp',
-                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
-            ],
-            "conditions": [
-                [ 'OS=="mac"', {
-                    "xcode_settings": {
-                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
-                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
-                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
-                        'CLANG_CXX_LIBRARY': 'libc++',
-                        'GCC_ENABLE_CPP_RTTI': 'YES',
-                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
-                    },
-                }],
-                [ 'OS=="linux"', {
-                    'cflags_cc': ['-fexceptions']
-                }]
-            ]
         }
     ]
 }

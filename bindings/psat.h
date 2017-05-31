@@ -9,11 +9,6 @@
 #include <nan.h>
 #include <node.h>
 #include <vector>
-
-using namespace Nan;
-using namespace v8;
-
-
 #include "psat/PSATResult.h"
 #include "psat/Motor.h"
 #include "psat/Pump.h"
@@ -25,6 +20,10 @@ using namespace v8;
 #include "calculator/pump/OptimalSpecificSpeedCorrection.h"
 #include "calculator/pump/OptimalDeviationFactor.h"
 #include "calculator/pump/HeadTool.h"
+
+using namespace Nan;
+using namespace v8;
+
 //
 //// Setup
 //

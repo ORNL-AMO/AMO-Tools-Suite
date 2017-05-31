@@ -1,6 +1,6 @@
 
 #include <nan.h>
-#include "losses.h"
+#include "phast.h"
 
 using namespace Nan;
 
@@ -9,7 +9,10 @@ NAN_MODULE_INIT(InitPhast) {
     // PHAST Losses
     Nan::Set(target, New<String>("atmosphere").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(atmosphere)).ToLocalChecked());
-             
+
+    Nan::Set(target, New<String>("auxiliaryPowerLoss").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(auxiliaryPowerLoss)).ToLocalChecked());
+
     Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
 
