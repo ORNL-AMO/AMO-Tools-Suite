@@ -94,7 +94,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
 	    CHECK( expected.getGasByVol("O2") == outputs[6].getGasByVol("O2") );
     }
 
-    {
+  /*  {
         auto const output = sqlite.getGasFlueGasMaterialById(3);
         GasCompositions expected("Natural Gas Ohio", 93.33, 0.25, 3.4, 1.82, 0, 0, 0, 0.45, 0.22, 0, 0.35);
         expected.setID(3);
@@ -110,13 +110,53 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+    }*/
+
+    {
+        auto const outputs = sqlite.getGasFlueGasMaterials();
+        CHECK( outputs.size() == 7 );
+        GasCompositions expected("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
+        expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == outputs[6].getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == outputs[6].getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == outputs[6].getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == outputs[6].getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[6].getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == outputs[6].getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == outputs[6].getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == outputs[6].getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == outputs[6].getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == outputs[6].getGasByVol("O2") );
     }
+
+    {
+        auto const outputs = sqlite.getGasFlueGasMaterials();
+        CHECK( outputs.size() == 7 );
+        GasCompositions expected("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
+        expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == outputs[6].getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == outputs[6].getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == outputs[6].getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == outputs[6].getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[6].getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == outputs[6].getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == outputs[6].getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == outputs[6].getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == outputs[6].getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == outputs[6].getGasByVol("O2") );
+    }
+
+
 }
 
 TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
 
-    {
+   /* {
         auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
         CHECK( outputs.size() == 19 );
         auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 63.3, 4.5, 1.0, 1.1, 19.0, 0, 11.1);
@@ -147,5 +187,107 @@ TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getO2() == output.getO2() );
         CHECK( expected.getMoisture() == output.getMoisture() );
         CHECK( expected.getNitrogen() == output.getNitrogen() );
+    }*/
+
+   {
+        auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
+        CHECK( outputs.size() == 19 );
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 70.3, 4.9, 2.2, 8.7, 7.5, 4.9, 1.5);
+        expected.setSubstance("Typical Bituminous Coal - US");
+        expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getCarbon() == outputs[6].getCarbon() );
+        CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
+        CHECK( expected.getSulphur() == outputs[6].getSulphur() );
+        CHECK( expected.getInertAsh() == outputs[6].getInertAsh() );
+        CHECK( expected.getO2() == outputs[6].getO2() );
+        CHECK( expected.getMoisture() == outputs[6].getMoisture() );
+        CHECK( expected.getNitrogen() == outputs[6].getNitrogen() );
+    }
+
+    {
+        auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
+        CHECK( outputs.size() == 19 );
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 77.7, 1.8, 0.7, 9.8, 2.1, 7.1, 0.8);
+        expected.setSubstance("Typical Anthracite - US");
+        expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getCarbon() == outputs[6].getCarbon() );
+        CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
+        CHECK( expected.getSulphur() == outputs[6].getSulphur() );
+        CHECK( expected.getInertAsh() == outputs[6].getInertAsh() );
+        CHECK( expected.getO2() == outputs[6].getO2() );
+        CHECK( expected.getMoisture() == outputs[6].getMoisture() );
+        CHECK( expected.getNitrogen() == outputs[6].getNitrogen() );
+    }
+
+    {
+        auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
+        CHECK( outputs.size() == 19 );
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 47.5, 3.4, 0.8, 8.3, 14.2, 25, 0.8);
+        expected.setSubstance("Typical Lignite - US");
+        expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getCarbon() == outputs[6].getCarbon() );
+        CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
+        CHECK( expected.getSulphur() == outputs[6].getSulphur() );
+        CHECK( expected.getInertAsh() == outputs[6].getInertAsh() );
+        CHECK( expected.getO2() == outputs[6].getO2() );
+        CHECK( expected.getMoisture() == outputs[6].getMoisture() );
+        CHECK( expected.getNitrogen() == outputs[6].getNitrogen() );
+    }
+
+    {
+        auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
+        CHECK( outputs.size() == 19 );
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 86.6, 12.8, 0.5, 0, 0, 0, 0.1);
+        expected.setSubstance("Fuel Oil #2");
+        expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getCarbon() == outputs[6].getCarbon() );
+        CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
+        CHECK( expected.getSulphur() == outputs[6].getSulphur() );
+        CHECK( expected.getInertAsh() == outputs[6].getInertAsh() );
+        CHECK( expected.getO2() == outputs[6].getO2() );
+        CHECK( expected.getMoisture() == outputs[6].getMoisture() );
+        CHECK( expected.getNitrogen() == outputs[6].getNitrogen() );
+    }
+
+    {
+        auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
+        CHECK( outputs.size() == 19 );
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 87.1, 10.6, 2.1, 0.2, 0, 0, 0);
+        expected.setSubstance("Fuel Oil #6");
+        expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getCarbon() == outputs[6].getCarbon() );
+        CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
+        CHECK( expected.getSulphur() == outputs[6].getSulphur() );
+        CHECK( expected.getInertAsh() == outputs[6].getInertAsh() );
+        CHECK( expected.getO2() == outputs[6].getO2() );
+        CHECK( expected.getMoisture() == outputs[6].getMoisture() );
+        CHECK( expected.getNitrogen() == outputs[6].getNitrogen() );
+    }
+
+    {
+        auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
+        CHECK( outputs.size() == 19 );
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 51.7, 5.4, 0.1, 3.1, 39.5, 0, 0.2);
+        expected.setSubstance("Typical Wood");
+        expected.setID(7);
+        CHECK( expected.getID() == outputs[6].getID() );
+        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
+        CHECK( expected.getCarbon() == outputs[6].getCarbon() );
+        CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
+        CHECK( expected.getSulphur() == outputs[6].getSulphur() );
+        CHECK( expected.getInertAsh() == outputs[6].getInertAsh() );
+        CHECK( expected.getO2() == outputs[6].getO2() );
+        CHECK( expected.getMoisture() == outputs[6].getMoisture() );
+        CHECK( expected.getNitrogen() == outputs[6].getNitrogen() );
     }
 }
