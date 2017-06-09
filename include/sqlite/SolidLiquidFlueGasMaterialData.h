@@ -5,7 +5,7 @@ class SolidLiquidFlueGasMaterial;
 
 std::vector<SolidLiquidFlueGasMaterial> SQLite::get_default_solid_liquid_flue_gas_materials() {
     return {
-            {"Anthracite", 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5},
+           /* {"Anthracite", 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5},
             {"Pittsburgh #8 Bituminous, Oh or Pa", 74.0, 5.1, 1.6, 2.3, 7.9, 0, 9.1},
             {"Illinois #6 Bituminous, Illinois", 69.0, 4.9, 1.0, 4.3, 10.0, 0, 10.8},
             {"Upper Freeport Bituminous, Pennsylvania", 74.9, 4.7, 1.27, 0.76, 4.97, 0, 13.4},
@@ -24,6 +24,13 @@ std::vector<SolidLiquidFlueGasMaterial> SQLite::get_default_solid_liquid_flue_ga
             {"Oak Bark", 49.7, 5.4, 0.2, 0.1, 39.3, 0, 5.3},
             {"Spruce Bark*", 51.8, 5.7, 0.2, 0.1, 38.4, 0, 3.8},
             {"Redwood Bark*", 51.9, 5.1, 0.1, 0.1, 42.4, 0, 0.4}
+            */
+            {"Typical Bituminous Coal - US", 70.3, 4.9, 2.2, 8.7, 7.5, 4.9, 1.5},
+            {"Typical Anthracite - US", 77.7, 1.8, 0.7, 9.8, 2.1, 7.1, 0.8},
+            {"Typical Lignite - US", 47.5, 3.4, 0.8, 8.3, 14.2, 25, 0.8},
+            {"Fuel Oil #2", 86.6, 12.8, 0.5, 0, 0, 0, 0.1},
+            {"Fuel Oil #6", 87.1, 10.6, 2.1, 0.2, 0, 0, 0},
+            {"Typical Wood", 51.7, 5.4, 0.1, 3.1, 39.5, 0, 0.2}
     };
 }
 
