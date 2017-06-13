@@ -20,7 +20,7 @@ option( BUILD_TESTING "Build testing targets" ON )
 
 # Build C++ documentation using Doxygen
 # Requires: doxygen
-#option( BUILD_DOCUMENTATION "Build Documentation" OFF )
+option( BUILD_DOCUMENTATION "Build Documentation" ON )
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -100,7 +100,7 @@ set(SOURCE_FILES
         src/calculator/losses/GasFlueGasMaterial.cpp
         src/phast/Furnace.cpp
         src/calculator/pump/HeadTool.cpp
-        src/calculator/losses/ElectricArcFurnaceEAF.cpp
+        src/calculator/losses/EnergyInputEAF.cpp
         src/calculator/losses/SlagOtherMaterialLosses.cpp src/calculator/losses/SolidLiquidFlueGasMaterial.cpp src/calculator/losses/AuxiliaryPower.cpp)
 
 set(INCLUDE_FILES
@@ -156,7 +156,7 @@ set(INCLUDE_FILES
         include/sqlite/LiquidLoadChargeMaterialData.h
         include/sqlite/SolidLiquidFlueGasMaterialData.h
         include/sqlite/GasFlueGasMaterialData.h
-        include/calculator/losses/ElectricArcFurnaceEAF.h
+        include/calculator/losses/EnergyInputEAF.h
         include/calculator/losses/SlagOtherMaterialLosses.h include/calculator/losses/SolidLiquidFlueGasMaterial.h include/calculator/losses/AuxiliaryPower.h)
 
 set(TEST_FILES
@@ -175,7 +175,7 @@ set(TEST_FILES
         tests/OpeningLosses.unit.cpp
         tests/GasFlueGasMaterial.unit.cpp
         tests/HeadTool.unit.cpp
-        tests/ElectricArcFurnaceEAF.unit.cpp
+        tests/EnergyInputEAF.unit.cpp
         tests/SQLite.unit.cpp tests/SolidLiquidFlueGasMaterial.unit.cpp tests/AuxiliaryPower.unit.cpp tests/SlagOtherMaterialLosses.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
@@ -212,10 +212,21 @@ if( BUILD_TESTING )
     add_executable(amo_tools_suite_tests tests/main.unit.cpp ${TEST_FILES})
     target_link_libraries( amo_tools_suite_tests Catch amo_tools_suite )
 endif()
-
-# if(BUILD_DOCUMENTATION)
-#   find_package(Doxygen REQUIRED)
-# endif()
+#SET(doxyfile_in Doxyfile)
+#if(BUILD_DOCUMENTATION)
+#    find_package(Doxygen REQUIRED)
+#set(doxyfile_in ${CMAKE_SOURCE_DIR}/doxyfile)
+#set(doxyfile ${CMAKE_BINARY_DIR}/doxyfile)
+#add_custom_target(
+#            doc ALL
+#            COMMAND
+#            $<$<CONFIG:Release>:${DOXYGEN_EXECUTABLE} ${doxyfile_in}>
+#            $<$<NOT:$<CONFIG:Release>>:${CMAKE_COMMAND} -E echo "Only done in Release builds" >
+#            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/doc
+#            COMMENT "Generating API documentation with Doxygen"
+#            VERBATIM
+#    )
+#endif()
 
 if( BUILD_PACKAGE )
   set(CPACK_INSTALL_CMAKE_PROJECTS

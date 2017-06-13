@@ -9,7 +9,7 @@
 #include <node.h>
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/AuxiliaryPower.h"
-#include "calculator/losses/ElectricArcFurnaceEAF.h"
+#include "calculator/losses/EnergyInputEAF.h"
 #include "calculator/losses/FixtureLosses.h"
 #include "calculator/losses/GasFlueGasMaterial.h"
 #include "calculator/losses/SolidLiquidFlueGasMaterial.h"

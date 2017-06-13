@@ -1,30 +1,30 @@
 /**
  * @file
- * @brief Contains the implementation of the electric arc furnace EAF loss calculator.
+ * @brief Contains the implementation of the energy input EAF loss calculator.
  *
  * @author Autumn Ferree (ferreeak)
  * @bug No known bugs.
  *
  */
-#include "calculator/losses/ElectricArcFurnaceEAF.h"
+#include "calculator/losses/EnergyInputEAF.h"
 
-double ElectricArcFurnaceEAF::getNaturalGasHeat() {
+double EnergyInputEAF::getNaturalGasHeat() {
     this->naturalGasHeat_ = (this->naturalGasFlow_)*0.00102;
     return this->naturalGasHeat_;
 }
 
-double ElectricArcFurnaceEAF::getCoalHeatContent(){
+double EnergyInputEAF::getCoalHeatContent(){
     this->coalHeatContent_ = (this->coalHeatingValue_)*(this->coalCarbonInjection_)/1000000;
     return this->coalHeatContent_;
 
 }
 
-double ElectricArcFurnaceEAF::getElectrodeHeatContent(){
+double EnergyInputEAF::getElectrodeHeatContent(){
     this->electrodeHeatContent_ = (this->electrodeUse_)*(this->electrodeHeatingValue_)/1000000;
     return this->electrodeHeatContent_;
 }
 
-double ElectricArcFurnaceEAF::getTotalChemicalEnergyInput(){
+double EnergyInputEAF::getTotalChemicalEnergyInput(){
     double coalHeatContent = getCoalHeatContent();
     double electrodeHeatContent = getElectrodeHeatContent();
     this->totalChemicalEnergyInput_ = (this->naturalGasHeatInput_) + coalHeatContent + electrodeHeatContent + (this->otherFuels_);
@@ -32,14 +32,14 @@ double ElectricArcFurnaceEAF::getTotalChemicalEnergyInput(){
 
 }
 
-double ElectricArcFurnaceEAF::getKwhCycle(){
+double EnergyInputEAF::getKwhCycle(){
     double totalChemicalEnergyInput = getTotalChemicalEnergyInput();
     this->kwhCycle_ = totalChemicalEnergyInput*(293.0832356);
     return this->kwhCycle_;
 
 }
 
-double ElectricArcFurnaceEAF::getHeatDelivered(){
+double EnergyInputEAF::getHeatDelivered(){
     double naturalGasHeat = getNaturalGasHeat();
     double coalHeatContent = getCoalHeatContent();
     double electrodeHeatContent = getElectrodeHeatContent();
@@ -47,7 +47,7 @@ double ElectricArcFurnaceEAF::getHeatDelivered(){
     return this->heatDelivered_;
 }
 
-double ElectricArcFurnaceEAF::getTotalKwhPerCycle(){
+double EnergyInputEAF::getTotalKwhPerCycle(){
     double kwhCycle = getKwhCycle();
     this->totalKwhPerCycle_ = kwhCycle + (this->electricityInput_);
     return this->totalKwhPerCycle_;

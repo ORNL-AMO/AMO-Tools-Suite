@@ -10,14 +10,14 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_ELECTRICARCFURNACEEAF_H
-#define AMO_TOOLS_SUITE_ELECTRICARCFURNACEEAF_H
+#ifndef AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
+#define AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
 
 
-class ElectricArcFurnaceEAF {
+class EnergyInputEAF {
     public:
     /**
-     * Constructor for the Electric Arc Furnace (EAF) heat loss with all inputs specified
+     * Constructor for the energy input EAF heat loss with all inputs specified
      *
      * @param naturalGasHeatInput value of total heat input to the heating system (furnace/oven) from all
      *                              sources of heat supplied (natural gas, carbon, fuel oil, etc.)
@@ -33,7 +33,7 @@ class ElectricArcFurnaceEAF {
      * @return nothing
      *
      * */
-    ElectricArcFurnaceEAF(
+    EnergyInputEAF(
             double naturalGasHeatInput,
             double naturalGasFlow,
             double measuredOxygenFlow,
@@ -63,7 +63,7 @@ class ElectricArcFurnaceEAF {
         totalKwhPerCycle_ = 0.0;
     }
 
-    ElectricArcFurnaceEAF() = default;
+    EnergyInputEAF() = default;
 
     double getNaturalGasHeatInput() const {
         return naturalGasHeatInput_;
@@ -202,4 +202,4 @@ private:
     double heatDelivered_;
     double totalKwhPerCycle_;
 };
-#endif //AMO_TOOLS_SUITE_ELECTRICARCFURNACEEAF_H
+#endif //AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
