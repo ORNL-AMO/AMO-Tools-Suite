@@ -8,6 +8,8 @@
 #include <nan.h>
 #include <node.h>
 #include "calculator/losses/Atmosphere.h"
+#include "calculator/losses/AuxiliaryPower.h"
+#include "calculator/losses/ElectricArcFurnaceEAF.h"
 #include "calculator/losses/FixtureLosses.h"
 #include "calculator/losses/GasFlueGasMaterial.h"
 #include "calculator/losses/SolidLiquidFlueGasMaterial.h"
@@ -22,12 +24,13 @@
 #include "calculator/losses/SolidLoadChargeMaterial.h"
 #include "calculator/losses/WallLosses.h"
 #include "calculator/losses/WaterCoolingLosses.h"
-#include "calculator/losses/AuxiliaryPower.h"
+
 
 using namespace Nan;
 using namespace v8;
 
 Local<Object> inp;
+Local<Object> r;
 
 double Get(const char *nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
@@ -36,6 +39,12 @@ double Get(const char *nm) {
         assert(!"defined");
     }
     return rObj->NumberValue();
+}
+
+void SetR(const char *nm, double n) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    Local<Number> getNum = Nan::New<Number>(n);
+    Nan::Set(r, getName, getNum);
 }
 
 /**********************
@@ -84,6 +93,39 @@ NAN_METHOD(auxiliaryPowerLoss) {
     Local<Number> retval = Nan::New(powerUsed);
     info.GetReturnValue().Set(retval);
 }
+
+
+NAN_METHOD(energyInput) {
+
+/**
+     * Constructor for the Electric Arc Furnace (EAF) heat loss with all inputs specified
+     *
+     * @param naturalGasHeatInput value of total heat input to the heating system (furnace/oven) from all
+     *                              sources of heat supplied (natural gas, carbon, fuel oil, etc.)
+     *                              measured in mm btu/cycle
+     * @param naturalGasFlow natural gas flow measured in cu.ft/cycle
+     * @param measuredOxygenFlow oxygen flow to the furnace measured in scfh
+     * @param coalCarbonInjection mass of coal or carbon injection for the cycle measured in lbs/cycle
+     * @param coalHeatingValue heating value for the coal or carbon injected measured in btu/lb
+     * @param electrodeUse electrode use measured in lbs/cycle
+     * @param electrodeHeatingValue electrode heating value measured in btu/lb
+     * @param otherFuels heat supplied from other sources, if any, measured in mm btu/cycle
+     * @param electricityInput total electric power supplied for the cycle measured in kwh/cycle
+     * @return heatDelivered (btu/cycle)
+     *
+     * */
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    ElectricArcFurnaceEAF eaf(Get("naturalGasHeatInput"), Get("naturalGasFlow"), Get("measuredOxygenFlow"), Get("coalCarbonInjection"), Get("coalHeatingValue"), Get("electrodeUse"), Get("electrodeHeatingValue"), Get("otherFuels"), Get("electricityInput"));
+    double heatDelivered = eaf.getHeatDelivered();
+    double kwhCycle = eaf.getKwhCycle();
+    double totalKwhCycle = eaf.getTotalKwhPerCycle();
+    SetR("heatDelivered", heatDelivered);
+    SetR("kwhCycle", kwhCycle);
+    SetR("totalKwhCycle", totalKwhCycle);
+    info.GetReturnValue().Set(r);
+}
+
 
 NAN_METHOD(fixtureLosses) {
 

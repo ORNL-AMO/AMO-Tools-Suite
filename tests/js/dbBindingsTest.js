@@ -129,18 +129,18 @@ test('dbGasFlueGasMaterial', function (t) {
 
     var obj = {
         id: 1,
-        substance: 'Natural Gas Pennsylvania',
-        CH4: 83.4,
-        C2H6: 15.8,
-        N2: 0.8,
-        H2: 0.0,
+        substance: 'Typical Natural Gas - US',
+        CH4: 87.0,
+        C2H6: 8.5,
+        N2: 3.6,
+        H2: 0.4,
         C3H8: 0.0,
         C4H10_CnH2n: 0.0,
         H2O: 0.0,
         CO: 0.0,
-        CO2: 0.0,
+        CO2: 0.4,
         SO2: 0.0,
-        O2: 0.0
+        O2: 0.1
     };
 
     t.equal(res.id, obj.id, res.id + " != " + obj.id);
@@ -154,7 +154,7 @@ test('dbGasFlueGasMaterial', function (t) {
     t.type(bindings.selectGasFlueGasMaterials, 'function');
     res = bindings.selectGasFlueGasMaterials();
     var obj2 = {
-        id: 7,
+        id: 3,
         substance: 'Blast Furnace Gas',
         CH4: 0.1,
         C2H6: 0.0,
@@ -169,20 +169,20 @@ test('dbGasFlueGasMaterial', function (t) {
         O2: 0.0
     };
 
-    t.equal(res.length, 7, "array is not of size 7");
-    t.equal(res[6].id, obj2.id, res[6].id + " != " + obj2.id);
-    t.equal(res[6].substance, obj2.substance, res[6].substance + " != " + obj2.substance);
-    t.equal(res[6].CH4, obj2.CH4, res[6].CH4 + " != " + obj2.CH4);
-    t.equal(res[6].C2H6, obj2.C2H6, res[6].C2H6 + " != " + obj2.C2H6);
-    t.equal(res[6].N2, obj2.N2, res[6].N2 + " != " + obj2.N2);
-    t.equal(res[6].H2, obj2.H2, res[6].H2 + " != " + obj2.H2);
-    t.equal(res[6].C3H8, obj2.C3H8, res[6].C3H8 + " != " + obj2.C3H8);
-    t.equal(res[6].C4H10_CnH2n, obj2.C4H10_CnH2n, res[6].C4H10_CnH2n + " != " + obj2.C4H10_CnH2n);
-    t.equal(res[6].H2O, obj2.H2O, res[6].H2O + " != " + obj2.H2O);
-    t.equal(res[6].CO, obj2.CO, res[6].CO + " != " + obj2.CO);
-    t.equal(res[6].CO2, obj2.CO2, res[6].CO2 + " != " + obj2.CO2);
-    t.equal(res[6].SO2, obj2.SO2, res[6].SO2 + " != " + obj2.SO2);
-    t.equal(res[6].O2, obj2.O2, res[6].O2 + " != " + obj2.O2);
+    t.equal(res.length, 3, "array is not of size 3");
+    t.equal(res[2].id, obj2.id, res[2].id + " != " + obj2.id);
+    t.equal(res[2].substance, obj2.substance, res[2].substance + " != " + obj2.substance);
+    t.equal(res[2].CH4, obj2.CH4, res[2].CH4 + " != " + obj2.CH4);
+    t.equal(res[2].C2H6, obj2.C2H6, res[2].C2H6 + " != " + obj2.C2H6);
+    t.equal(res[2].N2, obj2.N2, res[2].N2 + " != " + obj2.N2);
+    t.equal(res[2].H2, obj2.H2, res[2].H2 + " != " + obj2.H2);
+    t.equal(res[2].C3H8, obj2.C3H8, res[2].C3H8 + " != " + obj2.C3H8);
+    t.equal(res[2].C4H10_CnH2n, obj2.C4H10_CnH2n, res[2].C4H10_CnH2n + " != " + obj2.C4H10_CnH2n);
+    t.equal(res[2].H2O, obj2.H2O, res[2].H2O + " != " + obj2.H2O);
+    t.equal(res[2].CO, obj2.CO, res[2].CO + " != " + obj2.CO);
+    t.equal(res[2].CO2, obj2.CO2, res[2].CO2 + " != " + obj2.CO2);
+    t.equal(res[2].SO2, obj2.SO2, res[2].SO2 + " != " + obj2.SO2);
+    t.equal(res[2].O2, obj2.O2, res[2].O2 + " != " + obj2.O2);
 });
 
 test('dbSolidLiquidFlueGasMaterial', function (t) {
@@ -190,17 +190,17 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
     bindings.startup();
     t.type(bindings.selectSolidLiquidFlueGasMaterialById, 'function');
 
-    res = bindings.selectSolidLiquidFlueGasMaterialById(1);
+    res = bindings.selectSolidLiquidFlueGasMaterialById(2);
     var obj = {
-        id: 1,
-        substance: 'Anthracite',
-        carbon: 83.7 / 100,
-        hydrogen: 1.9 / 100,
-        sulphur: 0.9 / 100,
-        inertAsh: 0.7 / 100,
-        o2: 2.3 / 100,
-        moisture: 0 / 100,
-        nitrogen: 10.5 / 100
+        id: 2,
+        substance: 'Typical Anthracite - US',
+        carbon: 77.7 / 100,
+        hydrogen: 1.8 / 100,
+        sulphur: 0.7 / 100,
+        inertAsh: 9.8 / 100,
+        o2: 2.1 / 100,
+        moisture: 7.1 / 100,
+        nitrogen: 0.8 / 100
     };
 
     t.equal(res.id, obj.id, res.id + " != " + obj.id);
@@ -216,14 +216,14 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
     t.type(bindings.selectSolidLiquidFlueGasMaterials, 'function');
     res = bindings.selectSolidLiquidFlueGasMaterials();
 
-    t.equal(res.length, 19, "array is not of size 19");
-    t.equal(res[0].id, obj.id, res[0].id + " != " + obj.id);
-    t.equal(res[0].substance, obj.substance, res[0].substance + " != " + obj.substance);
-    t.equal(res[0].carbon, obj.carbon, res[0].carbon + " != " + obj.carbon);
-    t.equal(res[0].hydrogen, obj.hydrogen, res[0].hydrogen + " != " + obj.hydrogen);
-    t.equal(res[0].sulphur, obj.sulphur, res[0].sulphur + " != " + obj.sulphur);
-    t.equal(res[0].inertAsh, obj.inertAsh, res[0].inertAsh + " != " + obj.inertAsh);
-    t.equal(res[0].o2, obj.o2, res[0].o2 + " != " + obj.o2);
-    t.equal(res[0].moisture, obj.moisture, res[0].moisture + " != " + obj.moisture);
-    t.equal(res[0].nitrogen, obj.nitrogen, res[0].nitrogen + " != " + obj.nitrogen);
+    t.equal(res.length, 6, "array is not of size 6");
+    t.equal(res[1].id, obj.id, res[1].id + " != " + obj.id);
+    t.equal(res[1].substance, obj.substance, res[1].substance + " != " + obj.substance);
+    t.equal(res[1].carbon, obj.carbon, res[1].carbon + " != " + obj.carbon);
+    t.equal(res[1].hydrogen, obj.hydrogen, res[1].hydrogen + " != " + obj.hydrogen);
+    t.equal(res[1].sulphur, obj.sulphur, res[1].sulphur + " != " + obj.sulphur);
+    t.equal(res[1].inertAsh, obj.inertAsh, res[1].inertAsh + " != " + obj.inertAsh);
+    t.equal(res[1].o2, obj.o2, res[1].o2 + " != " + obj.o2);
+    t.equal(res[1].moisture, obj.moisture, res[1].moisture + " != " + obj.moisture);
+    t.equal(res[1].nitrogen, obj.nitrogen, res[1].nitrogen + " != " + obj.nitrogen);
 });
