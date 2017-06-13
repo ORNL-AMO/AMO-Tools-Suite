@@ -1,6 +1,6 @@
 set( CPACK_PACKAGE_VENDOR "US Department of Energy" )
 
-set(CPACK_PACKAGE_VENDOR "Oak Ridge Energy Laboratory")
+set(CPACK_PACKAGE_VENDOR "Oak Ridge National Laboratory")
 set(CPACK_PACKAGE_CONTACT "Gina Accawi <accawigk@ornl.gov>")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR}/Modules")
@@ -40,8 +40,8 @@ if( WIN32 AND NOT UNIX )
   endif()
 endif()
 
-# install(FILES "${CMAKE_SOURCE_DIR}/LICENSE.txt" DESTINATION "./")
-# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
+install(FILES "${CMAKE_SOURCE_DIR}/LICENSE.txt" DESTINATION "./")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
 
 install(TARGETS amo_tools_suite
         ARCHIVE

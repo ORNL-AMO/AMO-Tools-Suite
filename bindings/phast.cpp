@@ -16,6 +16,9 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("energyInput").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(energyInput)).ToLocalChecked());
+
     Nan::Set(target, New<String>("flueGasLossesByVolume").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(flueGasLossesByVolume)).ToLocalChecked());
 
