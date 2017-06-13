@@ -100,6 +100,7 @@ set(SOURCE_FILES
         src/calculator/losses/GasFlueGasMaterial.cpp
         src/phast/Furnace.cpp
         src/calculator/pump/HeadTool.cpp
+        src/calculator/losses/ElectricArcFurnaceEAF.cpp
         src/calculator/losses/SlagOtherMaterialLosses.cpp src/calculator/losses/SolidLiquidFlueGasMaterial.cpp src/calculator/losses/AuxiliaryPower.cpp)
 
 set(INCLUDE_FILES
@@ -155,6 +156,7 @@ set(INCLUDE_FILES
         include/sqlite/LiquidLoadChargeMaterialData.h
         include/sqlite/SolidLiquidFlueGasMaterialData.h
         include/sqlite/GasFlueGasMaterialData.h
+        include/calculator/losses/ElectricArcFurnaceEAF.h
         include/calculator/losses/SlagOtherMaterialLosses.h include/calculator/losses/SolidLiquidFlueGasMaterial.h include/calculator/losses/AuxiliaryPower.h)
 
 set(TEST_FILES
@@ -173,6 +175,7 @@ set(TEST_FILES
         tests/OpeningLosses.unit.cpp
         tests/GasFlueGasMaterial.unit.cpp
         tests/HeadTool.unit.cpp
+        tests/ElectricArcFurnaceEAF.unit.cpp
         tests/SQLite.unit.cpp tests/SolidLiquidFlueGasMaterial.unit.cpp tests/AuxiliaryPower.unit.cpp tests/SlagOtherMaterialLosses.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
