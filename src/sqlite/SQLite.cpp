@@ -60,7 +60,7 @@ std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
 	    auto const ID = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
         auto const latentHeat = sqlite3_column_double(stmt, 3);
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
@@ -76,7 +76,7 @@ SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
         auto const latentHeat = sqlite3_column_double(stmt, 3);
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
@@ -92,7 +92,7 @@ std::vector<GasLoadChargeMaterial> SQLite::getGasLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const ID = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatVapor = sqlite3_column_double(stmt, 2);
         auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
         glcm.setID(ID);
@@ -105,7 +105,7 @@ GasLoadChargeMaterial SQLite::getGasLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatVapor = sqlite3_column_double(stmt, 2);
         auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
         glcm.setID(id);
@@ -118,7 +118,7 @@ std::vector<LiquidLoadChargeMaterial> SQLite::getLiquidLoadChargeMaterials() con
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 2);
         auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto const vaporizingTemperature = sqlite3_column_double(stmt, 4);
@@ -134,7 +134,7 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 2);
         auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto const vaporizingTemperature = sqlite3_column_double(stmt, 4);
@@ -150,7 +150,7 @@ std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials()
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const carbon = sqlite3_column_double(stmt, 2);
         auto const hydrogen = sqlite3_column_double(stmt, 3);
         auto const sulphur = sqlite3_column_double(stmt, 4);
@@ -170,7 +170,7 @@ SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterialById(int id) con
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const carbon = sqlite3_column_double(stmt, 2);
         auto const hydrogen = sqlite3_column_double(stmt, 3);
         auto const sulphur = sqlite3_column_double(stmt, 4);
@@ -190,7 +190,7 @@ std::vector<GasCompositions> SQLite::getGasFlueGasMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const CH4 = sqlite3_column_double(stmt, 2);
         auto const C2H6 = sqlite3_column_double(stmt, 3);
         auto const N2 = sqlite3_column_double(stmt, 4);
@@ -214,7 +214,7 @@ GasCompositions SQLite::getGasFlueGasMaterialById(int id) const
 
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = SQLiteWrapper::convert_text(sqlite3_column_text(stmt, 1));
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
         auto const CH4 = sqlite3_column_double(stmt, 2);
         auto const C2H6 = sqlite3_column_double(stmt, 3);
         auto const N2 = sqlite3_column_double(stmt, 4);
