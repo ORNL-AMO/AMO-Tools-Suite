@@ -18,6 +18,7 @@
 class Pump {
 public:
 
+    ///enum class for pump styles
     enum class Style {
         END_SUCTION_SLURRY,
         END_SUCTION_SEWAGE,
@@ -32,10 +33,14 @@ public:
         LARGE_END_SUCTION,
         SPECIFIED_OPTIMAL_EFFICIENCY
     };
+
+    ///emun class for drive types
     enum class Drive {
         DIRECT_DRIVE,
         BELT_DRIVE
     };
+
+    ///enum class for speed types
     enum class Speed {
         FIXED_SPEED,
         NOT_FIXED_SPEED
@@ -75,61 +80,160 @@ public:
 
     Pump() = default;
 
+    /**
+     * Get the style of the pump being used
+     *
+     * @return Style, style of pump
+     */
     Style getStyle() {
         return style_;
     }
 
+    /**
+     * Set the style of pump being used
+     *
+     * @param style Style, style of pump
+     *
+     * @return nothing
+     */
     void setStyle(Style style) {
         style_ = style;
     }
+
+    /**
+     * Get the achievable efficiency of the pump at specified operating conditions
+     *
+     * @return double, achievable efficiency as %
+     */
     double getAchievableEfficiency(){
         return achievableEfficiency_;
     }
+
+    /**
+     * Set the achievable efficiency of the pump at specified operating conditons
+     *
+     * @param achievableEfficiency double, achievable efficiency as %
+     *
+     * @return nothing
+     */
     void setAchievableEfficiency(double achievableEfficiency){
         achievableEfficiency_ = achievableEfficiency;
     }
 
+    /**
+     * Get RPM of pump to define operation speed
+     *
+     * @return int, RPM
+     */
     int getRpm();
 
+    /**
+     * Set the RPM of pump to define operation speed
+     *
+     * @param rpm double, rpm
+     *
+     * @return nothing
+     */
     void setRpm(double rpm) {
         rpm_ = rpm;
     }
 
+    /**
+     * Get the type of drive the pump uses from either direct or belt drive
+     *
+     * @return Drive, drive type
+     */
     Drive getDrive() {
         return drive_;
     }
 
+    /**
+     * Set the type of drive the pump uses from either direct or belt drive
+     *
+     * @param drive Drive, drive type
+     *
+     * @return nothing
+     */
     void setDrive(Drive drive) {
         drive_ = drive;
     }
 
+    /**
+     * Get the kinematic viscosity of the fluid being pumped
+     *
+     * @return double, kinematic viscosity in centistokes
+     */
     double getKviscosity() {
         return kviscosity_;
     }
 
+    /**
+     * Set the kinematic viscosity of the fluid being pumped
+     *
+     * @param kviscosity double, kinematic viscosity in centistokes
+     *
+     * @return nothing
+     */
     void setKviscosity_(double kviscosity) {
         kviscosity_ = kviscosity;
     }
 
+    /**
+     * Get the specific gravity
+     *
+     * @return double, specific gravity - unitless
+     */
     double getSg() {
         return sg_;
     }
 
+    /**
+     * Set the specific gravity
+     *
+     * @param sg double, specific gravity - unitless
+     *
+     * @return nothing
+     */
     void setSg(double sg) {
         sg_ = sg;
     }
 
+    /**
+     * Get number of pump stages
+     *
+     * @return int, number of pump stages
+     */
     int getStageCount() {
         return stageCount_;
     }
 
+    /**
+     * Set number of pump stages
+     *
+     * @param stageCount int, number of pump stages
+     *
+     * @return nothing
+     */
     void setStageCount(int stageCount) {
         stageCount_ = stageCount;
     }
 
+    /**
+     * Get the type of pump speed from either fixed or not fixed
+     *
+     * @return Speed, pump speed type
+     */
     Speed getFixedSpeed(){
         return speed_;
     }
+
+    /**
+     * Set the type of pump speed from either fixed or not fixed
+     *
+     * @param speed Speed, pump speed type
+     *
+     * @return nothing
+     */
     void setFixedSpeed_(Speed speed){
         speed_ = speed;
     };

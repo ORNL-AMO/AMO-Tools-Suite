@@ -157,7 +157,7 @@ set(INCLUDE_FILES
         include/sqlite/SolidLiquidFlueGasMaterialData.h
         include/sqlite/GasFlueGasMaterialData.h
         include/calculator/losses/EnergyInputEAF.h
-        include/calculator/losses/SlagOtherMaterialLosses.h include/calculator/losses/SolidLiquidFlueGasMaterial.h include/calculator/losses/AuxiliaryPower.h)
+        include/calculator/losses/SlagOtherMaterialLosses.h include/calculator/losses/SolidLiquidFlueGasMaterial.h include/calculator/losses/AuxiliaryPower.h include/calculator/losses/ExhaustGasEAF.h src/calculator/losses/ExhaustGasEAF.cpp)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -176,7 +176,7 @@ set(TEST_FILES
         tests/GasFlueGasMaterial.unit.cpp
         tests/HeadTool.unit.cpp
         tests/EnergyInputEAF.unit.cpp
-        tests/SQLite.unit.cpp tests/SolidLiquidFlueGasMaterial.unit.cpp tests/AuxiliaryPower.unit.cpp tests/SlagOtherMaterialLosses.unit.cpp)
+        tests/SQLite.unit.cpp tests/SolidLiquidFlueGasMaterial.unit.cpp tests/AuxiliaryPower.unit.cpp tests/SlagOtherMaterialLosses.unit.cpp tests/ExhuastGasEAF.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
@@ -212,15 +212,17 @@ if( BUILD_TESTING )
     add_executable(amo_tools_suite_tests tests/main.unit.cpp ${TEST_FILES})
     target_link_libraries( amo_tools_suite_tests Catch amo_tools_suite )
 endif()
-#SET(doxyfile_in Doxyfile)
+
 #if(BUILD_DOCUMENTATION)
 #    find_package(Doxygen REQUIRED)
-#set(doxyfile_in ${CMAKE_SOURCE_DIR}/doxyfile)
+#set(doxyfile_in ${CMAKE_SOURCE_DIR}/doxyfile.in)
 #set(doxyfile ${CMAKE_BINARY_DIR}/doxyfile)
+#message("${DOXYGEN_EXECUTABLE} ${doxyfile_in}")
 #add_custom_target(
 #            doc ALL
+#        COMMAND "${DOXYGEN_EXECUTABLE} ${doxyfile_in}"
 #            COMMAND
-#            $<$<CONFIG:Release>:${DOXYGEN_EXECUTABLE} ${doxyfile_in}>
+#            $<$<CONFIG:Release>:"${DOXYGEN_EXECUTABLE} ${doxyfile_in}">
 #            $<$<NOT:$<CONFIG:Release>>:${CMAKE_COMMAND} -E echo "Only done in Release builds" >
 #            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/doc
 #            COMMENT "Generating API documentation with Doxygen"

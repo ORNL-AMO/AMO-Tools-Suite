@@ -16,11 +16,15 @@
 
 class Motor {
 public:
+
+    ///Classifications of efficiency classes
     enum class EfficiencyClass {
         STANDARD,
         ENERGY_EFFICIENT,
         SPECIFIED
     };
+
+    ///Classifications of line frequency
     enum class LineFrequency{
         FREQ60,
         FREQ50
@@ -60,64 +64,160 @@ public:
 
     Motor() = default;
 
+    /**
+     * Gets the line frequency at either 50 Hz or 60 Hz
+     *
+     * @return LineFrequency, line frquency in Hz
+     */
     LineFrequency getLineFrequency() const {
         return lineFrequency_;
     }
 
+    /**
+     * Sets the line frequency
+     *
+     * @param lineFrequency LineFrequency, line frequency of either 50Hz or 60Hz
+     *
+     * @return nothing
+     */
     void setLineFrequency(LineFrequency lineFrequency) {
         lineFrequency_ = lineFrequency;
     }
 
+    /**
+     * Gets the rated motor power
+     *
+     * @return double, rated motor power in hp or kW
+     */
     double getMotorRatedPower() const {
         return motorRatedPower_;
     }
 
+    /**
+     * Sets the reated motor power
+     *
+     * @param motorRatedPower double, rated motor power in hp or kW
+     *
+     * @return nothing
+     */
     void setMotorRatedPower(double motorRatedPower) {
         motorRatedPower_ = motorRatedPower;
     }
 
+    /**
+     * Gets the RPM of motor
+     *
+     * @return int, RPM of motor
+     */
     int getMotorRpm();
 
+    /**
+     * Sets the RPM of motor
+     *
+     * @param motorRpm double, RPM of motor
+     *
+     * @return nothing
+     */
     void setMotorRpm(double motorRpm) {
         motorRpm_ = motorRpm;
     }
 
+    /**
+     * Gets the classification of motor efficiency
+     *
+     * @return EfficiencyClass, efficiency class of motor
+     */
     EfficiencyClass getEfficiencyClass() const {
         return efficiencyClass_;
     }
 
+    /**
+     * Sets the classification of motor efficiency
+     *
+     * @param efficiencyClass EfficiencyClass, efficiency class of motor
+     *
+     * @return nothing
+     */
     void setEfficiencyClass(EfficiencyClass efficiencyClass) {
         efficiencyClass_ = efficiencyClass;
     }
 
+    /**
+     * Gets the specified efficiency
+     *
+     * @return double, specified efficiency as %
+     */
     double getSpecifiedEfficiency() const {
         return specifiedEfficiency_;
     }
 
+    /**
+     * Sets the specified efficiency
+     *
+     * @param fullLoadEfficiency double, specified efficiency as %
+     *
+     * @return nothing
+     */
     void setSpecifiedEfficiency(double fullLoadEfficiency) {
         specifiedEfficiency_ = fullLoadEfficiency;
     }
 
+    /**
+     * Gets the rated motor voltage
+     *
+     * @return double, rated motor voltage in V
+     */
     double getMotorRatedVoltage() const {
         return motorRatedVoltage_;
     }
 
+    /**
+     * Sets the rated motor voltage
+     *
+     * @param motorRatedVoltage double, rated motor voltage in V
+     *
+     * @return nothing
+     */
     void setMotorRatedVoltage(double motorRatedVoltage) {
         motorRatedVoltage_ = motorRatedVoltage;
     }
 
+    /**
+     * Gets the current at full load in amps
+     *
+     * @return double, current at full load in amps
+     */
     double getFullLoadAmps() {
         return fullLoadAmps_;
     }
 
+    /**
+     * Sets the current at full load
+     *
+     * @param fullLoadAmps double, current at full load in amps
+     *
+     * @return nothing
+     */
     void setFullLoadAmps(double fullLoadAmps) {
         fullLoadAmps_ = fullLoadAmps;
     }
 
+    /**
+     * Gets the size margin
+     *
+     * @return double, size margin as %
+     */
     double getSizeMargin() {
         return sizeMargin_;
     }
 
+    /**
+     * Sets the size margin
+     *
+     * @param sizeMargin double, size margin as %
+     *
+     * @return nothing
+     */
     void setSizeMargin(double sizeMargin) {
         sizeMargin_ = sizeMargin;
     }

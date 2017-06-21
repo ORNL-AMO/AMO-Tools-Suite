@@ -306,7 +306,7 @@ NAN_METHOD(estFLA) {
  * @param efficiency_class Efficiency class of motor.
  * @param efficiency Specified Efficiency of motor as defined by %.
  * @param load_factor between 0.0001 and 1.25
- * @param motor_rated_voltage Rated voltage of motor
+ * @param motor_rated_voltage Rated voltage of motor in volts
  * @param motor_rated_fla Motor rated full load amps
 
  */

@@ -27,10 +27,10 @@ public:
 
     /**
      * Constructor
-     * @param Pump
-     * @param Motor
-     * @param Financial
-     * @param FieldData
+     * @param pump
+     * @param motor
+     * @param financial
+     * @param fieldData
      * @return nothing
      */
     PSATResult(
@@ -74,18 +74,42 @@ public:
         double estimatedFLA_;       ///< Existing: The full load amps are either specified (known) or estimated. This field will hold either one. The estimated full load amps are calcluated from the motor voltage, hp, and speed.
     };
 
+    /**
+     *
+     * Gets the annual savings potential
+     *
+     * @return double, annual savings potential in US $
+     */
     double getAnnualSavingsPotential() const {
         return annualSavingsPotential_;
     }
 
+    /**
+     *
+     * Gets the optimization rating
+     *
+     * @return double, optimization rating
+     */
     double getOptimizationRating() const {
         return optimizationRating_;
     }
 
+    /**
+     *
+     * Gets the exisiting conditons
+     *
+     * @return const result_&, existing conditons
+     */
     const result_ &getExisting() const {
         return existing_;
     }
 
+    /**
+     *
+     * Gets the optimal conditons
+     *
+     * @return const result_&, optimal conditions
+     */
     const result_ &getOptimal() const {
         return optimal_;
     }

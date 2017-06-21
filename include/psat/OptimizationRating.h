@@ -22,7 +22,7 @@ public:
     /**
      * Constructor
      * @param existingAnnualCost Existing annual energy cost based on the product of the Existing annual energy consumption.
-     * @param motorRatedPower Existing annual energy cost based on the product of the Optimal annual energy consumption.
+     * @param optimalAnnualCost Existing annual energy cost based on the product of the Optimal annual energy consumption.
      * @return nothing
      */
     OptimizationRating(
@@ -33,20 +33,49 @@ public:
         optimalAnnualCost_(optimalAnnualCost)
     {}
 
+    /**
+     * Calculates the optimization rating
+     *
+     * @return double, optimization rating
+     */
     double calculate();
 
+    /**
+     * Gets the existing annual cost
+     *
+     * @return double, existing annual cost in US $
+     */
     double getExistingAnnualCost() const {
         return existingAnnualCost_;
     }
 
+    /**
+     * Sets teh existing annual cost
+     *
+     * @param existingAnnualCost double, existing annual cost in US $
+     *
+     * @return nothing
+     */
     void setExistingAnnualCost(double existingAnnualCost) {
         existingAnnualCost_ = existingAnnualCost;
     }
 
+    /**
+     * Gets the optimal annual cost
+     *
+     * @return double, optimal annual cost
+     */
     double getOptimalAnnualCost() const {
         return optimalAnnualCost_;
     }
 
+    /**
+     * Sets the optimal annual cost
+     *
+     * @param optimalAnnualCost double, optimal annual cost in US $
+     *
+     * @return double, optimization rating
+     */
     void setOptimalAnnualCost(double optimalAnnualCost) {
         optimalAnnualCost_ = optimalAnnualCost;
     }

@@ -30,6 +30,7 @@ public:
     * @param motorMeasuredPower Power of the motor.
     * @param motorRPM RPM of motor.
     * @param lineFrequency Line frequency of motor as either 50Hz or 60Hz.
+    * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
     * @param specifiedEfficiency Specified Efficiency of motor, if efficiency class is SPECIFIED.
     * @param ratedVoltage Rated voltage of motor.
     * @param fullLoadAmps Current at full load in amps.
@@ -64,24 +65,79 @@ public:
 		loadEstimationMethod_(loadEstimationMethod)
 	{};
 
+	/**
+     * Calculate motor shaft power
+     *
+     * @return double, motor shaft power in hp
+     */
     double calculate();
 
+	/**
+     * Calculates the motor shaft current
+     *
+     * @return double, motor shaft current in A
+     */
     double calculateCurrent();
 
+	/**
+     * Calculates the motor shaft efficiency
+     *
+     * @return double, motor shaft efficiency as %
+     */
     double calculateEfficiency();
 
+	/**
+     * Calculate the power
+     *
+     * @return double, power in hp or kw
+     */
     double calculatePower();
 
+	/**
+     * Calculates the power factor
+     *
+     * @return double, power factor - unitless
+     */
     double calculatePowerFactor();
 
+	/**
+     * Calculates estimated full load amps
+     *
+     * @return double, estimated full load amps in A
+     */
     double calculateEstimatedFLA();
 
+    ///double, temp load fraction
     double tempLoadFraction_ = 0.01;
-    double power = 0.0, powerE1 = 0.0, powerE2 = 0.0;
-    double lf1 = 0.0, lf2 = 0.0;
-    double eff = 0.0, eff1 = 0.0, eff2 = 0.0;
-    double current = 0.0, current1 = 0.0, current2 = 0.0;
-    double pf = 0.0, pf1 = 0.0, pf2 = 0.0;
+	///double, power in hp
+    double power = 0.0;
+	///double, power in hp
+	double powerE1 = 0.0;
+	///double, power in hp
+	double powerE2 = 0.0;
+	///double, line frequency in Hz
+    double lf1 = 0.0;
+	///double, line frequency in Hz
+	double lf2 = 0.0;
+	///double efficiency in %
+    double eff = 0.0;
+	///double efficiency in %
+	double eff1 = 0.0;
+	///double efficiency in %
+	double eff2 = 0.0;
+	///double, current in A
+    double current = 0.0;
+	///double, current in A
+	double current1 = 0.0;
+	///double, current in A
+	double current2 = 0.0;
+	///double, power factor - unitless
+    double pf = 0.0;
+	///double, power factor - unitless
+	double pf1 = 0.0;
+	///double, power factor - unitless
+	double pf2 = 0.0;
+	///double, estimated full load amps in A
     double estimatedFLA;
 
 private:

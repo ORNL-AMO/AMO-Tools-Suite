@@ -12,6 +12,8 @@
 #define AMO_SUITE_OPENINGLOSSES_H
 class OpeningLosses {
 public:
+
+    ///OpeningShape enum claaa
     enum class OpeningShape {
         CIRCULAR,   ///<
         RECTANGULAR ///<
@@ -19,15 +21,15 @@ public:
 
     /**
 	 * Constructor for a rectangular opening
-	 * @param emissivity
-	 * @param diameterLength
-     * @param widthHeight
-	 * @param thickness
-	 * @param ration
-	 * @param ambientTemperature
-	 * @param insideTemperature
-	 * @param percentTimeOpen
-	 * @param viewFactor
+	 * @param emissivity double, emissivity
+	 * @param diameterLength double, length of openings in inches
+     * @param widthHeight double, height of openings in inches
+	 * @param thickness double, furnace wall thickness in inches
+	 * @param ratio double, ratio
+	 * @param ambientTemperature double, ambient temperature in °F
+	 * @param insideTemperature double, inside temperature in °F
+	 * @param percentTimeOpen double, amount of time open as a %
+	 * @param viewFactor double, view factor
 	 * @return nothing
 	 */
     OpeningLosses(double emissivity,
@@ -53,14 +55,14 @@ public:
 
    /**
     * Constructor for a circular opening
-    * @param emissivity
-    * @param diameterLength
-    * @param thickness
-    * @param ration
-    * @param ambientTemperature
-    * @param insideTemperature
-    * @param percentTimeOpen
-    * @param viewFactor
+    * @param emissivity double, emissivity
+    * @param diameterLength double, length of opening ininches
+    * @param thickness double, furnace wall thickness in inches
+    * @param ratio double, ratio
+    * @param ambientTemperature double, ambient temperature in °F
+    * @param insideTemperature double, inside temperature in °F
+    * @param percentTimeOpen double, amount of time open as %
+    * @param viewFactor double, view factor
     * @return nothing
     */
     OpeningLosses(double emissivity,
@@ -82,6 +84,18 @@ public:
               heatLoss_(0.0)
     {   }
 
+    /**
+    * Constructor for a circular opening
+    * @param diameterLength double, length of opening in inches
+    * @param thickness double, furnace wall thickness in inches
+    * @param ratio double, ratio
+    * @param ambientTemperature double, ambient temperature in °F
+    * @param insideTemperature double, inside temperature in °F
+    * @param percentTimeOpen double, amount of time open as %
+    * @param viewFactor double, view factor
+     * @param openingShape OpeningShape, shape of opening
+    * @return nothing
+    */
     OpeningLosses(double diameterLength,
                   double thickness,
                   double ratio,
@@ -106,6 +120,16 @@ public:
         }
     }
 
+    /**
+    * Constructor for a circular opening
+    * @param diameterLength double, length of opening ininches
+    * @param thickness double, furnace wall thickness in inches
+    * @param ambientTemperature double, ambient temperature in °F
+    * @param insideTemperature double, inside temperature in °F
+    * @param percentTimeOpen double, amount of time open as %
+     * @param openingShape OpeningShape, shape of opening
+    * @return nothing
+    */
     OpeningLosses(double diameterLength,
                   double thickness,
                   double ambientTemperature,
@@ -132,86 +156,214 @@ public:
 
     OpeningLosses() = default;
 
+    /**
+     * Gets the emissivity
+     *
+     * @return double, emissivity - unitless
+     */
     double getEmissivity() const {
         return emissivity_;
     }
 
+
+    /**
+     * Sets the emissivity
+     *
+     * @param emissivity double, emissivity - unitless
+     *
+     * @return nothing
+     */
     void setEmissivity(double emissivity) {
         emissivity_ = emissivity;
     }
 
+
+    /**
+     * Gets the diameter of opening
+     *
+     * @return double, diameter of opening in inches
+     */
     double getDiameter() const {
         return diameter_;
     }
 
+
+    /**
+     * Sets the diameter of the opening
+     *
+     * @param diameter double, diameter of opening in inches
+     *
+     * @return nothing
+     */
     void setDiameter(double diameter) {
         diameter_ = diameter;
     }
 
+    /**
+     * Gets the width of the opening
+     *
+     * @return double, width of opening in inches
+     */
     double getWidth() const {
         return width_;
     }
 
+    /**
+     * Sets the width of opening
+     *
+     * @param width double, width of opening in inches
+     *
+     * @return nothing
+     */
     void setWidth(double width) {
         width_ = width;
     }
 
+    /**
+     * Gets the furnace wall thickness
+     *
+     * @return double, furnace wall thickness in inches
+     */
     double getThickness() const {
         return thickness_;
     }
 
+    /**
+     * Sets the furnace wall thickness
+     *
+     * @param thickness double, furnace wall thickness in inches
+     *
+     * @return nothing
+     */
     void setThickness(double thickness) {
         thickness_ = thickness;
     }
 
+    /**
+     * Gets the ratio
+     *
+     * @return double, ratio - unitless
+     */
     double getRatio() const {
         return ratio_;
     }
 
+    /**
+     * Sets the ratio
+     *
+     * @param ratio double, ratio - unitless
+     *
+     * @return nothing
+     */
     void setRatio(double ratio) {
         ratio_ = ratio;
     }
 
+    /**
+     * Gets the ambient temperature
+     *
+     * @return double, ambient temperature in °F
+     */
     double getAmbientTemperature() const {
         return ambientTemperature_;
     }
 
+    /**
+     * Sets the ambient temperature
+     *
+     * @param ambientTemperature double, ambient temperature in °F
+     *
+     * @return nothing
+     */
     void setAmbientTemperature(double ambientTemperature) {
         ambientTemperature_ = ambientTemperature;
     }
 
+    /**
+     * Gets the inside temperature
+     *
+     * @return double, inside temperature in °F
+     */
     double getInsideTemperature() const {
         return insideTemperature_;
     }
 
+    /**
+     * Sets the inside temperature
+     *
+     * @param insideTemperature double, inside temperature in °F
+     *
+     * @return nothing
+     */
     void setInsideTemperature(double insideTemperature) {
         insideTemperature_ = insideTemperature;
     }
 
+    /**
+     * Gets the percentage of time open
+     *
+     * @return double, amount of time open as %
+     */
     double getPercentTimeOpen() const {
         return percentTimeOpen_;
     }
 
+    /**
+     * Sets the percentage of time open
+     *
+     * @param percentTimeOpen double, amount of time opend as a %
+     *
+     * @return nothing
+     */
     void setPercentTimeOpen(double percentTimeOpen) {
         percentTimeOpen_ = percentTimeOpen;
     }
 
+    /**
+     * Gets the view factor
+     *
+     * @return double, view factor - unitless
+     */
     double getViewFactor() const {
         return viewFactor_;
     }
 
+    /**
+     * Sets the view factor
+     *
+     * @param viewFactor double, view factor - unitless
+     *
+     * @return nothing
+     */
     void setViewFactor(double viewFactor) {
         viewFactor_ = viewFactor;
     }
 
+    /**
+     * Gets the opening shape
+     *
+     * @return OpeningShape, shape of opening
+     */
     OpeningShape getOpeningShape() const {
         return openingShape_;
     }
 
+    /**
+     * Sets the opening shape
+     *
+     * @param openingShape OpeningShape, shape of opening
+     *
+     * @return nothing
+     */
     void setOpeningShape(OpeningShape openingShape) {
         openingShape_ = openingShape;
     }
 
+    /**
+     * Gets the heat loss
+     *
+     * @return double, heat loss in btu/cycle
+     */
     double getHeatLoss();
 
 private:

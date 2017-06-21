@@ -18,8 +18,24 @@
 #include <cmath>
 #include <memory>
 
+     /**
+     * @class GasProperties GasFlueGasMaterial.h
+     */
 class GasProperties {
 public:
+	/**
+     * Constructor
+     * @param specificHeat specific heat in btu/hr
+     * @param molecularWeight molecular weight in g/mol
+     * @param specificWeight specific weight in lb/scf
+     * @param compPercent composition percent as %
+     * @param compByVol composition by volume as %
+     * @param o2Generated O2 generated in g/mol
+     * @param heatingValue heating value in btu/lb
+     * @param h2oGenerated H2O generated in g/mol
+     * @param co2Generated CO2 generated in g/mol
+     * @return nothing
+     */
 
 	GasProperties( const std::function< double ( double t ) > specificHeat,
 	               const double molecularWeight,
@@ -49,6 +65,8 @@ private:
 
 
 // TODO should be a private class but unit tests need access to this
+
+
 class GasCompositions {
 public:
 	/**
@@ -102,6 +120,13 @@ public:
 		          {"CO2", this->CO2}, {"SO2", this->SO2}, {"O2", this->O2}};
 	}
 
+    /**
+     * Gets the gas by
+     *
+     * @param gasName const string, name of gas
+     *
+     * @return double, compostion by volume as %
+     */
 	double getGasByVol(const std::string & gasName) const {
 		auto const gas = gasses.find(gasName);
 		if (gas == gasses.end()) {
@@ -110,10 +135,29 @@ public:
 		return gas->second->compByVol;
 	}
 
+    /**
+     * Gets the name of substance
+     *
+     * @return string, name of substance
+     */
 	std::string getSubstance() const;
+
+    /**
+     * Gets the ID of gas
+     *
+     * @return int, ID of gas
+     */
 	int getID() const {
 		return this->id;
 	}
+
+    /**
+     * Sets the ID of gas
+     *
+     * @param id const int, ID number for gas
+     *
+     * @return nothing
+     */
 	void setID(const int id) {
 		this->id = id;
 	}
@@ -140,6 +184,7 @@ private:
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
 };
 
+
 class GasFlueGasMaterial {
 public:
     /**
@@ -148,7 +193,7 @@ public:
      * @param flueGasTemperature - Furnace Flue Gas Temperature in °F
      * @param excessAirPercentage - Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
      * @param combustionAirTemperature - Combustion Air Temperature
-     * @param composition - User defined gas compositions
+     * @param compositions - User defined gas compositions
      * @return nothing
      *
      * */
@@ -162,6 +207,11 @@ public:
             compositions_(compositions)
     {}
 
+	/**
+     * Gets the heat loss
+     *
+     * @return double, heat loss in btu/hr
+     */
     double getHeatLoss();
 
 private:

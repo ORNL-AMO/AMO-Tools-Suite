@@ -36,18 +36,42 @@ public:
 
     Financial() = default;
 
+    /**
+    * Gets the percentage of calendar hours the equipment is operating
+    *
+    * @return double, fraction of calendar hours the equipment is operating as %
+    */
     double getOperatingFraction() const {
         return operatingFraction_;
     }
 
+    /**
+   * Sets the percentage of calendar hours the equipment is operating
+   *
+   * @param operatingFraction double, fraction of calendar hours the equipment is operating as %
+   *
+   * @return nothing
+   */
     void setOperatingFraction(double operatingFraction) {
         operatingFraction_ = operatingFraction;
     }
 
+    /**
+   * Gets the cost of electricity per unit energy
+   *
+   * @return double, cost of electricity per unit energy in $/kwh
+   */
     double getUnitCost() const {
         return unitCost_;
     }
 
+    /**
+   * Sets the cost of electricity per unit energy
+   *
+   * @param unitCost double, cost of electricity per unit in $/kwh
+   *
+   * @return nothing
+   */
     void setUnitCost(double unitCost) {
         unitCost_ = unitCost;
     }

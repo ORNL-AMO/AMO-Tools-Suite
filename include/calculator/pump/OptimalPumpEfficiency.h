@@ -53,60 +53,149 @@ public:
 //                                                                        head_(head), speed_(speed),
 //                                                                        actualEfficiency_(actualEfficiency) {}
 
+/**
+     * Calculates the optimial pump efficiency
+     *
+     * @return double, optimal pump efficiency as %
+     */
     double calculate();
 
+    /**
+     * Gets the style of the pump
+     *
+     * @return Pump::Style, style of pump
+     */
     Pump::Style getStyle() const {
         return style_;
     }
 
+    /**
+     * Sets the pump style
+     *
+     * @param style Pump::Style, pump style
+     *
+     * @return nothing
+     */
     void setStyle(Pump::Style style) {
         style_ = style;
     }
 
+    /**
+     * Gets the pump RPM to define operation speed
+     *
+     * @return double, pump RPM
+     */
     double getRpm() const {
         return rpm_;
     }
 
+    /**
+     * Sets the pump RPM to define operation speed
+     *
+     * @param rpm double, pump RPM
+     *
+     * @return nothing
+     */
     void setRpm(double rpm) {
         rpm_ = rpm;
     }
 
+    /**
+     * Gets the kinematic viscosity of the fluid being pumped
+     *
+     * @return double, kinematic viscosity in centistokes
+     */
     double getKinematicViscosity() const {
         return kinematicViscosity_;
     }
 
+    /**
+     * Sets the kinematic viscosity of the fluid being pumped
+     *
+     * @param kinematicViscosity double, kinematic viscosity in centistokes
+     *
+     * @return nothing
+     */
     void setKinematicViscosity(double kinematicViscosity) {
         kinematicViscosity_ = kinematicViscosity;
     }
 
+    /**
+     * Gets the number of pump stages
+     *
+     * @return double, number of pump stages
+     */
     double getStageCount() const {
         return stageCount_;
     }
 
+    /**
+     * Sets the number of pump stages
+     *
+     * @param stageCount double, number of pump stages
+     *
+     * @return nothing
+     */
     void setStageCount(double stageCount) {
         stageCount_ = stageCount;
     }
 
+    /**
+     * Gets the measured or required flow rate
+     *
+     * @return double, measured or required flow rate in gpm
+     */
     double getFlowRate() const {
         return flowRate_;
     }
 
+    /**
+     * Sets the measured or required flow rate
+     *
+     * @param flowRate double, measured or required flow rate in gpm
+     *
+     * @return nothing
+     */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
     }
 
+    /**
+     * Gets the measured or required pump head
+     *
+     * @return double, measured or required pump head in ft
+     */
     double getHead() const {
         return head_;
     }
 
+    /**
+     * CSet the measured or required pump head
+     *
+     * @param head double, measrued or required pump head in ft
+     *
+     * @return nothing
+     */
     void setHead(double head) {
         head_ = head;
     }
 
+    /**
+     * Gets the actual efficiency of specified conditions
+     *
+     * @return double, actual efficiency as %
+     */
     double getActualEfficiency() const {
         return actualEfficiency_;
     }
 
+    /**
+     * Sets the actual efficiency of specified conditions
+     *
+     * @param actualEfficiency double, actual efficiency as %
+     *
+     * @return nothing
+     */
     void setActualEfficiency(double actualEfficiency) {
         actualEfficiency_ = actualEfficiency;
     }

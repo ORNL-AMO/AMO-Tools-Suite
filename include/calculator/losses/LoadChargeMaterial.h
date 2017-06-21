@@ -10,6 +10,7 @@
 class LoadChargeMaterial {
 public:
 
+    ///Classifications of thermic reaction type
     enum class ThermicReactionType {
         ENDOTHERMIC,
         EXOTHERMIC,

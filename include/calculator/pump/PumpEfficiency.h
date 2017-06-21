@@ -36,37 +36,90 @@ public:
          pumpShaftPower_(pumpShaftPower)
     {}
 
+    /**
+     * Calculates the pump efficiency
+     *
+     * @return double, pump efficiency as %
+     */
     double calculate();
 
 public:
+    /**
+     * Get the specific gravity
+     *
+     * @return double, specific gravity - unitless
+     */
     double getSpecificGravity() const {
         return specificGravity_;
     }
 
+    /**
+     * Set the specific gravity
+     *
+     * @param specificGravity double, specific gravity - unitless
+     *
+     * @return nothing
+     */
     void setSpecificGravity(double specificGravity) {
         specificGravity_ = specificGravity;
     }
 
+    /**
+     * Get the measured or required flow rate
+     *
+     * @return double, measured or required flow rate in gpm
+     */
     double getFlowRate() const {
         return flowRate_;
     }
 
+    /**
+     * Set the measured or required flow rate
+     *
+     * @param flowRate double, measrued or required flow rate in gpm
+     *
+     * @return nothing
+     */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
     }
 
+    /**
+     * Get the measured or required pump head
+     *
+     * @return double, measure or required pump head in ft or m
+     */
     double getHead() const {
         return head_;
     }
 
+    /**
+     * Set the measured or required pump head
+     *
+     * @param head double, measured or required pump head in ft or m
+     *
+     * @return nothing
+     */
     void setHead(double head) {
         head_ = head;
     }
 
+    /**
+     * Get pump shaft power
+     *
+     * @return double, pump shaft power in hp or kw
+     */
     double getPumpShaftPower() const {
         return pumpShaftPower_;
     }
 
+    /**
+     * Set the pump shaft power
+     *
+     * @param pumpShaftPower double, pump shaft power in hp or kw
+     *
+     * @return nothing
+     */
     void setPumpShaftPower(double pumpShaftPower) {
         pumpShaftPower_ = pumpShaftPower;
     }

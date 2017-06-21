@@ -34,7 +34,7 @@ double EnergyInputEAF::getTotalChemicalEnergyInput(){
 
 double EnergyInputEAF::getKwhCycle(){
     double totalChemicalEnergyInput = getTotalChemicalEnergyInput();
-    this->kwhCycle_ = totalChemicalEnergyInput*(293.0832356);
+    this->kwhCycle_ = totalChemicalEnergyInput*(293.0832356389);
     return this->kwhCycle_;
 
 }

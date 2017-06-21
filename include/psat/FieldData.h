@@ -14,9 +14,11 @@
 #ifndef AMO_LIBRARY_FIELDDATA_H
 #define AMO_LIBRARY_FIELDDATA_H
 
+
 class FieldData {
 public:
 
+    /// Classifications of load estimation methods
     enum class LoadEstimationMethod {
         POWER,
         CURRENT
@@ -25,11 +27,12 @@ public:
     /**
      * Constructor
      * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
-     * @param head Pump head measured in feet or meters.
+     * @param head Pump head measured in feet
      * @param loadEstimationMethod Estimated power or current on motor input.
      * @param motorPower Power output of the pump's motor in kw or hp.
      * @param motorAmps Current measured from the pump's motor in amps.
-     * @return voltage The measured bus voltage.
+     * @param voltage The measured bus voltage.
+     * @return nothing
      */
 
     FieldData(
@@ -50,50 +53,122 @@ public:
 
     FieldData() = default;
 
+    /**
+     * Gets the classification of the load estimation method
+     *
+     * @return LoadEstimationMethod, classification of the load estimation method
+     */
     LoadEstimationMethod getLoadEstimationMethod() const {
         return loadEstimationMethod_;
     }
 
+    /**
+     * Sets the classification of the load estimation method
+     *
+     * @param loadEstimationMethod LoadEstimationMethod, classification of the load estimation method
+     *
+     * @return nothing
+     */
     void setLoadEstimationMethod(LoadEstimationMethod loadEstimationMethod) {
         loadEstimationMethod_ = loadEstimationMethod;
     }
 
+    /**
+     * Gets the rate of flow
+     *
+     * @return double, rate of flow in gpm
+     */
     double getFlowRate() const {
         return flowRate_;
     }
 
+    /**
+     * Sets the rate of flow
+     *
+     * @param flowRate double, rate of flow in gpm
+     *
+     * @return nothing
+     */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
     }
 
+    /**
+     * Gets the pump head
+     *
+     * @return double, pump head in ft
+     */
     double getHead() const {
         return head_;
     }
 
+    /**
+     * Sets the pump head
+     *
+     * @param head double, pump head in ft
+     *
+     * @return nothing
+     */
     void setHead(double head) {
         head_ = head;
     }
 
+    /**
+     * Gets the power output of the pump's motor
+     *
+     * @return double, pump motor's output power in hp or kw
+     */
     double getMotorPower() const {
         return motorPower_;
     }
 
+    /**
+     * Sets the power output of the pump's motor
+     *
+     * @param motorPower double, pump motor's output power in hp or kw
+     *
+     * @return nothing
+     */
     void setMotorPower(double motorPower) {
         motorPower_ = motorPower;
     }
 
+    /**
+     * Gets the current measured from the pump's motor
+     *
+     * @return double, current measured from pump's motor in amps
+     */
     double getMotorAmps() const {
         return motorAmps_;
     }
 
+    /**
+     * Sets the current measured from the pump's motor
+     *
+     * @param motorAmps double, current measured from pump's motor in amps
+     *
+     * @return nothing
+     */
     void setMotorAmps(double motorAmps) {
         motorAmps_ = motorAmps;
     }
 
+    /**
+     * Gets the measured bus voltage
+     *
+     * @return double, measured bus voltage in volts
+     */
     double getVoltage() const {
         return voltage_;
     }
 
+    /**
+     * Sets the measured bus voltage
+     *
+     * @param voltage double, measured bus coltage in volts
+     *
+     * @return nothing
+     */
     void setVoltage(double voltage) {
         voltage_ = voltage;
     }
