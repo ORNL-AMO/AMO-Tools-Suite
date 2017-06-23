@@ -18,12 +18,12 @@ public:
 	/**
     * Constructor for the ReturnCalcValues class with all inputs specified
     *
-    * @param differentialElevationHead units in ft
-    * @param differentialPressureHead units in ft
-    * @param differentialVelocityHead units in ft
-    * @param estimatedSuctionFrictionHead units in ft
-    * @param estimatedDischargeFrictionHead units in ft
-    * @param pumpHead units in ft
+    * @param differentialElevationHead double, differenial elevation head in ft
+    * @param differentialPressureHead double, differential pressure head in ft
+    * @param differentialVelocityHead double, differential velocity head in ft
+    * @param estimatedSuctionFrictionHead double, estimated suction friction head in ft
+    * @param estimatedDischargeFrictionHead double, estimated discharge friction head in ft
+    * @param pumpHead double, pump head in ft
     *
     * @return nothing
 	*
@@ -68,14 +68,14 @@ protected:
 	/**
     * Constructor for the abstract HeadToolBase class with all inputs specified
     *
-    * @param specificGravity no units
-    * @param flowRate units in gpm (gallons per minute)
-    * @param suctionPipeDiameter units in inches
-    * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in inches
-    * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation units in feet
-    * @param dischargeLineLossCoefficients no units
+    * @param specificGravity double, specific gravity - unitless
+    * @param flowRate double, flow rate in gpm (gallons per minute)
+    * @param suctionPipeDiameter double, diameter of suction pipe in inches
+    * @param suctionLineLossCoefficients double, suction line loss coefficient - unitless
+    * @param dischargePipeDiameter double, diameter of discharge pipe in inches
+    * @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch gauge)
+    * @param dischargeGaugeElevation double, gauge elevation of discharge in feet
+    * @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
 	*
  * */
 
@@ -154,16 +154,16 @@ public:
 	/**
     * Constructor for the HeadToolSuctionTank class with all inputs specified
     *
-    * @param specificGravity no units
-    * @param flowRate units in gpm (gallons per minute)
-    * @param suctionPipeDiameter units in feet
-    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauage)
-    * @param suctionTankFluidSurfaceElevation units in feet
-    * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in feet
-    * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation units in inches
-    * @param dischargeLineLossCoefficients no units
+    * @param specificGravity double, specific gravity - unitless
+    * @param flowRate double, flow rate in gpm (gallons per minute)
+    * @param suctionPipeDiameter double, diameter of suction pipe in feet
+    * @param suctionTankGasOverPressure double, gas over pressure of suction tank in psig (pounds per square inch gauage)
+    * @param suctionTankFluidSurfaceElevation double, fluid surface elevation of suction tank in feet
+    * @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
+    * @param dischargePipeDiameter double, diameter of discharge pipe in feet
+    * @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch gauge)
+    * @param dischargeGaugeElevation double, gauge elevation of discharge in inches
+    * @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
 	*
  * */
 
@@ -208,16 +208,16 @@ public:
 /**
 * Constructor for HeadTool with no Suction Tank, all inputs specified
 *
-* @param specificGravity no units
-* @param flowRate units in gpm (gallons per minute)
-* @param suctionPipeDiameter units in feet
-* @param suctionGaugePressure units in psig (pounds per square inch guage)
-* @param suctionGaugeElevation units in feet
-* @param suctionLineLossCoefficients no units
-* @param dischargePipeDiameter units in feet
-* @param dischargeGaugePressure units in psig (pounds per square inch guage)
-* @param dischargeGaugeElevation units in feet
-* @param dischargeLineLossCoefficients no units
+* @param specificGravity double, specific gravity - unitless
+* @param flowRate double, flow rate in gpm (gallons per minute)
+* @param suctionPipeDiameter double, diameter of suction pipe in feet
+* @param suctionGaugePressure double, gauge pressure of suction in psig (pounds per square inch guage)
+* @param suctionGaugeElevation double, gauge elevation of suction in feet
+* @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
+* @param dischargePipeDiameter double, diameter of discharge pipe in feet
+* @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch guage)
+* @param dischargeGaugeElevation double, gauge elevation of discharge in feet
+* @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
 *
 * */
 

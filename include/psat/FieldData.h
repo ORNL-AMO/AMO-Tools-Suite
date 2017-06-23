@@ -26,12 +26,12 @@ public:
 
     /**
      * Constructor
-     * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
-     * @param head Pump head measured in feet
-     * @param loadEstimationMethod Estimated power or current on motor input.
-     * @param motorPower Power output of the pump's motor in kw or hp.
-     * @param motorAmps Current measured from the pump's motor in amps.
-     * @param voltage The measured bus voltage.
+     * @param flowRate double, rate of flow. Units are gpm
+     * @param head double, pump head measured in feet
+     * @param loadEstimationMethod LoadEstimationMethod, classification of load estimation method
+     * @param motorPower double, power output of the pump's motor in hp.
+     * @param motorAmps double, current measured from the pump's motor in amps
+     * @param voltage double, the measured bus voltage in volts
      * @return nothing
      */
 
@@ -116,7 +116,7 @@ public:
     /**
      * Gets the power output of the pump's motor
      *
-     * @return double, pump motor's output power in hp or kw
+     * @return double, pump motor's output power in hp
      */
     double getMotorPower() const {
         return motorPower_;
@@ -125,7 +125,7 @@ public:
     /**
      * Sets the power output of the pump's motor
      *
-     * @param motorPower double, pump motor's output power in hp or kw
+     * @param motorPower double, pump motor's output power in hp
      *
      * @return nothing
      */
@@ -165,7 +165,7 @@ public:
     /**
      * Sets the measured bus voltage
      *
-     * @param voltage double, measured bus coltage in volts
+     * @param voltage double, measured bus voltage in volts
      *
      * @return nothing
      */

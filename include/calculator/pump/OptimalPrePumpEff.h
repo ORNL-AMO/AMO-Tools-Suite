@@ -17,9 +17,9 @@ class OptimalPrePumpEff {
 public:
     /**
      * Constructor
-     * @param style style Style of pump being used.
-     * @param achievableEfficiency Pump efficiency at the specified operating conditions.
-     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
+     * @param style Pump::Style, style of pump being used.
+     * @param achievableEfficiency douuble, pump efficiency at the specified operating conditions as %
+     * @param flowRate double, measured or required flow rate in gpm
      * @return nothing
      */
     OptimalPrePumpEff(
@@ -32,6 +32,10 @@ public:
         flowRate_(flowRate)
     {};
 
+    /**
+     * Calculates the optimal prepump efficiency
+     * @return double, optimal prepump efficiency as %
+     */
     double calculate();
 
 private:

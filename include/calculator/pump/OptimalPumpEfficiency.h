@@ -19,13 +19,13 @@ class OptimalPumpEfficiency {
 public:
     /**
      * Constructor
-     * @param style Style of pump being used.
-     * @param achievableEfficiency Pump efficiency at the specified operating conditions.
-     * @param rpm Pump RPM to define its operating speed.
-     * @param kinematicViscosity Kinematic viscosity of the fluid being pumped, in centistokes.
-     * @param stageCount The number of pump stages.
-     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
-     * @param head Either measured or required pump head im feet or meters.
+     * @param style Pump::Style, style of pump being used.
+     * @param achievableEfficiency double, pump efficiency at the specified operating conditions as %
+     * @param rpm double, pump RPM to define its operating speed
+     * @param kinematicViscosity double, kinematic viscosity of the fluid being pumped in centistokes
+     * @param stageCount double, the number of pump stages
+     * @param flowRate double, measured or required flow rate in gpm
+     * @param head double, pump head in ft
      * @return nothing
      */
     OptimalPumpEfficiency(
@@ -54,7 +54,7 @@ public:
 //                                                                        actualEfficiency_(actualEfficiency) {}
 
 /**
-     * Calculates the optimial pump efficiency
+     * Calculates the optimal pump efficiency
      *
      * @return double, optimal pump efficiency as %
      */
@@ -172,7 +172,7 @@ public:
     /**
      * CSet the measured or required pump head
      *
-     * @param head double, measrued or required pump head in ft
+     * @param head double, measured or required pump head in ft
      *
      * @return nothing
      */

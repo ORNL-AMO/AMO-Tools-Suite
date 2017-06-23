@@ -19,11 +19,11 @@ class MotorEfficiency {
 public:
     /**
      * Constructor
-     * @param lineFrequency Motor::LineFrequency, line frequency in Hz
+     * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      * @param motorRpm double, RPM of motor
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
      * @param specifiedEfficiency double, specified efficiency as %
-     * @param motorRatedPower double, rated power of motor in hp of kW
+     * @param motorRatedPower double, rated power of motor in hp
      * @param loadFactor double, load factor - unitless
      * @return
      */
@@ -53,7 +53,7 @@ public:
     /**
      * Gets the line frequency
      *
-     * @return Motor::LineFrequency, line frequency in Hz
+     * @return Motor::LineFrequency, classifictaion of line frequency in Hz
      */
     Motor::LineFrequency getLineFrequency() const {
         return lineFrequency_;
@@ -62,7 +62,7 @@ public:
     /**
      * Sets the line frequency
      *
-     * @param lineFrequency Motor::LineFrequency, line frequency in Hz
+     * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      *
      * @return nothing
      */
@@ -133,7 +133,7 @@ public:
     /**
      * Gets the load estimation method
      *
-     * @return FieldData::LoadEstimationMethod, load estimation method
+     * @return FieldData::LoadEstimationMethod, classification of load estimation method
      */
     FieldData::LoadEstimationMethod getLoadEstimationMethod() const {
         return loadEstimationMethod_;
@@ -142,7 +142,7 @@ public:
     /**
      * Sets the load estimation method
      *
-     * @param loadEstimationMethod FieldData::LoadEstimationMethod, load estimation method
+     * @param loadEstimationMethod FieldData::LoadEstimationMethod, classification of load estimation method
      *
      * @return nothing
      */

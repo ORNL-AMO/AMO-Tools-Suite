@@ -21,7 +21,7 @@ public:
 
     /**
 	 * Constructor for a rectangular opening
-	 * @param emissivity double, emissivity
+	 * @param emissivity double, emissivity - unitless
 	 * @param diameterLength double, length of openings in inches
      * @param widthHeight double, height of openings in inches
 	 * @param thickness double, furnace wall thickness in inches
@@ -29,7 +29,7 @@ public:
 	 * @param ambientTemperature double, ambient temperature in °F
 	 * @param insideTemperature double, inside temperature in °F
 	 * @param percentTimeOpen double, amount of time open as a %
-	 * @param viewFactor double, view factor
+	 * @param viewFactor double, view factor - unitless
 	 * @return nothing
 	 */
     OpeningLosses(double emissivity,
@@ -55,14 +55,14 @@ public:
 
    /**
     * Constructor for a circular opening
-    * @param emissivity double, emissivity
-    * @param diameterLength double, length of opening ininches
+    * @param emissivity double, emissivity - unitless
+    * @param diameterLength double, length of opening in inches
     * @param thickness double, furnace wall thickness in inches
     * @param ratio double, ratio
     * @param ambientTemperature double, ambient temperature in °F
     * @param insideTemperature double, inside temperature in °F
     * @param percentTimeOpen double, amount of time open as %
-    * @param viewFactor double, view factor
+    * @param viewFactor double, view factor - unitless
     * @return nothing
     */
     OpeningLosses(double emissivity,
@@ -92,8 +92,8 @@ public:
     * @param ambientTemperature double, ambient temperature in °F
     * @param insideTemperature double, inside temperature in °F
     * @param percentTimeOpen double, amount of time open as %
-    * @param viewFactor double, view factor
-     * @param openingShape OpeningShape, shape of opening
+    * @param viewFactor double, view factor - unitless
+     * @param openingShape OpeningShape, classification of shape of opening
     * @return nothing
     */
     OpeningLosses(double diameterLength,
@@ -122,12 +122,12 @@ public:
 
     /**
     * Constructor for a circular opening
-    * @param diameterLength double, length of opening ininches
+    * @param diameterLength double, length of opening in inches
     * @param thickness double, furnace wall thickness in inches
     * @param ambientTemperature double, ambient temperature in °F
     * @param insideTemperature double, inside temperature in °F
     * @param percentTimeOpen double, amount of time open as %
-     * @param openingShape OpeningShape, shape of opening
+     * @param openingShape OpeningShape, classification of shape of opening
     * @return nothing
     */
     OpeningLosses(double diameterLength,
@@ -311,7 +311,7 @@ public:
     /**
      * Sets the percentage of time open
      *
-     * @param percentTimeOpen double, amount of time opend as a %
+     * @param percentTimeOpen double, amount of time open as a %
      *
      * @return nothing
      */
@@ -342,7 +342,7 @@ public:
     /**
      * Gets the opening shape
      *
-     * @return OpeningShape, shape of opening
+     * @return OpeningShape, classification of shape of opening
      */
     OpeningShape getOpeningShape() const {
         return openingShape_;
@@ -351,7 +351,7 @@ public:
     /**
      * Sets the opening shape
      *
-     * @param openingShape OpeningShape, shape of opening
+     * @param openingShape OpeningShape, classification of shape of opening
      *
      * @return nothing
      */

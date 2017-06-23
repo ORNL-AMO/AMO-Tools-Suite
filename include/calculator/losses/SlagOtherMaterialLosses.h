@@ -24,11 +24,11 @@ public:
     /**
      * Constructor for the slag - other material heat loss with all inputs specified
      *
-     * @param weight Lb/cycle
-     * @param inletTemperature Inlet temperature of gasses in °F
-     * @param outletTemperature Outlet temperature of gasses in °F
-     * @param specificHeat Specific heat of material at average air temperature in Btu/(lb - °F)
-     * @param correctionFactor Correction factor
+     * @param weight double, weight discharged in Lb/cycle
+     * @param inletTemperature double, initial temperature of charged materials in °F
+     * @param outletTemperature double, Outlet/final temperature in °F
+     * @param specificHeat double, Specific heat of material at average air temperature in Btu/(lb*°F)
+     * @param correctionFactor double, Correction factor - unitless
      * @return nothing
      *
      * */
@@ -112,7 +112,7 @@ public:
     /**
      * Gets the correction factor
      *
-     * @return double, correction factor
+     * @return double, correction factor - unitless
      */
     double getCorrectionFactor() const {
         return correctionFactor_;
@@ -121,7 +121,7 @@ public:
     /**
      * Sets correction factor
      *
-     * @param correctionFactor double, correction factor
+     * @param correctionFactor double, correction factor - unitless
      *
      * @return nothing
      */
@@ -132,7 +132,7 @@ public:
     /**
      * Gets the specific heat of material
      *
-     * @return double, specific heat i btu/(lb-°F)
+     * @return double, specific heat in btu/(lb*°F)
      */
     double getSpecificHeat() const {
         return specificHeat_;
@@ -141,7 +141,7 @@ public:
     /**
      * Sets the specific heat of material
      *
-     * @param specificHeat double, specific heat of material in btu/(lb-°F)
+     * @param specificHeat double, specific heat of material in btu/(lb*°F)
      *
      * @return nothing
      */
@@ -161,7 +161,7 @@ public:
     /**
      * Gets the heat loss
      *
-     * @return ndouble, heat loss in kwh/cycle
+     * @return double, heat loss in kwh/cycle
      */
     double getHeatLoss();
 

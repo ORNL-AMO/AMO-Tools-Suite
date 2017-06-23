@@ -17,8 +17,8 @@ class AnnualCost {
 public:
     /**
      * Constructor
-     * @param annualEnergy Annual energy consumption in MWk.
-     * @param kwhRate
+     * @param annualEnergy double, annual energy consumption in MWh/year
+     * @param kwhRate double, rate in $/kWh
      * @return nothing
      */
     AnnualCost(
@@ -30,14 +30,14 @@ public:
     {}
 
     /**
-     * Calculates the annual energy cost.
-     * @return annual energy cost (annualEnergyCost_).
+     * Calculates the annual energy cost
+     * @return double, annual energy cost in $/year
      */
     double calculate();
 
     /**
      * Getter for annual energy.
-     * @return Annual Energy
+     * @return double, annual energy in MWh/year
      */
     double getAnnualEnergy() const {
         return annualEnergy_;
@@ -45,23 +45,25 @@ public:
 
     /**
      * Setter for annual energy
-     * @param annualEnergy
+     * @param annualEnergy double, annual energy consumption in MWh/year
+     * @return nothing
      */
     void setAnnualEnergy(double annualEnergy) {
         annualEnergy_ = annualEnergy;
     }
 
     /**
-     * Getter for Rate
-     * @return Rate
+     * Getter for the rate in $/kWh
+     * @return double, rate in $/kWh
      */
     double getKwhRate() const {
         return kwhRate_;
     }
 
     /**
-     * Setter for Rate
-     * @param kwhRate
+     * Setter for rate in $/kWh
+     * @param kwhRate double, rate in $/kwh
+     * @return nothing
      */
     void setKwhRate(double kwhRate) {
         kwhRate_ = kwhRate;

@@ -18,16 +18,16 @@ public:
     /**
      * Constructor for the exhaust gas EAF heat loss with all inputs specified
      *
-     * @param cycleTime measured in hrs
-     * @param offGasTemp temperature of exhaust gases from EAF before the gases mix with outside air measured in °F
-     * @param CO % of CO in exhaust gas
-     * @param H2 % of H2 in exhaust gas
-     * @param O2 % of O2 in exhaust gas
-     * @param CO2 % of CO2 in exhaust gas
-     * @param combustibleGases average value of combustible gases % in exhaust gases
-     * @param vfr (volume flow rate) total volume of exhaust gases measured in cfm
-     * @param dustLoading dust loading for exhaust gases measured in #s/scf
-     * @param otherLosses (n number) other heat losses not accounted for measured in btu/cycle
+     * @param cycleTime double, time of cycle measured in hrs
+     * @param offGasTemp double, temperature of exhaust gases from EAF before the gases mix with outside air measured in °F
+     * @param CO double, % of CO in exhaust gas
+     * @param H2 double, % of H2 in exhaust gas
+     * @param O2 double, % of O2 in exhaust gas
+     * @param CO2 double, % of CO2 in exhaust gas
+     * @param combustibleGases double, average value of combustible gases % in exhaust gases
+     * @param vfr double, (volume flow rate) total volume of exhaust gases measured in cfm
+     * @param dustLoading double, dust loading for exhaust gases measured in #s/scf (number of dust particles per scf)
+     * @param otherLosses double, other heat losses not accounted for measured in btu/cycle
      * @return nothing
      *
      * */
@@ -89,7 +89,7 @@ public:
     }
 
     /**
-     * Gets the off exhuast gas temperature
+     * Gets the off exhaust gas temperature
      *
      * @return double, off exhaust gas temperature in °F
      */
@@ -229,7 +229,7 @@ public:
     /**
      * Gets the dust loading
      *
-     * @return double, dust loading in #s/scf
+     * @return double, dust loading in #s/scf (number of particles per scf)
      */
     double getDustLoading_() const {
         return dustLoading_;
@@ -239,7 +239,7 @@ public:
      *
      * Sets the dust loading
      *
-     * @param dustLoading double, dust loading in #s/scf
+     * @param dustLoading double, dust loading in #s/scf (number of particles per scf)
      *
      * @return nothing
      */

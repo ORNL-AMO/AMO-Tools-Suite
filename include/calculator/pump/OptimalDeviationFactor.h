@@ -16,7 +16,7 @@ class OptimalDeviationFactor {
 public:
    /**
     * Constructor
-    * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
+    * @param flowRate double, rate of flow in gpm
     * @return nothing
     */
     OptimalDeviationFactor(
@@ -25,6 +25,11 @@ public:
         flowRate_(flowRate)
     {}
 
+    /**
+     * Calculates the optimal deviation factor
+     *
+     * @return double, optimal deviation factor - unitless
+     */
     double calculate();
 
 private:

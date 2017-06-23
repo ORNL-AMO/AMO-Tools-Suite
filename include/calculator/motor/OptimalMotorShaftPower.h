@@ -19,8 +19,8 @@ public:
 
     /**
      * Constructor
-     * @param pumpShaftPower Pump shaft power as defined in hp or Kw.
-     * @param drive Type of drive the pump uses from either direct or belt drive.
+     * @param pumpShaftPower double, Pump shaft power as defined in hp
+     * @param drive Pump::Drive, Type of drive the pump uses from either direct or belt drive.
      * @return nothing
      */
     OptimalMotorShaftPower(
@@ -34,14 +34,14 @@ public:
     /**
      * Calculates the optimal motor shaft power
      *
-     * @return double, optimal motor shaft power in kw
+     * @return double, optimal motor shaft power in hp
      */
     double calculate();
 
     /**
      * Gets the pump shaft power
      *
-     * @return double, pump shaft power in hp or kw
+     * @return double, pump shaft power in hp
      */
     double getPumpShaftPower() const {
         return pumpShaftPower_;
@@ -50,7 +50,7 @@ public:
     /**
      * Sets the pump shaft power
      *
-     * @param pumpShaftPower double, pump shaft power in hp or kw
+     * @param pumpShaftPower double, pump shaft power in hp
      *
      * @return nothing
      */

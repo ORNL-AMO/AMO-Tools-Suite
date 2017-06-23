@@ -16,14 +16,14 @@ class MotorCurrent {
 public:
     /**
      * Constructor
-     * @param motorRatedPower Rated power of motor in hp or kW
-     * @param motorRPM RPM of motor.
-     * @param lineFrequency line Frequency of motor in Hz
-     * @param efficiencyClass Efficiency class of motor.
-     * @param specifiedEfficiency Specified efficiency of motor when the efficiency class = SPECIFIED as %
-     * @param loadFactor load factor - unitless
-     * @param ratedVoltage Rated voltage of the motor in V
-     * @param fullLoadAmps Current at full load in A
+     * @param motorRatedPower double, Rated power of motor in hp
+     * @param motorRPM double, RPM of motor.
+     * @param lineFrequency Motor::LineFrequency, classification of line Frequency of motor in Hz
+     * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor.
+     * @param specifiedEfficiency double, Specified efficiency of motor when the efficiency class = SPECIFIED as %
+     * @param loadFactor double, load factor - unitless
+     * @param ratedVoltage double, Rated voltage of the motor in Volts
+     * @param fullLoadAmps double, Current at full load in Amps
      * @return nothing
      */
     MotorCurrent(double motorRatedPower, int motorRPM, Motor::LineFrequency lineFrequency,
@@ -38,14 +38,14 @@ public:
 
     /**
      * calculates the motor current at a given load factor.
-     * @return motor current
+     * @return double, motor current in amps
      */
     double calculate();
 
     /**
      * Gets the estimated full load amp
      *
-     * @return double, estimated current at full load in A
+     * @return double, estimated current at full load in Amps
      */
     double getEstimatedFLA() {
         return estimatedFLA_;

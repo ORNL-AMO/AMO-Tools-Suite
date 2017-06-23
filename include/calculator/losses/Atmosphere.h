@@ -22,11 +22,11 @@ public:
      *
      * Constructor for the atmospheric heat loss with all inputs specified
      *
-     * @param inletTemperature double, Inlet temperature of gasses in °F
-     * @param outletTemperature double, Outlet temperature of gasses in °F
-     * @param flowRate double, Flow rate of gasses in scfh
-     * @param correctionFactor double, Correction factor - unitless
-     * @param specificHeat double, Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @param inletTemperature double, inlet temperature of gasses in °F
+     * @param outletTemperature double, outlet temperature of gasses in °F
+     * @param flowRate double, flow rate of gasses in scfh
+     * @param correctionFactor double, correction factor - unitless
+     * @param specificHeat double, specific heat of gasses at average air temperature in Btu/(scf*°F)
      *
      * @return nothing
      *
@@ -130,7 +130,7 @@ public:
     /**
      * Getter for the specific heat
      *
-     * @return double, specific heat in btu/(scf-°F)
+     * @return double, specific heat in btu/(scf*°F)
      */
     double getSpecificHeat() const {
         return specificHeat_;
@@ -139,7 +139,7 @@ public:
     /**
      * Sets the specific heat
      *
-     * @param specificHeat double, specific heat in btu/(scf-°F)
+     * @param specificHeat double, specific heat in btu/(scf*°F)
      *
      * @return nothing
      */

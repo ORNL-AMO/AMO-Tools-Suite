@@ -17,8 +17,8 @@ class OptimalSpecificSpeedCorrection {
 public:
     /**
      * Constructor
-     * @param style Type of pump speed from either fixed or not fixed.
-     * @param specificSpeed
+     * @param style Pump::Style, type of pump speed from either fixed or not fixed.
+     * @param specificSpeed double, specific speed in rpm*sqrt(gpm)/((ft/s)^(3/2))
      * @return nothing
      */
     OptimalSpecificSpeedCorrection(
@@ -32,7 +32,7 @@ public:
     /**
      * Calculates the optimal specific speed correction
      *
-     * @return double, optimal specific speed correction
+     * @return double, optimal specific speed correction as %
      */
     double calculate();
 

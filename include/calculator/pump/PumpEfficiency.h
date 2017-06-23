@@ -18,10 +18,10 @@ class PumpEfficiency {
 public:
     /**
      * Constructor
-     * @param specificGravity Specific gravity.
-     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
-     * @param head Either measured or required pump head im feet or meters.
-     * @param pumpShaftPower Pump power as defined in hp or kW.
+     * @param specificGravity double, specific gravity - unitless
+     * @param flowRate double, measured or required flow rate in gpm
+     * @param head double, measured or required pump head in feet
+     * @param pumpShaftPower double, pump power as defined in hp
      * @return nothing
      */
     PumpEfficiency(
@@ -87,7 +87,7 @@ public:
     /**
      * Get the measured or required pump head
      *
-     * @return double, measure or required pump head in ft or m
+     * @return double, measure or required pump head in ft
      */
     double getHead() const {
         return head_;
@@ -96,7 +96,7 @@ public:
     /**
      * Set the measured or required pump head
      *
-     * @param head double, measured or required pump head in ft or m
+     * @param head double, measured or required pump head in ft
      *
      * @return nothing
      */
@@ -107,7 +107,7 @@ public:
     /**
      * Get pump shaft power
      *
-     * @return double, pump shaft power in hp or kw
+     * @return double, pump shaft power in hp
      */
     double getPumpShaftPower() const {
         return pumpShaftPower_;
@@ -116,7 +116,7 @@ public:
     /**
      * Set the pump shaft power
      *
-     * @param pumpShaftPower double, pump shaft power in hp or kw
+     * @param pumpShaftPower double, pump shaft power in hp
      *
      * @return nothing
      */

@@ -8,13 +8,13 @@ public:
 	/**
 	 * Constructor for the SolidLiquidFlueGasMaterial losses with all inputs specified
 	 *
-	 * @param flueGasTemperature - Furnace Flue Gas Temperature in °F
-	 * @param excessAirPercentage - Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
-	 * @param combustionAirTemperature - Combustion Air Temperature
-	 * @param fuelTemperature - fuel Temperature in °F
-	 * @param moistureInAirCombustion - moisture in Air Combustion
-	 * @param ashDischargeTemperature - ash discharge Temperature
-	 * @param unburnedCarbonInAsh - unburned carbon in ash expressed as a percentage
+	 * @param flueGasTemperature - double, Furnace Flue Gas Temperature in °F
+	 * @param excessAirPercentage - double, Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
+	 * @param combustionAirTemperature - double, Combustion Air Temperature in °F
+	 * @param fuelTemperature - double, fuel Temperature in °F
+	 * @param moistureInAirCombustion - double, moisture in Air Combustion as %
+	 * @param ashDischargeTemperature - double, ash discharge Temperature in °F
+	 * @param unburnedCarbonInAsh - double, unburned carbon in ash expressed as %
 	 * @param carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen content in fuel (as percentage)
 	 * @return nothing
 	 *
@@ -226,7 +226,7 @@ public:
 	/**
      * Sets the moisture in air combustion
      *
-     * @param moisture double, moisture in air combustion as percentage
+     * @param moisture double, moisture in air combustion as %
      *
      * @return nothing
      */

@@ -48,14 +48,14 @@ public:
 
     /**
      * Constructor
-     * @param style Style of pump being used.
-     * @param achievableEfficiency Pump % efficiency at the specified operating conditions.
-     * @param rpm Pump RPM to define its operating speed.
-     * @param drive Type of drive the pump uses from either direct or belt drive.
-     * @param kviscosity Kinematic viscosity of the fluid being pumped, in centistokes.
-     * @param sg Specific gravity.
-     * @param stageCount The number of pump stages.
-     * @param speed Type of pump speed from either fixed or not fixed.
+     * @param style Style, classification of style of pump being used.
+     * @param achievableEfficiency double, pump % efficiency at the specified operating conditions
+     * @param rpm double, pump RPM to define its operating speed
+     * @param drive Drive, type of drive the pump uses from either direct or belt drive.
+     * @param kviscosity double, kinematic viscosity of the fluid being pumped in centistokes.
+     * @param sg double, specific gravity- unitless
+     * @param stageCount int, the number of pump stages
+     * @param speed Speed, type of pump speed from either fixed or not fixed.
      * @return nothing
      */
     Pump(
@@ -83,7 +83,7 @@ public:
     /**
      * Get the style of the pump being used
      *
-     * @return Style, style of pump
+     * @return Style, classificiation of style of pump
      */
     Style getStyle() {
         return style_;
@@ -92,7 +92,7 @@ public:
     /**
      * Set the style of pump being used
      *
-     * @param style Style, style of pump
+     * @param style Style, classification of style of pump
      *
      * @return nothing
      */
@@ -123,14 +123,14 @@ public:
     /**
      * Get RPM of pump to define operation speed
      *
-     * @return int, RPM
+     * @return int, motor RPM
      */
     int getRpm();
 
     /**
      * Set the RPM of pump to define operation speed
      *
-     * @param rpm double, rpm
+     * @param rpm double, motor RPM
      *
      * @return nothing
      */
@@ -141,7 +141,7 @@ public:
     /**
      * Get the type of drive the pump uses from either direct or belt drive
      *
-     * @return Drive, drive type
+     * @return Drive, classification of drive type
      */
     Drive getDrive() {
         return drive_;
@@ -150,7 +150,7 @@ public:
     /**
      * Set the type of drive the pump uses from either direct or belt drive
      *
-     * @param drive Drive, drive type
+     * @param drive Drive, classification of drive type
      *
      * @return nothing
      */
@@ -221,7 +221,7 @@ public:
     /**
      * Get the type of pump speed from either fixed or not fixed
      *
-     * @return Speed, pump speed type
+     * @return Speed, classification of pump speed type
      */
     Speed getFixedSpeed(){
         return speed_;
@@ -230,7 +230,7 @@ public:
     /**
      * Set the type of pump speed from either fixed or not fixed
      *
-     * @param speed Speed, pump speed type
+     * @param speed Speed, classification of pump speed type
      *
      * @return nothing
      */

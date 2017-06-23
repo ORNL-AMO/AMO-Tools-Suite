@@ -18,22 +18,19 @@
 #include <cmath>
 #include <memory>
 
-     /**
-     * @class GasProperties GasFlueGasMaterial.h
-     */
 class GasProperties {
 public:
 	/**
      * Constructor
-     * @param specificHeat specific heat in btu/hr
-     * @param molecularWeight molecular weight in g/mol
-     * @param specificWeight specific weight in lb/scf
-     * @param compPercent composition percent as %
-     * @param compByVol composition by volume as %
-     * @param o2Generated O2 generated in g/mol
-     * @param heatingValue heating value in btu/lb
-     * @param h2oGenerated H2O generated in g/mol
-     * @param co2Generated CO2 generated in g/mol
+     * @param specificHeat double, specific heat in btu/(lb*°F)
+     * @param molecularWeight double, molecular weight in g/mol
+     * @param specificWeight double, specific weight in lb/scf
+     * @param compPercent double, composition percent as %
+     * @param compByVol double, composition by volume as %
+     * @param o2Generated double, O2 generated in g/mol
+     * @param heatingValue double, heating value in btu/lb
+     * @param h2oGenerated double, H2O generated in g/mol
+     * @param co2Generated double, CO2 generated in g/mol
      * @return nothing
      */
 
@@ -125,7 +122,7 @@ public:
      *
      * @param gasName const string, name of gas
      *
-     * @return double, compostion by volume as %
+     * @return double, composition by volume as %
      */
 	double getGasByVol(const std::string & gasName) const {
 		auto const gas = gasses.find(gasName);
@@ -190,10 +187,10 @@ public:
     /**
      * Constructor for the flue gas losses with all inputs specified
      *
-     * @param flueGasTemperature - Furnace Flue Gas Temperature in °F
-     * @param excessAirPercentage - Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
-     * @param combustionAirTemperature - Combustion Air Temperature
-     * @param compositions - User defined gas compositions
+     * @param flueGasTemperature double, Furnace Flue Gas Temperature in °F
+     * @param excessAirPercentage double, Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
+     * @param combustionAirTemperature double, Combustion Air Temperature in °F
+     * @param compositions - GasComposition, User defined gas compositions
      * @return nothing
      *
      * */

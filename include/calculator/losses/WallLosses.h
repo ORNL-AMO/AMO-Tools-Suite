@@ -150,7 +150,7 @@ public:
     }
 
     /**
-     * Gets the condition factor. The condidtion factor is the surface shape/orientation factor.
+     * Gets the condition factor. The condition factor is the surface shape/orientation factor.
      *
      * @return double, condition factor
      */
@@ -159,9 +159,9 @@ public:
     }
 
     /**
-     * Sets the condition factor. The condidtion factor is the surface shape/orientation factor.
+     * Sets the condition factor. The condition factor is the surface shape/orientation factor.
      *
-     * @param conditionFactor double, condidtion factor
+     * @param conditionFactor double, condition factor
      *
      * @return nothing
      */
@@ -172,7 +172,7 @@ public:
     /**
      * Gets the correction factor
      *
-     * @return double, correction factor
+     * @return double, correction factor - unitless
      */
     double getCorrectionFactor() const {
         return correctionFactor_;
@@ -181,7 +181,7 @@ public:
     /**
      * Sets the correction factor
      *
-     * @param correctionFactor double, correction factor
+     * @param correctionFactor double, correction factor - unitless
      *
      * @return nothing
      */

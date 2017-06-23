@@ -17,7 +17,7 @@ class LeakageLosses {
 public:
     /**
      * Constructor
-     * @param draftPressure double, furnance draft pressure in inch W.C.
+     * @param draftPressure double, furnace draft pressure in inch W.C.
      * @param openingArea double, opening area in ft^2
      * @param leakageGasTemperature double, temperature of gases leaking from furnace in °F
      * @param ambientTemperature double. ambient temperature in °F
@@ -128,7 +128,7 @@ public:
     }
 
     /**
-     * Gets the coeffcient
+     * Gets the coefficient
      *
      * @return double, coefficient - unitless
      */
@@ -139,7 +139,7 @@ public:
     /**
      * Sets the coefficient
      *
-     * @param coefficient double, coefficient
+     * @param coefficient double, coefficient - unitless
      *
      * @return nothing
      */

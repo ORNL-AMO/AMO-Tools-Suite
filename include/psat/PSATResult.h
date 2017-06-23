@@ -27,10 +27,10 @@ public:
 
     /**
      * Constructor
-     * @param pump
-     * @param motor
-     * @param financial
-     * @param fieldData
+     * @param pump Pump, contains all pump-related calculations, passed by reference
+     * @param motor Motor, contains all motor-related calculations, passed by reference
+     * @param financial Financial, contains all financial-related calculations, passed by reference
+     * @param fieldData FiledData, contains all field data-related calculations, passed by reference
      * @return nothing
      */
     PSATResult(
@@ -78,7 +78,7 @@ public:
      *
      * Gets the annual savings potential
      *
-     * @return double, annual savings potential in US $
+     * @return double, annual savings potential in $/year
      */
     double getAnnualSavingsPotential() const {
         return annualSavingsPotential_;
@@ -88,7 +88,7 @@ public:
      *
      * Gets the optimization rating
      *
-     * @return double, optimization rating
+     * @return double, optimization rating as %
      */
     double getOptimizationRating() const {
         return optimizationRating_;
@@ -96,9 +96,9 @@ public:
 
     /**
      *
-     * Gets the exisiting conditons
+     * Gets the existing conditions
      *
-     * @return const result_&, existing conditons
+     * @return const result_, existing conditions
      */
     const result_ &getExisting() const {
         return existing_;
@@ -106,15 +106,24 @@ public:
 
     /**
      *
-     * Gets the optimal conditons
+     * Gets the optimal conditions
      *
-     * @return const result_&, optimal conditions
+     * @return const result_, optimal conditions
      */
     const result_ &getOptimal() const {
         return optimal_;
     }
 
+    /**
+     * Calculates existing conditions
+     * @return double, existing conditions
+     */
     double calculateExisting();
+
+    /**
+     * Calculates optimal conditions
+     * @return double, optimal conditions
+     */
     double calculateOptimal();
 private:
     // Out values
