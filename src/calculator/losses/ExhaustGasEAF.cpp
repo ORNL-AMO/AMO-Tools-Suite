@@ -19,7 +19,7 @@ double ExhaustGasEAF::getH2HeatingValue() {
 }
 
 double ExhaustGasEAF::getCombustibles() {
-    this->combustibles_ = (this->combustibleGases_/100) * 1020;
+    this->combustibles_ = (this->combustibleGases_/100) * 1000;
     return this->combustibles_;
 }
 

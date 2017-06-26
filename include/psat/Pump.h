@@ -34,7 +34,7 @@ public:
         SPECIFIED_OPTIMAL_EFFICIENCY
     };
 
-    ///emun class for drive types
+    ///enum class for drive types
     enum class Drive {
         DIRECT_DRIVE,
         BELT_DRIVE
@@ -83,7 +83,7 @@ public:
     /**
      * Get the style of the pump being used
      *
-     * @return Style, classificiation of style of pump
+     * @return Style, classification of style of pump
      */
     Style getStyle() {
         return style_;
@@ -110,7 +110,7 @@ public:
     }
 
     /**
-     * Set the achievable efficiency of the pump at specified operating conditons
+     * Set the achievable efficiency of the pump at specified operating conditions
      *
      * @param achievableEfficiency double, achievable efficiency as %
      *
