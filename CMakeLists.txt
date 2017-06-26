@@ -101,7 +101,11 @@ set(SOURCE_FILES
         src/phast/Furnace.cpp
         src/calculator/pump/HeadTool.cpp
         src/calculator/losses/EnergyInputEAF.cpp
-        src/calculator/losses/SlagOtherMaterialLosses.cpp src/calculator/losses/SolidLiquidFlueGasMaterial.cpp src/calculator/losses/AuxiliaryPower.cpp)
+        src/calculator/losses/SlagOtherMaterialLosses.cpp
+        src/calculator/losses/SolidLiquidFlueGasMaterial.cpp
+        src/calculator/losses/AuxiliaryPower.cpp
+        src/calculator/losses/ExhaustGasEAF.cpp
+        src/calculator/EnergyEquivalency.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -157,7 +161,12 @@ set(INCLUDE_FILES
         include/sqlite/SolidLiquidFlueGasMaterialData.h
         include/sqlite/GasFlueGasMaterialData.h
         include/calculator/losses/EnergyInputEAF.h
-        include/calculator/losses/SlagOtherMaterialLosses.h include/calculator/losses/SolidLiquidFlueGasMaterial.h include/calculator/losses/AuxiliaryPower.h include/calculator/losses/ExhaustGasEAF.h src/calculator/losses/ExhaustGasEAF.cpp)
+        include/calculator/losses/SlagOtherMaterialLosses.h
+        include/calculator/losses/SolidLiquidFlueGasMaterial.h
+        include/calculator/losses/AuxiliaryPower.h
+        include/calculator/losses/ExhaustGasEAF.h
+        include/calculator/EnergyEquivalency.h
+        )
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -176,7 +185,12 @@ set(TEST_FILES
         tests/GasFlueGasMaterial.unit.cpp
         tests/HeadTool.unit.cpp
         tests/EnergyInputEAF.unit.cpp
-        tests/SQLite.unit.cpp tests/SolidLiquidFlueGasMaterial.unit.cpp tests/AuxiliaryPower.unit.cpp tests/SlagOtherMaterialLosses.unit.cpp tests/ExhuastGasEAF.unit.cpp)
+        tests/SQLite.unit.cpp
+        tests/SolidLiquidFlueGasMaterial.unit.cpp
+        tests/AuxiliaryPower.unit.cpp
+        tests/SlagOtherMaterialLosses.unit.cpp
+        tests/ExhuastGasEAF.unit.cpp
+        tests/EnergyEquivalency.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
