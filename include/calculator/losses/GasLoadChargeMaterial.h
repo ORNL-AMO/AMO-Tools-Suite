@@ -24,15 +24,15 @@ public:
      * Constructor for the gas load/charge material with all inputs specified
      *
      * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
-     * @param specificHeatGas Specific Heat of Gas in Btu/(lb- °F)
+     * @param specificHeatGas Specific Heat of Gas in Btu/(lb*°F)
      * @param feedRate Feed Rate for Gas Mixture in lb/hr
      * @param percentVapor Vapor in Gas Mixture (% of Total)
      * @param initialTemperature Initial Temperature in °F
      * @param dischargeTemperature Discharge Temperature in °F
-     * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb- °F)
+     * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb*°F)
      * @param percentReacted Feed Gas Reacted (% of Total)
      * @param reactionHeat Heat of Reaction in Btu/lb
-     * @param additionalHeat Additional Heat Required in Btu/h
+     * @param additionalHeat Additional Heat Required in Btu/hr
      *
      * */
     GasLoadChargeMaterial(
@@ -84,7 +84,7 @@ public:
      * Gets the specific heat of gas
      *
      *
-     * @return double, specific heat of gas in btu/(lb-°F)
+     * @return double, specific heat of gas in btu/(lb*°F)
      */
     double getSpecificHeatGas() const {
         return specificHeatGas_;
@@ -93,7 +93,7 @@ public:
     /**
      * Sets the specific heat of gas
      *
-     * @param specificHeatGas double, specific heat of gas in btu/(lb-°F)
+     * @param specificHeatGas double, specific heat of gas in btu/(lb*°F)
      *
      * @return nothing
      */
@@ -164,7 +164,7 @@ public:
     /**
      * Gets the specific heat of vapor
      *
-     * @return double, specific heat of vapor in btu/(lb-°F)
+     * @return double, specific heat of vapor in btu/(lb*°F)
      */
     double getSpecificHeatVapor() const {
         return specificHeatVapor_;
@@ -173,7 +173,7 @@ public:
     /**
      * Sets the specific heat of vapor
      *
-     * @param specificHeatVapor double, specific heat of vapor in btu/(lb-°F)
+     * @param specificHeatVapor double, specific heat of vapor in btu/(lb*°F)
      *
      * @return nothing
      */
@@ -354,7 +354,7 @@ private:
      * Constructor for the gas load/charge material with subset of inputs specified.
      *
      * @param substance Name of substance
-     * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb- °F)
+     * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb*°F)
      *
      * */
     GasLoadChargeMaterial(

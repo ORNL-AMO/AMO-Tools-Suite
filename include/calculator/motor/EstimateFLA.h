@@ -17,12 +17,12 @@ class EstimateFLA {
 public:
     /**
      * Constructor
-     * @param motorRatedPower Rated Power of motor in hp or kW.
-     * @param motorRPM RPM of motor.
-     * @param lineFrequency Line frequency of motor in 50Hz or 60Hz.
-     * @param efficiencyClass Efficiency class of motor.
-     * @param specifiedEfficiency Specified Efficiency of motor as defined by %.
-     * @param ratedVoltage Rated voltage of motor.
+     * @param motorRatedPower double, Rated Power of motor in hp or kW.
+     * @param motorRPM double, RPM of motor.
+     * @param lineFrequency Motor::LineFrequency, Line frequency of motor in 50Hz or 60Hz.
+     * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor.
+     * @param specifiedEfficiency double, Specified Efficiency of motor as defined by %.
+     * @param ratedVoltage double, Rated voltage of motor in volts
      * @return nothing
      */
     EstimateFLA(
@@ -49,7 +49,7 @@ public:
 
     /**
      * Getter for estimated Full load amps
-     * @return Estimated full load amp
+     * @return double, Estimated full load amp
      */
     double getEstimatedFLA() {
         return estimatedFLA_;

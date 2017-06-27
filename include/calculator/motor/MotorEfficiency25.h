@@ -18,10 +18,10 @@ class MotorEfficiency25 {
 public:
     /**
      * Constructor
-     * @param efficiencyClass Efficiency class of motor
-     * @param motorRatedPower Rated power of motor
-     * @param motorRpm Rpm of motor
-     * @param lineFrequency Line Frequency of motor
+     * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor
+     * @param motorRatedPower double, Rated power of motor in hp
+     * @param motorRpm double, Rpm of motor
+     * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      * @return nothing
      */
     MotorEfficiency25(
@@ -38,7 +38,7 @@ public:
 
     /**
      *
-     * @return Vector containing motor efficiency
+     * @return Vector containing motor efficiency as %
      */
     std::vector<double> calculate();
 
@@ -48,7 +48,7 @@ private:
      */
     Motor::EfficiencyClass efficiencyClass_;
     /**
-     * Rated power of motor
+     * Rated power of motor in hp
      */
     double motorRatedPower_;
     /**

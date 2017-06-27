@@ -26,17 +26,17 @@ public:
 
    /**
     * Constructor
-    * @param motorRatedPower Rated Power of motor in hp or Kw.
-    * @param motorMeasuredPower Power of the motor.
-    * @param motorRPM RPM of motor.
-    * @param lineFrequency Line frequency of motor as either 50Hz or 60Hz.
+    * @param motorRatedPower double, Rated Power of motor in hp
+    * @param motorMeasuredPower double, Power of the motor in hp
+    * @param motorRPM double, RPM of motor.
+    * @param lineFrequency Motor::LineFrequency, Line frequency of motor as either 50Hz or 60Hz.
     * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
-    * @param specifiedEfficiency Specified Efficiency of motor, if efficiency class is SPECIFIED.
-    * @param ratedVoltage Rated voltage of motor.
-    * @param fullLoadAmps Current at full load in amps.
-    * @param fieldVoltage Field voltage.
-    * @param loadEstimationMethod Estimated power or current on motor input.
-    * @param fieldCurrent Field current as defined in amps.
+    * @param specifiedEfficiency double, Specified Efficiency of motor, if efficiency class is SPECIFIED.
+    * @param ratedVoltage double, Rated voltage of motor in volts
+    * @param fullLoadAmps double, Current at full load in amps
+    * @param fieldVoltage double, Field voltage in volts
+    * @param loadEstimationMethod double, Estimated power or current on motor input in hp
+    * @param fieldCurrent double, Field current as defined in amps.
     * @return nothing
     */
     MotorShaftPower(
@@ -89,7 +89,7 @@ public:
 	/**
      * Calculate the power
      *
-     * @return double, power in hp or kw
+     * @return double, power in hp
      */
     double calculatePower();
 

@@ -24,18 +24,18 @@ public:
     /**
      * Constructor for liquid load/charge material with all inputs specified
      *
-     * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
-     * @param specificHeatLiquid Specific Heat of Liquid in Btu/(lb-°F)
-     * @param vaporizingTemperature Vaporizing Temperature in °F
-     * @param latentHeat Latent Heat of Vaporization in Btu/lb
-     * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb-°F)
-     * @param chargeFeedRate Charge (Liquid)-Feed Rate in lb/h
-     * @param initialTemperature Initial Temperature in °F
-     * @param dischargeTemperature Discharge Temperature in °F
-     * @param percentVaporized Charge Liquid Vaporized  (% of Charge)
-     * @param percentReacted Charge Liquid Reacted (% of Charge)
-     * @param reactionHeat Heat of Reaction in Btu/lb
-     * @param additionalHeat Additional Heat Required in ???
+     * @param thermicReactionType LoadChargeMaterial::ThermicREactionType, Enumerated value for either endothermic or exothermic reactions
+     * @param specificHeatLiquid double, Specific Heat of Liquid in Btu/(lb*°F)
+     * @param vaporizingTemperature double, Vaporizing Temperature in °F
+     * @param latentHeat double, Latent Heat of Vaporization in Btu/lb
+     * @param specificHeatVapor double, Specific Heat of Vapor in Btu/(lb*°F)
+     * @param chargeFeedRate double, Charge (Liquid)-Feed Rate in lb/hr
+     * @param initialTemperature double, Initial Temperature in °F
+     * @param dischargeTemperature double, Discharge Temperature in °F
+     * @param percentVaporized double, Charge Liquid Vaporized  (% of Charge)
+     * @param percentReacted double, Charge Liquid Reacted (% of Charge)
+     * @param reactionHeat double, Heat of Reaction in Btu/lb
+     * @param additionalHeat double, Additional Heat Required in btu/hr
      *
      * */
 
@@ -70,7 +70,7 @@ public:
 
     /**
      *
-     * Gets the thermic reaction type
+     * Gets the classification of thermic reaction type
      *
      * @return LoadChargeMaterial::ThermicReactionType, thermic reaction type
      */
@@ -79,7 +79,7 @@ public:
     }
 
     /**
-     * Sets the thermic reaction type
+     * Sets the classification of thermic reaction type
      *
      * @param thermicReactionType LoadChargeMaterial::ThermicaReactionType, thermic reaction type
      *
@@ -91,9 +91,9 @@ public:
 
     /**
      *
-     * Gets the specific heat of liquid in Btu/(lb-°F)
+     * Gets the specific heat of liquid
      *
-     * @return double, specific heat in btu/(lb-°F)
+     * @return double, specific heat in btu/(lb*°F)
      */
     double getSpecificHeatLiquid() const {
         return specificHeatLiquid_;
@@ -103,7 +103,7 @@ public:
      *
      * Sets the specific heat of liquid
      *
-     * @param specificHeatLiquid double, specific heat of liquid in btu/(lb-°F)
+     * @param specificHeatLiquid double, specific heat of liquid in btu/(lb*°F)
      *
      * @return nothing
      */
@@ -159,7 +159,7 @@ public:
      *
      * Gets the specific heat of vapor
      *
-     * @return double, specific heat of vapor in btu/(lb-°F)
+     * @return double, specific heat of vapor in btu/(lb*°F)
      */
     double getSpecificHeatVapor() const {
         return specificHeatVapor_;
@@ -169,7 +169,7 @@ public:
      *
      * Sets the specific heat of vapor
      *
-     * @param specificHeatVapor double, specific heat of vapor in btu/(lb-°F)
+     * @param specificHeatVapor double, specific heat of vapor in btu/(lb*°F)
      *
      * @return nothing
      */
@@ -181,7 +181,7 @@ public:
      *
      * Gets the charge (liquid)-feed rate
      *
-     * @return ndouble, charge (liquid)-feed rate in lb/h
+     * @return ndouble, charge (liquid)-feed rate in lb/hr
      */
     double getChargeFeedRate() const {
         return chargeFeedRate_;
@@ -191,7 +191,7 @@ public:
      *
      * Sets the charge (liquid)-feed rate
      *
-     * @param chargeFeedRate double, charge (liquid)-feed rate in lb/h
+     * @param chargeFeedRate double, charge (liquid)-feed rate in lb/hr
      *
      * @return nothing
      */
@@ -313,7 +313,7 @@ public:
      *
      * Gets the additional heat
      *
-     * @return double, additional heat as ???
+     * @return double, additional heat as btu/hr
      */
     double getAdditionalHeat() const {
         return additionalHeat_;
@@ -323,7 +323,7 @@ public:
      *
      * Sets the additional heat
      *
-     * @param additionalHeat double, additional heat as ???
+     * @param additionalHeat double, additional heat as btu/hr
      *
      * @return nothing
      */
@@ -440,7 +440,7 @@ private:
      * Constructor for liquid load/charge material with subset of inputs specified.
      *
      * @param substance Name of substance
-     * @param specificHeatLiquid Specific Heat of Liquid in Btu/(lb-°F)
+     * @param specificHeatLiquid Specific Heat of Liquid in Btu/(lb*°F)
      * @param vaporizingTemperature Vaporizing Temperature in °F
      * @param latentHeat Latent Heat of Vaporization in Btu/lb
      *

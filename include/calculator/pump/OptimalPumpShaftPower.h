@@ -17,10 +17,10 @@ class OptimalPumpShaftPower {
 public:
     /**
      * Constructor
-     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
-     * @param head Either measured or required pump head im feet or meters.
-     * @param specificGravity Specific gravity.
-     * @param pumpEfficiency Pump efficiency at the specified operating conditions.
+     * @param flowRate double, measured or required flow rate in gpm
+     * @param head double, measured or required pump head in feet
+     * @param specificGravity double, specific gravity - unitless
+     * @param pumpEfficiency double, pump efficiency at the specified operating conditions as %
      * @return nothing
      */
     OptimalPumpShaftPower(
@@ -38,7 +38,7 @@ public:
     /**
      * Calculates the optimal pump shaft power
      *
-     * @return double, optimal pump shaft power in kw
+     * @return double, optimal pump shaft power in hp
      */
     double calculate();
 

@@ -16,12 +16,12 @@ class CurveFitVal {
 public:
     /**
      * Constructor
-     * @param noIntervalPoints Number of interval points
-     * @param xcoord Array of x coordinates
-     * @param ycoord Array of y coordinates
-     * @param pdegree Degree of polynomial curve
-     * @param loadFactor load Factor
-     * @return Curve Fit value at required load Factor.
+     * @param noIntervalPoints int, number of interval points
+     * @param xcoord array of x coordinates as doubles
+     * @param ycoord array of y coordinates as doubles
+     * @param pdegree int, degree of polynomial curve
+     * @param loadFactor double, load factor - unitless
+     * @return nothing
      */
     CurveFitVal(
         int noIntervalPoints,
@@ -38,8 +38,8 @@ public:
     {}
 
     /**
-     * Calculates the curve fit value
-     * @return Curve Fit Value
+     * Calculates the curve fit value at required load factor
+     * @return double, curve fit value
      */
     double calculate();
 

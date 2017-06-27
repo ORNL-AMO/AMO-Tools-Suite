@@ -32,14 +32,14 @@ public:
 
     /**
      * Constructor
-     * @param lineFrequency Mains supply frequency at either 50Hz or 60Hz.
-     * @param motorRatedPower Rated power for the motor in hp or kw.
-     * @param motorRpm Motor RPM.
-     * @param efficiencyClass Classification of motor efficiency.
-     * @param specifiedEfficiency Specified % Efficiency of motor, if efficiency class is SPECIFIED
-     * @param motorRatedVoltage Motor nameplate design voltage.
-     * @param fullLoadAmps Current at full load in amps.
-     * @param sizeMargin The size margin as defined in %.
+     * @param lineFrequency LineFrequency, main supply frequency at either 50Hz or 60Hz
+     * @param motorRatedPower double, rated power for the motor in hp
+     * @param motorRpm double, motor RPM
+     * @param efficiencyClass EfficiencyClass, classification of motor efficiency
+     * @param specifiedEfficiency double, specified % Efficiency of motor, if efficiency class is SPECIFIED
+     * @param motorRatedVoltage double, motor nameplate design voltage in volts
+     * @param fullLoadAmps double, current at full load in amps
+     * @param sizeMargin double, size margin as defined in %
      * @return nothing
      */
     Motor(
@@ -67,7 +67,7 @@ public:
     /**
      * Gets the line frequency at either 50 Hz or 60 Hz
      *
-     * @return LineFrequency, line frquency in Hz
+     * @return LineFrequency, classification of line frequency in Hz (either 50Hz or 60Hz)
      */
     LineFrequency getLineFrequency() const {
         return lineFrequency_;
@@ -87,7 +87,7 @@ public:
     /**
      * Gets the rated motor power
      *
-     * @return double, rated motor power in hp or kW
+     * @return double, rated motor power in hp
      */
     double getMotorRatedPower() const {
         return motorRatedPower_;
@@ -96,7 +96,7 @@ public:
     /**
      * Sets the reated motor power
      *
-     * @param motorRatedPower double, rated motor power in hp or kW
+     * @param motorRatedPower double, rated motor power in hp
      *
      * @return nothing
      */

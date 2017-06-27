@@ -16,9 +16,9 @@ public:
     /**
      * Constructor
      * Below parameters have self explanatory nomenclature.
-     * @param specificGravity Specified Gravity.
-     * @param flowRate Rate of flow. Units are gpm
-     * @param head Pump head measured in feet
+     * @param specificGravity double, specified gravity - unitless
+     * @param flowRate double, rate of flow in gpm
+     * @param head double, pump head measured in feet
      * @return nothing
      */
     FluidPower(
@@ -32,8 +32,8 @@ public:
     {};
 
     /**
-     * Calculates fluid power
-     * @return Fluid Power
+     * Calculates fluid power in kw
+     * @return double, fluid power
      */
     double calculate();
 
@@ -51,7 +51,7 @@ private:
      */
     double head_;
     /**
-     * Returning fluid power
+     * Returning fluid power in kw
      */
     double fluidPower_;
 };

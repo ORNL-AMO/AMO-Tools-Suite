@@ -16,10 +16,10 @@ public:
 
     /**
      * Constructor
-     * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
-     * @param initialTemperature Initial temperature in °F.
-     * @param outletTemperature Outlet temperature in °F.
-     * @param correctionFactor Correction factor
+     * @param flowRate double, Rate of flow. Units are gpm
+     * @param initialTemperature double, Initial temperature in °F.
+     * @param outletTemperature double, Outlet temperature in °F.
+     * @param correctionFactor double, Correction factor - unitless
      * @return nothing
      */
     WaterCoolingLosses(double flowRate,

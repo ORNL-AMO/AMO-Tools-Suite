@@ -21,7 +21,7 @@ class FixtureLosses {
 public:
     /**
      * Constructor
-     * @param specificHeat double, Specific heat in btu/(lb-°F).
+     * @param specificHeat double, Specific heat in btu/(lb*°F).
      * @param feedRate double, Feed Rate for Gas Mixture in lb/hr
      * @param initialTemperature double, Initial temperature in °F.
      * @param finalTemperature double, Final temperature in °F.
@@ -48,7 +48,7 @@ public:
     /**
     * Gets the specific heat
     *
-    * @return double, specific heat in btu/(lb-°F)
+    * @return double, specific heat in btu/(lb*°F)
     */
     double getSpecificHeat() const {
         return specificHeat_;
@@ -57,7 +57,7 @@ public:
     /**
     * Sets the specific heat
     *
-    * @param specificHeat double, specific heat in btu/(lb-°F)
+    * @param specificHeat double, specific heat in btu/(lb*°F)
     *
     * @return nothing
     */

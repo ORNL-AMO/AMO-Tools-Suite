@@ -19,11 +19,11 @@ public:
     /**
      * Constructor for the gas cooling losses (including air) with all inputs specified
      *
-     * @param flowRate Air or gas volumetric flow rate in SCFM (ft³/min)
-     * @param initialTemperature Inlet temperature of air or gas in °F
-     * @param finalTemperature Outlet temperature of air or gas in °F
-     * @param specificHeat Specific heat of gas or air at average air temperature in Btu/(scf F)
-     * @param correctionFactor Correction factor
+     * @param flowRate double, Air or gas volumetric flow rate in SCFM (ft³/min)
+     * @param initialTemperature double, Inlet temperature of air or gas in °F
+     * @param finalTemperature double, Outlet temperature of air or gas in °F
+     * @param specificHeat double, Specific heat of gas or air at average air temperature in Btu/(scf*°F)
+     * @param correctionFactor double, Correction factor - unitless
      *
      * */
 
@@ -107,7 +107,7 @@ public:
     /**
      * Gets the specific heat of air or gas at average air temperature
      *
-     * @return double, specific heat of air or gas in btu/(lb-°F)
+     * @return double, specific heat of air or gas in btu/(scf*°F)
      */
     double getSpecificHeat() const {
         return specificHeat_;
@@ -116,7 +116,7 @@ public:
     /**
      * Sets the specific heat of air or gas at average air temperature
      *
-     * @param specificHeat double, specific heat of air or gas in btu/(lb-°F)
+     * @param specificHeat double, specific heat of air or gas in btu/(scf*°F)
      *
      * @return nothing
      */

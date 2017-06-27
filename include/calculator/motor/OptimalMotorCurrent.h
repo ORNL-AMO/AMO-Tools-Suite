@@ -19,13 +19,13 @@ public:
 
    /**
     * Constructor
-    * @param motorRatedPower Rated Power of motor in hp or Kw.
-    * @param motorRPM RPM of motor.
-    * @param lineFrequency Line frequency of motor in either 60Hz or 50Hz.
-    * @param efficiencyClass Efficiency class of motor.
-    * @param specifiedEfficiency Specified Efficiency of motor, if efficiency class is SPECIFIED.
-    * @param loadFactor Load factor as defined by %.
-    * @param ratedVoltage Rated voltage of the motor.
+    * @param motorRatedPower double, Rated Power of motor in hp
+    * @param motorRPM double, RPM of motor.
+    * @param lineFrequency Motor::LineFrequency, Line frequency of motor in either 60Hz or 50Hz.
+    * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor.
+    * @param specifiedEfficiency double, Specified Efficiency of motor, if efficiency class is SPECIFIED.
+    * @param loadFactor double, Load factor - unitless
+    * @param ratedVoltage double, Rated voltage of the motor in volts
     * @return nothing
     */
     OptimalMotorCurrent(
@@ -53,14 +53,14 @@ public:
     /**
      * Calculates the optimal motor current
      *
-     * @return double, optimal motor current in A
+     * @return double, optimal motor current in Amps
      */
     double calculate();
 
     /**
      * Gets the motor power
      *
-     * @return double, motor power in hp or kw
+     * @return double, motor power in hp
      */
     double getMotorPower() const {
         return motorPower_;
@@ -69,7 +69,7 @@ public:
     /**
      * Sets the motor power
      *
-     * @param motorPower double, motor power in hp or kw
+     * @param motorPower double, motor power in hp
      *
      * @return nothing
      */
@@ -80,7 +80,7 @@ public:
     /**
      * Gets the voltage of the motor
      *
-     * @return double, voltage in V
+     * @return double, voltage in Volts
      */
     double getVoltage() const {
         return voltage_;
@@ -89,7 +89,7 @@ public:
     /**
      * Sets the voltage of the motor
      *
-     * @param voltage double, voltage of motor in V
+     * @param voltage double, voltage of motor in Volts
      *
      * @return nothing
      */

@@ -35,16 +35,16 @@ NAN_METHOD(headToolSuctionTank) {
     /**
     * Constructor for the HeadToolSuctionTank class with all inputs specified
     *
-    * @param specificGravity no units
-    * @param flowRate units in gpm (gallons per minute)
-    * @param suctionPipeDiameter units in inches
-    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauge)
-    * @param suctionTankFluidSurfaceElevation units in inches
-    * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in inches
-    * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation units in feet
-    * @param dischargeLineLossCoefficients no units
+    * @param specificGravity double, specific gravity - unitless
+    * @param flowRate double, flow rate in gpm (gallons per minute)
+    * @param suctionPipeDiameter double, diameter of suction pipe in inches
+    * @param suctionTankGasOverPressure double, gas over pressure of suction tank in psig (pounds per square inch gauge)
+    * @param suctionTankFluidSurfaceElevation double, fluid surface elevation of suction tank in inches
+    * @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
+    * @param dischargePipeDiameter double, diameter of discharge pipe in inches
+    * @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch gauge)
+    * @param dischargeGaugeElevation double, gauge elevation of discharge in feet
+    * @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
     *
  * */
 
@@ -87,16 +87,16 @@ NAN_METHOD(headTool) {
     /**
     * Constructor for the HeadTool class with all inputs specified
     *
-    * @param specificGravity no units
-    * @param flowRate units in gpm (gallons per minute)
-    * @param suctionPipeDiameter units in inches
-    * @param suctionTankGasOverPressure units in psig (pounds per square inch gauge)
-    * @param suctionTankFluidSurfaceElevation units in inches
-    * @param suctionLineLossCoefficients no units
-    * @param dischargePipeDiameter units in inches
-    * @param dischargeGaugePressure units in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation units in feet
-    * @param dischargeLineLossCoefficients no units
+    * @param specificGravity double, specific gravity - unitless
+    * @param flowRate double, flow rate in gpm (gallons per minute)
+    * @param suctionPipeDiameter double, diameter of suction pipe in inches
+    * @param suctionTankGasOverPressure double, gas over pressure of suction tank in psig (pounds per square inch gauge)
+    * @param suctionTankFluidSurfaceElevation double, fluid surface elevation of suction tank in inches
+    * @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
+    * @param dischargePipeDiameter double, diameter of discharge pipe in inches
+    * @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch gauge)
+    * @param dischargeGaugeElevation double, gauge elevation of discharge in feet
+    * @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
     *
  * */
 
@@ -174,41 +174,41 @@ Pump::Speed speed() {
 
 /**
  * Constructor Pump
- * @param pump_style Style of pump being used.
- * @param pump_specified Pump % efficiency at the specified operating conditions.
- * @param rpm Pump RPM to define its operating speed.
- * @param drive Type of drive the pump uses from either direct or belt drive.
- * @param kinematic_viscosity Kinematic viscosity of the fluid being pumped, in centistokes.
- * @param specific_gravity Specific gravity.
- * @param stages The number of pump stages.
- * @param speed Type of pump speed from either fixed or not fixed.
+ * @param pump_style Pump::Style, style of pump being used
+ * @param pump_specified double, pump % efficiency at the specified operating conditions
+ * @param rpm double, pump RPM to define its operating speed
+ * @param drive Drive, type of drive the pump uses from either direct or belt drive
+ * @param kinematic_viscosity double, kinematic viscosity of the fluid being pumped in centistokes
+ * @param specific_gravity double, specific gravity - unitless
+ * @param stages double, the number of pump stages
+ * @param speed Speed, type of pump speed from either fixed or not fixed
  */
 /**
  * Constructor motor
- * @param line_frequency Mains supply frequency at either 50Hz or 60Hz.
- * @param motor_rated_power Rated power for the motor in hp or kw.
- * @param motor_rated_speed Motor RPM.
- * @param efficiency_class Classification of motor efficiency.
- * @param efficiency Specified % Efficiency of motor, if efficiency class is SPECIFIED
- * @param motor_rated_voltage Motor nameplate design voltage.
- * @param motor_rated_fla Current at full load in amps.
- * @param margin The size margin as defined in %.
+ * @param line_frequency LineFrequency, mains supply frequency at either 50Hz or 60Hz
+ * @param motor_rated_power double, rated power for the motor in hp
+ * @param motor_rated_speed double, motor RPM
+ * @param efficiency_class EfficiencyClass, classification of motor efficiency
+ * @param efficiency double, specified % efficiency of motor, if efficiency class is SPECIFIED
+ * @param motor_rated_voltage double, motor nameplate design voltage in volts
+ * @param motor_rated_fla double, current at full load in amps
+ * @param margin double, the size margin as defined in %
  */
 
 /**
  * Constructor financial
- * @param operating_fraction Fraction(%) of calender hours the equipment is operating.
- * @param cost_kw_hour Per unit energy cost of electricity in $/kwhr.
+ * @param operating_fraction double, fraction(%) of calender hours the equipment is operating
+ * @param cost_kw_hour double, per unit energy cost of electricity in $/kwhr.
  */
 
 /**
  * Constructor field data
- * @param flow_rate Rate of flow. GPM
- * @param head Pump head measured in feet
- * @param load_estimation_method Estimated power or current on motor input.
- * @param motor_field_power Power output of the pump's motor in hp.
- * @param motor_field_current Current measured from the pump's motor in amps.
- * @param motor_field_voltage The measured bus voltage.
+ * @param flow_rate double, rate of flow in GPM
+ * @param head double, pump head measured in feet
+ * @param load_estimation_method LoadEstimationMethod, estimated power or current on motor input
+ * @param motor_field_power double, power output of the pump's motor in hp
+ * @param motor_field_current double, current measured from the pump's motor in amps
+ * @param motor_field_voltage double, the measured bus voltage in volts
  */
 
 NAN_METHOD(results) {
@@ -278,12 +278,12 @@ NAN_METHOD(results) {
 }
 /**
  * Constructor estimate fla
- * @param motor_rated_power Rated Power of motor in hp
- * @param motor_rated_speed RPM of motor.
- * @param line_frequency Line frequency of motor in 50Hz or 60Hz.
- * @param efficiency_class Efficiency class of motor.
- * @param efficiency Specified Efficiency of motor as defined by %.
- * @param motor_rated_voltage Rated voltage of motor.
+ * @param motor_rated_power double, rated Power of motor in hp
+ * @param motor_rated_speed double, RPM of motor
+ * @param line_frequency LineFrequency, line frequency of motor in 50Hz or 60Hz
+ * @param efficiency_class EfficiencyClass, efficiency class of motor
+ * @param efficiency double, specified efficiency of motor as defined by %
+ * @param motor_rated_voltage double, rated voltage of motor in volts
 
  */
 NAN_METHOD(estFLA) {
@@ -300,14 +300,14 @@ NAN_METHOD(estFLA) {
 }
 /**
  * Constructor motor performance
- * @param motor_rated_power Rated Power of motor in hp
- * @param motor_rated_speed RPM of motor.
- * @param line_frequency Line frequency of motor in 50Hz or 60Hz.
- * @param efficiency_class Efficiency class of motor.
- * @param efficiency Specified Efficiency of motor as defined by %.
- * @param load_factor between 0.0001 and 1.25
- * @param motor_rated_voltage Rated voltage of motor in volts
- * @param motor_rated_fla Motor rated full load amps
+ * @param motor_rated_power double, rated power of motor in hp
+ * @param motor_rated_speed double, RPM of motor
+ * @param line_frequency LineFrequency, line frequency of motor in 50Hz or 60Hz
+ * @param efficiency_class EfficiencyClass, efficiency class of motor
+ * @param efficiency double, specified efficiency of motor as defined by %
+ * @param load_factor double, load factor between 0.0001 and 1.25 - unitless
+ * @param motor_rated_voltage double, rated voltage of motor in volts
+ * @param motor_rated_fla double, motor rated full load amps
 
  */
 NAN_METHOD(motorPerformance) {
@@ -337,8 +337,8 @@ NAN_METHOD(motorPerformance) {
 }
 /**
  * Constructor
- * @param style style Style of pump being used.
- * @param flow_rate GPM
+ * @param style Pump::Style, style of pump being used
+ * @param flow_rate double, flow rate in GPM
  */
 NAN_METHOD(pumpEfficiency)  {
     inp = info[0]->ToObject();
@@ -355,8 +355,8 @@ NAN_METHOD(pumpEfficiency)  {
 
 /**
  * Constructor
- * @param style style Style of pump being used.
- * @param specific_speed rpm
+ * @param style Pump::Style, style Style of pump being used.
+ * @param specific_speed double, specific speed in rpm*sqrt(gpm)/((ft/s)^(3/2))
  */
 NAN_METHOD(achievableEfficiency) {
     inp = info[0]->ToObject();
@@ -366,12 +366,12 @@ NAN_METHOD(achievableEfficiency) {
 }
 /**
  * Constructor nema
- * @param motor_rated_power Rated Power of motor in hp
- * @param motor_rated_speed RPM of motor.
- * @param line_frequency Line frequency of motor in 50Hz or 60Hz.
- * @param efficiency_class Efficiency class of motor.
- * @param efficiency Specified Efficiency of motor as defined by %.
- * @param load_factor between 0.0001 and 1.25
+ * @param motor_rated_power double, rated power of motor in hp
+ * @param motor_rated_speed double, RPM of motor
+ * @param line_frequency LineFrequency, line frequency of motor in 50Hz or 60Hz
+ * @param efficiency_class EfficiencyClass, efficiency class of motor
+ * @param efficiency double, specified efficiency of motor as defined by %
+ * @param load_factor double, load factor between 0.0001 and 1.25 - unitless
  */
 NAN_METHOD(nema) {
     inp = info[0]->ToObject();

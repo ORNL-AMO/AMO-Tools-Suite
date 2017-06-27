@@ -17,8 +17,8 @@ class PumpShaftPower {
 public:
     /**
      * Constructor
-     * @param motorShaftPower Motor shaft power as defined in hp or Kw.
-     * @param drive Type of drive the pump uses from either direct or belt drive.
+     * @param motorShaftPower double, motor shaft power as defined in hp
+     * @param drive Pump::Motor, type of drive the pump uses from either direct or belt drive.
      * @return nothing
      */
     PumpShaftPower(
@@ -34,14 +34,14 @@ public:
     /**
      * Calculates the pump shaft power
      *
-     * @return double, pump shaft power in hp or kw
+     * @return double, pump shaft power in hp
      */
     double calculate();
 
     /**
      * Gets the motor shaft power
      *
-     * @return double, motor shaft power in hp or kw
+     * @return double, motor shaft power in hp
      */
     double getMotorShaftPower() const {
         return motorShaftPower_;
@@ -50,7 +50,7 @@ public:
     /**
      * Sets the motor shaft power
      *
-     * @param motorShaftPower double, in hp or kw
+     * @param motorShaftPower double, in hp
      *
      * @return nothing
      */

@@ -21,15 +21,15 @@ public:
 
     /**
      * Constructor
-     * @param motorRatedPower Rated Power of motor in hp
-     * @param motorRPM RPM of motor in rpms
-     * @param lineFrequency Line frequency of motor in Hz
-     * @param efficiencyClass Efficiency class of motor as %
-     * @param specifiedEfficiency Specified Efficiency of motor, if efficiency class is SPECIFIED
-     * @param ratedVoltage Rated voltage of the motor in V
-     * @param fullLoadAmps Current at full load in A
-     * @param fieldVoltage Field voltage in V
-     * @param optimalMotorShaftPower Optimal shaft power as defined in hp or Kw.
+     * @param motorRatedPower double, Rated Power of motor in hp
+     * @param motorRPM double, RPM of motor
+     * @param lineFrequency Motor::LineFrequency, classification of Line frequency of motor in Hz
+     * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor as %
+     * @param specifiedEfficiency double, Specified Efficiency of motor, if efficiency class is SPECIFIED
+     * @param ratedVoltage double, Rated voltage of the motor in V
+     * @param fullLoadAmps double, Current at full load in A
+     * @param fieldVoltage double, Field voltage in V
+     * @param optimalMotorShaftPower double, Optimal shaft power as defined in hp
      * @return nothing
      */
     OptimalMotorPower(
@@ -63,7 +63,7 @@ public:
     /**
      * Calculates the optimal motor power
      *
-     * @return double, optimal motor power in kw
+     * @return double, optimal motor power in hp
      */
     double calculate();
 

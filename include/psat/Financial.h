@@ -21,8 +21,8 @@ public:
 
     /**
      * Constructor
-     * @param operatingFraction Fraction(%) of calender hours the equipment is operating.
-     * @param unitCost Per unit energy cost of electricity in $/kwhr.
+     * @param operatingFraction double, fraction(%) of calender hours the equipment is operating
+     * @param unitCost double, per unit energy cost of electricity in $/kwh
      * @return nothing
      */
 

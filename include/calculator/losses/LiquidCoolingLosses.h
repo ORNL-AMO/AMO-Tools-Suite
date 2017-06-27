@@ -15,12 +15,12 @@ class LiquidCoolingLosses {
 public:
     /**
      * Constructor
-     * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
-     * @param density Density in lb/cu.ft
-     * @param initialTemperature Initial temperature in °F.
-     * @param outletTemperature Outlet temperature in °F.
-     * @param specificHeat Specific heat in btu/hr.
-     * @param correctionFactor Correction factor
+     * @param flowRate double, Rate of flow. Units are gpm,
+     * @param density double, Density in lb/cu.ft
+     * @param initialTemperature double, Initial temperature in °F.
+     * @param outletTemperature double, Outlet temperature in °F.
+     * @param specificHeat double, Specific heat in btu/(lb*°F)
+     * @param correctionFactor double, Correction factor - unitless
      * @return nothing
      */
 
@@ -74,7 +74,7 @@ public:
     /**
      * Sets the density
      *
-     * @param density double, denisty in lb/cu.ft
+     * @param density double, density in lb/cu.ft
      *
      * @return nothing
      */
@@ -125,7 +125,7 @@ public:
     /**
      * Gets the specific heat
      *
-     * @return double, specific heat in btu/hr
+     * @return double, specific heat in btu/(lb*°F)
      */
     double getSpecificHeat() const {
         return specificHeat_;
@@ -134,7 +134,7 @@ public:
     /**
      * Sets the specific heat
      *
-     * @param specificHeat double, specific heat in btu/hr
+     * @param specificHeat double, specific heat in btu/(lb*°F)
      *
      * @return nothing
      */

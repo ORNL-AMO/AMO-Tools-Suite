@@ -16,10 +16,10 @@ class OptimalSpecificSpeed {
 public:
     /**
      * Constructor
-     * @param rpm Pump RPM to define its operating speed.
-     * @param flowRate Measured or required flow rate in units that are consistent with the selection in "Pump Fluid" section.
-     * @param head Either measured or required pump head im feet or meters.
-     * @param stageCount The number of pump stages.
+     * @param rpm double, pump RPM to define its operating speed
+     * @param flowRate double, measured or required flow rate in gpm
+     * @param head double, measured or required pump head in feet
+     * @param stageCount double, the number of pump stages
      * @return nothing
      */
     OptimalSpecificSpeed(
@@ -34,6 +34,10 @@ public:
         rpm_(rpm)
     {};
 
+    /**
+     * Calculates the optimal specific speed
+     * @return double, optimal specific speed in rpm*sqrt(gpm)/((ft/s)^(3/2))
+     */
     double calculate();
 private:
     double stageCount_;

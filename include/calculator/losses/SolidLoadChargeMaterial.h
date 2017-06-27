@@ -28,21 +28,21 @@ public:
     /**
  * Constructor for the solid load/charge material with all inputs specified.
  *
- * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
- * @param specificHeatSolid Average specific heat of the solid material (dry) in Btu/(lb-°F)
- * @param latentHeat Latent heat of fusion in Btu/(lb)
- * @param specificHeatLiquid Specific heat of liquid from molten material in Btu/(lb-°F)
- * @param meltingPoint The melting point of the material in °F
- * @param chargeFeedRate Charge (wet)-feed rate in lb/h
- * @param waterContentCharged Water content as charged (%) in %
- * @param waterContentDischarged Water content as discharged (%) in %
- * @param initialTemperature Initial temperature in °F
- * @param dischargeTemperature Charge material discharge temperature in °F
- * @param waterVaporDischargeTemperature Water vapor discharge temperature in °F
- * @param chargeMelted Charge melted (% of dry charge) in %
- * @param chargedReacted Charge Reacted (% of dry charge) in %
- * @param reactionHeat Heat of reaction in Btu/lb
- * @param additionalHeat Additional heat required in Btu/h
+ * @param thermicReactionType LoadChargeMaterial::ThermicReactionType, Enumerated value for either endothermic or exothermic reactions
+ * @param specificHeatSolid double, Average specific heat of the solid material (dry) in Btu/(lb*°F)
+ * @param latentHeat double, Latent heat of fusion in Btu/(lb)
+ * @param specificHeatLiquid double, Specific heat of liquid from molten material in Btu/(lb*°F)
+ * @param meltingPoint double, The melting point of the material in °F
+ * @param chargeFeedRate double, Charge (wet)-feed rate in lb/hr
+ * @param waterContentCharged double, Water content as charged (%)
+ * @param waterContentDischarged double, Water content as discharged (%)
+ * @param initialTemperature double, Initial temperature in °F
+ * @param dischargeTemperature double, Charge material discharge temperature in °F
+ * @param waterVaporDischargeTemperature double, Water vapor discharge temperature in °F
+ * @param chargeMelted double, Charge melted (% of dry charge)
+ * @param chargedReacted double, Charge Reacted (% of dry charge) in %
+ * @param reactionHeat double, Heat of reaction in Btu/lb
+ * @param additionalHeat double, Additional heat required in Btu/h
  *
  * */
     SolidLoadChargeMaterial(
@@ -83,7 +83,7 @@ public:
     /**
      * Gets the thermic reaction type
      *
-     * @return LoadChargeMaterial::ThermicReactionType thermic reaction type
+     * @return LoadChargeMaterial::ThermicReactionType classification of thermic reaction type
      */
     LoadChargeMaterial::ThermicReactionType getThermicReactionType() const {
         return thermicReactionType_;
@@ -103,7 +103,7 @@ public:
     /**
      * Gets the average specific heat of the solid material(dry)
      *
-     * @return double, average specific heat of solid material (dry) in btu/(lb-°F)
+     * @return double, average specific heat of solid material (dry) in btu/(lb*°F)
      */
     double getSpecificHeatSolid() const {
         return specificHeatSolid_;
@@ -112,7 +112,7 @@ public:
     /**
      * Sets the average specific heat of the solid material (dry)
      *
-     * @param specificHeatSolid double, average specific heat of the solid material (dry) in btu/(lb-°F)
+     * @param specificHeatSolid double, average specific heat of the solid material (dry) in btu/(lb*°F)
      *
      * @return nothing
      */
@@ -143,7 +143,7 @@ public:
     /**
      * Gets the specific heat of liquid from molten material
      *
-     * @return double, specific heat of liquid from molten material in btu/(lb-°F)
+     * @return double, specific heat of liquid from molten material in btu/(lb*°F)
      */
     double getSpecificHeatLiquid() const {
         return specificHeatLiquid_;
@@ -152,7 +152,7 @@ public:
     /**
      * Sets the specific heat of liquid from molten material
      *
-     * @param specificHeatLiquid double, specific heat of liquid from molten material in btu/(lb-°F)
+     * @param specificHeatLiquid double, specific heat of liquid from molten material in btu/(lb*°F)
      *
      * @return nothing
      */
@@ -203,7 +203,7 @@ public:
     /**
      * Gets the charge (wet)-feed rate
      *
-     * @return double, charge (wet)-feed rate in lb/h
+     * @return double, charge (wet)-feed rate in lb/hr
      */
     double getChargeFeedRate() const {
         return chargeFeedRate_;
@@ -212,7 +212,7 @@ public:
     /**
      * Sets the charge (wet)-feed rate
      *
-     * @param chargeFeedRate double, charge (wet)-feed rate in lb/h
+     * @param chargeFeedRate double, charge (wet)-feed rate in lb/hr
      *
      * @return nothing
      */
@@ -323,7 +323,7 @@ public:
     /**
      * Gets the charge melted (% of dry charge)
      *
-     * @return double, % of charge melted (% of dry charge)
+     * @return double, charge melted (% of dry charge)
      */
     double getChargeMelted() const {
         return percentMelted_ * 100.0;
@@ -332,7 +332,7 @@ public:
     /**
      * Sets the charge melted (% of dry charge)
      *
-     * @param chargeMelted double, % of charge melted (%of dry charge)
+     * @param chargeMelted double, charge melted (% of dry charge)
      *
      * @return nothing
      */
@@ -341,18 +341,18 @@ public:
     }
 
     /**
-     * Gets the charge reacted (% of dry charge)
+     * Gets the charge reacted
      *
-     * @return double, % of charge reacted (% of dry charge)
+     * @return double, charge reacted (% of dry charge)
      */
     double getChargedReacted() const {
         return percentReacted_ * 100.0;
     }
 
     /**
-     * Sets the charged reacted (%of of dry charge)
+     * Sets the charged reacted
      *
-     * @param chargedReacted double, % of charge reacted (% of dry charge)
+     * @param chargedReacted double, charge reacted (% of dry charge)
      *
      * @return nothing
      */
@@ -383,7 +383,7 @@ public:
     /**
      * Gets the additional heat required
      *
-     * @return double, additional heat required in btu/h
+     * @return double, additional heat required in btu/hr
      */
     double getAdditionalHeat() const {
         return additionalHeat_;
@@ -392,7 +392,7 @@ public:
     /**
      * Sets the additional heat required
      *
-     * @param additionalHeat double, additional heat required in btu/h
+     * @param additionalHeat double, additional heat required in btu/hr
      *
      * @return nothing
      */
@@ -453,7 +453,7 @@ public:
     }
 
     /**
-     * Obtain the total heat for the solid charge material in Btu/h
+     * Obtain the total heat for the solid charge material in Btu/hr
      * */
     double getTotalHeat();
 
@@ -486,11 +486,11 @@ private:
     /**
     * Constructor for the solid load/charge material with subset of inputs specified.
     *
-    * @param substance Name of substance
-    * @param specificHeatSolid Average specific heat of the solid material (dry) in Btu/(lb-°F)
-    * @param latentHeat Latent heat of fusion in Btu/(lb)
-    * @param specificHeatLiquid Specific heat of liquid from molten material in Btu/(lb-°F)
-    * @param meltingPoint The melting point of the material in °F
+    * @param substance string, Name of substance
+    * @param specificHeatSolid double, Average specific heat of the solid material (dry) in Btu/(lb*°F)
+    * @param latentHeat double, Latent heat of fusion in Btu/(lb)
+    * @param specificHeatLiquid double, Specific heat of liquid from molten material in Btu/(lb*°F)
+    * @param meltingPoint double, The melting point of the material in °F
     *
     * */
     SolidLoadChargeMaterial(

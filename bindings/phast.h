@@ -61,11 +61,11 @@ NAN_METHOD(atmosphere) {
     /**
      * Constructor for the atmospheric heat loss with all inputs specified
      *
-     * @param inletTemperature double, Inlet temperature of gasses in °F
-     * @param outletTemperature double, Outlet temperature of gasses in °F
-     * @param flowRate double, Flow rate of gasses in scfh
-     * @param correctionFactor double, Correction factor - unitless
-     * @param specificHeat double, Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @param inletTemperature double, inlet temperature of gasses in °F
+     * @param outletTemperature double, outlet temperature of gasses in °F
+     * @param flowRate double, flow rate of gasses in scfh
+     * @param correctionFactor double, correction factor - unitless
+     * @param specificHeat double, specific heat of gasses at average air temperature in Btu/(scf - °F)
      * @return nothing
      *
      * */
@@ -80,10 +80,10 @@ NAN_METHOD(atmosphere) {
 NAN_METHOD(auxiliaryPowerLoss) {
 /**
  * Constructor
- * @param motorPhase current motor phase - this option is greyed out in PHAST 3.0
+ * @param motorPhase double, current motor phase - this option is greyed out in PHAST 3.0
  * @param supplyVoltage double, supply voltage in volts
  * @param avgCurrent double, average current in Amperes
- * @param powerFactor double, average power factor value
+ * @param powerFactor double, average power factor value - unitless
  * @param operatingTime double, percent operating time
  * @return nothing
  */
@@ -100,18 +100,18 @@ NAN_METHOD(energyInput) {
 /**
      * Constructor for the Electric Arc Furnace (EAF) heat loss with all inputs specified
      *
-     * @param naturalGasHeatInput value of total heat input to the heating system (furnace/oven) from all
+     * @param naturalGasHeatInput double, value of total heat input to the heating system (furnace/oven) from all
      *                              sources of heat supplied (natural gas, carbon, fuel oil, etc.)
      *                              measured in mm btu/cycle
-     * @param naturalGasFlow natural gas flow measured in cu.ft/cycle
-     * @param measuredOxygenFlow oxygen flow to the furnace measured in scfh
-     * @param coalCarbonInjection mass of coal or carbon injection for the cycle measured in lbs/cycle
-     * @param coalHeatingValue heating value for the coal or carbon injected measured in btu/lb
-     * @param electrodeUse electrode use measured in lbs/cycle
-     * @param electrodeHeatingValue electrode heating value measured in btu/lb
-     * @param otherFuels heat supplied from other sources, if any, measured in mm btu/cycle
-     * @param electricityInput total electric power supplied for the cycle measured in kwh/cycle
-     * @return heatDelivered (btu/cycle)
+     * @param naturalGasFlow double, natural gas flow measured in cu.ft/cycle
+     * @param measuredOxygenFlow double, oxygen flow to the furnace measured in scfh
+     * @param coalCarbonInjection double, mass of coal or carbon injection for the cycle measured in lbs/cycle
+     * @param coalHeatingValue double, heating value for the coal or carbon injected measured in btu/lb
+     * @param electrodeUse double, electrode use measured in lbs/cycle
+     * @param electrodeHeatingValue double, electrode heating value measured in btu/lb
+     * @param otherFuels double, heat supplied from other sources, if any, measured in mm btu/cycle
+     * @param electricityInput double, total electric power supplied for the cycle measured in kwh/cycle
+     * @return double, heat delivered in btu/cycle
      *
      * */
     inp = info[0]->ToObject();
@@ -131,13 +131,13 @@ NAN_METHOD(fixtureLosses) {
 
 /**
     * Constructor for Fixture Losses
-    * @param specificHeat Specific heat in btu/(lb-°F). double
-    * @param feedRate Feed Rate for Gas Mixture in lb/hr. double
-    * @param initialTemperature Initial temperature in °F. double
-    * @param finalTemperature Final temperature in °F. double
+    * @param specificHeat double, pecific heat in btu/(lb*°F)
+    * @param feedRate double, feed rate for gas mixture in lb/hr
+    * @param initialTemperature double, initial temperature in °F
+    * @param finalTemperature double, final temperature in °F
     * @param correctionFactor double, correction factor - unitless
     *
-    * @return doiuble, heat loss in btu/cycle
+    * @return double, heat loss in btu/cycle
     */
     inp = info[0]->ToObject();
     FixtureLosses fl(Get("specificHeat"), Get("feedRate"), Get("initialTemperature"), Get("finalTemperature"), Get("correctionFactor"));
@@ -153,7 +153,7 @@ NAN_METHOD(flueGasLossesByVolume) {
      * @param flueGasTemperature double, temperature of flue gas in °F
      * @param excessAirPercentage double, excess air as %
      * @param combustionAirTemperature double, temperature of combustion air in °F
-     * @param gasComposition - percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
+     * @param gasComposition double, percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
      * @return nothing
      *
      * */
@@ -181,7 +181,7 @@ NAN_METHOD(flueGasLossesByMass) {
      * @param moistureInAirComposition double, moisture in air composition as %
      * @param ashDischargeTemperature double, temperature of ash discharge in °F
      * @param unburnedCarbonInAsh double, amount of unburned carbon in ash as %
-     * @param fuel composition of: carbon, hydrogen, sulphur, inertAsh, o2, moisture and nitrogen (in %)
+     * @param fuel double, composition of: carbon, hydrogen, sulphur, inertAsh, o2, moisture and nitrogen (in %)
      * @return nothing
      *
      * */
@@ -201,11 +201,11 @@ NAN_METHOD(gasCoolingLosses) {
 /**
   * Constructor for the gas cooling losses (including air) with all inputs specified
   *
-  * @param flowRate Air or gas volumetric flow rate in SCFM (ft³/min)
-  * @param initialTemperature Inlet temperature of air or gas in °F
-  * @param finalTemperature Outlet temperature of air or gas in °F
-  * @param specificHeat Specific heat of gas or air at average air temperature in Btu/(scf F)
-  * @param correctionFactor Correction factor
+  * @param flowRate double, air or gas volumetric flow rate in SCFM (ft³/min)
+  * @param initialTemperature double, inlet temperature of air or gas in °F
+  * @param finalTemperature double, outlet temperature of air or gas in °F
+  * @param specificHeat double, specific heat of gas or air at average air temperature in Btu/(scf*°F)
+  * @param correctionFactor double, correction factor - unitless
   *
   * @return heatLoss double
   * */
@@ -220,16 +220,16 @@ NAN_METHOD(gasLoadChargeMaterial) {
         /**
  * Constructor for the gas load/charge material with all inputs specified
  *
- * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions 0 = Endo, else = Exo Int
- * @param specificHeatGas Specific Heat of Gas in Btu/(lb- °F) double
- * @param feedRate Feed Rate for Gas Mixture double
- * @param percentVapor Vapor in Gas Mixture (% of Total) double
- * @param initialTemperature Initial Temperature in °F double
- * @param dischargeTemperature Discharge Temperature in °F double
- * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb- °F) double
- * @param percentReacted Feed Gas Reacted (% of Total) double
- * @param reactionHeat Heat of Reaction in Btu/lb double
- * @param additionalHeat Additional Heat Required in Btu/h double
+ * @param thermicReactionType ThermicReactionType, enumerated value for either endothermic or exothermic reactions 0 = Endo, else = Exo Int
+ * @param specificHeatGas double, specific heat of gas in Btu/(lb*°F)
+ * @param feedRate double, feed rate for gas mixture
+ * @param percentVapor double, vapor in gas mixture (% of total)
+ * @param initialTemperature double, initial temperature in °F
+ * @param dischargeTemperature double, discharge temperature in °F
+ * @param specificHeatVapor double, specific heat of vapor in Btu/(lb*°F)
+ * @param percentReacted double, feed gas reacted (% of total)
+ * @param reactionHeat double, heat of reaction in Btu/lb
+ * @param additionalHeat double, additional heat required in Btu/hr
  *
  * @return double, heat loss in btu/cycle
  *
@@ -271,13 +271,13 @@ NAN_METHOD(leakageLosses) {
 NAN_METHOD(liquidCoolingLosses) {
         /**
  * Constructor
- * @param flowRate Rate of flow. Units are gpm. double
- * @param density Density in lb/cu.ft double
- * @param initialTemperature Initial temperature in °F. double
- * @param outletTemperature Outlet temperature in °F. double
- * @param specificHeat Specific heat in °F. double
- * @param correctionFactor Correction factor double
- * @return heatLoss in btu/hr. double
+ * @param flowRate double, rate of flow in gpm.
+ * @param density double, density in lb/cu.ft
+ * @param initialTemperature double, initial temperature in °F.
+ * @param outletTemperature double, outlet temperature in °F
+ * @param specificHeat double, specific heat in btu/(lb*°F)
+ * @param correctionFactor double, correction factor - unitless
+ * @return double, heat loss in btu/hr
  */
     inp = info[0]->ToObject();
     LiquidCoolingLosses lcl(Get("flowRate"), Get("density"), Get("initialTemperature"), Get("outletTemperature"),
@@ -291,19 +291,19 @@ NAN_METHOD(liquidLoadChargeMaterial) {
         /**
          * Constructor for liquid load/charge material with all inputs specified
          *
-         * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
-         * @param specificHeatLiquid Specific Heat of Liquid in Btu/(lb-°F)
-         * @param vaporizingTemperature Vaporizing Temperature in °F
-         * @param latentHeat Latent Heat of Vaporization in Btu/lb
-         * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb-°F)
-         * @param chargeFeedRate Charge (Liquid)-Feed Rate in lb/h
-         * @param initialTemperature Initial Temperature in °F
-         * @param dischargeTemperature Discharge Temperature in °F
-         * @param percentVaporized Charge Liquid Vaporized  (% of Charge)
-         * @param percentReacted Charge Liquid Reacted (% of Charge)
-         * @param reactionHeat Heat of Reaction in Btu/lb
-         * @param additionalHeat Additional Heat Required in %
-         * @return heatLoss in btu/hr. double
+         * @param thermicReactionType ThermicReactionType, enumerated value for either endothermic or exothermic reactions
+         * @param specificHeatLiquid double, specific heat of liquid in Btu/(lb*°F)
+         * @param vaporizingTemperature double, vaporizing temperature in °F
+         * @param latentHeat double, latent heat of vaporization in Btu/lb
+         * @param specificHeatVapor double, specific heat of vapor in Btu/(lb*°F)
+         * @param chargeFeedRate double, charge (liquid)-feed rate in lb/hr
+         * @param initialTemperature double, initial temperature in °F
+         * @param dischargeTemperature double, discharge temperature in °F
+         * @param percentVaporized double, charge liquid vaporized  (% of charge)
+         * @param percentReacted double, charge liquid reacted (% of charge)
+         * @param reactionHeat double, heat of reaction in Btu/lb
+         * @param additionalHeat double, additional heat required in %
+         * @return double, heat loss in btu/hr
          * */
 
     inp = info[0]->ToObject();
@@ -332,7 +332,7 @@ NAN_METHOD(openingLossesCircular) {
          * @param ambientTemperature double, ambient temperature in °F
          * @param insideTemperature double, inside temperature in °F
          * @param percentTimeOpen double, amount of time open as %
-         * @param viewFactor double, view factor
+         * @param viewFactor double, view factor - unitless
          * @return nothing
          */
     inp = info[0]->ToObject();
@@ -347,15 +347,15 @@ NAN_METHOD(openingLossesQuad) {
 
         /**
          * Constructor for a rectangular opening
-         * @param emissivity double, emissivity
+         * @param emissivity double, emissivity - unitless
          * @param length double, length of openings in inches
          * @param widthHeight double, height of openings in inches
          * @param thickness double, furnace wall thickness in inches
-         * @param ratio double, ratio
+         * @param ratio double, ratio - unitless
          * @param ambientTemperature double, ambient temperature in °F
          * @param insideTemperature double, inside temperature in °F
          * @param percentTimeOpen double, amount of time open as a %
-         * @param viewFactor double, view factor
+         * @param viewFactor double, view factor - unitless
          * @return double, heatLoss in btu/cycle
          */
     inp = info[0]->ToObject();
@@ -370,12 +370,12 @@ NAN_METHOD(slagOtherMaterialLosses) {
 
 /**     * Constructor for the slag - other material heat loss with all inputs specified
         *
-        * @param weight double, Lb/cycle
-        * @param inletTemperature double, Inlet temperature of gasses in °F
-        * @param outletTemperature double, Outlet temperature of gasses in °F
-        * @param specificHeat double, Specific heat of material at average air temperature in Btu/(lb - °F)
-        * @param correctionFactor double, Correction factor - unitless
-        * @return double, heatLoss in btu/cycle
+        * @param weight double, weight in lb/cycle
+        * @param inletTemperature double, inlet temperature of gasses in °F
+        * @param outletTemperature double, outlet temperature of gasses in °F
+        * @param specificHeat double, specific heat of material at average air temperature in Btu/(lb*°F)
+        * @param correctionFactor double, correction factor - unitless
+        * @return double, heat loss in btu/cycle
         *
         * */
     inp = info[0]->ToObject();
@@ -389,21 +389,21 @@ NAN_METHOD(solidLoadChargeMaterial) {
     /**
  * Constructor for the solid load/charge material with all inputs specified.
  *
- * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
- * @param specificHeatSolid Average specific heat of the solid material (dry) in Btu/(lb-°F)
- * @param latentHeat Latent heat of fusion in Btu/(lb)
- * @param specificHeatLiquid Specific heat of liquid from molten material in Btu/(lb-°F)
- * @param meltingPoint The melting point of the material in °F
- * @param chargeFeedRate Charge (wet)-feed rate in lb/h
- * @param waterContentCharged Water content as charged (%) in %
- * @param waterContentDischarged Water content as discharged (%) in %
- * @param initialTemperature Initial temperature in °F
- * @param dischargeTemperature Charge material discharge temperature in °F
- * @param waterVaporDischargeTemperature Water vapor discharge temperature in °F
- * @param chargeMelted Charge melted (% of dry charge) in %
- * @param chargedReacted Charge Reacted (% of dry charge) in %
- * @param reactionHeat Heat of reaction in Btu/lb
- * @param additionalHeat Additional heat required in Btu/h
+ * @param thermicReactionType ThermicReactionType, enumerated value for either endothermic or exothermic reactions
+ * @param specificHeatSolid double, average specific heat of the solid material (dry) in Btu/(lb*°F)
+ * @param latentHeat double, latent heat of fusion in Btu/(lb)
+ * @param specificHeatLiquid double, specific heat of liquid from molten material in Btu/(lb*°F)
+ * @param meltingPoint double, the melting point of the material in °F
+ * @param chargeFeedRate double, charge (wet)-feed rate in lb/hr
+ * @param waterContentCharged double, water content as charged (%) in %
+ * @param waterContentDischarged double, water content as discharged (%) in %
+ * @param initialTemperature double, initial temperature in °F
+ * @param dischargeTemperature double, charge material discharge temperature in °F
+ * @param waterVaporDischargeTemperature double, water vapor discharge temperature in °F
+ * @param chargeMelted double, charge melted (% of dry charge) in %
+ * @param chargedReacted double, charge Reacted (% of dry charge) in %
+ * @param reactionHeat double, heat of reaction in Btu/lb
+ * @param additionalHeat double, additional heat required in Btu/hr
  *
  * */
 
@@ -444,10 +444,10 @@ NAN_METHOD(wallLosses) {
 NAN_METHOD(waterCoolingLosses) {
     /**
      * Constructor
-     * @param flowRate Rate of flow. Units are gpm.
-     * @param initialTemperature Initial temperature in °F.
-     * @param outletTemperature Outlet temperature in °F.
-     * @param correctionFactor Correction factor - unitless
+     * @param flowRate double, rate of flow in gpm
+     * @param initialTemperature double, initial temperature in °F
+     * @param outletTemperature double, outlet temperature in °F
+     * @param correctionFactor double, correction factor - unitless
      * @return nothing
      */
     inp = info[0]->ToObject();
