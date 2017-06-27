@@ -94,7 +94,7 @@ public:
     }
 
     /**
-     * Sets the reated motor power
+     * Sets the rated motor power
      *
      * @param motorRatedPower double, rated motor power in hp
      *

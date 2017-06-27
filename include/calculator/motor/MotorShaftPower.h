@@ -35,8 +35,8 @@ public:
     * @param ratedVoltage double, Rated voltage of motor in volts
     * @param fullLoadAmps double, Current at full load in amps
     * @param fieldVoltage double, Field voltage in volts
-    * @param loadEstimationMethod double, Estimated power or current on motor input in hp
-    * @param fieldCurrent double, Field current as defined in amps.
+    * @param loadEstimationMethod FieldData::LoadEstimationMethod, estimated power or current on motor input in hp
+    * @param fieldCurrent double, field current as defined in amps.
     * @return nothing
     */
     MotorShaftPower(
