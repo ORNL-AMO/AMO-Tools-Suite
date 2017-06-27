@@ -9,7 +9,7 @@
 #include <node.h>
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/AuxiliaryPower.h"
-#include "calculator/losses/ElectricArcFurnaceEAF.h"
+#include "calculator/losses/EnergyInputEAF.h"
 #include "calculator/losses/FixtureLosses.h"
 #include "calculator/losses/GasFlueGasMaterial.h"
 #include "calculator/losses/SolidLiquidFlueGasMaterial.h"
@@ -61,11 +61,11 @@ NAN_METHOD(atmosphere) {
     /**
      * Constructor for the atmospheric heat loss with all inputs specified
      *
-     * @param inletTemperature Inlet temperature of gasses in °F
-     * @param outletTemperature Outlet temperature of gasses in °F
-     * @param flowRate Flow rate of gasses in scfh
-     * @param correctionFactor Correction factor
-     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @param inletTemperature double, Inlet temperature of gasses in °F
+     * @param outletTemperature double, Outlet temperature of gasses in °F
+     * @param flowRate double, Flow rate of gasses in scfh
+     * @param correctionFactor double, Correction factor - unitless
+     * @param specificHeat double, Specific heat of gasses at average air temperature in Btu/(scf - °F)
      * @return nothing
      *
      * */
@@ -81,10 +81,10 @@ NAN_METHOD(auxiliaryPowerLoss) {
 /**
  * Constructor
  * @param motorPhase current motor phase - this option is greyed out in PHAST 3.0
- * @param supplyVoltage Volts
- * @param avgCurrent average current in Amperes
- * @param powerFactor average power factor value
- * @param operatingTime percent operating time
+ * @param supplyVoltage double, supply voltage in volts
+ * @param avgCurrent double, average current in Amperes
+ * @param powerFactor double, average power factor value
+ * @param operatingTime double, percent operating time
  * @return nothing
  */
     inp = info[0]->ToObject();
@@ -131,13 +131,13 @@ NAN_METHOD(fixtureLosses) {
 
 /**
     * Constructor for Fixture Losses
-    * @param specificHeat Specific heat in °F. double
-    * @param feedRate Feed Rate for Gas Mixture. double
+    * @param specificHeat Specific heat in btu/(lb-°F). double
+    * @param feedRate Feed Rate for Gas Mixture in lb/hr. double
     * @param initialTemperature Initial temperature in °F. double
     * @param finalTemperature Final temperature in °F. double
-    * @param correctionFactor % of correction. double
+    * @param correctionFactor double, correction factor - unitless
     *
-    * @return heatLoss double
+    * @return doiuble, heat loss in btu/cycle
     */
     inp = info[0]->ToObject();
     FixtureLosses fl(Get("specificHeat"), Get("feedRate"), Get("initialTemperature"), Get("finalTemperature"), Get("correctionFactor"));
@@ -150,9 +150,9 @@ NAN_METHOD(flueGasLossesByVolume) {
     /**
      * Constructor for the flue gas losses by volume with all inputs specified
      *
-     * @param flueGasTemperature in °F
-     * @param excessAirPercentage %
-     * @param combustionAirTemperature °F
+     * @param flueGasTemperature double, temperature of flue gas in °F
+     * @param excessAirPercentage double, excess air as %
+     * @param combustionAirTemperature double, temperature of combustion air in °F
      * @param gasComposition - percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
      * @return nothing
      *
@@ -174,13 +174,13 @@ NAN_METHOD(flueGasLossesByMass) {
     /**
      * Constructor for the flue gas losses by weight with all inputs specified
      *
-     * @param flueGasTemperature in °F
-     * @param excessAirPercentage %
-     * @param combustionAirTemperature °F
-     * @param fuelTemperature °F
-     * @param moistureInAirComposition
-     * @param ashDischargeTemperature
-     * @param unburnedCarbonInAsh %
+     * @param flueGasTemperature double, flue gas temperature in °F
+     * @param excessAirPercentage double, excess air as %
+     * @param combustionAirTemperature double, combustion air temperature in °F
+     * @param fuelTemperature double, temperature of fuel in °F
+     * @param moistureInAirComposition double, moisture in air composition as %
+     * @param ashDischargeTemperature double, temperature of ash discharge in °F
+     * @param unburnedCarbonInAsh double, amount of unburned carbon in ash as %
      * @param fuel composition of: carbon, hydrogen, sulphur, inertAsh, o2, moisture and nitrogen (in %)
      * @return nothing
      *
@@ -231,7 +231,7 @@ NAN_METHOD(gasLoadChargeMaterial) {
  * @param reactionHeat Heat of Reaction in Btu/lb double
  * @param additionalHeat Additional Heat Required in Btu/h double
  *
- * @return heatLoss double
+ * @return double, heat loss in btu/cycle
  *
  * */
     inp = info[0]->ToObject();
@@ -251,13 +251,13 @@ NAN_METHOD(gasLoadChargeMaterial) {
 NAN_METHOD(leakageLosses) {
     /**
      * Constructor
-     * @param draftPressure
-     * @param openingArea
-     * @param leakageGasTemperature
-     * @param ambientTemperature
-     * @param coefficient
-     * @param specificGravity
-     * @param correctionFactor
+     * @param draftPressure double, furnace draft pressure in inch W.C.
+     * @param openingArea double, opening area in ft^2
+     * @param leakageGasTemperature double, temperature of gases leaking from furnace in °F
+     * @param ambientTemperature double, ambient temperature in °F
+     * @param coefficient double, coefficient - unitless
+     * @param specificGravity double, specific gravity - unitless
+     * @param correctionFactor double, correction factor - unitless
      * @return nothing
      */
     inp = info[0]->ToObject();
@@ -271,13 +271,13 @@ NAN_METHOD(leakageLosses) {
 NAN_METHOD(liquidCoolingLosses) {
         /**
  * Constructor
- * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr. double
- * @param density Density double
+ * @param flowRate Rate of flow. Units are gpm. double
+ * @param density Density in lb/cu.ft double
  * @param initialTemperature Initial temperature in °F. double
  * @param outletTemperature Outlet temperature in °F. double
  * @param specificHeat Specific heat in °F. double
  * @param correctionFactor Correction factor double
- * @return heatLoss double
+ * @return heatLoss in btu/hr. double
  */
     inp = info[0]->ToObject();
     LiquidCoolingLosses lcl(Get("flowRate"), Get("density"), Get("initialTemperature"), Get("outletTemperature"),
@@ -303,7 +303,7 @@ NAN_METHOD(liquidLoadChargeMaterial) {
          * @param percentReacted Charge Liquid Reacted (% of Charge)
          * @param reactionHeat Heat of Reaction in Btu/lb
          * @param additionalHeat Additional Heat Required in %
-         * @return heatLoss double
+         * @return heatLoss in btu/hr. double
          * */
 
     inp = info[0]->ToObject();
@@ -325,14 +325,14 @@ NAN_METHOD(openingLossesCircular) {
 
         /**
          * Constructor for a circular opening
-         * @param emissivity
-         * @param diameterLength
-         * @param thickness
-         * @param ratio
-         * @param ambientTemperature
-         * @param insideTemperature
-         * @param percentTimeOpen
-         * @param viewFactor
+         * @param emissivity double, emissivity - unitless
+         * @param diameterLength double, length of opening in inches
+         * @param thickness double, furnace wall thickness in inches
+         * @param ratio double, ratio - unitless
+         * @param ambientTemperature double, ambient temperature in °F
+         * @param insideTemperature double, inside temperature in °F
+         * @param percentTimeOpen double, amount of time open as %
+         * @param viewFactor double, view factor
          * @return nothing
          */
     inp = info[0]->ToObject();
@@ -347,16 +347,16 @@ NAN_METHOD(openingLossesQuad) {
 
         /**
          * Constructor for a rectangular opening
-         * @param emissivity
-         * @param length
-         * @param widthHeight
-         * @param thickness
-         * @param ratio
-         * @param ambientTemperature
-         * @param insideTemperature
-         * @param percentTimeOpen
-         * @param viewFactor
-         * @return heatLoss
+         * @param emissivity double, emissivity
+         * @param length double, length of openings in inches
+         * @param widthHeight double, height of openings in inches
+         * @param thickness double, furnace wall thickness in inches
+         * @param ratio double, ratio
+         * @param ambientTemperature double, ambient temperature in °F
+         * @param insideTemperature double, inside temperature in °F
+         * @param percentTimeOpen double, amount of time open as a %
+         * @param viewFactor double, view factor
+         * @return double, heatLoss in btu/cycle
          */
     inp = info[0]->ToObject();
     OpeningLosses ol(Get("emissivity"), Get("length"), Get("widthHeight"), Get("thickness"), Get("ratio"),
@@ -370,12 +370,12 @@ NAN_METHOD(slagOtherMaterialLosses) {
 
 /**     * Constructor for the slag - other material heat loss with all inputs specified
         *
-        * @param weight Lb/cycle
-        * @param inletTemperature Inlet temperature of gasses in °F
-        * @param outletTemperature Outlet temperature of gasses in °F
-        * @param specificHeat Specific heat of material at average air temperature in Btu/(lb - °F)
-        * @param correctionFactor Correction factor
-        * @return heatLoss
+        * @param weight double, Lb/cycle
+        * @param inletTemperature double, Inlet temperature of gasses in °F
+        * @param outletTemperature double, Outlet temperature of gasses in °F
+        * @param specificHeat double, Specific heat of material at average air temperature in Btu/(lb - °F)
+        * @param correctionFactor double, Correction factor - unitless
+        * @return double, heatLoss in btu/cycle
         *
         * */
     inp = info[0]->ToObject();
@@ -424,14 +424,14 @@ NAN_METHOD(solidLoadChargeMaterial) {
 NAN_METHOD(wallLosses) {
 /**
   * Wall Losses Arguments
-  * @param surfaceArea double
-  * @param ambientTemperature double
-  * @param surfaceTemperature double
-  * @param windVelocity double
-  * @param surfaceEmissivity double
-  * @param conditionFactor double
-  * @param correctionFactor double
-  * @return heatLoss double
+  * @param surfaceArea double, total outside surface area in ft^2
+  * @param ambientTemperature double, ambient temperature in °F
+  * @param surfaceTemperature double, average surface temperature (measured) in °F
+  * @param windVelocity double, wind velocity in miles/hr
+  * @param surfaceEmissivity double, surface emissivity - unitless
+  * @param conditionFactor double, condition factor - unitless
+  * @param correctionFactor double, correction factor - unitless
+  * @return double, heat loss in btu/cycle
   */
     inp = info[0]->ToObject();
     WallLosses wl(Get("surfaceArea"), Get("ambientTemperature"), Get("surfaceTemperature"), Get("windVelocity"),
@@ -444,10 +444,10 @@ NAN_METHOD(wallLosses) {
 NAN_METHOD(waterCoolingLosses) {
     /**
      * Constructor
-     * @param flowRate Rate of flow. Units are gpm, MGD(Million Gallons Per Day), L/s, m^3/hr.
+     * @param flowRate Rate of flow. Units are gpm.
      * @param initialTemperature Initial temperature in °F.
      * @param outletTemperature Outlet temperature in °F.
-     * @param correctionFactor Correction factor
+     * @param correctionFactor Correction factor - unitless
      * @return nothing
      */
     inp = info[0]->ToObject();

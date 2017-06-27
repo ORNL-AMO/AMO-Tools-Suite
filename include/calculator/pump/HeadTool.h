@@ -15,6 +15,19 @@
 * */
 class ReturnCalcValues {
 public:
+	/**
+    * Constructor for the ReturnCalcValues class with all inputs specified
+    *
+    * @param differentialElevationHead units in ft
+    * @param differentialPressureHead units in ft
+    * @param differentialVelocityHead units in ft
+    * @param estimatedSuctionFrictionHead units in ft
+    * @param estimatedDischargeFrictionHead units in ft
+    * @param pumpHead units in ft
+    *
+    * @return nothing
+	*
+ * */
 	ReturnCalcValues(
 			const double differentialElevationHead,
 			const double differentialPressureHead,
@@ -31,8 +44,23 @@ public:
 			pumpHead(pumpHead)
 	{}
 
-	const double differentialElevationHead, differentialPressureHead, differentialVelocityHead;
-	const double estimatedSuctionFrictionHead, estimatedDischargeFrictionHead, pumpHead;
+	///units of ft
+	const double differentialElevationHead;
+
+	///units of ft
+	const double differentialPressureHead;
+
+	///units of ft
+	const double differentialVelocityHead;
+
+    ///units of ft
+	const double estimatedSuctionFrictionHead;
+
+	///units of ft
+	const double estimatedDischargeFrictionHead;
+
+	///units of ft
+	const double pumpHead;
 };
 
 class HeadToolBase {
@@ -71,21 +99,53 @@ protected:
 			dischargeLineLossCoefficients_(dischargeLineLossCoefficients)
 	{}
 
+	/**
+     * Calculates the operating pump head
+     *
+     * @return ReturnCalcValues class with all its values calculated
+     */
 	virtual ReturnCalcValues calculate() = 0;
 
+	/**
+     * Calculates the velocity
+     *
+     * @param diameter const double, diameter in inches
+     * @param flow const double, flow rate in gpm
+     *
+     * @return double, velocity in ft/s
+     */
 	double velocity(const double diameter, const double flow);
 
+	/**
+     * Calculates the velocity head
+     *
+     * @param velocity const double, velocity in ft/s
+     * @param gravity const double, gravity in ft/s^2
+     *
+     * @return nothing
+     */
 	double velocityHead(const double velocity, const double gravity);
 
-	const double specificGravity_, flowRate_;
-
-	const double suctionPipeDiameter_, suctionLineLossCoefficients_;
-
-	const double dischargePipeDiameter_, dischargeGaugePressure_;
-
-	const double dischargeGaugeElevation_, dischargeLineLossCoefficients_;
-
-	const double gravity_ = 32.1740, PI_ = 3.141592653589793238463;
+	/// specific gravity - unitless
+	const double specificGravity_;
+	/// flow rate in gpm
+	const double flowRate_;
+	/// suction pipe diamter in inches
+	const double suctionPipeDiameter_;
+	/// suction line loss coefficient - unitless
+	const double suctionLineLossCoefficients_;
+	/// discharge  pipe diameter in inches
+	const double dischargePipeDiameter_;
+	/// discharge gauge pressure in psi
+	const double dischargeGaugePressure_;
+	/// discharge gauge elevation in ft
+	const double dischargeGaugeElevation_;
+	/// discharge line loss coefficients - unitless
+	const double dischargeLineLossCoefficients_;
+	/// gravity constant
+	const double gravity_ = 32.1740;
+	/// value of Pi
+	const double PI_ = 3.141592653589793238463;
 };
 
 class HeadToolSuctionTank : private HeadToolBase {
@@ -131,6 +191,11 @@ public:
 			suctionTankFluidSurfaceElevation_(suctionTankFluidSurfaceElevation)
 	{}
 
+	/**
+     * Calculates the operating pump head
+     *
+     * @return ReturnCalcValues, all the values calculated for operating pump head
+     */
 	ReturnCalcValues calculate();
 
 private:
@@ -179,7 +244,11 @@ public:
 			suctionGaugePressure_(suctionGaugePressure),
 			suctionGaugeElevation_(suctionGaugeElevation)
 	{}
-
+/**
+     * Calculates the operating pump head
+     *
+     * @return ReturnCalcValues class with internal values calculated
+     */
 	ReturnCalcValues calculate();
 
 private:

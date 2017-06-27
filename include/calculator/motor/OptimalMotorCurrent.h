@@ -50,20 +50,49 @@ public:
 //        fieldVoltage_(fieldVoltage)
     {};
 
+    /**
+     * Calculates the optimal motor current
+     *
+     * @return double, optimal motor current in A
+     */
     double calculate();
 
+    /**
+     * Gets the motor power
+     *
+     * @return double, motor power in hp or kw
+     */
     double getMotorPower() const {
         return motorPower_;
     }
 
+    /**
+     * Sets the motor power
+     *
+     * @param motorPower double, motor power in hp or kw
+     *
+     * @return nothing
+     */
     void setMotorPower(double motorPower) {
         motorPower_ = motorPower;
     }
 
+    /**
+     * Gets the voltage of the motor
+     *
+     * @return double, voltage in V
+     */
     double getVoltage() const {
         return voltage_;
     }
 
+    /**
+     * Sets the voltage of the motor
+     *
+     * @param voltage double, voltage of motor in V
+     *
+     * @return nothing
+     */
     void setVoltage(double voltage) {
         voltage_ = voltage;
     }

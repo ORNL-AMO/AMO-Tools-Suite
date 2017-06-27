@@ -29,7 +29,13 @@ public:
         style_(style)
     {};
 
+    /**
+     * Calculates the optimal specific speed correction
+     *
+     * @return double, optimal specific speed correction
+     */
     double calculate();
+
 private:
     double specificSpeed_;
     Pump::Style style_;

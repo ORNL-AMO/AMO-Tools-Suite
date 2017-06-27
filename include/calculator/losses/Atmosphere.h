@@ -2,7 +2,7 @@
  * @file
  * @brief Calculator for heat required for atmosphere
  *
- * This contains the inputs for calculating a the heat loss for atmosphere
+ * This contains the inputs for calculating the heat loss for atmosphere
  * total heat.
  *
  * @author Gina Accawi (accawigk)
@@ -15,16 +15,19 @@
 
 #define REFERENCE_TEMPERATURE 60.0
 
+
 class Atmosphere {
 public:
     /**
+     *
      * Constructor for the atmospheric heat loss with all inputs specified
      *
-     * @param inletTemperature Inlet temperature of gasses in °F
-     * @param outletTemperature Outlet temperature of gasses in °F
-     * @param flowRate Flow rate of gasses in scfh
-     * @param correctionFactor Correction factor
-     * @param specificHeat Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     * @param inletTemperature double, Inlet temperature of gasses in °F
+     * @param outletTemperature double, Outlet temperature of gasses in °F
+     * @param flowRate double, Flow rate of gasses in scfh
+     * @param correctionFactor double, Correction factor - unitless
+     * @param specificHeat double, Specific heat of gasses at average air temperature in Btu/(scf - °F)
+     *
      * @return nothing
      *
      * */
@@ -44,50 +47,122 @@ public:
 
     Atmosphere() = default;
 
+    /**
+     * Getter for the inlet/initial temperature
+     *
+     * @return double, inlet/initial temperature in °F
+     */
     double getInletTemperature() const {
         return inletTemperature_;
     }
 
+    /**
+     * Sets the inlet/initial temperature
+     *
+     * @param inletTemperature double, initial temperature in °F
+     *
+     * @return nothing
+     */
     void setInletTemperature(double inletTemperature) {
         inletTemperature_ = inletTemperature;
     }
 
+    /**
+     * Getter for the outlet/final temperature
+     *
+     * @return double, outlet/final temperature in °F
+     */
     double getOutletTemperature() const {
         return outletTemperature_;
     }
 
+    /**
+     * Sets the outlet/final temperature
+     *
+     * @param outletTemperature double, outlet/final temperature in °F
+     *
+     * @return nothing
+     */
     void setOutletTemperature(double outletTemperature) {
         outletTemperature_ = outletTemperature;
     }
 
+    /**
+     * Getter for the flow rate
+     *
+     * @return double, flow rate in scfh
+     */
     double getFlowRate() const {
         return flowRate_;
     }
 
+    /**
+     * Sets the flow rate
+     *
+     * @param flowRate double, flow rate in scfh
+     *
+     * @return nothing
+     */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
     }
 
+    /**
+     * Getter for the correction factor
+     *
+     * @return double, correction factor - unitless
+     */
     double getCorrectionFactor() const {
         return correctionFactor_;
     }
 
+    /**
+     * Sets the correction factor
+     *
+     * @param correctionFactor double, correction factor - unitless
+     *
+     * @return nothing
+     */
     void setCorrectionFactor(double correctionFactor) {
         correctionFactor_ = correctionFactor;
     }
 
+    /**
+     * Getter for the specific heat
+     *
+     * @return double, specific heat in btu/(scf-°F)
+     */
     double getSpecificHeat() const {
         return specificHeat_;
     }
 
+    /**
+     * Sets the specific heat
+     *
+     * @param specificHeat double, specific heat in btu/(scf-°F)
+     *
+     * @return nothing
+     */
     void setSpecificHeat(double specificHeat) {
         specificHeat_ = specificHeat;
     }
 
+    /**
+     * Sets the total heat loss
+     *
+     * @param totalHeat double, total heat loss in btu/hr
+     *
+     * @return nothing
+     */
     void setTotalHeat(double totalHeat) {
         totalHeat_ = totalHeat;
     }
 
+    /**
+     * Calculates the total heat loss
+     *
+     * @return double, total heat loss in btu/hr
+     */
     double getTotalHeat();
 
 private:
@@ -98,6 +173,8 @@ private:
     double correctionFactor_;
     double specificHeat_;
     // Out value
+
+    /// Total heat loss measured in btu/hr
     double totalHeat_;
 };
 

@@ -31,20 +31,49 @@ public:
 
     PumpShaftPower() = default;
 
+    /**
+     * Calculates the pump shaft power
+     *
+     * @return double, pump shaft power in hp or kw
+     */
     double calculate();
 
+    /**
+     * Gets the motor shaft power
+     *
+     * @return double, motor shaft power in hp or kw
+     */
     double getMotorShaftPower() const {
         return motorShaftPower_;
     }
 
+    /**
+     * Sets the motor shaft power
+     *
+     * @param motorShaftPower double, in hp or kw
+     *
+     * @return nothing
+     */
     void setMotorShaftPower(double motorShaftPower) {
         motorShaftPower_ = motorShaftPower;
     }
 
+    /**
+     * Gets the type of drive the pump uses from either direct or belt drive
+     *
+     * @return Pump:Drive, type of drive
+     */
     Pump::Drive getDrive() const {
         return drive_;
     }
 
+    /**
+     * Set the type of drive the pump uses from either direct or belt drive
+     *
+     * @param drive Pump:Drive, type of drive
+     *
+     * @return nothing
+     */
     void setDrive(Pump::Drive drive) {
         drive_ = drive;
     }

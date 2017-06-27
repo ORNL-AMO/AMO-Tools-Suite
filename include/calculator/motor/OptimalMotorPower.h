@@ -21,14 +21,14 @@ public:
 
     /**
      * Constructor
-     * @param motorRatedPower Rated Power of motor
-     * @param motorRPM RPM of motor
-     * @param lineFrequency Line frequency of motor
-     * @param efficiencyClass Efficiency class of motor
+     * @param motorRatedPower Rated Power of motor in hp
+     * @param motorRPM RPM of motor in rpms
+     * @param lineFrequency Line frequency of motor in Hz
+     * @param efficiencyClass Efficiency class of motor as %
      * @param specifiedEfficiency Specified Efficiency of motor, if efficiency class is SPECIFIED
-     * @param ratedVoltage Rated voltage of the motor
-     * @param fullLoadAmps Current at full load.
-     * @param fieldVoltage Field voltage.
+     * @param ratedVoltage Rated voltage of the motor in V
+     * @param fullLoadAmps Current at full load in A
+     * @param fieldVoltage Field voltage in V
      * @param optimalMotorShaftPower Optimal shaft power as defined in hp or Kw.
      * @return nothing
      */
@@ -60,33 +60,85 @@ public:
 //        loadEstimationMethod_(loadEstimationMethod)
     {};
 
+    /**
+     * Calculates the optimal motor power
+     *
+     * @return double, optimal motor power in kw
+     */
     double calculate();
 
+    /**
+     * Gets the optimal motor shaft power
+     *
+     * @return double, optimal motor shaft power in hp
+     */
     double getOptimalMotorShaftPower_() const {
         return optimalMotorShaftPower_;
     }
 
+    /**
+     * Sets the optimal motor shaft power
+     *
+     * @param optimalMotorShaftPower double, optimal motor shaft power in hp
+     *
+     * @return nothing
+     */
     void setMotorShaftPower(double optimalMotorShaftPower) {
         optimalMotorShaftPower_ = optimalMotorShaftPower;
     }
 
+    /**
+     * Gets the motor efficiency if efficiency class is SPECIFIED
+     *
+     * @return double, mototr efficiency as %
+     */
     double getMotorEfficiency() const {
         return motorEfficiency_;
     }
 
+    /**
+     * Sets the motor efficiency if efficiency class is SPECIFIED
+     *
+     * @param motorEfficiency double, efficiency of motor as %
+     *
+     * @return nothing
+     */
     void setMotorEfficiency(double motorEfficiency) {
         motorEfficiency_ = motorEfficiency;
     }
 
+    /**
+     * Gets the motor current
+     *
+     * @return double, motor current in A
+     */
     double getMotorCurrent(){
         return current;
     }
+
+    /**
+     * Gets motor power factor
+     *
+     * @return double, power factor of motor - unitless
+     */
     double getMotorPf(){
         return pf;
     }
+
+    /**
+     * Get motor efficiency if efficiency class is not SPECIFIED
+     *
+     * @return double, motor efficiency as %
+     */
     double getMotorEff(){
         return eff;
     }
+
+    /**
+     * Gets motor power
+     *
+     * @return double, motor power in hp
+     */
     double getMotorPower(){
         return power;
     }

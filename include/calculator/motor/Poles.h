@@ -29,6 +29,12 @@ public:
         lineFreq_(lineFreq)
     {};
 
+
+    /**
+     * Calculates the number of poles
+     *
+     * @return int, number of poles
+     */
     int calculate();
 
 private:
