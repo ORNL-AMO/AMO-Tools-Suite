@@ -2,7 +2,7 @@
  * @file
  * @brief Calculator for fuel fired furnace
  *
- * This contains the inputs for calculating the efficiency improvement for a fuel fired furance
+ * This contains the inputs for calculating the efficiency improvement for a fuel fired furnace
  *
  * @author Autumn Ferree (ferreeak)
  * @bug No known bugs.
