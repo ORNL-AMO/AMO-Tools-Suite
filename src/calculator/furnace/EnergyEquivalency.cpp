@@ -1,12 +1,12 @@
 /**
  * @file
- * @brief Contains the implementation of the energy equivalency calculator.
+ * @brief Contains the implementation of the energy equivalency calculator for both electrotechnology and fuel fired furnaces.
  *
  * @author Autumn Ferree (ferreeak)
  * @bug No known bugs.
  *
  */
-#include "calculator/EnergyEquivalency.h"
+#include "calculator/furnace/EnergyEquivalency.h"
 
 double ElectricalEnergyEquivalency::getElectricalHeatInput() {
     this->electricalHeatInput_ = ((this->fuelFiredHeatInput_)*(this->fuelFiredEfficiency_))/(this->electricallyHeatedEfficiency_) * (1000000/3412);

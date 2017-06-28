@@ -105,7 +105,8 @@ set(SOURCE_FILES
         src/calculator/losses/SolidLiquidFlueGasMaterial.cpp
         src/calculator/losses/AuxiliaryPower.cpp
         src/calculator/losses/ExhaustGasEAF.cpp
-        src/calculator/EnergyEquivalency.cpp)
+        src/calculator/furnace/EnergyEquivalency.cpp
+        src/calculator/furnace/EfficiencyImprovement.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -165,8 +166,8 @@ set(INCLUDE_FILES
         include/calculator/losses/SolidLiquidFlueGasMaterial.h
         include/calculator/losses/AuxiliaryPower.h
         include/calculator/losses/ExhaustGasEAF.h
-        include/calculator/EnergyEquivalency.h
-        )
+        include/calculator/furnace/EnergyEquivalency.h
+        include/calculator/furnace/EfficiencyImprovement.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -190,7 +191,8 @@ set(TEST_FILES
         tests/AuxiliaryPower.unit.cpp
         tests/SlagOtherMaterialLosses.unit.cpp
         tests/ExhuastGasEAF.unit.cpp
-        tests/EnergyEquivalency.unit.cpp)
+        tests/EnergyEquivalency.unit.cpp
+        tests/EfficinecyImprovement.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

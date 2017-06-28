@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Calculator for energy equivalency for electric and fuel-fired furances
+ * @brief Calculator for energy equivalency for electric and fuel-fired furnaces
  *
  * This contains the inputs for calculating the energy equivalency for electric and fuel-fired furnaces.
  *
