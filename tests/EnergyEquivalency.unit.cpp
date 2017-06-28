@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include <calculator/EnergyEquivalency.h>
+#include <calculator/furnace/EnergyEquivalency.h>
 
 TEST_CASE( "Calculate the Equivalent Electrical Heat Input", "[Electrical Heat Input][EnergyEquivalency][Calculator]") {
     CHECK( ElectricalEnergyEquivalency(6.59, 50, 87.3).getElectricalHeatInput() == Approx(3371.27));
