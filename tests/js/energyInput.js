@@ -19,7 +19,7 @@ test('phast', function (t) {
     inp.otherFuels = 20;
     inp.electricityInput = 18000;
     var res = bindings.energyInput(inp);
-    t.equal(res.kwhCycle, 30978.898002920003, 'res.kwhCycle is ' + res.kwhCycle);
+    t.equal(res.kwhCycle, 30978.898007031734, 'res.kwhCycle is ' + res.kwhCycle);
     t.equal(res.heatDelivered, 55.7, 'res.heatDelivered is ' + res.heatDelivered);
-    t.equal(res.totalKwhCycle, 48978.89800292, 'res.totalKwhCycle is ' + res.totalKwhCycle);
+    t.equal(res.totalKwhCycle, 48978.898007031734, 'res.totalKwhCycle is ' + res.totalKwhCycle);
 });

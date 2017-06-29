@@ -120,7 +120,7 @@ NAN_METHOD(energyInput) {
      * */
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    ElectricArcFurnaceEAF eaf(Get("naturalGasHeatInput"), Get("naturalGasFlow"), Get("measuredOxygenFlow"), Get("coalCarbonInjection"), Get("coalHeatingValue"), Get("electrodeUse"), Get("electrodeHeatingValue"), Get("otherFuels"), Get("electricityInput"));
+    EnergyInputEAF eaf(Get("naturalGasHeatInput"), Get("naturalGasFlow"), Get("measuredOxygenFlow"), Get("coalCarbonInjection"), Get("coalHeatingValue"), Get("electrodeUse"), Get("electrodeHeatingValue"), Get("otherFuels"), Get("electricityInput"));
     double heatDelivered = eaf.getHeatDelivered();
     double kwhCycle = eaf.getKwhCycle();
     double totalKwhCycle = eaf.getTotalKwhPerCycle();
