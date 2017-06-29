@@ -50,7 +50,7 @@ test('energyEquivalency', function (t) {
 
     inp.fuelFiredEfficiency = 6.59;
     inp.electricallyHeatedEfficiency = 50;
-    
+
     inp.fuelFiredHeatInput = 87.3;
 
     var res = bindings.EnergyEquivalency(inp);

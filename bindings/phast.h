@@ -23,7 +23,7 @@
 #include "calculator/losses/LiquidCoolingLosses.h"
 #include "calculator/losses/LiquidLoadChargeMaterial.h"
 #include "calculator/losses/OpeningLosses.h"
-#include "claculator/furnace/O2Enrichment.h"
+#include "calculator/furnace/O2Enrichment.h"
 #include "calculator/losses/SlagOtherMaterialLosses.h"
 #include "calculator/losses/SolidLoadChargeMaterial.h"
 #include "calculator/losses/WallLosses.h"
