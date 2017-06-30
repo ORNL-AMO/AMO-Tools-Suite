@@ -37,6 +37,10 @@ TEST_CASE( "Calculate the Total Heat Exhaust", "[Total Heat Exhaust][ExhaustGasE
     CHECK( ExhaustGasEAF(2, 2800, 10, 10, 0, 5, 5, 50000, .005, 0).getTotalHeatExhaust() == Approx(171958895.705521));
 }
 
+TEST_CASE( "Calculate the Total Kwh Per Cycle", "[Total Kwh Per Hour][ExhaustGasEAF][EAF]") {
+    CHECK( ExhaustGasEAF(2, 2800, 10, 10, 0, 5, 5, 50000, .005, 0).getTotalKwhPerCycle() == Approx(50398.3));
+}
+
 TEST_CASE( "Calculate the Chemical Heat Percent", "[Chemical Heat Percent][ExhaustGasEAF][EAF]") {
     CHECK( ExhaustGasEAF(2, 2800, 10, 10, 0, 5, 5, 50000, .005, 0).getChemicalHeatPercent() == Approx(63.7818283010992));
 }

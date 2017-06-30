@@ -64,9 +64,6 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("initTest").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(initTest)).ToLocalChecked());
 
-
-    // Furnace calculators
-
     Nan::Set(target, New<String>("efficiencyImprovement").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(efficiencyImprovement)).ToLocalChecked());
 
@@ -75,6 +72,9 @@ NAN_MODULE_INIT(InitPhast) {
 
     Nan::Set(target, New<String>("energyEquivalencyFuel").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(energyEquivalencyFuel)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("flowCalculations").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flowCalculations)).ToLocalChecked());
 
     Nan::Set(target, New<String>("o2Enrichment").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(o2Enrichment)).ToLocalChecked());

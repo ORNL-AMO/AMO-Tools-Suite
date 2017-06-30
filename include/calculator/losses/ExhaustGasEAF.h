@@ -61,6 +61,7 @@ public:
         heatInDust_ = 0.0;
         totalHeatFlue_ = 0.0;
         totalHeatExhaust_ = 0.0;
+        totalKwhPerCycle_ = 0.0;
         chemicalHeatPercent_ = 0.0;
         sensibleHeatPercent_ = 0.0;
         otherHeatPercent_ = 0.0;
@@ -343,6 +344,13 @@ public:
     double getTotalHeatExhaust();
 
     /**
+     * Gets the total heat exhaust in kwh/cycle
+     *
+     * @return double, total heat exhaust in kwh/cycle
+     */
+    double getTotalKwhPerCycle();
+
+    /**
      * Calculates % of chemical heat loss
      *
      * @return double, % of chemical heat loss
@@ -390,6 +398,7 @@ private:
     double heatInDust_ = 0.0;
     double totalHeatFlue_ = 0.0;
     double totalHeatExhaust_ = 0.0;
+    double totalKwhPerCycle_ = 0.0;
     double chemicalHeatPercent_ = 0.0;
     double sensibleHeatPercent_ = 0.0;
     double otherHeatPercent_ = 0.0;
