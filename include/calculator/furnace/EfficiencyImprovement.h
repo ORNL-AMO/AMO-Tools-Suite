@@ -298,6 +298,16 @@ public:
     double getNewFuelSavings();
 
     /**
+     * Gets the current fuel savings
+     *
+     * @return double, current fuel savings as %
+     */
+    double getCurrentFuelSavings() {
+        return currentFuelSavings_;
+    };
+
+
+    /**
      * Gets the new fuel savings
      *
      * @return double, new fuel savings as %

@@ -7,9 +7,13 @@
 
 #include <nan.h>
 #include <node.h>
+#include "calculator/furnace/EfficiencyImprovement.h"
+#include "calculator/furnace/EnergyEquivalency.h"
+#include "calculator/furnace/O2Enrichment.h"
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/AuxiliaryPower.h"
 #include "calculator/losses/EnergyInputEAF.h"
+#include "calculator/losses/ExhaustGasEAF.h"
 #include "calculator/losses/FixtureLosses.h"
 #include "calculator/losses/GasFlueGasMaterial.h"
 #include "calculator/losses/SolidLiquidFlueGasMaterial.h"
@@ -126,6 +130,14 @@ NAN_METHOD(energyInput) {
     info.GetReturnValue().Set(r);
 }
 
+NAN_METHOD(exhaustGas) {
+
+    inp = info[0]->ToObject();
+    ExhaustGasEAF eg(Get("cycleTime"), Get("offGasTemp"), Get("CO"), Get("H2"), Get("O2"), Get("CO2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"), Get("otherLosses"));
+    double heatLoss = eg.getTotalHeatExhaust();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
+}
 
 NAN_METHOD(fixtureLosses) {
 
@@ -456,6 +468,89 @@ NAN_METHOD(waterCoolingLosses) {
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
 }
+
+// Furnace calculators
+
+NAN_METHOD(efficiencyImprovement) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    EfficiencyImprovement ei(Get("currentFlueGasOxygen"), Get("newFlueGasOxygen"), Get("currentFlueGasTemp"), Get("newFlueGasTemp"), Get("currentCombustionAirTemp"), Get("newCombustionAirTemp"), Get("currentEnergyInput"));
+    double excessAirCurrent = ei.getCurrentExcessAir();
+    double excessAirNew = ei.getNewExcessAir();
+    double heatInputCurrent = ei.getCurrentHeatInput();
+    double heatInputNew = ei.getNewHeatInput();
+    double airSpecificHeatCurrent = ei.getCurrentAirSpecificHeat();
+    double airSpecificHeatNew = ei.getNewAirSpecificHeat();
+    double airCorrectionNew = ei.getNewAirCorrection();
+    double airCorrectionCurrent = ei.getCurrentAirCorrection();
+    double availableHeatCurrent = ei.getCurrentAvailableHeat();
+    double availableHeatNew = ei.getNewAvailableHeat();
+    double combustionAirCorrectionCurrent = ei.getCurrentCombustionAirCorrection();
+    double combustionAirCorrectionNew = ei.getNewCombustionAirCorrection();
+    double fuelSavingsNew = ei.getNewFuelSavings();
+    double fuelSavingsCurrent = ei.getCurrentFuelSavings();
+    double energyInputNew = ei.getNewEnergyInput();
+    double energyInputCurrent = ei.getCurrentEnergyInput();
+    SetR("excessAirCurrent", excessAirCurrent);
+    SetR("excessAirNew", excessAirNew);
+    SetR("heatInputCurrent", heatInputCurrent);
+    SetR("heatInputNew", heatInputNew);
+    SetR("airSpecificHeatCurrent", airSpecificHeatCurrent);
+    SetR("airSpecificHeatNew", airSpecificHeatNew);
+    SetR("airCorrectionNew", airCorrectionNew);
+    SetR("airCorrectionCurrent", airCorrectionCurrent);
+    SetR("availableHeatCurrent", availableHeatCurrent);
+    SetR("availableHeatNew", availableHeatNew);
+    SetR("combustionAirCorrectionCurrent", combustionAirCorrectionCurrent);
+    SetR("combustionAirCorrectionNew", combustionAirCorrectionNew);
+    SetR("fuelSavingsNew", fuelSavingsNew);
+    SetR("fuelSavingsCurrent", fuelSavingsCurrent);
+    SetR("energyInputCurrent",energyInputCurrent);
+    SetR("energyInputNew", energyInputNew);
+    info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(energyEquivalencyElectric) {
+
+        inp = info[0]->ToObject();
+        r = Nan::New<Object>();
+        ElectricalEnergyEquivalency ee(Get("fuelFiredEfficiency"), Get("electricallyHeatedEfficiency"), Get("fuelFiredHeatInput"));
+        double electricalHeatInput = ee.getElectricalHeatInput();
+        double fuelFiredHeatInput = ee.getFuelFiredHeatInput();
+        SetR("electricalHeatInput", electricalHeatInput);
+        SetR("fuelFiredHeatInput", fuelFiredHeatInput);
+        info.GetReturnValue().Set(r);
+}
+NAN_METHOD(energyEquivalencyFuel) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    FuelFiredEnergyEquivalency ee(Get("electricallyHeatedEfficiency"), Get("fuelFiredEfficiency"), Get("electricalHeatInput"));
+    double electricalHeatInput = ee.getElectricalHeatInput();
+    double fuelFiredHeatInput = ee.getFuelFiredHeatInput();
+    SetR("electricalHeatInput", electricalHeatInput);
+    SetR("fuelFiredHeatInput", fuelFiredHeatInput);
+    info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(o2Enrichment) {
+
+        inp = info[0]->ToObject();
+        r = Nan::New<Object>();
+        O2Enrichment oe(Get("o2CombAir"), Get("o2CombAirEnriched"), Get("flueGasTemp"), Get("flueGasTempEnriched"), Get("o2FlueGas"), Get("o2FlueGasEnriched"), Get("combAirTemp"), Get("combAirTempEnriched"), Get("fuelConsumption"));
+        double availableHeatInput = oe.getAvailableHeat();
+        double availableHeatEnriched = oe.getAvailableHeatEnriched();
+        double fuelSavingsEnriched = oe.getFuelSavingsEnriched();
+        double fuelConsumptionEnriched = oe.getFuelConsumptionEnriched();
+        SetR("availableHeatInput", availableHeatInput);
+        SetR("availableHeatEnriched", availableHeatEnriched);
+        SetR("fuelSavingsEnriched", fuelSavingsEnriched);
+        SetR("fuelConsumptionEnriched", fuelConsumptionEnriched);
+        info.GetReturnValue().Set(r);
+}
+
+
 
 #endif //AMO_TOOLS_SUITE_LOSSES_H
 
