@@ -241,5 +241,5 @@ test('exhaustGas', function (t) {
     };
 
     var res = bindings.exhaustGas(inp);
-    t.equal(res, 50398.3, res + ' != 50398.3');
+    t.equal(res, 50398.269550270066, res + ' != 50398.269550270066');
 });

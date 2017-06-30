@@ -9,6 +9,7 @@
 #include <node.h>
 #include "calculator/furnace/EfficiencyImprovement.h"
 #include "calculator/furnace/EnergyEquivalency.h"
+#include "calculator/furnace/FlowCalculationsEnergyUse.h"
 #include "calculator/furnace/O2Enrichment.h"
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/AuxiliaryPower.h"
@@ -38,6 +39,7 @@ Local<Object> r;
 
 double Get(const char *nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
         assert(!"defined");
@@ -50,6 +52,15 @@ void SetR(const char *nm, double n) {
     Local<Number> getNum = Nan::New<Number>(n);
     Nan::Set(r, getName, getNum);
 }
+
+FlowCalculationsEnergyUse::Gas gas() {
+    return (FlowCalculationsEnergyUse::Gas)(int)Get("gasType");
+}
+
+FlowCalculationsEnergyUse::Section section() {
+    return (FlowCalculationsEnergyUse::Section)(int)Get("sectionType");
+}
+
 
 /**********************
  * Test methods
@@ -134,7 +145,7 @@ NAN_METHOD(exhaustGas) {
 
     inp = info[0]->ToObject();
     ExhaustGasEAF eg(Get("cycleTime"), Get("offGasTemp"), Get("CO"), Get("H2"), Get("O2"), Get("CO2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"), Get("otherLosses"));
-    double heatLoss = eg.getTotalHeatExhaust();
+    double heatLoss = eg.getTotalKwhPerCycle();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
 }
@@ -492,7 +503,7 @@ NAN_METHOD(efficiencyImprovement) {
     double fuelSavingsCurrent = ei.getCurrentFuelSavings();
     double energyInputNew = ei.getNewEnergyInput();
     double energyInputCurrent = ei.getCurrentEnergyInput();
-    SetR("excessAirCurrent", excessAirCurrent);
+    SetR("currentExcessAir", excessAirCurrent);
     SetR("excessAirNew", excessAirNew);
     SetR("heatInputCurrent", heatInputCurrent);
     SetR("heatInputNew", heatInputNew);
@@ -533,6 +544,22 @@ NAN_METHOD(energyEquivalencyFuel) {
     SetR("fuelFiredHeatInput", fuelFiredHeatInput);
     info.GetReturnValue().Set(r);
 }
+
+NAN_METHOD(flowCalculations) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    FlowCalculationsEnergyUse::Gas gas1 = gas();
+    FlowCalculationsEnergyUse::Section section1 = section();
+
+    FlowCalculationsEnergyUse fceu(gas1, Get("specificGravity"), Get("orificeDiameter"), Get("insidePipeDiameter"), section1, Get("dischargeCoefficient"), Get("gasHeatingValue"), Get("gasTemperature"), Get("gasPressure"), Get("orificePressureDrop"), Get("operatingTime") );
+    double flow = fceu.getFlow();
+    double heatInput = fceu.getHeatInput();
+    SetR("flow", flow);
+    SetR("heatInput", heatInput);
+    info.GetReturnValue().Set(r);
+}
+
 
 NAN_METHOD(o2Enrichment) {
 

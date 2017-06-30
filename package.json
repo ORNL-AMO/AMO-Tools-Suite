@@ -20,7 +20,7 @@
     "npm": "^5.0.0"
   },
   "scripts": {
-    "test": "tap tests/js/*.js"
+    "test": "tap debug tests/js/*.js"
   },
   "repository": {
     "type": "git",
