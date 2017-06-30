@@ -143,7 +143,7 @@ NAN_METHOD(fixtureLosses) {
 
 /**
     * Constructor for Fixture Losses
-    * @param specificHeat double, pecific heat in btu/(lb*°F)
+    * @param specificHeat double, specific heat in btu/(lb*°F)
     * @param feedRate double, feed rate for gas mixture in lb/hr
     * @param initialTemperature double, initial temperature in °F
     * @param finalTemperature double, final temperature in °F

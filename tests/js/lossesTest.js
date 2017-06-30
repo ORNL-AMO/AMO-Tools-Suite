@@ -231,3 +231,15 @@ test('wallLosses', function (t) {
     var res = bindings.waterCoolingLosses(inp);
     t.equal(res, 1989032.7936134234, res + ' != 1989032.7936134234');
 });
+
+test('exhaustGas', function (t) {
+    t.plan(2);
+    t.type(bindings.exhaustGas, 'function');
+
+    var inp = {
+        cycleTime: 2, offGasTemp: 2800, CO: 10, H2: 10, O2: 0, CO2: 5, combustibleGases: 5, vfr: 50000, dustLoading: 0.005, otherLosses: 0
+    };
+
+    var res = bindings.exhaustGas(inp);
+    t.equal(res, 50398.3, res + ' != 50398.3');
+});

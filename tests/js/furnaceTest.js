@@ -1,3 +1,4 @@
+
 /**
  * Created by ifw on 6/28/2017.
  */
@@ -91,5 +92,29 @@ test('o2Enrichment', function (t) {
     t.equal(res.getFuelSavingsEnriched, 16.5058213035, res.fuelFiredHeatInput + " != 16.5058213035");
 
     t.equal(res.getFuelConsumptionEnriched, 8.3494178697, res.fuelFiredHeatInput + " != 8.3494178697");
+
+});
+
+test('flowCalculationsEnergyUse', function (t) {
+    t.plan(2);
+    t.type(bindings.FlowCalculationsEnergyUse, 'function');
+    var inp = {};
+
+    inp.gasType = HELIUM;
+    inp.specificGravity = 0.14;
+    inp.orificeDiameter = 5;
+    inp.insidePipeDiameter = 9;
+    inp.sectionType = SHARP_EDGE;
+    inp.dischargeCoefficient = 0.6;
+    inp.gasHeatingValue = 7325;
+    inp.gasTemperature = 52;
+    inp.gasPressure = 63;
+    inp.orificePressureDrop = 26;
+    inp.operatingTime = 16;
+
+    var res = bindings.FlowCalculationsEnergyUse(inp);
+    t.equal(res.getFlow, 647312, res.electricalHeatInput + " != 647312");
+
+    t.equal(res.getHeatInput, 75865, res.fuelFiredHeatInput + " != 75865");
 
 });

@@ -61,6 +61,13 @@ double ExhaustGasEAF::getTotalHeatExhaust() {
     return this->totalHeatExhaust_;
 }
 
+double ExhaustGasEAF::getTotalKwhPerCycle(){
+    double totalHeatExhaust = getTotalHeatExhaust();
+    this->totalKwhPerCycle_ = totalHeatExhaust/3412;
+    return this->totalKwhPerCycle_;
+
+}
+
 double ExhaustGasEAF::getChemicalHeatPercent() {
     double chemicalHeat = getChemicalHeat();
     double totalHeatFlue = getTotalHeatFlue();
