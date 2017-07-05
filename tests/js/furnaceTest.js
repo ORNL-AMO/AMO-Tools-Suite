@@ -46,7 +46,7 @@ test('energyEquivalencyElectric', function (t) {
     inp.fuelFiredHeatInput = 87.3;
 
     var res = bindings.energyEquivalencyElectric(inp);
-    t.equal(res.electricalHeatInput, 3371.27, 'res.electricalHeatInput is ' + res.electricalHeatInput);
+    t.equal(res.electricalHeatInput, 3371.2686785819, 'res.electricalHeatInput is ' + res.electricalHeatInput);
 
 });
 
@@ -60,7 +60,7 @@ test('energyEquivalencyFuel', function (t) {
     inp.electricalHeatInput = 700;
 
     var res = bindings.energyEquivalencyFuel(inp);
-    t.equal(res.fuelFiredHeatInput, 2.1207694397, 'res.fuelFiredHeatInput is ' + res.fuelFiredHeatInput);
+    t.equal(res.fuelFiredHeatInput, 2.1213910017, 'res.fuelFiredHeatInput is ' + res.fuelFiredHeatInput);
 
 });
 
