@@ -2,7 +2,7 @@
 #include <calculator/furnace/FlowCalculationsEnergyUse.h>
 
 TEST_CASE( "Calculate the Flow(1)", "[Flow][FlowCalculationsEnergyUse][Calculator]") {
-    CHECK( FlowCalculationsEnergyUse(FlowCalculationsEnergyUse::Gas::HELIUM, 0.14, 5, 9, FlowCalculationsEnergyUse::Section::SHARP_EDGE, 0.6, 7325, 52, 63, 26, 16).getFlow() == Approx(647312));
+    CHECK( FlowCalculationsEnergyUse(FlowCalculationsEnergyUse::Gas::HELIUM, 0.14, 5, 9, FlowCalculationsEnergyUse::Section::SHARP_EDGE, 0.6, 7325, 52, 63, 26, 16).getFlow() == Approx(647312.3211663722));
 }
 
 TEST_CASE( "Calculate the Heat Input(1)", "[Heat Input][FlowCalculationsEnergyUse][Calculator]") {

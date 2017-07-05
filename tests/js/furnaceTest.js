@@ -7,7 +7,7 @@ const test = require('tap').test
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'phast'});
 
 test('efficiencyImprovement', function (t) {
-    t.plan(2);
+    t.plan(7);
     t.type(bindings.efficiencyImprovement, 'function');
 
     var inp = {};
@@ -15,24 +15,24 @@ test('efficiencyImprovement', function (t) {
     inp.currentFlueGasOxygen = 6;
     inp.newFlueGasOxygen = 2;
     inp.currentFlueGasTemp = 1600;
-    inp.fuelFiredHeatInput = 1200;
     inp.currentCombustionAirTemp = 80;
     inp.newCombustionAirTemp = 750;
     inp.currentEnergyInput = 10;
+    inp.newFlueGasTemp = 1200;
 
     var res = bindings.efficiencyImprovement(inp);
 
-    t.equal(res.currentExcessAir, 35.80, 'res.currentExcessAir is ' + res.currentExcessAir);
+    t.equal(res.currentExcessAir, 35.80000271600005, 'res.currentExcessAir is ' + res.currentExcessAir);
 
-    t.equal(res.newExcessAir, 9.4210532075, 'res.newExcessAir is ' + res.newExcessAir);
+    t.equal(res.newExcessAir, 9.421053207479227, 'res.newExcessAir is ' + res.newExcessAir);
 
-    t.equal(res.currentAvailableHeat, 46.6298023469, 'res.currentAvailableHeat is ' + res.currentAvailableHeat);
+    t.equal(res.currentAvailableHeat, 46.62980234686012, 'res.currentAvailableHeat is ' + res.currentAvailableHeat);
 
-    t.equal(res.newAvailableHeat, 78.9720318524, 'res.newAvailableHeat is '+ res.newAvailableHeat);
+    t.equal(res.newAvailableHeat, 78.97203185240743, 'res.newAvailableHeat is '+ res.newAvailableHeat);
 
-    t.equal(res.newFuelSavings, 40.9540298596, 'res.newFuelSavings is ' + res.newFuelSavings);
+    t.equal(res.newFuelSavings, 40.954029859574106, 'res.newFuelSavings is ' + res.newFuelSavings);
 
-    t.equal(res.newEnergyInput, 5.904597014, 'res.newEnergyInput is ' + res.newEnergyInput);
+    t.equal(res.newEnergyInput, 5.90459701404259, 'res.newEnergyInput is ' + res.newEnergyInput);
 
 });
 
@@ -46,7 +46,7 @@ test('energyEquivalencyElectric', function (t) {
     inp.fuelFiredHeatInput = 87.3;
 
     var res = bindings.energyEquivalencyElectric(inp);
-    t.equal(res.electricalHeatInput, 3371.27, 'res.electricalHeatInput is ' + res.electricalHeatInput);
+    t.equal(res.electricalHeatInput, 3371.29902, 'res.electricalHeatInput is ' + res.electricalHeatInput);
 
 });
 
@@ -60,12 +60,12 @@ test('energyEquivalencyFuel', function (t) {
     inp.electricalHeatInput = 700;
 
     var res = bindings.energyEquivalencyFuel(inp);
-    t.equal(res.fuelFiredHeatInput, 2.1207694397, 'res.fuelFiredHeatInput is ' + res.fuelFiredHeatInput);
+    t.equal(res.fuelFiredHeatInput, 2.1207694397283534, 'res.fuelFiredHeatInput is ' + res.fuelFiredHeatInput);
 
 });
 
 test('o2Enrichment', function (t) {
-    t.plan(2);
+    t.plan(5);
     t.type(bindings.o2Enrichment, 'function');
     var inp = {};
 
@@ -80,18 +80,18 @@ test('o2Enrichment', function (t) {
     inp.fuelConsumption = 10;
 
     var res = bindings.o2Enrichment(inp);
-    t.equal(res.availableHeatInput, 61.97, 'res.availableHeatInput is ' + res.availableHeatInput);
+    t.equal(res.availableHeatInput, 61.97028577716948, 'res.availableHeatInput is ' + res.availableHeatInput);
 
-    t.equal(res.availableHeatEnriched, 74.2210855231, 'res.availableHeatEnriched is ' + res.availableHeatEnriched);
+    t.equal(res.availableHeatEnriched, 74.2210855230995, 'res.availableHeatEnriched is ' + res.availableHeatEnriched);
 
-    t.equal(res.fuelSavingsEnriched, 16.5058213035, 'res.fuelSavingsEnriched is ' + res.fuelSavingsEnriched);
+    t.equal(res.fuelSavingsEnriched, 16.505821303458657, 'res.fuelSavingsEnriched is ' + res.fuelSavingsEnriched);
 
-    t.equal(res.fuelConsumptionEnriched, 8.3494178697, 'res.fuelConsumptionEnriched is ' + res.fuelConsumptionEnriched);
+    t.equal(res.fuelConsumptionEnriched, 8.349417869654134, 'res.fuelConsumptionEnriched is ' + res.fuelConsumptionEnriched);
 
 });
 
 test('flowCalculations', function (t) {
-    t.plan(2);
+    t.plan(3);
     t.type(bindings.flowCalculations, 'function');
     var inp = {};
 
@@ -113,8 +113,8 @@ test('flowCalculations', function (t) {
 
     var res = bindings.flowCalculations(inp);
 
-    t.equal(res.flow, 647312, 'res.flow is ' + res.flow);
+    t.equal(res.flow, 647312.3211663722, 'res.flow is ' + res.flow);
 
-    t.equal(res.heatInput, 75865, 'res.heatInput is ' + res.heatInput);
+    t.equal(res.heatInput, 75865.00404069883, 'res.heatInput is ' + res.heatInput);
 
 });
