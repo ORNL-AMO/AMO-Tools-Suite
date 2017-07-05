@@ -487,38 +487,36 @@ NAN_METHOD(efficiencyImprovement) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
     EfficiencyImprovement ei(Get("currentFlueGasOxygen"), Get("newFlueGasOxygen"), Get("currentFlueGasTemp"), Get("newFlueGasTemp"), Get("currentCombustionAirTemp"), Get("newCombustionAirTemp"), Get("currentEnergyInput"));
-    double excessAirCurrent = ei.getCurrentExcessAir();
-    double excessAirNew = ei.getNewExcessAir();
-    double heatInputCurrent = ei.getCurrentHeatInput();
-    double heatInputNew = ei.getNewHeatInput();
-    double airSpecificHeatCurrent = ei.getCurrentAirSpecificHeat();
-    double airSpecificHeatNew = ei.getNewAirSpecificHeat();
-    double airCorrectionNew = ei.getNewAirCorrection();
-    double airCorrectionCurrent = ei.getCurrentAirCorrection();
-    double availableHeatCurrent = ei.getCurrentAvailableHeat();
-    double availableHeatNew = ei.getNewAvailableHeat();
-    double combustionAirCorrectionCurrent = ei.getCurrentCombustionAirCorrection();
-    double combustionAirCorrectionNew = ei.getNewCombustionAirCorrection();
-    double fuelSavingsNew = ei.getNewFuelSavings();
-    double fuelSavingsCurrent = ei.getCurrentFuelSavings();
-    double energyInputNew = ei.getNewEnergyInput();
-    double energyInputCurrent = ei.getCurrentEnergyInput();
-    SetR("currentExcessAir", excessAirCurrent);
-    SetR("excessAirNew", excessAirNew);
-    SetR("heatInputCurrent", heatInputCurrent);
-    SetR("heatInputNew", heatInputNew);
-    SetR("airSpecificHeatCurrent", airSpecificHeatCurrent);
-    SetR("airSpecificHeatNew", airSpecificHeatNew);
-    SetR("airCorrectionNew", airCorrectionNew);
-    SetR("airCorrectionCurrent", airCorrectionCurrent);
-    SetR("availableHeatCurrent", availableHeatCurrent);
-    SetR("availableHeatNew", availableHeatNew);
-    SetR("combustionAirCorrectionCurrent", combustionAirCorrectionCurrent);
-    SetR("combustionAirCorrectionNew", combustionAirCorrectionNew);
-    SetR("fuelSavingsNew", fuelSavingsNew);
-    SetR("fuelSavingsCurrent", fuelSavingsCurrent);
-    SetR("energyInputCurrent",energyInputCurrent);
-    SetR("energyInputNew", energyInputNew);
+    double currentExcessAir = ei.getCurrentExcessAir();
+    double newExcessAir = ei.getNewExcessAir();
+    double currentHeatInput = ei.getCurrentHeatInput();
+    double newHeatInput = ei.getNewHeatInput();
+    double currentAirSpecificHeat = ei.getCurrentAirSpecificHeat();
+    double newAirSpecificHeat = ei.getNewAirSpecificHeat();
+    double currentAirCorrection = ei.getCurrentAirCorrection();
+    double newAirCorrection = ei.getNewAirCorrection();
+    double currentCombustionAirCorrection = ei.getCurrentCombustionAirCorrection();
+    double newCombustionAirCorrection = ei.getNewCombustionAirCorrection();
+    double currentAvailableHeat = ei.getCurrentAvailableHeat();
+    double newAvailableHeat = ei.getNewAvailableHeat();
+    double currentFuelSavings = ei.getCurrentFuelSavings();
+    double newFuelSavings = ei.getNewFuelSavings();
+    double newEnergyInput = ei.getNewEnergyInput();
+    SetR("currentExcessAir", currentExcessAir);
+    SetR("newExcessAir", newExcessAir);
+    SetR("currentHeatInput", currentHeatInput);
+    SetR("newHeatInput", newHeatInput);
+    SetR("currentAirSpecificHeat", currentAirSpecificHeat);
+    SetR("newAirSpecificHeat", newAirSpecificHeat);
+    SetR("currentAirCorrection", currentAirCorrection);
+    SetR("newAirCorrection", newAirCorrection);
+    SetR("currentCombustionAirCorrection", currentCombustionAirCorrection);
+    SetR("newCombustionAirCorrection", newCombustionAirCorrection);
+    SetR("currentAvailableHeat", currentAvailableHeat);
+    SetR("newAvailableHeat", newAvailableHeat);
+    SetR("currentFuelSavings", currentFuelSavings);
+    SetR("newFuelSavings", newFuelSavings);
+    SetR("newEnergyInput", newEnergyInput);
     info.GetReturnValue().Set(r);
 }
 
@@ -526,24 +524,22 @@ NAN_METHOD(energyEquivalencyElectric) {
 
         inp = info[0]->ToObject();
         r = Nan::New<Object>();
-        ElectricalEnergyEquivalency ee(Get("fuelFiredEfficiency"), Get("electricallyHeatedEfficiency"), Get("fuelFiredHeatInput"));
-        double electricalHeatInput = ee.getElectricalHeatInput();
-        double fuelFiredHeatInput = ee.getFuelFiredHeatInput();
+        ElectricalEnergyEquivalency eee(Get("fuelFiredEfficiency"), Get("electricallyHeatedEfficiency"), Get("fuelFiredHeatInput"));
+        double electricalHeatInput = eee.getElectricalHeatInput();
         SetR("electricalHeatInput", electricalHeatInput);
-        SetR("fuelFiredHeatInput", fuelFiredHeatInput);
         info.GetReturnValue().Set(r);
 }
+
 NAN_METHOD(energyEquivalencyFuel) {
 
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    FuelFiredEnergyEquivalency ee(Get("electricallyHeatedEfficiency"), Get("fuelFiredEfficiency"), Get("electricalHeatInput"));
-    double electricalHeatInput = ee.getElectricalHeatInput();
-    double fuelFiredHeatInput = ee.getFuelFiredHeatInput();
-    SetR("electricalHeatInput", electricalHeatInput);
+    FuelFiredEnergyEquivalency ffee(Get("electricallyHeatedEfficiency"), Get("fuelFiredEfficiency"), Get("electricalHeatInput"));
+    double fuelFiredHeatInput = ffee.getFuelFiredHeatInput();
     SetR("fuelFiredHeatInput", fuelFiredHeatInput);
     info.GetReturnValue().Set(r);
 }
+
 
 NAN_METHOD(flowCalculations) {
 
