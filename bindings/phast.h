@@ -7,6 +7,7 @@
 
 #include <nan.h>
 #include <node.h>
+#include <iostream>
 #include "calculator/furnace/EfficiencyImprovement.h"
 #include "calculator/furnace/EnergyEquivalency.h"
 #include "calculator/furnace/FlowCalculationsEnergyUse.h"
@@ -42,7 +43,8 @@ double Get(const char *nm) {
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
-        assert(!"defined");
+        std::cout<<nm;
+        //assert(!"defined");
     }
     return rObj->NumberValue();
 }
