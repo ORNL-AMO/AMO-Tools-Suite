@@ -535,8 +535,10 @@ NAN_METHOD(flowCalculations) {
     FlowCalculationsEnergyUse fceu(gas1, Get("specificGravity"), Get("orificeDiameter"), Get("insidePipeDiameter"), section1, Get("dischargeCoefficient"), Get("gasHeatingValue"), Get("gasTemperature"), Get("gasPressure"), Get("orificePressureDrop"), Get("operatingTime") );
     double flow = fceu.getFlow();
     double heatInput = fceu.getHeatInput();
+    double totalFlow = fceu.getTotalFlow();
     SetR("flow", flow);
     SetR("heatInput", heatInput);
+    SetR("totalFlow", totalFlow);
     info.GetReturnValue().Set(r);
 }
 

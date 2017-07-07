@@ -53,10 +53,16 @@ double FlowCalculationsEnergyUse::getFlow() {
 double FlowCalculationsEnergyUse::getHeatInput() {
     double flow = getFlow();
     if ((this->gasHeatingValue_) <= 0){
-        this->heatInput_ = flow * (this->operatingTime_);
+        this->heatInput_ = 0;
     }
     else {
         this->heatInput_ = (flow * (this->gasHeatingValue_) * (this->operatingTime_)) / 1000000;
     }
     return this->heatInput_;
+}
+
+double FlowCalculationsEnergyUse::getTotalFlow() {
+    double flow = getFlow();
+    this->totalflow_ = (flow * this->operatingTime_);
+    return this->totalflow_;
 }

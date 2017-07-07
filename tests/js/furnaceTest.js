@@ -46,7 +46,8 @@ test('energyEquivalencyElectric', function (t) {
     inp.fuelFiredHeatInput = 87.3;
 
     var res = bindings.energyEquivalencyElectric(inp);
-    t.equal(res.electricalHeatInput, 3371.29902, 'res.electricalHeatInput is ' + res.electricalHeatInput);
+    t.equal(res.electricalHeatInput, 3371.268678581893, 'res.electricalHeatInput is ' + res.electricalHeatInput);
+
 
 });
 
@@ -60,7 +61,7 @@ test('energyEquivalencyFuel', function (t) {
     inp.electricalHeatInput = 700;
 
     var res = bindings.energyEquivalencyFuel(inp);
-    t.equal(res.fuelFiredHeatInput, 2.1207694397283534, 'res.fuelFiredHeatInput is ' + res.fuelFiredHeatInput);
+    t.equal(res.fuelFiredHeatInput, 2.121391001697793, 'res.fuelFiredHeatInput is ' + res.fuelFiredHeatInput);
 
 });
 
@@ -91,7 +92,7 @@ test('o2Enrichment', function (t) {
 });
 
 test('flowCalculations', function (t) {
-    t.plan(3);
+    t.plan(4);
     t.type(bindings.flowCalculations, 'function');
     var inp = {};
 
@@ -116,5 +117,7 @@ test('flowCalculations', function (t) {
     t.equal(res.flow, 647312.3211663722, 'res.flow is ' + res.flow);
 
     t.equal(res.heatInput, 75865.00404069883, 'res.heatInput is ' + res.heatInput);
+
+    t.equal(res.totalFlow, 10356997.138661955, 'res.totalFlow is ' + res.totalFlow);
 
 });
