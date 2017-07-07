@@ -7,4 +7,4 @@ To run tests for the node addon: npm run test.
 
 To run C++ unit tests: cmake --build --target amo_tools_suite_tests
 
-To create C++ artifacts: cmake .. from target directory, then make
+To create C++ artifacts: cmake .. from target directory, then make, then cmake package

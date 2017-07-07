@@ -118,7 +118,7 @@ public:
     /**
      * Sets the current temperature of flue gas
      *
-     * @param newFlueGasTemp double, current temperature of flue gas in °F
+     * @param currentFlueGasTemp double, current temperature of flue gas in °F
      *
      * @return nothing
      */

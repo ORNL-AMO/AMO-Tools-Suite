@@ -26,7 +26,7 @@ public:
      * @param CO2 double, % of CO2 in exhaust gas
      * @param combustibleGases double, average value of combustible gases % in exhaust gases
      * @param vfr double, (volume flow rate) total volume of exhaust gases measured in cfm
-     * @param dustLoading double, dust loading for exhaust gases measured in #s/scf (number of dust particles per scf)
+     * @param dustLoading double, dust loading for exhaust gases measured in s/scf (number of dust particles per scf)
      * @param otherLosses double, other heat losses not accounted for measured in btu/cycle
      * @return nothing
      *
@@ -230,7 +230,7 @@ public:
     /**
      * Gets the dust loading
      *
-     * @return double, dust loading in #s/scf (number of particles per scf)
+     * @return double, dust loading in s/scf (number of particles per scf)
      */
     double getDustLoading_() const {
         return dustLoading_;
@@ -240,7 +240,7 @@ public:
      *
      * Sets the dust loading
      *
-     * @param dustLoading double, dust loading in #s/scf (number of particles per scf)
+     * @param dustLoading double, dust loading in s/scf (number of particles per scf)
      *
      * @return nothing
      */

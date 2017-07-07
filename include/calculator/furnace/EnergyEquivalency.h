@@ -72,7 +72,7 @@ public:
     /**
      * Sets the electrically heated equipment efficiency
      *
-     * @param electricallyHeatEfficiency double, electrically heated equipment efficiency as %
+     * @param electricallyHeatedEfficiency double, electrically heated equipment efficiency as %
      *
      * @return nothing
      */
