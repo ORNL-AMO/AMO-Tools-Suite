@@ -367,7 +367,7 @@ public:
     /**
      * Gets the adjusted (if necessary) discharge coefficient
      *
-     * @returnn double, adjusted discharge coefficient - unitless
+     * @return double, adjusted discharge coefficient - unitless
      */
     double getAdjustedDischargeCoefficient();
 
