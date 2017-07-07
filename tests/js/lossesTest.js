@@ -243,3 +243,27 @@ test('exhaustGas', function (t) {
     var res = bindings.exhaustGas(inp);
     t.equal(res, 50398.269550270066, res + ' != 50398.269550270066');
 });
+
+test('availableHeat', function (t) {
+    t.plan(2);
+    t.type(bindings.availableHeat, 'function');
+
+    var inp = {
+        excessAir: 65, combustionAirTemp: 300, exhaustGasTemp: 550
+    };
+
+    var res = bindings.availableHeat(inp);
+    t.equal(res, 82.727942398, res + ' != 82.727942398');
+});
+
+test('heatDelievered', function (t) {
+    t.plan(2);
+    t.type(bindings.heatDelivered, 'function');
+
+    var inp = {
+        totalHeatInput: 5000000, electricalPowerInput: 0, availableHeat: 82.73, otherLosses: 500
+    };
+
+    var res = bindings.heatDelivered(inp);
+    t.equal(res, 1212.3388042204, res + ' != 1212.3388042204');
+});

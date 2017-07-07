@@ -79,6 +79,12 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("o2Enrichment").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(o2Enrichment)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("availableHeat").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(availableHeat)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("heatDelivered").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(heatDelivered)).ToLocalChecked());
+
 }
 
 NODE_MODULE(phast, InitPhast)

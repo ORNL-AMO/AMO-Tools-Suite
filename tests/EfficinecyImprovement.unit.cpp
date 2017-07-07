@@ -9,11 +9,11 @@ TEST_CASE( "Calculate the New Excess Air", "[New Excess Air][EfficiencyImproveme
     CHECK( EfficiencyImprovement(6, 2, 1600, 1200, 80, 750, 10).getNewExcessAir() == Approx(9.4210532075));
 }
 
-TEST_CASE( "Calculate the Current Available Heat", "[Current Avaiable Heat][EfficiencyImprovement][Calculator]") {
+TEST_CASE( "Calculate the Current Available Heat", "[Current Available Heat][EfficiencyImprovement][Calculator]") {
     CHECK( EfficiencyImprovement(6, 2, 1600, 1200, 80, 750, 10).getCurrentAvailableHeat() == Approx(46.6298023469));
 }
 
-TEST_CASE( "Calculate the New Available Heat", "[New Avaiable Heat][EfficiencyImprovement][Calculator]") {
+TEST_CASE( "Calculate the New Available Heat", "[New Available Heat][EfficiencyImprovement][Calculator]") {
     CHECK( EfficiencyImprovement(6, 2, 1600, 1200, 80, 750, 10).getNewAvailableHeat() == Approx(78.9720318524));
 }
 

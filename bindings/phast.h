@@ -7,6 +7,7 @@
 
 #include <nan.h>
 #include <node.h>
+#include <iostream>
 #include "calculator/furnace/EfficiencyImprovement.h"
 #include "calculator/furnace/EnergyEquivalency.h"
 #include "calculator/furnace/FlowCalculationsEnergyUse.h"
@@ -42,7 +43,8 @@ double Get(const char *nm) {
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
-        assert(!"defined");
+        std::cout<<nm;
+        //assert(!"defined");
     }
     return rObj->NumberValue();
 }
@@ -553,6 +555,26 @@ NAN_METHOD(o2Enrichment) {
         SetR("fuelSavingsEnriched", fuelSavingsEnriched);
         SetR("fuelConsumptionEnriched", fuelConsumptionEnriched);
         info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(availableHeat) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    AvailableHeat av(Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"));
+    double availableHeat = av.getAvailableHeat();
+    SetR("availableHeat", availableHeat);
+    info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(energyInputExhaustGasLosses) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    EnergyInputExhaustGasLosses eiegl(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
+    double heatDeliveredInKw = eiegl.getHeatDeliveredinKw();
+    SetR("heatDeliveredInKw", heatDeliveredInKw);
+    info.GetReturnValue().Set(r);
 }
 
 
