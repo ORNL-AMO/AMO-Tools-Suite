@@ -559,6 +559,26 @@ NAN_METHOD(o2Enrichment) {
         info.GetReturnValue().Set(r);
 }
 
+NAN_METHOD(availableHeat) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    AvailableHeat av(Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"));
+    double availableHeat = av.getAvailableHeat();
+    SetR("availableHeat", availableHeat);
+    info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(energyInputExhaustGasLosses) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    EnergyInputExhaustGasLosses eiegl(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
+    double heatDeliveredInKw = eiegl.getHeatDeliveredinKw();
+    SetR("heatDeliveredInKw", heatDeliveredInKw);
+    info.GetReturnValue().Set(r);
+}
+
 
 
 #endif //AMO_TOOLS_SUITE_LOSSES_H
