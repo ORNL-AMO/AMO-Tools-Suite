@@ -406,6 +406,14 @@ public:
      */
     double getHeatInput();
 
+/**
+ * Gets the total flow in scf
+ *
+ * @return double, total flow in scf
+ */
+
+    double getTotalFlow();
+
 private:
     // In values
     FlowCalculationsEnergyUse::Gas gasType_;
@@ -429,6 +437,7 @@ private:
     double adjustedGasPressure_;
     double flow_;
     double heatInput_;
+    double totalflow_;
 };
 
 
