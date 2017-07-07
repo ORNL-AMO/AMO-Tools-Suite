@@ -19,6 +19,9 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("energyInput").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(energyInput)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("energyInputExhaustGasLosses").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(energyInputExhaustGasLosses)).ToLocalChecked());
+
     Nan::Set(target, New<String>("exhaustGas").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(exhaustGas)).ToLocalChecked());
 
@@ -82,8 +85,6 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("availableHeat").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(availableHeat)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("heatDelivered").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(heatDelivered)).ToLocalChecked());
 
 }
 

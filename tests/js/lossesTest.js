@@ -253,17 +253,17 @@ test('availableHeat', function (t) {
     };
 
     var res = bindings.availableHeat(inp);
-    t.equal(res, 82.727942398, res + ' != 82.727942398');
+    t.equal(res, 82.72794239800001, res + ' != 82.72794239800001');
 });
 
-test('heatDelievered', function (t) {
+test('energyInputExhaustGasLosses', function (t) {
     t.plan(2);
-    t.type(bindings.heatDelivered, 'function');
+    t.type(bindings.energyInputExhaustGasLosses, 'function');
 
     var inp = {
         totalHeatInput: 5000000, electricalPowerInput: 0, availableHeat: 82.73, otherLosses: 500
     };
 
-    var res = bindings.heatDelivered(inp);
-    t.equal(res, 1212.3388042204, res + ' != 1212.3388042204');
+    var res = bindings.energyInputExhaustGasLosses(inp);
+    t.equal(res, 1212.3388042203985, res + ' != 1212.3388042203985');
 });

@@ -14,6 +14,7 @@
 #include "calculator/furnace/O2Enrichment.h"
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/AuxiliaryPower.h"
+#include "calculator/losses/EnergyInputExhaustGasLosses.h"
 #include "calculator/losses/EnergyInputEAF.h"
 #include "calculator/losses/ExhaustGasEAF.h"
 #include "calculator/losses/FixtureLosses.h"
@@ -565,8 +566,8 @@ NAN_METHOD(availableHeat) {
     r = Nan::New<Object>();
     AvailableHeat av(Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"));
     double availableHeat = av.getAvailableHeat();
-    SetR("availableHeat", availableHeat);
-    info.GetReturnValue().Set(r);
+    Local<Number> retval = Nan::New(availableHeat);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(energyInputExhaustGasLosses) {
@@ -574,9 +575,9 @@ NAN_METHOD(energyInputExhaustGasLosses) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
     EnergyInputExhaustGasLosses eiegl(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
-    double heatDeliveredInKw = eiegl.getHeatDeliveredinKw();
-    SetR("heatDeliveredInKw", heatDeliveredInKw);
-    info.GetReturnValue().Set(r);
+    double heatDeliveredInKw = eiegl.getHeatDeliveredInKw();
+    Local<Number> retval = Nan::New(heatDeliveredInKw);
+    info.GetReturnValue().Set(retval);
 }
 
 
