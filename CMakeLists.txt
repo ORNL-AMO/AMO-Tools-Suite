@@ -109,7 +109,6 @@ set(SOURCE_FILES
         src/calculator/furnace/EfficiencyImprovement.cpp
         src/calculator/furnace/O2Enrichment.cpp
         src/calculator/furnace/FlowCalculationsEnergyUse.cpp
-        src/calculator/losses/ElectricFlueGasLoss.cpp
         src/calculator/losses/EnergyInputExhaustGasLosses.cpp)
 
 set(INCLUDE_FILES
@@ -174,7 +173,6 @@ set(INCLUDE_FILES
         include/calculator/furnace/EfficiencyImprovement.h
         include/calculator/furnace/O2Enrichment.h
         include/calculator/furnace/FlowCalculationsEnergyUse.h
-        include/calculator/losses/ElectricFlueGasLoss.h
         include/calculator/losses/EnergyInputExhaustGasLosses.h)
 
 set(TEST_FILES
