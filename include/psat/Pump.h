@@ -15,6 +15,10 @@
 #ifndef AMO_LIBRARY_PUMP_H
 #define AMO_LIBRARY_PUMP_H
 
+/**
+ * Pump class
+ * Contains all of the properties of a pump.
+ */
 class Pump {
 public:
 

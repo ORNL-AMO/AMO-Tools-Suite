@@ -13,6 +13,11 @@
 #ifndef AMO_TOOLS_SUITE_EXHAUSTGASEAF_H
 #define AMO_TOOLS_SUITE_EXHAUSTGASEAF_H
 
+/**
+ * Exhaust Gas for an Electric Arc Furnace class
+ * Contains all of the properties of the exhaust gas from the furnace.
+ * Used to calculate the heat loss caused by the exhaust gas coming out of the electric arc furnace.
+ */
 class ExhaustGasEAF {
 public:
     /**

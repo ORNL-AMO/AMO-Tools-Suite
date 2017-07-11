@@ -15,7 +15,10 @@
 #ifndef AMO_LIBRARY_OPTIMIZATIONRATING_H
 #define AMO_LIBRARY_OPTIMIZATIONRATING_H
 
-
+/**
+ * Optimization Rating class
+ * Used to calculate the overall rating of the existing conditions when compared to the optimal conditions.
+ */
 class OptimizationRating {
 public:
 

@@ -11,6 +11,11 @@
 #ifndef AMO_SUITE_WATERCOOLINGLOSSES_H
 #define AMO_SUITE_WATERCOOLINGLOSSES_H
 
+/**
+ * Water Cooling Losses class
+ * Contains all of the properties of a water cooling system.
+ * Used to calculate how much heat loss is caused by the cooling components and their cooling media (water).
+ */
 class WaterCoolingLosses {
 public:
 

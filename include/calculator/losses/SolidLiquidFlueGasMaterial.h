@@ -3,6 +3,11 @@
 
 #include <string>
 
+/**
+ * Solid Liquid Flue Gas Material class
+ * Contains all of the properties of a solid or liquid flue gas material.
+ * Used to calculate the heat loss caused by carrying the products of combustion out of the system through the flue.
+ */
 class SolidLiquidFlueGasMaterial {
 public:
 	/**

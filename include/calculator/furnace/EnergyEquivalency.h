@@ -12,6 +12,10 @@
 #ifndef AMO_TOOLS_SUITE_ENERGYEQUIVALENCY_H
 #define AMO_TOOLS_SUITE_ENERGYEQUIVALENCY_H
 
+/**
+ * Electrical Energy Equivalency calculator class
+ * Used to calculate the electrical heat input that is equivalent to the fuel-fired heat input.
+ */
 class ElectricalEnergyEquivalency {
 public:
     /**
@@ -118,7 +122,10 @@ private:
     double electricalHeatInput_;
 };
 
-
+/**
+ * Fuel Fired Energy Equivalency calculator class
+ * Used to calculate the fuel-fired heat input that is equivalent to the electric heat input.
+ */
 class FuelFiredEnergyEquivalency {
 public:
     /**
@@ -160,7 +167,7 @@ public:
     /**
      * Sets the electrically heated equipment efficiency
      *
-     * @param electricallyHeatEfficiency double, electrically heated equipment efficiency as %
+     * @param electricallyHeatedEfficiency double, electrically heated equipment efficiency as %
      *
      * @return nothing
      */

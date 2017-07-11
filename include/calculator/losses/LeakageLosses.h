@@ -13,6 +13,13 @@
 
 #ifndef AMO_SUITE_LEAKAGELOSSES_H
 #define AMO_SUITE_LEAKAGELOSSES_H
+
+/**
+ * Leakage Losses class
+ * Contains all of the properties of a hot gas leakage.
+ * Used to calculate the heat loss caused by gases leaving the furnace via openings other then the flue.
+ * This calculator should only be used if the furnace is operating at a positive pressure.
+ */
 class LeakageLosses {
 public:
     /**
