@@ -90,7 +90,6 @@ public:
     }
 
     /**
-     *
      * Gets the specific heat of liquid
      *
      * @return double, specific heat in btu/(lb*°F)

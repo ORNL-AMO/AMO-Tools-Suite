@@ -14,6 +14,8 @@
 #include <calculator/losses/GasLoadChargeMaterial.h>
 #include <calculator/losses/GasFlueGasMaterial.h>
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
+#include <calculator/losses/Atmosphere.h>
+#include <calculator/losses/WallLosses.h>
 
 using namespace Nan;
 using namespace v8;
@@ -290,6 +292,73 @@ std::unique_ptr<SQLite> sql;
 
         info.GetReturnValue().Set(obj);
     };
+
+
+NAN_METHOD(selectAtmosphereSpecificHeat) {
+    Local<String> id = Nan::New<String>("id").ToLocalChecked();
+    Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
+    Local<String> specificHeat = Nan::New<String>("specificHeat").ToLocalChecked();
+    auto const aMaterials = sql->getAtmosphereSpecificHeat();
+
+    auto objs = Nan::New<v8::Array>();
+    for ( size_t i = 0; i < aMaterials.size(); i++ ) {
+        auto const ash = aMaterials[i];
+        Local<Object> obj = Nan::New<Object>();
+        Nan::Set(obj, id, Nan::New<Number>(ash.getID()));
+        Nan::Set(obj, substance, Nan::New<String>(ash.getSubstance()).ToLocalChecked());
+        Nan::Set(obj, specificHeat, Nan::New<Number>(ash.getSpecificHeat()));
+        Nan::Set(objs, i, obj);
+    }
+
+    info.GetReturnValue().Set(objs);
+};
+
+NAN_METHOD(selectAtmosphereSpecificHeatById) {
+    Local<String> id = Nan::New<String>("id").ToLocalChecked();
+    Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
+    Local<String> specificHeat = Nan::New<String>("specificHeat").ToLocalChecked();
+
+    auto const ash = sql->getAtmosphereSpecificHeatById(info[0]->NumberValue());
+    Local<Object> obj = Nan::New<Object>();
+    Nan::Set(obj, id, Nan::New<Number>(ash.getID()));
+    Nan::Set(obj, substance, Nan::New<String>(ash.getSubstance()).ToLocalChecked());
+    Nan::Set(obj, specificHeat, Nan::New<Number>(ash.getSpecificHeat()));
+
+    info.GetReturnValue().Set(obj);
+};
+
+NAN_METHOD(selectWallLossesSurface) {
+    Local<String> id = Nan::New<String>("id").ToLocalChecked();
+    Local<String> surface = Nan::New<String>("surface").ToLocalChecked();
+    Local<String> conditionFactor = Nan::New<String>("conditionFactor").ToLocalChecked();
+    auto const wlSurfaces = sql->getWallLossesSurface();
+
+    auto objs = Nan::New<v8::Array>();
+    for ( size_t i = 0; i < wlSurfaces.size(); i++ ) {
+        auto const wls = wlSurfaces[i];
+        Local<Object> obj = Nan::New<Object>();
+        Nan::Set(obj, id, Nan::New<Number>(wls.getID()));
+        Nan::Set(obj, surface, Nan::New<String>(wls.getSurface()).ToLocalChecked());
+        Nan::Set(obj, conditionFactor, Nan::New<Number>(wls.getConditionFactor()));
+        Nan::Set(objs, i, obj);
+    }
+
+    info.GetReturnValue().Set(objs);
+};
+
+NAN_METHOD(selectWallLossesSurfaceById) {
+    Local<String> id = Nan::New<String>("id").ToLocalChecked();
+    Local<String> surface = Nan::New<String>("surface").ToLocalChecked();
+    Local<String> conditionFactor = Nan::New<String>("conditionFactor").ToLocalChecked();
+
+    auto const wls = sql->getWallLossesSurfaceById(info[0]->NumberValue());
+    Local<Object> obj = Nan::New<Object>();
+    Nan::Set(obj, id, Nan::New<Number>(wls.getID()));
+    Nan::Set(obj, surface, Nan::New<String>(wls.getSurface()).ToLocalChecked());
+    Nan::Set(obj, conditionFactor, Nan::New<Number>(wls.getConditionFactor()));
+
+    info.GetReturnValue().Set(obj);
+};
 
 
 #endif //AMO_TOOLS_SUITE_DB_H
