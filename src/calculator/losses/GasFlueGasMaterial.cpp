@@ -14,6 +14,19 @@ std::string GasCompositions::getSubstance() const {
     return substance;
 }
 
+double GasCompositions::calculateExcessAir(const double O2userInput) {
+    calculateCompByWeight();
+    auto excessAir = (8.52381 * O2userInput) / (2 - (9.52381 * O2userInput));
+    auto error = 100.0;
+
+    while (error > 2.0) {
+        calculateMassFlueGasComponents(excessAir);
+        auto const O2i = mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
+        error = (O2userInput - O2i) / 2;
+    }
+	return excessAir;
+}
+
 void GasCompositions::calculateCompByWeight() {
     double summationDenom = 0;
     for ( auto const & compound : gasses ) {

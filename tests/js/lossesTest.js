@@ -81,6 +81,19 @@ test('flueGasByMass', function (t) {
     t.equal(res, 0.8222977480707968, res + ' != 0.8222977480707968');
 });
 
+test('flueGasByVolumeExcessAirConversion', function (t) {
+    t.plan(2);
+    t.type(bindings.flueGasLossesByVolumeExcessAirConversion, 'function');
+    var inp = {
+        flueGasTemperature: 700, excessAirPercentage: 0, combustionAirTemperature: 125, substance: 'test substance',
+        CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0,
+        O2: 3.0
+    };
+
+    var res = bindings.flueGasLossesByVolumeExcessAirConversion(inp);
+    t.equal(res, 0, res + ' != 0');
+});
+
 test('gasCoolingLosses', function (t) {
     t.plan(3);
     t.type(bindings.gasCoolingLosses, 'function');

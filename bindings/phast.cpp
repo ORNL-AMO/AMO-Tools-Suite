@@ -31,6 +31,9 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("flueGasLossesByMass").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(flueGasLossesByMass)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("flueGasLossesByVolumeExcessAirConversion").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasLossesByVolumeExcessAirConversion)).ToLocalChecked());
+
     Nan::Set(target, New<String>("gasCoolingLosses").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(gasCoolingLosses)).ToLocalChecked());
 

@@ -132,6 +132,16 @@ public:
 		return gas->second->compByVol;
 	}
 
+//	double getGasByWeight(const std::string & gasName) const {
+//		auto const gas = gasses.find(gasName);
+//		if (gas == gasses.end()) {
+//			throw std::runtime_error("Cannot find " + gasName + " in gasses");
+//		}
+//		return gas->second->compByWeight;
+//	}
+
+	double calculateExcessAir(const double O2userInput);
+
     /**
      * Gets the name of substance
      *
@@ -166,16 +176,16 @@ private:
 	void calculateCompByWeight();
 	double calculateSensibleHeat(const double combustionAirTemp);
 	double calculateHeatCombustionAir(const double combustionAirTemp, const double excessAir);
-	double calculateHeatingValueFuel();
 	void calculateMassFlueGasComponents(const double excessAir);
+	double calculateHeatingValueFuel();
 	void calculateEnthalpy();
 	double calculateTotalHeatContentFlueGas(const double flueGasTemperature);
 
 	// the hash map holds a reference to the GasProperties below for easier iterable summations
 	std::unordered_map <std::string, std::shared_ptr<GasProperties>> gasses;
 	int id;
-	const std::string substance;
-	const double totalPercent;
+	std::string substance;
+	double totalPercent;
 	double hH2Osat, tH2Osat;
 	double mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;

@@ -543,6 +543,65 @@ NAN_METHOD(flowCalculations) {
     info.GetReturnValue().Set(r);
 }
 
+NAN_METHOD(flueGasLossesByVolumeExcessAirConversion) {
+    /**
+     * Constructor for the flue gas losses by volume with all inputs specified
+     *
+     * @param flueGasTemperature double, temperature of flue gas in °F
+     * @param excessAirPercentage double, excess air as %
+     * @param combustionAirTemperature double, temperature of combustion air in °F
+     * @param gasComposition double, percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
+     * @return nothing
+     *
+     * */
+
+    inp = info[0]->ToObject();
+    // TODO find a way to get substance name legitimately
+
+    GasCompositions firstComp("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
+    auto error = 100.0;
+    auto const O2 = firstComp.getGasByVol("O2");
+
+    while (error > 2.0) {
+        auto const H2O = comps.getGasByWeight("H2O"), CO2 = comps.getGasByWeight("CO2");
+        auto const N2 = comps.getGasByWeight("N2"), SO2 = comps.getGasByWeight("SO2");
+        auto const O2i = O2 / (H2O + CO2 + N2 + O2 + SO2);
+        comps.calculateCompByWeight();
+        auto const excessAir = (8.52381 * O2i) / (2 - (9.52381 * O2i));
+        error = fabs(O2 - O2i) / O2;
+    }
+
+    Local<Number> retval = Nan::New(error);
+    info.GetReturnValue().Set(retval);
+}
+
+//NAN_METHOD(flueGasLossesByMassExcessAirConversion) {
+//    /**
+//     * Constructor for the flue gas losses by weight with all inputs specified
+//     *
+//     * @param flueGasTemperature double, flue gas temperature in °F
+//     * @param excessAirPercentage double, excess air as %
+//     * @param combustionAirTemperature double, combustion air temperature in °F
+//     * @param fuelTemperature double, temperature of fuel in °F
+//     * @param moistureInAirComposition double, moisture in air composition as %
+//     * @param ashDischargeTemperature double, temperature of ash discharge in °F
+//     * @param unburnedCarbonInAsh double, amount of unburned carbon in ash as %
+//     * @param fuel double, composition of: carbon, hydrogen, sulphur, inertAsh, o2, moisture and nitrogen (in %)
+//     * @return nothing
+//     *
+//     * */
+//
+//    inp = info[0]->ToObject();
+//    SolidLiquidFlueGasMaterial slfgm(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"),
+//                                     Get("fuelTemperature"), Get("moistureInAirComposition"), Get("ashDischargeTemperature"),
+//                                     Get("unburnedCarbonInAsh"), Get("carbon"), Get("hydrogen"), Get("sulphur"),
+//                                     Get("inertAsh"), Get("o2"), Get("moisture"), Get("nitrogen"));
+//
+//    double heatLoss = slfgm.getHeatLoss();
+//    Local<Number> retval = Nan::New(heatLoss);
+//    info.GetReturnValue().Set(retval);
+//}
 
 NAN_METHOD(o2Enrichment) {
 
