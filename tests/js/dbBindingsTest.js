@@ -229,7 +229,7 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
 });
 
 test('dbSelectAtmosphereSpecificHeat', function (t) {
-    t.plan(10);
+    t.plan(9);
     bindings.startup();
     t.type(bindings.selectAtmosphereSpecificHeatById, 'function');
 
@@ -260,7 +260,7 @@ test('dbSelectAtmosphereSpecificHeat', function (t) {
 });
 
 test('dbSelectWallLossesSurface', function (t) {
-    t.plan(10);
+    t.plan(9);
     bindings.startup();
     t.type(bindings.selectWallLossesSurfaceById, 'function');
 
@@ -279,7 +279,7 @@ test('dbSelectWallLossesSurface', function (t) {
 
     var obj2 = {
         id: 7,
-        substance: 'Horizontal plate facing down, cooler than air',
+        surface: 'Horizontal plate facing down, cooler than air',
         conditionFactor: 1.79
     };
 
