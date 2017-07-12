@@ -556,23 +556,14 @@ NAN_METHOD(flueGasLossesByVolumeExcessAirConversion) {
      * */
 
     inp = info[0]->ToObject();
-    // TODO find a way to get substance name legitimately
 
-    GasCompositions firstComp("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+    GasCompositions comp("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                           Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
-    auto error = 100.0;
-    auto const O2 = firstComp.getGasByVol("O2");
 
-    while (error > 2.0) {
-        auto const H2O = comps.getGasByWeight("H2O"), CO2 = comps.getGasByWeight("CO2");
-        auto const N2 = comps.getGasByWeight("N2"), SO2 = comps.getGasByWeight("SO2");
-        auto const O2i = O2 / (H2O + CO2 + N2 + O2 + SO2);
-        comps.calculateCompByWeight();
-        auto const excessAir = (8.52381 * O2i) / (2 - (9.52381 * O2i));
-        error = fabs(O2 - O2i) / O2;
-    }
+    auto const flueGasO2 = Get("flueGasO2Percentage");
+    auto const excessAir = comp.calculateExcessAir(flueGasO2);
 
-    Local<Number> retval = Nan::New(error);
+    Local<Number> retval = Nan::New(excessAir);
     info.GetReturnValue().Set(retval);
 }
 

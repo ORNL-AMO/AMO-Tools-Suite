@@ -16,13 +16,19 @@ std::string GasCompositions::getSubstance() const {
 
 double GasCompositions::calculateExcessAir(const double O2userInput) {
     calculateCompByWeight();
-    auto excessAir = (8.52381 * O2userInput) / (2 - (9.52381 * O2userInput));
-    auto error = 100.0;
+    double excessAir = (8.52381 * O2userInput) / (2 - (9.52381 * O2userInput));
+	if (excessAir == 0) return 0;
 
-    while (error > 2.0) {
+    while (true) {
         calculateMassFlueGasComponents(excessAir);
         auto const O2i = mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
-        error = (O2userInput - O2i) / 2;
+        auto const error = fabs((O2userInput - O2i) / O2userInput);
+        if (error < 0.02) break;
+	    if (O2i > O2userInput) {
+            excessAir -= (excessAir * 0.01);
+        } else {
+            excessAir += (excessAir * 0.01);
+        }
     }
 	return excessAir;
 }
@@ -74,6 +80,7 @@ double GasCompositions::calculateHeatingValueFuel() {
 }
 
 void GasCompositions::calculateMassFlueGasComponents(const double excessAir) {
+	mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
     for ( auto const & comp : gasses ) {
         mH2O += (comp.second->h2oGenerated * comp.second->compByWeight) / comp.second->molecularWeight;
         mCO2 += (comp.second->co2Generated * comp.second->compByWeight) / comp.second->molecularWeight;

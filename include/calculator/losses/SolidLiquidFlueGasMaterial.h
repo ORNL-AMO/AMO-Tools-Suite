@@ -50,6 +50,38 @@ public:
 			nitrogen(nitrogen / 100)
 	{}
 
+//	SolidLiquidFlueGasMaterial(
+//			const bool
+//			const double flueGasTemperature,
+//			const double flueGasO2,
+//			const double combustionAirTemperature,
+//			const double fuelTemperature,
+//			const double moistureInAirCombustion,
+//			const double ashDischargeTemperature,
+//			const double unburnedCarbonInAsh,
+//			const double carbon,
+//			const double hydrogen,
+//			const double sulphur,
+//			const double inertAsh,
+//			const double o2,
+//			const double moisture,
+//			const double nitrogen) :
+//			flueGasTemperature(flueGasTemperature),
+//			excessAirPercentage(excessAirPercentage / 100.0),
+//			combustionAirTemperature(combustionAirTemperature),
+//			fuelTemperature(fuelTemperature),
+//			moistureInAirCombustion(moistureInAirCombustion),
+//			ashDischargeTemperature(ashDischargeTemperature),
+//			unburnedCarbonInAsh(unburnedCarbonInAsh / 100.0),
+//			carbon(carbon / 100),
+//			hydrogen(hydrogen / 100),
+//			sulphur(sulphur / 100),
+//			inertAsh(inertAsh / 100),
+//			o2(o2 / 100),
+//			moisture(moisture / 100),
+//			nitrogen(nitrogen / 100)
+//	{}
+
 	/**
      * Gets the total heat loss
      *
