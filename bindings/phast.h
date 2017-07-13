@@ -564,10 +564,12 @@ NAN_METHOD(flueGasLossesByVolumeGivenO2) {
     auto const excessAir = comp.calculateExcessAir(flueGasO2);
 
     GasFlueGasMaterial fg(Get("flueGasTemperature"), excessAir * 100.0, Get("combustionAirTemperature"), comp);
-    double heatloss = fg.getHeatLoss();
+    double heatLoss = fg.getHeatLoss();
 
-    Local<Number> retval = Nan::New(heatloss);
-    info.GetReturnValue().Set(retval);
+    r = Nan::New<Object>();
+    SetR("heatLoss", heatLoss);
+    SetR("excessAir", excessAir * 100.0);
+    info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(flueGasLossesByMassGivenO2) {
@@ -602,8 +604,10 @@ NAN_METHOD(flueGasLossesByMassGivenO2) {
                                      Get("inertAsh"), Get("o2"), Get("moisture"), Get("nitrogen"));
 
     double heatLoss = slfgm.getHeatLoss();
-    Local<Number> retval = Nan::New(heatLoss);
-    info.GetReturnValue().Set(retval);
+	r = Nan::New<Object>();
+    SetR("heatLoss", heatLoss);
+    SetR("excessAir", excessAir * 100.0);
+    info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(o2Enrichment) {

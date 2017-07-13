@@ -82,7 +82,7 @@ test('flueGasByMass', function (t) {
 });
 
 test('flueGasLossesByVolumeGivenO2', function (t) {
-    t.plan(4);
+    t.plan(7);
     t.type(bindings.flueGasLossesByVolumeGivenO2, 'function');
     var inp = {
         flueGasTemperature: 700, flueGasO2: 0.5, combustionAirTemperature: 125, substance: 'test substance',
@@ -90,23 +90,23 @@ test('flueGasLossesByVolumeGivenO2', function (t) {
         O2: 0
     };
 
-    // GasCompositions composition("unit test gas", 94.1, 2.4, 1.41, 0.03, 0.49, 0.29, 0, 0.42, 0.71, 0, 0);
-    // REQUIRE(GasFlueGasMaterial(700, 9.0, 125, composition).getHeatLoss() == Approx(0.76899));
-
     var res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res, 0.7758857340516403, res + ' != 0.7758857340516403');
+    t.equal(res['heatLoss'], 0.7758857340516403, res + ' != 0.7758857340516403');
+    t.equal(res['excessAir'], 2.3172209488353976, res + ' != 2.3172209488353976');
 
     inp['flueGasO2'] = 3.0;
     res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res, 0.7622712144825897, res + ' != 0.7622712144825897');
+    t.equal(res['heatLoss'], 0.7622712144825897, res + ' != 0.7622712144825897');
+    t.equal(res['excessAir'], 15.52234414568954, res + ' != 15.52234414568954');
 
     inp['flueGasO2'] = 7.0;
     res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res, 0.731683496609056, res + ' != 0.731683496609056');
+    t.equal(res['heatLoss'], 0.731683496609056, res + ' != 0.731683496609056');
+    t.equal(res['excessAir'], 45.197503654937584, res + ' != 45.197503654937584');
 });
 
 test('flueGasLossesByMassGivenO2', function (t) {
-    t.plan(4);
+    t.plan(7);
     t.type(bindings.flueGasLossesByMassGivenO2, 'function');
 
     var inp = {
@@ -116,15 +116,18 @@ test('flueGasLossesByMassGivenO2', function (t) {
     };
 
     var res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res, 0.8297708723770466, res + ' != 0.8297708723770466');
+    t.equal(res['heatLoss'], 0.8297708723770466, res + ' != 0.8297708723770466');
+    t.equal(res['excessAir'], 2.29427816716376, res + ' != 2.29427816716376');
 
     inp['flueGasO2'] = 3.0;
     res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res, 0.8151987636583022, res + ' != 0.8151987636583022');
+    t.equal(res['heatLoss'], 0.8151987636583022, res + ' != 0.8151987636583022');
+    t.equal(res['excessAir'], 15.368657569989644, res + ' != 15.368657569989644');
 
     inp['flueGasO2'] = 7.0;
     res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res, 0.7824331921965915, res + ' != 0.7824331921965915');
+    t.equal(res['heatLoss'], 0.7824331921965915, res + ' != 0.7824331921965915');
+    t.equal(res['excessAir'], 44.75000361875009, res + ' != 44.75000361875009');
 });
 
 
