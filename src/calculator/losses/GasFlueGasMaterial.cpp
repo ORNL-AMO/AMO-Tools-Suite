@@ -14,17 +14,18 @@ std::string GasCompositions::getSubstance() const {
     return substance;
 }
 
-double GasCompositions::calculateExcessAir(const double O2userInput) {
+double GasCompositions::calculateExcessAir(const double flueGasO2) {
     calculateCompByWeight();
-    double excessAir = (8.52381 * O2userInput) / (2 - (9.52381 * O2userInput));
+    double excessAir = (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2));
 	if (excessAir == 0) return 0;
 
-    while (true) {
+	// loop a max of 100 times, this loop doesn't take more than roughly 10 iterations right now
+    for (auto i = 0; i < 100; i++) {
         calculateMassFlueGasComponents(excessAir);
         auto const O2i = mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
-        auto const error = fabs((O2userInput - O2i) / O2userInput);
+        auto const error = fabs((flueGasO2 - O2i) / flueGasO2);
         if (error < 0.02) break;
-	    if (O2i > O2userInput) {
+        if (O2i > flueGasO2) {
             excessAir -= (excessAir * 0.01);
         } else {
             excessAir += (excessAir * 0.01);

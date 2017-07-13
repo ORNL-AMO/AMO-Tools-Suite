@@ -81,26 +81,52 @@ test('flueGasByMass', function (t) {
     t.equal(res, 0.8222977480707968, res + ' != 0.8222977480707968');
 });
 
-test('flueGasByVolumeExcessAirConversion', function (t) {
+test('flueGasLossesByVolumeGivenO2', function (t) {
     t.plan(4);
-    t.type(bindings.flueGasLossesByVolumeExcessAirConversion, 'function');
+    t.type(bindings.flueGasLossesByVolumeGivenO2, 'function');
     var inp = {
-        flueGasTemperature: 700, flueGasO2Percentage: 0.005, combustionAirTemperature: 125, substance: 'test substance',
+        flueGasTemperature: 700, flueGasO2: 0.5, combustionAirTemperature: 125, substance: 'test substance',
         CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0,
         O2: 0
     };
 
-    var res = bindings.flueGasLossesByVolumeExcessAirConversion(inp);
-    t.equal(res, 0.023172209488353974, res + ' != 0.023172209488353974');
+    // GasCompositions composition("unit test gas", 94.1, 2.4, 1.41, 0.03, 0.49, 0.29, 0, 0.42, 0.71, 0, 0);
+    // REQUIRE(GasFlueGasMaterial(700, 9.0, 125, composition).getHeatLoss() == Approx(0.76899));
 
-    inp['flueGasO2Percentage'] = 0.03;
-    res = bindings.flueGasLossesByVolumeExcessAirConversion(inp);
-    t.equal(res, 0.1552234414568954, res + ' != 0.1552234414568954');
+    var res = bindings.flueGasLossesByVolumeGivenO2(inp);
+    t.equal(res, 0.7758857340516403, res + ' != 0.7758857340516403');
 
-    inp['flueGasO2Percentage'] = 0.07;
-    res = bindings.flueGasLossesByVolumeExcessAirConversion(inp);
-    t.equal(res, 0.4519750365493759, res + ' != 0.4519750365493759');
+    inp['flueGasO2'] = 3.0;
+    res = bindings.flueGasLossesByVolumeGivenO2(inp);
+    t.equal(res, 0.7622712144825897, res + ' != 0.7622712144825897');
+
+    inp['flueGasO2'] = 7.0;
+    res = bindings.flueGasLossesByVolumeGivenO2(inp);
+    t.equal(res, 0.731683496609056, res + ' != 0.731683496609056');
 });
+
+test('flueGasLossesByMassGivenO2', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasLossesByMassGivenO2, 'function');
+
+    var inp = {
+        flueGasTemperature: 700, flueGasO2: 0.5, combustionAirTemperature: 125, fuelTemperature: 70,
+        moistureInAirComposition: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
+        carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5
+    };
+
+    var res = bindings.flueGasLossesByMassGivenO2(inp);
+    t.equal(res, 0.8297708723770466, res + ' != 0.8297708723770466');
+
+    inp['flueGasO2'] = 3.0;
+    res = bindings.flueGasLossesByMassGivenO2(inp);
+    t.equal(res, 0.8151987636583022, res + ' != 0.8151987636583022');
+
+    inp['flueGasO2'] = 7.0;
+    res = bindings.flueGasLossesByMassGivenO2(inp);
+    t.equal(res, 0.7824331921965915, res + ' != 0.7824331921965915');
+});
+
 
 test('gasCoolingLosses', function (t) {
     t.plan(3);

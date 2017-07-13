@@ -132,15 +132,7 @@ public:
 		return gas->second->compByVol;
 	}
 
-//	double getGasByWeight(const std::string & gasName) const {
-//		auto const gas = gasses.find(gasName);
-//		if (gas == gasses.end()) {
-//			throw std::runtime_error("Cannot find " + gasName + " in gasses");
-//		}
-//		return gas->second->compByWeight;
-//	}
-
-	double calculateExcessAir(const double O2userInput);
+	double calculateExcessAir(const double flueGasO2);
 
     /**
      * Gets the name of substance

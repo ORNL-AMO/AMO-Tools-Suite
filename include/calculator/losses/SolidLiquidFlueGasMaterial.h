@@ -9,7 +9,7 @@ public:
 	 * Constructor for the SolidLiquidFlueGasMaterial losses with all inputs specified
 	 *
 	 * @param flueGasTemperature - double, Furnace Flue Gas Temperature in °F
-	 * @param excessAirPercentage - double, Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
+	 * @param excessAir - double, Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
 	 * @param combustionAirTemperature - double, Combustion Air Temperature in °F
 	 * @param fuelTemperature - double, fuel Temperature in °F
 	 * @param moistureInAirCombustion - double, moisture in Air Combustion as %
@@ -21,7 +21,7 @@ public:
 	 * */
 	SolidLiquidFlueGasMaterial(
 			const double flueGasTemperature,
-			const double excessAirPercentage,
+			const double excessAir,
 			const double combustionAirTemperature,
 			const double fuelTemperature,
 			const double moistureInAirCombustion,
@@ -35,7 +35,7 @@ public:
 			const double moisture,
 			const double nitrogen) :
 			flueGasTemperature(flueGasTemperature),
-			excessAirPercentage(excessAirPercentage / 100.0),
+			excessAir(excessAir / 100.0),
 			combustionAirTemperature(combustionAirTemperature),
 			fuelTemperature(fuelTemperature),
 			moistureInAirCombustion(moistureInAirCombustion),
@@ -50,37 +50,15 @@ public:
 			nitrogen(nitrogen / 100)
 	{}
 
-//	SolidLiquidFlueGasMaterial(
-//			const bool
-//			const double flueGasTemperature,
-//			const double flueGasO2,
-//			const double combustionAirTemperature,
-//			const double fuelTemperature,
-//			const double moistureInAirCombustion,
-//			const double ashDischargeTemperature,
-//			const double unburnedCarbonInAsh,
-//			const double carbon,
-//			const double hydrogen,
-//			const double sulphur,
-//			const double inertAsh,
-//			const double o2,
-//			const double moisture,
-//			const double nitrogen) :
-//			flueGasTemperature(flueGasTemperature),
-//			excessAirPercentage(excessAirPercentage / 100.0),
-//			combustionAirTemperature(combustionAirTemperature),
-//			fuelTemperature(fuelTemperature),
-//			moistureInAirCombustion(moistureInAirCombustion),
-//			ashDischargeTemperature(ashDischargeTemperature),
-//			unburnedCarbonInAsh(unburnedCarbonInAsh / 100.0),
-//			carbon(carbon / 100),
-//			hydrogen(hydrogen / 100),
-//			sulphur(sulphur / 100),
-//			inertAsh(inertAsh / 100),
-//			o2(o2 / 100),
-//			moisture(moisture / 100),
-//			nitrogen(nitrogen / 100)
-//	{}
+	/**
+     * Calculates excess air percentage given flue gas O2 levels
+     *
+     * @return double, calculated excess air percentage
+     */
+	static double calculateExcessAirFromFlueGasO2(
+			const double flueGasO2, const double carbon, const double hydrogen, const double sulphur,
+			const double inertAsh, const double o2, const double moisture, const double nitrogen,
+			const double moistureInAirCombustion);
 
 	/**
      * Gets the total heat loss
@@ -115,7 +93,7 @@ public:
      *
      * @return double, excess air as %
      */
-	double getExcessAirPercentage() const { return excessAirPercentage; }
+	double getExcessAir() const { return excessAir; }
 
 	/**
      * Gets the combustion air temperature
@@ -235,7 +213,7 @@ public:
      *
      * @return nothing
      */
-	void setExcessAirPercentage( const double excessAir ) { excessAirPercentage = excessAir; }
+	void setExcessAir( const double excessAir ) { this->excessAir = excessAir; }
 
 	/**
      * Sets the combustion air temperature
@@ -306,7 +284,7 @@ private:
 
 	int id = 0;
 	std::string substance = "UndefinedSubstance";
-	double flueGasTemperature, excessAirPercentage, combustionAirTemperature;
+	double flueGasTemperature, excessAir, combustionAirTemperature;
 	double fuelTemperature, moistureInAirCombustion, ashDischargeTemperature, unburnedCarbonInAsh;
 	const double carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen;
 };
