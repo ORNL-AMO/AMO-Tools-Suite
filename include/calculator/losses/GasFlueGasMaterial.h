@@ -18,6 +18,10 @@
 #include <cmath>
 #include <memory>
 
+/**
+ * Gas Properties class
+ * Contains all of the properties of a gas.
+ */
 class GasProperties {
 public:
 	/**
@@ -63,7 +67,10 @@ private:
 
 // TODO should be a private class but unit tests need access to this
 
-
+/**
+ * Gas Compositions class
+ * Contains the gas compositions of a gas mixture.
+ */
 class GasCompositions {
 public:
 	/**
@@ -118,7 +125,7 @@ public:
 	}
 
     /**
-     * Gets the gas by
+     * Gets the gas by its name
      *
      * @param gasName const string, name of gas
      *
@@ -181,7 +188,11 @@ private:
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
 };
 
-
+/**
+ * Gas Flue Gas Material class
+ * Contains all of the properties of a gas flue gas material.
+ * Used to calculate the heat loss caused by carrying the products of combustion out of the system through the flue.
+ */
 class GasFlueGasMaterial {
 public:
     /**

@@ -11,6 +11,10 @@
 #ifndef AMO_TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
 #define AMO_TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
 
+/**
+ * Available Heat class
+ * Used to calculate the available heat
+ */
 class AvailableHeat {
 public:
     /**
@@ -154,6 +158,10 @@ private:
     double availableHeat_;
 };
 
+/**
+ * Energy Input Exhaust Gas Losses
+ * Used to calculate the fuel heat that is delivered to the oven/furnace
+ */
 class EnergyInputExhaustGasLosses {
 public:
     /**

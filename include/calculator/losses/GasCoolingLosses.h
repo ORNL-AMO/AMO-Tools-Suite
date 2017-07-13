@@ -13,7 +13,11 @@
 #ifndef AMO_SUITE_GASCOOLINGLOSSES_H
 #define AMO_SUITE_GASCOOLINGLOSSES_H
 
-
+/**
+ * Gas Cooling Losses class
+ * Contains all of the properties of a cooling system and its gas media.
+ * Used to calculate how much heat loss is caused by the cooling components and their cooling media (a gas).
+ */
 class GasCoolingLosses {
 public:
     /**

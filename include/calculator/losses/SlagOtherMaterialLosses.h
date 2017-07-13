@@ -18,7 +18,16 @@
 #ifndef AMO_SUITE_SLAGOTHERMATERIAL_H
 #define AMO_SUITE_SLAGOTHERMATERIAL_H
 
-
+/**
+ * Slag Other Material Losses class
+ * Contains all of the properties for slag/waste products.
+ * Used to calculate the heat loss caused by having to heat up the slag or other combustion byproducts within the furnace.'
+ * ASSUMPTIONS:
+ *  Majority of slag is silicon.
+ *  Specific heat does not change with temperature.
+ * WARNINGS:
+ *  Glass structures in slag will change output significantly.
+ */
 class SlagOtherMaterialLosses {
 public:
     /**

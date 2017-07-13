@@ -14,6 +14,10 @@
 
 #include <cmath>
 
+/**
+ * Auxiliary Power Losses class
+ * Used to calculate the energy use of systems using electricity associated with the heating system.
+ */
 class AuxiliaryPower {
 public:
 	/**

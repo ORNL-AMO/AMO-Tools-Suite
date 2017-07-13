@@ -5,6 +5,8 @@
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
 #include <calculator/losses/GasFlueGasMaterial.h>
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
+#include <calculator/losses/Atmosphere.h>
+#include <calculator/losses/WallLosses.h>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
@@ -19,7 +21,7 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
 
         SolidLoadChargeMaterial expected;
         expected.setSubstance("Aluminum");
-        expected.setSpecificHeatSolid(0.2479);
+        expected.setSpecificHeatSolid(0.247910198232625);
         expected.setLatentHeat(169);
         expected.setSpecificHeatLiquid(0.2601);
         expected.setMeltingPoint(1215);
@@ -450,5 +452,45 @@ TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getO2() == output.getO2() );
         CHECK( expected.getMoisture() == output.getMoisture() );
         CHECK( expected.getNitrogen() == output.getNitrogen() );
+    }
+}
+
+TEST_CASE( "SQLite - getAtmosphereSpecificHeat", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const outputs = sqlite.getAtmosphereSpecificHeat();
+        CHECK( outputs.size() == 6 );
+    }
+
+    {
+        auto const output = sqlite.getAtmosphereSpecificHeatById(1);
+
+        Atmosphere expected;
+        expected.setSubstance("Nitrogen");
+        expected.setSpecificHeat(0.0185);
+        expected.setID(1);
+
+        CHECK( expected == output );
+    }
+}
+
+TEST_CASE( "SQLite - getWallLossesSurface", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const outputs = sqlite.getWallLossesSurface();
+        CHECK( outputs.size() == 7 );
+    }
+
+    {
+        auto const output = sqlite.getWallLossesSurfaceById(1);
+
+        WallLosses expected;
+        expected.setSurface("Horizontal cylinders");
+        expected.setConditionFactor(1.016);
+        expected.setID(1);
+
+        CHECK( expected == output );
     }
 }

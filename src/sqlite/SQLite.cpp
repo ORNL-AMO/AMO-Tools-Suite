@@ -2,11 +2,15 @@
 #include <calculator/losses/SolidLoadChargeMaterial.h>
 #include <calculator/losses/GasLoadChargeMaterial.h>
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
+#include <calculator/losses/Atmosphere.h>
+#include <calculator/losses/WallLosses.h>
 #include <sqlite/SolidLoadChargeMaterialData.h>
 #include <calculator/losses/GasFlueGasMaterial.h>
 #include <sqlite/GasLoadChargeMaterialData.h>
 #include <sqlite/LiquidLoadChargeMaterialData.h>
 #include <sqlite/GasFlueGasMaterialData.h>
+#include <sqlite/AtmosphereSpecificHeatData.h>
+#include <sqlite/WallLossesSurfaceData.h>
 
 #include <fstream>
 #include <iostream>
@@ -50,6 +54,12 @@ SQLite::~SQLite()
     sqlite3_finalize(m_gas_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_single_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_insert_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_select_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_select_single_stmt);
+    sqlite3_finalize(m_wall_losses_surface_insert_stmt);
+    sqlite3_finalize(m_wall_losses_surface_select_stmt);
+    sqlite3_finalize(m_wall_losses_surface_select_single_stmt);
 }
 
 std::string SQLiteWrapper::convert_text( const unsigned char * text ) {
@@ -233,6 +243,58 @@ GasCompositions SQLite::getGasFlueGasMaterialById(int id) const
     return get_object<GasCompositions>(m_gas_flue_gas_materials_select_single_stmt, id, cb);
 }
 
+std::vector<Atmosphere> SQLite::getAtmosphereSpecificHeat() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
+        auto const specificHeat = sqlite3_column_double(stmt, 2);
+        auto a = Atmosphere(substance, specificHeat);
+        a.setID(id);
+        return a;
+    };
+    return get_all_objects<Atmosphere>(m_atmosphere_specific_heat_select_stmt, cb);
+}
+
+Atmosphere SQLite::getAtmosphereSpecificHeatById(int id) const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
+        auto const specificHeat = sqlite3_column_double(stmt, 2);
+        auto a = Atmosphere(substance, specificHeat);
+        a.setID(id);
+        return a;
+    };
+    return get_object<Atmosphere>(m_atmosphere_specific_heat_select_single_stmt, id, cb);
+}
+
+std::vector<WallLosses> SQLite::getWallLossesSurface() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        std::string const surface = convert_text(sqlite3_column_text(stmt, 1));
+        auto const conditionFactor = sqlite3_column_double(stmt, 2);
+        auto wl = WallLosses(surface, conditionFactor);
+        wl.setID(id);
+        return wl;
+    };
+    return get_all_objects<WallLosses>(m_wall_losses_surface_select_stmt, cb);
+}
+
+WallLosses SQLite::getWallLossesSurfaceById(int id) const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        std::string const surface = convert_text(sqlite3_column_text(stmt, 1));
+        auto const conditionFactor = sqlite3_column_double(stmt, 2);
+        auto wl = WallLosses(surface, conditionFactor);
+        wl.setID(id);
+        return wl;
+    };
+    return get_object<WallLosses>(m_wall_losses_surface_select_single_stmt, id, cb);
+}
+
 void SQLite::create_select_stmt()
 {
     std::string const select_solid_load_charge_materials =
@@ -305,6 +367,32 @@ void SQLite::create_select_stmt()
            WHERE id = ?)";
 
     prepare_statement(m_gas_flue_gas_materials_select_single_stmt, select_single_gas_flue_gas_materials);
+
+    std::string const select_atmosphere_specific_heat =
+            R"(SELECT id, substance, specificHeat
+           FROM atmosphere_specific_heat)";
+
+    prepare_statement(m_atmosphere_specific_heat_select_stmt, select_atmosphere_specific_heat);
+
+    std::string const select_single_atmosphere_specific_heat =
+            R"(SELECT id, substance, specificHeat
+           FROM atmosphere_specific_heat
+           WHERE id = ?)";
+
+    prepare_statement(m_atmosphere_specific_heat_select_single_stmt, select_single_atmosphere_specific_heat);
+
+    std::string const select_wall_losses_surface =
+            R"(SELECT id, surface, conditionFactor
+           FROM wall_losses_surface)";
+
+    prepare_statement(m_wall_losses_surface_select_stmt, select_wall_losses_surface);
+
+    std::string const select_single_wall_losses_surface =
+            R"(SELECT id, surface, conditionFactor
+           FROM wall_losses_surface
+           WHERE id = ?)";
+
+    prepare_statement(m_wall_losses_surface_select_single_stmt, select_single_wall_losses_surface);
 }
 
 void SQLite::create_tables()
@@ -417,6 +505,38 @@ void SQLite::create_tables()
            VALUES (?,?,?,?,?,?,?,?,?,?,?,?))";
 
     prepare_statement(m_gas_flue_gas_materials_insert_stmt, gas_flue_gas_materials_insert_sql);
+
+    const std::string atmosphere_specific_heat_table_sql =
+            R"(CREATE TABLE IF NOT EXISTS atmosphere_specific_heat (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             substance text NOT NULL DEFAULT "" UNIQUE,
+             specificHeat real NOT NULL, -- Btu/(scf.F)
+             UNIQUE (substance, specificHeat)
+      );)";
+
+    execute_command(atmosphere_specific_heat_table_sql);
+
+    const std::string atmosphere_specific_heat_insert_sql =
+            R"(INSERT INTO atmosphere_specific_heat(substance, specificHeat)
+           VALUES (?,?))";
+
+    prepare_statement(m_atmosphere_specific_heat_insert_stmt, atmosphere_specific_heat_insert_sql);
+
+    const std::string wall_losses_surface_table_sql =
+            R"(CREATE TABLE IF NOT EXISTS wall_losses_surface (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             surface text NOT NULL DEFAULT "" UNIQUE,
+             conditionFactor real NOT NULL, -- unitless
+             UNIQUE (surface, conditionFactor)
+      );)";
+
+    execute_command(wall_losses_surface_table_sql);
+
+    const std::string wall_losses_surface_insert_sql =
+            R"(INSERT INTO wall_losses_surface(surface, conditionFactor)
+           VALUES (?,?))";
+
+    prepare_statement(m_wall_losses_surface_insert_stmt, wall_losses_surface_insert_sql);
 }
 
 void SQLite::insert_default_data()
@@ -435,6 +555,12 @@ void SQLite::insert_default_data()
     }
     for( auto const & material : get_default_gas_flue_gas_materials() ) {
         insert_gas_flue_gas_materials(material);
+    }
+    for( auto const & material : get_default_atmosphere_specific_heat() ) {
+        insert_atmosphere_specific_heat(material);
+    }
+    for( auto const & surface : get_default_wall_losses_surface() ) {
+        insert_wall_losses_surface(surface);
     }
 }
 
@@ -514,6 +640,29 @@ bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
     reset_command(m_gas_flue_gas_materials_insert_stmt);
     return valid_insert;
 }
+
+bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
+{
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 1, sh.getSubstance());
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 2, sh.getSpecificHeat());
+
+    int rc = step_command(m_atmosphere_specific_heat_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_atmosphere_specific_heat_insert_stmt);
+    return valid_insert;
+}
+
+bool SQLite::insert_wall_losses_surface(WallLosses const & cf)
+{
+    bind_value(m_wall_losses_surface_insert_stmt, 1, cf.getSurface());
+    bind_value(m_wall_losses_surface_insert_stmt, 2, cf.getConditionFactor());
+
+    int rc = step_command(m_wall_losses_surface_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_wall_losses_surface_insert_stmt);
+    return valid_insert;
+}
+
 
 SQLiteWrapper::SQLiteWrapper( std::shared_ptr<sqlite3> const & db )
     :

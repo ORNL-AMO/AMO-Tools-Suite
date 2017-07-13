@@ -11,7 +11,7 @@ test('dbSelectSolidMaterial', function (t) {
     var obj = {
         id: 1,
         substance: 'Aluminum',
-        specificHeatSolid: 0.2479,
+        specificHeatSolid: 0.247910198232625,
         latentHeat: 169,
         specificHeatLiquid: 0.2601,
         meltingPoint: 1215
@@ -30,7 +30,7 @@ test('dbSelectSolidMaterial', function (t) {
     var obj2 = {
         id: 40,
         substance: 'Ladle Refractory',
-        specificHeatSolid: 0.2501,
+        specificHeatSolid: 0.250059708621925,
         latentHeat: 425,
         specificHeatLiquid: 0.26,
         meltingPoint: 5000
@@ -226,4 +226,66 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
     t.equal(res[1].o2, obj.o2, res[1].o2 + " != " + obj.o2);
     t.equal(res[1].moisture, obj.moisture, res[1].moisture + " != " + obj.moisture);
     t.equal(res[1].nitrogen, obj.nitrogen, res[1].nitrogen + " != " + obj.nitrogen);
+});
+
+test('dbSelectAtmosphereSpecificHeat', function (t) {
+    t.plan(9);
+    bindings.startup();
+    t.type(bindings.selectAtmosphereSpecificHeatById, 'function');
+
+    var res = bindings.selectAtmosphereSpecificHeatById(1);
+    var obj = {
+        id: 1,
+        substance: 'Nitrogen',
+        specificHeat: 0.0185};
+
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
+    t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
+    t.equal(res.specificHeat, obj.specificHeat, res.specificHeat + " != " + obj.specificHeat);
+
+
+    t.type(bindings.selectAtmosphereSpecificHeat, 'function');
+
+    var obj2 = {
+        id: 6,
+        substance: 'Water Vapor',
+        specificHeat: 0.0212
+    };
+
+    res = bindings.selectAtmosphereSpecificHeat();
+    t.equal(res.length, 6, "array is not of size 6");
+    t.equal(res[5].id, obj2.id, res[5].id + " != " + obj2.id);
+    t.equal(res[5].substance, obj2.substance, res[5].substance + " != " + obj2.substance);
+    t.equal(res[5].specificHeat, obj2.specificHeat, res[5].specificHeat + " != " + obj2.specificHeat);
+});
+
+test('dbSelectWallLossesSurface', function (t) {
+    t.plan(9);
+    bindings.startup();
+    t.type(bindings.selectWallLossesSurfaceById, 'function');
+
+    var res = bindings.selectWallLossesSurfaceById(1);
+    var obj = {
+        id: 1,
+        surface: 'Horizontal cylinders',
+        conditionFactor: 1.016};
+
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
+    t.equal(res.surface, obj.surface, res.surface + " != " + obj.surface);
+    t.equal(res.conditionFactor, obj.conditionFactor, res.conditionFactor + " != " + obj.conditionFactor);
+
+
+    t.type(bindings.selectWallLossesSurface, 'function');
+
+    var obj2 = {
+        id: 7,
+        surface: 'Horizontal plate facing down, cooler than air',
+        conditionFactor: 1.79
+    };
+
+    res = bindings.selectWallLossesSurface();
+    t.equal(res.length, 7, "array is not of size 7");
+    t.equal(res[6].id, obj2.id, res[6].id + " != " + obj2.id);
+    t.equal(res[6].surface, obj2.surface, res[6].surface + " != " + obj2.surface);
+    t.equal(res[6].conditionFactor, obj2.conditionFactor, res[6].conditionFactor + " != " + obj2.conditionFactor);
 });

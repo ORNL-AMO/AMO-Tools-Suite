@@ -10,12 +10,24 @@
  *
  */
 
+#include <string>
+
 #ifndef AMO_SUITE_ATMOSPHERE_H
 #define AMO_SUITE_ATMOSPHERE_H
 
+/** Reference Temperature is 60°F */
 #define REFERENCE_TEMPERATURE 60.0
 
-
+/**
+ * Atmosphere class
+ * Contains all of the properties of the atmosphere of gases within the furnace.
+ * Used to calculate how much heat is used by the atmosphere gases.
+ * ASSUMPTIONS:
+ *  The atmosphere composition does not change.
+ *  There is not heat of reaction (endothermic or exothermic) between the atmosphere and materials inside the furnace.
+ * WARNINGS:
+ *  If the atmosphere reacts with the material being processed, then its composition changes, and it is necessary to use appropriate correction factors based on new and old composition properties.
+ */
 class Atmosphere {
 public:
     /**
@@ -165,6 +177,59 @@ public:
      */
     double getTotalHeat();
 
+    /**
+     * Gets the name of substance
+     *
+     * @return string, name of substance
+     */
+    std::string getSubstance() const {
+        return substance_;
+    }
+
+    /**
+     * Sets the name of substance
+     *
+     * @param substance string const&, name of substance
+     *
+     * @return nothing
+     */
+    void setSubstance(std::string const & substance) {
+        substance_ = substance;
+    }
+
+    /**
+     * Gets the ID of material
+     *
+     * @return double, ID of material
+     */
+    double getID() const {
+        return this->id;
+    }
+
+    /**
+     * Sets the ID of material
+     *
+     * @param id const int, ID of material
+     *
+     * @return nothing
+     */
+    void setID(const int id) {
+        this->id = id;
+    }
+
+    ///bool operator
+    bool operator == (const Atmosphere& rhs) const
+    {
+        return specificHeat_ == rhs.specificHeat_ &&
+               substance_ == rhs.substance_ && id == rhs.id;
+    }
+
+    ///bool operator
+    bool operator != (const Atmosphere& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 private:
     // In values
     double inletTemperature_;
@@ -172,10 +237,29 @@ private:
     double flowRate_;
     double correctionFactor_;
     double specificHeat_;
+
+    std::string substance_ = "Unknown";
+    double id = 0;
     // Out value
 
     /// Total heat loss measured in btu/hr
     double totalHeat_;
+
+    friend class SQLite;
+
+    /**
+     * Constructor for the specific heat with subset of inputs specified.
+     *
+     * @param substance Name of substance
+     * @param specificHeat Specific Heat of  in Btu/(lb*°F)
+     *
+     * */
+    Atmosphere(
+            std::string const & substance,
+            double specificHeat)
+            : specificHeat_(specificHeat),
+              substance_(substance)
+    {}
 };
 
 

@@ -21,11 +21,17 @@
 #include "psat/Motor.h"
 #include "psat/FieldData.h"
 
+/**
+ * Motor Shaft Power class
+ * Contains all of the properties of a motor shaft.
+ * Used to calculate the power supplied by the motor to the pump shaft.
+ */
 class MotorShaftPower {
 public:
 
    /**
-    * Constructor
+    * Constructor for Motor Shaft Power class
+    *
     * @param motorRatedPower double, Rated Power of motor in hp
     * @param motorMeasuredPower double, Power of the motor in hp
     * @param motorRPM double, RPM of motor.
@@ -37,6 +43,7 @@ public:
     * @param fieldVoltage double, Field voltage in volts
     * @param loadEstimationMethod FieldData::LoadEstimationMethod, estimated power or current on motor input in hp
     * @param fieldCurrent double, field current as defined in amps.
+    *
     * @return nothing
     */
     MotorShaftPower(

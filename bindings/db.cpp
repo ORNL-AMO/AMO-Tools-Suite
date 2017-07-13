@@ -44,6 +44,18 @@ NAN_MODULE_INIT(InitDb) {
 
     Nan::Set(target, New<String>("selectGasFlueGasMaterialById").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectGasFlueGasMaterialById)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("selectAtmosphereSpecificHeat").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectAtmosphereSpecificHeat)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("selectAtmosphereSpecificHeatById").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectAtmosphereSpecificHeatById)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("selectWallLossesSurface").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectWallLossesSurface)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("selectWallLossesSurfaceById").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectWallLossesSurfaceById)).ToLocalChecked());
 }
 
 NODE_MODULE(db, InitDb)

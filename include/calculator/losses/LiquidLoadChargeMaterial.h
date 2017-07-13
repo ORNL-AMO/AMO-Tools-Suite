@@ -15,8 +15,15 @@
 
 #include <string>
 #include "LoadChargeMaterial.h"
+
+/** Moisture boiling point is 210°F */
 #define MOISTURE_BOILING_POINT 210.0
 
+/**
+ * Liquid Load Charge Material class
+ * Contains all properties of a liquid load charge material
+ * Used to find the heat required for a liquid load charge material to be heated from the inlet temperature to the outlet temperature
+ */
 class LiquidLoadChargeMaterial {
 
 public:
@@ -90,7 +97,6 @@ public:
     }
 
     /**
-     *
      * Gets the specific heat of liquid
      *
      * @return double, specific heat in btu/(lb*°F)

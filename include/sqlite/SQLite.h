@@ -12,6 +12,8 @@ class LiquidLoadChargeMaterial;
 class GasLoadChargeMaterial;
 class GasCompositions;
 class SolidLiquidFlueGasMaterial;
+class Atmosphere;
+class WallLosses;
 
 class SQLiteWrapper
 {
@@ -116,6 +118,14 @@ public:
 
     GasCompositions getGasFlueGasMaterialById(int id) const;
 
+    std::vector<Atmosphere> getAtmosphereSpecificHeat() const;
+
+    Atmosphere getAtmosphereSpecificHeatById(int id) const;
+
+    std::vector<WallLosses> getWallLossesSurface() const;
+
+    WallLosses getWallLossesSurfaceById(int id) const;
+
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
@@ -132,6 +142,12 @@ private:
     sqlite3_stmt * m_gas_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_single_stmt = nullptr;
+    sqlite3_stmt * m_atmosphere_specific_heat_insert_stmt = nullptr;
+    sqlite3_stmt * m_atmosphere_specific_heat_select_stmt = nullptr;
+    sqlite3_stmt * m_atmosphere_specific_heat_select_single_stmt = nullptr;
+    sqlite3_stmt * m_wall_losses_surface_insert_stmt = nullptr;
+    sqlite3_stmt * m_wall_losses_surface_select_stmt = nullptr;
+    sqlite3_stmt * m_wall_losses_surface_select_single_stmt = nullptr;
 
     void create_select_stmt();
 
@@ -147,6 +163,10 @@ private:
 
     bool insert_gas_flue_gas_materials(GasCompositions const & comps);
 
+    bool insert_atmosphere_specific_heat(Atmosphere const & material);
+
+    bool insert_wall_losses_surface(WallLosses const & surface);
+
     void insert_default_data();
 
     std::vector<SolidLoadChargeMaterial> get_default_solid_load_charge_materials();
@@ -158,6 +178,10 @@ private:
     std::vector<SolidLiquidFlueGasMaterial> get_default_solid_liquid_flue_gas_materials();
 
     std::vector<GasCompositions> get_default_gas_flue_gas_materials();
+
+    std::vector<Atmosphere> get_default_atmosphere_specific_heat();
+
+    std::vector<WallLosses> get_default_wall_losses_surface();
 };
 
 
