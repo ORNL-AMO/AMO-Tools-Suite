@@ -18,10 +18,17 @@
 #include <string>
 #include "LoadChargeMaterial.h"
 
+/** Latent heat of evaporation for water is 970 Btu/lb */
 #define WATER_EVAPORATION 970.0
+
+/** Heat required temperature is 212.0°F */
 #define HEAT_REQUIRED_TEMP 212.0
 
-
+/**
+ * Solid Load Charge Material class
+ * Contains all of the properties of a solid load charge material
+ * Used to calculate the heat required for a solid load charge material to tbe heated from the inlet temperature to the outlet temperature
+ */
 class SolidLoadChargeMaterial {
 public:
 

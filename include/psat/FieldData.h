@@ -14,7 +14,10 @@
 #ifndef AMO_LIBRARY_FIELDDATA_H
 #define AMO_LIBRARY_FIELDDATA_H
 
-
+/**
+ * Field Data class
+ * Contains all of the data that can be measured from a pump.
+ */
 class FieldData {
 public:
 

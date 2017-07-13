@@ -11,9 +11,19 @@
 
 #ifndef AMO_SUITE_WALLLOSSES_H
 #define AMO_SUITE_WALLLOSSES_H
+
+/** Rad constant is 460.0 */
 #define RAD_CONSTANT 460.0
 
-
+/**
+ * Wall Losses class
+ * Contains all of the properties of a wall loss
+ * Used to calculate the heat loss caused by heat being transferred from the outer surface of the wall to the surroundings.
+ * ASSUMPTIONS:
+ *  Surface emissivity is uniform for the entire surface area.
+ *  Wind velocity is uniform over the entire surface area.
+ *
+ */
 class WallLosses {
 public:
 

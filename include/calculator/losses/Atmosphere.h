@@ -13,9 +13,19 @@
 #ifndef AMO_SUITE_ATMOSPHERE_H
 #define AMO_SUITE_ATMOSPHERE_H
 
+/** Reference Temperature is 60°F */
 #define REFERENCE_TEMPERATURE 60.0
 
-
+/**
+ * Atmosphere class
+ * Contains all of the properties of the atmosphere of gases within the furnace.
+ * Used to calculate how much heat is used by the atmosphere gases.
+ * ASSUMPTIONS:
+ *  The atmosphere composition does not change.
+ *  There is not heat of reaction (endothermic or exothermic) between the atmosphere and materials inside the furnace.
+ * WARNINGS:
+ *  If the atmosphere reacts with the material being processed, then its composition changes, and it is necessary to use appropriate correction factors based on new and old composition properties.
+ */
 class Atmosphere {
 public:
     /**

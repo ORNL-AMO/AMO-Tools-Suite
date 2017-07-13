@@ -11,6 +11,12 @@
 
 #ifndef AMO_SUITE_LIQUIDCOOLINGLOSSES_H
 #define AMO_SUITE_LIQUIDCOOLINGLOSSES_H
+
+/**
+ * Liquid Cooling Losses class
+ * Contains all of the properties of a cooling system and its liquid media.
+ * Used to calculate how much heat loss is caused by the cooling components and their cooling media (a liquid).
+ */
 class LiquidCoolingLosses {
 public:
     /**

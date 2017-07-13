@@ -12,6 +12,10 @@
 #ifndef AMO_TOOLS_SUITE_O2ENRICHMENT_H
 #define AMO_TOOLS_SUITE_O2ENRICHMENT_H
 
+/**
+ * O2 Enrichment calculator class
+ * Used to see the potential fuel savings of using O2 enriched fuel.
+ */
 class O2Enrichment {
 public:
     /**
@@ -281,14 +285,14 @@ public:
      */
     double getHeatInputEnriched();
 
-    /*
+    /**
      * Gets the specific heat of air
      *
      * @return double, specific heat of air in Btu/(lb*°F)
      */
     double getAirSpecificHeat();
 
-    /*
+    /**
      * Gets the specific heat of air with oxygen enrichment
      *
      * @return double, specific heat of air with oxygen enrichment in Btu/(lb*°F)

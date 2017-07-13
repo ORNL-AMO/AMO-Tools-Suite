@@ -15,7 +15,9 @@
 #define AMO_SUITE_FIXTURELOSSES_H
 
 /**
- * @class FixtureLosses FixtureLosses.h
+ * Fixture Losses class
+ * Contains all of the properties of a fixture, tray, conveyor belt, etc.
+ * Used to calculate the heat loss caused by fixtures, trays, conveyor belts, etc. that enter the furnace at lower temperatures.
  */
 class FixtureLosses {
 public:

@@ -7,6 +7,10 @@
 
 #define SPECIFIC_HEAT_WATER_VAPOR 0.481
 
+/**
+ * Load Charge Material class
+ * Used to describe the reaction type (endothermic or exothermic)
+ */
 class LoadChargeMaterial {
 public:
 

@@ -10,6 +10,13 @@
  */
 #ifndef AMO_SUITE_OPENINGLOSSES_H
 #define AMO_SUITE_OPENINGLOSSES_H
+
+/**
+ * Opening Losses class
+ * Contains all the properties of an opening loss.
+ * Used to calculate the heat loss caused by heat transfer from the openings on equipment to the surrounding.
+ * Only considers thermal radiation losses due to exposure of furnace to the surroundings.
+ */
 class OpeningLosses {
 public:
 

@@ -11,7 +11,10 @@
 
 #ifndef AMO_TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
 #define AMO_TOOLS_SUITE_FLOWCALCULATIONSENERGYUSE_H
-
+/**
+ * Flow Calculations Energy Use calculator class
+ * Used to find the flow and the heat input of a fuel-fired furnace.
+ */
 class FlowCalculationsEnergyUse {
 public:
 
@@ -45,7 +48,7 @@ public:
      * Constructor for the flow calculations energy use
      *
      * @param gasType Gas, type of gas
-     * @param specifiedSpecificGravity double, specific gravity specified by the user- unitless
+     * @param specificGravity double, specific gravity specified by the user- unitless
      * @param orificeDiameter double, diameter of orifice in inches
      * @param insidePipeDiameter double, diameter of inside pipe in inches
      * @param sectionType Section, type of section
