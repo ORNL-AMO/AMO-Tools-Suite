@@ -12,6 +12,10 @@
 #ifndef AMO_TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
 #define AMO_TOOLS_SUITE_EFFICIENCYIMPROVEMENT_H
 
+/**
+ * Efficiency Improvement calculator class
+ * Used to help calculate potential fuel savings by increasing the efficiency of the furnace.
+ */
 class EfficiencyImprovement {
 public:
     /**

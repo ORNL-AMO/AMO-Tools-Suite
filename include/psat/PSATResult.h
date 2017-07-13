@@ -20,6 +20,11 @@
 #include "Financial.h"
 #include "FieldData.h"
 
+/**
+ * PSAT Result class
+ * Contains all of the final results of the pump calculations.
+ * Used to calculate the existing efficiency of the pump and the optimal efficiency of the pump so they can be compared.
+ */
 class PSATResult {
 
 public:

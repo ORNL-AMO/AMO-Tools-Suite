@@ -18,7 +18,7 @@ public:
 	/**
     * Constructor for the ReturnCalcValues class with all inputs specified
     *
-    * @param differentialElevationHead double, differenial elevation head in ft
+    * @param differentialElevationHead double, differential elevation head in ft
     * @param differentialPressureHead double, differential pressure head in ft
     * @param differentialVelocityHead double, differential velocity head in ft
     * @param estimatedSuctionFrictionHead double, estimated suction friction head in ft
@@ -63,6 +63,11 @@ public:
 	const double pumpHead;
 };
 
+/**
+ * Head Tool Base class
+ * Contains all of the basic properties of a head tool.
+ * Used to calculate velocity and velocity head so those values can be used in the HeadToolSuctionTank class or HeadTool class to calculate all of the values in the ReturnCalcValues class.
+ */
 class HeadToolBase {
 protected:
 	/**
@@ -148,6 +153,11 @@ protected:
 	const double PI_ = 3.141592653589793238463;
 };
 
+/**
+ * Head Tool Suction Tank class
+ * Contains all of the properties of a head tool suction tank.
+ * Used to calculate all of the values in the ReturnCalcValues class.
+ */
 class HeadToolSuctionTank : private HeadToolBase {
 public:
 
@@ -202,6 +212,11 @@ private:
 	const double suctionTankGasOverPressure_, suctionTankFluidSurfaceElevation_;
 };
 
+/**
+ * Head Tool class
+ * Contains all of the properties of a head tool.
+ * Used to calculate all of the values of the ReturnCalcValues class.
+ */
 class HeadTool : private HeadToolBase {
 public:
 

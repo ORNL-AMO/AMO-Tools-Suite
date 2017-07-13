@@ -16,7 +16,11 @@
 #include <string>
 #include "LoadChargeMaterial.h"
 
-
+/**
+ * Gas Load Charge Material class
+ * Contains all properties of a gas load charge material
+ * Used to find the heat required for a gas load charge material to be heated from the inlet temperature to the outlet temperature
+ */
 class GasLoadChargeMaterial {
 public:
 

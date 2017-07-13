@@ -11,10 +11,21 @@
 
 #ifndef AMO_SUITE_WALLLOSSES_H
 #define AMO_SUITE_WALLLOSSES_H
+
+/** Rad constant is 460.0 */
 #define RAD_CONSTANT 460.0
 
 #include <string>
 
+/**
+ * Wall Losses class
+ * Contains all of the properties of a wall loss
+ * Used to calculate the heat loss caused by heat being transferred from the outer surface of the wall to the surroundings.
+ * ASSUMPTIONS:
+ *  Surface emissivity is uniform for the entire surface area.
+ *  Wind velocity is uniform over the entire surface area.
+ *
+ */
 class WallLosses {
 public:
 
@@ -197,64 +208,7 @@ public:
      */
     double getHeatLoss();
 
-    /**
-     * Gets the description of hte surface
-     *
-     * @return string, description of surface
-     */
-    std::string getSurface() const {
-        return surface_;
-    }
-
-    /**
-     * Sets the description of surface
-     *
-     * @param surface string const&, description of surface
-     *
-     * @return nothing
-     */
-    void setSurface(std::string const & surface) {
-        surface_ = surface;
-    }
-
-    /**
-     * Gets the ID of surface
-     *
-     * @return double, ID of surface
-     */
-    double getID() const {
-        return this->id;
-    }
-
-    /**
-     * Sets the ID of surface
-     *
-     * @param id const int, ID of surface
-     *
-     * @return nothing
-     */
-    void setID(const int id) {
-        this->id = id;
-    }
-
-    ///bool operator
-    bool operator == (const WallLosses& rhs) const
-    {
-        return conditionFactor_ == rhs.conditionFactor_ &&
-               surface_ == rhs.surface_ && id == rhs.id;
-    }
-
-    ///bool operator
-    bool operator != (const WallLosses& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
 private:
-    std::string surface_ = "Unknown";
-    double id = 0;
-
-    //in values
     double surfaceArea_;
     double ambientTemperature_;
     double surfaceTemperature_;
@@ -263,26 +217,7 @@ private:
     double conditionFactor_;
     double correctionFactor_;
 
-    ///out values
     double heatLoss_;
-
-
-    friend class SQLite;
-
-    /**
-     * Constructor for the surface shape/orientation factor with subset of inputs specified.
-     *
-     * @param surface string, description of the surface
-     * @param conditionFactor double, condition factor
-     *
-     * */
-    WallLosses(
-            std::string const & surface,
-            double conditionFactor)
-            : surface_(surface),
-              conditionFactor_(conditionFactor)
-    {}
-
 };
 
 #endif //AMO_SUITE_WALLLOSSES_H

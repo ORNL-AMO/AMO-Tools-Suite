@@ -14,6 +14,10 @@
 #ifndef AMO_LIBRARY_MOTOR_H
 #define AMO_LIBRARY_MOTOR_H
 
+/**
+ * Motor class
+ * Contains all of the properties of a motor.
+ */
 class Motor {
 public:
 

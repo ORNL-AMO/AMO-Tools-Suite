@@ -15,7 +15,10 @@
 #ifndef AMO_LIBRARY_FINANCIALS_H
 #define AMO_LIBRARY_FINANCIALS_H
 
-
+/**
+ * Financial class
+ * Contains the properties relating to the cost of operating equipment.
+ */
 class Financial {
 public:
 

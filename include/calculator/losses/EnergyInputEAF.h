@@ -13,7 +13,10 @@
 #ifndef AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
 #define AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
 
-
+/**
+ * Energy Input for an Electric Arc Furnace class
+ * Used to calculate the heat that is being supplied to an electric arc furnace.
+ */
 class EnergyInputEAF {
     public:
     /**
