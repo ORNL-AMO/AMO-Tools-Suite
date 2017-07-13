@@ -173,7 +173,9 @@ set(INCLUDE_FILES
         include/calculator/furnace/EfficiencyImprovement.h
         include/calculator/furnace/O2Enrichment.h
         include/calculator/furnace/FlowCalculationsEnergyUse.h
-        include/calculator/losses/EnergyInputExhaustGasLosses.h)
+        include/calculator/losses/EnergyInputExhaustGasLosses.h
+        include/sqlite/AtmosphereSpecificHeatData.h
+        include/sqlite/WallLossesSurfaceData.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -196,9 +198,9 @@ set(TEST_FILES
         tests/SolidLiquidFlueGasMaterial.unit.cpp
         tests/AuxiliaryPower.unit.cpp
         tests/SlagOtherMaterialLosses.unit.cpp
-        tests/ExhuastGasEAF.unit.cpp
+        tests/ExhaustGasEAF.unit.cpp
         tests/EnergyEquivalency.unit.cpp
-        tests/EfficinecyImprovement.unit.cpp
+        tests/EfficiencyImprovement.unit.cpp
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp)

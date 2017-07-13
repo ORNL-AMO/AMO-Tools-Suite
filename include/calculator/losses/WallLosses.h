@@ -15,6 +15,8 @@
 /** Rad constant is 460.0 */
 #define RAD_CONSTANT 460.0
 
+#include <string>
+
 /**
  * Wall Losses class
  * Contains all of the properties of a wall loss

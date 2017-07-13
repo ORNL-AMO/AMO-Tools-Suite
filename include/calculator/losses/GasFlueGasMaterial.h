@@ -125,7 +125,7 @@ public:
 	}
 
     /**
-     * Gets the gas by
+     * Gets the gas by its name
      *
      * @param gasName const string, name of gas
      *
