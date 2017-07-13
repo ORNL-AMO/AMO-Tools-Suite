@@ -173,7 +173,7 @@ set(INCLUDE_FILES
         include/calculator/furnace/EfficiencyImprovement.h
         include/calculator/furnace/O2Enrichment.h
         include/calculator/furnace/FlowCalculationsEnergyUse.h
-        include/calculator/losses/EnergyInputExhaustGasLosses.h)
+        include/calculator/losses/EnergyInputExhaustGasLosses.h include/calculator/furnace/HumidityRatio.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
