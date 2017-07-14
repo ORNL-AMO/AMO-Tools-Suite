@@ -91,6 +91,8 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("availableHeat").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(availableHeat)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("humidityRatio").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(humidityRatio)).ToLocalChecked());
 
 }
 

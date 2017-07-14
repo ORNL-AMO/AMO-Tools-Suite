@@ -109,7 +109,8 @@ set(SOURCE_FILES
         src/calculator/furnace/EfficiencyImprovement.cpp
         src/calculator/furnace/O2Enrichment.cpp
         src/calculator/furnace/FlowCalculationsEnergyUse.cpp
-        src/calculator/losses/EnergyInputExhaustGasLosses.cpp)
+        src/calculator/losses/EnergyInputExhaustGasLosses.cpp
+        src/calculator/furnace/HumidityRatio.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -175,7 +176,8 @@ set(INCLUDE_FILES
         include/calculator/furnace/FlowCalculationsEnergyUse.h
         include/calculator/losses/EnergyInputExhaustGasLosses.h
         include/sqlite/AtmosphereSpecificHeatData.h
-        include/sqlite/WallLossesSurfaceData.h src/calculator/furnace/HumidityRatio.cpp)
+        include/sqlite/WallLossesSurfaceData.h
+        include/calculator/furnace/HumidityRatio.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -203,7 +205,8 @@ set(TEST_FILES
         tests/EfficiencyImprovement.unit.cpp
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
-        tests/EnergyInputExhaustGasLosses.unit.cpp)
+        tests/EnergyInputExhaustGasLosses.unit.cpp
+        tests/HumidityRatio.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
