@@ -241,7 +241,7 @@ test('exhaustGas', function (t) {
     };
 
     var res = bindings.exhaustGas(inp);
-    t.equal(res, 52933.1306288164, res + ' != 52933.1306288164');
+    t.equal(res, 52933.130628816376, res + ' != 52933.130628816376');
 });
 
 test('availableHeat', function (t) {
