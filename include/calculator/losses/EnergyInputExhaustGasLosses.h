@@ -297,7 +297,7 @@ private:
     double otherLosses_ = 0.0;
 
     //In-Out values
-    double combustionAirCorrection_;
+//    double combustionAirCorrection_;
     double heatDelivered_;
 
     // Out values

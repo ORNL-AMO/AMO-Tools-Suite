@@ -31,6 +31,7 @@
 #include "calculator/losses/SolidLoadChargeMaterial.h"
 #include "calculator/losses/WallLosses.h"
 #include "calculator/losses/WaterCoolingLosses.h"
+#include "calculator/furnace/HumidityRatio.h"
 
 
 using namespace Nan;
@@ -644,6 +645,18 @@ NAN_METHOD(energyInputExhaustGasLosses) {
     double heatDeliveredInKw = eiegl.getHeatDeliveredInKw();
     Local<Number> retval = Nan::New(heatDeliveredInKw);
     info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(humidityRatio) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    HumidityRatio hr(Get("atmosphericPressure"), Get("dryBulbTemp"), Get("relativeHumidity"), Get("wetBulbTemp"));
+    double humidityRatioUsingRH = hr.getHumidityRatioUsingRH();
+    double humidityRatioUsingWBT = hr.getHumidityRatioUsingWBT();
+    SetR("humidityRatioUsingRH", humidityRatioUsingRH);
+    SetR("humidityRatioUsingWBT", humidityRatioUsingWBT);
+    info.GetReturnValue().Set(r);
 }
 
 

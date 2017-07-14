@@ -121,3 +121,23 @@ test('flowCalculations', function (t) {
     t.equal(res.totalFlow, 10356997.138661955, 'res.totalFlow is ' + res.totalFlow);
 
 });
+
+test('humidityRatio', function (t) {
+    t.plan(3);
+    t.type(bindings.humidityRatio, 'function');
+    var inp = {};
+
+    inp.atmosphericPressure = 0.8;
+    inp.dryBulbTemp = 120;
+    inp.relativeHumidity = 30;
+    inp.wetBulbTemp = 85;
+
+    console.log(inp);
+
+    var res = bindings.humidityRatio(inp);
+
+    t.equal(res.humidityRatioUsingRH, 0.028113628942036617, 'res.humidityRatioUsingRH is ' + res.humidityRatioUsingRH);
+
+    t.equal(res.humidityRatioUsingWBT, 0.024579434176341366, 'res.humidityRatioUsingWBT is ' + res.humidityRatioUsingWBT);
+
+});
