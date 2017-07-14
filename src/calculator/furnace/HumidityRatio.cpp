@@ -59,8 +59,8 @@ double HumidityRatio::getHumidityRatioUsingWBT() {
     const double vaporSpecificHeat = 0.444;
     const double airSpecificHeat = 0.24;
 
-    double satPressureDB = getSaturationPressure(this->dryBulbTemp_);
-    double ratioDB = molecularWeightRatio * satPressureDB / ((this->atmosphericPressure_) - satPressureDB);
+//    double satPressureDB = getSaturationPressure(this->dryBulbTemp_);
+//    double ratioDB = molecularWeightRatio * satPressureDB / ((this->atmosphericPressure_) - satPressureDB);
 
     double satPressureWB = getSaturationPressure(this->wetBulbTemp_);
     double ratioWB = molecularWeightRatio * satPressureWB / ((this->atmosphericPressure_) - satPressureWB);

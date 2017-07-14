@@ -136,8 +136,8 @@ test('humidityRatio', function (t) {
 
     var res = bindings.humidityRatio(inp);
 
-    t.equal(res.humidityRatioUsingRH, 0.028113629, 'res.humidityRatioUsingRH is ' + res.humidityRatioUsingRH);
+    t.equal(res.humidityRatioUsingRH, 0.028113628942036617, 'res.humidityRatioUsingRH is ' + res.humidityRatioUsingRH);
 
-    t.equal(res.humidityRatioUsingWBT, 0.0245794342, 'res.humidityRatioUsingWBT is ' + res.humidityRatioUsingWBT);
+    t.equal(res.humidityRatioUsingWBT, 0.024579434176341366, 'res.humidityRatioUsingWBT is ' + res.humidityRatioUsingWBT);
 
 });

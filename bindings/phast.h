@@ -647,7 +647,7 @@ NAN_METHOD(energyInputExhaustGasLosses) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(HumidityRatio) {
+NAN_METHOD(humidityRatio) {
 
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
