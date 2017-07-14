@@ -57,7 +57,7 @@ double ExhaustGasEAF::getTotalHeatFlue() {
 double ExhaustGasEAF::getTotalHeatExhaust() {
     double totalVfr = getTotalVfr();
     double totalHeatFlue = getTotalHeatFlue();
-    this->totalHeatExhaust_ = (this->cycleTime_)*totalVfr*totalHeatFlue*60;
+    this->totalHeatExhaust_ = (this->cycleTime_)*totalVfr*totalHeatFlue*60 + (this->otherLosses_);
     return this->totalHeatExhaust_;
 }
 

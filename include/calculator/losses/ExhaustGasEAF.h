@@ -342,14 +342,14 @@ public:
 
 
     /**
-     * Calculates the total heat loss in exhaust gases
+     * Calculates the total heat loss
      *
-     * @return double, total heat loss in exhaust gases in btu/cycle
+     * @return double, total heat loss in btu/cycle
      */
     double getTotalHeatExhaust();
 
     /**
-     * Gets the total heat exhaust in kwh/cycle
+     * Gets the total heat loss
      *
      * @return double, total heat exhaust in kwh/cycle
      */

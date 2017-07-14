@@ -237,11 +237,11 @@ test('exhaustGas', function (t) {
     t.type(bindings.exhaustGas, 'function');
 
     var inp = {
-        cycleTime: 2, offGasTemp: 2800, CO: 10, H2: 10, O2: 0, CO2: 5, combustibleGases: 5, vfr: 50000, dustLoading: 0.005, otherLosses: 0
+        cycleTime: 2, offGasTemp: 2800, CO: 10, H2: 10, O2: 0, CO2: 5, combustibleGases: 5, vfr: 50000, dustLoading: 0.005, otherLosses: 8648946
     };
 
     var res = bindings.exhaustGas(inp);
-    t.equal(res, 50398.269550270066, res + ' != 50398.269550270066');
+    t.equal(res, 52933.1306288164, res + ' != 52933.1306288164');
 });
 
 test('availableHeat', function (t) {
