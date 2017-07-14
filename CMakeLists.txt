@@ -175,7 +175,7 @@ set(INCLUDE_FILES
         include/calculator/furnace/FlowCalculationsEnergyUse.h
         include/calculator/losses/EnergyInputExhaustGasLosses.h
         include/sqlite/AtmosphereSpecificHeatData.h
-        include/sqlite/WallLossesSurfaceData.h)
+        include/sqlite/WallLossesSurfaceData.h src/calculator/furnace/HumidityRatio.cpp)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
