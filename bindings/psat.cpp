@@ -28,8 +28,14 @@ NAN_MODULE_INIT(InitPsat) {
     Nan::Set(target, New<String>("pumpEfficiency").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(pumpEfficiency)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("results").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(results)).ToLocalChecked());
+    Nan::Set(target, New<String>("resultsExistingAndOptimal").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(resultsExistingAndOptimal)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("resultsExisting").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(resultsExisting)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("resultsOptimal").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(resultsOptimal)).ToLocalChecked());
 
 }
 
