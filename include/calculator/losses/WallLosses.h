@@ -208,7 +208,62 @@ public:
      */
     double getHeatLoss();
 
+    /**
+     * Gets the surface description
+     *
+     * @return string, surface description
+     */
+    std::string getSurface() const {
+        return surface_;
+    }
+
+    /**
+     * Sets the surface description
+     *
+     * @param surface string const&, surface description
+     *
+     * @return nothing
+     */
+    void setSurface(std::string const & surface) {
+        surface_ = surface;
+    }
+
+    /**
+     * Gets the ID of surface description
+     *
+     * @return double, ID of surface description
+     */
+    double getID() const {
+        return this->id;
+    }
+
+    /**
+     * Sets the ID of surface description
+     *
+     * @param id const int, ID of surface description
+     *
+     * @return nothing
+     */
+    void setID(const int id) {
+        this->id = id;
+    }
+
+    ///bool operator
+    bool operator == (const WallLosses& rhs) const
+    {
+        return conditionFactor_ == rhs.conditionFactor_ &&
+               surface_ == rhs.surface_ && id == rhs.id;
+    }
+
+    ///bool operator
+    bool operator != (const WallLosses& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 private:
+    std::string surface_ = "Unknown";
+    ///in value
     double surfaceArea_;
     double ambientTemperature_;
     double surfaceTemperature_;
@@ -216,8 +271,27 @@ private:
     double surfaceEmissivity_;
     double conditionFactor_;
     double correctionFactor_;
-
+///out value
     double heatLoss_;
+
+
+    double id = 0;
+
+    friend class SQLite;
+
+    /**
+     * Constructor for the heat loss with subset of inputs specified.
+     *
+     * @param surface string, decription of surface
+     * @param conditionFactor double, condition factor - unitless
+     *
+     * */
+    WallLosses(
+            std::string const & surface,
+            double conditionFactor)
+            : surface_(surface),
+              conditionFactor_(conditionFactor)
+    {}
 };
 
 #endif //AMO_SUITE_WALLLOSSES_H
