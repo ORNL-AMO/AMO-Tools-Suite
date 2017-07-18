@@ -206,7 +206,7 @@ set(TEST_FILES
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp
-        tests/HumidityRatio.unit.cpp)
+        tests/HumidityRatio.unit.cpp
         tests/PSATResult.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
