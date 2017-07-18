@@ -14,6 +14,26 @@ std::string GasCompositions::getSubstance() const {
     return substance;
 }
 
+double GasCompositions::calculateExcessAir(const double flueGasO2) {
+    calculateCompByWeight();
+    double excessAir = (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2));
+	if (excessAir == 0) return 0;
+
+	// loop a max of 100 times, this loop doesn't take more than roughly 10 iterations right now
+    for (auto i = 0; i < 100; i++) {
+        calculateMassFlueGasComponents(excessAir);
+        auto const O2i = mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
+        auto const error = fabs((flueGasO2 - O2i) / flueGasO2);
+        if (error < 0.02) break;
+        if (O2i > flueGasO2) {
+            excessAir -= (excessAir * 0.01);
+        } else {
+            excessAir += (excessAir * 0.01);
+        }
+    }
+	return excessAir;
+}
+
 void GasCompositions::calculateCompByWeight() {
     double summationDenom = 0;
     for ( auto const & compound : gasses ) {
@@ -61,6 +81,7 @@ double GasCompositions::calculateHeatingValueFuel() {
 }
 
 void GasCompositions::calculateMassFlueGasComponents(const double excessAir) {
+	mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
     for ( auto const & comp : gasses ) {
         mH2O += (comp.second->h2oGenerated * comp.second->compByWeight) / comp.second->molecularWeight;
         mCO2 += (comp.second->co2Generated * comp.second->compByWeight) / comp.second->molecularWeight;
