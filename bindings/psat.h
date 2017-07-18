@@ -6,6 +6,7 @@
 #define AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 
 #include <map>
+#include <unordered_map>
 #include <nan.h>
 #include <node.h>
 #include <vector>
@@ -211,7 +212,7 @@ Pump::Speed speed() {
  * @param motor_field_voltage double, the measured bus voltage in volts
  */
 
-NAN_METHOD(results) {
+NAN_METHOD(resultsExistingAndOptimal) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
@@ -276,6 +277,109 @@ NAN_METHOD(results) {
     }
     info.GetReturnValue().Set(r);
 }
+
+NAN_METHOD(resultsExisting) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    Pump::Style style1 = style();
+    Pump::Drive drive1 = drive();
+    Pump::Speed fixed_speed = speed();
+
+    Motor::LineFrequency lineFrequency = line();
+    Motor::EfficiencyClass efficiencyClass = effCls();
+
+    FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+
+    Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
+              Get("specific_gravity"), Get("stages"), fixed_speed);
+
+    Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
+                Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
+
+    Financial fin(Get("operating_fraction"), Get("cost_kw_hour"));
+
+    FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
+                 Get("motor_field_current"), Get("motor_field_voltage"));
+
+    PSATResult psat(pump, motor, fin, fd);
+    psat.calculateExisting();
+    auto const & ex = psat.getExisting();
+
+    std::unordered_map<std::string, double> out = {
+            {"pump_efficiency", ex.pumpEfficiency_ * 100},
+            {"motor_rated_power", ex.motorRatedPower_},
+            {"motor_shaft_power", ex.motorShaftPower_},
+            {"pump_shaft_power", ex.pumpShaftPower_},
+            {"motor_efficiency", ex.motorEfficiency_* 100},
+            {"motor_power_factor", ex.motorPowerFactor_ * 100},
+            {"motor_current", ex.motorCurrent_},
+            {"motor_power", ex.motorPower_},
+            {"annual_energy", ex.annualEnergy_},
+            {"annual_cost", ex.annualCost_ * 1000},
+            {"annual_savings_potential", psat.getAnnualSavingsPotential()  * 1000},
+            {"optimization_rating", psat.getOptimizationRating()}
+    };
+
+    for(auto const & p: out) {
+        Local<String> key = Nan::New<String>(p.first).ToLocalChecked();
+        Local<Number> value = Nan::New(p.second);
+        Nan::Set(r, key, value);
+    }
+    info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(resultsOptimal) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    Pump::Style style1 = style();
+    Pump::Drive drive1 = drive();
+    Pump::Speed fixed_speed = speed();
+
+    Motor::LineFrequency lineFrequency = line();
+    Motor::EfficiencyClass efficiencyClass = effCls();
+
+    FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+
+    Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
+              Get("specific_gravity"), Get("stages"), fixed_speed);
+
+    Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
+                Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
+
+    Financial fin(Get("operating_fraction"), Get("cost_kw_hour"));
+
+    FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
+                 Get("motor_field_current"), Get("motor_field_voltage"));
+
+    PSATResult psat(pump, motor, fin, fd);
+    psat.calculateOptimal();
+    auto const & opt = psat.getOptimal();
+
+    std::unordered_map<std::string, double> out = {
+            {"pump_efficiency", opt.pumpEfficiency_ * 100},
+            {"motor_rated_power", opt.motorRatedPower_},
+            {"motor_shaft_power", opt.motorShaftPower_},
+            {"pump_shaft_power", opt.pumpShaftPower_},
+            {"motor_efficiency", opt.motorEfficiency_* 100},
+            {"motor_power_factor", opt.motorPowerFactor_ * 100},
+            {"motor_current", opt.motorCurrent_},
+            {"motor_power", opt.motorPower_},
+            {"annual_energy", opt.annualEnergy_},
+            {"annual_cost", opt.annualCost_ * 1000},
+            {"annual_savings_potential", psat.getAnnualSavingsPotential()  * 1000},
+            {"optimization_rating", psat.getOptimizationRating()}
+    };
+
+    for(auto const & p: out) {
+        Local<String> key = Nan::New<String>(p.first).ToLocalChecked();
+        Local<Number> value = Nan::New(p.second);
+        Nan::Set(r, key, value);
+    }
+    info.GetReturnValue().Set(r);
+}
+
 /**
  * Constructor estimate fla
  * @param motor_rated_power double, rated Power of motor in hp
