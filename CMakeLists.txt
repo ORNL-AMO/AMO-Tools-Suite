@@ -177,7 +177,7 @@ set(INCLUDE_FILES
         include/calculator/losses/EnergyInputExhaustGasLosses.h
         include/sqlite/AtmosphereSpecificHeatData.h
         include/sqlite/WallLossesSurfaceData.h
-        include/calculator/furnace/HumidityRatio.h)
+        include/calculator/furnace/HumidityRatio.h include/ssmt/SaturatedProperties.h src/ssmt/SaturatedProperties.cpp include/ssmt/SaturatedProperties.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -206,7 +206,7 @@ set(TEST_FILES
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp
-        tests/HumidityRatio.unit.cpp)
+        tests/HumidityRatio.unit.cpp tests/SaturatedProperties.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
