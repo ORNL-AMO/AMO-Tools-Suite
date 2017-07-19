@@ -136,9 +136,8 @@ double SaturatedProperties::getGasEnthalpy(){
     }
 
     const double R = 0.461526;
-    this->gasEnthalpy_ = inverseReducedTemp * (gibbsT0 + gibbsT1) * this->saturatedTemperature_ * R;
-    return this->gasEnthalpy_;
-    //return reducedPressure;
+    this->gasEnthalpy_ = inverseReducedTemp * (gibbsT0 + gibbsT1) * tempInK * R;
+    return this->gasEnthalpy_ / 2.325997;
 }
 
 

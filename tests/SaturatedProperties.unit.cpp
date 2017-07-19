@@ -10,5 +10,5 @@ TEST_CASE( "Calculate the Saturated Pressure from Temperature", "[Saturated Pres
 }
 
 TEST_CASE( "Calculate the Saturated Gas Specific Enthalpy", "[Gas Enthalpy][ssmt][Calculator]") {
-    CHECK( SaturatedProperties(500, 470).getGasEnthalpy() == Approx(1204.9));
+    CHECK( SaturatedProperties(500, 470).getGasEnthalpy() == Approx(1204.8703394671));
 }
