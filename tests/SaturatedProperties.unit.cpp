@@ -12,3 +12,15 @@ TEST_CASE( "Calculate the Saturated Pressure from Temperature", "[Saturated Pres
 TEST_CASE( "Calculate the Saturated Gas Specific Enthalpy", "[Gas Enthalpy][ssmt][Calculator]") {
     CHECK( SaturatedProperties(500, 470).getGasEnthalpy() == Approx(1204.8703394671));
 }
+
+TEST_CASE( "Calculate the Saturated Gas Specific Entropy", "[Gas Entropy][ssmt][Calculator]") {
+    CHECK( SaturatedProperties(500, 470).getGasEntropy() == Approx(1.4614367089));
+}
+
+TEST_CASE( "Calculate the Saturated Gas Specific Volume", "[Gas Volume][ssmt][Calculator]") {
+    CHECK( SaturatedProperties(500, 470).getGasVolume() == Approx(0.9011439029));
+}
+
+TEST_CASE( "Calculate the Saturated Liquid Specific Volume", "[Liquid Volume][ssmt][Calculator]") {
+    CHECK( SaturatedProperties(500, 470).getLiquidVolume() == Approx(0.020));
+}
