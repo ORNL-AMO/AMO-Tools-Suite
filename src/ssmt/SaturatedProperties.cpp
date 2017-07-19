@@ -73,13 +73,13 @@ double SaturatedProperties::getLiquidEnthalpy(){
 }
 
 double SaturatedProperties::getGasEnthalpy(){
-    double n0[] = {0, -0.96927686500217E+01,  0.10086655968018E+02, -0.56087911283020E-02,
+    double n0[] = {-0.96927686500217E+01,  0.10086655968018E+02, -0.56087911283020E-02,
                    0.71452738081455E-01, -0.40710498223928E+00,  0.14240819171444E+01,
                    -0.43839511319450E+01, -0.28408632460772E+00,  0.21268463753307E-01};
 
-    double J0[] = {0, 0, 1, -5, -4, -3, -2, -1, 2,  3};
+    double J0[] = {0, 1, -5, -4, -3, -2, -1, 2,  3};
 
-    double n1[] = {0, -0.17731742473213E-02,  -0.17834862292358E-01,  -0.45996013696365E-01,
+    double n1[] = {-0.17731742473213E-02,  -0.17834862292358E-01,  -0.45996013696365E-01,
                    -0.57581259083432E-01,  -0.50325278727930E-01,  -0.33032641670203E-04,
                    -0.18948987516315E-03,  -0.39392777243355E-02,  -0.43797295650573E-01,
                    -0.26674547914087E-04,   0.20481737692309E-07,   0.43870667284435E-06,
@@ -95,10 +95,10 @@ double SaturatedProperties::getGasEnthalpy(){
                    -0.12768608934681E-14,   0.73087610595061E-28,   0.55414715350778E-16,
                    -0.94369707241210E-06};
 
-    double J1[] = {0, 0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11,
+    double J1[] = {0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11,
                    25, 8, 36, 13, 4, 10, 14, 29, 50, 57, 20, 35, 48, 21, 53, 39, 26, 40, 58};
 
-    double I1[] = {0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7,
+    double I1[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7,
                    8, 8, 9, 10, 10, 10, 16, 16, 18, 20, 20, 20, 21, 22, 23, 24, 24, 24};
 
     double pressureInMpa = ((this->saturatedPressure_) +  + 14.696) * 0.00689475728;
@@ -114,7 +114,7 @@ double SaturatedProperties::getGasEnthalpy(){
     double gibbsTT0 = 0.0;
     double gibbsPit0 = 0.0;
 
-    for (int i = 1; i <= 9; i++)
+    for (int i = 0; i < 9; i++)
     {
         gibbs0 += n0[i] * pow(inverseReducedTemp, J0[i]);
         gibbsT0 += n0[i] * J0[i] * pow(inverseReducedTemp, J0[i] - 1);
@@ -128,7 +128,7 @@ double SaturatedProperties::getGasEnthalpy(){
     double gibbsTT1 = 0.0;
     double gibbsPit1 = 0.0;
 
-    for (int i = 1; i <= 43; i++)
+    for (int i = 0; i < 43; i++)
     {
         gibbs1 += n1[i] * pow(reducedPressure, I1[i]) * pow((inverseReducedTemp - 0.5), J1[i]);
         gibbsPi1 += n1[i] * I1[i] * pow(reducedPressure, I1[i] - 1) * pow((inverseReducedTemp - 0.5), J1[i]);
