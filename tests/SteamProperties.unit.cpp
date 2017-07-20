@@ -5,8 +5,13 @@
 #include "catch.hpp"
 #include <ssmt/SteamProperties.h>
 
-TEST_CASE( "Calculate Heat Loss for liquid cooling Losses ethylene glycon", "[Heat Loss][Ethylene Glycon][Liquid]") {
+TEST_CASE( "steam properties calculate", "[idk]") {
 	auto properties = SteamProperties(SteamProperties::ThermodynamicQuantity::TEMPERATURE);
-//	properties.calculate(500.0, 1000.0);
+	auto rv = properties.calculate(1000.0, 500.0);
 
+	for ( auto const it : rv ) {
+		std::string key = it.first;
+		double val = it.second;
+		auto breakPointHere = 0;
+	}
 }
