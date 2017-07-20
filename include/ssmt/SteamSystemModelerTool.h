@@ -17,6 +17,13 @@ public:
 //		LIQUIDREGION3
 //	};
 
+	static int regionSelect(const double pressure, const double temperature);
+	static std::unordered_map <std::string, double> region1(const double pressure, const double temperature);
+	static std::unordered_map <std::string, double> region2(const double pressure, const double temperature);
+	static std::unordered_map <std::string, double> region3(const double pressure, const double temperature);
+	static std::unordered_map <std::string, double> region3Density(const double density, const double temperature);
+	static double region4(const double temperature);
+
 private:
 	// constants
 
@@ -69,12 +76,12 @@ private:
 		return 0.57254459862746E+03 + std::pow( p - (0.13918839778870E+02 / 0.10192970039326E-02), 0.5 );
 	}
 
-	static int regionSelect(const double pressure, const double temperature);
-	static std::unordered_map <std::string, double> region1(const double pressure, const double temperature);
-	static std::unordered_map <std::string, double> region2(const double pressure, const double temperature);
-	static std::unordered_map <std::string, double> region3(const double pressure, const double temperature);
-	static std::unordered_map <std::string, double> region3Density(const double density, const double temperature);
-	static double region4(const double temperature);
+//	static int regionSelect(const double pressure, const double temperature);
+//	static std::unordered_map <std::string, double> region1(const double pressure, const double temperature);
+//	static std::unordered_map <std::string, double> region2(const double pressure, const double temperature);
+//	static std::unordered_map <std::string, double> region3(const double pressure, const double temperature);
+//	static std::unordered_map <std::string, double> region3Density(const double density, const double temperature);
+//	static double region4(const double temperature);
 
 	friend class SteamProperties;
 };

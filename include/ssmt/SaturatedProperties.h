@@ -22,7 +22,7 @@ public:
      *
      * Constructor for the saturated temperature calculator
      *
-     * @param saturatedPressure double, saturated pressure in psig
+     * @param saturatedPressure double, saturated pressure in MPa
      *
      * @return nothing
      *
@@ -38,7 +38,7 @@ public:
     /**
      * Gets the saturated pressure
      *
-     * @return double, saturated pressure in psig
+     * @return double, saturated pressure in MPa
      */
     double getSaturatedPressure() const {
         return saturatedPressure_;
@@ -47,7 +47,7 @@ public:
     /**
      * Sets the saturated pressure
      *
-     * @param saturatedPressure double, saturated pressure in psig
+     * @param saturatedPressure double, saturated pressure in MPa
      *
      * @return nothing
      */
@@ -58,7 +58,7 @@ public:
     /**
      * Calculates the saturated temperature
      *
-     * @return double, saturated temperature in °F
+     * @return double, saturated temperature in Kelvin
      */
     double calculate();
 
@@ -74,14 +74,14 @@ private:
 
 /**
  * Saturated pressure class
- * Used to calculate the saturated presssure given the saturated temperature.
+ * Used to calculate the saturated pressure given the saturated temperature.
  */
 class SaturatedPressure {
 public:
     /**
      * Constructor for the saturated pressure calculator
      *
-     * @param saturatedTemperature double, saturated temperature in °F
+     * @param saturatedTemperature double, saturated temperature in Kelvin
      *
      * @return nothing
      *
@@ -97,7 +97,7 @@ public:
     /**
      * Gets the saturated temperature
      *
-     * @return double, saturated temperature in °F
+     * @return double, saturated temperature in Kelvin
      */
     double getSaturatedTemperature() const {
         return saturatedTemperature_;
@@ -106,7 +106,7 @@ public:
     /**
      * Sets the saturated temperature
      *
-     * @param saturatedTemperature double, saturated temperature in °F
+     * @param saturatedTemperature double, saturated temperature in Kelvin
      *
      * @return nothing
      */
@@ -117,7 +117,7 @@ public:
     /**
      * Calculates the saturated pressure
      *
-     * @return double, saturated pressure in psig
+     * @return double, saturated pressure in MPa
      */
     double calculate();
 
