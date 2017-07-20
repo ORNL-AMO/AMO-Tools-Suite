@@ -22,5 +22,5 @@ TEST_CASE( "Calculate the Saturated Gas Specific Volume", "[Gas Volume][ssmt][Ca
 }
 
 TEST_CASE( "Calculate the Saturated Liquid Specific Volume", "[Liquid Volume][ssmt][Calculator]") {
-    CHECK( SaturatedProperties(500, 470).getLiquidVolume() == Approx(0.020));
+    CHECK( SaturatedProperties(500, 470).getLiquidVolume() == Approx(0.0198095156));
 }
