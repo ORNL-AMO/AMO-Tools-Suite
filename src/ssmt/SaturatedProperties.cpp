@@ -68,13 +68,13 @@ double SaturatedProperties::getLiquidEnthalpy(){
 
     double enthalpy;
 
-    if ((temp >= 273.15) && (temp <= 623.15))
+    if ((temp >= SteamSystemModelerTool::TEMPERATURE_MIN) && (temp <= SteamSystemModelerTool::TEMPERATURE_Tp))
     {
         std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region1(temp, pressure);
         enthalpy = properties["specificEnthalpy"];
     }
 
-    if ((temp > 623.15) && (temp <= 647.096))
+    if ((temp > SteamSystemModelerTool::TEMPERATURE_Tp) && (temp <= SteamSystemModelerTool::TEMPERATURE_CRIT))
     {
         std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region3(temp, pressure);
         enthalpy = properties["specificEnthalpy"];
@@ -106,12 +106,12 @@ double SaturatedProperties::getLiquidEntropy(){
 
     double entropy;
 
-    if ((temp >= 273.15) && (temp <= 623.15))
+    if ((temp >= SteamSystemModelerTool::TEMPERATURE_MIN) && (temp <= SteamSystemModelerTool::TEMPERATURE_Tp))
     {
         std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region1(temp, pressure);
         entropy = properties["specificEntropy"];
     }
-    if ((temp > 623.15) && (temp <= 647.096))
+    if ((temp > SteamSystemModelerTool::TEMPERATURE_Tp) && (temp <= SteamSystemModelerTool::TEMPERATURE_CRIT))
     {
         std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region3(temp, pressure);
         //entropy = properties["specificEntropy"];
@@ -141,17 +141,16 @@ double SaturatedProperties::getEvaporationEntropy(){
 double SaturatedProperties::getLiquidVolume(){
     double temp = this->saturatedTemperature_;
     double pressure = this->saturatedPressure_;
-    double tempInK = (temp + 459.67) * 5/9;
 
     double volume;
 
-    if ((tempInK >= 273.15) && (tempInK <= 623.15))
+    if ((temp >= SteamSystemModelerTool::TEMPERATURE_MIN) && (temp <= SteamSystemModelerTool::TEMPERATURE_Tp))
     {
         std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region1(temp, pressure);
         volume = properties["specificVolume"];
     }
 
-    if ((tempInK > 623.15) && (tempInK <= 647.096))
+    if ((temp > SteamSystemModelerTool::TEMPERATURE_Tp) && (temp <= SteamSystemModelerTool::TEMPERATURE_CRIT))
     {
         std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region3(temp, pressure);
         volume = properties["specificVolume"];

@@ -52,9 +52,14 @@ TEST_CASE( "Calculate the Saturated Liquid Specific Volume (Region 3)", "[Liquid
 }
 
 TEST_CASE( "Calculate the Saturated Liquid Specific Enthalpy (Region 3)", "[Liquid Enthalpy][ssmt][Calculator]") {
-    CHECK( SaturatedProperties(20.2659, 640).getLiquidEnthalpy() == Approx(1842.0));
+    CHECK( SaturatedProperties(20.2659, 640).getLiquidEnthalpy() == Approx(1841.9862103902));
 }
 
 TEST_CASE( "Calculate the Saturated Liquid Specific Entropy (Region 3)", "[Liquid Entropy][ssmt][Calculator]") {
-    CHECK( SaturatedProperties(20.2659, 640).getLiquidEntropy() == Approx(4.038));
+    CHECK( SaturatedProperties(20.2659, 640).getLiquidEntropy() == Approx(4.0378047547));
+}
+
+
+TEST_CASE( "Calculate", "[test][ssmt][Calculator]") {
+    CHECK( SteamSystemModelerTool().backwardPressureEnthalpyRegion2B(25, 3849.1) == Approx(0));
 }

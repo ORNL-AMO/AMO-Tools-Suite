@@ -4,6 +4,7 @@
 
 #include "ssmt/SteamSystemModelerTool.h"
 #include "ssmt/SteamProperties.h"
+#include "ssmt/SaturatedProperties.h"
 
 std::unordered_map <std::string, double> SteamProperties::calculate(const double pressure, const double quantityValue) {
 	switch (thermodynamicQuantity_) {
@@ -41,6 +42,48 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 
 std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureEnthalpy(const double pressure,
                                                                                      const double enthalpy) {
+//	double specificEnthalpyLimit;
+//	if ( pressure < SteamSystemModelerTool::PRESSURE_CRIT)
+//	{
+//		SaturatedTemperature tempFromPressure = SaturatedTemperature(pressure);
+//		SaturatedProperties pressureSatProps = SaturatedProperties(pressure, tempFromPressure.calculate());
+//		specificEnthalpyLimit = pressureSatProps.getLiquidEnthalpy();
+//	}
+//	if ( pressure > SteamSystemModelerTool::PRESSURE_Tp)
+//	{
+//		double boundaryTemperature = SteamSystemModelerTool::boundaryByPressureRegion3to2(pressure);
+//		std::unordered_map<std::string, double> boundaryProps = SteamSystemModelerTool::region2(pressure, boundaryTemperature);
+//		specificEnthalpyLimit = boundaryProps["specificEnthalpy"];
+//	}
+//
+//	if ( enthalpy < specificEnthalpyLimit )
+//	{
+//		std::unordered_map<std::string, double> region13boundary;
+//		region13boundary["specificEnthalpy"] = 0.0;
+//
+//		double temperature = 0.0;
+//		std::unordered_map<std::string, double> testProps;
+//
+//		if (pressure > SteamSystemModelerTool::PRESSURE_Tp)
+//			region13boundary = waterPropertiesPressureTemperature(pressure, SteamSystemModelerTool::TEMPERATURE_Tp);
+//
+//		if (pressure <= SteamSystemModelerTool::PRESSURE_Tp or enthalpy < region13boundary["specificEnthalpy"] )
+//		{
+//			// not the same function used in PHP code
+//			temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion1(pressure, enthalpy);
+//			testProps = SteamSystemModelerTool::region1(pressure, temperature);
+//			//testProps['region'] = '1';
+//		}
+//		else
+//		{
+//			//not the same function used in PHP code
+//			temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion3(pressure, enthalpy);
+//			testProps = SteamSystemModelerTool::region3(pressure, temperature);
+//			//testProps['region'] = 3;
+//		}
+//		return testProps;
+//	}
+
 	return std::unordered_map <std::string, double>();
 };
 
