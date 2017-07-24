@@ -143,8 +143,8 @@ public:
      *
      * Constructor for the saturated properties calculator
      *
-     * @param saturatedPressure double, saturated pressure in psig
-     * @param saturatedTemperature double, saturated temperature in °F
+     * @param saturatedPressure double, saturated pressure in MPa
+     * @param saturatedTemperature double, saturated temperature in Kelvin
      *
      * @return nothing
      *

@@ -46,10 +46,10 @@ TEST_CASE( "Calculate the Evaporation Specific Enthalpy", "[Evaporation Enthalpy
 TEST_CASE( "Calculate the Evaporation Specific Entropy", "[Evaporation Entropy][ssmt][Calculator]") {
     CHECK( SaturatedProperties(0.0035365894, 300).getEvaporationEntropy() == Approx(8.1244130853));
 }
-
-TEST_CASE( "Calculate the Saturated Liquid Specific Volume (Region 3)", "[Liquid Volume][ssmt][Calculator]") {
-    CHECK( SaturatedProperties(20.2659, 640).getLiquidVolume() == Approx(0.0020376164));
-}
+//
+//TEST_CASE( "Calculate the Saturated Liquid Specific Volume (Region 3)", "[Liquid Volume][ssmt][Calculator]") {
+//    CHECK( SaturatedProperties(20.2659, 640).getLiquidVolume() == Approx(0.0020376164));
+//}
 
 TEST_CASE( "Calculate the Saturated Liquid Specific Enthalpy (Region 3)", "[Liquid Enthalpy][ssmt][Calculator]") {
     CHECK( SaturatedProperties(20.2659, 640).getLiquidEnthalpy() == Approx(1841.9862103902));
@@ -59,7 +59,3 @@ TEST_CASE( "Calculate the Saturated Liquid Specific Entropy (Region 3)", "[Liqui
     CHECK( SaturatedProperties(20.2659, 640).getLiquidEntropy() == Approx(4.0378047547));
 }
 
-
-TEST_CASE( "Calculate", "[test][ssmt][Calculator]") {
-    CHECK( SteamSystemModelerTool().backwardPressureEnthalpyRegion2B(25, 3849.1) == Approx(0));
-}
