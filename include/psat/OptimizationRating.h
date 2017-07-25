@@ -36,12 +36,12 @@ public:
         optimalAnnualCost_(optimalAnnualCost)
     {}
 
-    /**
-     * Calculates the optimization rating
-     *
-     * @return double, optimization rating as %
-     */
-    double calculate();
+//    /**
+//     * Calculates the optimization rating
+//     *
+//     * @return double, optimization rating as %
+//     */
+//    double calculate();
 
     /**
      * Gets the existing annual cost

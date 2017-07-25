@@ -4,6 +4,6 @@
 
 #include "psat/OptimizationRating.h"
 
-double OptimizationRating::calculate() {
-    return 91.84;
-}
+//double OptimizationRating::calculate() {
+//    return 91.84;
+//}

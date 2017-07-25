@@ -204,6 +204,10 @@ enum class Key{
 
     static double backwardPressureEntropyRegion3(const double pressure, const double entropy);
 
+    //static double SteamSystemModelerTool::backwardPHregion2bExact(const double pressure, const double enthalpy);
+
+    //static double SteamSystemModelerTool::backwardExact(int region, SteamSystemModelerTool::Key key, const double pressure, const double var2);
+
     // constants
 
     static constexpr double PRESSURE_MIN = 0.01;

@@ -31,7 +31,7 @@ TEST_CASE( "Calculate the Steam Properties Using Specific Enthalpy", "[Steam Pro
 	std::unordered_map <std::string, double> test = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY).calculate(50, 60);
 	CHECK( test["pressure"] == Approx(50.0));
 	CHECK( test["temperature"] == Approx(275.8561282609));
-	CHECK( test["specificEnthalpy"] == Approx(60.0222543089));
+	CHECK( test["specificEnthalpy"] == Approx(60.0));
 	CHECK( test["specificEntropy"] == Approx(0.0386641323));
 	CHECK( test["quality"] == Approx(0));
 	CHECK( test["specificVolume"] == Approx(0.0009770201));
@@ -58,7 +58,12 @@ TEST_CASE( "Calculate the Steam Properties Using Specific Quality", "[Steam Prop
 }
 
 TEST_CASE( "Ctest", "[Steam Properties][ssmt][Calculator]") {
-	Point test = SteamSystemModelerTool::generatePoint(2, SteamSystemModelerTool::Key::ENTHALPY, 5, 8);
+	Point test = SteamSystemModelerTool::generatePoint(3, SteamSystemModelerTool::Key::ENTHALPY, 5, 8);
 	CHECK( test.getX() == Approx(20.0));
 
 }
+
+TEST_CASE( "test", "[Steam Properties][ssmt][Calculator]") {
+    CHECK( SteamSystemModelerTool::backwardPressureEnthalpyRegion2B(25, 3849.1) == Approx(275.9));
+}
+
