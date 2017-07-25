@@ -6,17 +6,17 @@
 #include <ssmt/SteamProperties.h>
 #include <ssmt/SteamSystemModelerTool.h>
 
-TEST_CASE( "steam properties calculate", "[idk]") {
-	auto properties = SteamProperties(SteamProperties::ThermodynamicQuantity::TEMPERATURE);
-	auto rv = properties.calculate(1000.0, 500.0);
-
-	for ( auto const it : rv ) {
-		std::string key = it.first;
-		double val = it.second;
-		auto breakPointHere = 0;
-	}
+TEST_CASE( "region 1", "[region 1]") {
+	auto result = SteamSystemModelerTool::region1(300, 15);
+	CHECK( result["pressure"] == Approx(15.0));
+	CHECK( result["temperature"] == Approx(300));
+	CHECK( result["specificEnthalpy"] == Approx(126.3055708813));
+	CHECK( result["specificEntropy"] == Approx(0.3888958577));
+	CHECK( result["quality"] == Approx(0));
+	CHECK( result["specificVolume"] == Approx(0.0009968749));
 }
 
+// region 1
 TEST_CASE( "Calculate the Steam Properties Using Temperature", "[Steam Properties][ssmt][Calculator]") {
 	std::unordered_map <std::string, double> test = SteamProperties(SteamProperties::ThermodynamicQuantity::TEMPERATURE).calculate(50, 300);
 	CHECK( test["pressure"] == Approx(50.0));
@@ -27,6 +27,7 @@ TEST_CASE( "Calculate the Steam Properties Using Temperature", "[Steam Propertie
 	CHECK( test["specificVolume"] == Approx(0.0009824691));
 }
 
+// idk what region this is right now
 TEST_CASE( "Calculate the Steam Properties Using Specific Enthalpy", "[Steam Properties][ssmt][Calculator]") {
 	std::unordered_map <std::string, double> test = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY).calculate(50, 60);
 	CHECK( test["pressure"] == Approx(50.0));
@@ -37,6 +38,7 @@ TEST_CASE( "Calculate the Steam Properties Using Specific Enthalpy", "[Steam Pro
 	CHECK( test["specificVolume"] == Approx(0.0009770201));
 }
 
+// region 3
 TEST_CASE( "Calculate the Steam Properties Using Specific Entropy", "[Steam Properties][ssmt][Calculator]") {
 	std::unordered_map <std::string, double> test = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTROPY).calculate(50, 4);
 	CHECK( test["pressure"] == Approx(50.0));

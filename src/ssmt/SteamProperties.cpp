@@ -40,7 +40,7 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 };
 
 std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {
-	double specificEnthalpyLimit;
+	double specificEnthalpyLimit = 0;
     SaturatedProperties pressureSatProps(0.0, 0.0);
     std::unordered_map<std::string, double> testProps;
     double temperature = 0.0;
