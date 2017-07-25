@@ -239,6 +239,8 @@ double SteamSystemModelerTool::backwardRegion3Exact(const double pressure, const
         temperatureB = SteamSystemModelerTool::linearTestPoint(X, pointA, pointB);
     }
 
+    return temperatureB;
+
 }
 
 
