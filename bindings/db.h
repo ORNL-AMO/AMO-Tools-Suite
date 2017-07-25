@@ -232,6 +232,8 @@ std::unique_ptr<SQLite> sql;
         Local<String> CO2 = Nan::New<String>("CO2").ToLocalChecked();
         Local<String> SO2 = Nan::New<String>("SO2").ToLocalChecked();
         Local<String> O2 = Nan::New<String>("O2").ToLocalChecked();
+        Local<String> heatingValue = Nan::New<String>("heatingValue").ToLocalChecked();
+        Local<String> specificGravity = Nan::New<String>("specificGravity").ToLocalChecked();
 
         auto const fgMaterials = sql->getGasFlueGasMaterials();
 
@@ -252,6 +254,8 @@ std::unique_ptr<SQLite> sql;
             Nan::Set(obj, CO2, Nan::New<Number>(fgm.getGasByVol("CO2")));
             Nan::Set(obj, SO2, Nan::New<Number>(fgm.getGasByVol("SO2")));
             Nan::Set(obj, O2, Nan::New<Number>(fgm.getGasByVol("O2")));
+            Nan::Set(obj, heatingValue, Nan::New<Number>(fgm.getHeatingValue()));
+            Nan::Set(obj, specificGravity, Nan::New<Number>(fgm.getSpecificGravity()));
             Nan::Set(objs, i, obj);
         }
 
@@ -272,6 +276,8 @@ std::unique_ptr<SQLite> sql;
         Local<String> CO2 = Nan::New<String>("CO2").ToLocalChecked();
         Local<String> SO2 = Nan::New<String>("SO2").ToLocalChecked();
         Local<String> O2 = Nan::New<String>("O2").ToLocalChecked();
+        Local<String> heatingValue = Nan::New<String>("heatingValue").ToLocalChecked();
+        Local<String> specificGravity = Nan::New<String>("specificGravity").ToLocalChecked();
 
         auto const fgm = sql->getGasFlueGasMaterialById(info[0]->NumberValue());
 
@@ -289,6 +295,8 @@ std::unique_ptr<SQLite> sql;
         Nan::Set(obj, CO2, Nan::New<Number>(fgm.getGasByVol("CO2")));
         Nan::Set(obj, SO2, Nan::New<Number>(fgm.getGasByVol("SO2")));
         Nan::Set(obj, O2, Nan::New<Number>(fgm.getGasByVol("O2")));
+        Nan::Set(obj, heatingValue, Nan::New<Number>(fgm.getHeatingValue()));
+        Nan::Set(obj, specificGravity, Nan::New<Number>(fgm.getSpecificGravity()));
 
         info.GetReturnValue().Set(obj);
     };

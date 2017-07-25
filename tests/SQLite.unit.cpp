@@ -97,7 +97,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
 
     //Typical Natural Gas - US
     {
-        auto const outputs = sqlite.getGasFlueGasMaterials();
+        auto outputs = sqlite.getGasFlueGasMaterials();
         CHECK( outputs.size() == 3 );
         GasCompositions expected("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
         expected.setID(1);
@@ -113,10 +113,12 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == outputs[0].getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == outputs[0].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[0].getGasByVol("O2") );
+        CHECK( outputs[0].calculateHeatingValue() == 22030.67089880065 );
+        CHECK( outputs[0].calculateSpecificGravity() == 0.6571206283343215 );
     }
 
     {
-        auto const output = sqlite.getGasFlueGasMaterialById(1);
+        auto output = sqlite.getGasFlueGasMaterialById(1);
         GasCompositions expected("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
         expected.setID(1);
         CHECK( expected.getID() == output.getID() );
@@ -131,11 +133,13 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+        CHECK( output.calculateHeatingValue() == 22030.67089880065 );
+        CHECK( output.calculateSpecificGravity() == 0.6571206283343215 );
     }
 
     //Coke Oven Gas
     {
-        auto const outputs = sqlite.getGasFlueGasMaterials();
+        auto outputs = sqlite.getGasFlueGasMaterials();
         CHECK( outputs.size() == 3 );
         GasCompositions expected("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
         expected.setID(2);
@@ -151,10 +155,12 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == outputs[1].getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == outputs[1].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[1].getGasByVol("O2") );
+        CHECK( outputs[1].calculateHeatingValue() == 19185.932389233436 );
+        CHECK( outputs[1].calculateSpecificGravity() == 0.44638781861292243 );
     }
 
     {
-        auto const output = sqlite.getGasFlueGasMaterialById(2);
+        auto output = sqlite.getGasFlueGasMaterialById(2);
         GasCompositions expected("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
         expected.setID(2);
         CHECK( expected.getID() == output.getID() );
@@ -169,12 +175,14 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+        CHECK( output.calculateHeatingValue() == 19185.932389233436 );
+        CHECK( output.calculateSpecificGravity() == 0.44638781861292243 );
     }
 
 
     //Blast Furnace
     {
-        auto const outputs = sqlite.getGasFlueGasMaterials();
+        auto outputs = sqlite.getGasFlueGasMaterials();
         CHECK( outputs.size() == 3 );
         GasCompositions expected("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
         expected.setID(3);
@@ -190,10 +198,12 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == outputs[2].getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == outputs[2].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[2].getGasByVol("O2") );
+        CHECK( outputs[2].calculateHeatingValue() == 1080.6848266529887 );
+        CHECK( outputs[2].calculateSpecificGravity() == 1.0870540901007706 );
     }
 
     {
-        auto const output = sqlite.getGasFlueGasMaterialById(3);
+        auto output = sqlite.getGasFlueGasMaterialById(3);
         GasCompositions expected("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
         expected.setID(3);
         CHECK( expected.getID() == output.getID() );
@@ -208,6 +218,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+        CHECK( output.calculateHeatingValue() == 1080.6848266529887 );
+        CHECK( output.calculateSpecificGravity() == 1.0870540901007706 );
     }
 
 
