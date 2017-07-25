@@ -231,7 +231,7 @@ double SteamSystemModelerTool::backwardRegion3Exact(const double pressure, const
     double temperatureB = SteamSystemModelerTool::linearTestPoint(X, pointA, pointB);
     int counter = 0;
 
-    while((abs(temperature - temperatureB) > 1e-6) && (counter++ < 15))
+    while((std::abs(temperature - temperatureB) > 1e-6) && (counter++ < 15))
     {
         pointA = pointB;
         pointB = SteamSystemModelerTool::generatePoint(3, key, pressure, temperatureB);
@@ -447,12 +447,15 @@ Point SteamSystemModelerTool::generatePoint(int region, SteamSystemModelerTool::
     switch (region) {
         case 1: {
             result =  SteamSystemModelerTool::region1(var1, var2);
+	        break;
         }
         case 2: {
             result =  SteamSystemModelerTool::region2(var1, var2);
+	        break;
         }
         case 3: {
             result =  SteamSystemModelerTool::region3(var1, var2);
+	        break;
         }
     }
 

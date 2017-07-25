@@ -58,7 +58,7 @@ TEST_CASE( "Calculate the Steam Properties Using Specific Quality", "[Steam Prop
 }
 
 TEST_CASE( "Ctest", "[Steam Properties][ssmt][Calculator]") {
-	Point test = SteamSystemModelerTool::generatePoint(1, SteamSystemModelerTool::Key::ENTHALPY, 5, 8);
+	Point test = SteamSystemModelerTool::generatePoint(2, SteamSystemModelerTool::Key::ENTHALPY, 5, 8);
 	CHECK( test.getX() == Approx(20.0));
 
 }
