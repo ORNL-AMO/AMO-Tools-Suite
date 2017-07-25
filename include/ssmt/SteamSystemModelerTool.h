@@ -251,7 +251,7 @@ enum class Key{
         return 0.34805185628969E+03 - 0.11671859879975E+01 * 0.10192970039326E-02 * std::pow(t, 2);
     }
     static const inline double boundaryByPressureRegion3to2(const double p) {
-        return 0.57254459862746E+03 + std::pow( (p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5 );
+        return p - 0.13918839778870E+02;//0.57254459862746E+03 + pow( (p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5 );
     }
 
 private:

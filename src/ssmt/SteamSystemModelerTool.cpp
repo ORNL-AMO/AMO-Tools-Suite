@@ -137,15 +137,16 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 	auto testPressureA = region3propNew["pressure"];
 
 
-	auto boundary23Properties = region2(p, boundaryByPressureRegion3to2(p));
+	auto boundary23Properties = region2(boundaryByPressureRegion3to2(p), p);
 	auto densityB = boundary23Properties["density"];
 	region3propNew = region3Density(densityB, t);
 	auto testPressureB = region3propNew["pressure"];
 
+    auto densityNew = 0.0;
 	double pressureNew;
 	for ( size_t i = 0; i < 4; i++ ) {
-		auto const densityNew = (densityA + densityB) / 2.0;
-		auto region3propNew = region3Density(densityNew, t);
+		densityNew = (densityA + densityB) / 2.0;
+		region3propNew = region3Density(densityNew, t);
 		pressureNew = region3propNew["pressure"];
 		if ( p > pressureNew ) {
 			densityB = densityNew;
@@ -156,9 +157,10 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 		}
 	}
 
+
 	// Uses Linear Interpolation
 	size_t counter = 0;
-	while (std::abs(pressureNew - p) > 1e-10 and counter++ < 50 and testPressureA != testPressureB) {
+	while ((std::abs(pressureNew - p) > 1e-10) && (counter++ < 50) && (testPressureA != testPressureB)) {
 		auto densityNew = p * (densityA - densityB) / (testPressureA - testPressureB) + densityA - testPressureA * (densityA - densityB) / (testPressureA - testPressureB);
 		region3propNew = region3Density(densityNew, t);
 		pressureNew = region3propNew["pressure"];
@@ -169,7 +171,6 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 	}
 
 	return region3propNew;
-
 
 }
 
