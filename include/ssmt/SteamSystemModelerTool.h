@@ -96,11 +96,54 @@ public:
         REGION2C
     };
 
+    /**
+     * Determines the IAPWS region based on pressure and temperature
+     * @param pressure double, pressure in MPa
+     * @param temperature double, temperature in Kelvins
+     * @return int, region number
+     */
 	static int regionSelect(const double pressure, const double temperature);
+
+    /**
+     * Calculates the steam properties using region 1 equations
+     *
+     * @param temperature double, temperature in Kelvin
+     * @param pressure double, pressure in MPa
+     *
+     * @return unordered_map <string, double>, steam properties
+     */
 	static std::unordered_map <std::string, double> region1(const double temperature, const double pressure);
+
+    /**
+     * Calculates the steam properties using region 2 equations
+     *
+     * @param temperature double, temperature in Kelvin
+     * @param pressure double, pressure in MPa
+     *
+     * @return unordered_map <string, double>, steam properties
+     */
 	static std::unordered_map <std::string, double> region2(const double temperature, const double pressure);
+
+    /**
+     * Calculates the steam properties using region 3 equations
+     *
+     * @param temperature double, temperature in Kelvin
+     * @param pressure double, pressure in MPa
+     *
+     * @return unordered_map <string, double>, steam properties
+     */
 	static std::unordered_map <std::string, double> region3(const double temperature, const double pressure);
+
 	static std::unordered_map <std::string, double> region3Density(const double density, const double temperature);
+
+    /**
+     * Calculates the steam properties using region 4 equations (saturated properties)
+     *
+     * @param temperature double, temperature in Kelvin
+     * @param pressure double, pressure in MPa
+     *
+     * @return unordered_map <string, double>, steam properties
+     */
 	static double region4(const double temperature);
 
     /**
@@ -206,28 +249,80 @@ public:
      */
     static double linearTestPoint(const double X, Point point1, Point point2);
 
+
     static double backwardRegion3Exact(const double pressure, const double X, SteamSystemModelerTool::Key key);
 
     static double backwardPressureEnthalpyRegion3(const double pressure, const double enthalpy);
 
+    /**
+     * Uses linear interpolation to goal seek  region 3 using pressure and entropy
+     * @param pressure double, pressure in MPa
+     * @param entropy double, specific entropy in kJ/kg/K
+     * @return double, temperature in Kelvins
+     */
     static double backwardPressureEntropyRegion3(const double pressure, const double entropy);
 
     static double backwardPressureEnthalpyRegion1Exact(const double pressure, const double enthalpy);
 
     static double backwardPressureEntropyRegion1Exact(const double pressure, const double entropy);
 
+    /**
+     * Returns a more accurate temperature than backwardPressureEnthalpyRegion2A
+     * @param pressure double, pressure in MPa
+     * @param enthalpy double, specific enthalpy in kJ/kg
+     * @return double, temperature in Kelvin
+     */
     static double backwardPressureEnthalpyRegion2AExact(const double pressure, const double enthalpy);
 
+    /**
+     * Returns a more accurate temperature than backwardPressureEntropyRegion2A
+     * @param pressure double, pressure in MPa
+     * @param entropy double, specific entropy in kJ/kg/K
+     * @return double, temperature in Kelvin
+     */
     static double backwardPressureEntropyRegion2AExact(const double pressure, const double entropy);
 
+    /**
+     * Returns a more accurate temperature than backwardPressureEnthalpyRegion2B
+     * @param pressure double, pressure in MPa
+     * @param enthalpy double, specific enthalpy in kJ/kg
+     * @return double, temperature in Kelvin
+     */
     static double backwardPressureEnthalpyRegion2BExact(const double pressure, const double enthalpy);
 
+    /**
+     * Returns a more accurate temperature than backwardPressureEntropyRegion2B
+     * @param pressure double, pressure in MPa
+     * @param entropy double, specific entropy in kJ/kg/K
+     * @return double, temperature in Kelvin
+     */
     static double backwardPressureEntropyRegion2BExact(const double pressure, const double entropy);
 
+    /**
+     * Returns a more accurate temperature than backwardPressureEnthalpyRegion2C
+     * @param pressure double, pressure in MPa
+     * @param enthalpy double, specific enthalpy in kJ/kg
+     * @return double, temperature in Kelvin
+     */
     static double backwardPressureEnthalpyRegion2CExact(const double pressure, const double enthalpy);
 
+    /**
+     * Returns a more accurate temperature than backwardPressureEntropyRegion2C
+     * @param pressure double, pressure in MPa
+     * @param entropy double, specific entropy in kJ/kg/K
+     * @return double, temperature in Kelvin
+     */
     static double backwardPressureEntropyRegion2CExact(const double pressure, const double entropy);
 
+    /**
+     * Uses linear extrapolation for estimate equation to determine much more accurate temperature
+     * @param region int, region number
+     * @param key Key, value type like ENTROPY ot ENTHALPY
+     * @param regionFunction Region, the region of which function to be used (REGION1, REGION2A, etc)
+     * @param pressure double, pressure in MPa
+     * @param var2 double, value of either entropy (in kJ/kg/K) or enthalpy (in kJ/kg)
+     * @return doubble, temperature in Kelvin
+     */
     static double backwardExact(int region, SteamSystemModelerTool::Key key, SteamSystemModelerTool::Region regionFunction , const double pressure, const double var2);
 
     // constants
@@ -273,9 +368,24 @@ public:
     static constexpr double TEMPERATURE_REGION3_MAX = 863.15;
 
     // helper functions?
+
+    /**
+     * Calculates the boundary pressure associated with the given temperature
+     * @param t double, temperature in Kelvins
+     *
+     * @return double, pressure in MPa
+     */
     static const inline double boundaryByTemperatureRegion3to2(const double t) {
         return 0.34805185628969E+03 - 0.11671859879975E+01 * 0.10192970039326E-02 * std::pow(t, 2);
     }
+
+    /**
+     * Calculates the boundary temperature associated with the given pressure
+     *
+     * @param p double, pressure in MPa
+     *
+     * @return double, temperature in Kelvins
+     */
     static const inline double boundaryByPressureRegion3to2(const double p) {
         return 0.57254459862746E+03 + pow( (p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5 );
     }
