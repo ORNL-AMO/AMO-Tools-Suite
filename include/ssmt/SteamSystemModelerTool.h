@@ -8,6 +8,7 @@
 #include <cmath>
 #include <string>
 #include <unordered_map>
+#include <functional>
 
 class Point {
 public:
@@ -83,10 +84,17 @@ public:
 //		LIQUIDREGION3
 //	};
 
-enum class Key{
-    ENTHALPY,
-    ENTROPY
-};
+    enum class Key{
+        ENTHALPY,
+        ENTROPY
+    };
+
+    enum class Region{
+        REGION1,
+        REGION2A,
+        REGION2B,
+        REGION2C
+    };
 
 	static int regionSelect(const double pressure, const double temperature);
 	static std::unordered_map <std::string, double> region1(const double temperature, const double pressure);
@@ -204,9 +212,23 @@ enum class Key{
 
     static double backwardPressureEntropyRegion3(const double pressure, const double entropy);
 
-    //static double SteamSystemModelerTool::backwardPHregion2bExact(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion1Exact(const double pressure, const double enthalpy);
 
-    //static double SteamSystemModelerTool::backwardExact(int region, SteamSystemModelerTool::Key key, const double pressure, const double var2);
+    static double backwardPressureEntropyRegion1Exact(const double pressure, const double entropy);
+
+    static double backwardPressureEnthalpyRegion2AExact(const double pressure, const double enthalpy);
+
+    static double backwardPressureEntropyRegion2AExact(const double pressure, const double entropy);
+
+    static double backwardPressureEnthalpyRegion2BExact(const double pressure, const double enthalpy);
+
+    static double backwardPressureEntropyRegion2BExact(const double pressure, const double entropy);
+
+    static double backwardPressureEnthalpyRegion2CExact(const double pressure, const double enthalpy);
+
+    static double backwardPressureEntropyRegion2CExact(const double pressure, const double entropy);
+
+    static double backwardExact(int region, SteamSystemModelerTool::Key key, SteamSystemModelerTool::Region regionFunction , const double pressure, const double var2);
 
     // constants
 
@@ -255,7 +277,7 @@ enum class Key{
         return 0.34805185628969E+03 - 0.11671859879975E+01 * 0.10192970039326E-02 * std::pow(t, 2);
     }
     static const inline double boundaryByPressureRegion3to2(const double p) {
-        return p - 0.13918839778870E+02;//0.57254459862746E+03 + pow( (p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5 );
+        return 0.57254459862746E+03 + pow( (p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5 );
     }
 
 private:
