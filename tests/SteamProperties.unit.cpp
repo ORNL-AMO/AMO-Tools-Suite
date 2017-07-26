@@ -69,6 +69,47 @@ TEST_CASE( "waterPropertiesPressureTemperature", "[waterPropertiesPressureTemp]"
 	CHECK( result["specificEntropy"] == Approx(4.0543976678954));
 }
 
+TEST_CASE( "waterPropertiesPressureSpecificEnthalpy", "[waterPropertiesPressureEnthalpy]") {
+	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
+	auto result = sp.waterPropertiesPressureEnthalpy(50, 60);
+	CHECK( result["pressure"] == Approx(50));
+	CHECK( result["temperature"] == Approx(275.8561282609));
+	CHECK( result["specificVolume"] == Approx(0.0009770201));
+	CHECK( result["specificEnthalpy"] == Approx(60.0222543089));
+	CHECK( result["specificEntropy"] == Approx(0.0386641323));
+}
+
+TEST_CASE( "waterPropertiesPressureSpecificEnthalpy2", "[waterPropertiesPressureEnthalpy2]") {
+	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
+	auto result = sp.waterPropertiesPressureEnthalpy(50, 1000);
+	CHECK( result["pressure"] == Approx(50));
+	CHECK( result["temperature"] == Approx( 502.0103698876 ));
+	CHECK( result["specificVolume"] == Approx( 0.0011538465 ));
+	CHECK( result["specificEnthalpy"] == Approx(1000.1015589415));
+	CHECK( result["specificEntropy"] == Approx(2.5190601413 ));
+}
+
+TEST_CASE( "waterPropertiesPressureSpecificEnthalpy3", "[waterPropertiesPressureEnthalpy3]") {
+	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
+	auto result = sp.waterPropertiesPressureEnthalpy(10, 3000);
+	CHECK( result["pressure"] == Approx(10));
+	CHECK( result["temperature"] == Approx( 643.4889623134 ));
+	CHECK( result["specificVolume"] == Approx( 0.024188001 ));
+	CHECK( result["specificEnthalpy"] == Approx(3000.0100018335));
+	CHECK( result["specificEntropy"] == Approx(6.0659344202));
+}
+
+TEST_CASE( "waterPropertiesPressureSpecificEntropy", "[waterPropertiesPressureEntropy]") {
+	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTROPY);
+	auto result = sp.calculate(50, 3);
+	CHECK( result["pressure"] == Approx(10));
+	CHECK( result["temperature"] == Approx( 643.4889623134 ));
+	CHECK( result["specificVolume"] == Approx( 0.024188001 ));
+	CHECK( result["specificEnthalpy"] == Approx(3000.0100018335));
+	CHECK( result["specificEntropy"] == Approx(6.0659344202));
+}
+
+
 
 //// region 1
 //TEST_CASE( "Calculate the Steam Properties Using Temperature", "[Steam Properties][ssmt][Calculator]") {

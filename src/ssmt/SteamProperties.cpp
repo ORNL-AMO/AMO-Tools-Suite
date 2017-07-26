@@ -52,7 +52,8 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 	{
 		double boundaryTemperature = SteamSystemModelerTool::boundaryByPressureRegion3to2(pressure);
 		std::unordered_map<std::string, double> boundaryProps = SteamSystemModelerTool::region2(boundaryTemperature, pressure);
-		specificEnthalpyLimit = boundaryTemperature;//boundaryProps["specificEnthalpy"];
+		specificEnthalpyLimit = boundaryProps["specificEnthalpy"];
+//		specificEnthalpyLimit = boundaryTemperature;//boundaryProps["specificEnthalpy"];
 	}
 
 	if ( enthalpy < specificEnthalpyLimit )
@@ -125,8 +126,6 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     std::unordered_map <std::string, double> testProps;
     double quality = 0.0;
 
-    std::unordered_map <std::string, double> test = SteamSystemModelerTool::region1(300, 50);
-
     if (pressure < SteamSystemModelerTool::PRESSURE_CRIT){
         SaturatedTemperature tempFromPressure(pressure);
         double satTemperature = tempFromPressure.calculate();
@@ -143,9 +142,18 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     if ( entropy < specificEntropyLimit ){
         if (pressure > SteamSystemModelerTool::PRESSURE_Tp) {
             region13boundary = SteamProperties::waterPropertiesPressureTemperature(pressure, SteamSystemModelerTool::TEMPERATURE_Tp);
+//	        auto x = region13boundary["density"];
+//	        auto x1 = region13boundary["specificEnthalpy"];
+//	        auto x2 = region13boundary["specificEntropy"];
+//	        auto x3 = region13boundary["specificVolume"];
+//	        auto x4 = region13boundary["pressure"];
+//	        auto x5 = region13boundary["temperature"];
+//	        auto blah = 10;
+
         }
 
-        if ((pressure <= SteamSystemModelerTool::PRESSURE_Tp) || (entropy < region13boundary["specificEntropy"]))
+        if ((pressure <= SteamSystemModelerTool::PRESSURE_Tp) ||
+		        region13boundary.find("specificEntropy") != region13boundary.end() && (entropy < region13boundary["specificEntropy"]))
         {
             temperature = SteamSystemModelerTool::backwardPressureEntropyRegion1Exact(pressure, entropy);
             testProps = SteamSystemModelerTool::region1(temperature, pressure);
