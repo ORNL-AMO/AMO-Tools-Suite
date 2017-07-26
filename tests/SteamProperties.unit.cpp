@@ -83,20 +83,20 @@ TEST_CASE( "waterPropertiesPressureSpecificEnthalpy", "[waterPropertiesPressureE
 	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
 	auto result = sp.waterPropertiesPressureEnthalpy(50, 60);
 	CHECK( result["pressure"] == Approx(50));
-	CHECK( result["temperature"] == Approx(275.8561282609));
+	CHECK( result["temperature"] == Approx(275.8506041107));
 	CHECK( result["specificVolume"] == Approx(0.0009770201));
-	CHECK( result["specificEnthalpy"] == Approx(60.0222543089));
-	CHECK( result["specificEntropy"] == Approx(0.0386641323));
+	CHECK( result["specificEnthalpy"] == Approx(60.0));
+	CHECK( result["specificEntropy"] == Approx(0.0385834579));
 }
 
 TEST_CASE( "waterPropertiesPressureSpecificEnthalpy2", "[waterPropertiesPressureEnthalpy2]") {
 	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
 	auto result = sp.waterPropertiesPressureEnthalpy(50, 1000);
 	CHECK( result["pressure"] == Approx(50));
-	CHECK( result["temperature"] == Approx( 502.0103698876 ));
-	CHECK( result["specificVolume"] == Approx( 0.0011538465 ));
-	CHECK( result["specificEnthalpy"] == Approx(1000.1015589415));
-	CHECK( result["specificEntropy"] == Approx(2.5190601413 ));
+	CHECK( result["temperature"] == Approx(501.9871417891));
+	CHECK( result["specificVolume"] == Approx( 0.0011538465));
+	CHECK( result["specificEnthalpy"] == Approx(1000.0));
+	CHECK( result["specificEntropy"] == Approx(2.5188578322));
 }
 
 TEST_CASE( "waterPropertiesPressureSpecificEnthalpy3", "[waterPropertiesPressureEnthalpy3]") {
