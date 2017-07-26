@@ -252,6 +252,12 @@ public:
 
     static double backwardRegion3Exact(const double pressure, const double X, SteamSystemModelerTool::Key key);
 
+    /**
+     * Uses linear interpolation to goal seek  region 3 using pressure and enthalpy
+     * @param pressure double, pressure in MPa
+     * @param enthalpy double, specific enthalpy in kJ/kg
+     * @return double, temperature in Kelvins
+     */
     static double backwardPressureEnthalpyRegion3(const double pressure, const double enthalpy);
 
     /**
