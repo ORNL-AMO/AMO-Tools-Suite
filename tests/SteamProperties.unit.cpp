@@ -50,6 +50,16 @@ TEST_CASE( "region 2", "[region 2]") {
 	CHECK( result["specificEntropy"] == Approx(5.198131771144));
 }
 
+//TEST_CASE( "region 2 - 2", "[region 2 ]") {
+//	auto result = SteamSystemModelerTool::region2(14192.912751330714, 50);
+//	CHECK( result["pressure"] == Approx(25.58));
+//	CHECK( result["temperature"] == Approx(679.50438021013));
+//	CHECK( result["specificVolume"] == Approx(0.006211616555293));
+//	CHECK( result["density"] == Approx(160.98868806509));
+//	CHECK( result["specificEnthalpy"] == Approx(2621.5406472142));
+//	CHECK( result["specificEntropy"] == Approx(5.198131771144));
+//}
+
 TEST_CASE( "region 3", "[region 3]") {
 	auto result = SteamSystemModelerTool::region3(650, 25.58);
 	CHECK( result["density"] == Approx(499.93601366213));
@@ -102,11 +112,21 @@ TEST_CASE( "waterPropertiesPressureSpecificEnthalpy3", "[waterPropertiesPressure
 TEST_CASE( "waterPropertiesPressureSpecificEntropy", "[waterPropertiesPressureEntropy]") {
 	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTROPY);
 	auto result = sp.calculate(50, 3);
-	CHECK( result["pressure"] == Approx(10));
-	CHECK( result["temperature"] == Approx( 643.4889623134 ));
-	CHECK( result["specificVolume"] == Approx( 0.024188001 ));
-	CHECK( result["specificEnthalpy"] == Approx(3000.0100018335));
-	CHECK( result["specificEntropy"] == Approx(6.0659344202));
+	CHECK( result["pressure"] == Approx(50));
+	CHECK( result["temperature"] == Approx( 558.6087938578 ));
+	CHECK( result["specificVolume"] == Approx( 0.0012546044 ));
+	CHECK( result["specificEnthalpy"] == Approx(1255.054208238 ));
+	CHECK( result["specificEntropy"] == Approx( 3.0 ));
+}
+
+TEST_CASE( "waterPropertiesPressureSpecificQuality", "[waterPropertiesPressureQuality]") {
+	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::QUALITY);
+	auto result = sp.calculate(15, 0.5);
+	CHECK( result["pressure"] == Approx(15));
+	CHECK( result["temperature"] == Approx(  615.307871249 ));
+	CHECK( result["specificVolume"] == Approx(0.0059985271));
+	CHECK( result["specificEnthalpy"] == Approx( 2110.5082722126 ));
+	CHECK( result["specificEntropy"] == Approx( 4.497623181 ));
 }
 
 

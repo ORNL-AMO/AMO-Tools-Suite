@@ -517,7 +517,7 @@ double SteamSystemModelerTool::backwardExact(int region, SteamSystemModelerTool:
     }
 
     if (key == SteamSystemModelerTool::Key::ENTROPY)
-    {
+	    {
         if(regionFunction == SteamSystemModelerTool::Region::REGION1)
         {
             pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion1(pressure, var2));
@@ -530,8 +530,11 @@ double SteamSystemModelerTool::backwardExact(int region, SteamSystemModelerTool:
         }
         if(regionFunction == SteamSystemModelerTool::Region::REGION2B)
         {
-            pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion2B(pressure, var2));
-            pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion2B(pressure, pointA.getX()));
+	        auto const backwardPressureEntropy = backwardPressureEntropyRegion1(pressure, var2);
+//            pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion2B(pressure, var2));
+//            pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion2B(pressure, pointA.getX()));
+	        pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion1(pressure, var2));
+	        pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion1(pressure, pointA.getX()));
         }
         if(regionFunction == SteamSystemModelerTool::Region::REGION2C)
         {
@@ -549,19 +552,19 @@ double SteamSystemModelerTool::backwardExact(int region, SteamSystemModelerTool:
 
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion1Exact(const double pressure, const double enthalpy){
-    return backwardExact(2, SteamSystemModelerTool::Key::ENTHALPY, SteamSystemModelerTool::Region::REGION2B, pressure, enthalpy);
+    return backwardExact(1, SteamSystemModelerTool::Key::ENTHALPY, SteamSystemModelerTool::Region::REGION1, pressure, enthalpy);
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion1Exact(const double pressure, const double entropy){
-    return backwardExact(2, SteamSystemModelerTool::Key::ENTROPY, SteamSystemModelerTool::Region::REGION2B, pressure, entropy);
+    return backwardExact(1, SteamSystemModelerTool::Key::ENTROPY, SteamSystemModelerTool::Region::REGION1, pressure, entropy);
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion2AExact(const double pressure, const double enthalpy){
-    return backwardExact(2, SteamSystemModelerTool::Key::ENTHALPY, SteamSystemModelerTool::Region::REGION2B, pressure, enthalpy);
+    return backwardExact(2, SteamSystemModelerTool::Key::ENTHALPY, SteamSystemModelerTool::Region::REGION2A, pressure, enthalpy);
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2AExact(const double pressure, const double entropy){
-    return backwardExact(2, SteamSystemModelerTool::Key::ENTROPY, SteamSystemModelerTool::Region::REGION2B, pressure, entropy);
+    return backwardExact(2, SteamSystemModelerTool::Key::ENTROPY, SteamSystemModelerTool::Region::REGION2A, pressure, entropy);
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion2BExact(const double pressure, const double enthalpy){
@@ -573,9 +576,9 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2BExact(const double
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion2CExact(const double pressure, const double enthalpy){
-    return backwardExact(2, SteamSystemModelerTool::Key::ENTHALPY, SteamSystemModelerTool::Region::REGION2B, pressure, enthalpy);
+    return backwardExact(2, SteamSystemModelerTool::Key::ENTHALPY, SteamSystemModelerTool::Region::REGION2C, pressure, enthalpy);
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2CExact(const double pressure, const double entropy){
-    return backwardExact(2, SteamSystemModelerTool::Key::ENTROPY, SteamSystemModelerTool::Region::REGION2B, pressure, entropy);
+    return backwardExact(2, SteamSystemModelerTool::Key::ENTROPY, SteamSystemModelerTool::Region::REGION2C, pressure, entropy);
 }

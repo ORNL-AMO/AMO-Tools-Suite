@@ -142,13 +142,6 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     if ( entropy < specificEntropyLimit ){
         if (pressure > SteamSystemModelerTool::PRESSURE_Tp) {
             region13boundary = SteamProperties::waterPropertiesPressureTemperature(pressure, SteamSystemModelerTool::TEMPERATURE_Tp);
-//	        auto x = region13boundary["density"];
-//	        auto x1 = region13boundary["specificEnthalpy"];
-//	        auto x2 = region13boundary["specificEntropy"];
-//	        auto x3 = region13boundary["specificVolume"];
-//	        auto x4 = region13boundary["pressure"];
-//	        auto x5 = region13boundary["temperature"];
-//	        auto blah = 10;
 
         }
 
@@ -157,6 +150,13 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
         {
             temperature = SteamSystemModelerTool::backwardPressureEntropyRegion1Exact(pressure, entropy);
             testProps = SteamSystemModelerTool::region1(temperature, pressure);
+//	        auto density = region13boundary["density"];
+//	        auto enthalpy = region13boundary["specificEnthalpy"];
+//	        auto entropy = region13boundary["specificEntropy"];
+//	        auto specVol = region13boundary["specificVolume"];
+//	        auto pressure = region13boundary["pressure"];
+//	        auto temp = region13boundary["temperature"];
+//	        auto blah = 10;
            // $testProps['region'] = '1';
         }
         else{
