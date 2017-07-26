@@ -77,6 +77,16 @@ TEST_CASE( "waterPropertiesPressureTemperature", "[waterPropertiesPressureTemp]"
 	CHECK( result["internalEnergy"] == Approx(1812.3374452641));
 	CHECK( result["specificEnthalpy"] == Approx(1863.5039931841));
 	CHECK( result["specificEntropy"] == Approx(4.0543976678954));
+
+	result = sp.waterPropertiesPressureTemperature(3, 300);
+	CHECK( result["specificVolume"] == Approx(0.001));
+	CHECK( result["specificEnthalpy"] == Approx(115.3312730214));
+	CHECK( result["specificEntropy"] == Approx(0.3922947924));
+
+	result = sp.waterPropertiesPressureTemperature(3, 500);
+	CHECK( result["specificEnthalpy"] == Approx(975.542239097));
+	CHECK( result["specificEntropy"] == Approx(2.5804191201));
+	CHECK( result["specificVolume"] == Approx(0.001202418));
 }
 
 TEST_CASE( "waterPropertiesPressureSpecificEnthalpy", "[waterPropertiesPressureEnthalpy]") {
