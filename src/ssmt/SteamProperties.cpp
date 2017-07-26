@@ -119,7 +119,7 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 
 std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureEntropy(const double pressure, const double entropy) {
     SaturatedProperties pressureSatProps(0.0, 0.0);
-    double specificEntropyLimit;
+    double specificEntropyLimit = 0;
     double boundaryTemperature = 0.0;
     std::unordered_map <std::string, double> boundaryProps;
     std::unordered_map <std::string, double> region13boundary;
