@@ -33,10 +33,7 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 		default:
             break;
 	}
-	// stuff
-
-	//return std::unordered_map <std::string, double>();
-
+	return std::unordered_map <std::string, double>();
 };
 
 std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {

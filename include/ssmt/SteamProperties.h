@@ -36,7 +36,7 @@ public:
      */
 	std::unordered_map <std::string, double> calculate(const double pressure, const double quantityValue);
 
-private:
+//private:
     /**
      * Calculates the steam properties using temperature
      * @param pressure double, pressure in MPa
