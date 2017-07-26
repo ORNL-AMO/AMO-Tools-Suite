@@ -281,7 +281,7 @@ int SteamSystemModelerTool::regionSelect(const double p, const double t) {
                   0.66456186191635E-7, 0.80670734103027E-10, -0.93477771213947E-12, 0.58265442020601E-14, -0.15020185953503E-16};
 
     double nu = enthalpy / 2500;
-    double temp = 0;
+    double temp = 0.0;
 
     for(int i = 0; i < 20; i++)
     {
@@ -434,7 +434,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 
     double temp = 0.0;
 
-    for(int i = 0; i <= 20; i++)
+    for(int i = 0; i < 20; i++)
     {
         temp += array2[i] * pow(pressure, array0[i]) * pow((entropy + 2), array1[i]);
     }
