@@ -382,7 +382,7 @@ public:
      * @return double, pressure in MPa
      */
     static const inline double boundaryByTemperatureRegion3to2(const double t) {
-        return 0.34805185628969E+03 - 0.11671859879975E+01 * 0.10192970039326E-02 * std::pow(t, 2);
+        return 0.34805185628969E+03 - 0.11671859879975E+01 * t + 0.10192970039326E-02 * std::pow(t, 2.0);
     }
 
     /**
