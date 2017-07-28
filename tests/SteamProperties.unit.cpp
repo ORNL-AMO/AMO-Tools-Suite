@@ -70,7 +70,7 @@ TEST_CASE( "region 3", "[region 3]") {
 }
 
 TEST_CASE( "waterPropertiesPressureTemperature", "[waterPropertiesPressureTemp]") {
-	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::TEMPERATURE);
+	auto sp = SteamProperties(25.58, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 650);
 	auto result = sp.waterPropertiesPressureTemperature(25.58, 650);
 	CHECK( result["density"] == Approx(499.93601366213));
 	CHECK( result["specificVolume"] == Approx(0.0020002559781097));
@@ -147,8 +147,8 @@ TEST_CASE( "waterPropertiesPressureTemperature", "[waterPropertiesPressureTemp]"
 }
 
 TEST_CASE( "waterPropertiesPressureSpecificEnthalpy", "[waterPropertiesPressureEnthalpy]") {
-	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
-	auto result = sp.waterPropertiesPressureEnthalpy(50, 60);
+	auto sp = SteamProperties(50, SteamProperties::ThermodynamicQuantity::ENTHALPY, 60);
+	auto result = sp.calculate();
 	CHECK( result["pressure"] == Approx(50));
 	CHECK( result["temperature"] == Approx(275.8506041107));
 	CHECK( result["specificVolume"] == Approx(0.0009770201));
@@ -157,8 +157,8 @@ TEST_CASE( "waterPropertiesPressureSpecificEnthalpy", "[waterPropertiesPressureE
 }
 
 TEST_CASE( "waterPropertiesPressureSpecificEnthalpy2", "[waterPropertiesPressureEnthalpy2]") {
-	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
-	auto result = sp.waterPropertiesPressureEnthalpy(50, 1000);
+	auto sp = SteamProperties(50, SteamProperties::ThermodynamicQuantity::ENTHALPY, 1000);
+	auto result = sp.calculate();
 	CHECK( result["pressure"] == Approx(50));
 	CHECK( result["temperature"] == Approx(501.9871417891));
 	CHECK( result["specificVolume"] == Approx( 0.0011538465));
@@ -167,8 +167,8 @@ TEST_CASE( "waterPropertiesPressureSpecificEnthalpy2", "[waterPropertiesPressure
 }
 
 TEST_CASE( "waterPropertiesPressureSpecificEnthalpy3", "[waterPropertiesPressureEnthalpy3]") {
-	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
-	auto result = sp.waterPropertiesPressureEnthalpy(10, 3000);
+	auto sp = SteamProperties(10, SteamProperties::ThermodynamicQuantity::ENTHALPY, 3000);
+	auto result = sp.calculate();
 	CHECK( result["pressure"] == Approx(10));
 	CHECK( result["temperature"] == Approx( 643.4889623134 ));
 	CHECK( result["specificVolume"] == Approx( 0.024188001 ));
@@ -177,8 +177,8 @@ TEST_CASE( "waterPropertiesPressureSpecificEnthalpy3", "[waterPropertiesPressure
 }
 
 TEST_CASE( "waterPropertiesPressureSpecificEntropy", "[waterPropertiesPressureEntropy]") {
-	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTROPY);
-	auto result = sp.calculate(50, 3);
+	auto sp = SteamProperties(50, SteamProperties::ThermodynamicQuantity::ENTROPY, 3);
+	auto result = sp.calculate();
 	CHECK( result["pressure"] == Approx(50));
 	CHECK( result["temperature"] == Approx( 558.6087938578 ));
 	CHECK( result["specificVolume"] == Approx( 0.0012546044 ));
@@ -187,8 +187,8 @@ TEST_CASE( "waterPropertiesPressureSpecificEntropy", "[waterPropertiesPressureEn
 }
 
 TEST_CASE( "waterPropertiesPressureSpecificQuality", "[waterPropertiesPressureQuality]") {
-	auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::QUALITY);
-	auto result = sp.calculate(15, 0.5);
+	auto sp = SteamProperties(15, SteamProperties::ThermodynamicQuantity::QUALITY, 0.5);
+	auto result = sp.calculate();
 	CHECK( result["pressure"] == Approx(15));
 	CHECK( result["temperature"] == Approx(  615.307871249 ));
 	CHECK( result["specificVolume"] == Approx(0.0059985271));
@@ -197,36 +197,36 @@ TEST_CASE( "waterPropertiesPressureSpecificQuality", "[waterPropertiesPressureQu
 }
 
 TEST_CASE( "Calculate Steam Properties using Pressure and Enthalpy", "[waterPropertiesPressureEnthalpy]") {
-    auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTHALPY);
-    auto result1 = sp.calculate(3, 500);
+    auto sp = SteamProperties(3, SteamProperties::ThermodynamicQuantity::ENTHALPY, 500);
+    auto result1 = sp.calculate();
     CHECK( result1["pressure"] == Approx(3));
     CHECK( result1["temperature"] == Approx( 391.791991375 ));
     CHECK( result1["specificVolume"] == Approx(0.0010575419));
     CHECK( result1["specificEnthalpy"] == Approx(500 ));
     CHECK( result1["specificEntropy"] == Approx(1.5106138266 ));
 
-    auto result2 = sp.calculate(80, 500);
+    auto result2 = sp.waterPropertiesPressureEnthalpy(80, 500);
     CHECK( result2["pressure"] == Approx(80));
     CHECK( result2["temperature"] == Approx(378.1241736021));
     CHECK( result2["specificVolume"] == Approx(.001));
     CHECK( result2["specificEnthalpy"] == Approx( 500 ));
     CHECK( result2["specificEntropy"] == Approx(1.304));
 
-    auto result3 = sp.calculate(80, 1500);
+    auto result3 = sp.waterPropertiesPressureEnthalpy(80, 1500);
     CHECK( result3["pressure"] == Approx(80));
     CHECK( result3["temperature"] == Approx(611.0580090037));
     CHECK( result3["specificVolume"] == Approx(0.0013215616));
     CHECK( result3["specificEnthalpy"] == Approx( 1500 ));
     CHECK( result3["specificEntropy"] == Approx( 3.3530707604 ));
 
-	auto result4 = sp.calculate(0.001, 3000);
+	auto result4 = sp.waterPropertiesPressureEnthalpy(0.001, 3000);
 	CHECK( result4["pressure"] == Approx(0.001));
 	CHECK( result4["temperature"] == Approx(534.433241));
 	CHECK( result4["specificVolume"] == Approx(246.6488133525));
 	CHECK( result4["specificEnthalpy"] == Approx( 3000 ));
 	CHECK( result4["specificEntropy"] == Approx(10.2066379788));
 
-	auto result5 = sp.calculate(3, 3000);
+	auto result5 = sp.waterPropertiesPressureEnthalpy(3, 3000);
 	CHECK( result5["pressure"] == Approx(3));
 	CHECK( result5["temperature"] == Approx(575.37337));
 	CHECK( result5["specificVolume"] == Approx(0.0816111351));
@@ -241,7 +241,7 @@ TEST_CASE( "Calculate Steam Properties using Pressure and Enthalpy", "[waterProp
 //	CHECK( result6["specificEnthalpy"] == Approx( 4000 ));
 //	CHECK( result6["specificEntropy"] == Approx( 0.0 ));
 
-	auto result7 = sp.calculate(5, 3500);
+	auto result7 = sp.waterPropertiesPressureEnthalpy(5, 3500);
 	CHECK( result7["pressure"] == Approx(5));
 	CHECK( result7["temperature"] == Approx(801.299102));
 	CHECK( result7["specificVolume"] == Approx(0.0714748469));
@@ -258,28 +258,28 @@ TEST_CASE( "Calculate Steam Properties using Pressure and Enthalpy", "[waterProp
 //	CHECK( result8["specificEntropy"] == Approx(7.0610476389));
 
 
-	auto result9 = sp.calculate(25, 3500);
+	auto result9 = sp.waterPropertiesPressureEnthalpy(25, 3500);
 	CHECK( result9["pressure"] == Approx(25));
 	CHECK( result9["temperature"] == Approx(875.279054));
 	CHECK( result9["specificVolume"] == Approx(0.0141966031));
 	CHECK( result9["specificEnthalpy"] == Approx(3500));
 	CHECK( result9["specificEntropy"] == Approx(6.3710455092));
 
-	auto result10 = sp.calculate(40, 2700);
+	auto result10 = sp.waterPropertiesPressureEnthalpy(40, 2700);
 	CHECK( result10["pressure"] == Approx(40));
 	CHECK( result10["temperature"] == Approx(743.0656225993));
 	CHECK( result10["specificVolume"] == Approx(0.0045639484));
 	CHECK( result10["specificEnthalpy"] == Approx(2700));
 	CHECK( result10["specificEntropy"] == Approx(5.2016434761));
 
-	auto result11 = sp.calculate(60, 2700);
+	auto result11 = sp.waterPropertiesPressureEnthalpy(60, 2700);
 	CHECK( result11["pressure"] == Approx(60));
 	CHECK( result11["temperature"] == Approx(791.1146921709));
 	CHECK( result11["specificVolume"] == Approx(0.003319241));
 	CHECK( result11["specificEnthalpy"] == Approx(2700));
 	CHECK( result11["specificEntropy"] == Approx(5.1013392134));
 
-	auto result12 = sp.calculate(60, 3200);
+	auto result12 = sp.waterPropertiesPressureEnthalpy(60, 3200);
 	CHECK( result12["pressure"] == Approx(60));
 	CHECK( result12["temperature"] == Approx(882.7697090377));
 	CHECK( result12["specificVolume"] == Approx(0.0049873395));
@@ -290,57 +290,57 @@ TEST_CASE( "Calculate Steam Properties using Pressure and Enthalpy", "[waterProp
 }
 
 TEST_CASE( "Calculate Steam Properties using Pressure and Entropy", "[waterPropertiesPressureEntropy]") {
-    auto sp = SteamProperties(SteamProperties::ThermodynamicQuantity::ENTROPY);
-    auto result1 = sp.calculate(3, 0.5);
+    auto sp = SteamProperties(3, SteamProperties::ThermodynamicQuantity::ENTROPY, 0.5);
+    auto result1 = sp.calculate();
     CHECK(result1["pressure"] == Approx(3));
     CHECK(result1["temperature"] == Approx(307.842258));
     CHECK(result1["specificVolume"] == Approx(0.0010046046));
     CHECK(result1["specificEnthalpy"] == Approx(148.0634883148));
     CHECK(result1["specificEntropy"] == Approx(0.5));
 
-    auto result2 = sp.calculate(80, 0.5);
+    auto result2 = sp.waterPropertiesPressureEntropy(80, 0.5);
     CHECK( result2["pressure"] == Approx(80));
     CHECK( result2["temperature"] == Approx(309.979785));
     CHECK( result2["specificVolume"] == Approx(0.0009747722));
     CHECK( result2["specificEnthalpy"] == Approx(224.2263328394));
     CHECK( result2["specificEntropy"] == Approx(0.5));
 
-    auto result3 = sp.calculate(80, 3);
+    auto result3 = sp.waterPropertiesPressureEntropy(80, 3);
     CHECK( result3["pressure"] == Approx(80));
     CHECK( result3["temperature"] == Approx(565.9070416669));
     CHECK( result3["specificVolume"] == Approx(0.0012263315));
     CHECK( result3["specificEnthalpy"] == Approx(1292.2544898841));
     CHECK( result3["specificEntropy"] == Approx(3));
 
-    auto result4 = sp.calculate(8, 6);
+    auto result4 = sp.waterPropertiesPressureEntropy(8, 6);
     CHECK( result4["pressure"] == Approx(8));
     CHECK( result4["temperature"] == Approx(600.48404));
     CHECK( result4["specificVolume"] == Approx(0.0276660137));
     CHECK( result4["specificEnthalpy"] == Approx(2907.378739685));
     CHECK( result4["specificEntropy"] == Approx(6));
 
-    auto result5 = sp.calculate(90, 6);
+    auto result5 = sp.waterPropertiesPressureEntropy(90, 6);
     CHECK( result5["pressure"] == Approx(90));
     CHECK( result5["temperature"] == Approx(1038.01126));
     CHECK( result5["specificVolume"] == Approx(0.00454352));
     CHECK( result5["specificEnthalpy"] == Approx(3628.089478129));
     CHECK( result5["specificEntropy"] == Approx(6));
 
-    auto result6 = sp.calculate(20, 5.75);
+    auto result6 = sp.waterPropertiesPressureEntropy(20, 5.75);
     CHECK( result6["pressure"] == Approx(20));
     CHECK( result6["temperature"] == Approx(697.992849));
     CHECK( result6["specificVolume"] == Approx(0.0114675187));
     CHECK( result6["specificEnthalpy"] == Approx(2952.1269382186));
     CHECK( result6["specificEntropy"] == Approx(5.75));
 
-    auto result7 = sp.calculate(80, 5.25);
+    auto result7 = sp.waterPropertiesPressureEntropy(80, 5.25);
     CHECK( result7["pressure"] == Approx(80));
     CHECK( result7["temperature"] == Approx(854.011484));
     CHECK( result7["specificVolume"] == Approx(0.0031462467));
     CHECK( result7["specificEnthalpy"] == Approx(2886.747071315));
     CHECK( result7["specificEntropy"] == Approx(5.25));
 
-    auto result8 = sp.calculate(80, 5.75);
+    auto result8 = sp.waterPropertiesPressureEntropy(80, 5.75);
     CHECK( result8["pressure"] == Approx(80));
     CHECK( result8["temperature"] == Approx(949.017998));
     CHECK( result8["specificVolume"] == Approx(0.0042610579));

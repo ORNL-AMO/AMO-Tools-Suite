@@ -6,16 +6,16 @@
 #include "ssmt/SteamProperties.h"
 #include "ssmt/SaturatedProperties.h"
 
-std::unordered_map <std::string, double> SteamProperties::calculate(const double pressure, const double quantityValue) {
+std::unordered_map <std::string, double> SteamProperties::calculate() {
 	switch (thermodynamicQuantity_) {
 		case ThermodynamicQuantity::TEMPERATURE:
-			return waterPropertiesPressureTemperature(pressure, quantityValue);
+			return waterPropertiesPressureTemperature(this->pressure_, this->quantityValue_);
 		case ThermodynamicQuantity::ENTHALPY:
-			return waterPropertiesPressureEnthalpy(pressure, quantityValue);
+			return waterPropertiesPressureEnthalpy(this->pressure_, this->quantityValue_);
 		case ThermodynamicQuantity::ENTROPY:
-			return waterPropertiesPressureEntropy(pressure, quantityValue);
+			return waterPropertiesPressureEntropy(this->pressure_, this->quantityValue_);
 		case ThermodynamicQuantity::QUALITY:
-			return waterPropertiesPressureQuality(pressure, quantityValue);
+			return waterPropertiesPressureQuality(this->pressure_, this->quantityValue_);
 	};
 }
 
