@@ -93,7 +93,6 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     }
 
     if (pressure <= 4){
-        // not
 //        temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion2A(pressure, enthalpy);
 	    temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion2AExact(pressure, enthalpy);
     }
@@ -102,11 +101,9 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 
         double pressureLine = constants[0] + constants[1] * enthalpy + constants[2] * pow(enthalpy, 2);
         if (pressureLine > pressure){
-            // not same function as PHP
 //            temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion2B(pressure, enthalpy);
 	        temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion2BExact(pressure, enthalpy);
         }else{
-            // not same function as PHP
 //            temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion2C(pressure, enthalpy);
 	        temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion2CExact(pressure, enthalpy);
         }

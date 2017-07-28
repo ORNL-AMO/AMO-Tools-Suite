@@ -267,8 +267,7 @@ int SteamSystemModelerTool::regionSelect(const double p, const double t) {
 		if (p <= PRESSURE_MAX and p > boundaryPressure) return 3;
 	}
 
-//	if (t > TEMPERATURE_REGION3_MAX and t <= TEMPERATURE_MAX) // last if statement in the php code
-	return 2;
+	if (t > TEMPERATURE_REGION3_MAX and t <= TEMPERATURE_MAX)  return 2;// last if statement in the php code
 }
 
  double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pressure, const double enthalpy) {
@@ -303,7 +302,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2A(const double pre
     double temperature = 0.0;
     double nu = enthalpy/2000;
 
-    for(int i = 0; i <= 34; i++){
+    for(int i = 0; i < 34; i++){
         temperature += array2[i] * pow(pressure, array0[i]) * pow((nu - 2.1), array1[i]);
     }
     return temperature;
@@ -531,8 +530,8 @@ double SteamSystemModelerTool::backwardExact(int region, SteamSystemModelerTool:
         }
         if(regionFunction == SteamSystemModelerTool::Region::REGION2B)
         {
-	        pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion1(pressure, entropyOrEnthalpy));
-	        pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion1(pressure, pointA.getX()));
+	        pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion2B(pressure, entropyOrEnthalpy));
+	        pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion2B(pressure, pointA.getX()));
         }
         if(regionFunction == SteamSystemModelerTool::Region::REGION2C)
         {
