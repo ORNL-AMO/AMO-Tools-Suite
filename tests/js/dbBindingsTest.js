@@ -121,7 +121,7 @@ test('dbSelectGasMaterial', function (t) {
 });
 
 test('dbGasFlueGasMaterial', function (t) {
-    t.plan(23);
+    t.plan(27);
     bindings.startup();
 
     t.type(bindings.selectGasFlueGasMaterialById, 'function');
@@ -140,7 +140,9 @@ test('dbGasFlueGasMaterial', function (t) {
         CO: 0.0,
         CO2: 0.4,
         SO2: 0.0,
-        O2: 0.1
+        O2: 0.1,
+        heatingValue: 22030.67089880065,
+        specificGravity: 0.6571206283343215
     };
 
     t.equal(res.id, obj.id, res.id + " != " + obj.id);
@@ -150,6 +152,8 @@ test('dbGasFlueGasMaterial', function (t) {
     t.equal(res.N2, obj.N2, res.N2 + " != " + obj.N2);
     t.equal(res.H2, obj.H2, res.H2 + " != " + obj.H2);
     t.equal(res.O2, obj.O2, res.O2 + " != " + obj.O2);
+    t.equal(res.heatingValue, obj.heatingValue, res.heatingValue + " != " + obj.heatingValue);
+    t.equal(res.specificGravity, obj.specificGravity, res.specificGravity + " != " + obj.specificGravity);
 
     t.type(bindings.selectGasFlueGasMaterials, 'function');
     res = bindings.selectGasFlueGasMaterials();
@@ -166,7 +170,9 @@ test('dbGasFlueGasMaterial', function (t) {
         CO: 23.3,
         CO2: 14.4,
         SO2: 0.0,
-        O2: 0.0
+        O2: 0.0,
+        heatingValue: 1080.6848266529887,
+        specificGravity: 1.0870540901007706
     };
 
     t.equal(res.length, 3, "array is not of size 3");
@@ -183,6 +189,8 @@ test('dbGasFlueGasMaterial', function (t) {
     t.equal(res[2].CO2, obj2.CO2, res[2].CO2 + " != " + obj2.CO2);
     t.equal(res[2].SO2, obj2.SO2, res[2].SO2 + " != " + obj2.SO2);
     t.equal(res[2].O2, obj2.O2, res[2].O2 + " != " + obj2.O2);
+    t.equal(res[2].heatingValue, obj2.heatingValue, res[2].heatingValue + " != " + obj2.heatingValue);
+    t.equal(res[2].specificGravity, obj2.specificGravity, res[2].specificGravity + " != " + obj2.specificGravity);
 });
 
 test('dbSolidLiquidFlueGasMaterial', function (t) {
