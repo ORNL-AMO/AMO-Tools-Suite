@@ -13,10 +13,10 @@ int main() {
 
     std::cout << "Hello, World!" << std::endl;
     std::cout << std::setprecision(16);
-    Pump pump(Pump::Style::END_SUCTION_ANSI_API, 90, 1780, Pump::Drive::DIRECT_DRIVE, 1.00, 1.000, 2, Pump::Speed::NOT_FIXED_SPEED);
-    Motor motor(Motor::LineFrequency::FREQ60, 200, 1780, Motor::EfficiencyClass::SPECIFIED, 95, 460, 225.0, 0);
-    Financial financial(1.000, 0.05);
-    FieldData fieldData(1840, 174.85, FieldData::LoadEstimationMethod::POWER, 80, 125.857, 480);
+    Pump pump(Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY, 72, 1780, Pump::Drive::DIRECT_DRIVE, 1.00, 1.000, 2, Pump::Speed::FIXED_SPEED);
+    Motor motor(Motor::LineFrequency::FREQ60, 200, 1780, Motor::EfficiencyClass::ENERGY_EFFICIENT, 0, 460, 225.0, 100);
+    Financial financial(1.000, 0.06);
+    FieldData fieldData(2000, 277, FieldData::LoadEstimationMethod::POWER, 150, 0, 460);
 
     PSATResult psatResult(pump,motor,financial,fieldData);
     psatResult.calculateExisting();

@@ -20,10 +20,16 @@ public:
 
     /**
      * Constructor for SteamProperties class
+     * @param pressure double, pressure in MPa
      * @param quantity ThermodynamicQuantity, the value type used to calculate steam propeties (TEMPERATURE, ENTHALPY, etc.)
      */
-	SteamProperties(ThermodynamicQuantity quantity) :
-			thermodynamicQuantity_(quantity)
+	SteamProperties(
+			double pressure,
+			ThermodynamicQuantity quantity,
+			double quantityValue):
+			pressure_(pressure),
+			thermodynamicQuantity_(quantity),
+			quantityValue_(quantityValue)
 	{}
 
     /**
@@ -34,7 +40,8 @@ public:
      *
      * @return unordered_map <string, double>, steam properties
      */
-	std::unordered_map <std::string, double> calculate(const double pressure, const double quantityValue);
+	std::unordered_map <std::string, double> calculate();
+	//std::unordered_map <std::string, double> calculate(const double pressure, const double quantityValue);
 
 //private:
     /**
@@ -76,8 +83,10 @@ public:
 //	};
 
 //	Region regionSelect(const double pressure, const double temperature);
-
+private:
+	double pressure_ = 0.0;
 	ThermodynamicQuantity thermodynamicQuantity_;
+	double quantityValue_ = 0.0;
 
 };
 

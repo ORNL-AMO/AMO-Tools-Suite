@@ -83,6 +83,31 @@
                 }]
             ]
         },
+        {
+                 "target_name": "ssmt",
+                 'include_dirs': ['include', 'include/ssmt',
+                     "<!(node -e \"require('nan')\")"
+                  ],
+                 'sources' : [
+                     'bindings/ssmt.cpp',
+                     "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/').map(f=>'src/ssmt/'+f).join(' '))\")",
+                 ],
+                 "conditions": [
+                     [ 'OS=="mac"', {
+                         "xcode_settings": {
+                             'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                             'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                             'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                             'CLANG_CXX_LIBRARY': 'libc++',
+                             'GCC_ENABLE_CPP_RTTI': 'YES',
+                             'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                         },
+                     }],
+                     [ 'OS=="linux"', {
+                         'cflags_cc': ['-fexceptions']
+                     }]
+                 ]
+        },
 		{
             "target_name": "db",
             'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses',
