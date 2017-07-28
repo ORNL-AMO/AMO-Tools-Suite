@@ -110,7 +110,10 @@ set(SOURCE_FILES
         src/calculator/furnace/O2Enrichment.cpp
         src/calculator/furnace/FlowCalculationsEnergyUse.cpp
         src/calculator/losses/EnergyInputExhaustGasLosses.cpp
-        src/calculator/furnace/HumidityRatio.cpp)
+        src/calculator/furnace/HumidityRatio.cpp
+        src/ssmt/SaturatedProperties.cpp
+        src/ssmt/SteamProperties.cpp
+        src/ssmt/SteamSystemModelerTool.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -177,7 +180,10 @@ set(INCLUDE_FILES
         include/calculator/losses/EnergyInputExhaustGasLosses.h
         include/sqlite/AtmosphereSpecificHeatData.h
         include/sqlite/WallLossesSurfaceData.h
-        include/calculator/furnace/HumidityRatio.h)
+        include/calculator/furnace/HumidityRatio.h
+        include/ssmt/SaturatedProperties.h
+        include/ssmt/SteamProperties.h
+        include/ssmt/SteamSystemModelerTool.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -207,7 +213,9 @@ set(TEST_FILES
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp
         tests/HumidityRatio.unit.cpp
-        tests/PSATResult.unit.cpp)
+        tests/SaturatedProperties.unit.cpp
+        tests/SteamProperties.unit.cpp
+        )
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
