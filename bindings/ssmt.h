@@ -64,6 +64,7 @@ NAN_METHOD(saturatedTemperature) {
     /**
      * Constructor for the Saturated Temperature class
      * @param saturatedPressure double, saturatedPressure in MPa
+     * @return nothing
      */
     SaturatedTemperature st(Get("saturatedPressure"));
     double saturatedTemperature = st.calculate();
@@ -79,6 +80,12 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
     SaturatedPressure findPressure = SaturatedPressure(Get("saturatedTemperature");
     double pressure = findPressure.calculate();
 
+    /**
+     * Constructor for Saturated Properties class
+     * @param pressure double, saturated pressure in MPa
+     * @param saturatedTemperature double, saturated temperature in K
+     * @return nothing
+     */
     SaturatedProperties sp(pressure, Get("saturatedTemperature"));
     double saturatedPressure = sp.getSaturatedPressure();
     double saturatedTemperature = sp.getSaturatedTemperature();
@@ -113,6 +120,12 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
     SaturatedTemperature findTemperature = SaturatedTemperature(Get("saturatedPressure");
     double temperature = findTemperature.calculate();
 
+    /**
+     * Constructor for Saturated Properties class
+     * @param saturatedPressure double, saturated pressure in MPa
+     * @param temperature double, saturated temperature in K
+     * @return nothing
+     */
     SaturatedProperties sp(Get("saturatedPressure"), temperature);
     double saturatedPressure = sp.getSaturatedPressure();
     double saturatedTemperature = sp.getSaturatedTemperature();
@@ -139,32 +152,6 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(saturatedProperties) {
-
-    inp = info[0]->ToObject();
-    r = Nan::New<Object>();
-    SaturatedProperties sp(Get("saturatedPressure"), Get("saturatedTemperature"));
-    double liquidEnthalpy = sp.getLiquidEnthalpy();
-    double gasEnthalpy = sp.getGasEnthalpy();
-    double evaporationEnthalpy = sp.getEvaporationEnthalpy();
-    double liquidEntropy = sp.getLiquidEntropy();
-    double gasEntropy = sp.getGasEntropy();
-    double evaporationEntropy = sp.getEvaporationEntropy();
-    double liquidVolume = sp.getLiquidVolume();
-    double gasVolume = sp.getGasVolume();
-    double evaporationVolume = sp.getEvaporationVolume();
-    SetR("liquidEnthalpy", liquidEnthalpy);
-    SetR("gasEnthalpy", gasEnthalpy);
-    SetR("evaporationEnthalpy", evaporationEnthalpy);
-    SetR("liquidEntropy", liquidEntropy);
-    SetR("gasEntropy", gasEntropy);
-    SetR("evaporationEntropy", evaporationEntropy);
-    SetR("liquidVolume", liquidVolume);
-    SetR("gasVolume", gasVolume);
-    SetR("evaporationVolume", evaporationVolume);
-    info.GetReturnValue().Set(r);
-}
-
 
 NAN_METHOD(steamProperties) {
 
@@ -173,6 +160,13 @@ NAN_METHOD(steamProperties) {
 
     SteamProperties::ThermodynamicQuantity quantity = thermodynamicQuantity();
 
+    /**
+     * Constructor for Steam Properties class
+     * @param pressure double, saturated pressure in MPa
+     * @param quantity SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, specific enthalpy in kJ/kg, specific entropy in kJ/kg/K, or saturated quality - unitless)
+     * @param quantityValue double, value of either temperature in K, specific enthalpy in kJ/kg, specific entropy in kJ/kg/K, or saturated quality - unitless
+     * @return nothing
+     */
     SteamProperties sp(Get("pressure"), quantity, Get("quantityValue"));
     std::unordered_map <std::string, double> results = sp.calculate();
     double pressure = results["pressure"];
