@@ -35,7 +35,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
     //double gibbsTT = 0;
     //double gibbsPit = 0;
 
-	for ( auto k = 0; k < n.size(); k++ ) {
+	for ( auto k = 0; k < (int) n.size(); k++ ) {
 		gibbs += n[k] * pow((7.1 - reducedPressure), i[k]) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsPi += (-1 * n[k]) * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsT += n[k] * pow((7.1 - reducedPressure), i[k]) * j[k] * pow((inversedReducedTemp - 1.222), j[k] - 1);
@@ -192,10 +192,10 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 			0, 0, 1, 2, 7, 10, 12, 23, 2, 6, 15, 17, 0, 2, 6, 7, 22, 26, 0, 2,
 			4, 16, 26, 0, 2, 4, 26, 1, 3, 26, 0, 2, 26, 2, 26, 2, 26, 0, 1, 26
 	};
-	const std::array<int, 40> i = {
-			0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3,
-			3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 8, 9, 9, 10, 10, 11
-	};
+	const std::array<int, 40> i = {{
+                                           0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3,
+                                           3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 8, 9, 9, 10, 10, 11
+                                   }};
 
 	auto const reducedDensity = d / 322.0;
 	auto const inverseReducedTemp = 647.096 / t;
@@ -268,6 +268,8 @@ int SteamSystemModelerTool::regionSelect(const double p, const double t) {
 	}
 
 	if (t > TEMPERATURE_REGION3_MAX and t <= TEMPERATURE_MAX)  return 2;// last if statement in the php code
+    // Should never return 0
+    return 0;
 }
 
  double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pressure, const double enthalpy) {

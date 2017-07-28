@@ -144,7 +144,7 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
         }
 
         if ((pressure <= SteamSystemModelerTool::PRESSURE_Tp) ||
-		        region13boundary.find("specificEntropy") != region13boundary.end() && (entropy < region13boundary["specificEntropy"]))
+                (region13boundary.find("specificEntropy") != region13boundary.end() && (entropy < region13boundary["specificEntropy"])))
         {
             temperature = SteamSystemModelerTool::backwardPressureEntropyRegion1Exact(pressure, entropy);
             testProps = SteamSystemModelerTool::region1(temperature, pressure);

@@ -25,7 +25,7 @@ public:
         double sizeMargin
     ) :
         optimalMotorShaftPower_(optimalMotorShaftPower),
-        sizeMargin_(sizeMargin)
+        sizeMargin_(sizeMargin/100.0)
     {};
 
     /**

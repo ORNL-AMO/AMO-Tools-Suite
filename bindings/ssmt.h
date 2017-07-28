@@ -77,7 +77,7 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SaturatedPressure findPressure = SaturatedPressure(Get("saturatedTemperature");
+    SaturatedPressure findPressure = SaturatedPressure(Get("saturatedTemperature"));
     double pressure = findPressure.calculate();
 
     /**
@@ -117,7 +117,7 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SaturatedTemperature findTemperature = SaturatedTemperature(Get("saturatedPressure");
+    SaturatedTemperature findTemperature = SaturatedTemperature(Get("saturatedPressure"));
     double temperature = findTemperature.calculate();
 
     /**
