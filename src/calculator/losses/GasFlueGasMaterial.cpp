@@ -72,6 +72,21 @@ double GasCompositions::calculateHeatCombustionAir(const double combustionAirTem
     return mCombustionAir * cpCombustionAir * (combustionAirTemp - 32);
 }
 
+// public API component of calculating heating value, needs to calculateCompByWeight before calculating Heating Value
+double GasCompositions::calculateHeatingValue() {
+    calculateCompByWeight();
+    return calculateHeatingValueFuel();
+}
+
+double GasCompositions::calculateSpecificGravity() {
+    double summationNumerator = 0;
+    for ( auto const & compound : gasses ) {
+        summationNumerator += compound.second->compAdjByVol * compound.second->molecularWeight;
+    }
+    return summationNumerator / (22.4 * 1.205);
+}
+
+// private function used internally
 double GasCompositions::calculateHeatingValueFuel() {
     double heatValueFuel = 0;
 	for ( auto const & comp : gasses ) {
