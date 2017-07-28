@@ -257,17 +257,17 @@ double SteamSystemModelerTool::region4(const double t) {
 int SteamSystemModelerTool::regionSelect(const double p, const double t) {
 	const double boundaryPressure = (t >= TEMPERATURE_Tp) ? boundaryByTemperatureRegion3to2(t) : region4(t);
 
-	if (t >= TEMPERATURE_MIN and t <= TEMPERATURE_Tp) {
-		if (p <= PRESSURE_MAX and p >= boundaryPressure) return 1;
-		if (p > 0 and p <= boundaryPressure) return 2;
+	if (t >= TEMPERATURE_MIN && t <= TEMPERATURE_Tp) {
+		if (p <= PRESSURE_MAX && p >= boundaryPressure) return 1;
+		if (p > 0 && p <= boundaryPressure) return 2;
 	}
 
-	if (t >= TEMPERATURE_Tp and t <= TEMPERATURE_REGION3_MAX) {
-		if (p > 0 and p <= boundaryPressure) return 2;
-		if (p <= PRESSURE_MAX and p > boundaryPressure) return 3;
+	if (t >= TEMPERATURE_Tp && t <= TEMPERATURE_REGION3_MAX) {
+		if (p > 0 && p <= boundaryPressure) return 2;
+		if (p <= PRESSURE_MAX && p > boundaryPressure) return 3;
 	}
 
-	if (t > TEMPERATURE_REGION3_MAX and t <= TEMPERATURE_MAX)  return 2;// last if statement in the php code
+	if (t > TEMPERATURE_REGION3_MAX && t <= TEMPERATURE_MAX)  return 2;// last if statement in the php code
     // Should never return 0
     return 0;
 }
