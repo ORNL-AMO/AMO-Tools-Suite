@@ -17,7 +17,7 @@ std::unordered_map <std::string, double> SteamProperties::calculate() {
 		case ThermodynamicQuantity::QUALITY:
 			return waterPropertiesPressureQuality(this->pressure_, this->quantityValue_);
         default:
-            return 0;
+            return waterPropertiesPressureQuality(this->pressure_, this->quantityValue_);;
 	};
 }
 
