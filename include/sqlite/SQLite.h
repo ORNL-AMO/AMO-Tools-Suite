@@ -102,6 +102,10 @@ public:
 
     SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
 
+    std::vector<SolidLoadChargeMaterial> getCustomSolidLoadChargeMaterials() const;
+
+    bool insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material);
+
     std::vector<GasLoadChargeMaterial> getGasLoadChargeMaterials() const;
 
     GasLoadChargeMaterial getGasLoadChargeMaterialById(int id) const;
@@ -130,6 +134,7 @@ private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_single_stmt = nullptr;
+    sqlite3_stmt * m_solid_load_charge_materials_select_custom_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_single_stmt = nullptr;

@@ -22,13 +22,33 @@ using namespace v8;
 
 std::unique_ptr<SQLite> sql;
 
+// update all tables to have secondary key
+// when creating sqlite, add table that has history, put in tools-suite number and the date so that we know where db's came from
+// so data is version, timestamp, comment - "initial file based release"
+// to save the backup,
+
+
     NAN_METHOD(startup) {
-	    std::string dbName = ":memory:";
-	    sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
+        // check if backup db exists, if so, select all custom data, secondary id 1, then insert it into the new DB.
+        // then rename backupfile as timestamp, i.e. c++ timestamp::now() or something
+//	    std::string dbName = ":memory:";
+//	    sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
+
+        std::string dbName = "amo-tools-suite.db";
+        std::ifstream ifs(dbName);
+	    const bool fileExists = ! ifs.is_open();
+        ifs.close();
+
+        // *** I know what the problem is here. The unique_ptr sql isn't dying, so therefore the prepare_statement have a lock on them.
+        // TODO this obviously needs to change for the purpose of unit testing.
+
+        sql = std::unique_ptr<SQLite>(new SQLite(dbName, fileExists));
     }
 
     NAN_METHOD(update) {
 //        db migration code goes here
+        // save a backup (change filename of db, crossplatform, C++), then program is gonna die and update itself
+        // put the backup in a backup folder
     }
 
     NAN_METHOD(selectSolidLoadChargeMaterials) {

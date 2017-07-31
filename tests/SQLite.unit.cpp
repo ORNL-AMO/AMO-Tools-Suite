@@ -7,6 +7,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <fstream>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
@@ -28,6 +29,60 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
         expected.setID(1);
 
         CHECK( expected == output );
+    }
+}
+
+TEST_CASE( "SQLite - test db init", "[sqlite]" ) {
+    std::ifstream ifs("amo-tools-suite.db");
+	auto const isOpen = ! ifs.is_open();
+    ifs.close();
+
+    auto sqlite = SQLite("amo-tools-suite.db", isOpen);
+    {
+        auto const output = sqlite.getSolidLoadChargeMaterialById(1);
+
+        SolidLoadChargeMaterial expected;
+        expected.setSubstance("Aluminum");
+        expected.setSpecificHeatSolid(0.247910198232625);
+        expected.setLatentHeat(169);
+        expected.setSpecificHeatLiquid(0.2601);
+        expected.setMeltingPoint(1215);
+        expected.setID(1);
+
+        CHECK( expected == output );
+    }
+}
+
+TEST_CASE( "SQLite - TestSolidLoadChargeMaterialsMigrations", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+    auto const mats = sqlite.getSolidLoadChargeMaterials();
+
+    {
+        SolidLoadChargeMaterial expected;
+        expected.setSubstance("custom");
+        expected.setSpecificHeatSolid(0.25);
+        expected.setLatentHeat(100);
+        expected.setSpecificHeatLiquid(0.50);
+        expected.setMeltingPoint(1200);
+        expected.setID(mats.size() + 1);
+        sqlite.insertSolidLoadChargeMaterials(expected);
+
+	    auto const output = sqlite.getCustomSolidLoadChargeMaterials();
+	    CHECK( output[0] == expected );
+    }
+
+    {
+        SolidLoadChargeMaterial expected;
+        expected.setSubstance("custom2");
+        expected.setSpecificHeatSolid(0.55);
+        expected.setLatentHeat(200);
+        expected.setSpecificHeatLiquid(0.70);
+        expected.setMeltingPoint(1000);
+        expected.setID(mats.size() + 2);
+        sqlite.insertSolidLoadChargeMaterials(expected);
+
+        auto const output = sqlite.getCustomSolidLoadChargeMaterials();
+        CHECK( output[1] == expected );
     }
 }
 

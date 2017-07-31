@@ -41,6 +41,7 @@ SQLite::~SQLite()
 {
     sqlite3_finalize(m_solid_load_charge_materials_select_stmt);
     sqlite3_finalize(m_solid_load_charge_materials_select_single_stmt);
+    sqlite3_finalize(m_solid_load_charge_materials_select_custom_stmt);
     sqlite3_finalize(m_solid_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_stmt);
@@ -70,11 +71,12 @@ std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
 	    auto const ID = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
-        auto const latentHeat = sqlite3_column_double(stmt, 3);
-        auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
-        auto const meltingPoint = sqlite3_column_double(stmt, 5);
+        auto const sid = sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatSolid = sqlite3_column_double(stmt, 3);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 5);
+        auto const meltingPoint = sqlite3_column_double(stmt, 6);
         auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
         slcm.setID(ID);
 	    return slcm;
@@ -86,16 +88,34 @@ SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
-        auto const latentHeat = sqlite3_column_double(stmt, 3);
-        auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
-        auto const meltingPoint = sqlite3_column_double(stmt, 5);
+        auto const sid = sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatSolid = sqlite3_column_double(stmt, 3);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 5);
+        auto const meltingPoint = sqlite3_column_double(stmt, 6);
         auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
 	    slcm.setID(id);
         return slcm;
     };
     return get_object<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_single_stmt, id, cb);
+}
+
+std::vector<SolidLoadChargeMaterial> SQLite::getCustomSolidLoadChargeMaterials() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const ID = sqlite3_column_int(stmt, 0);
+        auto const sid = sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatSolid = sqlite3_column_double(stmt, 3);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 5);
+        auto const meltingPoint = sqlite3_column_double(stmt, 6);
+        auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
+        slcm.setID(ID);
+        return slcm;
+    };
+    return get_all_objects<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_custom_stmt, cb);
 }
 
 std::vector<GasLoadChargeMaterial> SQLite::getGasLoadChargeMaterials() const
@@ -302,19 +322,27 @@ WallLosses SQLite::getWallLossesSurfaceById(int id) const
 void SQLite::create_select_stmt()
 {
     std::string const select_solid_load_charge_materials =
-        R"(SELECT id, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+        R"(SELECT id, sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
                   mean_specific_heat_of_liquid, melting_point
            FROM solid_load_charge_materials)";
 
     prepare_statement(m_solid_load_charge_materials_select_stmt, select_solid_load_charge_materials);
 
     std::string const select_single_solid_load_charge_materials =
-        R"(SELECT id, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+        R"(SELECT id, sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
                   mean_specific_heat_of_liquid, melting_point
            FROM solid_load_charge_materials
            WHERE id = ?)";
 
     prepare_statement(m_solid_load_charge_materials_select_single_stmt, select_single_solid_load_charge_materials);
+
+    std::string const select_custom_solid_load_charge_materials =
+            R"(SELECT id, sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+                  mean_specific_heat_of_liquid, melting_point
+           FROM solid_load_charge_materials
+           WHERE sid = 1)";
+
+    prepare_statement(m_solid_load_charge_materials_select_custom_stmt, select_custom_solid_load_charge_materials);
 
     std::string const select_gas_load_charge_materials =
         R"(SELECT id, substance, mean_specific_heat_of_vapor
@@ -404,6 +432,7 @@ void SQLite::create_tables()
     const std::string solid_load_charge_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS solid_load_charge_materials (
            id integer PRIMARY KEY AUTOINCREMENT,
+           sid integer NOT NULL,
            substance text NOT NULL DEFAULT "" UNIQUE,
            mean_specific_heat_of_solid real NOT NULL, -- Btu/lb.F
            latent_heat_of_fusion real NOT NULL, -- Btu/lb.
@@ -416,9 +445,9 @@ void SQLite::create_tables()
     execute_command(solid_load_charge_materials_table_sql);
 
     const std::string solid_load_charge_materials_insert_sql =
-        R"(INSERT INTO solid_load_charge_materials(substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+        R"(INSERT INTO solid_load_charge_materials(sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
                                                    mean_specific_heat_of_liquid, melting_point)
-           VALUES (?,?,?,?,?))";
+           VALUES (?,?,?,?,?,?))";
 
     prepare_statement(m_solid_load_charge_materials_insert_stmt, solid_load_charge_materials_insert_sql);
 
@@ -572,11 +601,28 @@ void SQLite::insert_default_data()
 
 bool SQLite::insert_solid_load_charge_materials(SolidLoadChargeMaterial const & material)
 {
-    bind_value(m_solid_load_charge_materials_insert_stmt, 1, material.getSubstance());
-    bind_value(m_solid_load_charge_materials_insert_stmt, 2, material.getSpecificHeatSolid());
-    bind_value(m_solid_load_charge_materials_insert_stmt, 3, material.getLatentHeat());
-    bind_value(m_solid_load_charge_materials_insert_stmt, 4, material.getSpecificHeatLiquid());
-    bind_value(m_solid_load_charge_materials_insert_stmt, 5, material.getMeltingPoint());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 1, 0);
+    bind_value(m_solid_load_charge_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 3, material.getSpecificHeatSolid());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 4, material.getLatentHeat());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 5, material.getSpecificHeatLiquid());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 6, material.getMeltingPoint());
+
+    int rc = step_command(m_solid_load_charge_materials_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_solid_load_charge_materials_insert_stmt);
+    return valid_insert;
+}
+
+// used for inserting custom materials, part of the public API
+bool SQLite::insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material)
+{
+    bind_value(m_solid_load_charge_materials_insert_stmt, 1, 1);
+    bind_value(m_solid_load_charge_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 3, material.getSpecificHeatSolid());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 4, material.getLatentHeat());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 5, material.getSpecificHeatLiquid());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 6, material.getMeltingPoint());
 
     int rc = step_command(m_solid_load_charge_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
