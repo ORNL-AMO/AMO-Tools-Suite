@@ -11,6 +11,7 @@
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 #include "ssmt/SteamProperties.h"
+#include "ssmt/Boiler.h"
 
 
 using namespace Nan;
