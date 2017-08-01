@@ -53,9 +53,9 @@ public:
               steamMassFlow_(steamMassFlow)
 
     {
-        steamProperties_;
-        blowdownProperties_;
-        feedwaterProperties_ ;
+//        steamProperties_;
+//        blowdownProperties_;
+//        feedwaterProperties_;
         steamEnergyFlow_ = 0.0;
         boilerEnergy_ = 0.0;
         fuelEnergy_ = 0.0;

@@ -17,14 +17,14 @@ std::unordered_map <std::string, double> Boiler::getSteamProperties() {
 }
 
 std::unordered_map <std::string, double> Boiler::getBlowdownProperties() {
-    SteamProperties sp = SteamProperties(this->steamPressure_, this->quantityType_, this->quantityValue_);
+    SteamProperties sp = SteamProperties(this->steamPressure_, SteamProperties::ThermodynamicQuantity::QUALITY, 0);
     std::unordered_map <std::string, double> steamProperties = sp.calculate();
     this->blowdownProperties_ = steamProperties;
     return this->blowdownProperties_;
 }
 
 std::unordered_map <std::string, double> Boiler::getFeedwaterProperties() {
-    SteamProperties sp = SteamProperties(this->deaeratorPressure_, this->quantityType_, this->quantityValue_);
+    SteamProperties sp = SteamProperties(this->deaeratorPressure_, SteamProperties::ThermodynamicQuantity::QUALITY, 0);
     std::unordered_map <std::string, double> steamProperties = sp.calculate();
     this->feedwaterProperties_ = steamProperties;
     return this->feedwaterProperties_;
@@ -33,7 +33,7 @@ std::unordered_map <std::string, double> Boiler::getFeedwaterProperties() {
 double Boiler::getSteamEnergyFlow() {
     std::unordered_map <std::string, double> steamProperties = getSteamProperties();
     this->steamEnergyFlow_ = steamProperties["specificEnthalpy"] * this->steamMassFlow_;
-    return this->steamEnergyFlow_
+    return this->steamEnergyFlow_/1000;
 }
 
 double Boiler::getFeedwaterMassFlow() {
@@ -44,7 +44,7 @@ double Boiler::getFeedwaterMassFlow() {
 double Boiler::getFeedwaterEnergyFlow(){
     std::unordered_map <std::string, double> feedwaterProperties = getFeedwaterProperties();
     this->feedwaterEnergyFlow_ = feedwaterProperties["specificEnthalpy"] * getFeedwaterMassFlow();
-    return this->feedwaterEnergyFlow_;
+    return this->feedwaterEnergyFlow_/1000;
 }
 
 double Boiler::getBlowdownMassFlow() {
@@ -55,11 +55,14 @@ double Boiler::getBlowdownMassFlow() {
 double Boiler::getBlowdownEnergyFlow() {
     std::unordered_map <std::string, double> blowdownProperties = getBlowdownProperties();
     this->blowdownEnergyFlow_ = blowdownProperties["specificEnthalpy"] * getBlowdownMassFlow();
-    return this->blowdownEnergyFlow_;
+    return this->blowdownEnergyFlow_/1000;
 }
 
 double Boiler::getBoilerEnergy(){
-    this->boilerEnergy_ = getSteamEnergyFlow() + getBlowdownEnergyFlow() + getFeedwaterMassFlow();
+    double steam = getSteamEnergyFlow();
+    double blowdown = getBlowdownEnergyFlow();
+    double feedwater = getFeedwaterEnergyFlow();
+    this->boilerEnergy_ = steam + blowdown - feedwater;
     return this->boilerEnergy_;
 }
 
