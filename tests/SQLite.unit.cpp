@@ -32,30 +32,48 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
-TEST_CASE( "SQLite - test db init", "[sqlite]" ) {
-    std::ifstream ifs("amo-tools-suite.db");
-	auto const isOpen = ! ifs.is_open();
-    ifs.close();
-
-    auto sqlite = SQLite("amo-tools-suite.db", isOpen);
-    {
-        auto const output = sqlite.getSolidLoadChargeMaterialById(1);
-
-        SolidLoadChargeMaterial expected;
-        expected.setSubstance("Aluminum");
-        expected.setSpecificHeatSolid(0.247910198232625);
-        expected.setLatentHeat(169);
-        expected.setSpecificHeatLiquid(0.2601);
-        expected.setMeltingPoint(1215);
-        expected.setID(1);
-
-        CHECK( expected == output );
-    }
-}
+// commented because it writes to HDD
+//TEST_CASE( "SQLite - test db init", "[sqlite]" ) {
+//    {
+//        std::ifstream ifs("amo-tools-suite.db");
+//        auto const isOpen = ! ifs.is_open();
+//        ifs.close();
+//        auto sqlite = SQLite("amo-tools-suite.db", isOpen);
+//        auto const output = sqlite.getSolidLoadChargeMaterialById(1);
+//
+//        SolidLoadChargeMaterial expected;
+//        expected.setSubstance("Aluminum");
+//        expected.setSpecificHeatSolid(0.247910198232625);
+//        expected.setLatentHeat(169);
+//        expected.setSpecificHeatLiquid(0.2601);
+//        expected.setMeltingPoint(1215);
+//        expected.setID(1);
+//
+//        CHECK( expected == output );
+//    }
+//
+//    {
+//        std::ifstream ifs("amo-tools-suite.db");
+//        auto const isOpen = ! ifs.is_open();
+//        ifs.close();
+//        auto sqlite = SQLite("amo-tools-suite.db", isOpen);
+//        auto const output = sqlite.getSolidLoadChargeMaterialById(1);
+//
+//        SolidLoadChargeMaterial expected;
+//        expected.setSubstance("Aluminum");
+//        expected.setSpecificHeatSolid(0.247910198232625);
+//        expected.setLatentHeat(169);
+//        expected.setSpecificHeatLiquid(0.2601);
+//        expected.setMeltingPoint(1215);
+//        expected.setID(1);
+//
+//        CHECK( expected == output );
+//    }
+//}
 
 TEST_CASE( "SQLite - TestSolidLoadChargeMaterialsMigrations", "[sqlite]" ) {
-    auto sqlite = SQLite(":memory:", true);
-    auto const mats = sqlite.getSolidLoadChargeMaterials();
+    auto sourceSqlite = SQLite(":memory:", true);
+    auto const mats = sourceSqlite.getSolidLoadChargeMaterials();
 
     {
         SolidLoadChargeMaterial expected;
@@ -65,9 +83,9 @@ TEST_CASE( "SQLite - TestSolidLoadChargeMaterialsMigrations", "[sqlite]" ) {
         expected.setSpecificHeatLiquid(0.50);
         expected.setMeltingPoint(1200);
         expected.setID(mats.size() + 1);
-        sqlite.insertSolidLoadChargeMaterials(expected);
+        sourceSqlite.insertSolidLoadChargeMaterials(expected);
 
-	    auto const output = sqlite.getCustomSolidLoadChargeMaterials();
+	    auto const output = sourceSqlite.getCustomSolidLoadChargeMaterials();
 	    CHECK( output[0] == expected );
     }
 
@@ -79,9 +97,28 @@ TEST_CASE( "SQLite - TestSolidLoadChargeMaterialsMigrations", "[sqlite]" ) {
         expected.setSpecificHeatLiquid(0.70);
         expected.setMeltingPoint(1000);
         expected.setID(mats.size() + 2);
-        sqlite.insertSolidLoadChargeMaterials(expected);
+        sourceSqlite.insertSolidLoadChargeMaterials(expected);
 
-        auto const output = sqlite.getCustomSolidLoadChargeMaterials();
+        auto const output = sourceSqlite.getCustomSolidLoadChargeMaterials();
+        CHECK( output[1] == expected );
+    }
+
+    auto destinationSqlite = SQLite(":memory:", true);
+    auto const customData = sourceSqlite.getCustomSolidLoadChargeMaterials();
+    for (auto const material : customData) {
+        destinationSqlite.insertSolidLoadChargeMaterials(material);
+    }
+
+    {
+        SolidLoadChargeMaterial expected;
+        expected.setSubstance("custom2");
+        expected.setSpecificHeatSolid(0.55);
+        expected.setLatentHeat(200);
+        expected.setSpecificHeatLiquid(0.70);
+        expected.setMeltingPoint(1000);
+        expected.setID(mats.size() + 2);
+
+        auto const output = destinationSqlite.getCustomSolidLoadChargeMaterials();
         CHECK( output[1] == expected );
     }
 }
