@@ -9,6 +9,8 @@
 #include <sqlite/SQLite.h>
 #include <fstream>
 #include <memory>
+#include <cstdio>
+#include <iostream>
 #include <calculator/losses/SolidLoadChargeMaterial.h>
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
 #include <calculator/losses/GasLoadChargeMaterial.h>
@@ -20,36 +22,73 @@
 using namespace Nan;
 using namespace v8;
 
+Local<Object> inp;
 std::unique_ptr<SQLite> sql;
+
+double Get(std::string const & nm) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+
+    auto rObj = inp->ToObject()->Get(getName);
+    if (rObj->IsUndefined()) {
+        std::cout<<nm;
+        //assert(!"defined");
+    }
+    return rObj->NumberValue();
+}
+
+std::string GetStr(std::string const & nm) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    auto obj = inp->ToObject()->Get(getName);
+    v8::String::Utf8Value s(obj);
+    return std::string(*s);
+}
+
 
 // update all tables to have secondary key
 // when creating sqlite, add table that has history, put in tools-suite number and the date so that we know where db's came from
 // so data is version, timestamp, comment - "initial file based release"
 // to save the backup,
 
-
+// startup should not be used with unit tests
     NAN_METHOD(startup) {
-        // check if backup db exists, if so, select all custom data, secondary id 1, then insert it into the new DB.
-        // then rename backupfile as timestamp, i.e. c++ timestamp::now() or something
-//	    std::string dbName = ":memory:";
-//	    sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
-
         std::string dbName = "amo-tools-suite.db";
         std::ifstream ifs(dbName);
 	    const bool fileExists = ! ifs.is_open();
         ifs.close();
 
-        // *** I know what the problem is here. The unique_ptr sql isn't dying, so therefore the prepare_statement have a lock on them.
-        // TODO this obviously needs to change for the purpose of unit testing.
-
+	    sql.reset();
         sql = std::unique_ptr<SQLite>(new SQLite(dbName, fileExists));
     }
 
-    NAN_METHOD(update) {
-//        db migration code goes here
-        // save a backup (change filename of db, crossplatform, C++), then program is gonna die and update itself
-        // put the backup in a backup folder
+    // used for unit testing, we don't want files written to the hard drive during testing
+    NAN_METHOD(unitTestStartup) {
+        std::string dbName = ":memory:";
+        sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
     }
+
+// to be run before program shutdown upon software update, shouldn't be used in unit tests
+    NAN_METHOD(preUpdate) {
+        sql.reset();
+        std::rename("amo-tools-suite.db", "amo-tools-suiteBACKUP.db");
+    }
+
+// to be called after program shutdown, upon software restart, shouldn't be used in unit tests
+NAN_METHOD(postUpdate) {
+    auto const backupSql = SQLite("amo-tools-suiteBACKUP.db", false);
+    auto const customSolidLoadChargeMats = backupSql.getCustomSolidLoadChargeMaterials();
+
+    auto const now = std::chrono::system_clock::now();
+    auto const date = std::chrono::system_clock::to_time_t(now);
+    std::string dateStr = (ctime(&date));
+    std::string db = "amo-tools-suite" + dateStr + ".db";
+    std::rename("amo-tools-suiteBACKUP.db", db.c_str());
+
+    startup(info);
+
+    for (auto const mat : customSolidLoadChargeMats) {
+        sql->insertSolidLoadChargeMaterials(mat);
+    }
+}
 
     NAN_METHOD(selectSolidLoadChargeMaterials) {
 	    Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -96,6 +135,19 @@ std::unique_ptr<SQLite> sql;
         Nan::Set(obj, meltingPoint, Nan::New<Number>(slcm.getMeltingPoint()));
 
         info.GetReturnValue().Set(obj);
+    }
+
+    NAN_METHOD(insertSolidLoadChargeMaterial) {
+        inp = info[0]->ToObject();
+        SolidLoadChargeMaterial slcm;
+
+	    std::string substance = GetStr("substance");
+        slcm.setSubstance(substance);
+        slcm.setSpecificHeatSolid(Get("specificHeatSolid"));
+        slcm.setSpecificHeatLiquid(Get("specificHeatLiquid"));
+        slcm.setLatentHeat(Get("latentHeat"));
+        slcm.setMeltingPoint(Get("meltingPoint"));
+        sql->insertSolidLoadChargeMaterials(slcm);
     }
 
     NAN_METHOD(selectLiquidLoadChargeMaterials) {

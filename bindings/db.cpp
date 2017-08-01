@@ -12,14 +12,23 @@ NAN_MODULE_INIT(InitDb) {
     Nan::Set(target, New<String>("startup").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(startup)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("update").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(update)).ToLocalChecked());
+	Nan::Set(target, New<String>("unitTestStartup").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(unitTestStartup)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("preUpdate").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(preUpdate)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("postUpdate").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(postUpdate)).ToLocalChecked());
 
     Nan::Set(target, New<String>("selectSolidLoadChargeMaterials").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectSolidLoadChargeMaterials)).ToLocalChecked());
 
     Nan::Set(target, New<String>("selectSolidLoadChargeMaterialById").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectSolidLoadChargeMaterialById)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("insertSolidLoadChargeMaterial").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(insertSolidLoadChargeMaterial)).ToLocalChecked());
 
     Nan::Set(target, New<String>("selectLiquidLoadChargeMaterials").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectLiquidLoadChargeMaterials)).ToLocalChecked());

@@ -4,7 +4,7 @@ const test = require('tap').test
 
 test('dbSelectSolidMaterial', function (t) {
     t.plan(15);
-    bindings.startup();
+    bindings.unitTestStartup();
     t.type(bindings.selectSolidLoadChargeMaterialById, 'function');
 
     var res = bindings.selectSolidLoadChargeMaterialById(1);
@@ -23,7 +23,6 @@ test('dbSelectSolidMaterial', function (t) {
     t.equal(res.latentHeat, obj.latentHeat, res.latentHeat + " != " + obj.latentHeat);
     t.equal(res.specificHeatLiquid, obj.specificHeatLiquid, res.specificHeatLiquid + " != " + obj.specificHeatLiquid);
     t.equal(res.meltingPoint, obj.meltingPoint, res.meltingPoint + " != " + obj.meltingPoint);
-
 
     t.type(bindings.selectSolidLoadChargeMaterials, 'function');
 
@@ -48,7 +47,7 @@ test('dbSelectSolidMaterial', function (t) {
 
 test('dbSelectLiquidMaterial', function (t) {
     t.plan(15);
-    bindings.startup();
+    bindings.unitTestStartup();
     t.type(bindings.selectLiquidLoadChargeMaterialById, 'function');
 
     var res = bindings.selectLiquidLoadChargeMaterialById(1);
@@ -92,7 +91,7 @@ test('dbSelectLiquidMaterial', function (t) {
 
 test('dbSelectGasMaterial', function (t) {
     t.plan(9);
-    bindings.startup();
+    bindings.unitTestStartup();
 
     t.type(bindings.selectGasLoadChargeMaterialById, 'function');
     var res = bindings.selectGasLoadChargeMaterialById(1);
@@ -122,7 +121,7 @@ test('dbSelectGasMaterial', function (t) {
 
 test('dbGasFlueGasMaterial', function (t) {
     t.plan(27);
-    bindings.startup();
+    bindings.unitTestStartup();
 
     t.type(bindings.selectGasFlueGasMaterialById, 'function');
     var res = bindings.selectGasFlueGasMaterialById(1);
@@ -195,7 +194,7 @@ test('dbGasFlueGasMaterial', function (t) {
 
 test('dbSolidLiquidFlueGasMaterial', function (t) {
     t.plan(21);
-    bindings.startup();
+    bindings.unitTestStartup();
     t.type(bindings.selectSolidLiquidFlueGasMaterialById, 'function');
 
     res = bindings.selectSolidLiquidFlueGasMaterialById(2);
@@ -238,7 +237,7 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
 
 test('dbSelectAtmosphereSpecificHeat', function (t) {
     t.plan(9);
-    bindings.startup();
+    bindings.unitTestStartup();
     t.type(bindings.selectAtmosphereSpecificHeatById, 'function');
 
     var res = bindings.selectAtmosphereSpecificHeatById(1);
@@ -269,7 +268,7 @@ test('dbSelectAtmosphereSpecificHeat', function (t) {
 
 test('dbSelectWallLossesSurface', function (t) {
     t.plan(9);
-    bindings.startup();
+    bindings.unitTestStartup();
     t.type(bindings.selectWallLossesSurfaceById, 'function');
 
     var res = bindings.selectWallLossesSurfaceById(1);
@@ -297,3 +296,40 @@ test('dbSelectWallLossesSurface', function (t) {
     t.equal(res[6].surface, obj2.surface, res[6].surface + " != " + obj2.surface);
     t.equal(res[6].conditionFactor, obj2.conditionFactor, res[6].conditionFactor + " != " + obj2.conditionFactor);
 });
+
+// this test should be left commented out, it writes files to the HDD and adds materials to the DB, passing ONLY the
+// first time, unless the database files are deleted from tests/js/ where the files match tests/js/*.db
+// test('dbTestMigrations', function (t) {
+//     t.plan(6);
+//
+//     bindings.startup();
+//
+//     var mat1 = {
+//         substance: 'customMaterial',
+//         specificHeatSolid: 0.25,
+//         latentHeat: 150,
+//         specificHeatLiquid: 0.30,
+//         meltingPoint: 1200
+//     };
+//     var mat2 = {
+//         substance: 'customMaterial2',
+//         specificHeatSolid: 0.35,
+//         latentHeat: 350,
+//         specificHeatLiquid: 0.39,
+//         meltingPoint: 2900
+//     };
+//
+//     bindings.insertSolidLoadChargeMaterial(mat1);
+//     bindings.insertSolidLoadChargeMaterial(mat2);
+//
+//     bindings.preUpdate();
+//     bindings.postUpdate();
+//
+//     var res = bindings.selectSolidLoadChargeMaterials();
+//     t.equal(res.length, 42, res.length + " != 42");
+//     t.equal(res[41].substance, mat2.substance, res[41].substance + " != " + mat2.substance);
+//     t.equal(res[41].specificHeatSolid, mat2.specificHeatSolid, res[41].specificHeatSolid + " != " + mat2.specificHeatSolid);
+//     t.equal(res[41].latentHeat, mat2.latentHeat, res[41].latentHeat + " != " + mat2.latentHeat);
+//     t.equal(res[41].specificHeatLiquid, mat2.specificHeatLiquid, res[41].specificHeatLiquid + " != " + mat2.specificHeatLiquid);
+//     t.equal(res[41].meltingPoint, mat2.meltingPoint, res[41].meltingPoint + " != " + mat2.meltingPoint);
+// });
