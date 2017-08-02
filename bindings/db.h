@@ -9,7 +9,7 @@
 #include <sqlite/SQLite.h>
 #include <fstream>
 #include <memory>
-#include <cstdio>
+#include <chrono>
 #include <iostream>
 #include <calculator/losses/SolidLoadChargeMaterial.h>
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
