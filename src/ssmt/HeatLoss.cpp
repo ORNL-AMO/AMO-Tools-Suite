@@ -19,7 +19,7 @@ std::unordered_map <std::string, double> HeatLoss::getInletProperties() {
 double HeatLoss::getInletEnergyFlow(){
     std::unordered_map <std::string, double> inletProps = getInletProperties();
     this->inletEnergyFlow_ = inletProps["specificEnthalpy"] * this->inletMassFlow_;
-    return inletEnergyFlow_;
+    return inletEnergyFlow_/1000;
 }
 
 double HeatLoss::getOutletMassFlow(){
