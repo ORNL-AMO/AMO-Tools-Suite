@@ -36,20 +36,29 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
 //TEST_CASE( "SQLite - test db init", "[sqlite]" ) {
 //    {
 //        std::ifstream ifs("amo-tools-suite.db");
-//        auto const isOpen = ! ifs.is_open();
+//        auto const isOpen = ifs.is_open();
 //        ifs.close();
-//        auto sqlite = SQLite("amo-tools-suite.db", isOpen);
-//        auto const output = sqlite.getSolidLoadChargeMaterialById(1);
+//        auto sqlite = SQLite("amo-tools-suite.db", ! isOpen);
 //
+//        auto res = sqlite.getSolidLoadChargeMaterials();
+//        auto const resSize = res.size() + 1;
 //        SolidLoadChargeMaterial expected;
-//        expected.setSubstance("Aluminum");
-//        expected.setSpecificHeatSolid(0.247910198232625);
-//        expected.setLatentHeat(169);
-//        expected.setSpecificHeatLiquid(0.2601);
-//        expected.setMeltingPoint(1215);
-//        expected.setID(1);
+//        expected.setSubstance("custom" + std::to_string(resSize));
+//        expected.setSpecificHeatSolid(0.25);
+//        expected.setLatentHeat(100);
+//        expected.setSpecificHeatLiquid(0.50);
+//        expected.setMeltingPoint(1200);
+//        expected.setID(resSize);
+//        sqlite.insertSolidLoadChargeMaterials(expected);
 //
-//        CHECK( expected == output );
+//        res = sqlite.getSolidLoadChargeMaterials();
+//	    auto const last = res[resSize - 1];
+//        CHECK( expected.getSubstance() == last.getSubstance() );
+//        CHECK( expected.getID() == last.getID() );
+//        CHECK( expected.getSpecificHeatLiquid() == last.getSpecificHeatLiquid() );
+//        CHECK( expected.getSpecificHeatSolid() == last.getSpecificHeatSolid() );
+//        CHECK( expected.getMeltingPoint() == last.getMeltingPoint() );
+//        CHECK( expected.getLatentHeat() == last.getLatentHeat() );
 //    }
 //
 //    {
@@ -57,17 +66,27 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
 //        auto const isOpen = ! ifs.is_open();
 //        ifs.close();
 //        auto sqlite = SQLite("amo-tools-suite.db", isOpen);
-//        auto const output = sqlite.getSolidLoadChargeMaterialById(1);
+//
+//        auto res = sqlite.getSolidLoadChargeMaterials();
+//        auto const resSize = res.size() + 1;
 //
 //        SolidLoadChargeMaterial expected;
-//        expected.setSubstance("Aluminum");
-//        expected.setSpecificHeatSolid(0.247910198232625);
-//        expected.setLatentHeat(169);
-//        expected.setSpecificHeatLiquid(0.2601);
-//        expected.setMeltingPoint(1215);
-//        expected.setID(1);
+//        expected.setSubstance("custom" + std::to_string(resSize));
+//        expected.setSpecificHeatSolid(0.25);
+//        expected.setLatentHeat(100);
+//        expected.setSpecificHeatLiquid(0.50);
+//        expected.setMeltingPoint(1200);
+//        expected.setID(resSize);
+//        sqlite.insertSolidLoadChargeMaterials(expected);
 //
-//        CHECK( expected == output );
+//        res = sqlite.getSolidLoadChargeMaterials();
+//        auto const last = res[resSize - 1];
+//        CHECK( expected.getSubstance() == last.getSubstance() );
+//        CHECK( expected.getID() == last.getID() );
+//        CHECK( expected.getSpecificHeatLiquid() == last.getSpecificHeatLiquid() );
+//        CHECK( expected.getSpecificHeatSolid() == last.getSpecificHeatSolid() );
+//        CHECK( expected.getMeltingPoint() == last.getMeltingPoint() );
+//        CHECK( expected.getLatentHeat() == last.getLatentHeat() );
 //    }
 //}
 

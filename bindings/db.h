@@ -53,11 +53,11 @@ std::string GetStr(std::string const & nm) {
     NAN_METHOD(startup) {
         std::string dbName = "amo-tools-suite.db";
         std::ifstream ifs(dbName);
-	    const bool fileExists = ! ifs.is_open();
+	    const bool fileExists = ifs.is_open();
         ifs.close();
 
 	    sql.reset();
-        sql = std::unique_ptr<SQLite>(new SQLite(dbName, fileExists));
+        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
     }
 
     // used for unit testing, we don't want files written to the hard drive during testing
@@ -147,7 +147,8 @@ NAN_METHOD(postUpdate) {
         slcm.setSpecificHeatLiquid(Get("specificHeatLiquid"));
         slcm.setLatentHeat(Get("latentHeat"));
         slcm.setMeltingPoint(Get("meltingPoint"));
-        sql->insertSolidLoadChargeMaterials(slcm);
+        bool success = sql->insertSolidLoadChargeMaterials(slcm);
+        info.GetReturnValue().Set(success);
     }
 
     NAN_METHOD(selectLiquidLoadChargeMaterials) {

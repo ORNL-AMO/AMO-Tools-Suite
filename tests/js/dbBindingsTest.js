@@ -297,39 +297,44 @@ test('dbSelectWallLossesSurface', function (t) {
     t.equal(res[6].conditionFactor, obj2.conditionFactor, res[6].conditionFactor + " != " + obj2.conditionFactor);
 });
 
-// this test should be left commented out, it writes files to the HDD and adds materials to the DB, passing ONLY the
-// first time, unless the database files are deleted from tests/js/ where the files match tests/js/*.db
+// commented out bc it writes files to the HDD
 // test('dbTestMigrations', function (t) {
-//     t.plan(6);
+//     t.plan(8);
 //
 //     bindings.startup();
+//     var res = bindings.selectSolidLoadChargeMaterials();
+//     var slcmLen = res.length;
+//     var slcmLen2 = slcmLen + 1;
+//     var slcmLen3 = slcmLen + 2;
 //
 //     var mat1 = {
-//         substance: 'customMaterial',
+//         substance: 'customMaterial' + slcmLen2,
 //         specificHeatSolid: 0.25,
 //         latentHeat: 150,
 //         specificHeatLiquid: 0.30,
 //         meltingPoint: 1200
 //     };
 //     var mat2 = {
-//         substance: 'customMaterial2',
+//         substance: 'customMaterial' + slcmLen3,
 //         specificHeatSolid: 0.35,
 //         latentHeat: 350,
 //         specificHeatLiquid: 0.39,
 //         meltingPoint: 2900
 //     };
 //
-//     bindings.insertSolidLoadChargeMaterial(mat1);
-//     bindings.insertSolidLoadChargeMaterial(mat2);
+//     var success1 = bindings.insertSolidLoadChargeMaterial(mat1);
+//     var success2 = bindings.insertSolidLoadChargeMaterial(mat2);
 //
 //     bindings.preUpdate();
 //     bindings.postUpdate();
 //
 //     var res = bindings.selectSolidLoadChargeMaterials();
-//     t.equal(res.length, 42, res.length + " != 42");
-//     t.equal(res[41].substance, mat2.substance, res[41].substance + " != " + mat2.substance);
-//     t.equal(res[41].specificHeatSolid, mat2.specificHeatSolid, res[41].specificHeatSolid + " != " + mat2.specificHeatSolid);
-//     t.equal(res[41].latentHeat, mat2.latentHeat, res[41].latentHeat + " != " + mat2.latentHeat);
-//     t.equal(res[41].specificHeatLiquid, mat2.specificHeatLiquid, res[41].specificHeatLiquid + " != " + mat2.specificHeatLiquid);
-//     t.equal(res[41].meltingPoint, mat2.meltingPoint, res[41].meltingPoint + " != " + mat2.meltingPoint);
+//     t.equal(success1, true, "insert 1 was unsuccessful");
+//     t.equal(success2, true, "insert 2 was unsuccessful");
+//     t.equal(slcmLen + 2, res.length, res.length + " != " + slcmLen + 2);
+//     t.equal(res[slcmLen + 1].substance, mat2.substance, res[slcmLen + 1].substance + " != " + mat2.substance);
+//     t.equal(res[slcmLen + 1].specificHeatSolid, mat2.specificHeatSolid, res[slcmLen + 1].specificHeatSolid + " != " + mat2.specificHeatSolid);
+//     t.equal(res[slcmLen + 1].latentHeat, mat2.latentHeat, res[slcmLen + 1].latentHeat + " != " + mat2.latentHeat);
+//     t.equal(res[slcmLen + 1].specificHeatLiquid, mat2.specificHeatLiquid, res[slcmLen + 1].specificHeatLiquid + " != " + mat2.specificHeatLiquid);
+//     t.equal(res[slcmLen + 1].meltingPoint, mat2.meltingPoint, res[slcmLen + 1].meltingPoint + " != " + mat2.meltingPoint);
 // });

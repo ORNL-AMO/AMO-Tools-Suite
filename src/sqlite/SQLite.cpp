@@ -32,6 +32,8 @@ SQLite::SQLite(std::string const & db_name, bool init_db)
     if ( init_db ) {
         create_tables();
         insert_default_data();
+    } else {
+	    create_insert_stmt();
     }
 
     create_select_stmt();
@@ -426,6 +428,55 @@ void SQLite::create_select_stmt()
 
     prepare_statement(m_wall_losses_surface_select_single_stmt, select_single_wall_losses_surface);
 }
+
+void SQLite::create_insert_stmt() {
+    const std::string solid_load_charge_materials_insert_sql =
+            R"(INSERT INTO solid_load_charge_materials(sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+                                                   mean_specific_heat_of_liquid, melting_point)
+           VALUES (?,?,?,?,?,?))";
+
+    prepare_statement(m_solid_load_charge_materials_insert_stmt, solid_load_charge_materials_insert_sql);
+
+    const std::string gas_load_charge_materials_insert_sql =
+            R"(INSERT INTO gas_load_charge_materials(substance,mean_specific_heat_of_vapor) VALUES (?,?))";
+
+    prepare_statement(m_gas_load_charge_materials_insert_stmt, gas_load_charge_materials_insert_sql);
+
+    const std::string liquid_load_charge_materials_insert_sql =
+            R"(INSERT INTO liquid_load_charge_materials(substance, mean_specific_heat_of_liquid,
+                                                    latent_heat_of_vaporisation, mean_specific_heat_of_vapor,
+                                                    boiling_point)
+           VALUES (?,?,?,?,?))";
+
+    prepare_statement(m_liquid_load_charge_materials_insert_stmt, liquid_load_charge_materials_insert_sql);
+
+    const std::string solid_liquid_flue_gas_materials_insert_sql =
+            R"(INSERT INTO solid_liquid_flue_gas_materials(substance, carbon, hydrogen, nitrogen, sulfur, oxygen,
+                                                       moisture, ash)
+           VALUES (?,?,?,?,?,?,?,?))";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_insert_stmt, solid_liquid_flue_gas_materials_insert_sql);
+
+    const std::string gas_flue_gas_materials_insert_sql =
+            R"(INSERT INTO gas_flue_gas_materials(substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
+
+    prepare_statement(m_gas_flue_gas_materials_insert_stmt, gas_flue_gas_materials_insert_sql);
+
+    const std::string atmosphere_specific_heat_insert_sql =
+            R"(INSERT INTO atmosphere_specific_heat(substance, specificHeat)
+           VALUES (?,?))";
+
+    prepare_statement(m_atmosphere_specific_heat_insert_stmt, atmosphere_specific_heat_insert_sql);
+
+    const std::string wall_losses_surface_insert_sql =
+            R"(INSERT INTO wall_losses_surface(surface, conditionFactor)
+           VALUES (?,?))";
+
+    prepare_statement(m_wall_losses_surface_insert_stmt, wall_losses_surface_insert_sql);
+}
+
 
 void SQLite::create_tables()
 {

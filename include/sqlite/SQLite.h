@@ -156,6 +156,8 @@ private:
 
     void create_select_stmt();
 
+    void create_insert_stmt();
+
     void create_tables();
 
     bool insert_solid_load_charge_materials(SolidLoadChargeMaterial const & material);
