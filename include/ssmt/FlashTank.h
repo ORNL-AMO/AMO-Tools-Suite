@@ -10,6 +10,7 @@
  */
 
 #include "SteamProperties.h"
+#include "SaturatedProperties.h"
 
 #ifndef AMO_TOOLS_SUITE_FLASHTANK_H
 #define AMO_TOOLS_SUITE_FLASHTANK_H
@@ -46,6 +47,7 @@ public:
               tankPressure_(tankPressure)
 
     {
+        outletSaturatedProperties_ = SaturatedProperties(0.0, 0.0);
         inletWaterEnergyFlow_ = 0.0;
         outletGasMassFlow_ = 0.0;
         outletGasEnergyFlow_ = 0.0;
@@ -163,16 +165,10 @@ public:
     std::unordered_map <std::string, double> getInletWaterProperties();
 
     /**
-     * Calculates all of the properties of the outlet gas
-     * @return std::unordered_map <std::string, double>, outlet gas properties
+     * Calculates all of the saturated properties of the outlet gas and liquid
+     * @return std::unordered_map <std::string, double>, outlet gas and liquid saturated properties
      */
-    std::unordered_map <std::string, double> getOutletGasProperties();
-
-    /**
-     * Calculates all of the properties of the outlet liquid
-     * @return std::unordered_map <std::string, double>, outlet liquid properties
-     */
-    std::unordered_map <std::string, double> getOutletLiquidProperties();
+    SaturatedProperties getOutletSaturatedProperties();
 
     /**
      * Calculates the inlet water energy flow
@@ -215,8 +211,7 @@ private:
 
     // Out values
     std::unordered_map <std::string, double> inletWaterProperties_;
-    std::unordered_map <std::string, double> outletGasProperties_;
-    std::unordered_map <std::string, double> outletGLiquidProperties_;
+    SaturatedProperties outletSaturatedProperties_;
     double inletWaterEnergyFlow_;
     double outletGasMassFlow_;
     double outletGasEnergyFlow_;
