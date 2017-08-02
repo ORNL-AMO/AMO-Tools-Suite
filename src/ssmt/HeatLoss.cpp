@@ -33,7 +33,7 @@ double HeatLoss::getOutletEnergyFlow(){
 }
 
 std::unordered_map <std::string, double> HeatLoss::getOutletProperties() {
-    double outletEnthalpy = getOutletEnergyFlow()/getInletMassFlow().
+    double outletEnthalpy = getOutletEnergyFlow()/getInletMassFlow();
     SteamProperties sp = SteamProperties(this->inletPressure_, SteamProperties::ThermodynamicQuantity::ENTHALPY, outletEnthalpy);
     std::unordered_map <std::string, double> steamProperties = sp.calculate();
     this->outletProperties_ = steamProperties;
