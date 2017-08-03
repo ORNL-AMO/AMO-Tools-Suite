@@ -295,7 +295,7 @@ NAN_METHOD(heatLoss) {
         double inletTemperature = inletResults["temperature"];
         double inletSpecificEnthalpy = inletResults["specificEnthalpy"];
         double inletSpecificEntropy = inletResults["specificEntropy"];
-        double inletQuality = steamResults["quality"];
+        double inletQuality = inletResults["quality"];
         double inletMassFlow = hl.getInletMassFlow();
         double inletEnergyFlow = hl.getInletEnergyFlow();
 
@@ -310,7 +310,7 @@ NAN_METHOD(heatLoss) {
         double heatLoss = hl.getHeatLoss();
 
         SetR("inletPressure", inletPressure);
-        SetR("inletTemperature", sinletTemperature);
+        SetR("inletTemperature", inletTemperature);
         SetR("inletSpecificEnthalpy", inletSpecificEnthalpy);
         SetR("inletSpecificEntropy", inletSpecificEntropy);
         SetR("inletQuality", inletQuality);
@@ -326,6 +326,81 @@ NAN_METHOD(heatLoss) {
         SetR("outletEnergyFlow", outletEnergyFlow);
 
         SetR("heatLoss", heatLoss);
+
+        info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(flashTank) {
+
+        inp = info[0]->ToObject();
+        r = Nan::New<Object>();
+
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+
+        /**
+        *
+        * Constructor for the flash tank calculator
+        *
+        * @param inletWaterPressure double, inlet water pressure in MPa
+        * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+        * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+        * @param inletWaterMassFlow double, inlet water mass flow in kg/hr
+        * @param tankPressure double, pressure of the tank in MPa
+        *
+        * @return nothing
+        *
+        * */
+        FlashTank ft(Get("inletWaterPressure"), quantityType, Get("quantityValue"), Get("inletWaterMassFlow"), Get("tankPressure"));
+        std::unordered_map <std::string, double> inletWaterResults = ft.getInletWaterProperties();
+        std::unordered_map <std::string, double> outletSaturatedResults = ft.getOutletSaturatedProperties();
+
+        double inletWaterPressure = inletWaterResults["pressure"];
+        double inletWaterTemperature = inletWaterResults["temperature"];
+        double inletWaterSpecificEnthalpy = inletWaterResults["specificEnthalpy"];
+        double inletWaterSpecificEntropy = inletWaterResults["specificEntropy"];
+        double inletWaterQuality = inletWaterResults["quality"];
+        double inletWaterMassFlow = ft.getInletWaterMassFlow();
+        double inletWaterEnergyFlow = ft.getInletWaterEnergyFlow();
+
+        double outletGasPressure = outletSaturatedResults["saturatedPressure"];
+        double outletGasTemperature = outletSaturatedResults["saturatedTemperature"];
+        double outletGasSpecificEnthalpy = outletSaturatedResults["gasSpecificEnthalpy"];
+        double outletGasSpecificEntropy = outletSaturatedResults["gasSpecificEntropy"];
+        double outletGasQuality = 1;
+        double outletGasMassFlow = ft.getOutletGasMassFlow();
+        double outletGasEnergyFlow = ft.getOutletGasEnergyFlow();
+
+        double outletLiquidPressure = outletSaturatedResults["saturatedPressure"];
+        double outletLiquidTemperature = outletSaturatedResults["saturatedTemperature"];
+        double outletLiquidSpecificEnthalpy = outletSaturatedResults["liquidSpecificEnthalpy"];
+        double outletLiquidSpecificEntropy = outletSaturatedResults["liquidSpecificEntropy"];
+        double outletLiquidQuality = 0;
+        double outletLiquidMassFlow = ft.getOutletLiquidMassFlow();
+        double outletLiquidEnergyFlow = ft.getOutletLiquidEnergyFlow();
+
+        SetR("inletWaterPressure", inletWaterPressure);
+        SetR("inletWaterTemperature", inletWaterTemperature);
+        SetR("inletWaterSpecificEnthalpy", inletWaterSpecificEnthalpy);
+        SetR("inletWaterSpecificEntropy", inletWaterSpecificEntropy);
+        SetR("inletWaterQuality", inletWaterQuality);
+        SetR("inletWaterMassFlow", inletWaterMassFlow);
+        SetR("inletWaterEnergyFlow", inletWaterEnergyFlow);
+
+        SetR("outletGasPressure", outletGasPressure);
+        SetR("outletGasTemperature", outletGasTemperature);
+        SetR("outletGasSpecificEnthalpy", outletGasSpecificEnthalpy);
+        SetR("outletGasSpecificEntropy", outletGasSpecificEntropy);
+        SetR("outletGasQuality", outletGasQuality);
+        SetR("outletGasMassFlow", outletGasMassFlow);
+        SetR("outletGasEnergyFlow", outletGasEnergyFlow);
+
+        SetR("outletLiquidPressure", outletLiquidPressure);
+        SetR("outletLiquidTemperature", outletLiquidTemperature);
+        SetR("outletLiquidSpecificEnthalpy", outletLiquidSpecificEnthalpy);
+        SetR("outletLiquidSpecificEntropy", outletLiquidSpecificEntropy);
+        SetR("outletLiquidQuality", outletLiquidQuality);
+        SetR("outletLiquidMassFlow", outletLiquidMassFlow);
+        SetR("outletLiquidEnergyFlow", outletLiquidEnergyFlow);
 
         info.GetReturnValue().Set(r);
 }
