@@ -47,7 +47,6 @@ public:
               tankPressure_(tankPressure)
 
     {
-        outletSaturatedProperties_ = SaturatedProperties(0.0, 0.0);
         inletWaterEnergyFlow_ = 0.0;
         outletGasMassFlow_ = 0.0;
         outletGasEnergyFlow_ = 0.0;
@@ -168,7 +167,7 @@ public:
      * Calculates all of the saturated properties of the outlet gas and liquid
      * @return std::unordered_map <std::string, double>, outlet gas and liquid saturated properties
      */
-    SaturatedProperties getOutletSaturatedProperties();
+    std::unordered_map <std::string, double> getOutletSaturatedProperties();
 
     /**
      * Calculates the inlet water energy flow
@@ -211,7 +210,7 @@ private:
 
     // Out values
     std::unordered_map <std::string, double> inletWaterProperties_;
-    SaturatedProperties outletSaturatedProperties_;
+    std::unordered_map <std::string, double> outletSaturatedProperties_;
     double inletWaterEnergyFlow_;
     double outletGasMassFlow_;
     double outletGasEnergyFlow_;
