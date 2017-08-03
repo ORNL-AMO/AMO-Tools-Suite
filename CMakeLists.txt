@@ -116,7 +116,7 @@ set(SOURCE_FILES
         src/ssmt/SteamSystemModelerTool.cpp
         src/ssmt/Boiler.cpp 
         src/ssmt/HeatLoss.cpp)
-
+        
 set(INCLUDE_FILES
         include/psat/FieldData.h
         include/psat/Financial.h
@@ -186,7 +186,8 @@ set(INCLUDE_FILES
         include/ssmt/SaturatedProperties.h
         include/ssmt/SteamProperties.h
         include/ssmt/SteamSystemModelerTool.h 
-        include/ssmt/Boiler.h include/ssmt/HeatLoss.h )
+        include/ssmt/Boiler.h 
+        include/ssmt/HeatLoss.h )
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
