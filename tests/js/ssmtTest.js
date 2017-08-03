@@ -122,7 +122,7 @@ test('boiler', function (t) {
 });
 
 test('heatLoss', function (t) {
-    t.plan(8);
+    t.plan(5);
     t.type(bindings.heatLoss, 'function');
 
     var inp = {
@@ -135,8 +135,8 @@ test('heatLoss', function (t) {
 
     var res = bindings.heatLoss(inp);
 
-    t.equal(res.inletEnergyFlow, 15643, 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(res.inletEnergyFlow, 15642.967348653074, 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
     t.equal(res.outletMassFlow, 5434, 'res.outletMassFlow is ' + res.outletMassFlow);
-    t.equal(res.outletEnergyFlow, 15261.2789453459, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
-    t.equal(res.heatLoss, 381.6884033071, 'res.heatLoss is ' + res.heatLoss);
+    t.equal(res.outletEnergyFlow, 15261.278945345939, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(res.heatLoss, 381.68840330713465, 'res.heatLoss is ' + res.heatLoss);
 });

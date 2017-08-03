@@ -11,6 +11,7 @@
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 #include "ssmt/SteamProperties.h"
+#include "ssmt/HeatLoss.h"
 #include "ssmt/Boiler.h"
 
 
@@ -295,7 +296,7 @@ NAN_METHOD(heatLoss) {
         double inletTemperature = inletResults["temperature"];
         double inletSpecificEnthalpy = inletResults["specificEnthalpy"];
         double inletSpecificEntropy = inletResults["specificEntropy"];
-        double inletQuality = steamResults["quality"];
+        double inletQuality = inletResults["quality"];
         double inletMassFlow = hl.getInletMassFlow();
         double inletEnergyFlow = hl.getInletEnergyFlow();
 
@@ -310,7 +311,7 @@ NAN_METHOD(heatLoss) {
         double heatLoss = hl.getHeatLoss();
 
         SetR("inletPressure", inletPressure);
-        SetR("inletTemperature", sinletTemperature);
+        SetR("inletTemperature", inletTemperature);
         SetR("inletSpecificEnthalpy", inletSpecificEnthalpy);
         SetR("inletSpecificEntropy", inletSpecificEntropy);
         SetR("inletQuality", inletQuality);
