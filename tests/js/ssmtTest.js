@@ -99,3 +99,24 @@ test('steamProperties', function (t) {
     t.equal(res.specificVolume, 0.008904111059648875, 'res.specificVolume is '+ res.specificVolume);
 
 });
+
+test('boiler', function (t) {
+    t.plan(8);
+    t.type(bindings.boiler, 'function');
+
+    var inp = {
+        deaeratorPressure : 10, combustionEfficiency : 85, blowdownRate : 2,
+        steamPressure : 20, thermodynamicQuantity : 1, //1 is ENTHALPY
+        quantityValue : 2000, steamMassFlow : 45
+    };
+
+    var res = bindings.boiler(inp);
+
+    t.equal(res.steamEnergyFlow, 110.7533647508802, 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
+    t.equal(res.blowdownMassFlow, 0.9183673469387756, 'res.blowdownMassFlow is ' + res.blowdownMassFlow);
+    t.equal(res.blowdownEnergyFlow, 1.6779495528531483, 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
+    t.equal(res.feedwaterMassFlow, 45.91836734693878, 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
+    t.equal(res.feedwaterEnergyFlow, 64.64697706690914, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(res.boilerEnergy, 47.7843372368242, 'res.boilerEnergy is '+ res.boilerEnergy);
+    t.equal(res.fuelEnergy, 56.216867337440235, 'res.fuelEnergy is '+ res.fuelEnergy);
+});

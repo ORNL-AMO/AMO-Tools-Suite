@@ -11,6 +11,7 @@
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 #include "ssmt/SteamProperties.h"
+#include "ssmt/Boiler.h"
 
 
 using namespace Nan;
@@ -182,6 +183,95 @@ NAN_METHOD(steamProperties) {
     SetR("quality", quality);
     SetR("specificVolume", specificVolume);
     info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(boiler) {
+
+        inp = info[0]->ToObject();
+        r = Nan::New<Object>();
+
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+
+        /**
+     *
+     * Constructor for the boiler calculator
+     *
+     * @param deaeratorPressure double, pressure of deaerator in MPa
+     * @param combustionEfficiency double, combustion efficiency of the boiler as %
+     * @param blowdownRate double, blowdown rate as a % of inlet mass flow
+     * @param steamPressure double, pressure of steam in MPa
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param steamMassFlow double, steam mass flow in kg/hr
+     *
+     * @return nothing
+     *
+     * */
+        Boiler b(Get("deaeratorPressure"), Get("combustionEfficiency"), Get("blowdownRate"), Get("steamPressure"), quantityType, Get("quantityValue"), Get("steamMassFlow"));
+        std::unordered_map <std::string, double> steamResults = b.getSteamProperties();
+        std::unordered_map <std::string, double> blowdownResults = b.getBlowdownProperties();
+        std::unordered_map <std::string, double> feedwaterResults = b.getFeedwaterProperties();
+        double steamPressure = steamResults["pressure"];
+        double steamTemperature = steamResults["temperature"];
+        double steamSpecificEnthalpy = steamResults["specificEnthalpy"];
+        double steamSpecificEntropy = steamResults["specificEntropy"];
+        double steamQuality = steamResults["quality"];
+        double steamSpecificVolume = steamResults["specificVolume"];
+        double steamMassFlow = b.getSteamMassFlow();
+        double steamEnergyFlow = b.getSteamEnergyFlow();
+
+        double blowdownPressure = blowdownResults["pressure"];
+        double blowdownTemperature = blowdownResults["temperature"];
+        double blowdownSpecificEnthalpy = blowdownResults["specificEnthalpy"];
+        double blowdownSpecificEntropy = blowdownResults["specificEntropy"];
+        double blowdownQuality = blowdownResults["quality"];
+        double blowdownSpecificVolume = blowdownResults["specificVolume"];
+        double blowdownMassFlow = b.getBlowdownMassFlow();
+        double blowdownEnergyFlow = b.getBlowdownEnergyFlow();
+
+        double feedwaterPressure = feedwaterResults["pressure"];
+        double feedwaterTemperature = feedwaterResults["temperature"];
+        double feedwaterSpecificEnthalpy = feedwaterResults["specificEnthalpy"];
+        double feedwaterSpecificEntropy = feedwaterResults["specificEntropy"];
+        double feedwaterQuality = feedwaterResults["quality"];
+        double feedwaterSpecificVolume = feedwaterResults["specificVolume"];
+        double feedwaterMassFlow = b.getFeedwaterMassFlow();
+        double feedwaterEnergyFlow = b.getFeedwaterEnergyFlow();
+
+        double boilerEnergy = b.getBoilerEnergy();
+        double fuelEnergy = b.getFuelEnergy();
+
+        SetR("steamPressure", steamPressure);
+        SetR("steamTemperature", steamTemperature);
+        SetR("steamSpecificEnthalpy", steamSpecificEnthalpy);
+        SetR("steamSpecificEntropy", steamSpecificEntropy);
+        SetR("steamQuality", steamQuality);
+        SetR("steamSpecificVolume", steamSpecificVolume);
+        SetR("steamMassFlow", steamMassFlow);
+        SetR("steamEnergyFlow", steamEnergyFlow);
+
+        SetR("blowdownPressure", blowdownPressure);
+        SetR("blowdownTemperature", blowdownTemperature);
+        SetR("blowdownSpecificEnthalpy", blowdownSpecificEnthalpy);
+        SetR("blowdownSpecificEntropy", blowdownSpecificEntropy);
+        SetR("blowdownQuality", blowdownQuality);
+        SetR("blowdownSpecificVolume", blowdownSpecificVolume);
+        SetR("blowdownMassFlow", blowdownMassFlow);
+        SetR("blowdownEnergyFlow", blowdownEnergyFlow);
+
+        SetR("feedwaterPressure", feedwaterPressure);
+        SetR("feedwaterTemperature", feedwaterTemperature);
+        SetR("feedwaterSpecificEnthalpy", feedwaterSpecificEnthalpy);
+        SetR("feedwaterSpecificEntropy", feedwaterSpecificEntropy);
+        SetR("feedwaterQuality", feedwaterQuality);
+        SetR("feedwaterSpecificVolume", feedwaterSpecificVolume);
+        SetR("feedwaterMassFlow", feedwaterMassFlow);
+        SetR("feedwaterEnergyFlow", feedwaterEnergyFlow);
+
+        SetR("boilerEnergy", boilerEnergy);
+        SetR("fuelEnergy", fuelEnergy);
+
+        info.GetReturnValue().Set(r);
 }
 
 
