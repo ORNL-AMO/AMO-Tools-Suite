@@ -27,7 +27,7 @@ std::unordered_map <std::string, double> FlashTank::getOutletSaturatedProperties
 double FlashTank::getInletWaterEnergyFlow(){
     std::unordered_map <std::string, double> inletWaterProps = getInletWaterProperties();
     this->inletWaterEnergyFlow_ = this->inletWaterMassFlow_ * inletWaterProps["specificEnthalpy"];
-    return this->inletWaterEnergyFlow_;
+    return this->inletWaterEnergyFlow_/1000;
 }
 
 double FlashTank::getOutletLiquidMassFlow() {
@@ -45,11 +45,11 @@ double FlashTank::getOutletGasMassFlow() {
 double FlashTank::getOutletGasEnergyFlow(){
     std::unordered_map <std::string, double> satProps = getOutletSaturatedProperties();
     this->outletGasEnergyFlow_ = getOutletGasMassFlow() * satProps["gasSpecificEnthalpy"];
-    return this->outletGasEnergyFlow_;
+    return this->outletGasEnergyFlow_/1000;
 }
 
 double FlashTank::getOutletLiquidEnergyFlow(){
     std::unordered_map <std::string, double> satProps = getOutletSaturatedProperties();
     this->outletLiquidEnergyFlow_ = getOutletLiquidMassFlow() * satProps["liquidSpecificEnthalpy"];
-    return this->outletLiquidEnergyFlow_;
+    return this->outletLiquidEnergyFlow_/1000;
 }
