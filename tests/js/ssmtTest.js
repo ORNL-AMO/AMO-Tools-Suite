@@ -122,7 +122,7 @@ test('boiler', function (t) {
 });
 
 test('heatLoss', function (t) {
-    t.plan(8);
+    t.plan(5);
     t.type(bindings.heatLoss, 'function');
 
     var inp = {
@@ -139,4 +139,25 @@ test('heatLoss', function (t) {
     t.equal(res.outletMassFlow, 5434, 'res.outletMassFlow is ' + res.outletMassFlow);
     t.equal(res.outletEnergyFlow, 15261.2789453459, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
     t.equal(res.heatLoss, 381.6884033071, 'res.heatLoss is ' + res.heatLoss);
+});
+
+test('flashTank', function (t) {
+    t.plan(6);
+    t.type(bindings.flashTank, 'function');
+
+    var inp = {
+        inletWaterPressure : 4.54484,
+        thermodynamicQuantity : 1, //1 is ENTHALPY
+        quantityValue : 2000,
+        inletWaterMassFlow : 36133,
+        tankPressure : 3.3884
+    };
+
+    var res = bindings.flashTank(inp);
+
+    t.equal(res.inletWaterEnergyFlow, 72266, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
+    t.equal(res.outletGasMassFlow, 19667, 'res.outletGasMassFlow is ' + res.outletGasMassFlow);
+    t.equal(res.outletGasEnergyFlow, 55127, 'res.outletGasEnergyFlow is ' + res.outletGasEnergyFlow);
+    t.equal(res.outletLiquidMassFlow, 16466, 'res.outletLiquidMassFlow is ' + res.outletLiquidMassFlow);
+    t.equal(res.outletLiquidEnergyFlow, 17139, 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
 });
