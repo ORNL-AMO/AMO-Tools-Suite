@@ -11,6 +11,7 @@
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 #include "ssmt/SteamProperties.h"
+#include "ssmt/HeatLoss.h"
 #include "ssmt/Boiler.h"
 
 
@@ -216,7 +217,6 @@ NAN_METHOD(boiler) {
         double steamSpecificEnthalpy = steamResults["specificEnthalpy"];
         double steamSpecificEntropy = steamResults["specificEntropy"];
         double steamQuality = steamResults["quality"];
-        double steamSpecificVolume = steamResults["specificVolume"];
         double steamMassFlow = b.getSteamMassFlow();
         double steamEnergyFlow = b.getSteamEnergyFlow();
 
@@ -225,7 +225,6 @@ NAN_METHOD(boiler) {
         double blowdownSpecificEnthalpy = blowdownResults["specificEnthalpy"];
         double blowdownSpecificEntropy = blowdownResults["specificEntropy"];
         double blowdownQuality = blowdownResults["quality"];
-        double blowdownSpecificVolume = blowdownResults["specificVolume"];
         double blowdownMassFlow = b.getBlowdownMassFlow();
         double blowdownEnergyFlow = b.getBlowdownEnergyFlow();
 
@@ -234,7 +233,6 @@ NAN_METHOD(boiler) {
         double feedwaterSpecificEnthalpy = feedwaterResults["specificEnthalpy"];
         double feedwaterSpecificEntropy = feedwaterResults["specificEntropy"];
         double feedwaterQuality = feedwaterResults["quality"];
-        double feedwaterSpecificVolume = feedwaterResults["specificVolume"];
         double feedwaterMassFlow = b.getFeedwaterMassFlow();
         double feedwaterEnergyFlow = b.getFeedwaterEnergyFlow();
 
@@ -246,7 +244,6 @@ NAN_METHOD(boiler) {
         SetR("steamSpecificEnthalpy", steamSpecificEnthalpy);
         SetR("steamSpecificEntropy", steamSpecificEntropy);
         SetR("steamQuality", steamQuality);
-        SetR("steamSpecificVolume", steamSpecificVolume);
         SetR("steamMassFlow", steamMassFlow);
         SetR("steamEnergyFlow", steamEnergyFlow);
 
@@ -255,7 +252,6 @@ NAN_METHOD(boiler) {
         SetR("blowdownSpecificEnthalpy", blowdownSpecificEnthalpy);
         SetR("blowdownSpecificEntropy", blowdownSpecificEntropy);
         SetR("blowdownQuality", blowdownQuality);
-        SetR("blowdownSpecificVolume", blowdownSpecificVolume);
         SetR("blowdownMassFlow", blowdownMassFlow);
         SetR("blowdownEnergyFlow", blowdownEnergyFlow);
 
@@ -264,12 +260,73 @@ NAN_METHOD(boiler) {
         SetR("feedwaterSpecificEnthalpy", feedwaterSpecificEnthalpy);
         SetR("feedwaterSpecificEntropy", feedwaterSpecificEntropy);
         SetR("feedwaterQuality", feedwaterQuality);
-        SetR("feedwaterSpecificVolume", feedwaterSpecificVolume);
         SetR("feedwaterMassFlow", feedwaterMassFlow);
         SetR("feedwaterEnergyFlow", feedwaterEnergyFlow);
 
         SetR("boilerEnergy", boilerEnergy);
         SetR("fuelEnergy", fuelEnergy);
+
+        info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(heatLoss) {
+
+        inp = info[0]->ToObject();
+        r = Nan::New<Object>();
+
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+
+        /**
+     *
+     * Constructor for the heat loss calculator
+     *
+     * @param inletPressure double, inlet pressure in MPa
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param inletMassFlow double, inlet mass flow in kg/hr
+     * @param percentHeatLoss double, heat loss as %
+     *
+     * @return nothing
+     *
+     * */
+        HeatLoss hl(Get("inletPressure"), quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("percentHeatLoss"));
+        std::unordered_map <std::string, double> inletResults = hl.getInletProperties();
+        std::unordered_map <std::string, double> outletResults = hl.getOutletProperties();
+        double inletPressure = inletResults["pressure"];
+        double inletTemperature = inletResults["temperature"];
+        double inletSpecificEnthalpy = inletResults["specificEnthalpy"];
+        double inletSpecificEntropy = inletResults["specificEntropy"];
+        double inletQuality = inletResults["quality"];
+        double inletMassFlow = hl.getInletMassFlow();
+        double inletEnergyFlow = hl.getInletEnergyFlow();
+
+        double outletPressure = outletResults["pressure"];
+        double outletTemperature = outletResults["temperature"];
+        double outletSpecificEnthalpy = outletResults["specificEnthalpy"];
+        double outletSpecificEntropy = outletResults["specificEntropy"];
+        double outletQuality = outletResults["quality"];
+        double outletMassFlow = hl.getOutletMassFlow();
+        double outletEnergyFlow = hl.getOutletEnergyFlow();
+
+        double heatLoss = hl.getHeatLoss();
+
+        SetR("inletPressure", inletPressure);
+        SetR("inletTemperature", inletTemperature);
+        SetR("inletSpecificEnthalpy", inletSpecificEnthalpy);
+        SetR("inletSpecificEntropy", inletSpecificEntropy);
+        SetR("inletQuality", inletQuality);
+        SetR("inletMassFlow", inletMassFlow);
+        SetR("inletEnergyFlow", inletEnergyFlow);
+
+        SetR("outletPressure", outletPressure);
+        SetR("outletTemperature", outletTemperature);
+        SetR("outletSpecificEnthalpy", outletSpecificEnthalpy);
+        SetR("outletSpecificEntropy", outletSpecificEntropy);
+        SetR("outletQuality", outletQuality);
+        SetR("outletMassFlow", outletMassFlow);
+        SetR("outletEnergyFlow", outletEnergyFlow);
+
+        SetR("heatLoss", heatLoss);
 
         info.GetReturnValue().Set(r);
 }

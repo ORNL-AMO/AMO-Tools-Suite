@@ -26,6 +26,9 @@ NAN_MODULE_INIT(InitSsmt) {
         Nan::Set(target, New<String>("boiler").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(boiler)).ToLocalChecked());
 
+        Nan::Set(target, New<String>("heatLoss").ToLocalChecked(),
+        GetFunction(New<FunctionTemplate>(heatLoss)).ToLocalChecked());
+
 }
 
 NODE_MODULE(ssmt, InitSsmt)

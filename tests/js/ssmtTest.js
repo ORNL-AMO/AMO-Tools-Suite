@@ -120,3 +120,23 @@ test('boiler', function (t) {
     t.equal(res.boilerEnergy, 47.7843372368242, 'res.boilerEnergy is '+ res.boilerEnergy);
     t.equal(res.fuelEnergy, 56.216867337440235, 'res.fuelEnergy is '+ res.fuelEnergy);
 });
+
+test('heatLoss', function (t) {
+    t.plan(5);
+    t.type(bindings.heatLoss, 'function');
+
+    var inp = {
+        inletPressure : 2.418,
+        thermodynamicQuantity : 0, //0 is TEMPERATURE
+        quantityValue : 521,
+        inletMassFlow : 5434,
+        percentHeatLoss : 2.44
+    };
+
+    var res = bindings.heatLoss(inp);
+
+    t.equal(res.inletEnergyFlow, 15642.967348653074, 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(res.outletMassFlow, 5434, 'res.outletMassFlow is ' + res.outletMassFlow);
+    t.equal(res.outletEnergyFlow, 15261.278945345939, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(res.heatLoss, 381.68840330713465, 'res.heatLoss is ' + res.heatLoss);
+});
