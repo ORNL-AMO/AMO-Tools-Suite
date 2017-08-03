@@ -122,7 +122,7 @@ test('boiler', function (t) {
 });
 
 test('heatLoss', function (t) {
-    t.plan(8);
+    t.plan(5);
     t.type(bindings.heatLoss, 'function');
 
     var inp = {
