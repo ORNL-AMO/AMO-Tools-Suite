@@ -113,7 +113,8 @@ set(SOURCE_FILES
         src/calculator/furnace/HumidityRatio.cpp
         src/ssmt/SaturatedProperties.cpp
         src/ssmt/SteamProperties.cpp
-        src/ssmt/SteamSystemModelerTool.cpp)
+        src/ssmt/SteamSystemModelerTool.cpp
+        src/ssmt/Boiler.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -183,7 +184,7 @@ set(INCLUDE_FILES
         include/calculator/furnace/HumidityRatio.h
         include/ssmt/SaturatedProperties.h
         include/ssmt/SteamProperties.h
-        include/ssmt/SteamSystemModelerTool.h include/ssmt/Boiler.h src/ssmt/Boiler.cpp)
+        include/ssmt/SteamSystemModelerTool.h include/ssmt/Boiler.h )
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
