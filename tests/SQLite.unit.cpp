@@ -233,6 +233,7 @@ TEST_CASE( "SQLite - customLiquidLoadChargeMaterials", "[sqlite]" ) {
         llcm.setID(size);
         sqlite.insertLiquidLoadChargeMaterials(llcm);
 
+	    auto const check = sqlite.getLiquidLoadChargeMaterials();
         auto const output = sqlite.getCustomLiquidLoadChargeMaterials();
         CHECK( output.size() == 2);
         CHECK( output[1].getSubstance() == llcm.getSubstance());

@@ -417,13 +417,13 @@ void SQLite::create_select_stmt()
 
     prepare_statement(m_liquid_load_charge_materials_select_single_stmt, select_single_liquid_load_charge_materials);
 
-    std::string const select_custom_single_liquid_load_charge_materials =
+    std::string const select_custom_liquid_load_charge_materials =
             R"(SELECT id, sid, substance, mean_specific_heat_of_liquid, latent_heat_of_vaporisation,
                   mean_specific_heat_of_vapor, boiling_point
            FROM liquid_load_charge_materials
-           WHERE id = 1)";
+           WHERE sid = 1)";
 
-    prepare_statement(m_liquid_load_charge_materials_select_custom_stmt, select_single_liquid_load_charge_materials);
+    prepare_statement(m_liquid_load_charge_materials_select_custom_stmt, select_custom_liquid_load_charge_materials);
 
     std::string const select_solid_liquid_flue_gas_materials =
             R"(SELECT id, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
