@@ -127,9 +127,9 @@ public:
 
     SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterialById(int id) const;
 
-    SolidLiquidFlueGasMaterial getCustomLiquidFlueGasMaterials() const;
+    std::vector<SolidLiquidFlueGasMaterial> getCustomSolidLiquidFlueGasMaterials() const;
 
-    bool insertCustomLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material) const;
+    bool insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material) const;
 
     std::vector<GasCompositions> getGasFlueGasMaterials() const;
 
