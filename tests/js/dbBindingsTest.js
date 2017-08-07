@@ -89,6 +89,28 @@ test('dbSelectLiquidMaterial', function (t) {
     t.equal(res[12].vaporizationTemperature, obj2.vaporizationTemperature, res[12].vaporizationTemperature + " != " + obj2.vaporizationTemperature);
 });
 
+test('dbInsertCustomLiquidMaterial', function (t) {
+    t.plan(3);
+    bindings.unitTestStartup();
+    t.type(bindings.selectLiquidLoadChargeMaterials, 'function');
+
+    var res = bindings.selectLiquidLoadChargeMaterials();
+    var obj = {
+        id: 1,
+        substance: 'customLiquidLoadChargeMaterial',
+        specificHeatLiquid: 0.6501,
+        specificHeatVapor: 0.55,
+        latentHeat: 105,
+        vaporizationTemperature: 900
+    };
+    var size = res.length;
+    bindings.insertLiquidLoadChargeMaterial(obj);
+    res = bindings.selectLiquidLoadChargeMaterials();
+    t.equal(res.length, size + 1, res.length + " != " + (size + 1));
+    t.equal(res[size].substance, obj.substance, res.substance + " != " + obj.substance);
+});
+
+
 test('dbSelectGasMaterial', function (t) {
     t.plan(9);
     bindings.unitTestStartup();
@@ -117,6 +139,26 @@ test('dbSelectGasMaterial', function (t) {
     t.equal(res[9].id, obj2.id, res[9].id + " != " + obj2.id);
     t.equal(res[9].substance, obj2.substance, res[9].substance + " != " + obj2.substance);
     t.equal(res[9].specificHeatVapor, obj2.specificHeatVapor, res[9].specificHeatVapor + " != " + obj2.specificHeatVapor);
+});
+
+test('dbInsertGasLoadChargeMaterial', function (t) {
+    t.plan(4);
+    bindings.unitTestStartup();
+
+    t.type(bindings.insertGasLoadChargeMaterial, 'function');
+    var res = bindings.selectGasLoadChargeMaterials();
+    var size = res.length;
+    var obj2 = {
+        substance: 'customGasLoadChargeMaterial',
+        specificHeatVapor: 3.45
+    };
+
+    bindings.insertGasLoadChargeMaterial(obj2);
+    res = bindings.selectGasLoadChargeMaterials();
+
+    t.equal(res.length, size + 1, res.length + " != " + (size + 1));
+    t.equal(res[size].substance, obj2.substance, res[size].substance + " != " + obj2.substance);
+    t.equal(res[size].specificHeatVapor, obj2.specificHeatVapor, res[size].specificHeatVapor + " != " + obj2.specificHeatVapor);
 });
 
 test('dbGasFlueGasMaterial', function (t) {
@@ -192,6 +234,46 @@ test('dbGasFlueGasMaterial', function (t) {
     t.equal(res[2].specificGravity, obj2.specificGravity, res[2].specificGravity + " != " + obj2.specificGravity);
 });
 
+test('dbGasFlueGasMaterial', function (t) {
+    t.plan(14);
+    bindings.unitTestStartup();
+
+    t.type(bindings.selectGasFlueGasMaterials, 'function');
+    var res = bindings.selectGasFlueGasMaterials();
+    var size = res.length;
+    var obj2 = {
+        substance: 'customGasFlueGas',
+        CH4: 0.1,
+        C2H6: 0.0,
+        N2: 56.4,
+        H2: 2.4,
+        C3H8: 0.0,
+        C4H10_CnH2n: 0.0,
+        H2O: 3.4,
+        CO: 23.3,
+        CO2: 14.4,
+        SO2: 0.0,
+        O2: 0.0
+    };
+
+    bindings.insertGasFlueGasMaterial(obj2);
+    res = bindings.selectGasFlueGasMaterials();
+
+    t.equal(res.length, size + 1, res.length + " != " + (size + 1));
+    t.equal(res[size].substance, obj2.substance, res[size].substance + " != " + obj2.substance);
+    t.equal(res[size].CH4, obj2.CH4, res[size].CH4 + " != " + obj2.CH4);
+    t.equal(res[size].C2H6, obj2.C2H6, res[size].C2H6 + " != " + obj2.C2H6);
+    t.equal(res[size].N2, obj2.N2, res[size].N2 + " != " + obj2.N2);
+    t.equal(res[size].H2, obj2.H2, res[size].H2 + " != " + obj2.H2);
+    t.equal(res[size].C3H8, obj2.C3H8, res[size].C3H8 + " != " + obj2.C3H8);
+    t.equal(res[size].C4H10_CnH2n, obj2.C4H10_CnH2n, res[size].C4H10_CnH2n + " != " + obj2.C4H10_CnH2n);
+    t.equal(res[size].H2O, obj2.H2O, res[size].H2O + " != " + obj2.H2O);
+    t.equal(res[size].CO, obj2.CO, res[size].CO + " != " + obj2.CO);
+    t.equal(res[size].CO2, obj2.CO2, res[size].CO2 + " != " + obj2.CO2);
+    t.equal(res[size].SO2, obj2.SO2, res[size].SO2 + " != " + obj2.SO2);
+    t.equal(res[size].O2, obj2.O2, res[size].O2 + " != " + obj2.O2);
+});
+
 test('dbSolidLiquidFlueGasMaterial', function (t) {
     t.plan(21);
     bindings.unitTestStartup();
@@ -235,6 +317,38 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
     t.equal(res[1].nitrogen, obj.nitrogen, res[1].nitrogen + " != " + obj.nitrogen);
 });
 
+test('dbInsertSolidLiquidFlueGasMaterial', function (t) {
+    t.plan(10);
+    bindings.unitTestStartup();
+    t.type(bindings.selectSolidLiquidFlueGasMaterialById, 'function');
+
+    var res = bindings.selectSolidLiquidFlueGasMaterials();
+    var obj = {
+        substance: 'customSolidLiquidFlueGasMaterial',
+        carbon: 77.7,
+        hydrogen: 1.8,
+        sulphur: 0.7,
+        inertAsh: 9.8,
+        o2: 2.1,
+        moisture: 7.1,
+        nitrogen: 0.8
+    };
+
+    var size = res.length;
+    bindings.insertSolidLiquidFlueGasMaterial(obj);
+    res = bindings.selectSolidLiquidFlueGasMaterials();
+
+    t.equal(res.length, size + 1, res.length + " != " + (size + 1));
+    t.equal(res[size].substance, obj.substance, res[size].substance + " != " + obj.substance);
+    t.equal(res[size].carbon, obj.carbon, res[size].carbon + " != " + obj.carbon);
+    t.equal(res[size].hydrogen, obj.hydrogen, res[size].hydrogen + " != " + obj.hydrogen);
+    t.equal(res[size].sulphur, obj.sulphur, res[size].sulphur + " != " + obj.sulphur);
+    t.equal(res[size].inertAsh, obj.inertAsh, res[size].inertAsh + " != " + obj.inertAsh);
+    t.equal(res[size].o2, obj.o2, res[size].o2 + " != " + obj.o2);
+    t.equal(res[size].moisture, obj.moisture, res[size].moisture + " != " + obj.moisture);
+    t.equal(res[size].nitrogen, obj.nitrogen, res[size].nitrogen + " != " + obj.nitrogen);
+});
+
 test('dbSelectAtmosphereSpecificHeat', function (t) {
     t.plan(9);
     bindings.unitTestStartup();
@@ -266,6 +380,26 @@ test('dbSelectAtmosphereSpecificHeat', function (t) {
     t.equal(res[5].specificHeat, obj2.specificHeat, res[5].specificHeat + " != " + obj2.specificHeat);
 });
 
+test('dbInsertAtmosphereSpecificHeat', function (t) {
+    t.plan(4);
+    bindings.unitTestStartup();
+    t.type(bindings.selectAtmosphereSpecificHeat, 'function');
+
+    var res = bindings.selectAtmosphereSpecificHeat();
+    var size = res.length;
+
+    var obj2 = {
+        substance: 'customAtmosphereObject',
+        specificHeat: 0.5
+    };
+
+    bindings.insertAtmosphereSpecificHeat(obj2);
+    res = bindings.selectAtmosphereSpecificHeat();
+    t.equal(res.length, size + 1, res.length + " != " + (size + 1));
+    t.equal(res[size].substance, obj2.substance, res[size].substance + " != " + obj2.substance);
+    t.equal(res[size].specificHeat, obj2.specificHeat, res[size].specificHeat + " != " + obj2.specificHeat);
+});
+
 test('dbSelectWallLossesSurface', function (t) {
     t.plan(9);
     bindings.unitTestStartup();
@@ -295,6 +429,25 @@ test('dbSelectWallLossesSurface', function (t) {
     t.equal(res[6].id, obj2.id, res[6].id + " != " + obj2.id);
     t.equal(res[6].surface, obj2.surface, res[6].surface + " != " + obj2.surface);
     t.equal(res[6].conditionFactor, obj2.conditionFactor, res[6].conditionFactor + " != " + obj2.conditionFactor);
+});
+
+test('dbInsertWallLossesSurface', function (t) {
+    t.plan(4);
+    bindings.unitTestStartup();
+    t.type(bindings.selectWallLossesSurface, 'function');
+
+    var obj2 = {
+        surface: 'customWallLossesSurface',
+        conditionFactor: 1.79
+    };
+
+    var res = bindings.selectWallLossesSurface();
+    var size = res.length;
+    bindings.insertWallLossesSurface(obj2);
+    res = bindings.selectWallLossesSurface();
+    t.equal(res.length, size + 1, res.length + " != " + (size + 1));
+    t.equal(res[size].surface, obj2.surface, res[size].surface + " != " + obj2.surface);
+    t.equal(res[size].conditionFactor, obj2.conditionFactor, res[size].conditionFactor + " != " + obj2.conditionFactor);
 });
 
 // commented out bc it writes files to the HDD
