@@ -240,157 +240,178 @@ TEST_CASE( "SQLite - customLiquidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
-//TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
-//    auto sqlite = SQLite(":memory:", true);
-//
-//  /*  {
-//        auto const output = sqlite.getGasFlueGasMaterialById(3);
-//        GasCompositions expected("Natural Gas Ohio", 93.33, 0.25, 3.4, 1.82, 0, 0, 0, 0.45, 0.22, 0, 0.35);
-//        expected.setID(3);
-//        CHECK( expected.getID() == output.getID() );
-//	    CHECK( expected.getSubstance() == output.getSubstance() );
-//        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
-//        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
-//        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
-//        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
-//        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
-//        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
-//        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
-//        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
-//        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
-//        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-//    }*/
-//
-//    //Typical Natural Gas - US
-//    {
-//        auto outputs = sqlite.getGasFlueGasMaterials();
-//        CHECK( outputs.size() == 3 );
-//        GasCompositions expected("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
-//        expected.setID(1);
-//        CHECK( expected.getID() == outputs[0].getID() );
-//        CHECK( expected.getSubstance() == outputs[0].getSubstance() );
-//        CHECK( expected.getGasByVol("C2H6") == outputs[0].getGasByVol("C2H6") );
-//        CHECK( expected.getGasByVol("N2") == outputs[0].getGasByVol("N2") );
-//        CHECK( expected.getGasByVol("H2") == outputs[0].getGasByVol("H2") );
-//        CHECK( expected.getGasByVol("C3H8") == outputs[0].getGasByVol("C3H8") );
-//        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[0].getGasByVol("C4H10_CnH2n") );
-//        CHECK( expected.getGasByVol("H2O") == outputs[0].getGasByVol("H2O") );
-//        CHECK( expected.getGasByVol("CO") == outputs[0].getGasByVol("CO") );
-//        CHECK( expected.getGasByVol("CO2") == outputs[0].getGasByVol("CO2") );
-//        CHECK( expected.getGasByVol("SO2") == outputs[0].getGasByVol("SO2") );
-//        CHECK( expected.getGasByVol("O2") == outputs[0].getGasByVol("O2") );
-//        CHECK( outputs[0].calculateHeatingValue() == 22030.67089880065 );
-//        CHECK( outputs[0].calculateSpecificGravity() == 0.6571206283343215 );
-//    }
-//
-//    {
-//        auto output = sqlite.getGasFlueGasMaterialById(1);
-//        GasCompositions expected("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
-//        expected.setID(1);
-//        CHECK( expected.getID() == output.getID() );
-//        CHECK( expected.getSubstance() == output.getSubstance() );
-//        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
-//        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
-//        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
-//        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
-//        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
-//        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
-//        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
-//        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
-//        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
-//        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-//        CHECK( output.calculateHeatingValue() == 22030.67089880065 );
-//        CHECK( output.calculateSpecificGravity() == 0.6571206283343215 );
-//    }
-//
-//    //Coke Oven Gas
-//    {
-//        auto outputs = sqlite.getGasFlueGasMaterials();
-//        CHECK( outputs.size() == 3 );
-//        GasCompositions expected("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
-//        expected.setID(2);
-//        CHECK( expected.getID() == outputs[1].getID() );
-//        CHECK( expected.getSubstance() == outputs[1].getSubstance() );
-//        CHECK( expected.getGasByVol("C2H6") == outputs[1].getGasByVol("C2H6") );
-//        CHECK( expected.getGasByVol("N2") == outputs[1].getGasByVol("N2") );
-//        CHECK( expected.getGasByVol("H2") == outputs[1].getGasByVol("H2") );
-//        CHECK( expected.getGasByVol("C3H8") == outputs[1].getGasByVol("C3H8") );
-//        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[1].getGasByVol("C4H10_CnH2n") );
-//        CHECK( expected.getGasByVol("H2O") == outputs[1].getGasByVol("H2O") );
-//        CHECK( expected.getGasByVol("CO") == outputs[1].getGasByVol("CO") );
-//        CHECK( expected.getGasByVol("CO2") == outputs[1].getGasByVol("CO2") );
-//        CHECK( expected.getGasByVol("SO2") == outputs[1].getGasByVol("SO2") );
-//        CHECK( expected.getGasByVol("O2") == outputs[1].getGasByVol("O2") );
-//        CHECK( outputs[1].calculateHeatingValue() == 19185.932389233436 );
-//        CHECK( outputs[1].calculateSpecificGravity() == 0.44638781861292243 );
-//    }
-//
-//    {
-//        auto output = sqlite.getGasFlueGasMaterialById(2);
-//        GasCompositions expected("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
-//        expected.setID(2);
-//        CHECK( expected.getID() == output.getID() );
-//        CHECK( expected.getSubstance() == output.getSubstance() );
-//        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
-//        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
-//        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
-//        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
-//        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
-//        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
-//        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
-//        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
-//        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
-//        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-//        CHECK( output.calculateHeatingValue() == 19185.932389233436 );
-//        CHECK( output.calculateSpecificGravity() == 0.44638781861292243 );
-//    }
-//
-//
-//    //Blast Furnace
-//    {
-//        auto outputs = sqlite.getGasFlueGasMaterials();
-//        CHECK( outputs.size() == 3 );
-//        GasCompositions expected("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
-//        expected.setID(3);
-//        CHECK( expected.getID() == outputs[2].getID() );
-//        CHECK( expected.getSubstance() == outputs[2].getSubstance() );
-//        CHECK( expected.getGasByVol("C2H6") == outputs[2].getGasByVol("C2H6") );
-//        CHECK( expected.getGasByVol("N2") == outputs[2].getGasByVol("N2") );
-//        CHECK( expected.getGasByVol("H2") == outputs[2].getGasByVol("H2") );
-//        CHECK( expected.getGasByVol("C3H8") == outputs[2].getGasByVol("C3H8") );
-//        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[2].getGasByVol("C4H10_CnH2n") );
-//        CHECK( expected.getGasByVol("H2O") == outputs[2].getGasByVol("H2O") );
-//        CHECK( expected.getGasByVol("CO") == outputs[2].getGasByVol("CO") );
-//        CHECK( expected.getGasByVol("CO2") == outputs[2].getGasByVol("CO2") );
-//        CHECK( expected.getGasByVol("SO2") == outputs[2].getGasByVol("SO2") );
-//        CHECK( expected.getGasByVol("O2") == outputs[2].getGasByVol("O2") );
-//        CHECK( outputs[2].calculateHeatingValue() == 1080.6848266529887 );
-//        CHECK( outputs[2].calculateSpecificGravity() == 1.0870540901007706 );
-//    }
-//
-//    {
-//        auto output = sqlite.getGasFlueGasMaterialById(3);
-//        GasCompositions expected("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
-//        expected.setID(3);
-//        CHECK( expected.getID() == output.getID() );
-//        CHECK( expected.getSubstance() == output.getSubstance() );
-//        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
-//        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
-//        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
-//        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
-//        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
-//        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
-//        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
-//        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
-//        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
-//        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-//        CHECK( output.calculateHeatingValue() == 1080.6848266529887 );
-//        CHECK( output.calculateSpecificGravity() == 1.0870540901007706 );
-//    }
-//
-//
-//}
-//
+TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+  /*  {
+        auto const output = sqlite.getGasFlueGasMaterialById(3);
+        GasCompositions expected("Natural Gas Ohio", 93.33, 0.25, 3.4, 1.82, 0, 0, 0, 0.45, 0.22, 0, 0.35);
+        expected.setID(3);
+        CHECK( expected.getID() == output.getID() );
+	    CHECK( expected.getSubstance() == output.getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+    }*/
+
+    //Typical Natural Gas - US
+    {
+        auto outputs = sqlite.getGasFlueGasMaterials();
+        CHECK( outputs.size() == 3 );
+        GasCompositions expected("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
+        expected.setID(1);
+        CHECK( expected.getID() == outputs[0].getID() );
+        CHECK( expected.getSubstance() == outputs[0].getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == outputs[0].getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == outputs[0].getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == outputs[0].getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == outputs[0].getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[0].getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == outputs[0].getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == outputs[0].getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == outputs[0].getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == outputs[0].getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == outputs[0].getGasByVol("O2") );
+        CHECK( outputs[0].calculateHeatingValue() == 22030.67089880065 );
+        CHECK( outputs[0].calculateSpecificGravity() == 0.6571206283343215 );
+    }
+
+    {
+        auto output = sqlite.getGasFlueGasMaterialById(1);
+        GasCompositions expected("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
+        expected.setID(1);
+        CHECK( expected.getID() == output.getID() );
+        CHECK( expected.getSubstance() == output.getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+        CHECK( output.calculateHeatingValue() == 22030.67089880065 );
+        CHECK( output.calculateSpecificGravity() == 0.6571206283343215 );
+    }
+
+    //Coke Oven Gas
+    {
+        auto outputs = sqlite.getGasFlueGasMaterials();
+        CHECK( outputs.size() == 3 );
+        GasCompositions expected("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
+        expected.setID(2);
+        CHECK( expected.getID() == outputs[1].getID() );
+        CHECK( expected.getSubstance() == outputs[1].getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == outputs[1].getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == outputs[1].getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == outputs[1].getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == outputs[1].getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[1].getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == outputs[1].getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == outputs[1].getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == outputs[1].getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == outputs[1].getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == outputs[1].getGasByVol("O2") );
+        CHECK( outputs[1].calculateHeatingValue() == 19185.932389233436 );
+        CHECK( outputs[1].calculateSpecificGravity() == 0.44638781861292243 );
+    }
+
+    {
+        auto output = sqlite.getGasFlueGasMaterialById(2);
+        GasCompositions expected("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
+        expected.setID(2);
+        CHECK( expected.getID() == output.getID() );
+        CHECK( expected.getSubstance() == output.getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+        CHECK( output.calculateHeatingValue() == 19185.932389233436 );
+        CHECK( output.calculateSpecificGravity() == 0.44638781861292243 );
+    }
+
+
+    //Blast Furnace
+    {
+        auto outputs = sqlite.getGasFlueGasMaterials();
+        CHECK( outputs.size() == 3 );
+        GasCompositions expected("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
+        expected.setID(3);
+        CHECK( expected.getID() == outputs[2].getID() );
+        CHECK( expected.getSubstance() == outputs[2].getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == outputs[2].getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == outputs[2].getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == outputs[2].getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == outputs[2].getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[2].getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == outputs[2].getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == outputs[2].getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == outputs[2].getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == outputs[2].getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == outputs[2].getGasByVol("O2") );
+        CHECK( outputs[2].calculateHeatingValue() == 1080.6848266529887 );
+        CHECK( outputs[2].calculateSpecificGravity() == 1.0870540901007706 );
+    }
+
+    {
+        auto output = sqlite.getGasFlueGasMaterialById(3);
+        GasCompositions expected("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
+        expected.setID(3);
+        CHECK( expected.getID() == output.getID() );
+        CHECK( expected.getSubstance() == output.getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+        CHECK( output.calculateHeatingValue() == 1080.6848266529887 );
+        CHECK( output.calculateSpecificGravity() == 1.0870540901007706 );
+    }
+}
+
+TEST_CASE( "SQLite - CustomGasFlueGasMaterials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto size = sqlite.getGasFlueGasMaterials().size();
+        GasCompositions expected("customGasFlueGas", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
+        expected.setID(size);
+        sqlite.insertGasFlueGasMaterial(expected);
+	    auto const output = sqlite.getGasFlueGasMaterials();
+	    CHECK(output[size].getSubstance() == expected.getSubstance());
+    }
+
+    {
+        auto size = sqlite.getGasFlueGasMaterials().size();
+        GasCompositions expected("customGasFlueGas2", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
+        expected.setID(size);
+        sqlite.insertGasFlueGasMaterial(expected);
+        auto const output = sqlite.getCustomGasFlueGasMaterials();
+        CHECK(output.size() == 2);
+        CHECK(output[1].getSubstance() == expected.getSubstance());
+    }
+
+}
 //TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
 //    auto sqlite = SQLite(":memory:", true);
 //
@@ -632,7 +653,7 @@ TEST_CASE( "SQLite - customLiquidLoadChargeMaterials", "[sqlite]" ) {
 //        CHECK( expected.getNitrogen() == output.getNitrogen() );
 //    }
 //}
-//
+
 //TEST_CASE( "SQLite - getAtmosphereSpecificHeat", "[sqlite]" ) {
 //    auto sqlite = SQLite(":memory:", true);
 //
