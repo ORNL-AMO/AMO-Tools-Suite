@@ -692,22 +692,50 @@ TEST_CASE( "SQLite - CustomAtmosphereSpecificHeat", "[sqlite]" ) {
     }
 }
 
-//TEST_CASE( "SQLite - getWallLossesSurface", "[sqlite]" ) {
-//    auto sqlite = SQLite(":memory:", true);
-//
-//    {
-//        auto const outputs = sqlite.getWallLossesSurface();
-//        CHECK( outputs.size() == 7 );
-//    }
-//
-//    {
-//        auto const output = sqlite.getWallLossesSurfaceById(1);
-//
-//        WallLosses expected;
-//        expected.setSurface("Horizontal cylinders");
-//        expected.setConditionFactor(1.016);
-//        expected.setID(1);
-//
-//        CHECK( expected == output );
-//    }
-//}
+TEST_CASE( "SQLite - getWallLossesSurface", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const outputs = sqlite.getWallLossesSurface();
+        CHECK( outputs.size() == 7 );
+    }
+
+    {
+        auto const output = sqlite.getWallLossesSurfaceById(1);
+
+        WallLosses expected;
+        expected.setSurface("Horizontal cylinders");
+        expected.setConditionFactor(1.016);
+        expected.setID(1);
+
+        CHECK( expected == output );
+    }
+}
+
+TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+	    auto const size = sqlite.getWallLossesSurface().size();
+        WallLosses expected;
+        expected.setSurface("customSurface");
+        expected.setConditionFactor(10);
+        expected.setID(size);
+        sqlite.insertWallLossesSurface(expected);
+        auto const output = sqlite.getWallLossesSurface();
+        CHECK( output.size() == size + 1 );
+        CHECK( output[size].getConditionFactor() == expected.getConditionFactor() );
+    }
+
+    {
+        auto const size = sqlite.getWallLossesSurface().size();
+        WallLosses expected;
+        expected.setSurface("customSurface2");
+        expected.setConditionFactor(19);
+        expected.setID(size);
+        sqlite.insertWallLossesSurface(expected);
+        auto const output = sqlite.getCustomWallLossesSurface();
+        CHECK( output.size() == 2 );
+        CHECK( output[1].getConditionFactor() == expected.getConditionFactor() );
+    }
+}

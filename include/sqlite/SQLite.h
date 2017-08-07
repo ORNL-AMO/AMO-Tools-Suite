@@ -149,7 +149,11 @@ public:
 
     std::vector<WallLosses> getWallLossesSurface() const;
 
+    std::vector<WallLosses> getCustomWallLossesSurface() const;
+
     WallLosses getWallLossesSurfaceById(int id) const;
+
+    bool insertWallLossesSurface(WallLosses const & material);
 
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;

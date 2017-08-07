@@ -412,6 +412,20 @@ std::vector<WallLosses> SQLite::getWallLossesSurface() const
     return get_all_objects<WallLosses>(m_wall_losses_surface_select_stmt, cb);
 }
 
+std::vector<WallLosses> SQLite::getCustomWallLossesSurface() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        std::string const surface = convert_text(sqlite3_column_text(stmt, 2));
+        auto const conditionFactor = sqlite3_column_double(stmt, 3);
+        auto wl = WallLosses(surface, conditionFactor);
+        wl.setID(id);
+        return wl;
+    };
+    return get_all_objects<WallLosses>(m_wall_losses_surface_select_custom_stmt, cb);
+}
+
 WallLosses SQLite::getWallLossesSurfaceById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
@@ -573,7 +587,7 @@ void SQLite::create_select_stmt()
     std::string const select_custom_wall_losses_surface =
             R"(SELECT id, sid, surface, conditionFactor
            FROM wall_losses_surface
-           WHERE sid = ?)";
+           WHERE sid = 1)";
 
     prepare_statement(m_wall_losses_surface_select_custom_stmt, select_custom_wall_losses_surface);
 }
@@ -958,6 +972,18 @@ bool SQLite::insert_wall_losses_surface(WallLosses const & cf)
     bind_value(m_wall_losses_surface_insert_stmt, 1, 0);
     bind_value(m_wall_losses_surface_insert_stmt, 2, cf.getSurface());
     bind_value(m_wall_losses_surface_insert_stmt, 3, cf.getConditionFactor());
+
+    int rc = step_command(m_wall_losses_surface_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_wall_losses_surface_insert_stmt);
+    return valid_insert;
+}
+
+bool SQLite::insertWallLossesSurface(WallLosses const & material)
+{
+    bind_value(m_wall_losses_surface_insert_stmt, 1, 1);
+    bind_value(m_wall_losses_surface_insert_stmt, 2, material.getSurface());
+    bind_value(m_wall_losses_surface_insert_stmt, 3, material.getConditionFactor());
 
     int rc = step_command(m_wall_losses_surface_insert_stmt);
     bool valid_insert = step_validity(rc);
