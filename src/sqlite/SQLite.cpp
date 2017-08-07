@@ -370,6 +370,20 @@ std::vector<Atmosphere> SQLite::getAtmosphereSpecificHeat() const
     return get_all_objects<Atmosphere>(m_atmosphere_specific_heat_select_stmt, cb);
 }
 
+std::vector<Atmosphere> SQLite::getCustomAtmosphereSpecificHeat() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeat = sqlite3_column_double(stmt, 3);
+        auto a = Atmosphere(substance, specificHeat);
+        a.setID(id);
+        return a;
+    };
+    return get_all_objects<Atmosphere>(m_atmosphere_specific_heat_select_custom_stmt, cb);
+}
+
 Atmosphere SQLite::getAtmosphereSpecificHeatById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
@@ -920,6 +934,18 @@ bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
     bind_value(m_atmosphere_specific_heat_insert_stmt, 1, 0);
     bind_value(m_atmosphere_specific_heat_insert_stmt, 2, sh.getSubstance());
     bind_value(m_atmosphere_specific_heat_insert_stmt, 3, sh.getSpecificHeat());
+
+    int rc = step_command(m_atmosphere_specific_heat_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_atmosphere_specific_heat_insert_stmt);
+    return valid_insert;
+}
+
+// part of the public API used to insert custom materials
+bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material){
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 1, 1);
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 2, material.getSubstance());
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 3, material.getSpecificHeat());
 
     int rc = step_command(m_atmosphere_specific_heat_insert_stmt);
     bool valid_insert = step_validity(rc);

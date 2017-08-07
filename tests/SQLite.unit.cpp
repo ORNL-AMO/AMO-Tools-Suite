@@ -646,26 +646,52 @@ TEST_CASE( "SQLite - CustomSolidLiquidFlueGasMaterials", "[sqlite]" ) {
     }
 }
 
-//TEST_CASE( "SQLite - getAtmosphereSpecificHeat", "[sqlite]" ) {
-//    auto sqlite = SQLite(":memory:", true);
-//
-//    {
-//        auto const outputs = sqlite.getAtmosphereSpecificHeat();
-//        CHECK( outputs.size() == 6 );
-//    }
-//
-//    {
-//        auto const output = sqlite.getAtmosphereSpecificHeatById(1);
-//
-//        Atmosphere expected;
-//        expected.setSubstance("Nitrogen");
-//        expected.setSpecificHeat(0.0185);
-//        expected.setID(1);
-//
-//        CHECK( expected == output );
-//    }
-//}
-//
+TEST_CASE( "SQLite - getAtmosphereSpecificHeat", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const outputs = sqlite.getAtmosphereSpecificHeat();
+        CHECK( outputs.size() == 6 );
+    }
+
+    {
+        auto const output = sqlite.getAtmosphereSpecificHeatById(1);
+
+        Atmosphere expected;
+        expected.setSubstance("Nitrogen");
+        expected.setSpecificHeat(0.0185);
+        expected.setID(1);
+
+        CHECK( expected == output );
+    }
+}
+
+TEST_CASE( "SQLite - CustomAtmosphereSpecificHeat", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const size = sqlite.getAtmosphereSpecificHeat().size();
+        Atmosphere expected;
+        expected.setSubstance("customAtmosphere");
+        expected.setID(size);
+        sqlite.insertAtmosphereSpecificHeat(expected);
+        auto const outputs = sqlite.getAtmosphereSpecificHeat();
+        CHECK( outputs.size() == size + 1 );
+        CHECK( outputs[size].getSubstance() == expected.getSubstance() );
+    }
+
+    {
+        auto const size = sqlite.getAtmosphereSpecificHeat().size();
+        Atmosphere expected;
+        expected.setSubstance("customAtmosphere2");
+        expected.setID(size);
+        sqlite.insertAtmosphereSpecificHeat(expected);
+        auto const outputs = sqlite.getCustomAtmosphereSpecificHeat();
+        CHECK( outputs.size() == 2 );
+        CHECK( outputs[1].getSubstance() == expected.getSubstance() );
+    }
+}
+
 //TEST_CASE( "SQLite - getWallLossesSurface", "[sqlite]" ) {
 //    auto sqlite = SQLite(":memory:", true);
 //
