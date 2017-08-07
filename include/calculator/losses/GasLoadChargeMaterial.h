@@ -312,7 +312,7 @@ public:
      *
      * @return nothing
      */
-    void setID(const int id) {
+    void setID(const size_t id) {
         this->id = id;
     }
 
@@ -348,7 +348,7 @@ private:
     double reactionHeat_ = 0.0;
     double additionalHeat_ = 0.0;
     std::string substance_ = "Unknown";
-    double id = 0;
+    size_t id = 0;
     // Out value
     double totalHeat_ = 0.0;
 

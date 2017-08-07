@@ -110,9 +110,17 @@ public:
 
     GasLoadChargeMaterial getGasLoadChargeMaterialById(int id) const;
 
+    std::vector<GasLoadChargeMaterial> getCustomGasLoadChargeMaterials() const;
+
+    bool insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material);
+
     std::vector<LiquidLoadChargeMaterial> getLiquidLoadChargeMaterials() const;
 
     LiquidLoadChargeMaterial getLiquidLoadChargeMaterialById(int id) const;
+
+    std::vector<LiquidLoadChargeMaterial> getCustomLiquidLoadChargeMaterials() const;
+
+    bool insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & material);
 
     std::vector<SolidLiquidFlueGasMaterial> getSolidLiquidFlueGasMaterials() const;
 
@@ -138,9 +146,11 @@ private:
     sqlite3_stmt * m_gas_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_single_stmt = nullptr;
+    sqlite3_stmt * m_gas_load_charge_materials_select_custom_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_single_stmt = nullptr;
+    sqlite3_stmt * m_liquid_load_charge_materials_select_custom_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_single_stmt = nullptr;
