@@ -186,7 +186,8 @@ set(INCLUDE_FILES
         include/calculator/furnace/HumidityRatio.h
         include/ssmt/SaturatedProperties.h
         include/ssmt/SteamProperties.h
-        include/ssmt/SteamSystemModelerTool.h include/ssmt/Boiler.h
+        include/ssmt/SteamSystemModelerTool.h
+        include/ssmt/Boiler.h
         include/ssmt/HeatLoss.h
         include/ssmt/FlashTank.h)
 
