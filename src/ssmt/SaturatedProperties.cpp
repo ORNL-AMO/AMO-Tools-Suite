@@ -64,8 +64,8 @@ double SaturatedPressure::calculate() {
 
 std::unordered_map<std::string, double> SaturatedProperties::calculate() {
    // std::unordered_map<std::string, double> satProps;
-    double t = this->saturatedPressure_;
-    double p = this->saturatedTemperature_;
+    double p = this->saturatedPressure_;
+    double t = this->saturatedTemperature_;
 
     double liquidEnthalpy = 0;
     double liquidEntropy = 0;
@@ -97,8 +97,8 @@ std::unordered_map<std::string, double> SaturatedProperties::calculate() {
     double evaporationVolume = gasVolume - liquidVolume;
 
     return {
-            {"temperature", t}, // temperature in Kelvin
             {"pressure", p}, //pressure in MPa
+            {"temperature", t}, // temperature in Kelvin
             {"gasSpecificEnthalpy", gasEnthalpy}, //enthalpy in kJ/kg
             {"gasSpecificEntropy", gasEntropy}, // entropy in kJ/kg/K
             {"gasSpecificVolume", gasVolume}, // volume in m³/kg

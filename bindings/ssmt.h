@@ -90,17 +90,19 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
      * @return nothing
      */
     SaturatedProperties sp(pressure, Get("saturatedTemperature"));
-    double saturatedPressure = sp.getSaturatedPressure();
-    double saturatedTemperature = sp.getSaturatedTemperature();
-    double liquidEnthalpy = sp.getLiquidEnthalpy();
-    double gasEnthalpy = sp.getGasEnthalpy();
-    double evaporationEnthalpy = sp.getEvaporationEnthalpy();
-    double liquidEntropy = sp.getLiquidEntropy();
-    double gasEntropy = sp.getGasEntropy();
-    double evaporationEntropy = sp.getEvaporationEntropy();
-    double liquidVolume = sp.getLiquidVolume();
-    double gasVolume = sp.getGasVolume();
-    double evaporationVolume = sp.getEvaporationVolume();
+    std::unordered_map <std::string, double> results = sp.calculate();
+    //double saturatedPressure = results["pressure"];
+    double saturatedPressure = results["pressure"];
+    double saturatedTemperature = results["temperature"];
+    double liquidEnthalpy = results["liquidSpecificEnthalpy"];
+    double gasEnthalpy = results["gasSpecificEnthalpy"];
+    double evaporationEnthalpy = results["evaporationSpecificEnthalpy"];
+    double liquidEntropy = results["liquidSpecificEntropy"];
+    double gasEntropy = results["gasSpecificEntropy"];
+    double evaporationEntropy = results["evaporationSpecificEntropy"];
+    double liquidVolume = results["liquidSpecificVolume"];
+    double gasVolume = results["gasSpecificVolume"];
+    double evaporationVolume = results["evaporationSpecificVolume"];
     SetR("saturatedPressure", saturatedPressure);
     SetR("saturatedTemperature", saturatedTemperature);
     SetR("liquidEnthalpy", liquidEnthalpy);
@@ -130,17 +132,18 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
      * @return nothing
      */
     SaturatedProperties sp(Get("saturatedPressure"), temperature);
-    double saturatedPressure = sp.getSaturatedPressure();
-    double saturatedTemperature = sp.getSaturatedTemperature();
-    double liquidEnthalpy = sp.getLiquidEnthalpy();
-    double gasEnthalpy = sp.getGasEnthalpy();
-    double evaporationEnthalpy = sp.getEvaporationEnthalpy();
-    double liquidEntropy = sp.getLiquidEntropy();
-    double gasEntropy = sp.getGasEntropy();
-    double evaporationEntropy = sp.getEvaporationEntropy();
-    double liquidVolume = sp.getLiquidVolume();
-    double gasVolume = sp.getGasVolume();
-    double evaporationVolume = sp.getEvaporationVolume();
+    std::unordered_map <std::string, double> results = sp.calculate();
+    double saturatedPressure = results["pressure"];
+    double saturatedTemperature = results["temperature"];
+    double liquidEnthalpy = results["liquidSpecificEnthalpy"];
+    double gasEnthalpy = results["gasSpecificEnthalpy"];
+    double evaporationEnthalpy = results["evaporationSpecificEnthalpy"];
+    double liquidEntropy = results["liquidSpecificEntropy"];
+    double gasEntropy = results["gasSpecificEntropy"];
+    double evaporationEntropy = results["evaporationSpecificEntropy"];
+    double liquidVolume = results["liquidSpecificVolume"];
+    double gasVolume = results["gasSpecificVolume"];
+    double evaporationVolume = results["evaporationSpecificVolume"];
     SetR("saturatedPressure", saturatedPressure);
     SetR("saturatedTemperature", saturatedTemperature);
     SetR("liquidEnthalpy", liquidEnthalpy);

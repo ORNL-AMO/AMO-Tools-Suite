@@ -83,7 +83,7 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     if ( (pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (enthalpy >= pressureSatProps["liquidSpecificEnthalpy"]) && (enthalpy <= pressureSatProps["gasSpecificEnthalpy"])){
         double quality = (enthalpy - pressureSatProps["liquidSpecificEnthalpy"]) /(pressureSatProps["gasSpecificEnthalpy"] - pressureSatProps["liquidSpecificEnthalpy"]);
         testProps = {
-                {"temperature", pressureSatProps["saturatedTemperature"]}, //temperature in Kelvin
+                {"temperature", pressureSatProps["temperature"]}, //temperature in Kelvin
                 {"pressure", pressure}, //pressure in MPa
 //			    {"phase", "Liquid"},
 			    {"quality", quality},

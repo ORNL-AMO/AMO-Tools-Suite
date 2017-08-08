@@ -82,4 +82,3 @@ TEST_CASE( "Calculate the Saturated Liquid Specific Entropy (Region 3)", "[Liqui
     std::unordered_map <std::string, double> props = sp.calculate();
     CHECK( props["liquidSpecificEntropy"] == Approx(4.0378047547));
 }
-
