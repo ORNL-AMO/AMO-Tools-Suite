@@ -13,6 +13,8 @@
 #include "ssmt/SteamProperties.h"
 #include "ssmt/HeatLoss.h"
 #include "ssmt/Boiler.h"
+#include "ssmt/HeatLoss.h"
+#include "ssmt/FlashTank.h"
 
 
 using namespace Nan;
@@ -89,17 +91,19 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
      * @return nothing
      */
     SaturatedProperties sp(pressure, Get("saturatedTemperature"));
-    double saturatedPressure = sp.getSaturatedPressure();
-    double saturatedTemperature = sp.getSaturatedTemperature();
-    double liquidEnthalpy = sp.getLiquidEnthalpy();
-    double gasEnthalpy = sp.getGasEnthalpy();
-    double evaporationEnthalpy = sp.getEvaporationEnthalpy();
-    double liquidEntropy = sp.getLiquidEntropy();
-    double gasEntropy = sp.getGasEntropy();
-    double evaporationEntropy = sp.getEvaporationEntropy();
-    double liquidVolume = sp.getLiquidVolume();
-    double gasVolume = sp.getGasVolume();
-    double evaporationVolume = sp.getEvaporationVolume();
+    std::unordered_map <std::string, double> results = sp.calculate();
+    //double saturatedPressure = results["pressure"];
+    double saturatedPressure = results["pressure"];
+    double saturatedTemperature = results["temperature"];
+    double liquidEnthalpy = results["liquidSpecificEnthalpy"];
+    double gasEnthalpy = results["gasSpecificEnthalpy"];
+    double evaporationEnthalpy = results["evaporationSpecificEnthalpy"];
+    double liquidEntropy = results["liquidSpecificEntropy"];
+    double gasEntropy = results["gasSpecificEntropy"];
+    double evaporationEntropy = results["evaporationSpecificEntropy"];
+    double liquidVolume = results["liquidSpecificVolume"];
+    double gasVolume = results["gasSpecificVolume"];
+    double evaporationVolume = results["evaporationSpecificVolume"];
     SetR("saturatedPressure", saturatedPressure);
     SetR("saturatedTemperature", saturatedTemperature);
     SetR("liquidEnthalpy", liquidEnthalpy);
@@ -129,17 +133,18 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
      * @return nothing
      */
     SaturatedProperties sp(Get("saturatedPressure"), temperature);
-    double saturatedPressure = sp.getSaturatedPressure();
-    double saturatedTemperature = sp.getSaturatedTemperature();
-    double liquidEnthalpy = sp.getLiquidEnthalpy();
-    double gasEnthalpy = sp.getGasEnthalpy();
-    double evaporationEnthalpy = sp.getEvaporationEnthalpy();
-    double liquidEntropy = sp.getLiquidEntropy();
-    double gasEntropy = sp.getGasEntropy();
-    double evaporationEntropy = sp.getEvaporationEntropy();
-    double liquidVolume = sp.getLiquidVolume();
-    double gasVolume = sp.getGasVolume();
-    double evaporationVolume = sp.getEvaporationVolume();
+    std::unordered_map <std::string, double> results = sp.calculate();
+    double saturatedPressure = results["pressure"];
+    double saturatedTemperature = results["temperature"];
+    double liquidEnthalpy = results["liquidSpecificEnthalpy"];
+    double gasEnthalpy = results["gasSpecificEnthalpy"];
+    double evaporationEnthalpy = results["evaporationSpecificEnthalpy"];
+    double liquidEntropy = results["liquidSpecificEntropy"];
+    double gasEntropy = results["gasSpecificEntropy"];
+    double evaporationEntropy = results["evaporationSpecificEntropy"];
+    double liquidVolume = results["liquidSpecificVolume"];
+    double gasVolume = results["gasSpecificVolume"];
+    double evaporationVolume = results["evaporationSpecificVolume"];
     SetR("saturatedPressure", saturatedPressure);
     SetR("saturatedTemperature", saturatedTemperature);
     SetR("liquidEnthalpy", liquidEnthalpy);
@@ -327,6 +332,81 @@ NAN_METHOD(heatLoss) {
         SetR("outletEnergyFlow", outletEnergyFlow);
 
         SetR("heatLoss", heatLoss);
+
+        info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(flashTank) {
+
+        inp = info[0]->ToObject();
+        r = Nan::New<Object>();
+
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+
+        /**
+        *
+        * Constructor for the flash tank calculator
+        *
+        * @param inletWaterPressure double, inlet water pressure in MPa
+        * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+        * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+        * @param inletWaterMassFlow double, inlet water mass flow in kg/hr
+        * @param tankPressure double, pressure of the tank in MPa
+        *
+        * @return nothing
+        *
+        * */
+        FlashTank ft(Get("inletWaterPressure"), quantityType, Get("quantityValue"), Get("inletWaterMassFlow"), Get("tankPressure"));
+        std::unordered_map <std::string, double> inletWaterResults = ft.getInletWaterProperties();
+        std::unordered_map <std::string, double> outletSaturatedResults = ft.getOutletSaturatedProperties();
+
+        double inletWaterPressure = inletWaterResults["pressure"];
+        double inletWaterTemperature = inletWaterResults["temperature"];
+        double inletWaterSpecificEnthalpy = inletWaterResults["specificEnthalpy"];
+        double inletWaterSpecificEntropy = inletWaterResults["specificEntropy"];
+        double inletWaterQuality = inletWaterResults["quality"];
+        double inletWaterMassFlow = ft.getInletWaterMassFlow();
+        double inletWaterEnergyFlow = ft.getInletWaterEnergyFlow();
+
+        double outletGasPressure = outletSaturatedResults["saturatedPressure"];
+        double outletGasTemperature = outletSaturatedResults["saturatedTemperature"];
+        double outletGasSpecificEnthalpy = outletSaturatedResults["gasSpecificEnthalpy"];
+        double outletGasSpecificEntropy = outletSaturatedResults["gasSpecificEntropy"];
+        double outletGasQuality = 1;
+        double outletGasMassFlow = ft.getOutletGasMassFlow();
+        double outletGasEnergyFlow = ft.getOutletGasEnergyFlow();
+
+        double outletLiquidPressure = outletSaturatedResults["saturatedPressure"];
+        double outletLiquidTemperature = outletSaturatedResults["saturatedTemperature"];
+        double outletLiquidSpecificEnthalpy = outletSaturatedResults["liquidSpecificEnthalpy"];
+        double outletLiquidSpecificEntropy = outletSaturatedResults["liquidSpecificEntropy"];
+        double outletLiquidQuality = 0;
+        double outletLiquidMassFlow = ft.getOutletLiquidMassFlow();
+        double outletLiquidEnergyFlow = ft.getOutletLiquidEnergyFlow();
+
+        SetR("inletWaterPressure", inletWaterPressure);
+        SetR("inletWaterTemperature", inletWaterTemperature);
+        SetR("inletWaterSpecificEnthalpy", inletWaterSpecificEnthalpy);
+        SetR("inletWaterSpecificEntropy", inletWaterSpecificEntropy);
+        SetR("inletWaterQuality", inletWaterQuality);
+        SetR("inletWaterMassFlow", inletWaterMassFlow);
+        SetR("inletWaterEnergyFlow", inletWaterEnergyFlow);
+
+        SetR("outletGasPressure", outletGasPressure);
+        SetR("outletGasTemperature", outletGasTemperature);
+        SetR("outletGasSpecificEnthalpy", outletGasSpecificEnthalpy);
+        SetR("outletGasSpecificEntropy", outletGasSpecificEntropy);
+        SetR("outletGasQuality", outletGasQuality);
+        SetR("outletGasMassFlow", outletGasMassFlow);
+        SetR("outletGasEnergyFlow", outletGasEnergyFlow);
+
+        SetR("outletLiquidPressure", outletLiquidPressure);
+        SetR("outletLiquidTemperature", outletLiquidTemperature);
+        SetR("outletLiquidSpecificEnthalpy", outletLiquidSpecificEnthalpy);
+        SetR("outletLiquidSpecificEntropy", outletLiquidSpecificEntropy);
+        SetR("outletLiquidQuality", outletLiquidQuality);
+        SetR("outletLiquidMassFlow", outletLiquidMassFlow);
+        SetR("outletLiquidEnergyFlow", outletLiquidEnergyFlow);
 
         info.GetReturnValue().Set(r);
 }
