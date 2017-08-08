@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <calculator/losses/GasFlueGasMaterial.h>
 
 class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;
@@ -102,54 +103,91 @@ public:
 
     SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
 
+    std::vector<SolidLoadChargeMaterial> getCustomSolidLoadChargeMaterials() const;
+
+    bool insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material);
+
     std::vector<GasLoadChargeMaterial> getGasLoadChargeMaterials() const;
 
     GasLoadChargeMaterial getGasLoadChargeMaterialById(int id) const;
+
+    std::vector<GasLoadChargeMaterial> getCustomGasLoadChargeMaterials() const;
+
+    bool insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material);
 
     std::vector<LiquidLoadChargeMaterial> getLiquidLoadChargeMaterials() const;
 
     LiquidLoadChargeMaterial getLiquidLoadChargeMaterialById(int id) const;
 
+    std::vector<LiquidLoadChargeMaterial> getCustomLiquidLoadChargeMaterials() const;
+
+    bool insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & material);
+
     std::vector<SolidLiquidFlueGasMaterial> getSolidLiquidFlueGasMaterials() const;
 
     SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterialById(int id) const;
+
+    std::vector<SolidLiquidFlueGasMaterial> getCustomSolidLiquidFlueGasMaterials() const;
+
+    bool insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material) const;
 
     std::vector<GasCompositions> getGasFlueGasMaterials() const;
 
     GasCompositions getGasFlueGasMaterialById(int id) const;
 
+    std::vector<GasCompositions> getCustomGasFlueGasMaterials() const;
+
+    bool insertGasFlueGasMaterial(GasCompositions const & material) const;
+
     std::vector<Atmosphere> getAtmosphereSpecificHeat() const;
 
     Atmosphere getAtmosphereSpecificHeatById(int id) const;
 
+    std::vector<Atmosphere> getCustomAtmosphereSpecificHeat() const;
+
+    bool insertAtmosphereSpecificHeat(Atmosphere const & material);
+
     std::vector<WallLosses> getWallLossesSurface() const;
 
+    std::vector<WallLosses> getCustomWallLossesSurface() const;
+
     WallLosses getWallLossesSurfaceById(int id) const;
+
+    bool insertWallLossesSurface(WallLosses const & material);
 
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_single_stmt = nullptr;
+    sqlite3_stmt * m_solid_load_charge_materials_select_custom_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_single_stmt = nullptr;
+    sqlite3_stmt * m_gas_load_charge_materials_select_custom_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_single_stmt = nullptr;
+    sqlite3_stmt * m_liquid_load_charge_materials_select_custom_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_single_stmt = nullptr;
+	sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_custom_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_single_stmt = nullptr;
+    sqlite3_stmt * m_gas_flue_gas_materials_select_custom_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_insert_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_single_stmt = nullptr;
+    sqlite3_stmt * m_atmosphere_specific_heat_select_custom_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_insert_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_single_stmt = nullptr;
+    sqlite3_stmt * m_wall_losses_surface_select_custom_stmt = nullptr;
 
     void create_select_stmt();
+
+    void create_insert_stmt();
 
     void create_tables();
 

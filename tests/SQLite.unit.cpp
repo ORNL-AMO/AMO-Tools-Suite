@@ -7,6 +7,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <fstream>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
@@ -31,6 +32,116 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
+//// commented because it writes to HDD
+//TEST_CASE( "SQLite - test db init", "[sqlite]" ) {
+//    {
+//        std::ifstream ifs("amo_tools_suite.db");
+//        auto const isOpen = ifs.is_open();
+//        ifs.close();
+//        auto sqlite = SQLite("amo_tools_suite.db", ! isOpen);
+//
+//        auto res = sqlite.getSolidLoadChargeMaterials();
+//        auto const resSize = res.size() + 1;
+//        SolidLoadChargeMaterial expected;
+//        expected.setSubstance("custom" + std::to_string(resSize));
+//        expected.setSpecificHeatSolid(0.25);
+//        expected.setLatentHeat(100);
+//        expected.setSpecificHeatLiquid(0.50);
+//        expected.setMeltingPoint(1200);
+//        expected.setID(resSize);
+//        sqlite.insertSolidLoadChargeMaterials(expected);
+//
+//        res = sqlite.getSolidLoadChargeMaterials();
+//	    auto const last = res[resSize - 1];
+//        CHECK( expected.getSubstance() == last.getSubstance() );
+//        CHECK( expected.getID() == last.getID() );
+//        CHECK( expected.getSpecificHeatLiquid() == last.getSpecificHeatLiquid() );
+//        CHECK( expected.getSpecificHeatSolid() == last.getSpecificHeatSolid() );
+//        CHECK( expected.getMeltingPoint() == last.getMeltingPoint() );
+//        CHECK( expected.getLatentHeat() == last.getLatentHeat() );
+//    }
+//
+//    {
+//        std::ifstream ifs("amo_tools_suite.db");
+//        auto const isOpen = ! ifs.is_open();
+//        ifs.close();
+//        auto sqlite = SQLite("amo_tools_suite.db", isOpen);
+//
+//        auto res = sqlite.getSolidLoadChargeMaterials();
+//        auto const resSize = res.size() + 1;
+//
+//        SolidLoadChargeMaterial expected;
+//        expected.setSubstance("custom" + std::to_string(resSize));
+//        expected.setSpecificHeatSolid(0.25);
+//        expected.setLatentHeat(100);
+//        expected.setSpecificHeatLiquid(0.50);
+//        expected.setMeltingPoint(1200);
+//        expected.setID(resSize);
+//        sqlite.insertSolidLoadChargeMaterials(expected);
+//
+//        res = sqlite.getSolidLoadChargeMaterials();
+//        auto const last = res[resSize - 1];
+//        CHECK( expected.getSubstance() == last.getSubstance() );
+//        CHECK( expected.getID() == last.getID() );
+//        CHECK( expected.getSpecificHeatLiquid() == last.getSpecificHeatLiquid() );
+//        CHECK( expected.getSpecificHeatSolid() == last.getSpecificHeatSolid() );
+//        CHECK( expected.getMeltingPoint() == last.getMeltingPoint() );
+//        CHECK( expected.getLatentHeat() == last.getLatentHeat() );
+//    }
+//}
+
+TEST_CASE( "SQLite - TestSolidLoadChargeMaterialsMigrations", "[sqlite]" ) {
+    auto sourceSqlite = SQLite(":memory:", true);
+    auto const mats = sourceSqlite.getSolidLoadChargeMaterials();
+
+    {
+        SolidLoadChargeMaterial expected;
+        expected.setSubstance("custom");
+        expected.setSpecificHeatSolid(0.25);
+        expected.setLatentHeat(100);
+        expected.setSpecificHeatLiquid(0.50);
+        expected.setMeltingPoint(1200);
+        expected.setID(mats.size() + 1);
+        sourceSqlite.insertSolidLoadChargeMaterials(expected);
+
+	    auto const output = sourceSqlite.getCustomSolidLoadChargeMaterials();
+	    CHECK( output[0] == expected );
+    }
+
+    {
+        SolidLoadChargeMaterial expected;
+        expected.setSubstance("custom2");
+        expected.setSpecificHeatSolid(0.55);
+        expected.setLatentHeat(200);
+        expected.setSpecificHeatLiquid(0.70);
+        expected.setMeltingPoint(1000);
+        expected.setID(mats.size() + 2);
+        sourceSqlite.insertSolidLoadChargeMaterials(expected);
+
+        auto const output = sourceSqlite.getCustomSolidLoadChargeMaterials();
+        CHECK( output[1] == expected );
+    }
+
+    auto destinationSqlite = SQLite(":memory:", true);
+    auto const customData = sourceSqlite.getCustomSolidLoadChargeMaterials();
+    for (auto const material : customData) {
+        destinationSqlite.insertSolidLoadChargeMaterials(material);
+    }
+
+    {
+        SolidLoadChargeMaterial expected;
+        expected.setSubstance("custom2");
+        expected.setSpecificHeatSolid(0.55);
+        expected.setLatentHeat(200);
+        expected.setSpecificHeatLiquid(0.70);
+        expected.setMeltingPoint(1000);
+        expected.setID(mats.size() + 2);
+
+        auto const output = destinationSqlite.getCustomSolidLoadChargeMaterials();
+        CHECK( output[1] == expected );
+    }
+}
+
 TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
 
@@ -48,6 +159,32 @@ TEST_CASE( "SQLite - getGasLoadChargeMaterials", "[sqlite]" ) {
 	    expected.setID(1);
 
         CHECK( expected == output );
+    }
+}
+
+TEST_CASE( "SQLite - CustomGasLoadChargeMaterials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const size = sqlite.getGasLoadChargeMaterials().size();
+        GasLoadChargeMaterial glcm;
+        glcm.setSubstance("custom");
+        glcm.setID(size);
+        sqlite.insertGasLoadChargeMaterials(glcm);
+        auto const outputs = sqlite.getGasLoadChargeMaterials();
+        CHECK(outputs[size].getSubstance() == glcm.getSubstance());
+        CHECK( outputs.size() == size + 1 );
+    }
+
+    {
+        auto const size = sqlite.getGasLoadChargeMaterials().size();
+        GasLoadChargeMaterial glcm;
+        glcm.setSubstance("custom2");
+        glcm.setID(size);
+        sqlite.insertGasLoadChargeMaterials(glcm);
+        auto const outputs = sqlite.getCustomGasLoadChargeMaterials();
+        CHECK( outputs[1].getSubstance() == "custom2" );
+        CHECK( outputs.size() == 2 );
     }
 }
 
@@ -74,26 +211,37 @@ TEST_CASE( "SQLite - getLiquidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
-TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
+TEST_CASE( "SQLite - customLiquidLoadChargeMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
 
-  /*  {
-        auto const output = sqlite.getGasFlueGasMaterialById(3);
-        GasCompositions expected("Natural Gas Ohio", 93.33, 0.25, 3.4, 1.82, 0, 0, 0, 0.45, 0.22, 0, 0.35);
-        expected.setID(3);
-        CHECK( expected.getID() == output.getID() );
-	    CHECK( expected.getSubstance() == output.getSubstance() );
-        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
-        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
-        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
-        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
-        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
-        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
-        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
-        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
-        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
-        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-    }*/
+    {
+        auto const size = sqlite.getLiquidLoadChargeMaterials().size();
+        LiquidLoadChargeMaterial llcm;
+        llcm.setSubstance("custom");
+        llcm.setID(size);
+        sqlite.insertLiquidLoadChargeMaterials(llcm);
+
+        auto const output = sqlite.getLiquidLoadChargeMaterials();
+        CHECK( output.size() == size + 1);
+        CHECK( output[size].getSubstance() == llcm.getSubstance());
+    }
+
+    {
+        auto const size = sqlite.getLiquidLoadChargeMaterials().size();
+        LiquidLoadChargeMaterial llcm;
+        llcm.setSubstance("custom2");
+        llcm.setID(size);
+        sqlite.insertLiquidLoadChargeMaterials(llcm);
+
+	    auto const check = sqlite.getLiquidLoadChargeMaterials();
+        auto const output = sqlite.getCustomLiquidLoadChargeMaterials();
+        CHECK( output.size() == 2);
+        CHECK( output[1].getSubstance() == llcm.getSubstance());
+    }
+}
+
+TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
 
     //Typical Natural Gas - US
     {
@@ -221,45 +369,33 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( output.calculateHeatingValue() == 1080.6848266529887 );
         CHECK( output.calculateSpecificGravity() == 1.0870540901007706 );
     }
-
-
 }
 
-TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
+TEST_CASE( "SQLite - CustomGasFlueGasMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
 
-   /* {
-        auto const outputs = sqlite.getSolidLiquidFlueGasMaterials();
-        CHECK( outputs.size() == 19 );
-        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 63.3, 4.5, 1.0, 1.1, 19.0, 0, 11.1);
-	    expected.setSubstance("Lignite, North Dakota");
-	    expected.setID(7);
-        CHECK( expected.getID() == outputs[6].getID() );
-        CHECK( expected.getSubstance() == outputs[6].getSubstance() );
-        CHECK( expected.getCarbon() == outputs[6].getCarbon() );
-        CHECK( expected.getHydrogen() == outputs[6].getHydrogen() );
-        CHECK( expected.getSulphur() == outputs[6].getSulphur() );
-        CHECK( expected.getInertAsh() == outputs[6].getInertAsh() );
-        CHECK( expected.getO2() == outputs[6].getO2() );
-        CHECK( expected.getMoisture() == outputs[6].getMoisture() );
-        CHECK( expected.getNitrogen() == outputs[6].getNitrogen() );
+    {
+        auto size = sqlite.getGasFlueGasMaterials().size();
+        GasCompositions expected("customGasFlueGas", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
+        expected.setID(size);
+        sqlite.insertGasFlueGasMaterial(expected);
+	    auto const output = sqlite.getGasFlueGasMaterials();
+	    CHECK(output[size].getSubstance() == expected.getSubstance());
     }
 
     {
-        auto const output = sqlite.getSolidLiquidFlueGasMaterialById(1);
-        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 83.7, 1.9, 0.9, 0.7, 2.3, 0, 10.5);
-        expected.setID(1);
-        expected.setSubstance("Anthracite");
-        CHECK( expected.getID() == output.getID() );
-        CHECK( expected.getSubstance() == output.getSubstance() );
-        CHECK( expected.getCarbon() == output.getCarbon() );
-        CHECK( expected.getHydrogen() == output.getHydrogen() );
-        CHECK( expected.getSulphur() == output.getSulphur() );
-        CHECK( expected.getInertAsh() == output.getInertAsh() );
-        CHECK( expected.getO2() == output.getO2() );
-        CHECK( expected.getMoisture() == output.getMoisture() );
-        CHECK( expected.getNitrogen() == output.getNitrogen() );
-    }*/
+        auto size = sqlite.getGasFlueGasMaterials().size();
+        GasCompositions expected("customGasFlueGas2", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
+        expected.setID(size);
+        sqlite.insertGasFlueGasMaterial(expected);
+        auto const output = sqlite.getCustomGasFlueGasMaterials();
+        CHECK(output.size() == 2);
+        CHECK(output[1].getSubstance() == expected.getSubstance());
+    }
+
+}
+TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
 
     //Typical Bituminous Coal - US
    {
@@ -467,6 +603,31 @@ TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {
     }
 }
 
+TEST_CASE( "SQLite - CustomSolidLiquidFlueGasMaterials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const size = sqlite.getSolidLiquidFlueGasMaterials().size();
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 70.3, 4.9, 2.2, 8.7, 7.5, 4.9, 1.5);
+        expected.setSubstance("customSolidLiquidFlueGas");
+        expected.setID(size);
+	    sqlite.insertSolidLiquidFlueGasMaterial(expected);
+        auto const output = sqlite.getSolidLiquidFlueGasMaterials();
+	    CHECK(output[size].getSubstance() == expected.getSubstance());
+    }
+
+    {
+        auto const size = sqlite.getSolidLiquidFlueGasMaterials().size();
+        auto expected = SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 70.3, 4.9, 2.2, 8.7, 7.5, 4.9, 1.5);
+        expected.setSubstance("customSolidLiquidFlueGas2");
+        expected.setID(size);
+        sqlite.insertSolidLiquidFlueGasMaterial(expected);
+        auto const output = sqlite.getCustomSolidLiquidFlueGasMaterials();
+        CHECK(output.size() == 2);
+        CHECK(output[1].getSubstance() == expected.getSubstance());
+    }
+}
+
 TEST_CASE( "SQLite - getAtmosphereSpecificHeat", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
 
@@ -487,6 +648,32 @@ TEST_CASE( "SQLite - getAtmosphereSpecificHeat", "[sqlite]" ) {
     }
 }
 
+TEST_CASE( "SQLite - CustomAtmosphereSpecificHeat", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const size = sqlite.getAtmosphereSpecificHeat().size();
+        Atmosphere expected;
+        expected.setSubstance("customAtmosphere");
+        expected.setID(size);
+        sqlite.insertAtmosphereSpecificHeat(expected);
+        auto const outputs = sqlite.getAtmosphereSpecificHeat();
+        CHECK( outputs.size() == size + 1 );
+        CHECK( outputs[size].getSubstance() == expected.getSubstance() );
+    }
+
+    {
+        auto const size = sqlite.getAtmosphereSpecificHeat().size();
+        Atmosphere expected;
+        expected.setSubstance("customAtmosphere2");
+        expected.setID(size);
+        sqlite.insertAtmosphereSpecificHeat(expected);
+        auto const outputs = sqlite.getCustomAtmosphereSpecificHeat();
+        CHECK( outputs.size() == 2 );
+        CHECK( outputs[1].getSubstance() == expected.getSubstance() );
+    }
+}
+
 TEST_CASE( "SQLite - getWallLossesSurface", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
 
@@ -504,5 +691,33 @@ TEST_CASE( "SQLite - getWallLossesSurface", "[sqlite]" ) {
         expected.setID(1);
 
         CHECK( expected == output );
+    }
+}
+
+TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+	    auto const size = sqlite.getWallLossesSurface().size();
+        WallLosses expected;
+        expected.setSurface("customSurface");
+        expected.setConditionFactor(10);
+        expected.setID(size);
+        sqlite.insertWallLossesSurface(expected);
+        auto const output = sqlite.getWallLossesSurface();
+        CHECK( output.size() == size + 1 );
+        CHECK( output[size].getConditionFactor() == expected.getConditionFactor() );
+    }
+
+    {
+        auto const size = sqlite.getWallLossesSurface().size();
+        WallLosses expected;
+        expected.setSurface("customSurface2");
+        expected.setConditionFactor(19);
+        expected.setID(size);
+        sqlite.insertWallLossesSurface(expected);
+        auto const output = sqlite.getCustomWallLossesSurface();
+        CHECK( output.size() == 2 );
+        CHECK( output[1].getConditionFactor() == expected.getConditionFactor() );
     }
 }
