@@ -31,7 +31,10 @@ SQLite::SQLite(std::string const & db_name, bool init_db)
 
     if ( init_db ) {
         create_tables();
+        create_insert_stmt();
         insert_default_data();
+    } else {
+        create_insert_stmt();
     }
 
     create_select_stmt();
@@ -41,25 +44,32 @@ SQLite::~SQLite()
 {
     sqlite3_finalize(m_solid_load_charge_materials_select_stmt);
     sqlite3_finalize(m_solid_load_charge_materials_select_single_stmt);
+    sqlite3_finalize(m_solid_load_charge_materials_select_custom_stmt);
     sqlite3_finalize(m_solid_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_single_stmt);
+	sqlite3_finalize(m_gas_load_charge_materials_select_custom_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_single_stmt);
+    sqlite3_finalize(m_liquid_load_charge_materials_select_custom_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_single_stmt);
+    sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_custom_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_single_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_select_custom_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_insert_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_single_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_select_custom_stmt);
     sqlite3_finalize(m_wall_losses_surface_insert_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_single_stmt);
+    sqlite3_finalize(m_wall_losses_surface_select_custom_stmt);
 }
 
 std::string SQLiteWrapper::convert_text( const unsigned char * text ) {
@@ -70,11 +80,12 @@ std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
 	    auto const ID = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
-        auto const latentHeat = sqlite3_column_double(stmt, 3);
-        auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
-        auto const meltingPoint = sqlite3_column_double(stmt, 5);
+        sqlite3_column_int(stmt, 1); // secondary ID - unused in selects
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatSolid = sqlite3_column_double(stmt, 3);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 5);
+        auto const meltingPoint = sqlite3_column_double(stmt, 6);
         auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
         slcm.setID(ID);
 	    return slcm;
@@ -86,11 +97,12 @@ SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeatSolid = sqlite3_column_double(stmt, 2);
-        auto const latentHeat = sqlite3_column_double(stmt, 3);
-        auto const specificHeatLiquid = sqlite3_column_double(stmt, 4);
-        auto const meltingPoint = sqlite3_column_double(stmt, 5);
+        sqlite3_column_int(stmt, 1); // secondary ID - unused in selects
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatSolid = sqlite3_column_double(stmt, 3);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 5);
+        auto const meltingPoint = sqlite3_column_double(stmt, 6);
         auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
 	    slcm.setID(id);
         return slcm;
@@ -98,12 +110,30 @@ SolidLoadChargeMaterial SQLite::getSolidLoadChargeMaterialById(int id) const
     return get_object<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_single_stmt, id, cb);
 }
 
+std::vector<SolidLoadChargeMaterial> SQLite::getCustomSolidLoadChargeMaterials() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const ID = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1); // secondary ID - unused in selects
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatSolid = sqlite3_column_double(stmt, 3);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 5);
+        auto const meltingPoint = sqlite3_column_double(stmt, 6);
+        auto slcm = SolidLoadChargeMaterial(substance, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint);
+        slcm.setID(ID);
+        return slcm;
+    };
+    return get_all_objects<SolidLoadChargeMaterial>(m_solid_load_charge_materials_select_custom_stmt, cb);
+}
+
 std::vector<GasLoadChargeMaterial> SQLite::getGasLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const ID = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 2);
+        sqlite3_column_int(stmt, 1); // secondary ID - unused for selects
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
         glcm.setID(ID);
         return glcm;
@@ -114,25 +144,41 @@ std::vector<GasLoadChargeMaterial> SQLite::getGasLoadChargeMaterials() const
 GasLoadChargeMaterial SQLite::getGasLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
-        auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 2);
+        auto const ID = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1); // secondary ID - unused for selects
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
-        glcm.setID(id);
+        glcm.setID(ID);
         return glcm;
     };
     return get_object<GasLoadChargeMaterial>(m_gas_load_charge_materials_select_single_stmt, id, cb);
+}
+
+std::vector<GasLoadChargeMaterial> SQLite::getCustomGasLoadChargeMaterials() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const ID = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1); // secondary ID - unused for selects
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
+        auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
+        glcm.setID(ID);
+        return glcm;
+    };
+    return get_all_objects<GasLoadChargeMaterial>(m_gas_load_charge_materials_select_custom_stmt, cb);
 }
 
 std::vector<LiquidLoadChargeMaterial> SQLite::getLiquidLoadChargeMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeatLiquid = sqlite3_column_double(stmt, 2);
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
-        auto const vaporizingTemperature = sqlite3_column_double(stmt, 4);
-        auto const latentHeat = sqlite3_column_double(stmt, 5);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
+        auto const latentHeat = sqlite3_column_double(stmt, 6);
         auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
         llcm.setID(id);
         return llcm;
@@ -144,11 +190,12 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeatLiquid = sqlite3_column_double(stmt, 2);
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
-        auto const vaporizingTemperature = sqlite3_column_double(stmt, 4);
-        auto const latentHeat = sqlite3_column_double(stmt, 5);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
+        auto const latentHeat = sqlite3_column_double(stmt, 6);
         auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
         llcm.setID(id);
         return llcm;
@@ -156,18 +203,36 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterialById(int id) const
     return get_object<LiquidLoadChargeMaterial>(m_liquid_load_charge_materials_select_single_stmt, id, cb);
 }
 
+std::vector<LiquidLoadChargeMaterial> SQLite::getCustomLiquidLoadChargeMaterials() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
+        auto const latentHeat = sqlite3_column_double(stmt, 6);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        llcm.setID(id);
+        return llcm;
+    };
+    return get_all_objects<LiquidLoadChargeMaterial>(m_liquid_load_charge_materials_select_custom_stmt, cb);
+}
+
 std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const carbon = sqlite3_column_double(stmt, 2);
-        auto const hydrogen = sqlite3_column_double(stmt, 3);
-        auto const sulphur = sqlite3_column_double(stmt, 4);
-        auto const inertAsh = sqlite3_column_double(stmt, 5);
-        auto const o2 = sqlite3_column_double(stmt, 6);
-        auto const moisture = sqlite3_column_double(stmt, 7);
-        auto const nitrogen = sqlite3_column_double(stmt, 8);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const carbon = sqlite3_column_double(stmt, 3);
+        auto const hydrogen = sqlite3_column_double(stmt, 4);
+        auto const sulphur = sqlite3_column_double(stmt, 5);
+        auto const inertAsh = sqlite3_column_double(stmt, 6);
+        auto const o2 = sqlite3_column_double(stmt, 7);
+        auto const moisture = sqlite3_column_double(stmt, 8);
+        auto const nitrogen = sqlite3_column_double(stmt, 9);
         auto slfgm = SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
                                           o2 * 100, moisture * 100, nitrogen * 100);
 	    slfgm.setID(id);
@@ -176,18 +241,40 @@ std::vector<SolidLiquidFlueGasMaterial> SQLite::getSolidLiquidFlueGasMaterials()
     return get_all_objects<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_stmt, cb);
 }
 
+std::vector<SolidLiquidFlueGasMaterial> SQLite::getCustomSolidLiquidFlueGasMaterials() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const carbon = sqlite3_column_double(stmt, 3);
+        auto const hydrogen = sqlite3_column_double(stmt, 4);
+        auto const sulphur = sqlite3_column_double(stmt, 5);
+        auto const inertAsh = sqlite3_column_double(stmt, 6);
+        auto const o2 = sqlite3_column_double(stmt, 7);
+        auto const moisture = sqlite3_column_double(stmt, 8);
+        auto const nitrogen = sqlite3_column_double(stmt, 9);
+        auto slfgm = SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
+                                                o2 * 100, moisture * 100, nitrogen * 100);
+        slfgm.setID(id);
+        return slfgm;
+    };
+    return get_all_objects<SolidLiquidFlueGasMaterial>(m_solid_liquid_flue_gas_materials_select_custom_stmt, cb);
+}
+
 SolidLiquidFlueGasMaterial SQLite::getSolidLiquidFlueGasMaterialById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const carbon = sqlite3_column_double(stmt, 2);
-        auto const hydrogen = sqlite3_column_double(stmt, 3);
-        auto const sulphur = sqlite3_column_double(stmt, 4);
-        auto const inertAsh = sqlite3_column_double(stmt, 5);
-        auto const o2 = sqlite3_column_double(stmt, 6);
-        auto const moisture = sqlite3_column_double(stmt, 7);
-        auto const nitrogen = sqlite3_column_double(stmt, 8);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const carbon = sqlite3_column_double(stmt, 3);
+        auto const hydrogen = sqlite3_column_double(stmt, 4);
+        auto const sulphur = sqlite3_column_double(stmt, 5);
+        auto const inertAsh = sqlite3_column_double(stmt, 6);
+        auto const o2 = sqlite3_column_double(stmt, 7);
+        auto const moisture = sqlite3_column_double(stmt, 8);
+        auto const nitrogen = sqlite3_column_double(stmt, 9);
         auto slfgm = SolidLiquidFlueGasMaterial(substance, carbon * 100, hydrogen * 100, sulphur * 100, inertAsh * 100,
                                           o2 * 100, moisture * 100, nitrogen * 100);
         slfgm.setID(id);
@@ -200,20 +287,21 @@ std::vector<GasCompositions> SQLite::getGasFlueGasMaterials() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const CH4 = sqlite3_column_double(stmt, 2);
-        auto const C2H6 = sqlite3_column_double(stmt, 3);
-        auto const N2 = sqlite3_column_double(stmt, 4);
-        auto const H2 = sqlite3_column_double(stmt, 5);
-        auto const C3H8 = sqlite3_column_double(stmt, 6);
-        auto const C4H10_CnH2n = sqlite3_column_double(stmt, 7);
-        auto const H2O = sqlite3_column_double(stmt, 8);
-        auto const CO = sqlite3_column_double(stmt, 9);
-        auto const CO2 = sqlite3_column_double(stmt, 10);
-        auto const SO2 = sqlite3_column_double(stmt, 11);
-        auto const O2 = sqlite3_column_double(stmt, 12);
-        auto const heatingValue = sqlite3_column_double(stmt, 13);
-        auto const specificGravity = sqlite3_column_double(stmt, 14);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const CH4 = sqlite3_column_double(stmt, 3);
+        auto const C2H6 = sqlite3_column_double(stmt, 4);
+        auto const N2 = sqlite3_column_double(stmt, 5);
+        auto const H2 = sqlite3_column_double(stmt, 6);
+        auto const C3H8 = sqlite3_column_double(stmt, 7);
+        auto const C4H10_CnH2n = sqlite3_column_double(stmt, 8);
+        auto const H2O = sqlite3_column_double(stmt, 9);
+        auto const CO = sqlite3_column_double(stmt, 10);
+        auto const CO2 = sqlite3_column_double(stmt, 11);
+        auto const SO2 = sqlite3_column_double(stmt, 12);
+        auto const O2 = sqlite3_column_double(stmt, 13);
+        auto const heatingValue = sqlite3_column_double(stmt, 14);
+        auto const specificGravity = sqlite3_column_double(stmt, 15);
         auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, specificGravity);
         comp.setID(id);
         return comp;
@@ -226,20 +314,21 @@ GasCompositions SQLite::getGasFlueGasMaterialById(int id) const
 
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const CH4 = sqlite3_column_double(stmt, 2);
-        auto const C2H6 = sqlite3_column_double(stmt, 3);
-        auto const N2 = sqlite3_column_double(stmt, 4);
-        auto const H2 = sqlite3_column_double(stmt, 5);
-        auto const C3H8 = sqlite3_column_double(stmt, 6);
-        auto const C4H10_CnH2n = sqlite3_column_double(stmt, 7);
-        auto const H2O = sqlite3_column_double(stmt, 8);
-        auto const CO = sqlite3_column_double(stmt, 9);
-        auto const CO2 = sqlite3_column_double(stmt, 10);
-        auto const SO2 = sqlite3_column_double(stmt, 11);
-        auto const O2 = sqlite3_column_double(stmt, 12);
-        auto const heatingValue = sqlite3_column_double(stmt, 13);
-        auto const specificGravity = sqlite3_column_double(stmt, 14);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const CH4 = sqlite3_column_double(stmt, 3);
+        auto const C2H6 = sqlite3_column_double(stmt, 4);
+        auto const N2 = sqlite3_column_double(stmt, 5);
+        auto const H2 = sqlite3_column_double(stmt, 6);
+        auto const C3H8 = sqlite3_column_double(stmt, 7);
+        auto const C4H10_CnH2n = sqlite3_column_double(stmt, 8);
+        auto const H2O = sqlite3_column_double(stmt, 9);
+        auto const CO = sqlite3_column_double(stmt, 10);
+        auto const CO2 = sqlite3_column_double(stmt, 11);
+        auto const SO2 = sqlite3_column_double(stmt, 12);
+        auto const O2 = sqlite3_column_double(stmt, 13);
+        auto const heatingValue = sqlite3_column_double(stmt, 14);
+        auto const specificGravity = sqlite3_column_double(stmt, 15);
         auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, specificGravity);
         comp.setID(id);
         return comp;
@@ -247,12 +336,39 @@ GasCompositions SQLite::getGasFlueGasMaterialById(int id) const
     return get_object<GasCompositions>(m_gas_flue_gas_materials_select_single_stmt, id, cb);
 }
 
+std::vector<GasCompositions> SQLite::getCustomGasFlueGasMaterials() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const CH4 = sqlite3_column_double(stmt, 3);
+        auto const C2H6 = sqlite3_column_double(stmt, 4);
+        auto const N2 = sqlite3_column_double(stmt, 5);
+        auto const H2 = sqlite3_column_double(stmt, 6);
+        auto const C3H8 = sqlite3_column_double(stmt, 7);
+        auto const C4H10_CnH2n = sqlite3_column_double(stmt, 8);
+        auto const H2O = sqlite3_column_double(stmt, 9);
+        auto const CO = sqlite3_column_double(stmt, 10);
+        auto const CO2 = sqlite3_column_double(stmt, 11);
+        auto const SO2 = sqlite3_column_double(stmt, 12);
+        auto const O2 = sqlite3_column_double(stmt, 13);
+        auto const heatingValue = sqlite3_column_double(stmt, 14);
+        auto const specificGravity = sqlite3_column_double(stmt, 15);
+        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, specificGravity);
+        comp.setID(id);
+        return comp;
+    };
+    return get_all_objects<GasCompositions>(m_gas_flue_gas_materials_select_custom_stmt, cb);
+}
+
 std::vector<Atmosphere> SQLite::getAtmosphereSpecificHeat() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeat = sqlite3_column_double(stmt, 2);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeat = sqlite3_column_double(stmt, 3);
         auto a = Atmosphere(substance, specificHeat);
         a.setID(id);
         return a;
@@ -260,12 +376,27 @@ std::vector<Atmosphere> SQLite::getAtmosphereSpecificHeat() const
     return get_all_objects<Atmosphere>(m_atmosphere_specific_heat_select_stmt, cb);
 }
 
+std::vector<Atmosphere> SQLite::getCustomAtmosphereSpecificHeat() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeat = sqlite3_column_double(stmt, 3);
+        auto a = Atmosphere(substance, specificHeat);
+        a.setID(id);
+        return a;
+    };
+    return get_all_objects<Atmosphere>(m_atmosphere_specific_heat_select_custom_stmt, cb);
+}
+
 Atmosphere SQLite::getAtmosphereSpecificHeatById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const substance = convert_text(sqlite3_column_text(stmt, 1));
-        auto const specificHeat = sqlite3_column_double(stmt, 2);
+        sqlite3_column_int(stmt, 1);
+        std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
+        auto const specificHeat = sqlite3_column_double(stmt, 3);
         auto a = Atmosphere(substance, specificHeat);
         a.setID(id);
         return a;
@@ -277,8 +408,9 @@ std::vector<WallLosses> SQLite::getWallLossesSurface() const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const surface = convert_text(sqlite3_column_text(stmt, 1));
-        auto const conditionFactor = sqlite3_column_double(stmt, 2);
+        sqlite3_column_int(stmt, 1);
+        std::string const surface = convert_text(sqlite3_column_text(stmt, 2));
+        auto const conditionFactor = sqlite3_column_double(stmt, 3);
         auto wl = WallLosses(surface, conditionFactor);
         wl.setID(id);
         return wl;
@@ -286,12 +418,27 @@ std::vector<WallLosses> SQLite::getWallLossesSurface() const
     return get_all_objects<WallLosses>(m_wall_losses_surface_select_stmt, cb);
 }
 
+std::vector<WallLosses> SQLite::getCustomWallLossesSurface() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        std::string const surface = convert_text(sqlite3_column_text(stmt, 2));
+        auto const conditionFactor = sqlite3_column_double(stmt, 3);
+        auto wl = WallLosses(surface, conditionFactor);
+        wl.setID(id);
+        return wl;
+    };
+    return get_all_objects<WallLosses>(m_wall_losses_surface_select_custom_stmt, cb);
+}
+
 WallLosses SQLite::getWallLossesSurfaceById(int id) const
 {
     auto cb = [] (sqlite3_stmt * stmt) {
         auto const id = sqlite3_column_int(stmt, 0);
-        std::string const surface = convert_text(sqlite3_column_text(stmt, 1));
-        auto const conditionFactor = sqlite3_column_double(stmt, 2);
+        sqlite3_column_int(stmt, 1);
+        std::string const surface = convert_text(sqlite3_column_text(stmt, 2));
+        auto const conditionFactor = sqlite3_column_double(stmt, 3);
         auto wl = WallLosses(surface, conditionFactor);
         wl.setID(id);
         return wl;
@@ -302,108 +449,210 @@ WallLosses SQLite::getWallLossesSurfaceById(int id) const
 void SQLite::create_select_stmt()
 {
     std::string const select_solid_load_charge_materials =
-        R"(SELECT id, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+        R"(SELECT id, sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
                   mean_specific_heat_of_liquid, melting_point
            FROM solid_load_charge_materials)";
 
     prepare_statement(m_solid_load_charge_materials_select_stmt, select_solid_load_charge_materials);
 
     std::string const select_single_solid_load_charge_materials =
-        R"(SELECT id, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+        R"(SELECT id, sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
                   mean_specific_heat_of_liquid, melting_point
            FROM solid_load_charge_materials
            WHERE id = ?)";
 
     prepare_statement(m_solid_load_charge_materials_select_single_stmt, select_single_solid_load_charge_materials);
 
+    std::string const select_custom_solid_load_charge_materials =
+            R"(SELECT id, sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+                  mean_specific_heat_of_liquid, melting_point
+           FROM solid_load_charge_materials
+           WHERE sid = 1)";
+
+    prepare_statement(m_solid_load_charge_materials_select_custom_stmt, select_custom_solid_load_charge_materials);
+
     std::string const select_gas_load_charge_materials =
-        R"(SELECT id, substance, mean_specific_heat_of_vapor
+        R"(SELECT id, sid, substance, mean_specific_heat_of_vapor
            FROM gas_load_charge_materials)";
 
     prepare_statement(m_gas_load_charge_materials_select_stmt, select_gas_load_charge_materials);
 
     std::string const select_single_gas_load_charge_materials =
-        R"(SELECT id, substance, mean_specific_heat_of_vapor
+        R"(SELECT id, sid, substance, mean_specific_heat_of_vapor
            FROM gas_load_charge_materials
            WHERE id = ?)";
 
     prepare_statement(m_gas_load_charge_materials_select_single_stmt, select_single_gas_load_charge_materials);
 
+    std::string const select_custom_gas_load_charge_materials =
+            R"(SELECT id, sid, substance, mean_specific_heat_of_vapor
+           FROM gas_load_charge_materials
+           WHERE sid = 1)";
+
+    prepare_statement(m_gas_load_charge_materials_select_custom_stmt, select_custom_gas_load_charge_materials);
+
     std::string const select_liquid_load_charge_materials =
-        R"(SELECT id, substance, mean_specific_heat_of_liquid, latent_heat_of_vaporisation,
+        R"(SELECT id, sid, substance, mean_specific_heat_of_liquid, latent_heat_of_vaporisation,
                   mean_specific_heat_of_vapor, boiling_point
            FROM liquid_load_charge_materials)";
 
     prepare_statement(m_liquid_load_charge_materials_select_stmt, select_liquid_load_charge_materials);
 
     std::string const select_single_liquid_load_charge_materials =
-        R"(SELECT id, substance, mean_specific_heat_of_liquid, latent_heat_of_vaporisation,
+        R"(SELECT id, sid, substance, mean_specific_heat_of_liquid, latent_heat_of_vaporisation,
                   mean_specific_heat_of_vapor, boiling_point
            FROM liquid_load_charge_materials
            WHERE id = ?)";
 
     prepare_statement(m_liquid_load_charge_materials_select_single_stmt, select_single_liquid_load_charge_materials);
 
+    std::string const select_custom_liquid_load_charge_materials =
+            R"(SELECT id, sid, substance, mean_specific_heat_of_liquid, latent_heat_of_vaporisation,
+                  mean_specific_heat_of_vapor, boiling_point
+           FROM liquid_load_charge_materials
+           WHERE sid = 1)";
+
+    prepare_statement(m_liquid_load_charge_materials_select_custom_stmt, select_custom_liquid_load_charge_materials);
+
     std::string const select_solid_liquid_flue_gas_materials =
-            R"(SELECT id, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
+            R"(SELECT id, sid, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
            FROM solid_liquid_flue_gas_materials)";
 
     prepare_statement(m_solid_liquid_flue_gas_materials_select_stmt, select_solid_liquid_flue_gas_materials);
 
     std::string const select_single_solid_liquid_flue_gas_materials =
-            R"(SELECT id, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
+            R"(SELECT id, sid, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
            FROM solid_liquid_flue_gas_materials
            WHERE id = ?)";
 
     prepare_statement(m_solid_liquid_flue_gas_materials_select_single_stmt, select_single_solid_liquid_flue_gas_materials);
 
+    std::string const select_custom_solid_liquid_flue_gas_materials =
+            R"(SELECT id, sid, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
+           FROM solid_liquid_flue_gas_materials
+           WHERE sid = 1)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_select_custom_stmt, select_custom_solid_liquid_flue_gas_materials);
+
     std::string const select_gas_flue_gas_materials =
-            R"(SELECT id, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+            R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
                   carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity
            FROM gas_flue_gas_materials)";
 
     prepare_statement(m_gas_flue_gas_materials_select_stmt, select_gas_flue_gas_materials);
 
     std::string const select_single_gas_flue_gas_materials =
-            R"(SELECT id, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+            R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
                   carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity
            FROM gas_flue_gas_materials
            WHERE id = ?)";
 
     prepare_statement(m_gas_flue_gas_materials_select_single_stmt, select_single_gas_flue_gas_materials);
 
+    std::string const select_custom_gas_flue_gas_materials =
+            R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity
+           FROM gas_flue_gas_materials
+           WHERE sid = 1)";
+
+    prepare_statement(m_gas_flue_gas_materials_select_custom_stmt, select_custom_gas_flue_gas_materials);
+
     std::string const select_atmosphere_specific_heat =
-            R"(SELECT id, substance, specificHeat
+            R"(SELECT id, sid, substance, specificHeat
            FROM atmosphere_specific_heat)";
 
     prepare_statement(m_atmosphere_specific_heat_select_stmt, select_atmosphere_specific_heat);
 
     std::string const select_single_atmosphere_specific_heat =
-            R"(SELECT id, substance, specificHeat
+            R"(SELECT id, sid, substance, specificHeat
            FROM atmosphere_specific_heat
            WHERE id = ?)";
 
     prepare_statement(m_atmosphere_specific_heat_select_single_stmt, select_single_atmosphere_specific_heat);
 
+    std::string const select_custom_atmosphere_specific_heat =
+            R"(SELECT id, sid, substance, specificHeat
+           FROM atmosphere_specific_heat
+           WHERE sid = 1)";
+
+    prepare_statement(m_atmosphere_specific_heat_select_custom_stmt, select_custom_atmosphere_specific_heat);
+
     std::string const select_wall_losses_surface =
-            R"(SELECT id, surface, conditionFactor
+            R"(SELECT id, sid, surface, conditionFactor
            FROM wall_losses_surface)";
 
     prepare_statement(m_wall_losses_surface_select_stmt, select_wall_losses_surface);
 
     std::string const select_single_wall_losses_surface =
-            R"(SELECT id, surface, conditionFactor
+            R"(SELECT id, sid, surface, conditionFactor
            FROM wall_losses_surface
            WHERE id = ?)";
 
     prepare_statement(m_wall_losses_surface_select_single_stmt, select_single_wall_losses_surface);
+
+    std::string const select_custom_wall_losses_surface =
+            R"(SELECT id, sid, surface, conditionFactor
+           FROM wall_losses_surface
+           WHERE sid = 1)";
+
+    prepare_statement(m_wall_losses_surface_select_custom_stmt, select_custom_wall_losses_surface);
 }
+
+void SQLite::create_insert_stmt() {
+    const std::string solid_load_charge_materials_insert_sql =
+            R"(INSERT INTO solid_load_charge_materials(sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
+                                                   mean_specific_heat_of_liquid, melting_point)
+           VALUES (?,?,?,?,?,?))";
+
+    prepare_statement(m_solid_load_charge_materials_insert_stmt, solid_load_charge_materials_insert_sql);
+
+    const std::string gas_load_charge_materials_insert_sql =
+            R"(INSERT INTO gas_load_charge_materials(sid, substance,mean_specific_heat_of_vapor) VALUES (?,?,?))";
+
+    prepare_statement(m_gas_load_charge_materials_insert_stmt, gas_load_charge_materials_insert_sql);
+
+    const std::string liquid_load_charge_materials_insert_sql =
+            R"(INSERT INTO liquid_load_charge_materials(sid, substance, mean_specific_heat_of_liquid,
+                                                    latent_heat_of_vaporisation, mean_specific_heat_of_vapor,
+                                                    boiling_point)
+           VALUES (?,?,?,?,?,?))";
+
+    prepare_statement(m_liquid_load_charge_materials_insert_stmt, liquid_load_charge_materials_insert_sql);
+
+    const std::string solid_liquid_flue_gas_materials_insert_sql =
+            R"(INSERT INTO solid_liquid_flue_gas_materials(sid, substance, carbon, hydrogen, nitrogen, sulfur, oxygen,
+                                                       moisture, ash)
+           VALUES (?,?,?,?,?,?,?,?,?))";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_insert_stmt, solid_liquid_flue_gas_materials_insert_sql);
+
+    const std::string gas_flue_gas_materials_insert_sql =
+            R"(INSERT INTO gas_flue_gas_materials(sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
+
+    prepare_statement(m_gas_flue_gas_materials_insert_stmt, gas_flue_gas_materials_insert_sql);
+
+    const std::string atmosphere_specific_heat_insert_sql =
+            R"(INSERT INTO atmosphere_specific_heat(sid, substance, specificHeat)
+           VALUES (?,?,?))";
+
+    prepare_statement(m_atmosphere_specific_heat_insert_stmt, atmosphere_specific_heat_insert_sql);
+
+    const std::string wall_losses_surface_insert_sql =
+            R"(INSERT INTO wall_losses_surface(sid, surface, conditionFactor)
+           VALUES (?,?,?))";
+
+    prepare_statement(m_wall_losses_surface_insert_stmt, wall_losses_surface_insert_sql);
+}
+
 
 void SQLite::create_tables()
 {
     const std::string solid_load_charge_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS solid_load_charge_materials (
            id integer PRIMARY KEY AUTOINCREMENT,
+           sid integer NOT NULL,
            substance text NOT NULL DEFAULT "" UNIQUE,
            mean_specific_heat_of_solid real NOT NULL, -- Btu/lb.F
            latent_heat_of_fusion real NOT NULL, -- Btu/lb.
@@ -415,16 +664,10 @@ void SQLite::create_tables()
 
     execute_command(solid_load_charge_materials_table_sql);
 
-    const std::string solid_load_charge_materials_insert_sql =
-        R"(INSERT INTO solid_load_charge_materials(substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
-                                                   mean_specific_heat_of_liquid, melting_point)
-           VALUES (?,?,?,?,?))";
-
-    prepare_statement(m_solid_load_charge_materials_insert_stmt, solid_load_charge_materials_insert_sql);
-
     const std::string gas_load_charge_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS gas_load_charge_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
              substance text NOT NULL DEFAULT "" UNIQUE,
              mean_specific_heat_of_vapor real NOT NULL, -- Btu/lb.F
              UNIQUE (substance, mean_specific_heat_of_vapor)
@@ -432,14 +675,10 @@ void SQLite::create_tables()
 
     execute_command(gas_load_charge_materials_table_sql);
 
-    const std::string gas_load_charge_materials_insert_sql =
-        R"(INSERT INTO gas_load_charge_materials(substance,mean_specific_heat_of_vapor) VALUES (?,?))";
-
-    prepare_statement(m_gas_load_charge_materials_insert_stmt, gas_load_charge_materials_insert_sql);
-
     const std::string liquid_load_charge_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS liquid_load_charge_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
              substance text NOT NULL DEFAULT "" UNIQUE,
              mean_specific_heat_of_liquid real NOT NULL, -- kJ/kg.F
              latent_heat_of_vaporisation real NOT NULL, -- Btu/lb.
@@ -451,17 +690,10 @@ void SQLite::create_tables()
 
     execute_command(liquid_load_charge_materials_table_sql);
 
-    const std::string liquid_load_charge_materials_insert_sql =
-        R"(INSERT INTO liquid_load_charge_materials(substance, mean_specific_heat_of_liquid,
-                                                    latent_heat_of_vaporisation, mean_specific_heat_of_vapor,
-                                                    boiling_point)
-           VALUES (?,?,?,?,?))";
-
-    prepare_statement(m_liquid_load_charge_materials_insert_stmt, liquid_load_charge_materials_insert_sql);
-
     const std::string solid_liquid_flue_gas_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS solid_liquid_flue_gas_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
              substance text NOT NULL DEFAULT "" UNIQUE,
              carbon real NOT NULL, --C
              hydrogen real NOT NULL, -- H2
@@ -475,16 +707,10 @@ void SQLite::create_tables()
 
     execute_command(solid_liquid_flue_gas_materials_table_sql);
 
-    const std::string solid_liquid_flue_gas_materials_insert_sql =
-        R"(INSERT INTO solid_liquid_flue_gas_materials(substance, carbon, hydrogen, nitrogen, sulfur, oxygen,
-                                                       moisture, ash)
-           VALUES (?,?,?,?,?,?,?,?))";
-
-    prepare_statement(m_solid_liquid_flue_gas_materials_insert_stmt, solid_liquid_flue_gas_materials_insert_sql);
-
     const std::string gas_flue_gas_materials_table_sql =
         R"(CREATE TABLE IF NOT EXISTS gas_flue_gas_materials (
              id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
              substance text NOT NULL DEFAULT "" UNIQUE,
              hydrogen real NOT NULL, -- H2
              methane real NOT NULL, -- CH4
@@ -505,16 +731,10 @@ void SQLite::create_tables()
 
     execute_command(gas_flue_gas_materials_table_sql);
 
-    const std::string gas_flue_gas_materials_insert_sql =
-        R"(INSERT INTO gas_flue_gas_materials(substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
-                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
-
-    prepare_statement(m_gas_flue_gas_materials_insert_stmt, gas_flue_gas_materials_insert_sql);
-
     const std::string atmosphere_specific_heat_table_sql =
             R"(CREATE TABLE IF NOT EXISTS atmosphere_specific_heat (
              id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
              substance text NOT NULL DEFAULT "" UNIQUE,
              specificHeat real NOT NULL, -- Btu/(scf.F)
              UNIQUE (substance, specificHeat)
@@ -522,27 +742,16 @@ void SQLite::create_tables()
 
     execute_command(atmosphere_specific_heat_table_sql);
 
-    const std::string atmosphere_specific_heat_insert_sql =
-            R"(INSERT INTO atmosphere_specific_heat(substance, specificHeat)
-           VALUES (?,?))";
-
-    prepare_statement(m_atmosphere_specific_heat_insert_stmt, atmosphere_specific_heat_insert_sql);
-
     const std::string wall_losses_surface_table_sql =
             R"(CREATE TABLE IF NOT EXISTS wall_losses_surface (
              id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
              surface text NOT NULL DEFAULT "" UNIQUE,
              conditionFactor real NOT NULL, -- unitless
              UNIQUE (surface, conditionFactor)
       );)";
 
     execute_command(wall_losses_surface_table_sql);
-
-    const std::string wall_losses_surface_insert_sql =
-            R"(INSERT INTO wall_losses_surface(surface, conditionFactor)
-           VALUES (?,?))";
-
-    prepare_statement(m_wall_losses_surface_insert_stmt, wall_losses_surface_insert_sql);
 }
 
 void SQLite::insert_default_data()
@@ -572,11 +781,28 @@ void SQLite::insert_default_data()
 
 bool SQLite::insert_solid_load_charge_materials(SolidLoadChargeMaterial const & material)
 {
-    bind_value(m_solid_load_charge_materials_insert_stmt, 1, material.getSubstance());
-    bind_value(m_solid_load_charge_materials_insert_stmt, 2, material.getSpecificHeatSolid());
-    bind_value(m_solid_load_charge_materials_insert_stmt, 3, material.getLatentHeat());
-    bind_value(m_solid_load_charge_materials_insert_stmt, 4, material.getSpecificHeatLiquid());
-    bind_value(m_solid_load_charge_materials_insert_stmt, 5, material.getMeltingPoint());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 1, 0);
+    bind_value(m_solid_load_charge_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 3, material.getSpecificHeatSolid());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 4, material.getLatentHeat());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 5, material.getSpecificHeatLiquid());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 6, material.getMeltingPoint());
+
+    int rc = step_command(m_solid_load_charge_materials_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_solid_load_charge_materials_insert_stmt);
+    return valid_insert;
+}
+
+// used for inserting custom materials, part of the public API
+bool SQLite::insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material)
+{
+    bind_value(m_solid_load_charge_materials_insert_stmt, 1, 1);
+    bind_value(m_solid_load_charge_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 3, material.getSpecificHeatSolid());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 4, material.getLatentHeat());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 5, material.getSpecificHeatLiquid());
+    bind_value(m_solid_load_charge_materials_insert_stmt, 6, material.getMeltingPoint());
 
     int rc = step_command(m_solid_load_charge_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
@@ -586,8 +812,22 @@ bool SQLite::insert_solid_load_charge_materials(SolidLoadChargeMaterial const & 
 
 bool SQLite::insert_gas_load_charge_materials(GasLoadChargeMaterial const & material)
 {
-    bind_value(m_gas_load_charge_materials_insert_stmt, 1, material.getSubstance());
-    bind_value(m_gas_load_charge_materials_insert_stmt, 2, material.getSpecificHeatVapor());
+    bind_value(m_gas_load_charge_materials_insert_stmt, 1, 0);
+    bind_value(m_gas_load_charge_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_gas_load_charge_materials_insert_stmt, 3, material.getSpecificHeatVapor());
+
+    int rc = step_command(m_gas_load_charge_materials_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_gas_load_charge_materials_insert_stmt);
+    return valid_insert;
+}
+
+// used for inserting custom materials, part of the public API
+bool SQLite::insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material)
+{
+    bind_value(m_gas_load_charge_materials_insert_stmt, 1, 1);
+    bind_value(m_gas_load_charge_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_gas_load_charge_materials_insert_stmt, 3, material.getSpecificHeatVapor());
 
     int rc = step_command(m_gas_load_charge_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
@@ -597,11 +837,28 @@ bool SQLite::insert_gas_load_charge_materials(GasLoadChargeMaterial const & mate
 
 bool SQLite::insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const & material)
 {
-    bind_value(m_liquid_load_charge_materials_insert_stmt, 1, material.getSubstance());
-    bind_value(m_liquid_load_charge_materials_insert_stmt, 2, material.getSpecificHeatLiquid());
-    bind_value(m_liquid_load_charge_materials_insert_stmt, 3, material.getLatentHeat());
-    bind_value(m_liquid_load_charge_materials_insert_stmt, 4, material.getSpecificHeatVapor());
-    bind_value(m_liquid_load_charge_materials_insert_stmt, 5, material.getVaporizingTemperature());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 1, 0);
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 3, material.getSpecificHeatLiquid());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 4, material.getLatentHeat());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 5, material.getSpecificHeatVapor());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 6, material.getVaporizingTemperature());
+
+    int rc = step_command(m_liquid_load_charge_materials_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_liquid_load_charge_materials_insert_stmt);
+    return valid_insert;
+}
+
+// used for inserting custom materials, part of the public API
+bool SQLite::insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & material)
+{
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 1, 1);
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 3, material.getSpecificHeatLiquid());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 4, material.getLatentHeat());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 5, material.getSpecificHeatVapor());
+    bind_value(m_liquid_load_charge_materials_insert_stmt, 6, material.getVaporizingTemperature());
 
     int rc = step_command(m_liquid_load_charge_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
@@ -611,14 +868,32 @@ bool SQLite::insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const 
 
 bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material)
 {
-    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 1, material.getSubstance());
-    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 2, material.getCarbon());
-    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 3, material.getHydrogen());
-    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 4, material.getSulphur());
-    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 5, material.getInertAsh());
-    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 6, material.getO2());
-    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 7, material.getMoisture());
-    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 8, material.getNitrogen());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 1, 0);
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 3, material.getCarbon());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 4, material.getHydrogen());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 5, material.getSulphur());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 6, material.getInertAsh());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 7, material.getO2());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 8, material.getMoisture());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 9, material.getNitrogen());
+
+    int rc = step_command(m_solid_liquid_flue_gas_materials_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_solid_liquid_flue_gas_materials_insert_stmt);
+    return valid_insert;
+}
+
+bool SQLite::insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material) const {
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 1, 1);
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 2, material.getSubstance());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 3, material.getCarbon());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 4, material.getHydrogen());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 5, material.getSulphur());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 6, material.getInertAsh());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 7, material.getO2());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 8, material.getMoisture());
+    bind_value(m_solid_liquid_flue_gas_materials_insert_stmt, 9, material.getNitrogen());
 
     int rc = step_command(m_solid_liquid_flue_gas_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
@@ -628,20 +903,45 @@ bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial c
 
 bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
 {
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 1, comps.getSubstance());
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 2, comps.getGasByVol("CH4"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 3, comps.getGasByVol("C2H6"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 4, comps.getGasByVol("N2"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 5, comps.getGasByVol("H2"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 6, comps.getGasByVol("C3H8"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 7, comps.getGasByVol("C4H10_CnH2n"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 8, comps.getGasByVol("H2O"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 9, comps.getGasByVol("CO"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 10, comps.getGasByVol("CO2"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 11, comps.getGasByVol("SO2"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 12, comps.getGasByVol("O2"));
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 13, comps.heatingValue);
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 14, comps.specificGravity);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 1, 0);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 2, comps.getSubstance());
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 3, comps.getGasByVol("CH4"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 4, comps.getGasByVol("C2H6"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 5, comps.getGasByVol("N2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 6, comps.getGasByVol("H2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 7, comps.getGasByVol("C3H8"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 8, comps.getGasByVol("C4H10_CnH2n"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 9, comps.getGasByVol("H2O"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 10, comps.getGasByVol("CO"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 11, comps.getGasByVol("CO2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 12, comps.getGasByVol("SO2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 13, comps.getGasByVol("O2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 14, comps.heatingValue);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 15, comps.specificGravity);
+
+    int rc = step_command(m_gas_flue_gas_materials_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_gas_flue_gas_materials_insert_stmt);
+    return valid_insert;
+}
+
+// used for inserting custom materials, part of the public API
+bool SQLite::insertGasFlueGasMaterial(GasCompositions const & comps) const {
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 1, 1);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 2, comps.getSubstance());
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 3, comps.getGasByVol("CH4"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 4, comps.getGasByVol("C2H6"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 5, comps.getGasByVol("N2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 6, comps.getGasByVol("H2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 7, comps.getGasByVol("C3H8"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 8, comps.getGasByVol("C4H10_CnH2n"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 9, comps.getGasByVol("H2O"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 10, comps.getGasByVol("CO"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 11, comps.getGasByVol("CO2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 12, comps.getGasByVol("SO2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 13, comps.getGasByVol("O2"));
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 14, comps.heatingValue);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 15, comps.specificGravity);
 
     int rc = step_command(m_gas_flue_gas_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
@@ -651,8 +951,21 @@ bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
 
 bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
 {
-    bind_value(m_atmosphere_specific_heat_insert_stmt, 1, sh.getSubstance());
-    bind_value(m_atmosphere_specific_heat_insert_stmt, 2, sh.getSpecificHeat());
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 1, 0);
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 2, sh.getSubstance());
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 3, sh.getSpecificHeat());
+
+    int rc = step_command(m_atmosphere_specific_heat_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_atmosphere_specific_heat_insert_stmt);
+    return valid_insert;
+}
+
+// part of the public API used to insert custom materials
+bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material){
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 1, 1);
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 2, material.getSubstance());
+    bind_value(m_atmosphere_specific_heat_insert_stmt, 3, material.getSpecificHeat());
 
     int rc = step_command(m_atmosphere_specific_heat_insert_stmt);
     bool valid_insert = step_validity(rc);
@@ -662,8 +975,21 @@ bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
 
 bool SQLite::insert_wall_losses_surface(WallLosses const & cf)
 {
-    bind_value(m_wall_losses_surface_insert_stmt, 1, cf.getSurface());
-    bind_value(m_wall_losses_surface_insert_stmt, 2, cf.getConditionFactor());
+    bind_value(m_wall_losses_surface_insert_stmt, 1, 0);
+    bind_value(m_wall_losses_surface_insert_stmt, 2, cf.getSurface());
+    bind_value(m_wall_losses_surface_insert_stmt, 3, cf.getConditionFactor());
+
+    int rc = step_command(m_wall_losses_surface_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_wall_losses_surface_insert_stmt);
+    return valid_insert;
+}
+
+bool SQLite::insertWallLossesSurface(WallLosses const & material)
+{
+    bind_value(m_wall_losses_surface_insert_stmt, 1, 1);
+    bind_value(m_wall_losses_surface_insert_stmt, 2, material.getSurface());
+    bind_value(m_wall_losses_surface_insert_stmt, 3, material.getConditionFactor());
 
     int rc = step_command(m_wall_losses_surface_insert_stmt);
     bool valid_insert = step_validity(rc);
