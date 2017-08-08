@@ -40,15 +40,17 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 
 std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {
 	double specificEnthalpyLimit = 0;
-    SaturatedProperties pressureSatProps(0.0, 0.0);
+    std::unordered_map <std::string, double> pressureSatProps;
     std::unordered_map<std::string, double> testProps;
     double temperature = 0.0;
 
 	if ( pressure < SteamSystemModelerTool::PRESSURE_CRIT)
 	{
 		SaturatedTemperature tempFromPressure = SaturatedTemperature(pressure);
-		pressureSatProps = SaturatedProperties(pressure, tempFromPressure.calculate());
-		specificEnthalpyLimit = pressureSatProps.getLiquidEnthalpy();
+        double temp = tempFromPressure.calculate();
+        SaturatedProperties sp = SaturatedProperties(pressure, temp);
+		pressureSatProps = sp.calculate();
+		specificEnthalpyLimit = pressureSatProps["liquidSpecificEnthalpy"];
 	}
 	if ( pressure > SteamSystemModelerTool::PRESSURE_Tp)
 	{
@@ -78,17 +80,17 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 		return testProps;
 	}
 
-    if ( (pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (enthalpy >= pressureSatProps.getLiquidEnthalpy()) && (enthalpy <= pressureSatProps.getGasEnthalpy())){
-        double quality = (enthalpy - pressureSatProps.getLiquidEnthalpy()) /(pressureSatProps.getGasEnthalpy() - pressureSatProps.getLiquidEnthalpy());
+    if ( (pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (enthalpy >= pressureSatProps["liquidSpecificEnthalpy"]) && (enthalpy <= pressureSatProps["gasSpecificEnthalpy"])){
+        double quality = (enthalpy - pressureSatProps["liquidSpecificEnthalpy"]) /(pressureSatProps["gasSpecificEnthalpy"] - pressureSatProps["liquidSpecificEnthalpy"]);
         testProps = {
-                {"temperature", pressureSatProps.getSaturatedTemperature()}, //temperature in Kelvin
+                {"temperature", pressureSatProps["temperature"]}, //temperature in Kelvin
                 {"pressure", pressure}, //pressure in MPa
 //			    {"phase", "Liquid"},
 			    {"quality", quality},
-                {"specificVolume", (pressureSatProps.getGasVolume() - pressureSatProps.getLiquidVolume()) * quality + pressureSatProps.getLiquidVolume()}, //volume in m³/kg
+                {"specificVolume", (pressureSatProps["gasSpecificVolume"] - pressureSatProps["liquidSpecificVolume"]) * quality + pressureSatProps["liquidSpecificVolume"]}, //volume in m³/kg
                 //{"density", 1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³
                 {"specificEnthalpy", enthalpy}, // enthalpy in kJ/kg
-                {"specificEntropy", (pressureSatProps.getGasEntropy() - pressureSatProps.getLiquidEntropy()) * quality + pressureSatProps.getLiquidEntropy()} // entropy in kJ/kg/K
+                {"specificEntropy", (pressureSatProps["gasSpecificEntropy"] - pressureSatProps["liquidSpecificEntropy"]) * quality + pressureSatProps["liquidSpecificEntropy"]} // entropy in kJ/kg/K
         };
 
         return testProps;
@@ -117,7 +119,7 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 };
 
 std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureEntropy(const double pressure, const double entropy) {
-    SaturatedProperties pressureSatProps(0.0, 0.0);
+    std::unordered_map <std::string, double> pressureSatProps;
     double specificEntropyLimit = 0;
     double boundaryTemperature = 0.0;
     std::unordered_map <std::string, double> boundaryProps;
@@ -129,8 +131,9 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     if (pressure < SteamSystemModelerTool::PRESSURE_CRIT){
         SaturatedTemperature tempFromPressure(pressure);
         double satTemperature = tempFromPressure.calculate();
-        pressureSatProps = SaturatedProperties(pressure, satTemperature);
-        specificEntropyLimit = pressureSatProps.getLiquidEntropy();
+        SaturatedProperties sp = SaturatedProperties(pressure, satTemperature);
+        pressureSatProps = sp.calculate();
+        specificEntropyLimit = pressureSatProps["liquidSpecificEntropy"];
     }
 
     if (pressure > SteamSystemModelerTool::PRESSURE_Tp){
@@ -167,18 +170,18 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
         return testProps;
     }
 
-    if ((pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (entropy >= pressureSatProps.getLiquidEntropy()) && (entropy <= pressureSatProps.getGasEntropy()))
+    if ((pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (entropy >= pressureSatProps["liquidSpecificEntropy"]) && (entropy <= pressureSatProps["gasSpecificEntropy"]))
     {
-        quality = (entropy - pressureSatProps.getLiquidEntropy()) /(pressureSatProps.getGasEntropy() - pressureSatProps.getLiquidEntropy());
+        quality = (entropy - pressureSatProps["liquidSpecificEntropy"]) /(pressureSatProps["gasSpecificEntropy"] - pressureSatProps["liquidSpecificEntropy"]);
 
         testProps = {
-                {"temperature", pressureSatProps.getSaturatedTemperature()}, //temperature in Kelvin
+                {"temperature", pressureSatProps["saturatedTemperature"]}, //temperature in Kelvin
                 {"pressure", pressure}, //pressure in MPa
 //			    {"phase", "Liquid"},
                 {"quality", quality},
-                {"specificVolume", (pressureSatProps.getGasVolume() - pressureSatProps.getLiquidVolume()) * quality + pressureSatProps.getLiquidVolume()}, //volume in m³/kg
+                {"specificVolume", (pressureSatProps["gasSpecificVolume"] - pressureSatProps["liquidSpecificVolume"]) * quality + pressureSatProps["liquidSpecificVolume"]}, //volume in m³/kg
                 //{"density", 1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³
-                {"specificEnthalpy", (pressureSatProps.getGasEnthalpy() - pressureSatProps.getLiquidEnthalpy()) * quality + pressureSatProps.getLiquidEnthalpy()}, // enthalpy in kJ/kg
+                {"specificEnthalpy", (pressureSatProps["gasSpecificEnthalpy"] - pressureSatProps["liquidSpecificEnthalpy"]) * quality + pressureSatProps["liquidSpecificEnthalpy"]}, // enthalpy in kJ/kg
                 {"specificEntropy", entropy} // entropy in kJ/kg/K
         };
 
@@ -209,11 +212,12 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 
     SaturatedTemperature satTemp = SaturatedTemperature(pressure);
     SaturatedProperties tmp = SaturatedProperties(pressure, satTemp.calculate());
+    std::unordered_map <std::string, double> satProps = tmp.calculate();
     properties["temperature"] = tmp.getSaturatedTemperature() * 1;
     properties["pressure"] = tmp.getSaturatedPressure() * 1;
-    properties["specificEnthalpy"] = tmp.getGasEnthalpy() * quality + tmp.getLiquidEnthalpy() * (1 - quality);
-    properties["specificEntropy"] = tmp.getGasEntropy() * quality + tmp.getLiquidEntropy() * (1 - quality);
-    properties["specificVolume"] = tmp.getGasVolume() * quality + tmp.getLiquidVolume() * (1 - quality);
+    properties["specificEnthalpy"] = satProps["gasSpecificEnthalpy"] * quality + satProps["liquidSpecificEnthalpy"] * (1 - quality);
+    properties["specificEntropy"] = satProps["gasSpecificEntropy"] * quality + satProps["liquidSpecificEntropy"] * (1 - quality);
+    properties["specificVolume"] = satProps["gasSpecificVolume"] * quality + satProps["liquidSpecificVolume"] * (1 - quality);
     properties["density"] = 1/properties["specificVolume"];
     properties["quality"] = quality;
     //properties['region'] = $tmp['region'];
