@@ -91,6 +91,7 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
      */
     SaturatedProperties sp(pressure, Get("saturatedTemperature"));
     std::unordered_map <std::string, double> results = sp.calculate();
+    //double saturatedPressure = results["pressure"];
     double saturatedPressure = results["pressure"];
     double saturatedTemperature = results["temperature"];
     double liquidEnthalpy = results["liquidSpecificEnthalpy"];
