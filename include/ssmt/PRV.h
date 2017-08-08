@@ -222,7 +222,7 @@ public:
      * @return nothing
      *
      * */
-    PrvWithoutDesuperheating(
+    PrvWithDesuperheating(
             double inletPressure,
             SteamProperties::ThermodynamicQuantity quantityType,
             double quantityValue,
