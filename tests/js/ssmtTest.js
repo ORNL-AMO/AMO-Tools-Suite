@@ -156,8 +156,8 @@ test('flashTank', function (t) {
     var res = bindings.flashTank(inp);
 
     t.equal(res.inletWaterEnergyFlow, 72266, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
-    t.equal(res.outletGasMassFlow, 19667, 'res.outletGasMassFlow is ' + res.outletGasMassFlow);
-    t.equal(res.outletGasEnergyFlow, 55127, 'res.outletGasEnergyFlow is ' + res.outletGasEnergyFlow);
-    t.equal(res.outletLiquidMassFlow, 16466, 'res.outletLiquidMassFlow is ' + res.outletLiquidMassFlow);
-    t.equal(res.outletLiquidEnergyFlow, 17139, 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
+    t.equal(res.outletGasMassFlow, 19667.16383431122, 'res.outletGasMassFlow is ' + res.outletGasMassFlow);
+    t.equal(res.outletGasEnergyFlow, 55126.79710787576, 'res.outletGasEnergyFlow is ' + res.outletGasEnergyFlow);
+    t.equal(res.outletLiquidMassFlow, 16465.83616568878, 'res.outletLiquidMassFlow is ' + res.outletLiquidMassFlow);
+    t.equal(res.outletLiquidEnergyFlow, 17139.20289212423, 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
 });
