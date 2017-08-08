@@ -450,7 +450,7 @@ test('dbInsertWallLossesSurface', function (t) {
     t.equal(res[size].conditionFactor, obj2.conditionFactor, res[size].conditionFactor + " != " + obj2.conditionFactor);
 });
 
-// commented out bc it writes files to the HDD
+// // commented out bc it writes files to the HDD
 // test('dbTestMigrations', function (t) {
 //     t.plan(8);
 //

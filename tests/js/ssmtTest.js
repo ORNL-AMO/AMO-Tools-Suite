@@ -140,3 +140,24 @@ test('heatLoss', function (t) {
     t.equal(res.outletEnergyFlow, 15261.278945345939, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
     t.equal(res.heatLoss, 381.68840330713465, 'res.heatLoss is ' + res.heatLoss);
 });
+
+test('flashTank', function (t) {
+    t.plan(6);
+    t.type(bindings.flashTank, 'function');
+
+    var inp = {
+        inletWaterPressure : 4.54484,
+        thermodynamicQuantity : 1, //1 is ENTHALPY
+        quantityValue : 2000,
+        inletWaterMassFlow : 36133,
+        tankPressure : 3.3884
+    };
+
+    var res = bindings.flashTank(inp);
+
+    t.equal(res.inletWaterEnergyFlow, 72266, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
+    t.equal(res.outletGasMassFlow, 19667.16383431122, 'res.outletGasMassFlow is ' + res.outletGasMassFlow);
+    t.equal(res.outletGasEnergyFlow, 55126.79710787576, 'res.outletGasEnergyFlow is ' + res.outletGasEnergyFlow);
+    t.equal(res.outletLiquidMassFlow, 16465.83616568878, 'res.outletLiquidMassFlow is ' + res.outletLiquidMassFlow);
+    t.equal(res.outletLiquidEnergyFlow, 17139.20289212423, 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
+});

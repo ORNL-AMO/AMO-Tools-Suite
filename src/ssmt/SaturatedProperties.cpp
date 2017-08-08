@@ -62,116 +62,52 @@ double SaturatedPressure::calculate() {
     return this->saturatedPressure_;
 }
 
-double SaturatedProperties::getLiquidEnthalpy(){
-    double temp = this->saturatedTemperature_;
-    double pressure = this->saturatedPressure_;
+std::unordered_map<std::string, double> SaturatedProperties::calculate() {
+   // std::unordered_map<std::string, double> satProps;
+    double p = this->saturatedPressure_;
+    double t = this->saturatedTemperature_;
 
-    double enthalpy;
+    double liquidEnthalpy = 0;
+    double liquidEntropy = 0;
+    double liquidVolume = 0;
 
-    if ((temp >= SteamSystemModelerTool::TEMPERATURE_MIN) && (temp <= SteamSystemModelerTool::TEMPERATURE_Tp))
+    std::unordered_map<std::string, double> gasProperties = SteamSystemModelerTool::region2(this->saturatedTemperature_, this->saturatedPressure_);
+    double gasEnthalpy = gasProperties["specificEnthalpy"];
+    double gasEntropy = gasProperties["specificEntropy"];
+    double gasVolume = gasProperties["specificVolume"];
+
+    if ((this->saturatedTemperature_ >= SteamSystemModelerTool::TEMPERATURE_MIN) && (this->saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_Tp))
     {
-        std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region1(temp, pressure);
-        enthalpy = properties["specificEnthalpy"];
+        std::unordered_map<std::string, double> liquidProperties = SteamSystemModelerTool::region1(this->saturatedTemperature_, this->saturatedPressure_);
+        liquidEnthalpy = liquidProperties["specificEnthalpy"];
+        liquidEntropy = liquidProperties["specificEntropy"];
+        liquidVolume = liquidProperties["specificVolume"];
     }
 
-    if ((temp > SteamSystemModelerTool::TEMPERATURE_Tp) && (temp <= SteamSystemModelerTool::TEMPERATURE_CRIT))
+    if ((this->saturatedTemperature_ > SteamSystemModelerTool::TEMPERATURE_Tp) && (this->saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_CRIT))
     {
-        std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region3(temp, pressure);
-        enthalpy = properties["specificEnthalpy"];
+        std::unordered_map<std::string, double> liquidProperties = SteamSystemModelerTool::region3(this->saturatedTemperature_, this->saturatedPressure_);
+        liquidEnthalpy = liquidProperties["specificEnthalpy"];
+        liquidEntropy = liquidProperties["specificEntropy"];
+        liquidVolume = liquidProperties["specificVolume"];
     }
 
-    return enthalpy;
+    double evaporationEnthalpy = gasEnthalpy - liquidEnthalpy;
+    double evaporationEntropy = gasEntropy - liquidEntropy;
+    double evaporationVolume = gasVolume - liquidVolume;
 
-}
+    return {
+            {"pressure", p}, //pressure in MPa
+            {"temperature", t}, // temperature in Kelvin
+            {"gasSpecificEnthalpy", gasEnthalpy}, //enthalpy in kJ/kg
+            {"gasSpecificEntropy", gasEntropy}, // entropy in kJ/kg/K
+            {"gasSpecificVolume", gasVolume}, // volume in m³/kg
+            {"liquidSpecificEnthalpy", liquidEnthalpy}, // enthalpy in kJ/kg
+            {"liquidSpecificEntropy", liquidEntropy}, // entropy in kJ/kg/K
+            {"liquidSpecificVolume", liquidVolume}, // volume in m³/kg
+            {"evaporationSpecificEnthalpy", evaporationEnthalpy}, // enthalpy in kJ/kg
+            {"evaporationSpecificEntropy", evaporationEntropy}, // entropy in kJ/kg/K
+            {"evaporationSpecificVolume", evaporationVolume}, // volume in m³/kg
+    };
 
-double SaturatedProperties::getGasEnthalpy(){
-    double temp = this->saturatedTemperature_;
-    double pressure = this->saturatedPressure_;
-    std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region2(temp, pressure);
-    return properties["specificEnthalpy"];
-}
-
-
-
-double SaturatedProperties::getEvaporationEnthalpy(){
-    double gasEnthalpy = getGasEnthalpy();
-    double liquidEnthalpy = getLiquidEnthalpy();
-    this->evaporationEnthalpy_ = gasEnthalpy - liquidEnthalpy;
-    return this->evaporationEnthalpy_;
-}
-
-double SaturatedProperties::getLiquidEntropy(){
-    double temp = this->saturatedTemperature_;
-    double pressure = this->saturatedPressure_;
-
-    double entropy;
-
-    if ((temp >= SteamSystemModelerTool::TEMPERATURE_MIN) && (temp <= SteamSystemModelerTool::TEMPERATURE_Tp))
-    {
-        std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region1(temp, pressure);
-        entropy = properties["specificEntropy"];
-    }
-    if ((temp > SteamSystemModelerTool::TEMPERATURE_Tp) && (temp <= SteamSystemModelerTool::TEMPERATURE_CRIT))
-    {
-        std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region3(temp, pressure);
-        //entropy = properties["specificEntropy"];
-        entropy = properties["specificEntropy"];
-    }
-
-    return entropy;
-
-
-}
-
-double SaturatedProperties::getGasEntropy(){
-    double temp = this->saturatedTemperature_;
-    double pressure = this->saturatedPressure_;
-    std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region2(temp, pressure);
-    return properties["specificEntropy"];
-
-}
-
-double SaturatedProperties::getEvaporationEntropy(){
-    double gasEntropy = getGasEntropy();
-    double liquidEntropy = getLiquidEntropy();
-    this->evaporationEntropy_ = gasEntropy - liquidEntropy;
-    return this->evaporationEntropy_;
-}
-
-double SaturatedProperties::getLiquidVolume(){
-    double temp = this->saturatedTemperature_;
-    double pressure = this->saturatedPressure_;
-
-    double volume;
-
-    if ((temp >= SteamSystemModelerTool::TEMPERATURE_MIN) && (temp <= SteamSystemModelerTool::TEMPERATURE_Tp))
-    {
-        std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region1(temp, pressure);
-        volume = properties["specificVolume"];
-    }
-
-    if ((temp > SteamSystemModelerTool::TEMPERATURE_Tp) && (temp <= SteamSystemModelerTool::TEMPERATURE_CRIT))
-    {
-        std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region3(temp, pressure);
-        volume = properties["specificVolume"];
-    }
-
-    return volume;
-}
-
-
-
-double SaturatedProperties::getGasVolume(){
-    double temp = this->saturatedTemperature_;
-    double pressure = this->saturatedPressure_;
-    std::unordered_map<std::string, double> properties = SteamSystemModelerTool::region2(temp, pressure);
-    return properties["specificVolume"];
-
-}
-
-double SaturatedProperties::getEvaporationVolume(){
-    double gasVolume = getGasVolume();
-    double liquidVolume = getLiquidVolume();
-    this->evaporationVolume_ = gasVolume - liquidVolume;
-    return this->evaporationVolume_;
 }

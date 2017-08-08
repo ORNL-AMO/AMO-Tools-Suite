@@ -49,21 +49,27 @@ SQLite::~SQLite()
     sqlite3_finalize(m_gas_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_single_stmt);
+	sqlite3_finalize(m_gas_load_charge_materials_select_custom_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_single_stmt);
+    sqlite3_finalize(m_liquid_load_charge_materials_select_custom_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_single_stmt);
+    sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_custom_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_single_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_select_custom_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_insert_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_single_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_select_custom_stmt);
     sqlite3_finalize(m_wall_losses_surface_insert_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_single_stmt);
+    sqlite3_finalize(m_wall_losses_surface_select_custom_stmt);
 }
 
 std::string SQLiteWrapper::convert_text( const unsigned char * text ) {
