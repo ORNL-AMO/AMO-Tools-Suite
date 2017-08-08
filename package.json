@@ -9,7 +9,8 @@
   "gypfile": true,
   "dependencies": {
     "nan": "^2.5.1",
-    "node-gyp": "^3.6.2"
+    "node-gyp": "^3.6.2",
+    "utf-8-validate": "^3.0.3"
   },
   "devDependencies": {
     "bindings": "^1.2.1",

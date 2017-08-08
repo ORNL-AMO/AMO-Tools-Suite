@@ -187,7 +187,7 @@ set(INCLUDE_FILES
         include/ssmt/SteamProperties.h
         include/ssmt/SteamSystemModelerTool.h 
         include/ssmt/Boiler.h 
-        include/ssmt/HeatLoss.h )
+        include/ssmt/HeatLoss.h include/ssmt/PRV.h src/ssmt/PRV.cpp)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
