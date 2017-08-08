@@ -54,23 +54,23 @@ test('saturatedPropertiesGivenPressure', function (t) {
 
     t.equal(res.saturatedTemperature, 638.8959115457051, 'res.saturatedTemperature is ' + res.saturatedTemperature);
 
-    t.equal(res.liquidEnthalpy, 1827.1006242178723, 'res.liquidEnthalpy is ' + res.liquidEnthalpy);
+    t.equal(res.liquidEnthalpy, 1827.1006242178828, 'res.liquidEnthalpy is ' + res.liquidEnthalpy);
 
     t.equal(res.gasEnthalpy, 2421.680542687896, 'res.gasEnthalpy is '+ res.gasEnthalpy);
 
-    t.equal(res.evaporationEnthalpy, 594.5799184700236, 'res.evaporationEnthalpy is ' + res.evaporationEnthalpy);
+    t.equal(res.evaporationEnthalpy, 594.5799184700131, 'res.evaporationEnthalpy is ' + res.evaporationEnthalpy);
 
-    t.equal(res.liquidEntropy, 4.015381593120578, 'res.liquidEntropy is ' + res.liquidEntropy);
+    t.equal(res.liquidEntropy, 4.015381593120595, 'res.liquidEntropy is ' + res.liquidEntropy);
 
     t.equal(res.gasEntropy, 4.946001326758373, 'res.gasEntropy is '+ res.gasEntropy);
 
-    t.equal(res.evaporationEntropy, 0.930619733637795, 'res.evaporationEntropy is ' + res.evaporationEntropy);
+    t.equal(res.evaporationEntropy, 0.9306197336377782, 'res.evaporationEntropy is ' + res.evaporationEntropy);
 
-    t.equal(res.liquidVolume, 0.0020386472456956663, 'res.liquidVolume is ' + res.liquidVolume);
+    t.equal(res.liquidVolume, 0.00203864724569564, 'res.liquidVolume is ' + res.liquidVolume);
 
-    t.equal(res.gasVolume, 0.005936854102266306, 'res.gasVolume is '+ res.gasVolume);
+    t.equal(res.gasVolume, 0.005936854102266304, 'res.gasVolume is '+ res.gasVolume);
 
-    t.equal(res.evaporationVolume, 0.0038982068565706395, 'res.evaporationVolume is ' + res.evaporationVolume);
+    t.equal(res.evaporationVolume, 0.003898206856570664, 'res.evaporationVolume is ' + res.evaporationVolume);
 
 });
 
@@ -112,13 +112,13 @@ test('boiler', function (t) {
 
     var res = bindings.boiler(inp);
 
-    t.equal(res.steamEnergyFlow, 110.7533647508802, 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
+    t.equal(res.steamEnergyFlow, 110.75336475088508, 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
     t.equal(res.blowdownMassFlow, 0.9183673469387756, 'res.blowdownMassFlow is ' + res.blowdownMassFlow);
-    t.equal(res.blowdownEnergyFlow, 1.6779495528531483, 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
+    t.equal(res.blowdownEnergyFlow, 1.6779495528531578, 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
     t.equal(res.feedwaterMassFlow, 45.91836734693878, 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
     t.equal(res.feedwaterEnergyFlow, 64.64697706690914, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
-    t.equal(res.boilerEnergy, 47.7843372368242, 'res.boilerEnergy is '+ res.boilerEnergy);
-    t.equal(res.fuelEnergy, 56.216867337440235, 'res.fuelEnergy is '+ res.fuelEnergy);
+    t.equal(res.boilerEnergy, 47.7843372368291, 'res.boilerEnergy is '+ res.boilerEnergy);
+    t.equal(res.fuelEnergy, 56.216867337446004, 'res.fuelEnergy is '+ res.fuelEnergy);
 });
 
 test('heatLoss', function (t) {
@@ -181,4 +181,29 @@ test('prvWithoutDesuperheating', function (t) {
     t.equal(res.outletEnergyFlow, 123147.93493161911, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
     t.equal(res.inletSpecificEnthalpy, 3243.29562632655, 'res.inletSpecificEnthalpy is ' + res.inletSpecificEnthalpy);
     t.equal(res.outletSpecificEnthalpy, 3243.29562632655, 'res.outletSpecificEnthalpy is ' + res.outletSpecificEnthalpy);
+});
+
+test('prvWithDesuperheating', function (t) {
+    t.plan(6);
+    t.type(bindings.prvWithDesuperheating, 'function');
+
+    var inp = {
+        inletPressure : 2.8937,
+        thermodynamicQuantity : 0, //0 is TEMPERATURE
+        quantityValue : 936.3,
+        inletMassFlow : 17599,
+        outletPressure : 0.8188,
+        feedwaterPressure : 0.2937,
+        feedwaterThermodynamicQuantity : 2, //2 is ENTROPY
+        feedwaterQuantityValue : 5,
+        desuperheatingTemp : 708.3
+    };
+
+    var res = bindings.prvWithDesuperheating(inp);
+
+    t.equal(res.inletEnergyFlow, 67367.3111113208, 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(res.outletMassFlow, 23583.469367594505, 'res.outletMassFlow is ' + res.outletMassFlow);
+    t.equal(res.outletEnergyFlow, 78812.94289252072, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(res.feedwaterMassFlow, 5984.4693675945055, 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
+    t.equal(res.feedwaterEnergyFlow, 11445.631781199914, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
 });

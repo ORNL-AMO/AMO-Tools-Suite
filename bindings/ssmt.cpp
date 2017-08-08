@@ -35,6 +35,9 @@ NAN_MODULE_INIT(InitSsmt) {
     Nan::Set(target, New<String>("prvWithoutDesuperheating").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(prvWithoutDesuperheating)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("prvWithDesuperheating").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(prvWithDesuperheating)).ToLocalChecked());
+
 
 }
 

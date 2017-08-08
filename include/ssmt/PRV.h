@@ -217,7 +217,11 @@ public:
      * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param inletMassFlow double, inlet mass flow in kg/hr
-     * @param percentHeatLoss double, heat loss as %
+     * @param outletPressure double, outlet pressure in MPa
+     * @param feedwaterPressure double, pressure of feedwater in MPa
+     * @param feedwaterQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param feedwaterQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param desuperheatingTemp double, desuperheating temperature in K
      *
      * @return nothing
      *
