@@ -51,7 +51,7 @@ std::string GetStr(std::string const & nm) {
 
 // startup should not be used with unit tests
     NAN_METHOD(startup) {
-        std::string dbName = "amo-tools-suite.db";
+        std::string dbName = "amo_tools_suite.db";
         std::ifstream ifs(dbName);
 	    const bool fileExists = ifs.is_open();
         ifs.close();
@@ -69,19 +69,19 @@ std::string GetStr(std::string const & nm) {
 // to be run before program shutdown upon software update, shouldn't be used in unit tests
     NAN_METHOD(preUpdate) {
         sql.reset();
-        std::rename("amo-tools-suite.db", "amo-tools-suiteBACKUP.db");
+        std::rename("amo_tools_suite.db", "amo_tools_suiteBACKUP.db");
     }
 
 // to be called after program shutdown, upon software restart, shouldn't be used in unit tests
 NAN_METHOD(postUpdate) {
-    auto const backupSql = SQLite("amo-tools-suiteBACKUP.db", false);
+    auto const backupSql = SQLite("amo_tools_suiteBACKUP.db", false);
     auto const customSolidLoadChargeMats = backupSql.getCustomSolidLoadChargeMaterials();
 
     auto const now = std::chrono::system_clock::now();
     auto const date = std::chrono::system_clock::to_time_t(now);
     std::string dateStr = (ctime(&date));
     std::string db = "amo-tools-suite" + dateStr + ".db";
-    std::rename("amo-tools-suiteBACKUP.db", db.c_str());
+    std::rename("amo_tools_suiteBACKUP.db", db.c_str());
 
     startup(info);
 

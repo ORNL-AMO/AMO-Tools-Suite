@@ -32,13 +32,13 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
-// commented because it writes to HDD
+//// commented because it writes to HDD
 //TEST_CASE( "SQLite - test db init", "[sqlite]" ) {
 //    {
-//        std::ifstream ifs("amo-tools-suite.db");
+//        std::ifstream ifs("amo_tools_suite.db");
 //        auto const isOpen = ifs.is_open();
 //        ifs.close();
-//        auto sqlite = SQLite("amo-tools-suite.db", ! isOpen);
+//        auto sqlite = SQLite("amo_tools_suite.db", ! isOpen);
 //
 //        auto res = sqlite.getSolidLoadChargeMaterials();
 //        auto const resSize = res.size() + 1;
@@ -62,10 +62,10 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
 //    }
 //
 //    {
-//        std::ifstream ifs("amo-tools-suite.db");
+//        std::ifstream ifs("amo_tools_suite.db");
 //        auto const isOpen = ! ifs.is_open();
 //        ifs.close();
-//        auto sqlite = SQLite("amo-tools-suite.db", isOpen);
+//        auto sqlite = SQLite("amo_tools_suite.db", isOpen);
 //
 //        auto res = sqlite.getSolidLoadChargeMaterials();
 //        auto const resSize = res.size() + 1;
@@ -242,24 +242,6 @@ TEST_CASE( "SQLite - customLiquidLoadChargeMaterials", "[sqlite]" ) {
 
 TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
     auto sqlite = SQLite(":memory:", true);
-
-  /*  {
-        auto const output = sqlite.getGasFlueGasMaterialById(3);
-        GasCompositions expected("Natural Gas Ohio", 93.33, 0.25, 3.4, 1.82, 0, 0, 0, 0.45, 0.22, 0, 0.35);
-        expected.setID(3);
-        CHECK( expected.getID() == output.getID() );
-	    CHECK( expected.getSubstance() == output.getSubstance() );
-        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
-        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
-        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
-        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
-        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
-        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
-        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
-        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
-        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
-        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-    }*/
 
     //Typical Natural Gas - US
     {

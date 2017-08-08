@@ -451,43 +451,43 @@ test('dbInsertWallLossesSurface', function (t) {
 });
 
 // commented out bc it writes files to the HDD
-// test('dbTestMigrations', function (t) {
-//     t.plan(8);
-//
-//     bindings.startup();
-//     var res = bindings.selectSolidLoadChargeMaterials();
-//     var slcmLen = res.length;
-//     var slcmLen2 = slcmLen + 1;
-//     var slcmLen3 = slcmLen + 2;
-//
-//     var mat1 = {
-//         substance: 'customMaterial' + slcmLen2,
-//         specificHeatSolid: 0.25,
-//         latentHeat: 150,
-//         specificHeatLiquid: 0.30,
-//         meltingPoint: 1200
-//     };
-//     var mat2 = {
-//         substance: 'customMaterial' + slcmLen3,
-//         specificHeatSolid: 0.35,
-//         latentHeat: 350,
-//         specificHeatLiquid: 0.39,
-//         meltingPoint: 2900
-//     };
-//
-//     var success1 = bindings.insertSolidLoadChargeMaterial(mat1);
-//     var success2 = bindings.insertSolidLoadChargeMaterial(mat2);
-//
-//     bindings.preUpdate();
-//     bindings.postUpdate();
-//
-//     var res = bindings.selectSolidLoadChargeMaterials();
-//     t.equal(success1, true, "insert 1 was unsuccessful");
-//     t.equal(success2, true, "insert 2 was unsuccessful");
-//     t.equal(slcmLen + 2, res.length, res.length + " != " + slcmLen + 2);
-//     t.equal(res[slcmLen + 1].substance, mat2.substance, res[slcmLen + 1].substance + " != " + mat2.substance);
-//     t.equal(res[slcmLen + 1].specificHeatSolid, mat2.specificHeatSolid, res[slcmLen + 1].specificHeatSolid + " != " + mat2.specificHeatSolid);
-//     t.equal(res[slcmLen + 1].latentHeat, mat2.latentHeat, res[slcmLen + 1].latentHeat + " != " + mat2.latentHeat);
-//     t.equal(res[slcmLen + 1].specificHeatLiquid, mat2.specificHeatLiquid, res[slcmLen + 1].specificHeatLiquid + " != " + mat2.specificHeatLiquid);
-//     t.equal(res[slcmLen + 1].meltingPoint, mat2.meltingPoint, res[slcmLen + 1].meltingPoint + " != " + mat2.meltingPoint);
-// });
+test('dbTestMigrations', function (t) {
+    t.plan(8);
+
+    bindings.startup();
+    var res = bindings.selectSolidLoadChargeMaterials();
+    var slcmLen = res.length;
+    var slcmLen2 = slcmLen + 1;
+    var slcmLen3 = slcmLen + 2;
+
+    var mat1 = {
+        substance: 'customMaterial' + slcmLen2,
+        specificHeatSolid: 0.25,
+        latentHeat: 150,
+        specificHeatLiquid: 0.30,
+        meltingPoint: 1200
+    };
+    var mat2 = {
+        substance: 'customMaterial' + slcmLen3,
+        specificHeatSolid: 0.35,
+        latentHeat: 350,
+        specificHeatLiquid: 0.39,
+        meltingPoint: 2900
+    };
+
+    var success1 = bindings.insertSolidLoadChargeMaterial(mat1);
+    var success2 = bindings.insertSolidLoadChargeMaterial(mat2);
+
+    bindings.preUpdate();
+    bindings.postUpdate();
+
+    var res = bindings.selectSolidLoadChargeMaterials();
+    t.equal(success1, true, "insert 1 was unsuccessful");
+    t.equal(success2, true, "insert 2 was unsuccessful");
+    t.equal(slcmLen + 2, res.length, res.length + " != " + slcmLen + 2);
+    t.equal(res[slcmLen + 1].substance, mat2.substance, res[slcmLen + 1].substance + " != " + mat2.substance);
+    t.equal(res[slcmLen + 1].specificHeatSolid, mat2.specificHeatSolid, res[slcmLen + 1].specificHeatSolid + " != " + mat2.specificHeatSolid);
+    t.equal(res[slcmLen + 1].latentHeat, mat2.latentHeat, res[slcmLen + 1].latentHeat + " != " + mat2.latentHeat);
+    t.equal(res[slcmLen + 1].specificHeatLiquid, mat2.specificHeatLiquid, res[slcmLen + 1].specificHeatLiquid + " != " + mat2.specificHeatLiquid);
+    t.equal(res[slcmLen + 1].meltingPoint, mat2.meltingPoint, res[slcmLen + 1].meltingPoint + " != " + mat2.meltingPoint);
+});
