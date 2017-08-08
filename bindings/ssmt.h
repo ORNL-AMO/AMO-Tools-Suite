@@ -15,6 +15,7 @@
 #include "ssmt/Boiler.h"
 #include "ssmt/HeatLoss.h"
 #include "ssmt/FlashTank.h"
+#include "ssmt/PRV.h"
 
 
 using namespace Nan;
@@ -409,6 +410,64 @@ NAN_METHOD(flashTank) {
         SetR("outletLiquidEnergyFlow", outletLiquidEnergyFlow);
 
         info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(prvWithoutDesuperheating) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+
+   /**
+    *
+    * Constructor for the PRV without desuperheating calculator
+    *
+    * @param inletPressure double, inlet pressure in MPa
+    * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+    * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+    * @param inletMassFlow double, inlet mass flow in kg/hr
+    * @param outletPressure double, houtlet pressure in MPa
+    *
+    * @return nothing
+    *
+    * */
+    PrvWithoutDesuperheating pwod(Get("inletPressure"),quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("outletPressure"));
+    std::unordered_map <std::string, double> inletResults = pwod.getInletProperties();
+    std::unordered_map <std::string, double> outletResults = pwod.getOutletProperties();
+    double inletPressure = inletResults["pressure"];
+    double inletTemperature = inletResults["temperature"];
+    double inletSpecificEnthalpy = inletResults["specificEnthalpy"];
+    double inletSpecificEntropy = inletResults["specificEntropy"];
+    double inletQuality = inletResults["quality"];
+    double inletMassFlow = pwod.getInletMassFlow();
+    double inletEnergyFlow = pwod.getInletEnergyFlow();
+
+    double outletPressure = outletResults["pressure"];
+    double outletTemperature = outletResults["temperature"];
+    double outletSpecificEnthalpy = outletResults["specificEnthalpy"];
+    double outletSpecificEntropy = outletResults["specificEntropy"];
+    double outletQuality = outletResults["quality"];
+    double outletMassFlow = pwod.getOutletMassFlow();
+    double outletEnergyFlow = pwod.getOutletEnergyFlow();
+
+    SetR("inletPressure", inletPressure);
+    SetR("inletTemperature", inletTemperature);
+    SetR("inletSpecificEnthalpy", inletSpecificEnthalpy);
+    SetR("inletSpecificEntropy", inletSpecificEntropy);
+    SetR("inletQuality", inletQuality);
+    SetR("inletMassFlow", inletMassFlow);
+    SetR("inletEnergyFlow", inletEnergyFlow);
+
+    SetR("outletPressure", outletPressure);
+    SetR("outletTemperature", outletTemperature);
+    SetR("outletSpecificEnthalpy", outletSpecificEnthalpy);
+    SetR("outletSpecificEntropy", outletSpecificEntropy);
+    SetR("outletQuality", outletQuality);
+    SetR("outletMassFlow", outletMassFlow);
+    SetR("outletEnergyFlow", outletEnergyFlow);
+
+    info.GetReturnValue().Set(r);
 }
 
 

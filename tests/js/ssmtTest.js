@@ -161,3 +161,24 @@ test('flashTank', function (t) {
     t.equal(res.outletLiquidMassFlow, 16465.83616568878, 'res.outletLiquidMassFlow is ' + res.outletLiquidMassFlow);
     t.equal(res.outletLiquidEnergyFlow, 17139.20289212423, 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
 });
+
+test('prvWithoutDesuperheating', function (t) {
+    t.plan(6);
+    t.type(bindings.prvWithoutDesuperheating, 'function');
+
+    var inp = {
+        inletPressure : 4.8794,
+        thermodynamicQuantity : 0, //0 is TEMPERATURE
+        quantityValue : 691.5,
+        inletMassFlow : 37970,
+        outletPressure : 4.0823
+    };
+
+    var res = bindings.prvWithoutDesuperheating(inp);
+
+    t.equal(res.inletEnergyFlow, 123147.93493161911, 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(res.outletMassFlow, 37970, 'res.outletMassFlow is ' + res.outletMassFlow);
+    t.equal(res.outletEnergyFlow, 123147.93493161911, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(res.inletSpecificEnthalpy, 3243.29562632655, 'res.inletSpecificEnthalpy is ' + res.inletSpecificEnthalpy);
+    t.equal(res.outletSpecificEnthalpy, 3243.29562632655, 'res.outletSpecificEnthalpy is ' + res.outletSpecificEnthalpy);
+});
