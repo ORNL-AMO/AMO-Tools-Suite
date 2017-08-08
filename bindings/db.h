@@ -9,6 +9,8 @@
 #include <sqlite/SQLite.h>
 #include <fstream>
 #include <memory>
+#include <chrono>
+#include <iostream>
 #include <calculator/losses/SolidLoadChargeMaterial.h>
 #include <calculator/losses/LiquidLoadChargeMaterial.h>
 #include <calculator/losses/GasLoadChargeMaterial.h>
@@ -20,16 +22,73 @@
 using namespace Nan;
 using namespace v8;
 
+Local<Object> inp;
 std::unique_ptr<SQLite> sql;
 
+double Get(std::string const & nm) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+
+    auto rObj = inp->ToObject()->Get(getName);
+    if (rObj->IsUndefined()) {
+        std::cout<<nm;
+        //assert(!"defined");
+    }
+    return rObj->NumberValue();
+}
+
+std::string GetStr(std::string const & nm) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    auto obj = inp->ToObject()->Get(getName);
+    v8::String::Utf8Value s(obj);
+    return std::string(*s);
+}
+
+
+// update all tables to have secondary key
+// when creating sqlite, add table that has history, put in tools-suite number and the date so that we know where db's came from
+// so data is version, timestamp, comment - "initial file based release"
+// to save the backup,
+
+// startup should not be used with unit tests
     NAN_METHOD(startup) {
-	    std::string dbName = ":memory:";
-	    sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
+        std::string dbName = "amo-tools-suite.db";
+        std::ifstream ifs(dbName);
+	    const bool fileExists = ifs.is_open();
+        ifs.close();
+
+	    sql.reset();
+        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
     }
 
-    NAN_METHOD(update) {
-//        db migration code goes here
+    // used for unit testing, we don't want files written to the hard drive during testing
+    NAN_METHOD(unitTestStartup) {
+        std::string dbName = ":memory:";
+        sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
     }
+
+// to be run before program shutdown upon software update, shouldn't be used in unit tests
+    NAN_METHOD(preUpdate) {
+        sql.reset();
+        std::rename("amo-tools-suite.db", "amo-tools-suiteBACKUP.db");
+    }
+
+// to be called after program shutdown, upon software restart, shouldn't be used in unit tests
+NAN_METHOD(postUpdate) {
+    auto const backupSql = SQLite("amo-tools-suiteBACKUP.db", false);
+    auto const customSolidLoadChargeMats = backupSql.getCustomSolidLoadChargeMaterials();
+
+    auto const now = std::chrono::system_clock::now();
+    auto const date = std::chrono::system_clock::to_time_t(now);
+    std::string dateStr = (ctime(&date));
+    std::string db = "amo-tools-suite" + dateStr + ".db";
+    std::rename("amo-tools-suiteBACKUP.db", db.c_str());
+
+    startup(info);
+
+    for (auto const mat : customSolidLoadChargeMats) {
+        sql->insertSolidLoadChargeMaterials(mat);
+    }
+}
 
     NAN_METHOD(selectSolidLoadChargeMaterials) {
 	    Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -78,6 +137,20 @@ std::unique_ptr<SQLite> sql;
         info.GetReturnValue().Set(obj);
     }
 
+    NAN_METHOD(insertSolidLoadChargeMaterial) {
+        inp = info[0]->ToObject();
+        SolidLoadChargeMaterial slcm;
+
+	    std::string substance = GetStr("substance");
+        slcm.setSubstance(substance);
+        slcm.setSpecificHeatSolid(Get("specificHeatSolid"));
+        slcm.setSpecificHeatLiquid(Get("specificHeatLiquid"));
+        slcm.setLatentHeat(Get("latentHeat"));
+        slcm.setMeltingPoint(Get("meltingPoint"));
+        bool success = sql->insertSolidLoadChargeMaterials(slcm);
+        info.GetReturnValue().Set(success);
+    }
+
     NAN_METHOD(selectLiquidLoadChargeMaterials) {
         Local<String> id = Nan::New<String>("id").ToLocalChecked();
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
@@ -103,6 +176,20 @@ std::unique_ptr<SQLite> sql;
 
         info.GetReturnValue().Set(objs);
     }
+
+NAN_METHOD(insertLiquidLoadChargeMaterial) {
+    inp = info[0]->ToObject();
+    LiquidLoadChargeMaterial llcm;
+
+    std::string substance = GetStr("substance");
+    llcm.setSubstance(substance);
+    llcm.setSpecificHeatLiquid(Get("specificHeatLiquid"));
+    llcm.setSpecificHeatVapor(Get("specificHeatVapor"));
+    llcm.setVaporizingTemperature(Get("vaporizationTemperature"));
+    llcm.setLatentHeat(Get("latentHeat"));
+    bool success = sql->insertLiquidLoadChargeMaterials(llcm);
+    info.GetReturnValue().Set(success);
+}
 
     NAN_METHOD(selectLiquidLoadChargeMaterialById) {
         Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -144,6 +231,17 @@ std::unique_ptr<SQLite> sql;
 
         info.GetReturnValue().Set(objs);
     }
+
+NAN_METHOD(insertGasLoadChargeMaterial) {
+    inp = info[0]->ToObject();
+    GasLoadChargeMaterial glcm;
+
+    std::string substance = GetStr("substance");
+    glcm.setSubstance(substance);
+	glcm.setSpecificHeatVapor(Get("specificHeatVapor"));
+    bool success = sql->insertGasLoadChargeMaterials(glcm);
+    info.GetReturnValue().Set(success);
+}
 
     NAN_METHOD(selectGasLoadChargeMaterialById) {
         Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -191,6 +289,18 @@ std::unique_ptr<SQLite> sql;
 
         info.GetReturnValue().Set(objs);
     };
+
+NAN_METHOD(insertSolidLiquidFlueGasMaterial) {
+    inp = info[0]->ToObject();
+    SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, Get("carbon") * 100, Get("hydrogen") * 100,
+                                     Get("sulphur") * 100, Get("inertAsh") * 100, Get("o2") * 100,
+                                     Get("moisture") * 100, Get("nitrogen") * 100);
+
+    slfgm.setSubstance(GetStr("substance"));
+    bool success = sql->insertSolidLiquidFlueGasMaterial(slfgm);
+    info.GetReturnValue().Set(success);
+};
+
 
     NAN_METHOD(selectSolidLiquidFlueGasMaterialById) {
         Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -262,6 +372,15 @@ std::unique_ptr<SQLite> sql;
         info.GetReturnValue().Set(objs);
     };
 
+NAN_METHOD(insertGasFlueGasMaterial) {
+	inp = info[0]->ToObject();
+	GasCompositions comp(GetStr("substance"), Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+	                     Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
+
+	bool success = sql->insertGasFlueGasMaterial(comp);
+	info.GetReturnValue().Set(success);
+}
+
     NAN_METHOD(selectGasFlueGasMaterialById) {
         Local<String> id = Nan::New<String>("id").ToLocalChecked();
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
@@ -321,6 +440,15 @@ NAN_METHOD(selectAtmosphereSpecificHeat) {
     info.GetReturnValue().Set(objs);
 };
 
+NAN_METHOD(insertAtmosphereSpecificHeat) {
+    inp = info[0]->ToObject();
+	Atmosphere atmos;
+    atmos.setSubstance(GetStr("substance"));
+	atmos.setSpecificHeat(Get("specificHeat"));
+    bool success = sql->insertAtmosphereSpecificHeat(atmos);
+    info.GetReturnValue().Set(success);
+};
+
 NAN_METHOD(selectAtmosphereSpecificHeatById) {
     Local<String> id = Nan::New<String>("id").ToLocalChecked();
     Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
@@ -352,6 +480,15 @@ NAN_METHOD(selectWallLossesSurface) {
     }
 
     info.GetReturnValue().Set(objs);
+};
+
+NAN_METHOD(insertWallLossesSurface) {
+    inp = info[0]->ToObject();
+    WallLosses wl;
+    wl.setSurface(GetStr("surface"));
+    wl.setConditionFactor(Get("conditionFactor"));
+    bool success = sql->insertWallLossesSurface(wl);
+    info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(selectWallLossesSurfaceById) {
