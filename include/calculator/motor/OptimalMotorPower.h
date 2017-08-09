@@ -38,6 +38,7 @@ public:
         int motorRPM,
         Motor::LineFrequency lineFrequency,
         Motor::EfficiencyClass efficiencyClass,
+        Motor::EfficiencyClass optimalEfficiencyClass,
         double specifiedEfficiency,
         double ratedVoltage,
         double fullLoadAmps,
@@ -55,6 +56,7 @@ public:
         fullLoadAmps_(fullLoadAmps),
         fieldVoltage_(fieldVoltage),
         efficiencyClass_(efficiencyClass),
+        optimalEfficiencyClass_(optimalEfficiencyClass),
         specifiedEfficiency_(specifiedEfficiency)
 //        fieldCurrent_(fieldCurrent),
 //        loadEstimationMethod_(loadEstimationMethod)
@@ -164,6 +166,7 @@ private:
     double fullLoadAmps_ = 0.0;
     double fieldVoltage_ = 0.0;
     Motor::EfficiencyClass efficiencyClass_;
+    Motor::EfficiencyClass optimalEfficiencyClass_;
 
     double specifiedEfficiency_;
 //    double fieldCurrent_ = 0.0;

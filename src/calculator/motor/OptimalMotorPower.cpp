@@ -20,13 +20,13 @@ double OptimalMotorPower::calculate() {
     double tempLoadFraction_ = 0.00;
     double mspkW = 0.0;
     while (true) {
-        OptimalMotorCurrent optimalMotorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, Motor::EfficiencyClass::ENERGY_EFFICIENT,
+        OptimalMotorCurrent optimalMotorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, optimalEfficiencyClass_,
                                                 specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fieldVoltage_,
                                                 fullLoadAmps_);
         current = optimalMotorCurrent.calculate();
         //Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage_ / ratedVoltage_) - 1) * (1 + (-2 * tempLoadFraction_))) + 1);
-        MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
+        MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, optimalEfficiencyClass_, specifiedEfficiency_,
                                         motorRatedPower_,
                                         tempLoadFraction_);
         eff = motorEfficiency.calculate();
