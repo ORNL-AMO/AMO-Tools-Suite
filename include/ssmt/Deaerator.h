@@ -10,6 +10,7 @@
  */
 
 #include "SteamProperties.h"
+#include "SaturatedProperties.h"
 
 #ifndef AMO_TOOLS_SUITE_DEAERATOR_H
 #define AMO_TOOLS_SUITE_DEAERATOR_H
@@ -65,6 +66,11 @@ public:
         inletWaterEnergyFlow_ = 0.0;
         inletSteamMassFlow_ = 0.0;
         inletSteamEnergyFlow_ = 0.0;
+
+        totalDAMassFlow_ = 0.0;
+        totalOutletEnergyFlow_ = 0.0;
+        minEnergyFlow_ = 0.0;
+        neededEnergyFlow_ = 0.0;
 
     }
 
@@ -287,6 +293,30 @@ public:
     double getVentedSteamMassFlow();
 
     /**
+     * Calculates the total deaerator mass flow
+     * @return double, total deaerator mass flow in kg/hr
+     */
+    double getTotalDAMassFlow();
+
+    /**
+     * Calculates the total outlet energy flow
+     * @return double, total outlet energy flow in MJ/hr
+     */
+    double getTotalOutletEnergyFlow();
+
+    /**
+     * Calculates the minimum inlet energy flow
+     * @return double, minimum inlet energy flow in MJ/hr
+     */
+    double getMinEnergyFlow();
+
+    /**
+     * Calculates the additional energy flow needed
+     * @return double, additional energy flow needed in MJ/hr
+     */
+    double getNeededEnergyFlow();
+
+    /**
      * Calculates the vented steam energy flow
      * @return double, vented steam energy flow in MJ/hr
      */
@@ -327,6 +357,12 @@ private:
     double steamPressure_ = 0.0;
     SteamProperties::ThermodynamicQuantity steamQuantityType_;
     double steamQuantityValue_ = 0.0;
+
+    // In-Out values
+    double totalDAMassFlow_;
+    double totalOutletEnergyFlow_;
+    double minEnergyFlow_;
+    double neededEnergyFlow_;
 
 
     // Out values
