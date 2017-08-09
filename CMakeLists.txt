@@ -189,7 +189,7 @@ set(INCLUDE_FILES
         include/ssmt/SteamSystemModelerTool.h
         include/ssmt/Boiler.h
         include/ssmt/HeatLoss.h
-        include/ssmt/FlashTank.h)
+        include/ssmt/FlashTank.h include/ssmt/Deaerator.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
