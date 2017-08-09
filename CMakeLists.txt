@@ -223,7 +223,7 @@ set(TEST_FILES
         tests/SteamProperties.unit.cpp
         tests/Boiler.unit.cpp
         tests/HeatLoss.unit.cpp
-        tests/FlashTank.unit.cpp)
+        tests/FlashTank.unit.cpp tests/Deaerator.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

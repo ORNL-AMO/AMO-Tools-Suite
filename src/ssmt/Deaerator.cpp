@@ -58,26 +58,32 @@ double Deaerator::getFeedwaterEnergyFlow(){
 }
 
 double Deaerator::getVentedSteamMassFlow(){
-    this->ventedSteamMassFlow_ = this->ventRate_ * this->feedwaterMassFlow_;
+    this->ventedSteamMassFlow_ = (this->ventRate_/100) * this->feedwaterMassFlow_;
     return ventedSteamMassFlow_;
 }
 
+double Deaerator::getVentedSteamEnergyFlow(){
+    std::unordered_map <std::string, double> ventedSteamProps = getVentedSteamProperties();
+    this->ventedSteamEnergyFlow_ = ventedSteamProps["specificEnthalpy"] * getVentedSteamMassFlow();
+    return ventedSteamEnergyFlow_/1000;
+}
+
 double Deaerator::getTotalDAMassFlow(){
-    this->totalDAMassFlow_ = getInletSteamMassFlow() + this->feedwaterMassFlow_;
+    this->totalDAMassFlow_ = getVentedSteamMassFlow() + this->feedwaterMassFlow_;
     return totalDAMassFlow_;
 }
 
 double Deaerator::getTotalOutletEnergyFlow(){
     std::unordered_map <std::string, double> feedwaterProps = getFeedwaterProperties();
     std::unordered_map <std::string, double> ventedSteamProps = getVentedSteamProperties();
-    this->totalDAMassFlow_ = (feedwaterProps["specificEnthalpy"] * this->feedwaterMassFlow_) + (ventedSteamProps["specificEnthalpy"] * getVentedSteamMassFlow());
-    return totalDAMassFlow_;
+    this->totalOutletEnergyFlow_ = (feedwaterProps["specificEnthalpy"] * this->feedwaterMassFlow_) + (ventedSteamProps["specificEnthalpy"] * getVentedSteamMassFlow());
+    return totalOutletEnergyFlow_/1000;
 }
 
 double Deaerator::getMinEnergyFlow(){
     std::unordered_map <std::string, double> inletWaterProps = getInletWaterProperties();
-    this->minEnergyFlow_ = inletWaterProps["specificEnthalpy"] * getTotalDAMassFlow();
-    return minEnergyFlow_;
+    this->minEnergyFlow_ = inletWaterProps["specificEnthalpy"]* getTotalDAMassFlow();
+    return minEnergyFlow_/1000;
 }
 
 double Deaerator::getNeededEnergyFlow(){
@@ -89,7 +95,7 @@ double Deaerator::getInletSteamMassFlow(){
     std::unordered_map <std::string, double> inletSteamProps = getInletSteamProperties();
     std::unordered_map <std::string, double> inletWaterProps = getInletWaterProperties();
     this->inletSteamMassFlow_ = getNeededEnergyFlow()/(inletSteamProps["specificEnthalpy"] - inletWaterProps["specificEnthalpy"]);
-    return inletSteamMassFlow_;
+    return inletSteamMassFlow_ * 1000;
 }
 
 double Deaerator::getInletSteamEnergyFlow(){
