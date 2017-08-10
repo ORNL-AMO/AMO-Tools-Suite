@@ -458,13 +458,37 @@ NAN_METHOD(deaerator) {
     double ventedSteamMassFlow = d.getVentedSteamMassFlow();
     double ventedSteamEnergyFlow = d.getVentedSteamEnergyFlow();
 
-    double outletLiquidPressure = inletWaterResults["saturatedPressure"];
-    double outletLiquidTemperature = inletWaterResults["saturatedTemperature"];
-    double outletLiquidSpecificEnthalpy = inletWaterResults["liquidSpecificEnthalpy"];
-    double outletLiquidSpecificEntropy = inletWaterResults["liquidSpecificEntropy"];
-    double outletLiquidQuality = inletWaterResults["quality"];
-    double outletLiquidMassFlow = d.getInletWaterMassFlow();
-    double outletLiquidEnergyFlow = d.getInletWaterEnergyFlow();
+    double inletWaterPressure = inletWaterResults["saturatedPressure"];
+    double inletWaterTemperature = inletWaterResults["saturatedTemperature"];
+    double inletWaterSpecificEnthalpy = inletWaterResults["liquidSpecificEnthalpy"];
+    double inletWaterSpecificEntropy = inletWaterResults["liquidSpecificEntropy"];
+    double inletWaterQuality = inletWaterResults["quality"];
+    double inletWaterMassFlow = d.getInletWaterMassFlow();
+    double inletWaterEnergyFlow = d.getInletWaterEnergyFlow();
+
+    double inletSteamPressure = inletSteamResults["saturatedPressure"];
+    double inletSteamTemperature = inletSteamResults["saturatedTemperature"];
+    double inletSteamSpecificEnthalpy = inletSteamResults["liquidSpecificEnthalpy"];
+    double inletSteamSpecificEntropy = inletSteamResults["liquidSpecificEntropy"];
+    double inletSteamQuality = inletSteamResults["quality"];
+    double inletSteamMassFlow = d.getInletSteamMassFlow();
+    double inletSteamEnergyFlow = d.getInletSteamEnergyFlow();
+
+    SetR("feedwaterPressure", feedwaterPressure);
+    SetR("feedwaterTemperature", feedwaterTemperature);
+    SetR("feedwaterSpecificEnthalpy", feedwaterSpecificEnthalpy);
+    SetR("feedwaterSpecificEntropy", feedwaterSpecificEntropy);
+    SetR("feedwaterQuality", feedwaterQuality);
+    SetR("feedwaterMassFlow", feedwaterMassFlow);
+    SetR("feedwaterEnergyFlow", feedwaterEnergyFlow);
+
+    SetR("ventedSteamPressure", ventedSteamPressure);
+    SetR("ventedSteamTemperature", ventedSteamTemperature);
+    SetR("ventedSteamSpecificEnthalpy", ventedSteamSpecificEnthalpy);
+    SetR("ventedSteamSpecificEntropy", ventedSteamSpecificEntropy);
+    SetR("ventedSteamQuality", ventedSteamQuality);
+    SetR("ventedSteamMassFlow", ventedSteamMassFlow);
+    SetR("ventedSteamEnergyFlow", ventedSteamEnergyFlow);
 
     SetR("inletWaterPressure", inletWaterPressure);
     SetR("inletWaterTemperature", inletWaterTemperature);
@@ -474,21 +498,13 @@ NAN_METHOD(deaerator) {
     SetR("inletWaterMassFlow", inletWaterMassFlow);
     SetR("inletWaterEnergyFlow", inletWaterEnergyFlow);
 
-    SetR("outletGasPressure", outletGasPressure);
-    SetR("outletGasTemperature", outletGasTemperature);
-    SetR("outletGasSpecificEnthalpy", outletGasSpecificEnthalpy);
-    SetR("outletGasSpecificEntropy", outletGasSpecificEntropy);
-    SetR("outletGasQuality", outletGasQuality);
-    SetR("outletGasMassFlow", outletGasMassFlow);
-    SetR("outletGasEnergyFlow", outletGasEnergyFlow);
-
-    SetR("outletLiquidPressure", outletLiquidPressure);
-    SetR("outletLiquidTemperature", outletLiquidTemperature);
-    SetR("outletLiquidSpecificEnthalpy", outletLiquidSpecificEnthalpy);
-    SetR("outletLiquidSpecificEntropy", outletLiquidSpecificEntropy);
-    SetR("outletLiquidQuality", outletLiquidQuality);
-    SetR("outletLiquidMassFlow", outletLiquidMassFlow);
-    SetR("outletLiquidEnergyFlow", outletLiquidEnergyFlow);
+    SetR("inletSteamPressure", inletSteamPressure);
+    SetR("inletSteamTemperature", inletSteamTemperature);
+    SetR("inletSteamSpecificEnthalpy", inletSteamSpecificEnthalpy);
+    SetR("inletSteamSpecificEntropy", inletSteamSpecificEntropy);
+    SetR("inletSteamQuality", inletSteamQuality);
+    SetR("inletSteamMassFlow", inletSteamMassFlow);
+    SetR("inletSteamEnergyFlow", inletSteamEnergyFlow);
 
     info.GetReturnValue().Set(r);
 }

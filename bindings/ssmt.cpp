@@ -23,14 +23,17 @@ NAN_MODULE_INIT(InitSsmt) {
     Nan::Set(target, New<String>("steamProperties").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(steamProperties)).ToLocalChecked());
 
-        Nan::Set(target, New<String>("boiler").ToLocalChecked(),
+    Nan::Set(target, New<String>("boiler").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(boiler)).ToLocalChecked());
 
-        Nan::Set(target, New<String>("heatLoss").ToLocalChecked(),
+    Nan::Set(target, New<String>("heatLoss").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(heatLoss)).ToLocalChecked());
 
-        Nan::Set(target, New<String>("flashTank").ToLocalChecked(),
+    Nan::Set(target, New<String>("flashTank").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(flashTank)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("deaerator").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(deaerator)).ToLocalChecked());
 
 }
 

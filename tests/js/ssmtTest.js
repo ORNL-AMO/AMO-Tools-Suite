@@ -161,3 +161,30 @@ test('flashTank', function (t) {
     t.equal(res.outletLiquidMassFlow, 16465.83616568878, 'res.outletLiquidMassFlow is ' + res.outletLiquidMassFlow);
     t.equal(res.outletLiquidEnergyFlow, 17139.20289212423, 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
 });
+
+test('deaerator', function (t) {
+    t.plan(6);
+    t.type(bindings.deaerator, 'function');
+
+    var inp = {
+        deaeratorPressure : 0.1998,
+        ventRate : 0.4,
+        feedwaterMassFlow : 41685,
+        waterPressure : 0.1235,
+        waterQuantityType : 1, //1 is ENTHALPY
+        waterQuantityValue : 100,
+        steamPressure : 0.4777,
+        steamQuantityType : 2, //2 is ENTROPY
+        steamQuantityValue : 6
+    };
+
+    var res = bindings.deaerator(inp);
+
+    t.equal(res.feedwaterEnergyFlow, 21032, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(res.ventedSteamMassFlow, 166.74, 'res.ventedSteamMassFlow is ' + res.ventedSteamMassFlow);
+    t.equal(res.ventedSteamEnergyFlow, 451.2310290232, 'res.ventedSteamEnergyFlow is ' + res.ventedSteamEnergyFlow);
+    t.equal(res.inletWaterMassFlow, 34305, 'res.inletWaterMassFlow is ' + res.inletWaterMassFlow);
+    t.equal(res.inletWaterEnergyFlow, 3430.5357797804, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
+    t.equal(res.inletSteamMassFlow, 7546.3822021967, 'res.inletSteamMassFlow is ' + res.inletSteamMassFlow);
+    t.equal(res.inletSteamEnergyFlow, 18053, 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
+});
