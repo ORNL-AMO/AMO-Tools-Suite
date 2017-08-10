@@ -122,12 +122,12 @@ test('psatModified', function (t) {
         'motor_field_voltage': 480, 'baseline_pump_efficiency':80
     };
 
-    var psatResult = bindings.resultsOptimal(inp);
+    var psatResult = bindings.resultsModified(inp);
 
    t.equal(psatResult.pump_efficiency, 80 , 'modified pump efficiency is ' + psatResult.pump_efficiency);
     t.equal(psatResult.motor_rated_power, 100 , 'modified motor rated power is ' + psatResult.motor_rated_power);
-    t.equal(psatResult.motor_shaft_power, 101.55, 'modified motor shaft power is ' + psatResult.motor_shaft_power);
-    t.equal(psatResult.pump_shaft_power, 101.55, 'modified pump power is ' + psatResult.pump_shaft_power);
+    t.equal(psatResult.motor_shaft_power, 101.51891512553706, 'modified motor shaft power is ' + psatResult.motor_shaft_power);
+    t.equal(psatResult.pump_shaft_power, 101.51891512553706, 'modified pump power is ' + psatResult.pump_shaft_power);
     t.equal(psatResult.motor_efficiency, 95.02783605700556, 'modified motor efficiency is ' + psatResult.motor_efficiency);
     t.equal(psatResult.motor_power_factor, 85.97645176630047, 'modified motor power factor is ' + psatResult.motor_power_factor);
     t.equal(psatResult.motor_current, 102.81349971661015, 'modified motor current is ' + psatResult.motor_current);
@@ -140,19 +140,19 @@ test('psatModified', function (t) {
 
 test('psatModified2', function (t) {
     t.plan(11);
-    t.type(bindings.resultsOptimal, 'function');
+    t.type(bindings.resultsModified, 'function');
     var inp = {
         'pump_style': 12, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
         'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 200,
         'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
         'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
         'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
-        'motor_field_voltage': 480, 'baseline_pump_efficiency':80
+        'motor_field_voltage': 480, 'baseline_pump_efficiency': 80
     };
 
-    var psatResult = bindings.resultsOptimal(inp);
+    var psatResult = bindings.resultsModified(inp);
 
-   t.equal(psatResult.pump_efficiency, 90, ‘modified pump efficiency is ' + psatResult.pump_efficiency);
+   t.equal(psatResult.pump_efficiency, 90, 'modified pump efficiency is ' + psatResult.pump_efficiency);
     t.equal(psatResult.motor_rated_power, 100 , 'modified motor rated power is ' + psatResult.motor_rated_power);
     t.equal(psatResult.motor_shaft_power, 90.3, 'modified motor shaft power is ' + psatResult.motor_shaft_power);
     t.equal(psatResult.pump_shaft_power, 90.3, 'modified pump power is ' + psatResult.pump_shaft_power);

@@ -11,7 +11,7 @@ TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	double pump_specified = 90, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
 	double stages = 2.0, motor_rated_power = 200, motor_rated_speed = 1780, efficiency = 95, motor_rated_voltage = 460;
 	double motor_rated_fla = 225.0, margin = 0, operating_fraction = 1.00, cost_kw_hour = 0.05, flow_rate = 1840;
-	double head = 174.85, motor_field_power = 80, motor_field_current = 125.857, motor_field_voltage = 480; baseline_pump_efficiency = 80
+	double head = 174.85, motor_field_power = 80, motor_field_current = 125.857, motor_field_voltage = 480; baseline_pump_efficiency = 80;
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
 	Pump::Drive drive1(Pump::Drive::DIRECT_DRIVE);

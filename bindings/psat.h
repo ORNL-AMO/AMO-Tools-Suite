@@ -332,7 +332,7 @@ NAN_METHOD(resultsModified) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    double baselinePumpEfficiency = Get("baseline_pump_efficiency");
+    double baselinePumpEfficiency = Get("baseline_pump_efficiency") / 100;
 
     Pump::Style style1 = style();
     Pump::Drive drive1 = drive();
