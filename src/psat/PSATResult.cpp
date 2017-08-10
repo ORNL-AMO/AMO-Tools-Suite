@@ -128,19 +128,19 @@ double PSATResult::calculateOptimal() {
 }
 double PSATResult::calculateModified() {
     /**
-     * Steps for calculating the optimal values:
-     *  1. Calculate optimal pump efficiency, fluid power and pump shaft power
+         * Steps for calculating the modified values:
+     *  1. Calculate fluid power and pump shaft power
      *  2. Calculate Motor shaft power
      *      a. If a belt drive is specified, calculate the motor shaft power
      *      b. If direct drive, motor shaft power = pump shaft power
-     *  3. Select motor size based on required motor shaft power
-     *  4. Develop 25% interval motor performance data for EE motor of the selected size
+     *  4. Develop 25% interval motor performance data for specified efficiency rating motor of the selected size
      *  5. Do curve fitting of current from 25% to 1% intervals
      *  6. Do curve fitting of efficiency in 1% intervals
      *  7. Using current and efficiency 1% interval data, calculate balance of motor data in 1% intervals
      *  8. Calculate required power, motor eff., current, pf from shaft power
      *  9. Calculate annual energy and energy cost
      *  10.Calculate annual savings potential and optimization rating
+
      */
 
     if (pump_.getStyle() == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
