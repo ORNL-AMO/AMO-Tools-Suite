@@ -48,6 +48,30 @@ public:
         motor_(motor),
         financial_(financial),
         fieldData_(fieldData)
+    {
+        baselinePumpEfficiency_ = 0.0;
+    };
+
+    /**
+     * Constructor
+     * @param pump Pump, contains all pump-related calculations, passed by reference
+     * @param motor Motor, contains all motor-related calculations, passed by reference
+     * @param financial Financial, contains all financial-related calculations, passed by reference
+     * @param fieldData FiledData, contains all field data-related calculations, passed by reference
+     * @return nothing
+     */
+    PSATResult(
+            Pump &pump,
+            Motor &motor,
+            Financial &financial,
+            FieldData &fieldData,
+            double baselinePumpEfficiency
+    ) :
+            pump_(pump),
+            motor_(motor),
+            financial_(financial),
+            fieldData_(fieldData),
+            baselinePumpEfficiency_(baselinePumpEfficiency)
     {};
 
     /**
@@ -111,6 +135,16 @@ public:
 
     /**
      *
+     * Gets the modified conditions
+     *
+     * @return const result_, modified conditions
+     */
+    const result_ &getModified() const {
+        return modified_;
+    }
+
+    /**
+     *
      * Gets the optimal conditions
      *
      * @return const result_, optimal conditions
@@ -126,13 +160,22 @@ public:
     double calculateExisting();
 
     /**
+     * Calculates modified conditions
+     * @return double, modified conditions
+     */
+    double calculateModified();
+
+    /**
      * Calculates optimal conditions
      * @return double, optimal conditions
      */
     double calculateOptimal();
+
+
+
 private:
     // Out values
-    result_ existing_, optimal_;
+    result_ existing_, optimal_, modified_;
     double annualSavingsPotential_;
     double optimizationRating_;
     // In values
@@ -140,6 +183,7 @@ private:
     Motor motor_;
     Financial financial_;
     FieldData fieldData_;
+    double baselinePumpEfficiency_;
 };
 
 
