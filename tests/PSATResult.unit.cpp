@@ -11,7 +11,7 @@ TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	double pump_specified = 90, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
 	double stages = 2.0, motor_rated_power = 200, motor_rated_speed = 1780, efficiency = 95, motor_rated_voltage = 460;
 	double motor_rated_fla = 225.0, margin = 0, operating_fraction = 1.00, cost_kw_hour = 0.05, flow_rate = 1840;
-	double head = 174.85, motor_field_power = 80, motor_field_current = 125.857, motor_field_voltage = 480;
+	double head = 174.85, motor_field_power = 80, motor_field_current = 125.857, motor_field_voltage = 480; baseline_pump_efficiency = 80
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
 	Pump::Drive drive1(Pump::Drive::DIRECT_DRIVE);
@@ -24,11 +24,13 @@ TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
 	Financial fin(operating_fraction, cost_kw_hour);
 	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd);
+	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
 
 	psat.calculateExisting();
+	psat.calculateModified();
 	psat.calculateOptimal();
 	auto const & ex = psat.getExisting();
+	auto const & mod = psat.getModified();
 	auto const & opt = psat.getOptimal();
 
 	REQUIRE(ex.pumpEfficiency_ * 100 == Approx(80.2620381));
@@ -42,7 +44,18 @@ TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	REQUIRE(ex.annualEnergy_ == Approx(700.8));
 	REQUIRE(ex.annualCost_ * 1000.0 == Approx(35040));
 
+	REQUIRE(mod.pumpEfficiency_ * 100 == Approx(80));
+	REQUIRE(mod.motorRatedPower_ == Approx(100));
+	REQUIRE(mod.motorShaftPower_ == Approx(101.55));
+	REQUIRE(mod.pumpShaftPower_ == Approx(101.55));
+	REQUIRE(mod.motorEfficiency_ * 100 == Approx(95.0278));
+	REQUIRE(mod.motorPowerFactor_ * 100 == Approx(85.97645));
+	REQUIRE(mod.motorCurrent_ == Approx(102.81349971661015));
+	REQUIRE(mod.motorPower_ == Approx(79.71));
+	REQUIRE(mod.annualEnergy_ == Approx(698));
+	REQUIRE(mod.annualCost_ * 1000.0 == Approx(41895));
 
+	
 	REQUIRE(opt.pumpEfficiency_ * 100 == Approx(86.75480583084276));
 	REQUIRE(opt.motorRatedPower_ == Approx(100));
 	REQUIRE(opt.motorShaftPower_ == Approx(93.6145627007516));
@@ -54,8 +67,8 @@ TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	REQUIRE(opt.annualEnergy_ == Approx(643.777258834353));
 	REQUIRE(opt.annualCost_ * 1000.0 == Approx(32188.86294171768));
 
-	REQUIRE(psat.getAnnualSavingsPotential() * 1000 == Approx(2851.1370582823192));
-	REQUIRE(psat.getOptimizationRating() == Approx(0.9186319332681986));
+	REQUIRE(psat.getAnnualSavingsPotential() * 1000 == Approx(0));
+	REQUIRE(psat.getOptimizationRating() == Approx(0));
 
 }
 
