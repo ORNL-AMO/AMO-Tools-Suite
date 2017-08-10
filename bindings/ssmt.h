@@ -411,5 +411,87 @@ NAN_METHOD(flashTank) {
         info.GetReturnValue().Set(r);
 }
 
+NAN_METHOD(deaerator) {
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    SteamProperties::ThermodynamicQuantity waterQuantityType = thermodynamicQuantity();
+    SteamProperties::ThermodynamicQuantity steamQuantityType = thermodynamicQuantity();
+
+    /**
+     *
+     * Constructor for the deaerator calculator
+     *
+     * @param deaeratorPressure double, deaerator pressure in MPa
+     * @param ventRate double, vent rate as %
+     * @param feedwaterMassFlow double, mass flow of the feedwater in kg/hr
+     * @param waterPressure double, pressure of water in MPa
+     * @param waterQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param waterQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param steamPressure double, pressure of steam in MPa
+     * @param steamQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     * @param steamQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+
+     * @return nothing
+     *
+     * */
+    Deaerator d(Get("deaeratorPressure"), Get("ventRate"), Get("feedwaterMassFlow"), Get("waterPressure"), waterQuantityType, Get("waterQuantityValue"), Get("steamPressure"), steamQuantityType, Get("steamQuantityValue"));
+    std::unordered_map <std::string, double> feedwaterResults = d.getFeedwaterProperties();
+    std::unordered_map <std::string, double> ventedSteamResults = d.getVentedSteamProperties();
+    std::unordered_map <std::string, double> inletWaterResults = d.getInletWaterProperties();
+    std::unordered_map <std::string, double> inletSteamResults = d.getInletSteamProperties();
+
+    double feedwaterPressure = feedwaterResults["pressure"];
+    double feedwaterTemperature = feedwaterResults["temperature"];
+    double feedwaterSpecificEnthalpy = feedwaterResults["specificEnthalpy"];
+    double feedwaterSpecificEntropy = feedwaterResults["specificEntropy"];
+    double feedwaterQuality = feedwaterResults["quality"];
+    double feedwaterMassFlow = d.getFeedwaterMassFlow();
+    double feedwaterEnergyFlow = d.getFeedwaterEnergyFlow();
+
+    double ventedSteamPressure = ventedSteamResults["saturatedPressure"];
+    double ventedSteamTemperature = ventedSteamResults["saturatedTemperature"];
+    double ventedSteamSpecificEnthalpy = ventedSteamResults["gasSpecificEnthalpy"];
+    double ventedSteamSpecificEntropy = ventedSteamResults["gasSpecificEntropy"];
+    double ventedSteamQuality = ventedSteamResults["quality"];
+    double ventedSteamMassFlow = d.getVentedSteamMassFlow();
+    double ventedSteamEnergyFlow = d.getVentedSteamEnergyFlow();
+
+    double outletLiquidPressure = inletWaterResults["saturatedPressure"];
+    double outletLiquidTemperature = inletWaterResults["saturatedTemperature"];
+    double outletLiquidSpecificEnthalpy = inletWaterResults["liquidSpecificEnthalpy"];
+    double outletLiquidSpecificEntropy = inletWaterResults["liquidSpecificEntropy"];
+    double outletLiquidQuality = inletWaterResults["quality"];
+    double outletLiquidMassFlow = d.getInletWaterMassFlow();
+    double outletLiquidEnergyFlow = d.getInletWaterEnergyFlow();
+
+    SetR("inletWaterPressure", inletWaterPressure);
+    SetR("inletWaterTemperature", inletWaterTemperature);
+    SetR("inletWaterSpecificEnthalpy", inletWaterSpecificEnthalpy);
+    SetR("inletWaterSpecificEntropy", inletWaterSpecificEntropy);
+    SetR("inletWaterQuality", inletWaterQuality);
+    SetR("inletWaterMassFlow", inletWaterMassFlow);
+    SetR("inletWaterEnergyFlow", inletWaterEnergyFlow);
+
+    SetR("outletGasPressure", outletGasPressure);
+    SetR("outletGasTemperature", outletGasTemperature);
+    SetR("outletGasSpecificEnthalpy", outletGasSpecificEnthalpy);
+    SetR("outletGasSpecificEntropy", outletGasSpecificEntropy);
+    SetR("outletGasQuality", outletGasQuality);
+    SetR("outletGasMassFlow", outletGasMassFlow);
+    SetR("outletGasEnergyFlow", outletGasEnergyFlow);
+
+    SetR("outletLiquidPressure", outletLiquidPressure);
+    SetR("outletLiquidTemperature", outletLiquidTemperature);
+    SetR("outletLiquidSpecificEnthalpy", outletLiquidSpecificEnthalpy);
+    SetR("outletLiquidSpecificEntropy", outletLiquidSpecificEntropy);
+    SetR("outletLiquidQuality", outletLiquidQuality);
+    SetR("outletLiquidMassFlow", outletLiquidMassFlow);
+    SetR("outletLiquidEnergyFlow", outletLiquidEnergyFlow);
+
+    info.GetReturnValue().Set(r);
+}
+
 
 #endif //AMO_TOOLS_SUITE_SSMT_H
