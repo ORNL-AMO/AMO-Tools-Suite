@@ -328,7 +328,58 @@ NAN_METHOD(resultsExisting) {
     }
     info.GetReturnValue().Set(r);
 }
+NAN_METHOD(resultsModified) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
 
+    double baselinePumpEfficiency = Get("baseline_pump_efficiency") / 100;
+
+    Pump::Style style1 = style();
+    Pump::Drive drive1 = drive();
+    Pump::Speed fixed_speed = speed();
+
+    Motor::LineFrequency lineFrequency = line();
+    Motor::EfficiencyClass efficiencyClass = effCls();
+
+    FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+
+    Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
+              Get("specific_gravity"), Get("stages"), fixed_speed);
+
+    Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
+                Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
+
+    Financial fin(Get("operating_fraction"), Get("cost_kw_hour"));
+
+    FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
+                 Get("motor_field_current"), Get("motor_field_voltage"));
+
+    PSATResult psat(pump, motor, fin, fd, baselinePumpEfficiency);
+    psat.calculateModified();
+    auto const & mod = psat.getModified();
+
+    std::unordered_map<std::string, double> out = {
+            {"pump_efficiency", mod.pumpEfficiency_ * 100},
+            {"motor_rated_power", mod.motorRatedPower_},
+            {"motor_shaft_power", mod.motorShaftPower_},
+            {"pump_shaft_power", mod.pumpShaftPower_},
+            {"motor_efficiency", mod.motorEfficiency_* 100},
+            {"motor_power_factor", mod.motorPowerFactor_ * 100},
+            {"motor_current", mod.motorCurrent_},
+            {"motor_power", mod.motorPower_},
+            {"annual_energy", mod.annualEnergy_},
+            {"annual_cost", mod.annualCost_ * 1000},
+            {"annual_savings_potential", psat.getAnnualSavingsPotential()  * 1000},
+            {"optimization_rating", psat.getOptimizationRating()}
+    };
+
+    for(auto const & p: out) {
+        Local<String> key = Nan::New<String>(p.first).ToLocalChecked();
+        Local<Number> value = Nan::New(p.second);
+        Nan::Set(r, key, value);
+    }
+    info.GetReturnValue().Set(r);
+}
 NAN_METHOD(resultsOptimal) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();

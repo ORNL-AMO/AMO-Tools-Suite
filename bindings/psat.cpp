@@ -37,6 +37,10 @@ NAN_MODULE_INIT(InitPsat) {
     Nan::Set(target, New<String>("resultsOptimal").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(resultsOptimal)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("resultsModified").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(resultsModified)).ToLocalChecked());
+
+
 }
 
 NODE_MODULE(psat, InitPsat)

@@ -103,7 +103,7 @@ double PSATResult::calculateOptimal() {
     optimal_.motorRatedPower_ = optimalMotorSize.calculate();
     OptimalMotorPower optimalMotorPower(optimal_.motorRatedPower_, fieldData_.getMotorPower(), motor_.getMotorRpm(),
                                         motor_.getLineFrequency(),
-                                        motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(),
+                                        motor_.getEfficiencyClass(), Motor::EfficiencyClass::ENERGY_EFFICIENT, motor_.getSpecifiedEfficiency(),
                                         motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
                                         fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
                                         fieldData_.getMotorAmps(), optimal_.motorShaftPower_);
@@ -124,5 +124,64 @@ double PSATResult::calculateOptimal() {
     annualSavingsPotential_ = existing_.annualCost_ - optimal_.annualCost_;
     // Optimization Rating
     optimizationRating_ = optimal_.motorPower_ / existing_.motorPower_;
+    return 0;
+}
+double PSATResult::calculateModified() {
+    /**
+         * Steps for calculating the modified values:
+     *  1. Calculate fluid power and pump shaft power
+     *  2. Calculate Motor shaft power
+     *      a. If a belt drive is specified, calculate the motor shaft power
+     *      b. If direct drive, motor shaft power = pump shaft power
+     *  4. Develop 25% interval motor performance data for specified efficiency rating motor of the selected size
+     *  5. Do curve fitting of current from 25% to 1% intervals
+     *  6. Do curve fitting of efficiency in 1% intervals
+     *  7. Using current and efficiency 1% interval data, calculate balance of motor data in 1% intervals
+     *  8. Calculate required power, motor eff., current, pf from shaft power
+     *  9. Calculate annual energy and energy cost
+     *  10.Calculate annual savings potential and optimization rating
+
+     */
+
+    if (pump_.getStyle() == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
+        modified_.pumpEfficiency_ = pump_.getAchievableEfficiency();
+    } else {
+        modified_.pumpEfficiency_ = baselinePumpEfficiency_;
+    }
+
+    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData_.getFlowRate(), fieldData_.getHead(), pump_.getSg(),
+                                                modified_.pumpEfficiency_);
+    modified_.pumpShaftPower_ = modifiedPumpShaftPower.calculate();
+
+    OptimalMotorShaftPower modifiedMotorShaftPower(modified_.pumpShaftPower_, pump_.getDrive());
+    modified_.motorShaftPower_ = modifiedMotorShaftPower.calculate();
+
+    modified_.motorRatedPower_ = motor_.getMotorRatedPower();
+    OptimalMotorPower modifiedMotorPower(modified_.motorRatedPower_, fieldData_.getMotorPower(), motor_.getMotorRpm(),
+                                        motor_.getLineFrequency(),
+                                        motor_.getEfficiencyClass(), motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(),
+                                        motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
+                                        fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
+                                        fieldData_.getMotorAmps(), modified_.motorShaftPower_);
+    modifiedMotorPower.calculate();
+    modified_.motorCurrent_ = modifiedMotorPower.getMotorCurrent();
+    modified_.motorEfficiency_ = modifiedMotorPower.getMotorEff();
+    modified_.motorPower_ = modifiedMotorPower.getMotorPower();
+    modified_.motorPowerFactor_ = modifiedMotorPower.getMotorPf();
+
+    // Calculate Annual Energy
+    AnnualEnergy annualEnergy(modified_.motorPower_, financial_.getOperatingFraction());
+    modified_.annualEnergy_ = annualEnergy.calculate();
+
+    // Calculate Annual Cost
+    AnnualCost annualCost(modified_.annualEnergy_, financial_.getUnitCost());
+    modified_.annualCost_ = annualCost.calculate();
+
+    // Annual Savings potential
+    //annualSavingsPotential_ = existing_.annualCost_ - modified_.annualCost_;
+    annualSavingsPotential_ = 0.0;
+    // Optimization Rating
+    //optimizationRating_ = modified_.motorPower_ / existing_.motorPower_;
+    optimizationRating_ = 0.0;
     return 0;
 }

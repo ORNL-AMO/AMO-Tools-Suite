@@ -109,3 +109,60 @@ test('psatOptimal', function (t) {
     // t.equal(psatResult.annual_savings_potential, 2851.1370582823192, 'annual savings potential is ' + psatResult.annual_savings_potential);
     // t.equal(psatResult.optimization_rating, 0.9186319332681986, 'optimization rating is ' + psatResult.optimization_rating);
 });
+
+test('psatModified', function (t) {
+    t.plan(11);
+    t.type(bindings.resultsModified, 'function');
+    var inp = {
+        'pump_style': 6, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
+        'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 100,
+        'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
+        'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
+        'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
+        'motor_field_voltage': 480, 'baseline_pump_efficiency':80
+    };
+
+    var psatResult = bindings.resultsModified(inp);
+
+   t.equal(psatResult.pump_efficiency, 80 , 'modified pump efficiency is ' + psatResult.pump_efficiency);
+    t.equal(psatResult.motor_rated_power, 100 , 'modified motor rated power is ' + psatResult.motor_rated_power);
+    t.equal(psatResult.motor_shaft_power, 101.51891512553706, 'modified motor shaft power is ' + psatResult.motor_shaft_power);
+    t.equal(psatResult.pump_shaft_power, 101.51891512553706, 'modified pump power is ' + psatResult.pump_shaft_power);
+    t.equal(psatResult.motor_efficiency, 94.97328338279846, 'modified motor efficiency is ' + psatResult.motor_efficiency);
+    t.equal(psatResult.motor_power_factor, 86.9268753367501, 'modified motor power factor is ' + psatResult.motor_power_factor);
+    t.equal(psatResult.motor_current, 110.33889227065144, 'modified motor current is ' + psatResult.motor_current);
+    t.equal(psatResult.motor_power,79.74152797054958, 'modified motor power is ' + psatResult.motor_power);
+    t.equal(psatResult.annual_energy, 698.5357850220144, 'modified annual energy is ' + psatResult.annual_energy);
+    t.equal(psatResult.annual_cost, 34926.78925110072, 'modified annual cost is ' + psatResult.annual_cost);
+    // t.equal(psatResult.annual_savings_potential, 0, 'annual savings potential is ' + psatResult.annual_savings_potential);
+    // t.equal(psatResult.optimization_rating, 0,'optimization rating is ' + psatResult.optimization_rating);
+});
+
+test('psatModified2', function (t) {
+    t.plan(11);
+    t.type(bindings.resultsModified, 'function');
+    var inp = {
+        'pump_style': 11, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
+        'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 100,
+        'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
+        'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
+        'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
+        'motor_field_voltage': 480, 'baseline_pump_efficiency': 80
+    };
+
+    var psatResult = bindings.resultsModified(inp);
+
+   t.equal(psatResult.pump_efficiency, 90, 'modified pump efficiency is ' + psatResult.pump_efficiency);
+    t.equal(psatResult.motor_rated_power, 100 , 'modified motor rated power is ' + psatResult.motor_rated_power);
+    t.equal(psatResult.motor_shaft_power, 90.23903566714407, 'modified motor shaft power is ' + psatResult.motor_shaft_power);
+    t.equal(psatResult.pump_shaft_power, 90.23903566714407, 'modified pump power is ' + psatResult.pump_shaft_power);
+    t.equal(psatResult.motor_efficiency, 95.1184540060419, 'modified motor efficiency is ' + psatResult.motor_efficiency);
+    t.equal(psatResult.motor_power_factor, 85.44077014767082, 'modified motor power factor is ' + psatResult.motor_power_factor);
+    t.equal(psatResult.motor_current, 99.6326195182244, 'modified motor current is ' + psatResult.motor_current);
+    t.equal(psatResult.motor_power, 70.77315686713737, 'modified motor power is ' + psatResult.motor_power);
+    t.equal(psatResult.annual_energy, 619.9728541561234, 'modified annual energy is ' + psatResult.annual_energy);
+    t.equal(psatResult.annual_cost, 30998.642707806168, 'modified annual cost is ' + psatResult.annual_cost);
+    // t.equal(psatResult.annual_savings_potential, 0, 'annual savings potential is ' + psatResult.annual_savings_potential);
+    // t.equal(psatResult.optimization_rating, 0,'optimization rating is ' + psatResult.optimization_rating);
+
+});
