@@ -209,7 +209,7 @@ test('prvWithDesuperheating', function (t) {
 });
 
 test('deaerator', function (t) {
-    t.plan(6);
+    t.plan(8);
     t.type(bindings.deaerator, 'function');
 
     var inp = {
@@ -217,10 +217,10 @@ test('deaerator', function (t) {
         ventRate : 0.4,
         feedwaterMassFlow : 41685,
         waterPressure : 0.1235,
-        waterQuantityType : 1, //1 is ENTHALPY
+        waterThermodynamicQuantity : 1, //1 is ENTHALPY
         waterQuantityValue : 100,
         steamPressure : 0.4777,
-        steamQuantityType : 2, //2 is ENTROPY
+        steamThermodynamicQuantity : 2, //2 is ENTROPY
         steamQuantityValue : 6
     };
 
@@ -229,9 +229,8 @@ test('deaerator', function (t) {
     t.equal(res.feedwaterEnergyFlow, 21032.14129813274, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
     t.equal(res.ventedSteamMassFlow, 166.74, 'res.ventedSteamMassFlow is ' + res.ventedSteamMassFlow);
     t.equal(res.ventedSteamEnergyFlow, 451.2310290232193, 'res.ventedSteamEnergyFlow is ' + res.ventedSteamEnergyFlow);
-    t.equal(res.waterQuantityType, 1, 'res.waterQuantityType is ' + res.waterQuantityType);
-    t.equal(res.inletWaterMassFlow, 34305, 'res.inletWaterMassFlow is ' + res.inletWaterMassFlow);
-    t.equal(res.inletWaterEnergyFlow, 3430.5357797804, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
-    t.equal(res.inletSteamMassFlow, 7546.3822021967, 'res.inletSteamMassFlow is ' + res.inletSteamMassFlow);
-    t.equal(res.inletSteamEnergyFlow, 18053, 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
+    t.equal(res.inletWaterMassFlow, 34305.35779780327, 'res.inletWaterMassFlow is ' + res.inletWaterMassFlow);
+    t.equal(res.inletWaterEnergyFlow, 3430.535779780379, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
+    t.equal(res.inletSteamMassFlow, 7546.382202196729, 'res.inletSteamMassFlow is ' + res.inletSteamMassFlow);
+    t.equal(res.inletSteamEnergyFlow, 18052.836547375577, 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
 });

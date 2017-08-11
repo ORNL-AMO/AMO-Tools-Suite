@@ -50,6 +50,14 @@ SteamProperties::ThermodynamicQuantity feedwaterThermodynamicQuantity() {
     return (SteamProperties::ThermodynamicQuantity)(int)Get("feedwaterThermodynamicQuantity");
 }
 
+SteamProperties::ThermodynamicQuantity waterThermodynamicQuantity() {
+    return (SteamProperties::ThermodynamicQuantity)(int)Get("waterThermodynamicQuantity");
+}
+
+SteamProperties::ThermodynamicQuantity steamThermodynamicQuantity() {
+    return (SteamProperties::ThermodynamicQuantity)(int)Get("steamThermodynamicQuantity");
+}
+
 NAN_METHOD(saturatedPressure) {
 
     inp = info[0]->ToObject();
@@ -560,8 +568,8 @@ NAN_METHOD(deaerator) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SteamProperties::ThermodynamicQuantity waterQuantityType = thermodynamicQuantity();
-    SteamProperties::ThermodynamicQuantity steamQuantityType = thermodynamicQuantity();
+    SteamProperties::ThermodynamicQuantity waterQuantityType = waterThermodynamicQuantity();
+    SteamProperties::ThermodynamicQuantity steamQuantityType = steamThermodynamicQuantity();
 
     /**
      *
