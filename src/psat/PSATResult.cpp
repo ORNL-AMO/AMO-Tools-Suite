@@ -156,6 +156,7 @@ double PSATResult::calculateModified() {
     OptimalMotorShaftPower modifiedMotorShaftPower(modified_.pumpShaftPower_, pump_.getDrive());
     modified_.motorShaftPower_ = modifiedMotorShaftPower.calculate();
 
+    modified_.motorRatedPower_ = motor_.getMotorRatedPower();
     OptimalMotorPower modifiedMotorPower(modified_.motorRatedPower_, fieldData_.getMotorPower(), motor_.getMotorRpm(),
                                         motor_.getLineFrequency(),
                                         motor_.getEfficiencyClass(), motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(),
@@ -167,6 +168,7 @@ double PSATResult::calculateModified() {
     modified_.motorEfficiency_ = modifiedMotorPower.getMotorEff();
     modified_.motorPower_ = modifiedMotorPower.getMotorPower();
     modified_.motorPowerFactor_ = modifiedMotorPower.getMotorPf();
+
     // Calculate Annual Energy
     AnnualEnergy annualEnergy(modified_.motorPower_, financial_.getOperatingFraction());
     modified_.annualEnergy_ = annualEnergy.calculate();
