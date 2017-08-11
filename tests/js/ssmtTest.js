@@ -54,23 +54,23 @@ test('saturatedPropertiesGivenPressure', function (t) {
 
     t.equal(res.saturatedTemperature, 638.8959115457051, 'res.saturatedTemperature is ' + res.saturatedTemperature);
 
-    t.equal(res.liquidEnthalpy, 1827.1006242178723, 'res.liquidEnthalpy is ' + res.liquidEnthalpy);
+    t.equal(res.liquidEnthalpy, 1827.1006242178828, 'res.liquidEnthalpy is ' + res.liquidEnthalpy);
 
     t.equal(res.gasEnthalpy, 2421.680542687896, 'res.gasEnthalpy is '+ res.gasEnthalpy);
 
-    t.equal(res.evaporationEnthalpy, 594.5799184700236, 'res.evaporationEnthalpy is ' + res.evaporationEnthalpy);
+    t.equal(res.evaporationEnthalpy, 594.5799184700131, 'res.evaporationEnthalpy is ' + res.evaporationEnthalpy);
 
-    t.equal(res.liquidEntropy, 4.015381593120578, 'res.liquidEntropy is ' + res.liquidEntropy);
+    t.equal(res.liquidEntropy, 4.015381593120595, 'res.liquidEntropy is ' + res.liquidEntropy);
 
     t.equal(res.gasEntropy, 4.946001326758373, 'res.gasEntropy is '+ res.gasEntropy);
 
-    t.equal(res.evaporationEntropy, 0.930619733637795, 'res.evaporationEntropy is ' + res.evaporationEntropy);
+    t.equal(res.evaporationEntropy, 0.9306197336377782, 'res.evaporationEntropy is ' + res.evaporationEntropy);
 
-    t.equal(res.liquidVolume, 0.0020386472456956663, 'res.liquidVolume is ' + res.liquidVolume);
+    t.equal(res.liquidVolume, 0.00203864724569564, 'res.liquidVolume is ' + res.liquidVolume);
 
-    t.equal(res.gasVolume, 0.005936854102266306, 'res.gasVolume is '+ res.gasVolume);
+    t.equal(res.gasVolume, 0.005936854102266304, 'res.gasVolume is '+ res.gasVolume);
 
-    t.equal(res.evaporationVolume, 0.0038982068565706395, 'res.evaporationVolume is ' + res.evaporationVolume);
+    t.equal(res.evaporationVolume, 0.003898206856570664, 'res.evaporationVolume is ' + res.evaporationVolume);
 
 });
 
@@ -112,13 +112,13 @@ test('boiler', function (t) {
 
     var res = bindings.boiler(inp);
 
-    t.equal(res.steamEnergyFlow, 110.7533647508802, 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
+    t.equal(res.steamEnergyFlow, 110.75336475088508, 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
     t.equal(res.blowdownMassFlow, 0.9183673469387756, 'res.blowdownMassFlow is ' + res.blowdownMassFlow);
-    t.equal(res.blowdownEnergyFlow, 1.6779495528531483, 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
+    t.equal(res.blowdownEnergyFlow, 1.6779495528531578, 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
     t.equal(res.feedwaterMassFlow, 45.91836734693878, 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
     t.equal(res.feedwaterEnergyFlow, 64.64697706690914, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
-    t.equal(res.boilerEnergy, 47.7843372368242, 'res.boilerEnergy is '+ res.boilerEnergy);
-    t.equal(res.fuelEnergy, 56.216867337440235, 'res.fuelEnergy is '+ res.fuelEnergy);
+    t.equal(res.boilerEnergy, 47.7843372368291, 'res.boilerEnergy is '+ res.boilerEnergy);
+    t.equal(res.fuelEnergy, 56.216867337446004, 'res.fuelEnergy is '+ res.fuelEnergy);
 });
 
 test('heatLoss', function (t) {
@@ -180,9 +180,10 @@ test('deaerator', function (t) {
 
     var res = bindings.deaerator(inp);
 
-    t.equal(res.feedwaterEnergyFlow, 21032, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(res.feedwaterEnergyFlow, 21032.14129813274, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
     t.equal(res.ventedSteamMassFlow, 166.74, 'res.ventedSteamMassFlow is ' + res.ventedSteamMassFlow);
-    t.equal(res.ventedSteamEnergyFlow, 451.2310290232, 'res.ventedSteamEnergyFlow is ' + res.ventedSteamEnergyFlow);
+    t.equal(res.ventedSteamEnergyFlow, 451.2310290232193, 'res.ventedSteamEnergyFlow is ' + res.ventedSteamEnergyFlow);
+    t.equal(res.waterQuantityType, 1, 'res.waterQuantityType is ' + res.waterQuantityType);
     t.equal(res.inletWaterMassFlow, 34305, 'res.inletWaterMassFlow is ' + res.inletWaterMassFlow);
     t.equal(res.inletWaterEnergyFlow, 3430.5357797804, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
     t.equal(res.inletSteamMassFlow, 7546.3822021967, 'res.inletSteamMassFlow is ' + res.inletSteamMassFlow);

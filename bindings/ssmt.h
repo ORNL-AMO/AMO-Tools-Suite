@@ -15,6 +15,7 @@
 #include "ssmt/Boiler.h"
 #include "ssmt/HeatLoss.h"
 #include "ssmt/FlashTank.h"
+#include "ssmt/deaerator.h"
 
 
 using namespace Nan;
