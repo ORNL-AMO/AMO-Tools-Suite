@@ -32,6 +32,13 @@ NAN_MODULE_INIT(InitSsmt) {
     Nan::Set(target, New<String>("flashTank").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(flashTank)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("prvWithoutDesuperheating").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(prvWithoutDesuperheating)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("prvWithDesuperheating").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(prvWithDesuperheating)).ToLocalChecked());
+
+
     Nan::Set(target, New<String>("deaerator").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(deaerator)).ToLocalChecked());
 

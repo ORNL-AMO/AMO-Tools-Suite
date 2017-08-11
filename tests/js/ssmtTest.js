@@ -162,6 +162,52 @@ test('flashTank', function (t) {
     t.equal(res.outletLiquidEnergyFlow, 17139.20289212423, 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
 });
 
+test('prvWithoutDesuperheating', function (t) {
+    t.plan(6);
+    t.type(bindings.prvWithoutDesuperheating, 'function');
+
+    var inp = {
+        inletPressure : 4.8794,
+        thermodynamicQuantity : 0, //0 is TEMPERATURE
+        quantityValue : 691.5,
+        inletMassFlow : 37970,
+        outletPressure : 4.0823
+    };
+
+    var res = bindings.prvWithoutDesuperheating(inp);
+
+    t.equal(res.inletEnergyFlow, 123147.93493161911, 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(res.outletMassFlow, 37970, 'res.outletMassFlow is ' + res.outletMassFlow);
+    t.equal(res.outletEnergyFlow, 123147.93493161911, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(res.inletSpecificEnthalpy, 3243.29562632655, 'res.inletSpecificEnthalpy is ' + res.inletSpecificEnthalpy);
+    t.equal(res.outletSpecificEnthalpy, 3243.29562632655, 'res.outletSpecificEnthalpy is ' + res.outletSpecificEnthalpy);
+});
+
+test('prvWithDesuperheating', function (t) {
+    t.plan(6);
+    t.type(bindings.prvWithDesuperheating, 'function');
+
+    var inp = {
+        inletPressure : 2.8937,
+        thermodynamicQuantity : 0, //0 is TEMPERATURE
+        quantityValue : 936.3,
+        inletMassFlow : 17599,
+        outletPressure : 0.8188,
+        feedwaterPressure : 0.2937,
+        feedwaterThermodynamicQuantity : 2, //2 is ENTROPY
+        feedwaterQuantityValue : 5,
+        desuperheatingTemp : 708.3
+    };
+
+    var res = bindings.prvWithDesuperheating(inp);
+
+    t.equal(res.inletEnergyFlow, 67367.3111113208, 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(res.outletMassFlow, 23583.469367594505, 'res.outletMassFlow is ' + res.outletMassFlow);
+    t.equal(res.outletEnergyFlow, 78812.94289252072, 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(res.feedwaterMassFlow, 5984.4693675945055, 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
+    t.equal(res.feedwaterEnergyFlow, 11445.631781199914, 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+});
+
 test('deaerator', function (t) {
     t.plan(6);
     t.type(bindings.deaerator, 'function');
