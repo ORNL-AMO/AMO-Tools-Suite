@@ -116,7 +116,8 @@ set(SOURCE_FILES
         src/ssmt/SteamSystemModelerTool.cpp
         src/ssmt/Boiler.cpp
         src/ssmt/HeatLoss.cpp
-        src/ssmt/FlashTank.cpp)
+        src/ssmt/FlashTank.cpp
+        src/ssmt/PRV.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -189,7 +190,8 @@ set(INCLUDE_FILES
         include/ssmt/SteamSystemModelerTool.h
         include/ssmt/Boiler.h
         include/ssmt/HeatLoss.h
-        include/ssmt/FlashTank.h)
+        include/ssmt/FlashTank.h
+        include/ssmt/PRV.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -223,7 +225,8 @@ set(TEST_FILES
         tests/SteamProperties.unit.cpp
         tests/Boiler.unit.cpp
         tests/HeatLoss.unit.cpp
-        tests/FlashTank.unit.cpp)
+        tests/FlashTank.unit.cpp
+        tests/PRV.unit.cpp)
 
 find_package(PythonInterp 2.7 REQUIRED)
 execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
