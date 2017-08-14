@@ -32,6 +32,28 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
+TEST_CASE( "SQLite - deleteSolidLoadChargeMaterials", "[sqlite]" ) {
+	auto sqlite = SQLite(":memory:", true);
+
+	{
+		auto const output = sqlite.getSolidLoadChargeMaterials();
+
+		SolidLoadChargeMaterial mat;
+		mat.setSubstance("custom");
+		mat.setID(output.size());
+        SolidLoadChargeMaterial mat2;
+        mat2.setSubstance("custom2");
+        mat2.setID(output.size() + 1);
+
+        sqlite.insertSolidLoadChargeMaterials(mat);
+        sqlite.insertSolidLoadChargeMaterials(mat2);
+        sqlite.deleteSolidLoadChargeMaterial(mat2.getSubstance());
+
+        auto const output2 = sqlite.getSolidLoadChargeMaterials();
+        CHECK( output2[output2.size() - 1].getSubstance() == "custom" );
+	}
+}
+
 //// commented because it writes to HDD
 //TEST_CASE( "SQLite - test db init", "[sqlite]" ) {
 //    {

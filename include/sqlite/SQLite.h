@@ -107,6 +107,8 @@ public:
 
     bool insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material);
 
+    bool deleteSolidLoadChargeMaterial(std::string const & substance) const;
+
     std::vector<GasLoadChargeMaterial> getGasLoadChargeMaterials() const;
 
     GasLoadChargeMaterial getGasLoadChargeMaterialById(int id) const;
@@ -160,26 +162,32 @@ private:
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_custom_stmt = nullptr;
+
     sqlite3_stmt * m_gas_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_custom_stmt = nullptr;
+
     sqlite3_stmt * m_liquid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_custom_stmt = nullptr;
+
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_single_stmt = nullptr;
 	sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_custom_stmt = nullptr;
+
     sqlite3_stmt * m_gas_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_custom_stmt = nullptr;
+
     sqlite3_stmt * m_atmosphere_specific_heat_insert_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_single_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_custom_stmt = nullptr;
+
     sqlite3_stmt * m_wall_losses_surface_insert_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_single_stmt = nullptr;
