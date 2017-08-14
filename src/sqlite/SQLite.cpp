@@ -846,6 +846,11 @@ bool SQLite::insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material
     return valid_insert;
 }
 
+bool SQLite::deleteGasLoadChargeMaterial(std::string const & substance){
+	int rc = execute_command("DELETE from gas_load_charge_materials where substance = '" + substance + "' and sid=1");
+	return rc == SQLITE_OK;
+}
+
 bool SQLite::insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const & material)
 {
     bind_value(m_liquid_load_charge_materials_insert_stmt, 1, 0);
@@ -875,6 +880,11 @@ bool SQLite::insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & ma
     bool valid_insert = step_validity(rc);
     reset_command(m_liquid_load_charge_materials_insert_stmt);
     return valid_insert;
+}
+
+bool SQLite::deleteLiquidLoadChargeMaterial(std::string const &substance){
+    int rc = execute_command("DELETE from liquid_load_charge_materials where substance = '" + substance + "' and sid=1");
+    return rc == SQLITE_OK;
 }
 
 bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material)
@@ -910,6 +920,11 @@ bool SQLite::insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const &
     bool valid_insert = step_validity(rc);
     reset_command(m_solid_liquid_flue_gas_materials_insert_stmt);
     return valid_insert;
+}
+
+bool SQLite::deleteSolidLiquidFlueGasMaterial(std::string const & substance){
+    int rc = execute_command("DELETE from solid_liquid_flue_gas_materials where substance = '" + substance + "' and sid=1");
+    return rc == SQLITE_OK;
 }
 
 bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
@@ -960,6 +975,11 @@ bool SQLite::insertGasFlueGasMaterial(GasCompositions const & comps) const {
     return valid_insert;
 }
 
+bool SQLite::deleteGasFlueGasMaterial(std::string const & substance){
+    int rc = execute_command("DELETE from gas_flue_gas_materials where substance = '" + substance + "' and sid=1");
+    return rc == SQLITE_OK;
+}
+
 bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
 {
     bind_value(m_atmosphere_specific_heat_insert_stmt, 1, 0);
@@ -984,6 +1004,11 @@ bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material){
     return valid_insert;
 }
 
+bool SQLite::deleteAtmosphereSpecificHeat(std::string const & substance){
+    int rc = execute_command("DELETE from atmosphere_specific_heat where substance = '" + substance + "' and sid=1");
+    return rc == SQLITE_OK;
+}
+
 bool SQLite::insert_wall_losses_surface(WallLosses const & cf)
 {
     bind_value(m_wall_losses_surface_insert_stmt, 1, 0);
@@ -1006,6 +1031,11 @@ bool SQLite::insertWallLossesSurface(WallLosses const & material)
     bool valid_insert = step_validity(rc);
     reset_command(m_wall_losses_surface_insert_stmt);
     return valid_insert;
+}
+
+bool SQLite::deleteWallLossesSurface(std::string const & substance){
+    int rc = execute_command("DELETE from wall_losses_surface where surface = '" + substance + "' and sid=1");
+    return rc == SQLITE_OK;
 }
 
 

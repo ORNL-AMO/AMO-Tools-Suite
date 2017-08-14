@@ -32,7 +32,7 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
-TEST_CASE( "SQLite - deleteSolidLoadChargeMaterials", "[sqlite]" ) {
+TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 	auto sqlite = SQLite(":memory:", true);
 
 	{
@@ -48,10 +48,86 @@ TEST_CASE( "SQLite - deleteSolidLoadChargeMaterials", "[sqlite]" ) {
         sqlite.insertSolidLoadChargeMaterials(mat);
         sqlite.insertSolidLoadChargeMaterials(mat2);
         sqlite.deleteSolidLoadChargeMaterial(mat2.getSubstance());
-
         auto const output2 = sqlite.getSolidLoadChargeMaterials();
         CHECK( output2[output2.size() - 1].getSubstance() == "custom" );
 	}
+
+    {
+        auto const output = sqlite.getLiquidLoadChargeMaterials();
+        auto const last = output[output.size() - 1].getSubstance();
+        LiquidLoadChargeMaterial llcm;
+        llcm.setID(output.size());
+        llcm.setSubstance("custom");
+
+	    sqlite.insertLiquidLoadChargeMaterials(llcm);
+	    sqlite.deleteLiquidLoadChargeMaterial(llcm.getSubstance());
+        auto const output2 = sqlite.getLiquidLoadChargeMaterials();
+        CHECK( output2[output2.size() - 1].getSubstance() == last );
+    }
+
+    {
+        auto const output = sqlite.getGasLoadChargeMaterials();
+        auto const last = output[output.size() - 1].getSubstance();
+        GasLoadChargeMaterial glcm;
+        glcm.setID(output.size());
+        glcm.setSubstance("custom");
+
+        sqlite.insertGasLoadChargeMaterials(glcm);
+        sqlite.deleteGasLoadChargeMaterial(glcm.getSubstance());
+        auto const output2 = sqlite.getGasLoadChargeMaterials();
+        CHECK( output2[output2.size() - 1].getSubstance() == last );
+    }
+
+    {
+        auto const output = sqlite.getGasFlueGasMaterials();
+        auto const last = output[output.size() - 1].getSubstance();
+        GasCompositions gc("custom", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        gc.setID(output.size());
+
+        sqlite.insertGasFlueGasMaterial(gc);
+        sqlite.deleteGasFlueGasMaterial(gc.getSubstance());
+        auto const output2 = sqlite.getGasFlueGasMaterials();
+        CHECK( output2[output2.size() - 1].getSubstance() == last );
+    }
+
+    {
+        auto const output = sqlite.getSolidLiquidFlueGasMaterials();
+        auto const last = output[output.size() - 1].getSubstance();
+        SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        slfgm.setID(output.size());
+        slfgm.setSubstance("custom");
+
+        sqlite.insertSolidLiquidFlueGasMaterial(slfgm);
+        sqlite.deleteSolidLiquidFlueGasMaterial(slfgm.getSubstance());
+        auto const output2 = sqlite.getSolidLiquidFlueGasMaterials();
+        CHECK( output2[output2.size() - 1].getSubstance() == last );
+    }
+
+    {
+        auto const output = sqlite.getAtmosphereSpecificHeat();
+        auto const last = output[output.size() - 1].getSubstance();
+	    Atmosphere a;
+        a.setID(output.size());
+        a.setSubstance("custom");
+
+        sqlite.insertAtmosphereSpecificHeat(a);
+        sqlite.deleteAtmosphereSpecificHeat(a.getSubstance());
+        auto const output2 = sqlite.getAtmosphereSpecificHeat();
+        CHECK( output2[output2.size() - 1].getSubstance() == last );
+    }
+
+    {
+        auto const output = sqlite.getWallLossesSurface();
+        auto const last = output[output.size() - 1].getSurface();
+	    WallLosses wall;
+        wall.setID(output.size());
+        wall.setSurface("custom");
+
+        sqlite.insertWallLossesSurface(wall);
+        sqlite.deleteWallLossesSurface(wall.getSurface());
+        auto const output2 = sqlite.getWallLossesSurface();
+        CHECK( output2[output2.size() - 1].getSurface() == last );
+    }
 }
 
 //// commented because it writes to HDD
