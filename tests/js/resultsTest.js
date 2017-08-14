@@ -50,8 +50,8 @@ test('psatExistingAndOptimal', function (t) {
     t.equal(psatResult.annual_cost[0], 35040, 'existing annual cost is ' + psatResult.annual_cost[0]);
     t.equal(psatResult.annual_cost[1], 32188.86294171768, 'optimal annual cost is ' + psatResult.annual_cost[1]);
 
-    t.equal(psatResult.annual_savings_potential[0], 2851.1370582823192, 'annual savings potential is ' + psatResult.annual_savings_potential[0]);
-    t.equal(psatResult.optimization_rating[0], 0.9186319332681986, 'optimization rating is ' + psatResult.optimization_rating[0]);
+    t.equal(psatResult.annual_savings_potential[0], 0.0, 'annual savings potential is ' + psatResult.annual_savings_potential[0]);
+    t.equal(psatResult.optimization_rating[0], 0.0, 'optimization rating is ' + psatResult.optimization_rating[0]);
 });
 
 test('psatExisting', function (t) {
@@ -114,7 +114,7 @@ test('psatModified', function (t) {
     t.plan(11);
     t.type(bindings.resultsModified, 'function');
     var inp = {
-        'pump_style': 6, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
+        'pump_style': 6, 'pump_specified': null, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
         'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 100,
         'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
         'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
