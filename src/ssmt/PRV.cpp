@@ -10,17 +10,15 @@
 #include "ssmt/PRV.h"
 
 std::unordered_map <std::string, double> PrvWithoutDesuperheating::getInletProperties() {
-    SteamProperties sp = SteamProperties(this->inletPressure_, this->quantityType_, this->quantityValue_);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->inletProperties_ = steamProperties;
+    SteamProperties sp(this->inletPressure_, this->quantityType_, this->quantityValue_);
+    this->inletProperties_ = sp.calculate();
     return this->inletProperties_;
 }
 
 std::unordered_map <std::string, double> PrvWithoutDesuperheating::getOutletProperties() {
     std::unordered_map <std::string, double> inletProps = getInletProperties();
-    SteamProperties sp = SteamProperties(this->outletPressure_, SteamProperties::ThermodynamicQuantity::ENTHALPY, inletProps["specificEnthalpy"]);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->inletProperties_ = steamProperties;
+    SteamProperties sp(this->outletPressure_, SteamProperties::ThermodynamicQuantity::ENTHALPY, inletProps["specificEnthalpy"]);
+    this->inletProperties_ = sp.calculate();
     return this->inletProperties_;
 }
 
@@ -42,23 +40,20 @@ double PrvWithoutDesuperheating::getOutletEnergyFlow(){
 
 
 std::unordered_map <std::string, double> PrvWithDesuperheating::getInletProperties() {
-    SteamProperties sp = SteamProperties(this->inletPressure_, this->quantityType_, this->quantityValue_);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->inletProperties_ = steamProperties;
+    SteamProperties sp(this->inletPressure_, this->quantityType_, this->quantityValue_);
+    this->inletProperties_ = sp.calculate();
     return this->inletProperties_;
 }
 
 std::unordered_map <std::string, double> PrvWithDesuperheating::getFeedwaterProperties() {
-    SteamProperties sp = SteamProperties(this->feedwaterPressure_, this->feedwaterQuantityType_, this->feedwaterQuantityValue_);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->feedwaterProperties_ = steamProperties;
+    SteamProperties sp(this->feedwaterPressure_, this->feedwaterQuantityType_, this->feedwaterQuantityValue_);
+    this->feedwaterProperties_ = sp.calculate();
     return this->feedwaterProperties_;
 }
 
 std::unordered_map <std::string, double> PrvWithDesuperheating::getOutletProperties() {
-    SteamProperties sp = SteamProperties(this->outletPressure_, SteamProperties::ThermodynamicQuantity::TEMPERATURE, this->desuperheatingTemp_);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->outletProperties_ = steamProperties;
+    SteamProperties sp(this->outletPressure_, SteamProperties::ThermodynamicQuantity::TEMPERATURE, this->desuperheatingTemp_);
+    this->outletProperties_ = sp.calculate();
     return this->outletProperties_;
 }
 
