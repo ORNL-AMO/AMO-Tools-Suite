@@ -848,7 +848,7 @@ bool SQLite::insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material
 
 bool SQLite::deleteGasLoadChargeMaterial(std::string const & substance){
 	int rc = execute_command("DELETE from gas_load_charge_materials where substance = '" + substance + "' and sid=1");
-	return rc == SQLITE_OK;
+	return rc == SQLITE_OK; // always returns true even if entry didn't exist
 }
 
 bool SQLite::insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const & material)
@@ -884,7 +884,7 @@ bool SQLite::insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & ma
 
 bool SQLite::deleteLiquidLoadChargeMaterial(std::string const &substance){
     int rc = execute_command("DELETE from liquid_load_charge_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK;
+    return rc == SQLITE_OK; // always returns true even if entry didn't exist
 }
 
 bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material)
@@ -924,7 +924,7 @@ bool SQLite::insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const &
 
 bool SQLite::deleteSolidLiquidFlueGasMaterial(std::string const & substance){
     int rc = execute_command("DELETE from solid_liquid_flue_gas_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK;
+    return rc == SQLITE_OK; // always returns true even if entry didn't exist
 }
 
 bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
@@ -977,7 +977,7 @@ bool SQLite::insertGasFlueGasMaterial(GasCompositions const & comps) const {
 
 bool SQLite::deleteGasFlueGasMaterial(std::string const & substance){
     int rc = execute_command("DELETE from gas_flue_gas_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK;
+    return rc == SQLITE_OK; // always returns true even if entry didn't exist
 }
 
 bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
@@ -1006,7 +1006,7 @@ bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material){
 
 bool SQLite::deleteAtmosphereSpecificHeat(std::string const & substance){
     int rc = execute_command("DELETE from atmosphere_specific_heat where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK;
+    return rc == SQLITE_OK; // always returns true even if entry didn't exist
 }
 
 bool SQLite::insert_wall_losses_surface(WallLosses const & cf)
@@ -1035,7 +1035,7 @@ bool SQLite::insertWallLossesSurface(WallLosses const & material)
 
 bool SQLite::deleteWallLossesSurface(std::string const & substance){
     int rc = execute_command("DELETE from wall_losses_surface where surface = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK;
+    return rc == SQLITE_OK; // always returns true even if entry didn't exist
 }
 
 

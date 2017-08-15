@@ -141,9 +141,7 @@ NAN_METHOD(postUpdate) {
     NAN_METHOD(insertSolidLoadChargeMaterial) {
         inp = info[0]->ToObject();
         SolidLoadChargeMaterial slcm;
-
-	    std::string substance = GetStr("substance");
-        slcm.setSubstance(substance);
+        slcm.setSubstance(GetStr("substance"));
         slcm.setSpecificHeatSolid(Get("specificHeatSolid"));
         slcm.setSpecificHeatLiquid(Get("specificHeatLiquid"));
         slcm.setLatentHeat(Get("latentHeat"));
@@ -151,6 +149,12 @@ NAN_METHOD(postUpdate) {
         bool success = sql->insertSolidLoadChargeMaterials(slcm);
         info.GetReturnValue().Set(success);
     }
+
+NAN_METHOD(deleteSolidLoadChargeMaterial) {
+    inp = info[0]->ToObject();
+    bool success = sql->deleteSolidLoadChargeMaterial(GetStr("substance"));
+//    info.GetReturnValue().Set(success);
+}
 
     NAN_METHOD(selectLiquidLoadChargeMaterials) {
         Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -181,15 +185,19 @@ NAN_METHOD(postUpdate) {
 NAN_METHOD(insertLiquidLoadChargeMaterial) {
     inp = info[0]->ToObject();
     LiquidLoadChargeMaterial llcm;
-
-    std::string substance = GetStr("substance");
-    llcm.setSubstance(substance);
+    llcm.setSubstance(GetStr("substance"));
     llcm.setSpecificHeatLiquid(Get("specificHeatLiquid"));
     llcm.setSpecificHeatVapor(Get("specificHeatVapor"));
     llcm.setVaporizingTemperature(Get("vaporizationTemperature"));
     llcm.setLatentHeat(Get("latentHeat"));
     bool success = sql->insertLiquidLoadChargeMaterials(llcm);
     info.GetReturnValue().Set(success);
+}
+
+NAN_METHOD(deleteLiquidLoadChargeMaterial) {
+    inp = info[0]->ToObject();
+	bool success = sql->deleteLiquidLoadChargeMaterial(GetStr("substance"));
+//    info.GetReturnValue().Set(success);
 }
 
     NAN_METHOD(selectLiquidLoadChargeMaterialById) {
@@ -236,12 +244,16 @@ NAN_METHOD(insertLiquidLoadChargeMaterial) {
 NAN_METHOD(insertGasLoadChargeMaterial) {
     inp = info[0]->ToObject();
     GasLoadChargeMaterial glcm;
-
-    std::string substance = GetStr("substance");
-    glcm.setSubstance(substance);
+    glcm.setSubstance(GetStr("substance"));
 	glcm.setSpecificHeatVapor(Get("specificHeatVapor"));
     bool success = sql->insertGasLoadChargeMaterials(glcm);
     info.GetReturnValue().Set(success);
+}
+
+NAN_METHOD(deleteGasLoadChargeMaterial) {
+    inp = info[0]->ToObject();
+    bool success = sql->deleteGasLoadChargeMaterial(GetStr("substance"));
+//    info.GetReturnValue().Set(success);
 }
 
     NAN_METHOD(selectGasLoadChargeMaterialById) {
@@ -302,6 +314,11 @@ NAN_METHOD(insertSolidLiquidFlueGasMaterial) {
     info.GetReturnValue().Set(success);
 };
 
+NAN_METHOD(deleteSolidLiquidFlueGasMaterial) {
+    inp = info[0]->ToObject();
+    bool success = sql->deleteSolidLiquidFlueGasMaterial(GetStr("substance"));
+//    info.GetReturnValue().Set(success);
+};
 
     NAN_METHOD(selectSolidLiquidFlueGasMaterialById) {
         Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -382,6 +399,12 @@ NAN_METHOD(insertGasFlueGasMaterial) {
 	info.GetReturnValue().Set(success);
 }
 
+NAN_METHOD(deleteGasFlueGasMaterial) {
+    inp = info[0]->ToObject();
+    bool success = sql->deleteGasFlueGasMaterial(GetStr("substance"));
+//    info.GetReturnValue().Set(success);
+}
+
     NAN_METHOD(selectGasFlueGasMaterialById) {
         Local<String> id = Nan::New<String>("id").ToLocalChecked();
         Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
@@ -450,6 +473,12 @@ NAN_METHOD(insertAtmosphereSpecificHeat) {
     info.GetReturnValue().Set(success);
 };
 
+NAN_METHOD(deleteAtmosphereSpecificHeat) {
+    inp = info[0]->ToObject();
+    bool success = sql->deleteAtmosphereSpecificHeat(GetStr("substance"));
+//    info.GetReturnValue().Set(success);
+};
+
 NAN_METHOD(selectAtmosphereSpecificHeatById) {
     Local<String> id = Nan::New<String>("id").ToLocalChecked();
     Local<String> substance = Nan::New<String>("substance").ToLocalChecked();
@@ -490,6 +519,12 @@ NAN_METHOD(insertWallLossesSurface) {
     wl.setConditionFactor(Get("conditionFactor"));
     bool success = sql->insertWallLossesSurface(wl);
     info.GetReturnValue().Set(success);
+};
+
+NAN_METHOD(deleteWallLossesSurface) {
+    inp = info[0]->ToObject();
+    bool success = sql->deleteWallLossesSurface(GetStr("substance"));
+//    info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(selectWallLossesSurfaceById) {
