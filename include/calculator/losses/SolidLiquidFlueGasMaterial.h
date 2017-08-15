@@ -55,6 +55,8 @@ public:
 			nitrogen(nitrogen / 100)
 	{}
 
+	SolidLiquidFlueGasMaterial() = default;
+
 	/**
      * Calculates excess air percentage given flue gas O2 levels
      *

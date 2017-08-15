@@ -358,7 +358,8 @@ test('dbSelectAtmosphereSpecificHeat', function (t) {
     var obj = {
         id: 1,
         substance: 'Nitrogen',
-        specificHeat: 0.0185};
+        specificHeat: 0.0185
+    };
 
     t.equal(res.id, obj.id, res.id + " != " + obj.id);
     t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
@@ -448,6 +449,120 @@ test('dbInsertWallLossesSurface', function (t) {
     t.equal(res.length, size + 1, res.length + " != " + (size + 1));
     t.equal(res[size].surface, obj2.surface, res[size].surface + " != " + obj2.surface);
     t.equal(res[size].conditionFactor, obj2.conditionFactor, res[size].conditionFactor + " != " + obj2.conditionFactor);
+});
+
+test('dbDeletions', function (t) {
+    t.plan(7);
+    bindings.unitTestStartup();
+
+    var res = bindings.selectLiquidLoadChargeMaterials();
+    var last = res[res.length - 1].substance;
+    var obj = {
+        id: res.length,
+        substance: 'customLiquidLoadChargeMaterial',
+        specificHeatLiquid: 0.6501,
+        specificHeatVapor: 0.55,
+        latentHeat: 105,
+        vaporizationTemperature: 900
+    };
+    bindings.insertLiquidLoadChargeMaterial(obj);
+    bindings.deleteLiquidLoadChargeMaterial(obj);
+    res = bindings.selectLiquidLoadChargeMaterials();
+    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+
+    res = bindings.selectSolidLoadChargeMaterials();
+    last = res[res.length - 1].substance;
+    obj = {
+        id: res.length,
+        substance: 'customSolidLoadChargeMaterial',
+        specificHeatSolid: 0.247910198232625,
+        latentHeat: 169,
+        specificHeatLiquid: 0.2601,
+        meltingPoint: 1215
+    };
+    bindings.insertSolidLoadChargeMaterial(obj);
+    bindings.deleteSolidLoadChargeMaterial(obj);
+    res = bindings.selectSolidLoadChargeMaterials();
+    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+
+    res = bindings.selectGasLoadChargeMaterials();
+    last = res[res.length - 1].substance;
+    obj = {
+        id: res.length,
+        substance: 'customGasMaterial',
+        specificHeatVapor: 0.47
+    };
+    bindings.insertGasLoadChargeMaterial(obj);
+    bindings.deleteGasLoadChargeMaterial(obj);
+    res = bindings.selectGasLoadChargeMaterials();
+    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+
+    res = bindings.selectGasFlueGasMaterials();
+    last = res[res.length - 1].substance;
+    obj = {
+        id: res.length,
+        substance: 'customGasFlueGasMaterial',
+        CH4: 87.0,
+        C2H6: 8.5,
+        N2: 3.6,
+        H2: 0.4,
+        C3H8: 0.0,
+        C4H10_CnH2n: 0.0,
+        H2O: 0.0,
+        CO: 0.0,
+        CO2: 0.4,
+        SO2: 0.0,
+        O2: 0.1,
+        heatingValue: 22030,
+        specificGravity: 0.655
+    };
+    bindings.insertGasFlueGasMaterial(obj);
+    bindings.deleteGasFlueGasMaterial(obj);
+    res = bindings.selectGasFlueGasMaterials();
+    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+
+
+    res = bindings.selectSolidLiquidFlueGasMaterials();
+    last = res[res.length - 1].substance;
+    obj = {
+        id: res.length,
+        substance: 'customSolidLiquidFlueGas',
+        carbon: 77.7 / 100,
+        hydrogen: 1.8 / 100,
+        sulphur: 0.7 / 100,
+        inertAsh: 9.8 / 100,
+        o2: 2.1 / 100,
+        moisture: 7.1 / 100,
+        nitrogen: 0.8 / 100
+    };
+    bindings.insertSolidLiquidFlueGasMaterial(obj);
+    bindings.deleteSolidLiquidFlueGasMaterial(obj);
+    res = bindings.selectSolidLiquidFlueGasMaterials();
+    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+
+    res = bindings.selectAtmosphereSpecificHeat();
+    last = res[res.length - 1].substance;
+    obj = {
+        id: res.length,
+        substance: 'customAtmosphere',
+        specificHeat: 0.018
+    };
+    bindings.insertAtmosphereSpecificHeat(obj);
+    bindings.deleteAtmosphereSpecificHeat(obj);
+    res = bindings.selectAtmosphereSpecificHeat();
+    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+
+    res = bindings.selectWallLossesSurface();
+    last = res[res.length - 1].substance;
+    obj = {
+        id: res.length,
+        surface: 'customWallLossesSurface',
+        conditionFactor: 1.79
+    };
+    bindings.insertWallLossesSurface(obj);
+    bindings.deleteWallLossesSurface(obj);
+    res = bindings.selectWallLossesSurface();
+    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
 });
 
 // // commented out bc it writes files to the HDD
