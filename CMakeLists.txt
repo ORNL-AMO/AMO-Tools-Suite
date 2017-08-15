@@ -192,7 +192,7 @@ set(INCLUDE_FILES
         include/ssmt/Boiler.h
         include/ssmt/HeatLoss.h
         include/ssmt/FlashTank.h
-        include/ssmt/PRV.h)
+        include/ssmt/PRV.h
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h)
 
@@ -229,7 +229,7 @@ set(TEST_FILES
         tests/Boiler.unit.cpp
         tests/HeatLoss.unit.cpp
         tests/FlashTank.unit.cpp
-        tests/PRV.unit.cpp)
+        tests/PRV.unit.cpp
         tests/FlashTank.unit.cpp
         tests/Deaerator.unit.cpp)
 
