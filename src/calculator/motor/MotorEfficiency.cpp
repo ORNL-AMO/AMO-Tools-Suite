@@ -74,6 +74,8 @@ double MotorEfficiency::calculate() {
     double kWloss25 = ((1 / motorEfficiency_[0]) - 1) * motorRatedPower_ * 0.746 * 0.25;
     kWloss0 = 0.8 * kWloss25;
 
+    if (loadFactor_ > 1.5) loadFactor_ = 1.5;
+
     if (loadFactor_ < 0.25 || loadFactor_ == 0.25 || std::abs(loadFactor_ - 0.25) < 0.001) {
         double kWloss_ = kWloss0 + loadFactor_ * 100 * (kWloss25 - kWloss0) / 25;
         double kWshaft_ = motorRatedPower_ * 0.746 * (loadFactor_); // Make sure motorRatedPower is in hp
