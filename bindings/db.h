@@ -49,15 +49,16 @@ std::string GetStr(std::string const & nm) {
 // so data is version, timestamp, comment - "initial file based release"
 // to save the backup,
 
-// startup should not be used with unit tests
     NAN_METHOD(startup) {
-        std::string dbName = "db/amo_tools_suite.db";
-        std::ifstream ifs(dbName);
-	    const bool fileExists = ifs.is_open();
-        ifs.close();
+//        std::string dbName = "db/amo_tools_suite.db";
+//        std::ifstream ifs(dbName);
+//	    const bool fileExists = ifs.is_open();
+//        ifs.close();
+//	    sql.reset();
+//        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
 
-	    sql.reset();
-        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
+	    std::string const dbName = ":memory:";
+	    sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
     }
 
     // used for unit testing, we don't want files written to the hard drive during testing
