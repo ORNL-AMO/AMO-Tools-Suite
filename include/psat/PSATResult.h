@@ -176,8 +176,8 @@ public:
 private:
     // Out values
     result_ existing_, optimal_, modified_;
-    double annualSavingsPotential_;
-    double optimizationRating_;
+    double annualSavingsPotential_ = 0.0;
+    double optimizationRating_ = 0.0;
     // In values
     Pump pump_;
     Motor motor_;

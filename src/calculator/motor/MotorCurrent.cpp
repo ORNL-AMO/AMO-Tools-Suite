@@ -27,7 +27,7 @@
  * @return motor current
  */
 double MotorCurrent::calculate() {
-
+    if (loadFactor_ > 1.5) loadFactor_ = 1.5;
 
     EstimateFLA estimateFLA(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_, specifiedEfficiency_,
                             ratedVoltage_);

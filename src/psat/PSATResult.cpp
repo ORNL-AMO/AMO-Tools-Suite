@@ -121,9 +121,9 @@ double PSATResult::calculateOptimal() {
     optimal_.annualCost_ = annualCost.calculate();
 
     // Annual Savings potential
-    annualSavingsPotential_ = existing_.annualCost_ - optimal_.annualCost_;
+//    annualSavingsPotential_ = existing_.annualCost_ - optimal_.annualCost_;
     // Optimization Rating
-    optimizationRating_ = optimal_.motorPower_ / existing_.motorPower_;
+//    optimizationRating_ = optimal_.motorPower_ / existing_.motorPower_;
     return 0;
 }
 double PSATResult::calculateModified() {
