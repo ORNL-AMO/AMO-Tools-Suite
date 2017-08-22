@@ -17,7 +17,7 @@ double HeadToolBase::velocityHead(const double velocity, const double gravity) {
 	return ( ( velocity * velocity ) / 2.0 )  / gravity;
 }
 
-ReturnCalcValues HeadToolSuctionTank::calculate() {
+std::unordered_map<std::string, double> HeadToolSuctionTank::calculate() {
 	// this flow and pressure head should be used when units are metric, and the number 12 should be replaced with 1000
 	// in the velocityHead Suction and Discharge calculations
 //	const double flow = flowRate_ * 4.402867544 / 15850.32316;
@@ -35,12 +35,19 @@ ReturnCalcValues HeadToolSuctionTank::calculate() {
 	const double suctionHead = suctionLineLossCoefficients_ * velocityHeadSuction;
 	const double dischargeHead = dischargeLineLossCoefficients_ * velocityHeadDischarge;
 
-	const double head = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
+	const double pumpHead = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
 
-	return ReturnCalcValues(elevationHead, pressureHead, velocityHeadDifferential, suctionHead, dischargeHead, head);
+	return {
+			{"elevationHead",            elevationHead},
+			{"pressureHead",             pressureHead},
+			{"velocityHeadDifferential", velocityHeadDifferential},
+			{"suctionHead",              suctionHead},
+			{"dischargeHead",            dischargeHead},
+			{"pumpHead",                 pumpHead}
+	};
 }
 
-ReturnCalcValues HeadTool::calculate() {
+std::unordered_map<std::string, double> HeadTool::calculate() {
 //	const double flow = flowRate_ * 4.402867544 / 15850.32316;
 //	const double pressureHead =
 //			(((dischargeGaugePressure_ - suctionGaugePressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
@@ -56,8 +63,15 @@ ReturnCalcValues HeadTool::calculate() {
 	const double suctionHead = suctionLineLossCoefficients_ * velocityHeadSuction;
 	const double dischargeHead = dischargeLineLossCoefficients_ * velocityHeadDischarge;
 
-	const double head = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
+	const double pumpHead = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
 
-	return ReturnCalcValues(elevationHead, pressureHead, velocityHeadDifferential, suctionHead, dischargeHead, head);
+	return {
+			{"elevationHead",            elevationHead},
+			{"pressureHead",             pressureHead},
+			{"velocityHeadDifferential", velocityHeadDifferential},
+			{"suctionHead",              suctionHead},
+			{"dischargeHead",            dischargeHead},
+			{"pumpHead",                 pumpHead}
+	};
 }
 

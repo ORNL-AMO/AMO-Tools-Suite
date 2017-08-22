@@ -10,63 +10,13 @@
 #ifndef AMO_TOOLS_SUITE_HEADTOOL_H
 #define AMO_TOOLS_SUITE_HEADTOOL_H
 
-/**
-* Used to return the calculation made in both HeadTool classes, should not be used otherwise
-* */
-class ReturnCalcValues {
-public:
-	/**
-    * Constructor for the ReturnCalcValues class with all inputs specified
-    *
-    * @param differentialElevationHead double, differential elevation head in ft
-    * @param differentialPressureHead double, differential pressure head in ft
-    * @param differentialVelocityHead double, differential velocity head in ft
-    * @param estimatedSuctionFrictionHead double, estimated suction friction head in ft
-    * @param estimatedDischargeFrictionHead double, estimated discharge friction head in ft
-    * @param pumpHead double, pump head in ft
-    *
-    * @return nothing
-	*
- * */
-	ReturnCalcValues(
-			const double differentialElevationHead,
-			const double differentialPressureHead,
-			const double differentialVelocityHead,
-			const double estimatedSuctionFrictionHead,
-			const double estimatedDischargeFrictionHead,
-			const double pumpHead
-	) :
-			differentialElevationHead(differentialElevationHead),
-			differentialPressureHead(differentialPressureHead),
-			differentialVelocityHead(differentialVelocityHead),
-			estimatedSuctionFrictionHead(estimatedSuctionFrictionHead),
-			estimatedDischargeFrictionHead(estimatedDischargeFrictionHead),
-			pumpHead(pumpHead)
-	{}
-
-	///units of ft
-	const double differentialElevationHead;
-
-	///units of ft
-	const double differentialPressureHead;
-
-	///units of ft
-	const double differentialVelocityHead;
-
-    ///units of ft
-	const double estimatedSuctionFrictionHead;
-
-	///units of ft
-	const double estimatedDischargeFrictionHead;
-
-	///units of ft
-	const double pumpHead;
-};
+#include <string>
+#include <unordered_map>
 
 /**
  * Head Tool Base class
  * Contains all of the basic properties of a head tool.
- * Used to calculate velocity and velocity head so those values can be used in the HeadToolSuctionTank class or HeadTool class to calculate all of the values in the ReturnCalcValues class.
+ * Used to calculate velocity and velocity head so those values can be used in the HeadToolSuctionTank class or HeadTool class to calculate all of the values in the returned map.
  */
 class HeadToolBase {
 protected:
@@ -107,9 +57,9 @@ protected:
 	/**
      * Calculates the operating pump head
      *
-     * @return ReturnCalcValues class with all its values calculated
+     * @return unordered map with all its values calculated
      */
-	virtual ReturnCalcValues calculate() = 0;
+	virtual std::unordered_map<std::string, double> calculate() = 0;
 
 	/**
      * Calculates the velocity
@@ -156,7 +106,7 @@ protected:
 /**
  * Head Tool Suction Tank class
  * Contains all of the properties of a head tool suction tank.
- * Used to calculate all of the values in the ReturnCalcValues class.
+ * Used to calculate all of the values in the returned map.
  */
 class HeadToolSuctionTank : private HeadToolBase {
 public:
@@ -204,9 +154,9 @@ public:
 	/**
      * Calculates the operating pump head
      *
-     * @return ReturnCalcValues, all the values calculated for operating pump head
+     * @return unordered map with all the values calculated for operating pump head
      */
-	ReturnCalcValues calculate();
+	std::unordered_map<std::string, double> calculate() override;
 
 private:
 	const double suctionTankGasOverPressure_, suctionTankFluidSurfaceElevation_;
@@ -215,7 +165,7 @@ private:
 /**
  * Head Tool class
  * Contains all of the properties of a head tool.
- * Used to calculate all of the values of the ReturnCalcValues class.
+ * Used to calculate all of the values of the returned unordered map.
  */
 class HeadTool : private HeadToolBase {
 public:
@@ -262,9 +212,9 @@ public:
 /**
      * Calculates the operating pump head
      *
-     * @return ReturnCalcValues class with internal values calculated
+     * @return unordered_map with internal values calculated
      */
-	ReturnCalcValues calculate();
+	std::unordered_map<std::string, double> calculate() override;
 
 private:
 	const double suctionGaugePressure_, suctionGaugeElevation_;
