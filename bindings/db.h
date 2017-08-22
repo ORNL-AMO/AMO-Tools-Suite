@@ -30,7 +30,7 @@ double Get(std::string const & nm) {
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
-        ThrowTypeError(std::string("Get in db.h: " + nm + " not present in object").c_str());
+        ThrowTypeError(std::string("Get method in db.h: " + nm + " not present in object").c_str());
     }
     return rObj->NumberValue();
 }
@@ -39,7 +39,7 @@ std::string GetStr(std::string const & nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     auto obj = inp->ToObject()->Get(getName);
     if (obj->IsUndefined()) {
-        ThrowTypeError(std::string("GetStr in db.h: " + nm + " not present in object").c_str());
+        ThrowTypeError(std::string("GetStr method in db.h: " + nm + " not present in object").c_str());
     }
     v8::String::Utf8Value s(obj);
     return std::string(*s);

@@ -8,6 +8,7 @@
 #include <nan.h>
 #include <node.h>
 #include <iostream>
+#include <string>
 #include "calculator/furnace/EfficiencyImprovement.h"
 #include "calculator/furnace/EnergyEquivalency.h"
 #include "calculator/furnace/FlowCalculationsEnergyUse.h"
@@ -40,18 +41,17 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(const char *nm) {
+double Get(std::string const & nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
-        std::cout<<nm;
-        //assert(!"defined");
+        ThrowTypeError(std::string("Get method in phast.h: " + nm + " not present in object").c_str());
     }
     return rObj->NumberValue();
 }
 
-void SetR(const char *nm, double n) {
+void SetR(std::string const & nm, double n) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     Local<Number> getNum = Nan::New<Number>(n);
     Nan::Set(r, getName, getNum);
@@ -63,16 +63,6 @@ FlowCalculationsEnergyUse::Gas gas() {
 
 FlowCalculationsEnergyUse::Section section() {
     return (FlowCalculationsEnergyUse::Section)(int)Get("sectionType");
-}
-
-
-/**********************
- * Test methods
- */
-
-NAN_METHOD(initTest) {
-        Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
-        info.GetReturnValue().Set(temp);
 }
 
 NAN_METHOD(atmosphere) {
