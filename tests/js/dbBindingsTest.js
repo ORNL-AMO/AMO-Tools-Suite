@@ -553,7 +553,7 @@ test('dbDeletions', function (t) {
     t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
 
     res = bindings.selectWallLossesSurface();
-    last = res[res.length - 1].substance;
+    last = res[res.length - 1].surface;
     obj = {
         id: res.length,
         surface: 'customWallLossesSurface',
@@ -562,7 +562,7 @@ test('dbDeletions', function (t) {
     bindings.insertWallLossesSurface(obj);
     bindings.deleteWallLossesSurface(obj);
     res = bindings.selectWallLossesSurface();
-    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+    t.equal(last, res[res.length - 1].surface, last + " != " + res[res.length - 1].surface);
 });
 
 // // commented out bc it writes files to the HDD
