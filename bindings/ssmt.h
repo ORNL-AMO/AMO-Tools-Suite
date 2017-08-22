@@ -69,8 +69,7 @@ NAN_METHOD(saturatedPressure) {
      * @return nothing
      */
     SaturatedPressure sp(Get("saturatedTemperature"));
-    double saturatedPressure = sp.calculate();
-    SetR("saturatedPressure", saturatedPressure);
+    SetR("saturatedPressure", sp.calculate());
     info.GetReturnValue().Set(r);
 }
 
@@ -85,8 +84,7 @@ NAN_METHOD(saturatedTemperature) {
      * @return nothing
      */
     SaturatedTemperature st(Get("saturatedPressure"));
-    double saturatedTemperature = st.calculate();
-    SetR("saturatedTemperature", saturatedTemperature);
+    SetR("saturatedTemperature", st.calculate());
     info.GetReturnValue().Set(r);
 }
 
@@ -106,29 +104,18 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
      */
     SaturatedProperties sp(pressure, Get("saturatedTemperature"));
     std::unordered_map <std::string, double> results = sp.calculate();
-    //double saturatedPressure = results["pressure"];
-    double saturatedPressure = results["pressure"];
-    double saturatedTemperature = results["temperature"];
-    double liquidEnthalpy = results["liquidSpecificEnthalpy"];
-    double gasEnthalpy = results["gasSpecificEnthalpy"];
-    double evaporationEnthalpy = results["evaporationSpecificEnthalpy"];
-    double liquidEntropy = results["liquidSpecificEntropy"];
-    double gasEntropy = results["gasSpecificEntropy"];
-    double evaporationEntropy = results["evaporationSpecificEntropy"];
-    double liquidVolume = results["liquidSpecificVolume"];
-    double gasVolume = results["gasSpecificVolume"];
-    double evaporationVolume = results["evaporationSpecificVolume"];
-    SetR("saturatedPressure", saturatedPressure);
-    SetR("saturatedTemperature", saturatedTemperature);
-    SetR("liquidEnthalpy", liquidEnthalpy);
-    SetR("gasEnthalpy", gasEnthalpy);
-    SetR("evaporationEnthalpy", evaporationEnthalpy);
-    SetR("liquidEntropy", liquidEntropy);
-    SetR("gasEntropy", gasEntropy);
-    SetR("evaporationEntropy", evaporationEntropy);
-    SetR("liquidVolume", liquidVolume);
-    SetR("gasVolume", gasVolume);
-    SetR("evaporationVolume", evaporationVolume);
+
+    SetR("saturatedPressure", results["pressure"]);
+    SetR("saturatedTemperature", results["temperature"]);
+    SetR("liquidEnthalpy", results["liquidSpecificEnthalpy"]);
+    SetR("gasEnthalpy", results["gasSpecificEnthalpy"]);
+    SetR("evaporationEnthalpy", results["evaporationSpecificEnthalpy"]);
+    SetR("liquidEntropy", results["liquidSpecificEntropy"]);
+    SetR("gasEntropy", results["gasSpecificEntropy"]);
+    SetR("evaporationEntropy", results["evaporationSpecificEntropy"]);
+    SetR("liquidVolume", results["liquidSpecificVolume"]);
+    SetR("gasVolume", results["gasSpecificVolume"]);
+    SetR("evaporationVolume", results["evaporationSpecificVolume"]);
     info.GetReturnValue().Set(r);
 }
 
@@ -148,28 +135,17 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
      */
     SaturatedProperties sp(Get("saturatedPressure"), temperature);
     std::unordered_map <std::string, double> results = sp.calculate();
-    double saturatedPressure = results["pressure"];
-    double saturatedTemperature = results["temperature"];
-    double liquidEnthalpy = results["liquidSpecificEnthalpy"];
-    double gasEnthalpy = results["gasSpecificEnthalpy"];
-    double evaporationEnthalpy = results["evaporationSpecificEnthalpy"];
-    double liquidEntropy = results["liquidSpecificEntropy"];
-    double gasEntropy = results["gasSpecificEntropy"];
-    double evaporationEntropy = results["evaporationSpecificEntropy"];
-    double liquidVolume = results["liquidSpecificVolume"];
-    double gasVolume = results["gasSpecificVolume"];
-    double evaporationVolume = results["evaporationSpecificVolume"];
-    SetR("saturatedPressure", saturatedPressure);
-    SetR("saturatedTemperature", saturatedTemperature);
-    SetR("liquidEnthalpy", liquidEnthalpy);
-    SetR("gasEnthalpy", gasEnthalpy);
-    SetR("evaporationEnthalpy", evaporationEnthalpy);
-    SetR("liquidEntropy", liquidEntropy);
-    SetR("gasEntropy", gasEntropy);
-    SetR("evaporationEntropy", evaporationEntropy);
-    SetR("liquidVolume", liquidVolume);
-    SetR("gasVolume", gasVolume);
-    SetR("evaporationVolume", evaporationVolume);
+    SetR("saturatedPressure", results["pressure"]);
+    SetR("saturatedTemperature", results["temperature"]);
+    SetR("liquidEnthalpy", results["liquidSpecificEnthalpy"]);
+    SetR("gasEnthalpy", results["gasSpecificEnthalpy"]);
+    SetR("evaporationEnthalpy", results["evaporationSpecificEnthalpy"]);
+    SetR("liquidEntropy", results["liquidSpecificEntropy"]);
+    SetR("gasEntropy", results["gasSpecificEntropy"]);
+    SetR("evaporationEntropy", results["evaporationSpecificEntropy"]);
+    SetR("liquidVolume", results["liquidSpecificVolume"]);
+    SetR("gasVolume", results["gasSpecificVolume"]);
+    SetR("evaporationVolume", results["evaporationSpecificVolume"]);
     info.GetReturnValue().Set(r);
 }
 
@@ -190,102 +166,69 @@ NAN_METHOD(steamProperties) {
      */
     SteamProperties sp(Get("pressure"), quantity, Get("quantityValue"));
     std::unordered_map <std::string, double> results = sp.calculate();
-    double pressure = results["pressure"];
-    double temperature = results["temperature"];
-    double specificEnthalpy = results["specificEnthalpy"];
-    double specificEntropy = results["specificEntropy"];
-    double quality = results["quality"];
-    double specificVolume = results["specificVolume"];
-    SetR("pressure", pressure);
-    SetR("temperature", temperature);
-    SetR("specificEnthalpy", specificEnthalpy);
-    SetR("specificEntropy", specificEntropy);
-    SetR("quality", quality);
-    SetR("specificVolume", specificVolume);
+    SetR("pressure", results["pressure"]);
+    SetR("temperature", results["temperature"]);
+    SetR("specificEnthalpy", results["specificEnthalpy"]);
+    SetR("specificEntropy", results["specificEntropy"]);
+    SetR("quality", results["quality"]);
+    SetR("specificVolume", results["specificVolume"]);
     info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(boiler) {
 
-        inp = info[0]->ToObject();
-        r = Nan::New<Object>();
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
 
-        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+    SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
 
-        /**
-     *
-     * Constructor for the boiler calculator
-     *
-     * @param deaeratorPressure double, pressure of deaerator in MPa
-     * @param combustionEfficiency double, combustion efficiency of the boiler as %
-     * @param blowdownRate double, blowdown rate as a % of inlet mass flow
-     * @param steamPressure double, pressure of steam in MPa
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param steamMassFlow double, steam mass flow in kg/hr
-     *
-     * @return nothing
-     *
-     * */
-        Boiler b(Get("deaeratorPressure"), Get("combustionEfficiency"), Get("blowdownRate"), Get("steamPressure"), quantityType, Get("quantityValue"), Get("steamMassFlow"));
-        std::unordered_map <std::string, double> steamResults = b.getSteamProperties();
-        std::unordered_map <std::string, double> blowdownResults = b.getBlowdownProperties();
-        std::unordered_map <std::string, double> feedwaterResults = b.getFeedwaterProperties();
-        double steamPressure = steamResults["pressure"];
-        double steamTemperature = steamResults["temperature"];
-        double steamSpecificEnthalpy = steamResults["specificEnthalpy"];
-        double steamSpecificEntropy = steamResults["specificEntropy"];
-        double steamQuality = steamResults["quality"];
-        double steamMassFlow = b.getSteamMassFlow();
-        double steamEnergyFlow = b.getSteamEnergyFlow();
+    /**
+ *
+ * Constructor for the boiler calculator
+ *
+ * @param deaeratorPressure double, pressure of deaerator in MPa
+ * @param combustionEfficiency double, combustion efficiency of the boiler as %
+ * @param blowdownRate double, blowdown rate as a % of inlet mass flow
+ * @param steamPressure double, pressure of steam in MPa
+ * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+ * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+ * @param steamMassFlow double, steam mass flow in kg/hr
+ *
+ * @return nothing
+ *
+ * */
+    Boiler b(Get("deaeratorPressure"), Get("combustionEfficiency"), Get("blowdownRate"), Get("steamPressure"), quantityType, Get("quantityValue"), Get("steamMassFlow"));
 
-        double blowdownPressure = blowdownResults["pressure"];
-        double blowdownTemperature = blowdownResults["temperature"];
-        double blowdownSpecificEnthalpy = blowdownResults["specificEnthalpy"];
-        double blowdownSpecificEntropy = blowdownResults["specificEntropy"];
-        double blowdownQuality = blowdownResults["quality"];
-        double blowdownMassFlow = b.getBlowdownMassFlow();
-        double blowdownEnergyFlow = b.getBlowdownEnergyFlow();
+    std::unordered_map <std::string, double> results = b.getSteamProperties();
+    SetR("steamPressure", results["pressure"]);
+    SetR("steamTemperature", results["temperature"]);
+    SetR("steamSpecificEnthalpy", results["specificEnthalpy"]);
+    SetR("steamSpecificEntropy", results["specificEntropy"]);
+    SetR("steamQuality", results["quality"]);
+    SetR("steamMassFlow", b.getSteamMassFlow());
+    SetR("steamEnergyFlow", b.getSteamEnergyFlow());
 
-        double feedwaterPressure = feedwaterResults["pressure"];
-        double feedwaterTemperature = feedwaterResults["temperature"];
-        double feedwaterSpecificEnthalpy = feedwaterResults["specificEnthalpy"];
-        double feedwaterSpecificEntropy = feedwaterResults["specificEntropy"];
-        double feedwaterQuality = feedwaterResults["quality"];
-        double feedwaterMassFlow = b.getFeedwaterMassFlow();
-        double feedwaterEnergyFlow = b.getFeedwaterEnergyFlow();
+    results = b.getBlowdownProperties();
+    SetR("blowdownPressure", results["pressure"]);
+    SetR("blowdownTemperature", results["temperature"]);
+    SetR("blowdownSpecificEnthalpy", results["specificEnthalpy"]);
+    SetR("blowdownSpecificEntropy", results["specificEntropy"]);
+    SetR("blowdownQuality", results["quality"]);
+    SetR("blowdownMassFlow", b.getBlowdownMassFlow());
+    SetR("blowdownEnergyFlow", b.getBlowdownEnergyFlow());
 
-        double boilerEnergy = b.getBoilerEnergy();
-        double fuelEnergy = b.getFuelEnergy();
+	results = b.getFeedwaterProperties();
+    SetR("feedwaterPressure", results["pressure"]);
+    SetR("feedwaterTemperature", results["temperature"]);
+    SetR("feedwaterSpecificEnthalpy", results["specificEnthalpy"]);
+    SetR("feedwaterSpecificEntropy", results["specificEntropy"]);
+    SetR("feedwaterQuality", results["quality"]);
+    SetR("feedwaterMassFlow", b.getFeedwaterMassFlow());
+    SetR("feedwaterEnergyFlow", b.getFeedwaterEnergyFlow());
+    SetR("boilerEnergy", b.getBoilerEnergy());
+    SetR("fuelEnergy", b.getFuelEnergy());
 
-        SetR("steamPressure", steamPressure);
-        SetR("steamTemperature", steamTemperature);
-        SetR("steamSpecificEnthalpy", steamSpecificEnthalpy);
-        SetR("steamSpecificEntropy", steamSpecificEntropy);
-        SetR("steamQuality", steamQuality);
-        SetR("steamMassFlow", steamMassFlow);
-        SetR("steamEnergyFlow", steamEnergyFlow);
-
-        SetR("blowdownPressure", blowdownPressure);
-        SetR("blowdownTemperature", blowdownTemperature);
-        SetR("blowdownSpecificEnthalpy", blowdownSpecificEnthalpy);
-        SetR("blowdownSpecificEntropy", blowdownSpecificEntropy);
-        SetR("blowdownQuality", blowdownQuality);
-        SetR("blowdownMassFlow", blowdownMassFlow);
-        SetR("blowdownEnergyFlow", blowdownEnergyFlow);
-
-        SetR("feedwaterPressure", feedwaterPressure);
-        SetR("feedwaterTemperature", feedwaterTemperature);
-        SetR("feedwaterSpecificEnthalpy", feedwaterSpecificEnthalpy);
-        SetR("feedwaterSpecificEntropy", feedwaterSpecificEntropy);
-        SetR("feedwaterQuality", feedwaterQuality);
-        SetR("feedwaterMassFlow", feedwaterMassFlow);
-        SetR("feedwaterEnergyFlow", feedwaterEnergyFlow);
-
-        SetR("boilerEnergy", boilerEnergy);
-        SetR("fuelEnergy", fuelEnergy);
-
-        info.GetReturnValue().Set(r);
+    info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(heatLoss) {
