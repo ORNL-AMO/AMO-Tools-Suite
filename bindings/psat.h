@@ -87,13 +87,13 @@ NAN_METHOD(headToolSuctionTank) {
     Local<String> estimatedSuctionFrictionHead = Nan::New<String>("estimatedSuctionFrictionHead").ToLocalChecked();
     Local<String> estimatedDischargeFrictionHead = Nan::New<String>("estimatedDischargeFrictionHead").ToLocalChecked();
     Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
+	
     Local<Object> obj = Nan::New<Object>();
-    Nan::Set(obj, differentialElevationHead, Nan::New<Number>(rv["differentialElevationHead"]));
-    Nan::Set(obj, differentialPressureHead, Nan::New<Number>(rv["differentialPressureHead"]));
-    Nan::Set(obj, differentialVelocityHead, Nan::New<Number>(rv["differentialVelocityHead"]));
-    Nan::Set(obj, estimatedSuctionFrictionHead, Nan::New<Number>(rv["estimatedSuctionFrictionHead"]));
-    Nan::Set(obj, estimatedDischargeFrictionHead, Nan::New<Number>(rv["estimatedDischargeFrictionHead"]));
-    Nan::Set(obj, estimatedDischargeFrictionHead, Nan::New<Number>(rv["estimatedDischargeFrictionHead"]));
+    Nan::Set(obj, differentialElevationHead, Nan::New<Number>(rv["elevationHead"]));
+    Nan::Set(obj, differentialPressureHead, Nan::New<Number>(rv["pressureHead"]));
+    Nan::Set(obj, differentialVelocityHead, Nan::New<Number>(rv["velocityHeadDifferential"]));
+    Nan::Set(obj, estimatedSuctionFrictionHead, Nan::New<Number>(rv["suctionHead"]));
+    Nan::Set(obj, estimatedDischargeFrictionHead, Nan::New<Number>(rv["dischargeHead"]));
     Nan::Set(obj, pumpHead, Nan::New<Number>(rv["pumpHead"]));
 
     info.GetReturnValue().Set(obj);
@@ -141,12 +141,12 @@ NAN_METHOD(headTool) {
     Local<String> estimatedDischargeFrictionHead = Nan::New<String>("estimatedDischargeFrictionHead").ToLocalChecked();
     Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
     Local<Object> obj = Nan::New<Object>();
-    Nan::Set(obj, differentialElevationHead, Nan::New<Number>(rv["differentialElevationHead"]));
-    Nan::Set(obj, differentialPressureHead, Nan::New<Number>(rv["differentialPressureHead"]));
-    Nan::Set(obj, differentialVelocityHead, Nan::New<Number>(rv["differentialVelocityHead"]));
-    Nan::Set(obj, estimatedSuctionFrictionHead, Nan::New<Number>(rv["estimatedSuctionFrictionHead"]));
-    Nan::Set(obj, estimatedDischargeFrictionHead, Nan::New<Number>(rv["estimatedDischargeFrictionHead"]));
-    Nan::Set(obj, estimatedDischargeFrictionHead, Nan::New<Number>(rv["estimatedDischargeFrictionHead"]));
+
+    Nan::Set(obj, differentialElevationHead, Nan::New<Number>(rv["elevationHead"]));
+    Nan::Set(obj, differentialPressureHead, Nan::New<Number>(rv["pressureHead"]));
+    Nan::Set(obj, differentialVelocityHead, Nan::New<Number>(rv["velocityHeadDifferential"]));
+    Nan::Set(obj, estimatedSuctionFrictionHead, Nan::New<Number>(rv["suctionHead"]));
+    Nan::Set(obj, estimatedDischargeFrictionHead, Nan::New<Number>(rv["dischargeHead"]));
     Nan::Set(obj, pumpHead, Nan::New<Number>(rv["pumpHead"]));
     info.GetReturnValue().Set(obj);
 }
