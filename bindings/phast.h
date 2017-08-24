@@ -367,7 +367,7 @@ NAN_METHOD(solidLoadChargeMaterial) {
  * @param dischargeTemperature double, charge material discharge temperature in °F
  * @param waterVaporDischargeTemperature double, water vapor discharge temperature in °F
  * @param chargeMelted double, charge melted (% of dry charge) in %
- * @param chargedReacted double, charge Reacted (% of dry charge) in %
+ * @param chargeReacted double, charge Reacted (% of dry charge) in %
  * @param reactionHeat double, heat of reaction in Btu/lb
  * @param additionalHeat double, additional heat required in Btu/hr
  *
@@ -380,7 +380,7 @@ NAN_METHOD(solidLoadChargeMaterial) {
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
     }
-    SolidLoadChargeMaterial slcm(thermicReactionType, Get("specificHeatSolid"), Get("latentHeat"), Get("specificHeatLiquid"), Get("meltingPoint"), Get("chargeFeedRate"), Get("waterContentCharged"), Get("waterContentDischarged"), Get("initialTemperature"), Get("dischargeTemperature"), Get("waterVaporDischargeTemperature"), Get("chargeMelted"), Get("chargedReacted"), Get("reactionHeat"), Get("additionalHeat"));
+    SolidLoadChargeMaterial slcm(thermicReactionType, Get("specificHeatSolid"), Get("latentHeat"), Get("specificHeatLiquid"), Get("meltingPoint"), Get("chargeFeedRate"), Get("waterContentCharged"), Get("waterContentDischarged"), Get("initialTemperature"), Get("dischargeTemperature"), Get("waterVaporDischargeTemperature"), Get("chargeMelted"), Get("chargeReacted"), Get("reactionHeat"), Get("additionalHeat"));
     double heatLoss = slcm.getTotalHeat();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
