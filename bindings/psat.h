@@ -32,11 +32,11 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(const char *nm) {
+double Get(std::string const & nm) {
 	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
 	auto rObj = inp->ToObject()->Get(getName);
 	if (rObj->IsUndefined()) {
-		assert(!"defined");
+		ThrowTypeError(std::string("Get method in psat.h: " + nm + " not present in object").c_str());
 	}
 	return rObj->NumberValue();
 }

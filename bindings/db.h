@@ -60,6 +60,7 @@ std::string GetStr(std::string const & nm) {
 //        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
 
 	    std::string const dbName = ":memory:";
+	    sql.reset();
 	    sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
     }
 
