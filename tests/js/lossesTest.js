@@ -249,7 +249,7 @@ test('solidLoadChargeMaterial', function (t) {
     var inp = {
         thermicReactionType: 1, specificHeatSolid: 0.15, latentHeat: 60, specificHeatLiquid: 0.481, meltingPoint: 2900,
         chargeFeedRate: 10000, waterContentCharged: 0.1, waterContentDischarged: 0, initialTemperature: 70,
-        dischargeTemperature: 2200, waterVaporDischargeTemperature: 500, chargeMelted: 0, chargedReacted: 1,
+        dischargeTemperature: 2200, waterVaporDischargeTemperature: 500, chargeMelted: 0, chargeReacted: 1,
         reactionHeat: 100, additionalHeat: 0
     };
 

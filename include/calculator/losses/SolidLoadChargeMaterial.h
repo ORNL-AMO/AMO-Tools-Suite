@@ -47,7 +47,7 @@ public:
  * @param dischargeTemperature double, Charge material discharge temperature in °F
  * @param waterVaporDischargeTemperature double, Water vapor discharge temperature in °F
  * @param chargeMelted double, Charge melted (% of dry charge)
- * @param chargedReacted double, Charge Reacted (% of dry charge) in %
+ * @param chargeReacted double, Charge Reacted (% of dry charge) in %
  * @param reactionHeat double, Heat of reaction in Btu/lb
  * @param additionalHeat double, Additional heat required in Btu/h
  *
@@ -65,7 +65,7 @@ public:
             double dischargeTemperature,
             double waterVaporDischargeTemperature,
             double chargeMelted,
-            double chargedReacted,
+            double chargeReacted,
             double reactionHeat,
             double additionalHeat
     ) : thermicReactionType_ (thermicReactionType),
@@ -80,7 +80,7 @@ public:
         dischargeTemperature_(dischargeTemperature),
         waterVaporDischargeTemperature_(waterVaporDischargeTemperature),
         percentMelted_(chargeMelted / 100.0),
-        percentReacted_(chargedReacted / 100.0),
+        percentReacted_(chargeReacted / 100.0),
         reactionHeat_(reactionHeat),
         additionalHeat_(additionalHeat)
     {}
