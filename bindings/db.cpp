@@ -15,11 +15,11 @@ NAN_MODULE_INIT(InitDb) {
 	Nan::Set(target, New<String>("unitTestStartup").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(unitTestStartup)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("preUpdate").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(preUpdate)).ToLocalChecked());
-
-    Nan::Set(target, New<String>("postUpdate").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(postUpdate)).ToLocalChecked());
+//    Nan::Set(target, New<String>("preUpdate").ToLocalChecked(),
+//             GetFunction(New<FunctionTemplate>(preUpdate)).ToLocalChecked());
+//
+//    Nan::Set(target, New<String>("postUpdate").ToLocalChecked(),
+//             GetFunction(New<FunctionTemplate>(postUpdate)).ToLocalChecked());
 
     Nan::Set(target, New<String>("selectSolidLoadChargeMaterials").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectSolidLoadChargeMaterials)).ToLocalChecked());

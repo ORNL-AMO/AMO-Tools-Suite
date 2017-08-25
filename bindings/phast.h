@@ -8,6 +8,7 @@
 #include <nan.h>
 #include <node.h>
 #include <iostream>
+#include <string>
 #include "calculator/furnace/EfficiencyImprovement.h"
 #include "calculator/furnace/EnergyEquivalency.h"
 #include "calculator/furnace/FlowCalculationsEnergyUse.h"
@@ -40,18 +41,17 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(const char *nm) {
+double Get(std::string const & nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
-        std::cout<<nm;
-        //assert(!"defined");
+        ThrowTypeError(std::string("Get method in phast.h: " + nm + " not present in object").c_str());
     }
     return rObj->NumberValue();
 }
 
-void SetR(const char *nm, double n) {
+void SetR(std::string const & nm, double n) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     Local<Number> getNum = Nan::New<Number>(n);
     Nan::Set(r, getName, getNum);
@@ -63,16 +63,6 @@ FlowCalculationsEnergyUse::Gas gas() {
 
 FlowCalculationsEnergyUse::Section section() {
     return (FlowCalculationsEnergyUse::Section)(int)Get("sectionType");
-}
-
-
-/**********************
- * Test methods
- */
-
-NAN_METHOD(initTest) {
-        Local<String> temp = Nan::New<String>("Hello").ToLocalChecked();
-        info.GetReturnValue().Set(temp);
 }
 
 NAN_METHOD(atmosphere) {
@@ -377,7 +367,7 @@ NAN_METHOD(solidLoadChargeMaterial) {
  * @param dischargeTemperature double, charge material discharge temperature in °F
  * @param waterVaporDischargeTemperature double, water vapor discharge temperature in °F
  * @param chargeMelted double, charge melted (% of dry charge) in %
- * @param chargedReacted double, charge Reacted (% of dry charge) in %
+ * @param chargeReacted double, charge Reacted (% of dry charge) in %
  * @param reactionHeat double, heat of reaction in Btu/lb
  * @param additionalHeat double, additional heat required in Btu/hr
  *
@@ -390,7 +380,7 @@ NAN_METHOD(solidLoadChargeMaterial) {
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
     }
-    SolidLoadChargeMaterial slcm(thermicReactionType, Get("specificHeatSolid"), Get("latentHeat"), Get("specificHeatLiquid"), Get("meltingPoint"), Get("chargeFeedRate"), Get("waterContentCharged"), Get("waterContentDischarged"), Get("initialTemperature"), Get("dischargeTemperature"), Get("waterVaporDischargeTemperature"), Get("chargeMelted"), Get("chargedReacted"), Get("reactionHeat"), Get("additionalHeat"));
+    SolidLoadChargeMaterial slcm(thermicReactionType, Get("specificHeatSolid"), Get("latentHeat"), Get("specificHeatLiquid"), Get("meltingPoint"), Get("chargeFeedRate"), Get("waterContentCharged"), Get("waterContentDischarged"), Get("initialTemperature"), Get("dischargeTemperature"), Get("waterVaporDischargeTemperature"), Get("chargeMelted"), Get("chargeReacted"), Get("reactionHeat"), Get("additionalHeat"));
     double heatLoss = slcm.getTotalHeat();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);

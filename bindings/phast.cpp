@@ -70,9 +70,6 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("waterCoolingLosses").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(waterCoolingLosses)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("initTest").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(initTest)).ToLocalChecked());
-
     Nan::Set(target, New<String>("efficiencyImprovement").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(efficiencyImprovement)).ToLocalChecked());
 

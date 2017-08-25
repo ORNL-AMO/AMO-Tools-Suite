@@ -25,18 +25,17 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(const char *nm) {
+double Get(std::string const & nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
-        std::cout<<nm;
-        //assert(!"defined");
+        ThrowTypeError(std::string("Get method in ssmt.h: " + nm + " not present in object").c_str());
     }
     return rObj->NumberValue();
 }
 
-void SetR(const char *nm, double n) {
+void SetR(std::string const & nm, double n) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     Local<Number> getNum = Nan::New<Number>(n);
     Nan::Set(r, getName, getNum);

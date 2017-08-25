@@ -30,8 +30,7 @@ double Get(std::string const & nm) {
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
-        std::cout<<nm;
-        //assert(!"defined");
+        ThrowTypeError(std::string("Get method in db.h: " + nm + " not present in object").c_str());
     }
     return rObj->NumberValue();
 }
@@ -39,6 +38,9 @@ double Get(std::string const & nm) {
 std::string GetStr(std::string const & nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     auto obj = inp->ToObject()->Get(getName);
+    if (obj->IsUndefined()) {
+        ThrowTypeError(std::string("GetStr method in db.h: " + nm + " not present in object").c_str());
+    }
     v8::String::Utf8Value s(obj);
     return std::string(*s);
 }
@@ -58,6 +60,7 @@ std::string GetStr(std::string const & nm) {
 //        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
 
 	    std::string const dbName = ":memory:";
+	    sql.reset();
 	    sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
     }
 
@@ -67,30 +70,31 @@ std::string GetStr(std::string const & nm) {
         sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
     }
 
-// to be run before program shutdown upon software update, shouldn't be used in unit tests
-    NAN_METHOD(preUpdate) {
-        sql.reset();
-        std::rename("db/amo_tools_suite.db", "db/amo_tools_suite_temporary_backup.db");
-    }
-
-// to be called after program shutdown, upon software restart, shouldn't be used in unit tests
-NAN_METHOD(postUpdate) {
-    auto const backupSql = SQLite("db/amo_tools_suite_temporary_backup.db", false);
-    auto const customSolidLoadChargeMats = backupSql.getCustomSolidLoadChargeMaterials();
-
-    auto const now = std::chrono::system_clock::now();
-    auto const date = std::chrono::system_clock::to_time_t(now);
-    std::string dateStr = (ctime(&date));
-    dateStr = dateStr.substr(0, dateStr.size() - 1);
-    std::string db = "db/amo_tools_suite_" + dateStr + ".db";
-    std::rename("db/amo_tools_suite_temporary_backup.db", db.c_str());
-
-    startup(info);
-
-    for (auto const mat : customSolidLoadChargeMats) {
-        sql->insertSolidLoadChargeMaterials(mat);
-    }
-}
+// commented out due to the likely removal of these methods
+//// to be run before program shutdown upon software update, shouldn't be used in unit tests
+//    NAN_METHOD(preUpdate) {
+//        sql.reset();
+//        std::rename("db/amo_tools_suite.db", "db/amo_tools_suite_temporary_backup.db");
+//    }
+//
+//// to be called after program shutdown, upon software restart, shouldn't be used in unit tests
+//NAN_METHOD(postUpdate) {
+//    auto const backupSql = SQLite("db/amo_tools_suite_temporary_backup.db", false);
+//    auto const customSolidLoadChargeMats = backupSql.getCustomSolidLoadChargeMaterials();
+//
+//    auto const now = std::chrono::system_clock::now();
+//    auto const date = std::chrono::system_clock::to_time_t(now);
+//    std::string dateStr = (ctime(&date));
+//    dateStr = dateStr.substr(0, dateStr.size() - 1);
+//    std::string db = "db/amo_tools_suite_" + dateStr + ".db";
+//    std::rename("db/amo_tools_suite_temporary_backup.db", db.c_str());
+//
+//    startup(info);
+//
+//    for (auto const mat : customSolidLoadChargeMats) {
+//        sql->insertSolidLoadChargeMaterials(mat);
+//    }
+//}
 
     NAN_METHOD(selectSolidLoadChargeMaterials) {
 	    Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -518,7 +522,7 @@ NAN_METHOD(insertWallLossesSurface) {
 
 NAN_METHOD(deleteWallLossesSurface) {
     inp = info[0]->ToObject();
-    sql->deleteWallLossesSurface(GetStr("substance"));
+    sql->deleteWallLossesSurface(GetStr("surface"));
 };
 
 NAN_METHOD(selectWallLossesSurfaceById) {
