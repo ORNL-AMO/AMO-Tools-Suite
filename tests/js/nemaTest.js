@@ -5,6 +5,10 @@ const test = require('tap').test
 , testRoot = require('path').resolve(__dirname, '../../')
 , bindings = require('bindings')({ module_root: testRoot, bindings: 'psat'});
 
+function rnd(value) {
+    return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
+}
+
 test('psat', function (t) {
     t.plan(2);
     t.type(bindings.nema, 'function');
@@ -18,6 +22,5 @@ test('psat', function (t) {
     inp.motor_rated_power = 200;
     inp.load_factor = 1;
     var res = bindings.nema(inp);
-    t.equal(res, 95.33208465291122, 'res is ' + res);
-
+    t.equal(rnd(res), rnd(95.33208465291122), 'res is ' + res);
 });

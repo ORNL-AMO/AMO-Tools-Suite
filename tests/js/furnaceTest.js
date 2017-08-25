@@ -6,6 +6,10 @@ const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../')
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'phast'});
 
+function rnd(value) {
+    return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
+}
+
 test('efficiencyImprovement', function (t) {
     t.plan(7);
     t.type(bindings.efficiencyImprovement, 'function');
@@ -22,17 +26,17 @@ test('efficiencyImprovement', function (t) {
 
     var res = bindings.efficiencyImprovement(inp);
 
-    t.equal(res.currentExcessAir, 35.80000271600005, 'res.currentExcessAir is ' + res.currentExcessAir);
+    t.equal(rnd(res.currentExcessAir), rnd(35.80000271600005), 'res.currentExcessAir is ' + res.currentExcessAir);
 
-    t.equal(res.newExcessAir, 9.421053207479227, 'res.newExcessAir is ' + res.newExcessAir);
+    t.equal(rnd(res.newExcessAir), rnd(9.421053207479227), 'res.newExcessAir is ' + res.newExcessAir);
 
-    t.equal(res.currentAvailableHeat, 46.62980234686012, 'res.currentAvailableHeat is ' + res.currentAvailableHeat);
+    t.equal(rnd(res.currentAvailableHeat), rnd(46.62980234686012), 'res.currentAvailableHeat is ' + res.currentAvailableHeat);
 
-    t.equal(res.newAvailableHeat, 78.97203185240743, 'res.newAvailableHeat is '+ res.newAvailableHeat);
+    t.equal(rnd(res.newAvailableHeat), rnd(78.97203185240743), 'res.newAvailableHeat is '+ res.newAvailableHeat);
 
-    t.equal(res.newFuelSavings, 40.954029859574106, 'res.newFuelSavings is ' + res.newFuelSavings);
+    t.equal(rnd(res.newFuelSavings), rnd(40.954029859574106), 'res.newFuelSavings is ' + res.newFuelSavings);
 
-    t.equal(res.newEnergyInput, 5.90459701404259, 'res.newEnergyInput is ' + res.newEnergyInput);
+    t.equal(rnd(res.newEnergyInput), rnd(5.90459701404259), 'res.newEnergyInput is ' + res.newEnergyInput);
 
 });
 
@@ -46,7 +50,7 @@ test('energyEquivalencyElectric', function (t) {
     inp.fuelFiredHeatInput = 87.3;
 
     var res = bindings.energyEquivalencyElectric(inp);
-    t.equal(res.electricalHeatInput, 3371.268678581893, 'res.electricalHeatInput is ' + res.electricalHeatInput);
+    t.equal(rnd(res.electricalHeatInput), rnd(3371.268678581893), 'res.electricalHeatInput is ' + res.electricalHeatInput);
 
 
 });
@@ -61,7 +65,7 @@ test('energyEquivalencyFuel', function (t) {
     inp.electricalHeatInput = 700;
 
     var res = bindings.energyEquivalencyFuel(inp);
-    t.equal(res.fuelFiredHeatInput, 2.121391001697793, 'res.fuelFiredHeatInput is ' + res.fuelFiredHeatInput);
+    t.equal(rnd(res.fuelFiredHeatInput), rnd(2.121391001697793), 'res.fuelFiredHeatInput is ' + res.fuelFiredHeatInput);
 
 });
 
@@ -81,13 +85,13 @@ test('o2Enrichment', function (t) {
     inp.fuelConsumption = 10;
 
     var res = bindings.o2Enrichment(inp);
-    t.equal(res.availableHeatInput, 61.97028577716948, 'res.availableHeatInput is ' + res.availableHeatInput);
+    t.equal(rnd(res.availableHeatInput), rnd(61.97028577716948), 'res.availableHeatInput is ' + res.availableHeatInput);
 
-    t.equal(res.availableHeatEnriched, 74.2210855230995, 'res.availableHeatEnriched is ' + res.availableHeatEnriched);
+    t.equal(rnd(res.availableHeatEnriched), rnd(74.2210855230995), 'res.availableHeatEnriched is ' + res.availableHeatEnriched);
 
-    t.equal(res.fuelSavingsEnriched, 16.505821303458657, 'res.fuelSavingsEnriched is ' + res.fuelSavingsEnriched);
+    t.equal(rnd(res.fuelSavingsEnriched), rnd(16.505821303458657), 'res.fuelSavingsEnriched is ' + res.fuelSavingsEnriched);
 
-    t.equal(res.fuelConsumptionEnriched, 8.349417869654134, 'res.fuelConsumptionEnriched is ' + res.fuelConsumptionEnriched);
+    t.equal(rnd(res.fuelConsumptionEnriched), rnd(8.349417869654134), 'res.fuelConsumptionEnriched is ' + res.fuelConsumptionEnriched);
 
 });
 
@@ -114,11 +118,11 @@ test('flowCalculations', function (t) {
 
     var res = bindings.flowCalculations(inp);
 
-    t.equal(res.flow, 647312.3211663722, 'res.flow is ' + res.flow);
+    t.equal(rnd(res.flow), rnd(647312.3211663722), 'res.flow is ' + res.flow);
 
-    t.equal(res.heatInput, 75865.00404069883, 'res.heatInput is ' + res.heatInput);
+    t.equal(rnd(res.heatInput), rnd(75865.00404069883), 'res.heatInput is ' + res.heatInput);
 
-    t.equal(res.totalFlow, 10356997.138661955, 'res.totalFlow is ' + res.totalFlow);
+    t.equal(rnd(res.totalFlow), rnd(10356997.138661955), 'res.totalFlow is ' + res.totalFlow);
 
 });
 
@@ -136,8 +140,8 @@ test('humidityRatio', function (t) {
 
     var res = bindings.humidityRatio(inp);
 
-    t.equal(res.humidityRatioUsingRH, 0.028113628942036617, 'res.humidityRatioUsingRH is ' + res.humidityRatioUsingRH);
+    t.equal(rnd(res.humidityRatioUsingRH), rnd(0.028113628942036617), 'res.humidityRatioUsingRH is ' + res.humidityRatioUsingRH);
 
-    t.equal(res.humidityRatioUsingWBT, 0.024579434176341366, 'res.humidityRatioUsingWBT is ' + res.humidityRatioUsingWBT);
+    t.equal(rnd(res.humidityRatioUsingWBT), rnd(0.024579434176341366), 'res.humidityRatioUsingWBT is ' + res.humidityRatioUsingWBT);
 
 });

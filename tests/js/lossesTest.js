@@ -2,6 +2,10 @@ const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../')
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'phast'});
 
+function rnd(value) {
+    return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
+}
+
 test('atmosphere', function (t) {
     t.plan(2);
     t.type(bindings.atmosphere, 'function');
@@ -23,23 +27,23 @@ test('auxiliaryPower', function (t) {
     };
 
     var res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(res, 12.867405449429189, res + " != 12.867405449429189");
+    t.equal(rnd(res), rnd(12.867405449429189), res + " != 12.867405449429189");
 
     inp.supplyVoltage = 510;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(res, 14.266036476541055, res + " != 14.266036476541055");
+    t.equal(rnd(res), rnd(14.266036476541055), res + " != 14.266036476541055");
 
     inp.avgCurrent = 25;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(res, 18.771100627027707, res + " != 18.771100627027707");
+    t.equal(rnd(res), rnd(18.771100627027707), res + " != 18.771100627027707");
 
     inp.powerFactor = 0.55;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(res, 12.146006288076753, res + " != 12.146006288076753");
+    t.equal(rnd(res), rnd(12.146006288076753), res + " != 12.146006288076753");
 
     inp.operatingTime = 75;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(res, 9.109504716057565, res + " != 9.109504716057565");
+    t.equal(rnd(res), rnd(9.109504716057565), res + " != 9.109504716057565");
 });
 
 test('fixtureLosses', function (t) {
@@ -64,7 +68,7 @@ test('flueGasByVolume', function (t) {
     };
 
     var res = bindings.flueGasLossesByVolume(inp);
-    t.equal(res, 0.7689954663391211, res + ' != 0.7689954663391211');
+    t.equal(rnd(res), rnd(0.7689954663391211), res + ' != 0.7689954663391211');
 });
 
 test('flueGasByMass', function (t) {
@@ -78,7 +82,7 @@ test('flueGasByMass', function (t) {
     };
 
     var res = bindings.flueGasLossesByMass(inp);
-    t.equal(res, 0.8222977480707968, res + ' != 0.8222977480707968');
+    t.equal(rnd(res), rnd(0.8222977480707968), res + ' != 0.8222977480707968');
 });
 
 test('flueGasLossesByVolumeGivenO2', function (t) {
@@ -171,7 +175,7 @@ test('leakageLosses', function (t) {
     };
 
     var res = bindings.leakageLosses(inp);
-    t.equal(res, 2850767.216228273, res + ' != 2850767.216228273');
+    t.equal(rnd(res), rnd(2850767.216228273), res + ' != 2850767.216228273');
 });
 
 test('liquidCoolingLosses', function (t) {
@@ -213,7 +217,7 @@ test('openingLosses - both circular and quad', function (t) {
 
 
     var res = bindings.openingLossesCircular(inp);
-    t.equal(res, 16038.269976979091, res + ' != 16038.269976979091');
+    t.equal(rnd(res), rnd(16038.269976979091), res + ' != 16038.269976979091');
 
 
     inp = {
@@ -221,7 +225,7 @@ test('openingLosses - both circular and quad', function (t) {
         insideTemperature: 1600, percentTimeOpen: 20, viewFactor: 0.64
     };
     res = bindings.openingLossesQuad(inp);
-    t.equal(res, 18670.2258869289, res + ' != 18670.2258869289');
+    t.equal(rnd(res), rnd(18670.2258869289), res + ' != 18670.2258869289');
 });
 
 test('slagOtherMaterialLosses', function (t) {
@@ -267,7 +271,7 @@ test('wallLosses', function (t) {
     };
 
     var res = bindings.wallLosses(inp);
-    t.equal(res, 399122.25367509428, res + ' != 399122.25367509428');
+    t.equal(rnd(res), rnd(399122.25367509428), res + ' != 399122.25367509428');
 });
 
 test('wallLosses', function (t) {
@@ -279,7 +283,7 @@ test('wallLosses', function (t) {
     };
 
     var res = bindings.waterCoolingLosses(inp);
-    t.equal(res, 1989032.7936134234, res + ' != 1989032.7936134234');
+    t.equal(rnd(res), rnd(1989032.7936134234), res + ' != 1989032.7936134234');
 });
 
 test('exhaustGas', function (t) {
@@ -291,7 +295,7 @@ test('exhaustGas', function (t) {
     };
 
     var res = bindings.exhaustGas(inp);
-    t.equal(res, 52933.130628816376, res + ' != 52933.130628816376');
+    t.equal(rnd(res), rnd(52933.130628816376), res + ' != 52933.130628816376');
 });
 
 test('availableHeat', function (t) {
@@ -303,7 +307,7 @@ test('availableHeat', function (t) {
     };
 
     var res = bindings.availableHeat(inp);
-    t.equal(res, 82.72794239800001, res + ' != 82.72794239800001');
+    t.equal(rnd(res), rnd(82.72794239800001), res + ' != 82.72794239800001');
 });
 
 test('energyInputExhaustGasLosses', function (t) {
@@ -315,5 +319,5 @@ test('energyInputExhaustGasLosses', function (t) {
     };
 
     var res = bindings.energyInputExhaustGasLosses(inp);
-    t.equal(res, 1212.3388042203985, res + ' != 1212.3388042203985');
+    t.equal(rnd(res), rnd(1212.3388042203985), res + ' != 1212.3388042203985');
 });
