@@ -234,8 +234,8 @@ set(TEST_FILES
         tests/FlashTank.unit.cpp
         tests/Deaerator.unit.cpp)
 
-find_package(PythonInterp 2.7 REQUIRED)
-execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
+#find_package(PythonInterp 2.7 REQUIRED)
+#execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
 
 if (MINGW)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
