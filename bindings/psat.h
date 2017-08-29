@@ -286,18 +286,18 @@ NAN_METHOD(resultsExisting) {
 
     Pump::Style style1 = style();
     Pump::Drive drive1 = drive();
-    Pump::Speed fixed_speed = speed();
+//    Pump::Speed fixed_speed = speed();
 
     Motor::LineFrequency lineFrequency = line();
     Motor::EfficiencyClass efficiencyClass = effCls();
 
     FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
-    Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
-              Get("specific_gravity"), Get("stages"), fixed_speed);
+    Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
+              Get("specific_gravity"), Get("stages"), Pump::Speed::FIXED_SPEED);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
-                Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
+                Get("motor_rated_voltage"), Get("motor_rated_fla"));
 
     Financial fin(Get("operating_fraction"), Get("cost_kw_hour"));
 
@@ -323,13 +323,14 @@ NAN_METHOD(resultsExisting) {
             {"optimization_rating", psat.getOptimizationRating()}
     };
 
-    for(auto const & p: out) {
+    for (auto const & p: out) {
         Local<String> key = Nan::New<String>(p.first).ToLocalChecked();
         Local<Number> value = Nan::New(p.second);
         Nan::Set(r, key, value);
     }
     info.GetReturnValue().Set(r);
 }
+
 NAN_METHOD(resultsModified) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
@@ -375,13 +376,14 @@ NAN_METHOD(resultsModified) {
             {"optimization_rating", psat.getOptimizationRating()}
     };
 
-    for(auto const & p: out) {
+    for (auto const & p: out) {
         Local<String> key = Nan::New<String>(p.first).ToLocalChecked();
         Local<Number> value = Nan::New(p.second);
         Nan::Set(r, key, value);
     }
     info.GetReturnValue().Set(r);
 }
+
 NAN_METHOD(resultsOptimal) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
@@ -425,7 +427,7 @@ NAN_METHOD(resultsOptimal) {
             {"optimization_rating", psat.getOptimizationRating()}
     };
 
-    for(auto const & p: out) {
+    for (auto const & p: out) {
         Local<String> key = Nan::New<String>(p.first).ToLocalChecked();
         Local<Number> value = Nan::New(p.second);
         Nan::Set(r, key, value);
