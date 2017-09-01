@@ -1,6 +1,6 @@
 set( CPACK_PACKAGE_VENDOR "US Department of Energy" )
 
-set(CPACK_PACKAGE_VENDOR "Oak Ridge Energy Laboratory")
+set(CPACK_PACKAGE_VENDOR "Oak Ridge National Laboratory")
 set(CPACK_PACKAGE_CONTACT "Gina Accawi <accawigk@ornl.gov>")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR}/Modules")
@@ -40,19 +40,27 @@ if( WIN32 AND NOT UNIX )
   endif()
 endif()
 
-# install(FILES "${CMAKE_SOURCE_DIR}/LICENSE.txt" DESTINATION "./")
-# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
+install(FILES "${CMAKE_SOURCE_DIR}/LICENSE.txt" DESTINATION "./")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
 
-install(TARGETS amo_suite
+install(TARGETS amo_tools_suite
         ARCHIVE
         DESTINATION lib
         COMPONENT libraries)
 
 # Install header files
-INSTALL(DIRECTORY include/ DESTINATION include/
+INSTALL(DIRECTORY include/
+        DESTINATION include/
         COMPONENT headers
         PATTERN CMakeLists.txt EXCLUDE
 )
+
+INSTALL(FILES third_party/sqlite/sqlite3.h
+        DESTINATION include/sqlite
+        COMPONENT headers
+        )
+
+#install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db" DESTINATION "./db/")
 
 set(CPACK_COMPONENTS_ALL libraries headers)
 set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")
@@ -65,9 +73,9 @@ set(CPACK_COMPONENT_HEADERS_DESCRIPTION
 
 set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
 
-# if ( BUILD_DOCS )
-# 	install(FILES "${CMAKE_BINARY_DIR}/doc" DESTINATION "./doc")
-# endif ()
+#if ( BUILD_DOCUMENTATION )
+#	install(FILES "${CMAKE_BINARY_DIR}/doc" DESTINATION "./doc")
+#endif ()
 
 INCLUDE(CPack)
 

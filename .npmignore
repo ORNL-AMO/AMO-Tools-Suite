@@ -1,0 +1,17 @@
+.git/
+.github/
+bin/
+cmake/
+CMakeFiles/
+scripts/
+tests/
+/.gitignore
+/.gitattributes
+/*.txt
+/*.cmake
+/MakeFile
+/.idea
+cmake-build-debug/
+cmake-build-minsizerel/
+cmake-build-release/
+cmake-build-relwithdebinfo/

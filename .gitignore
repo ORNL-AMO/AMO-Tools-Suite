@@ -1,6 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Project Specific
+doxygen_log.txt
 cmake-build-*
+*.db
+doc
 
 ### Vim template
 # swap

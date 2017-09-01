@@ -1,0 +1,21 @@
+
+#IF ( MSVC ) # visual c++ (VS 2013)
+#    ADD_DEFINITIONS("-W0")
+#ELSEIF ( CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" ) # g++/Clang
+#    ADD_DEFINITIONS("-w")
+#ELSEIF ( WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" )
+#    ADD_DEFINITIONS("/W0")
+#ELSEIF ( UNIX AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" )
+#    ADD_DEFINITIONS("-w")
+#ENDIF () # COMPILER TYPE
+
+SET(SQLITE_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/sqlite3.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/sqlite3.c
+)
+
+#if (UNIX)
+#  ADD_DEFINITIONS( " -fPIC " )
+#endif()
+
+target_sources( amo_tools_suite PUBLIC ${SQLITE_SRC})
