@@ -4,9 +4,10 @@
 #include <string>
 #include <unordered_map>
 #include <cmath>
+#include <vector>
 
 // TODO consider deleting class member variables rectLength, width, diameter etc if they are used ONLY in area calculations
-// no need to have them sitting around if everything we need comes from the constructor input.
+// TODO deletions are looking more likely
 class Planar {
 protected:
 
@@ -164,30 +165,85 @@ private:
 };
 
 class PlaneData {
+public:
 	// TODO add "global" stuff for planes here maybe.
-	PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange, FlowTraverse & flowTraverse,
-	          AddlTravPlane & addlTravPlane, InletMstPlane & inletMstPlane, OutletMstPlane & outletMstPlane)
+	PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange,
+	          FlowTraverse & flowTraverse, std::vector<AddlTravPlane> & addlTravPlanes, InletMstPlane & inletMstPlane,
+	          OutletMstPlane & outletMstPlane, bool const variationsInPlanarBarometricPressure, bool const estimatePlaneTemp)
 			: fanInletFlange(fanInletFlange), fanOrEvaseOutletFlange(fanOrEvaseOutletFlange), flowTraverse(flowTraverse),
-			  addlTravPlane(addlTravPlane), inletMstPlane(inletMstPlane), outletMstPlane(outletMstPlane) {}
+			  addlTravPlanes(addlTravPlanes), inletMstPlane(inletMstPlane), outletMstPlane(outletMstPlane),
+			  variationsInPlanarBarometricPressure(variationsInPlanarBarometricPressure), estimatePlaneTemp(estimatePlaneTemp) {}
+
+private:
+	bool const variationsInPlanarBarometricPressure, estimatePlaneTemp;
+	const double barometricPressure = 0; // TODO should this be here? barometric pres. in the example is individually inputted
+
 
 	FanInletFlange fanInletFlange;
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
 	FlowTraverse flowTraverse;
-	AddlTravPlane addlTravPlane;
+	std::vector<AddlTravPlane> addlTravPlanes;
 	InletMstPlane inletMstPlane;
 	OutletMstPlane outletMstPlane;
+};
+
+class VelocityPressureTraverseData {
+public:
+	enum class TubeType {
+		STANDARD,
+		STYPE
+	};
+
+	VelocityPressureTraverseData(const TubeType pitotTubeType, const double pitotTubeCoefficient,
+	                             std::vector< std::vector< double > > & traverseHoleData)
+			: pitotTubeType(pitotTubeType), pitotTubeCoefficient(pitotTubeCoefficient),
+			  traverseHoleData(std::move(traverseHoleData))
+	{
+		auto maxPv3r = 0.0;
+		auto sumPv3r = 0.0;
+		for (auto & row : this->traverseHoleData) {
+			for (auto & val : row) {
+				if (val <= 0) {
+					val = 0;
+					continue;
+				}
+				val *= std::pow(pitotTubeCoefficient, 2);
+				if (val > maxPv3r) maxPv3r = val;
+				sumPv3r += std::sqrt(val);
+			}
+		}
+
+		pv3 = std::pow(sumPv3r / (this->traverseHoleData.size() * this->traverseHoleData[0].size()), 2);
+		size_t count = 0;
+		for (auto & row : this->traverseHoleData) {
+			for (auto & val : row) {
+				if (val > (0.1 * maxPv3r)) count++;
+			}
+		}
+
+		percent75Rule = count / static_cast<double>(this->traverseHoleData.size() * this->traverseHoleData[0].size());
+	};
+private:
+	const TubeType pitotTubeType;
+	const double pitotTubeCoefficient;
+	double pv3 = 0, percent75Rule = 0;
+
+//	const unsigned noTraverseHoles, noInsertionPoints; // TODO these need to go away, these dimensions will almost surely be defined in the UI, all we need is a vector here
+	std::vector< std::vector< double > > traverseHoleData;
 };
 
 
 class Fan {
 public:
-	// TODO working constructor, consider using std::move on PlaneData
-	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData) :
-			fanRatedInfo(fanRatedInfo), PlaneData(planeData)
-	{}
+	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, VelocityPressureTraverseData & velocityPressureTraverseData)
+			: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)),
+			  velocityPressureTraverseData(std::move(velocityPressureTraverseData))
+	{};
 
 private:
 	FanRatedInfo const fanRatedInfo;
+	PlaneData const planeData;
+	VelocityPressureTraverseData const velocityPressureTraverseData;
 };
 
 #endif //AMO_TOOLS_SUITE_FAN_H
