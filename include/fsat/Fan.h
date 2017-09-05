@@ -8,32 +8,137 @@
 // TODO consider deleting class member variables rectLength, width, diameter etc if they are used ONLY in area calculations
 // no need to have them sitting around if everything we need comes from the constructor input.
 class Planar {
-public:
-	Planar(const double rectLength, const double rectWidth, const unsigned noInletBoxes = 0) :
-			rectLength(rectLength), rectWidth(rectWidth), noInletBoxes(noInletBoxes)
-	{
-		area = (rectLength * rectWidth) / 144.0;
-		if (noInletBoxes > 0) area *= noInletBoxes;
-	}
+protected:
 
-	// TODO assuming inlet boxes are not possible to have if circular shape
-	explicit Planar(const double circularDuctDiameter) :
-			circularDuctDiameter(circularDuctDiameter), shape(Shape::CIRCULAR)
-	{
-		area = ((3.14159265358979 / 4) * (circularDuctDiameter * circularDuctDiameter)) / 144.0;
-	}
+	Planar(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure) :
+			shape(Shape::CIRCULAR), dryBulbTemp(dryBulbTemp), barometricPressure(barometricPressure),
+			area(((3.14159265358979 / 4) * (circularDuctDiameter * circularDuctDiameter)) / 144.0)
+	{}
 
-private:
+	Planar(const double rectLength, const double rectWidth, const double dryBulbTemp, const double barometricPressure) :
+			rectLength(rectLength), rectWidth(rectWidth), shape(Shape::RECTANGULAR), dryBulbTemp(dryBulbTemp),
+			barometricPressure(barometricPressure), area((rectLength * rectWidth) / 144.0)
+	{}
+
+	Planar(const double rectLength, const double rectWidth, unsigned const noInletBoxes, const double dryBulbTemp,
+	       const double barometricPressure) :
+			rectLength(rectLength), rectWidth(rectWidth), shape(Shape::RECTANGULAR), dryBulbTemp(dryBulbTemp),
+			barometricPressure(barometricPressure), area((rectLength * rectWidth * noInletBoxes) / 144.0)
+	{}
+
 	enum class Shape {
 		RECTANGULAR,
 		CIRCULAR
 	};
 
-
-	const double rectLength = 0, rectWidth = 0, circularDuctDiameter = 0;
+	const double rectLength = 0, rectWidth = 0, dryBulbTemp = 0, barometricPressure = 0;
+	const unsigned noInletBoxes = 0; // TODO should delete this variable along with all others besides area?
+	const Shape shape;
 	double area = 0;
-	const unsigned noInletBoxes = 0;
-	const Shape shape = Shape::RECTANGULAR;
+};
+
+class FanInletFlange : private Planar {
+public:
+	FanInletFlange(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure)
+			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure) {}
+
+	FanInletFlange(const double rectLength, const double rectWidth, const double dryBulbTemp,
+	               const double barometricPressure) : Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure) {}
+
+	FanInletFlange(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
+	               const double dryBulbTemp, const double barometricPressure)
+			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure)
+	{}
+};
+
+class FanOrEvaseOutletFlange : private Planar {
+public:
+	FanOrEvaseOutletFlange(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure)
+			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure) {}
+
+	FanOrEvaseOutletFlange(const double rectLength, const double rectWidth, const double dryBulbTemp,
+	               const double barometricPressure) : Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure) {}
+
+	FanOrEvaseOutletFlange(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
+	               const double dryBulbTemp, const double barometricPressure)
+			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure)
+	{}
+};
+
+class FlowTraverse : private Planar {
+public:
+	FlowTraverse(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure,
+	             const double staticPressure)
+			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+
+	FlowTraverse(const double rectLength, const double rectWidth, const double dryBulbTemp,
+	                       const double barometricPressure, const double staticPressure)
+			: Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+
+	FlowTraverse(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
+	                       const double dryBulbTemp, const double barometricPressure, const double staticPressure)
+			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure), staticPressure(staticPressure)
+	{}
+
+private:
+	const double staticPressure;
+};
+
+class AddlTravPlane : private Planar {
+public:
+	AddlTravPlane(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure,
+	             const double staticPressure)
+			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+
+	AddlTravPlane(const double rectLength, const double rectWidth, const double dryBulbTemp,
+	             const double barometricPressure, const double staticPressure)
+			: Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+
+	AddlTravPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
+	             const double dryBulbTemp, const double barometricPressure, const double staticPressure)
+			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure), staticPressure(staticPressure)
+	{}
+
+private:
+	const double staticPressure;
+};
+
+class InletMstPlane : private Planar {
+public:
+	InletMstPlane(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure,
+	             const double staticPressure)
+			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+
+	InletMstPlane(const double rectLength, const double rectWidth, const double dryBulbTemp,
+	             const double barometricPressure, const double staticPressure)
+			: Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+
+	InletMstPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
+	             const double dryBulbTemp, const double barometricPressure, const double staticPressure)
+			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure), staticPressure(staticPressure)
+	{}
+
+private:
+	const double staticPressure;
+};
+
+class OutletMstPlane : private Planar {
+public:
+	OutletMstPlane(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure,
+	             const double staticPressure)
+			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+
+	OutletMstPlane(const double rectLength, const double rectWidth, const double dryBulbTemp,
+	             const double barometricPressure, const double staticPressure)
+			: Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+
+	OutletMstPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
+	             const double dryBulbTemp, const double barometricPressure, const double staticPressure)
+			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure), staticPressure(staticPressure)
+	{}
+
+private:
+	const double staticPressure;
 };
 
 
@@ -58,18 +163,31 @@ private:
 
 };
 
+class PlaneData {
+	// TODO add "global" stuff for planes here maybe.
+	PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange, FlowTraverse & flowTraverse,
+	          AddlTravPlane & addlTravPlane, InletMstPlane & inletMstPlane, OutletMstPlane & outletMstPlane)
+			: fanInletFlange(fanInletFlange), fanOrEvaseOutletFlange(fanOrEvaseOutletFlange), flowTraverse(flowTraverse),
+			  addlTravPlane(addlTravPlane), inletMstPlane(inletMstPlane), outletMstPlane(outletMstPlane) {}
+
+	FanInletFlange fanInletFlange;
+	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
+	FlowTraverse flowTraverse;
+	AddlTravPlane addlTravPlane;
+	InletMstPlane inletMstPlane;
+	OutletMstPlane outletMstPlane;
+};
+
 
 class Fan {
 public:
-	Fan(FanRatedInfo & fanRatedInfo, std::unordered_map<std::string, Planar> & planes) :
-			fanRatedInfo(fanRatedInfo)
-	{
-		this->planes = std::move(planes);
-	}
+	// TODO working constructor, consider using std::move on PlaneData
+	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData) :
+			fanRatedInfo(fanRatedInfo), PlaneData(planeData)
+	{}
 
 private:
 	FanRatedInfo const fanRatedInfo;
-	std::unordered_map<std::string, Planar> planes;
 };
 
 #endif //AMO_TOOLS_SUITE_FAN_H
