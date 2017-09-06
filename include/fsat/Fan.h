@@ -11,20 +11,20 @@
 class Planar {
 protected:
 
-	Planar(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure) :
-			shape(Shape::CIRCULAR), dryBulbTemp(dryBulbTemp), barometricPressure(barometricPressure),
+	Planar(const double circularDuctDiameter, const double tdx, const double pbx) :
+			shape(Shape::CIRCULAR), tdx(tdx), pbx(pbx),
 			area(((3.14159265358979 / 4) * (circularDuctDiameter * circularDuctDiameter)) / 144.0)
 	{}
 
-	Planar(const double rectLength, const double rectWidth, const double dryBulbTemp, const double barometricPressure) :
-			rectLength(rectLength), rectWidth(rectWidth), shape(Shape::RECTANGULAR), dryBulbTemp(dryBulbTemp),
-			barometricPressure(barometricPressure), area((rectLength * rectWidth) / 144.0)
+	Planar(const double rectLength, const double rectWidth, const double tdx, const double pbx) :
+			shape(Shape::RECTANGULAR), tdx(tdx),
+			pbx(pbx), area((rectLength * rectWidth) / 144.0)
 	{}
 
-	Planar(const double rectLength, const double rectWidth, unsigned const noInletBoxes, const double dryBulbTemp,
-	       const double barometricPressure) :
-			rectLength(rectLength), rectWidth(rectWidth), shape(Shape::RECTANGULAR), dryBulbTemp(dryBulbTemp),
-			barometricPressure(barometricPressure), area((rectLength * rectWidth * noInletBoxes) / 144.0)
+	Planar(const double rectLength, const double rectWidth, unsigned const noInletBoxes, const double tdx,
+	       const double pbx) :
+			shape(Shape::RECTANGULAR), tdx(tdx),
+			pbx(pbx), area((rectLength * rectWidth * noInletBoxes) / 144.0)
 	{}
 
 	enum class Shape {
@@ -32,114 +32,127 @@ protected:
 		CIRCULAR
 	};
 
-	const double rectLength = 0, rectWidth = 0, dryBulbTemp = 0, barometricPressure = 0;
-	const unsigned noInletBoxes = 0; // TODO should delete this variable along with all others besides area?
-	const Shape shape;
-	double area = 0;
+//	const double rectLength = 0, rectWidth = 0, dryBulbTemp = 0, pbx = 0;
+//	const unsigned noInletBoxes = 0; // TODO should delete this variable along with all others besides area?
+
+//	where tdx = dryBulbTemperature and pbx = barometric pressure
+	const double tdx, pbx;
+	const Shape shape; // TODO should probably delete this one too
+	double area = 0, gasDensity = 0;
+
+	friend class PlaneData;
 };
 
 class FanInletFlange : private Planar {
 public:
-	FanInletFlange(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure)
-			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure) {}
+	FanInletFlange(const double circularDuctDiameter, const double tdx, const double pbx)
+			: Planar(circularDuctDiameter, tdx, pbx) {}
 
-	FanInletFlange(const double rectLength, const double rectWidth, const double dryBulbTemp,
-	               const double barometricPressure) : Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure) {}
+	FanInletFlange(const double rectLength, const double rectWidth, const double tdx, const double pbx)
+			: Planar(rectLength, rectWidth, tdx, pbx) {}
 
 	FanInletFlange(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	               const double dryBulbTemp, const double barometricPressure)
-			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure)
+	               const double tdx, const double pbx)
+			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx)
 	{}
 };
 
 class FanOrEvaseOutletFlange : private Planar {
 public:
-	FanOrEvaseOutletFlange(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure)
-			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure) {}
+	FanOrEvaseOutletFlange(const double circularDuctDiameter, const double tdx, const double pbx)
+			: Planar(circularDuctDiameter, tdx, pbx) {}
 
-	FanOrEvaseOutletFlange(const double rectLength, const double rectWidth, const double dryBulbTemp,
-	               const double barometricPressure) : Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure) {}
+	FanOrEvaseOutletFlange(const double rectLength, const double rectWidth, const double tdx,
+	               const double pbx) : Planar(rectLength, rectWidth, tdx, pbx) {}
 
 	FanOrEvaseOutletFlange(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	               const double dryBulbTemp, const double barometricPressure)
-			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure)
+	               const double tdx, const double pbx)
+			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx)
 	{}
 };
 
-class FlowTraverse : private Planar {
+class FlowTraverse : public Planar {
 public:
-	FlowTraverse(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure,
-	             const double staticPressure)
-			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+	FlowTraverse(const double circularDuctDiameter, const double tdx, const double pbx,
+	             const double psx)
+			: Planar(circularDuctDiameter, tdx, pbx), psx(psx) {}
 
-	FlowTraverse(const double rectLength, const double rectWidth, const double dryBulbTemp,
-	                       const double barometricPressure, const double staticPressure)
-			: Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+	FlowTraverse(const double rectLength, const double rectWidth, const double tdx,
+	                       const double pbx, const double psx)
+			: Planar(rectLength, rectWidth, tdx, pbx), psx(psx) {}
 
 	FlowTraverse(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	                       const double dryBulbTemp, const double barometricPressure, const double staticPressure)
-			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure), staticPressure(staticPressure)
+	                       const double tdx, const double pbx, const double psx)
+			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx), psx(psx)
 	{}
 
+	double getPsx() { return psx; }
+
 private:
-	const double staticPressure;
+	const double psx;
 };
 
-class AddlTravPlane : private Planar {
+class AddlTravPlane : public Planar {
 public:
-	AddlTravPlane(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure,
-	             const double staticPressure)
-			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+	AddlTravPlane(const double circularDuctDiameter, const double tdx, const double pbx,
+	             const double psx)
+			: Planar(circularDuctDiameter, tdx, pbx), psx(psx) {}
 
-	AddlTravPlane(const double rectLength, const double rectWidth, const double dryBulbTemp,
-	             const double barometricPressure, const double staticPressure)
-			: Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+	AddlTravPlane(const double rectLength, const double rectWidth, const double tdx,
+	             const double pbx, const double psx)
+			: Planar(rectLength, rectWidth, tdx, pbx), psx(psx) {}
 
 	AddlTravPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	             const double dryBulbTemp, const double barometricPressure, const double staticPressure)
-			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure), staticPressure(staticPressure)
+	             const double tdx, const double pbx, const double psx)
+			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx), psx(psx)
 	{}
 
+	double getPsx() { return psx; }
+
 private:
-	const double staticPressure;
+	const double psx;
 };
 
-class InletMstPlane : private Planar {
+class InletMstPlane : public Planar {
 public:
-	InletMstPlane(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure,
-	             const double staticPressure)
-			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+	InletMstPlane(const double circularDuctDiameter, const double tdx, const double pbx,
+	             const double psx)
+			: Planar(circularDuctDiameter, tdx, pbx), psx(psx) {}
 
-	InletMstPlane(const double rectLength, const double rectWidth, const double dryBulbTemp,
-	             const double barometricPressure, const double staticPressure)
-			: Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+	InletMstPlane(const double rectLength, const double rectWidth, const double tdx,
+	             const double pbx, const double psx)
+			: Planar(rectLength, rectWidth, tdx, pbx), psx(psx) {}
 
 	InletMstPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	             const double dryBulbTemp, const double barometricPressure, const double staticPressure)
-			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure), staticPressure(staticPressure)
+	             const double tdx, const double pbx, const double psx)
+			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx), psx(psx)
 	{}
 
+	double getPsx() { return psx; }
+
 private:
-	const double staticPressure;
+	const double psx;
 };
 
-class OutletMstPlane : private Planar {
+class OutletMstPlane : public Planar {
 public:
-	OutletMstPlane(const double circularDuctDiameter, const double dryBulbTemp, const double barometricPressure,
-	             const double staticPressure)
-			: Planar(circularDuctDiameter, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+	OutletMstPlane(const double circularDuctDiameter, const double tdx, const double pbx,
+	             const double psx)
+			: Planar(circularDuctDiameter, tdx, pbx), psx(psx) {}
 
-	OutletMstPlane(const double rectLength, const double rectWidth, const double dryBulbTemp,
-	             const double barometricPressure, const double staticPressure)
-			: Planar(rectLength, rectWidth, dryBulbTemp, barometricPressure), staticPressure(staticPressure) {}
+	OutletMstPlane(const double rectLength, const double rectWidth, const double tdx,
+	             const double pbx, const double psx)
+			: Planar(rectLength, rectWidth, tdx, pbx), psx(psx) {}
 
 	OutletMstPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	             const double dryBulbTemp, const double barometricPressure, const double staticPressure)
-			: Planar(rectLength, rectWidth, noInletBoxes, dryBulbTemp, barometricPressure), staticPressure(staticPressure)
+	             const double tdx, const double pbx, const double psx)
+			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx), psx(psx)
 	{}
 
+	double getPsx() { return psx; }
+
 private:
-	const double staticPressure;
+	const double psx;
 };
 
 
@@ -164,6 +177,50 @@ private:
 
 };
 
+
+class BaseGasDensity {
+public:
+
+	enum class GasType {
+		AIR,
+		STANDARDAIR,
+		OTHERGAS
+	};
+
+	// used for method 1
+	BaseGasDensity(const double tdo, const double pso, const double pbo, const double po)
+			: tdo(tdo), pso(pso), pbo(pbo), po(po) {}
+
+	// TODO incomplete, po (density) shouldn't be an input in either of the constructors below bc it needs to be calculated
+//	// used for method 2 without wet bulb temperature as "data to establish gas humidity"
+//	BaseGasDensity(const double tdo, const double pso, const double pbo, const double po, const double g,
+//	               const double two)
+//			: tdo(tdo), pso(pso), pbo(pbo), po(po), g(g), two(two) {}
+
+//	// used for method 2 with wet bulb temp being used for "data to establish gas humidity"
+//	BaseGasDensity(const double tdo, const double pso, const double pbo, const double po, const double g,
+//	               const double percentRH)
+//			: tdo(tdo), pso(pso), pbo(pbo), po(po), g(g), percentRH(percentRH) {}
+
+private:
+
+//	double calcWaterVaporDensityToDryAirDensityRatio(const double pws) {
+//		return 0.6214 + (percentRH * std::pow(pws, 1 / 1.42)) / 1130;
+//	}
+//
+//	double calcBaseGasDensity(const double p, const double pws) {
+//		return ((p - pws * percentRH) * g + pws * percentRH * calcWaterVaporDensityToDryAirDensityRatio(pws))
+//		       / (0.7543 * (tdo + 459.7));
+//	}
+
+	const double tdo, pso, pbo, po;
+
+	friend class PlaneData;
+
+//	const double g = 0, two = 0, percentRH = 0, tdp = 0;
+};
+
+
 class PlaneData {
 public:
 	// TODO add "global" stuff for planes here maybe.
@@ -176,8 +233,22 @@ public:
 
 private:
 	bool const variationsInPlanarBarometricPressure, estimatePlaneTemp;
-	const double barometricPressure = 0; // TODO should this be here? barometric pres. in the example is individually inputted
 
+	void calculatePlanes3through5Densities(BaseGasDensity & bgd) {
+		auto const calcDensity = [&bgd] (Planar & plane, const double psx) {
+			plane.gasDensity = bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx)
+			                   / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
+		};
+
+		calcDensity(flowTraverse, flowTraverse.getPsx());
+
+		for (auto & plane : addlTravPlanes) {
+			calcDensity(plane, plane.getPsx());
+		}
+
+		calcDensity(inletMstPlane, inletMstPlane.getPsx());
+		calcDensity(outletMstPlane, outletMstPlane.getPsx());
+	}
 
 	FanInletFlange fanInletFlange;
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
@@ -185,6 +256,8 @@ private:
 	std::vector<AddlTravPlane> addlTravPlanes;
 	InletMstPlane inletMstPlane;
 	OutletMstPlane outletMstPlane;
+
+	friend class Fan;
 };
 
 class VelocityPressureTraverseData {
@@ -194,6 +267,7 @@ public:
 		STYPE
 	};
 
+	// TODO pretty sure the constructor body here needs to be repeated for 3+ planes w/ different input data
 	VelocityPressureTraverseData(const TubeType pitotTubeType, const double pitotTubeCoefficient,
 	                             std::vector< std::vector< double > > & traverseHoleData)
 			: pitotTubeType(pitotTubeType), pitotTubeCoefficient(pitotTubeCoefficient),
@@ -223,10 +297,11 @@ public:
 
 		percent75Rule = count / static_cast<double>(this->traverseHoleData.size() * this->traverseHoleData[0].size());
 	};
+
 private:
 	const TubeType pitotTubeType;
 	const double pitotTubeCoefficient;
-	double pv3 = 0, percent75Rule = 0;
+	double pv3, percent75Rule;
 
 //	const unsigned noTraverseHoles, noInsertionPoints; // TODO these need to go away, these dimensions will almost surely be defined in the UI, all we need is a vector here
 	std::vector< std::vector< double > > traverseHoleData;
@@ -235,15 +310,19 @@ private:
 
 class Fan {
 public:
-	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, VelocityPressureTraverseData & velocityPressureTraverseData)
+	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, VelocityPressureTraverseData & velocityPressureTraverseData,
+	    BaseGasDensity & baseGasDensity)
 			: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)),
-			  velocityPressureTraverseData(std::move(velocityPressureTraverseData))
-	{};
+			  velocityPressureTraverseData(std::move(velocityPressureTraverseData)), baseGasDensity(baseGasDensity)
+	{
+		this->planeData.calculatePlanes3through5Densities(baseGasDensity);
+	};
 
 private:
 	FanRatedInfo const fanRatedInfo;
-	PlaneData const planeData;
+	PlaneData planeData;
 	VelocityPressureTraverseData const velocityPressureTraverseData;
+	BaseGasDensity const baseGasDensity;
 };
 
 #endif //AMO_TOOLS_SUITE_FAN_H

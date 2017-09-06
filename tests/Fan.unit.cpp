@@ -31,7 +31,9 @@ TEST_CASE( "Fan", "Fan stuff") {
 
 	VelocityPressureTraverseData vptd(VelocityPressureTraverseData::TubeType::STYPE, 0.87, traverseHoleData);
 
-	auto fan = Fan(fanRatedInfo, planeData, vptd);
+	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547);
+
+	auto fan = Fan(fanRatedInfo, planeData, vptd, baseGasDensity);
 
 
 	auto test = 0;
