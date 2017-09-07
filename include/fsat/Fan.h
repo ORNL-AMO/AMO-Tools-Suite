@@ -38,12 +38,12 @@ protected:
 //	where tdx = dryBulbTemperature and pbx = barometric pressure
 	const double tdx, pbx;
 	const Shape shape; // TODO should probably delete this one too
-	double area = 0, gasDensity = 0;
+	double area = 0, gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
 
 	friend class PlaneData;
 };
 
-class FanInletFlange : private Planar {
+class FanInletFlange : public Planar {
 public:
 	FanInletFlange(const double circularDuctDiameter, const double tdx, const double pbx)
 			: Planar(circularDuctDiameter, tdx, pbx) {}
@@ -71,19 +71,80 @@ public:
 	{}
 };
 
-class FlowTraverse : public Planar {
+// to be inherited by planes 3 and 3a, 3b
+class VelocityPressureTraverseData {
+public:
+	enum class TubeType {
+		STANDARD,
+		STYPE
+	};
+
+protected:
+
+//	// TODO pretty sure the constructor body here needs to be repeated for 3+ planes w/ different input data
+	VelocityPressureTraverseData(const TubeType pitotTubeType, const double pitotTubeCoefficient,
+	                             std::vector< std::vector< double > > & traverseHoleData)
+			: pitotTubeType(pitotTubeType), pitotTubeCoefficient(pitotTubeCoefficient),
+			  traverseHoleData(std::move(traverseHoleData))
+	{
+		auto maxPv3r = 0.0;
+		auto sumPv3r = 0.0;
+		for (auto & row : this->traverseHoleData) {
+			for (auto & val : row) {
+				if (val <= 0) {
+					val = 0;
+					continue;
+				}
+				val *= std::pow(pitotTubeCoefficient, 2);
+				if (val > maxPv3r) maxPv3r = val;
+				sumPv3r += std::sqrt(val);
+			}
+		}
+
+		pv3 = std::pow(sumPv3r / (this->traverseHoleData.size() * this->traverseHoleData[0].size()), 2);
+		size_t count = 0;
+		for (auto & row : this->traverseHoleData) {
+			for (auto & val : row) {
+				if (val > (0.1 * maxPv3r)) count++;
+			}
+		}
+
+		percent75Rule = count / static_cast<double>(this->traverseHoleData.size() * this->traverseHoleData[0].size());
+	};
+
+	const TubeType pitotTubeType;
+	const double pitotTubeCoefficient;
+	double pv3 = 0, percent75Rule = 0;
+
+	std::vector< std::vector< double > > traverseHoleData;
+
+	friend class PlaneData;
+};
+
+class FlowTraverse : public Planar, public VelocityPressureTraverseData {
 public:
 	FlowTraverse(const double circularDuctDiameter, const double tdx, const double pbx,
-	             const double psx)
-			: Planar(circularDuctDiameter, tdx, pbx), psx(psx) {}
+	             const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
+	             std::vector< std::vector< double > > & traverseHoleData)
+			: Planar(circularDuctDiameter, tdx, pbx),
+			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
+			  psx(psx)
+	{}
 
 	FlowTraverse(const double rectLength, const double rectWidth, const double tdx,
-	                       const double pbx, const double psx)
-			: Planar(rectLength, rectWidth, tdx, pbx), psx(psx) {}
+	                       const double pbx, const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
+	             std::vector< std::vector< double > > & traverseHoleData)
+			: Planar(rectLength, rectWidth, tdx, pbx),
+			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
+			  psx(psx)
+	{}
 
 	FlowTraverse(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	                       const double tdx, const double pbx, const double psx)
-			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx), psx(psx)
+	                       const double tdx, const double pbx, const double psx, const TubeType tubeType,
+	             const double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData)
+			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx),
+			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
+			  psx(psx)
 	{}
 
 	double getPsx() { return psx; }
@@ -92,19 +153,30 @@ private:
 	const double psx;
 };
 
-class AddlTravPlane : public Planar {
+class AddlTravPlane : public Planar, public VelocityPressureTraverseData {
 public:
 	AddlTravPlane(const double circularDuctDiameter, const double tdx, const double pbx,
-	             const double psx)
-			: Planar(circularDuctDiameter, tdx, pbx), psx(psx) {}
+	             const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
+	             std::vector< std::vector< double > > & traverseHoleData)
+			: Planar(circularDuctDiameter, tdx, pbx),
+			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
+			  psx(psx)
+	{}
 
 	AddlTravPlane(const double rectLength, const double rectWidth, const double tdx,
-	             const double pbx, const double psx)
-			: Planar(rectLength, rectWidth, tdx, pbx), psx(psx) {}
+	             const double pbx, const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
+	             std::vector< std::vector< double > > & traverseHoleData)
+			: Planar(rectLength, rectWidth, tdx, pbx),
+			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
+			  psx(psx)
+	{}
 
 	AddlTravPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	             const double tdx, const double pbx, const double psx)
-			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx), psx(psx)
+	             const double tdx, const double pbx, const double psx, const TubeType tubeType,
+	             const double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData)
+			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx),
+			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
+			  psx(psx)
 	{}
 
 	double getPsx() { return psx; }
@@ -226,15 +298,16 @@ public:
 	// TODO add "global" stuff for planes here maybe.
 	PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange,
 	          FlowTraverse & flowTraverse, std::vector<AddlTravPlane> & addlTravPlanes, InletMstPlane & inletMstPlane,
-	          OutletMstPlane & outletMstPlane, bool const variationsInPlanarBarometricPressure, bool const estimatePlaneTemp)
+	          OutletMstPlane & outletMstPlane, bool const variationsInPlanarBarometricPressure,
+	          bool const estimatePlaneTemp, const double totalPressureLossBtwnPlanes1and4, const double totalPressureLossBtwnPlanes2and5)
 			: fanInletFlange(fanInletFlange), fanOrEvaseOutletFlange(fanOrEvaseOutletFlange), flowTraverse(flowTraverse),
 			  addlTravPlanes(addlTravPlanes), inletMstPlane(inletMstPlane), outletMstPlane(outletMstPlane),
-			  variationsInPlanarBarometricPressure(variationsInPlanarBarometricPressure), estimatePlaneTemp(estimatePlaneTemp) {}
+			  variationsInPlanarBarometricPressure(variationsInPlanarBarometricPressure), estimatePlaneTemp(estimatePlaneTemp),
+			  totalPressureLossBtwnPlanes1and4(totalPressureLossBtwnPlanes1and4), totalPressureLossBtwnPlanes2and5(totalPressureLossBtwnPlanes2and5) {}
 
 private:
-	bool const variationsInPlanarBarometricPressure, estimatePlaneTemp;
 
-	void calculatePlanes3through5Densities(BaseGasDensity & bgd) {
+	void calculatePlanes3through5density(BaseGasDensity & bgd) {
 		auto const calcDensity = [&bgd] (Planar & plane, const double psx) {
 			plane.gasDensity = bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx)
 			                   / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
@@ -250,6 +323,33 @@ private:
 		calcDensity(outletMstPlane, outletMstPlane.getPsx());
 	}
 
+	void calculate() {
+		flowTraverse.gasVelocity = 1096 * std::sqrt(flowTraverse.pv3 / flowTraverse.gasDensity);
+		flowTraverse.gasVolumeFlowRate = flowTraverse.gasVelocity * flowTraverse.area;
+
+		auto mTotal = flowTraverse.gasDensity * flowTraverse.gasVolumeFlowRate;
+		for (auto & plane : addlTravPlanes) {
+			plane.gasVelocity = 1096 * std::sqrt(plane.pv3 / plane.gasDensity);
+			plane.gasVolumeFlowRate = plane.gasVelocity * plane.area;
+			mTotal += plane.gasDensity * plane.gasVolumeFlowRate;
+		}
+
+		inletMstPlane.gasVolumeFlowRate = mTotal / inletMstPlane.gasDensity;
+		inletMstPlane.gasVelocity = inletMstPlane.gasVolumeFlowRate / inletMstPlane.area;
+		inletMstPlane.gasVelocityPressure = inletMstPlane.gasDensity * std::pow((inletMstPlane.gasVelocity / 1096), 2);
+		inletMstPlane.gasTotalPressure = inletMstPlane.getPsx() + inletMstPlane.gasVelocityPressure;
+
+		// step 7
+		fanInletFlange.gasTotalPressure = inletMstPlane.gasTotalPressure - totalPressureLossBtwnPlanes1and4;
+
+		// step 8
+		fanInletFlange.gasDensity = inletMstPlane.gasDensity;
+
+
+
+//		outletMstPlane
+	}
+
 	FanInletFlange fanInletFlange;
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
 	FlowTraverse flowTraverse;
@@ -257,71 +357,26 @@ private:
 	InletMstPlane inletMstPlane;
 	OutletMstPlane outletMstPlane;
 
+	bool const variationsInPlanarBarometricPressure, estimatePlaneTemp;
+	const double totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5;
+
 	friend class Fan;
 };
 
-class VelocityPressureTraverseData {
-public:
-	enum class TubeType {
-		STANDARD,
-		STYPE
-	};
-
-	// TODO pretty sure the constructor body here needs to be repeated for 3+ planes w/ different input data
-	VelocityPressureTraverseData(const TubeType pitotTubeType, const double pitotTubeCoefficient,
-	                             std::vector< std::vector< double > > & traverseHoleData)
-			: pitotTubeType(pitotTubeType), pitotTubeCoefficient(pitotTubeCoefficient),
-			  traverseHoleData(std::move(traverseHoleData))
-	{
-		auto maxPv3r = 0.0;
-		auto sumPv3r = 0.0;
-		for (auto & row : this->traverseHoleData) {
-			for (auto & val : row) {
-				if (val <= 0) {
-					val = 0;
-					continue;
-				}
-				val *= std::pow(pitotTubeCoefficient, 2);
-				if (val > maxPv3r) maxPv3r = val;
-				sumPv3r += std::sqrt(val);
-			}
-		}
-
-		pv3 = std::pow(sumPv3r / (this->traverseHoleData.size() * this->traverseHoleData[0].size()), 2);
-		size_t count = 0;
-		for (auto & row : this->traverseHoleData) {
-			for (auto & val : row) {
-				if (val > (0.1 * maxPv3r)) count++;
-			}
-		}
-
-		percent75Rule = count / static_cast<double>(this->traverseHoleData.size() * this->traverseHoleData[0].size());
-	};
-
-private:
-	const TubeType pitotTubeType;
-	const double pitotTubeCoefficient;
-	double pv3, percent75Rule;
-
-//	const unsigned noTraverseHoles, noInsertionPoints; // TODO these need to go away, these dimensions will almost surely be defined in the UI, all we need is a vector here
-	std::vector< std::vector< double > > traverseHoleData;
-};
 
 
 class Fan {
 public:
-	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, VelocityPressureTraverseData & velocityPressureTraverseData,
-	    BaseGasDensity & baseGasDensity)
-			: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)),
-			  velocityPressureTraverseData(std::move(velocityPressureTraverseData)), baseGasDensity(baseGasDensity)
+	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity)
+			: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)), baseGasDensity(baseGasDensity)
 	{
-		this->planeData.calculatePlanes3through5Densities(baseGasDensity);
+		this->planeData.calculatePlanes3through5density(baseGasDensity);
+		this->planeData.calculate();
 	};
 
 private:
 	FanRatedInfo const fanRatedInfo;
 	PlaneData planeData;
-	VelocityPressureTraverseData const velocityPressureTraverseData;
 	BaseGasDensity const baseGasDensity;
 };
 

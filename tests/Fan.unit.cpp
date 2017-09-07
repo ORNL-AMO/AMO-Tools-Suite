@@ -3,19 +3,6 @@
 
 TEST_CASE( "Fan", "Fan stuff") {
 	FanRatedInfo fanRatedInfo(40, 1191, 1191, 1170, 0.05, 26.28, FanRatedInfo::DriveType::DIRECT);
-	FanInletFlange fanInletFlange(143.63, 32.63, 2, 123, 26.57);
-	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70, 78, 132.7, 26.57);
-	FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1);
-
-	std::vector<AddlTravPlane> addlTravPlanes({
-			                                          {143.63, 32.63, 123.0, 26.57, -17.0}
-	                                          });
-
-	InletMstPlane inletMstPlane(143.63, 32.63, 2, 123.0, 26.57, -17.55);
-	OutletMstPlane outletMstPlane(55.42, 60.49, 132.7, 26.57, 1.8);
-
-	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
-	                           outletMstPlane, false, false);
 
 	std::vector< std::vector< double > > traverseHoleData = {
 			{
@@ -29,11 +16,41 @@ TEST_CASE( "Fan", "Fan stuff") {
 			}
 	};
 
-	VelocityPressureTraverseData vptd(VelocityPressureTraverseData::TubeType::STYPE, 0.87, traverseHoleData);
+
+
+	FanInletFlange fanInletFlange(143.63, 32.63, 2, 123, 26.57);
+	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70, 78, 132.7, 26.57);
+
+	FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1, VelocityPressureTraverseData::TubeType::STYPE, 0.87,
+	                          traverseHoleData);
+
+	traverseHoleData = {
+			{
+					0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630
+			},
+			{
+					0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596
+			},
+			{
+					0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620
+			}
+	};
+
+	std::vector<AddlTravPlane> addlTravPlanes({
+			                                          {143.63, 32.63, 123.0, 26.57, -17.0,
+					                                          VelocityPressureTraverseData::TubeType::STYPE, 0.87, traverseHoleData}
+	                                          });
+
+	InletMstPlane inletMstPlane(143.63, 32.63, 2, 123.0, 26.57, -17.55);
+	OutletMstPlane outletMstPlane(55.42, 60.49, 132.7, 26.57, 1.8);
+
+	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
+	                           outletMstPlane, false, false, 0, 0.627);
+
 
 	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547);
 
-	auto fan = Fan(fanRatedInfo, planeData, vptd, baseGasDensity);
+	auto fan = Fan(fanRatedInfo, planeData, baseGasDensity);
 
 
 	auto test = 0;
