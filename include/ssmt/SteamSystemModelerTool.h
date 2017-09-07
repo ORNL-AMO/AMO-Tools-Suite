@@ -96,13 +96,15 @@ public:
         REGION2C
     };
 
+private:
+
     /**
      * Determines the IAPWS region based on pressure and temperature
      * @param pressure double, pressure in MPa
      * @param temperature double, temperature in Kelvins
      * @return int, region number
      */
-	static int regionSelect(const double pressure, const double temperature);
+	static int regionSelect(double pressure, double temperature);
 
     /**
      * Calculates the steam properties using region 1 equations
@@ -112,7 +114,7 @@ public:
      *
      * @return unordered_map <string, double>, steam properties
      */
-	static std::unordered_map <std::string, double> region1(const double temperature, const double pressure);
+	static std::unordered_map <std::string, double> region1(double temperature, double pressure);
 
     /**
      * Calculates the steam properties using region 2 equations
@@ -122,7 +124,7 @@ public:
      *
      * @return unordered_map <string, double>, steam properties
      */
-	static std::unordered_map <std::string, double> region2(const double temperature, const double pressure);
+	static std::unordered_map <std::string, double> region2(double temperature, double pressure);
 
     /**
      * Calculates the steam properties using region 3 equations
@@ -132,9 +134,9 @@ public:
      *
      * @return unordered_map <string, double>, steam properties
      */
-	static std::unordered_map <std::string, double> region3(const double temperature, const double pressure);
+	static std::unordered_map <std::string, double> region3(double temperature, double pressure);
 
-	static std::unordered_map <std::string, double> region3Density(const double density, const double temperature);
+	static std::unordered_map <std::string, double> region3Density(double density, double temperature);
 
     /**
      * Calculates the steam properties using region 4 equations (saturated properties)
@@ -144,7 +146,7 @@ public:
      *
      * @return unordered_map <string, double>, steam properties
      */
-	static double region4(const double temperature);
+	static double region4(double temperature);
 
     /**
      * Calculates temperature based in pressure and enthalpy for region 1
@@ -154,7 +156,7 @@ public:
      *
      * @return double, temperature in Kelvins
      */
-     static double backwardPressureEnthalpyRegion1(const double pressure, const double enthalpy);
+     static double backwardPressureEnthalpyRegion1(double pressure, double enthalpy);
 
     /**
      * Calculates temperature based in pressure and enthalpy for region 2A
@@ -164,7 +166,7 @@ public:
      *
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEnthalpyRegion2A(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion2A(double pressure, double enthalpy);
 
     /**
      * Calculates temperature based in pressure and enthalpy for region 2B
@@ -174,7 +176,7 @@ public:
      *
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEnthalpyRegion2B(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion2B(double pressure, double enthalpy);
 
     /**
      * Calculates temperature based in pressure and enthalpy for region 2C
@@ -184,7 +186,7 @@ public:
      *
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEnthalpyRegion2C(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion2C(double pressure, double enthalpy);
 
     /**
      * Calculates temperature based on pressure and entropy for region 2A
@@ -194,7 +196,7 @@ public:
      *
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEntropyRegion2A(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion2A(double pressure, double entropy);
 
     /**
      * Calculates temperature based on pressure and entropy for region 2B
@@ -204,7 +206,7 @@ public:
      *
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEntropyRegion2B(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion2B(double pressure, double entropy);
 
     /**
      * Calculates temperature based on pressure and entropy for region 2C
@@ -214,7 +216,7 @@ public:
      *
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEntropyRegion2C(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion2C(double pressure, double entropy);
 
     /**
      * Calculates temperature based on pressure and entropy for region 1
@@ -224,7 +226,7 @@ public:
      *
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEntropyRegion1(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion1(double pressure, double entropy);
 
     /**
      * Generates a data point
@@ -247,10 +249,10 @@ public:
      *
      * @return double, y-value
      */
-    static double linearTestPoint(const double X, Point point1, Point point2);
+    static double linearTestPoint(double X, Point point1, Point point2);
 
 
-    static double backwardRegion3Exact(const double pressure, const double X, SteamSystemModelerTool::Key key);
+    static double backwardRegion3Exact(double pressure, double X, SteamSystemModelerTool::Key key);
 
     /**
      * Uses linear interpolation to goal seek  region 3 using pressure and enthalpy
@@ -258,7 +260,7 @@ public:
      * @param enthalpy double, specific enthalpy in kJ/kg
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEnthalpyRegion3(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion3(double pressure, double enthalpy);
 
     /**
      * Uses linear interpolation to goal seek  region 3 using pressure and entropy
@@ -266,11 +268,11 @@ public:
      * @param entropy double, specific entropy in kJ/kg/K
      * @return double, temperature in Kelvins
      */
-    static double backwardPressureEntropyRegion3(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion3(double pressure, double entropy);
 
-    static double backwardPressureEnthalpyRegion1Exact(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion1Exact(double pressure, double enthalpy);
 
-    static double backwardPressureEntropyRegion1Exact(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion1Exact(double pressure, double entropy);
 
     /**
      * Returns a more accurate temperature than backwardPressureEnthalpyRegion2A
@@ -278,7 +280,7 @@ public:
      * @param enthalpy double, specific enthalpy in kJ/kg
      * @return double, temperature in Kelvin
      */
-    static double backwardPressureEnthalpyRegion2AExact(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion2AExact(double pressure, double enthalpy);
 
     /**
      * Returns a more accurate temperature than backwardPressureEntropyRegion2A
@@ -286,7 +288,7 @@ public:
      * @param entropy double, specific entropy in kJ/kg/K
      * @return double, temperature in Kelvin
      */
-    static double backwardPressureEntropyRegion2AExact(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion2AExact(double pressure, double entropy);
 
     /**
      * Returns a more accurate temperature than backwardPressureEnthalpyRegion2B
@@ -294,7 +296,7 @@ public:
      * @param enthalpy double, specific enthalpy in kJ/kg
      * @return double, temperature in Kelvin
      */
-    static double backwardPressureEnthalpyRegion2BExact(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion2BExact(double pressure, double enthalpy);
 
     /**
      * Returns a more accurate temperature than backwardPressureEntropyRegion2B
@@ -302,7 +304,7 @@ public:
      * @param entropy double, specific entropy in kJ/kg/K
      * @return double, temperature in Kelvin
      */
-    static double backwardPressureEntropyRegion2BExact(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion2BExact(double pressure, double entropy);
 
     /**
      * Returns a more accurate temperature than backwardPressureEnthalpyRegion2C
@@ -310,7 +312,7 @@ public:
      * @param enthalpy double, specific enthalpy in kJ/kg
      * @return double, temperature in Kelvin
      */
-    static double backwardPressureEnthalpyRegion2CExact(const double pressure, const double enthalpy);
+    static double backwardPressureEnthalpyRegion2CExact(double pressure, double enthalpy);
 
     /**
      * Returns a more accurate temperature than backwardPressureEntropyRegion2C
@@ -318,7 +320,7 @@ public:
      * @param entropy double, specific entropy in kJ/kg/K
      * @return double, temperature in Kelvin
      */
-    static double backwardPressureEntropyRegion2CExact(const double pressure, const double entropy);
+    static double backwardPressureEntropyRegion2CExact(double pressure, double entropy);
 
     /**
      * Uses linear extrapolation for estimate equation to determine much more accurate temperature
@@ -329,7 +331,7 @@ public:
      * @param var2 double, value of either entropy (in kJ/kg/K) or enthalpy (in kJ/kg)
      * @return doubble, temperature in Kelvin
      */
-    static double backwardExact(int region, SteamSystemModelerTool::Key key, SteamSystemModelerTool::Region regionFunction , const double pressure, const double var2);
+    static double backwardExact(int region, SteamSystemModelerTool::Key key, SteamSystemModelerTool::Region regionFunction , double pressure, double var2);
 
     // constants
 
@@ -407,6 +409,7 @@ private:
 //	static double region4(const double temperature);
 
 	friend class SteamProperties;
+    friend class SaturatedProperties;
 };
 
 
