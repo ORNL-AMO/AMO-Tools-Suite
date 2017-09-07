@@ -125,22 +125,20 @@ NAN_METHOD(energyInput) {
      * */
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    EnergyInputEAF eaf(Get("naturalGasHeatInput"), Get("naturalGasFlow"), Get("measuredOxygenFlow"), Get("coalCarbonInjection"), Get("coalHeatingValue"), Get("electrodeUse"), Get("electrodeHeatingValue"), Get("otherFuels"), Get("electricityInput"));
-    double heatDelivered = eaf.getHeatDelivered();
-    double kwhCycle = eaf.getKwhCycle();
-    double totalKwhCycle = eaf.getTotalKwhPerCycle();
+    EnergyInputEAF eaf(Get("naturalGasHeatInput"), Get("measuredOxygenFlow"), Get("coalCarbonInjection"), Get("coalHeatingValue"), Get("electrodeUse"), Get("electrodeHeatingValue"), Get("otherFuels"), Get("electricityInput"));
+    const double heatDelivered = eaf.getHeatDelivered();
+    const double totalChemicalEnergyInput = eaf.getTotalChemicalEnergyInput();
+
     SetR("heatDelivered", heatDelivered);
-    SetR("kwhCycle", kwhCycle);
-    SetR("totalKwhCycle", totalKwhCycle);
+    SetR("totalChemicalEnergyInput", totalChemicalEnergyInput);
     info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(exhaustGas) {
-
     inp = info[0]->ToObject();
-    ExhaustGasEAF eg(Get("cycleTime"), Get("offGasTemp"), Get("CO"), Get("H2"), Get("O2"), Get("CO2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"), Get("otherLosses"));
-    double heatLoss = eg.getTotalKwhPerCycle();
-    Local<Number> retval = Nan::New(heatLoss);
+    ExhaustGasEAF eg(Get("offGasTemp"), Get("CO"), Get("H2"), Get("O2"), Get("CO2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"));
+	const double totalHeatExhaust = eg.getTotalHeatExhaust();
+    Local<Number> retval = Nan::New(totalHeatExhaust);
     info.GetReturnValue().Set(retval);
 }
 

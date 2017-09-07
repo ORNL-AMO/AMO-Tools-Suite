@@ -291,7 +291,7 @@ test('exhaustGas', function (t) {
     t.type(bindings.exhaustGas, 'function');
 
     var inp = {
-        cycleTime: 2, offGasTemp: 2800, CO: 10, H2: 10, O2: 0, CO2: 5, combustibleGases: 5, vfr: 50000, dustLoading: 0.005, otherLosses: 8648946
+        offGasTemp: 2800, CO: 10, H2: 10, O2: 0, CO2: 5, combustibleGases: 5, vfr: 50000, dustLoading: 0.005
     };
 
     var res = bindings.exhaustGas(inp);

@@ -8,48 +8,13 @@
  */
 #include "calculator/losses/EnergyInputEAF.h"
 
-double EnergyInputEAF::getNaturalGasHeat() {
-    this->naturalGasHeat_ = (this->naturalGasFlow_)*0.00102;
-    return this->naturalGasHeat_;
+double EnergyInputEAF::getTotalChemicalEnergyInput() {
+    const double coalHeatContent = (coalHeatingValue_ * coalCarbonInjection_) / 1000000;
+    const double electrodeHeatContent = (electrodeUse_ * electrodeHeatingValue_) / 1000000;
+    return naturalGasHeatInput_ + coalHeatContent + electrodeHeatContent + otherFuels_;
 }
-
-double EnergyInputEAF::getCoalHeatContent(){
-    this->coalHeatContent_ = (this->coalHeatingValue_)*(this->coalCarbonInjection_)/1000000;
-    return this->coalHeatContent_;
-
-}
-
-double EnergyInputEAF::getElectrodeHeatContent(){
-    this->electrodeHeatContent_ = (this->electrodeUse_)*(this->electrodeHeatingValue_)/1000000;
-    return this->electrodeHeatContent_;
-}
-
-double EnergyInputEAF::getTotalChemicalEnergyInput(){
-    double coalHeatContent = getCoalHeatContent();
-    double electrodeHeatContent = getElectrodeHeatContent();
-    this->totalChemicalEnergyInput_ = (this->naturalGasHeatInput_) + coalHeatContent + electrodeHeatContent + (this->otherFuels_);
-    return this->totalChemicalEnergyInput_;
-
-}
-
-double EnergyInputEAF::getKwhCycle(){
-    double totalChemicalEnergyInput = getTotalChemicalEnergyInput();
-    this->kwhCycle_ = totalChemicalEnergyInput*(293.0832356389);
-    return this->kwhCycle_;
-
-}
-
-double EnergyInputEAF::getHeatDelivered(){
-    double naturalGasHeat = getNaturalGasHeat();
-    double coalHeatContent = getCoalHeatContent();
-    double electrodeHeatContent = getElectrodeHeatContent();
-    this->heatDelivered_ = naturalGasHeat + coalHeatContent + electrodeHeatContent + (this->otherFuels_);
-    return this->heatDelivered_;
-}
-
-double EnergyInputEAF::getTotalKwhPerCycle(){
-    double kwhCycle = getKwhCycle();
-    this->totalKwhPerCycle_ = kwhCycle + (this->electricityInput_);
-    return this->totalKwhPerCycle_;
-
+double EnergyInputEAF::getHeatDelivered() {
+    const double coalHeatContent = (coalHeatingValue_ * coalCarbonInjection_) / 1000000;
+    const double electrodeHeatContent = electrodeUse_ * electrodeHeatingValue_ / 1000000;
+    return naturalGasHeatInput_ + coalHeatContent + electrodeHeatContent + otherFuels_ + electricityInput_;
 }

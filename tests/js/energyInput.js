@@ -10,20 +10,19 @@ function rnd(value) {
 }
 
 test('phast', function (t) {
-    t.plan(4);
+    t.plan(3);
     t.type(bindings.energyInput, 'function');
-    var inp = {};
-    inp.naturalGasHeatInput = 50;
-    inp.naturalGasFlow = 0;
-    inp.measuredOxygenFlow = 6500;
-    inp.coalCarbonInjection = 3300;
-    inp.coalHeatingValue = 9000;
-    inp.electrodeUse = 500;
-    inp.electrodeHeatingValue = 12000;
-    inp.otherFuels = 20;
-    inp.electricityInput = 18000;
+    var inp = {
+        naturalGasHeatInput: 50,
+        measuredOxygenFlow: 6500,
+        coalCarbonInjection: 3300,
+        coalHeatingValue: 9000,
+        electrodeUse: 500,
+        electrodeHeatingValue: 12000,
+        otherFuels: 20,
+        electricityInput: 18000
+    };
     var res = bindings.energyInput(inp);
-    t.equal(rnd(res.kwhCycle), rnd(30978.898007031734), 'res.kwhCycle is ' + res.kwhCycle);
     t.equal(res.heatDelivered, 55.7, 'res.heatDelivered is ' + res.heatDelivered);
-    t.equal(rnd(res.totalKwhCycle), rnd(48978.898007031734), 'res.totalKwhCycle is ' + res.totalKwhCycle);
+    t.equal(rnd(res.totalChemicalEnergyInput), rnd(48978.898007031734), 'res.totalChemicalEnergyInput is ' + res.totalChemicalEnergyInput);
 });
