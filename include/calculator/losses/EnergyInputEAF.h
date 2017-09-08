@@ -26,7 +26,6 @@ class EnergyInputEAF {
      * @param naturalGasHeatInput value of total heat input to the heating system (furnace/oven) from all
      *                              sources of heat supplied (natural gas, carbon, fuel oil, etc.)
      *                              measured in mm btu/cycle
-     * @param naturalGasFlow natural gas flow measured in cu.ft/cycle
      * @param measuredOxygenFlow oxygen flow to the furnace measured in scfh
      * @param coalCarbonInjection mass of coal or carbon injection for the cycle measured in lbs/cycle
      * @param coalHeatingValue heating value for the coal or carbon injected measured in btu/lb
