@@ -26,24 +26,22 @@ public:
      * @param offGasTemp double, temperature of exhaust gases from EAF before the gases mix with outside air measured in °F
      * @param CO double, % of CO in exhaust gas
      * @param H2 double, % of H2 in exhaust gas
-     * @param O2 double, % of O2 in exhaust gas
-     * @param CO2 double, % of CO2 in exhaust gas
      * @param combustibleGases double, average value of combustible gases % in exhaust gases
      * @param vfr double, (volume flow rate) total volume of exhaust gases measured in cfm
      * @param dustLoading double, dust loading for exhaust gases measured in s/scf (number of dust particles per scf)
      * @return nothing
      *
      * */
-    ExhaustGasEAF(const double offGasTemp, const double CO, const double H2, const double O2, const double CO2,
+    ExhaustGasEAF(const double offGasTemp, const double CO, const double H2,
                   const double combustibleGases, const double vfr, const double dustLoading)
-            : offGasTemp_(offGasTemp), CO_(CO), H2_(H2), O2_(O2), CO2_(CO2), combustibleGases_(combustibleGases),
+            : offGasTemp_(offGasTemp), CO_(CO), H2_(H2), combustibleGases_(combustibleGases),
               vfr_(vfr), dustLoading_(dustLoading)
     {}
 
     double getTotalHeatExhaust();
 
 private:
-    const double offGasTemp_, CO_, H2_, O2_, CO2_, combustibleGases_, vfr_, dustLoading_;
+    const double offGasTemp_, CO_, H2_, combustibleGases_, vfr_, dustLoading_;
 };
 
 #endif //AMO_TOOLS_SUITE_EXHAUSTGASEAF_H

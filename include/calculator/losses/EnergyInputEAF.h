@@ -26,7 +26,6 @@ class EnergyInputEAF {
      * @param naturalGasHeatInput value of total heat input to the heating system (furnace/oven) from all
      *                              sources of heat supplied (natural gas, carbon, fuel oil, etc.)
      *                              measured in mm btu/hour
-     * @param measuredOxygenFlow oxygen flow to the furnace measured in scfh
      * @param coalCarbonInjection mass of coal or carbon injection for the hour measured in lbs/hour
      * @param coalHeatingValue heating value for the coal or carbon injected measured in btu/lb
      * @param electrodeUse electrode use measured in lbs/hour
@@ -37,12 +36,12 @@ class EnergyInputEAF {
      * @return nothing
      * **/
 
-    EnergyInputEAF(const double naturalGasHeatInput, const double measuredOxygenFlow, const double coalCarbonInjection, const double coalHeatingValue,
-                   const double electrodeUse, const double electrodeHeatingValue, const double otherFuels, const double electricityInput)
-            : naturalGasHeatInput_(naturalGasHeatInput), measuredOxygenFlow_(measuredOxygenFlow),
-              coalCarbonInjection_(coalCarbonInjection), coalHeatingValue_(coalHeatingValue),
-              electrodeUse_(electrodeUse), electrodeHeatingValue_(electrodeHeatingValue),
-              otherFuels_(otherFuels), electricityInput_(electricityInput)
+    EnergyInputEAF(const double naturalGasHeatInput, const double coalCarbonInjection, const double coalHeatingValue,
+                   const double electrodeUse, const double electrodeHeatingValue, const double otherFuels,
+                   const double electricityInput)
+            : naturalGasHeatInput_(naturalGasHeatInput), coalCarbonInjection_(coalCarbonInjection),
+              coalHeatingValue_(coalHeatingValue), electrodeUse_(electrodeUse),
+              electrodeHeatingValue_(electrodeHeatingValue), otherFuels_(otherFuels), electricityInput_(electricityInput)
     {}
 
     /**
@@ -60,7 +59,7 @@ class EnergyInputEAF {
     double getHeatDelivered();
 
 private:
-    const double naturalGasHeatInput_, measuredOxygenFlow_, coalCarbonInjection_, coalHeatingValue_, electrodeUse_;
+    const double naturalGasHeatInput_, coalCarbonInjection_, coalHeatingValue_, electrodeUse_;
     const double electrodeHeatingValue_, otherFuels_, electricityInput_;
 };
 #endif //AMO_TOOLS_SUITE_ENERGYINPUTEAF_H
