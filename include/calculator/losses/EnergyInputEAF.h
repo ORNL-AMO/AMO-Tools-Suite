@@ -25,14 +25,14 @@ class EnergyInputEAF {
      *
      * @param naturalGasHeatInput value of total heat input to the heating system (furnace/oven) from all
      *                              sources of heat supplied (natural gas, carbon, fuel oil, etc.)
-     *                              measured in mm btu/cycle
+     *                              measured in mm btu/hour
      * @param measuredOxygenFlow oxygen flow to the furnace measured in scfh
-     * @param coalCarbonInjection mass of coal or carbon injection for the cycle measured in lbs/cycle
+     * @param coalCarbonInjection mass of coal or carbon injection for the hour measured in lbs/hour
      * @param coalHeatingValue heating value for the coal or carbon injected measured in btu/lb
-     * @param electrodeUse electrode use measured in lbs/cycle
+     * @param electrodeUse electrode use measured in lbs/hour
      * @param electrodeHeatingValue electrode heating value measured in btu/lb
-     * @param otherFuels heat supplied from other sources, if any, measured in mm btu/cycle
-     * @param electricityInput total electric power supplied for the cycle measured in kwh/cycle
+     * @param otherFuels heat supplied from other sources, if any, measured in mm btu/hour
+     * @param electricityInput total electric power supplied for the hour measured in kwh/hour
      *
      * @return nothing
      * **/
@@ -48,14 +48,14 @@ class EnergyInputEAF {
     /**
      * Calculates the total chemical energy input
      *
-     * @return double, total chemical energy input in mm btu/cycle
+     * @return double, total chemical energy input in btu/hour
      */
     double getTotalChemicalEnergyInput();
 
     /**
      * Calculates the heat delivered to the EAF
      *
-     * @return double, heat delivered to the EAF in btu/cycle
+     * @return double, heat delivered to the EAF in btu/hour
      */
     double getHeatDelivered();
 
