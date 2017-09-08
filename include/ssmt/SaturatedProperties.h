@@ -93,32 +93,10 @@ public:
             : saturatedPressure_(saturatedPressure),
               saturatedTemperature_(saturatedTemperature) {}
 
-    /**
-     * Gets the saturated pressure
-     *
-     * @return double, saturated pressure in psig
-     */
-    double getSaturatedPressure() const {
-        return saturatedPressure_;
-    }
-
-    /**
-     * Gets the saturated temperature
-     *
-     * @return double, saturated temperature in °F
-     */
-    double getSaturatedTemperature() const {
-        return saturatedTemperature_;
-    }
-
     std::unordered_map<std::string, double> calculate();
 
-
 private:
-    // In values
     const double saturatedPressure_, saturatedTemperature_;
-
-//    std::unordered_map<std::string, double> saturatedProperties;
 };
 
 

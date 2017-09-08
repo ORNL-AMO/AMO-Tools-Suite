@@ -12,37 +12,24 @@
 #include <cmath>
 
 double SaturatedTemperature::calculate() const {
-    const double C1 = 0.11670521452767E+04;
-    const double C2 = -0.72421316703206E+06;
-    const double C3 = -0.17073846940092E+02;
-    const double C4 = 0.12020824702470E+05;
-    const double C5 = -0.32325550322333E+07;
-    const double C6 = 0.14915108613530E+02;
-    const double C7 = -0.48232657361591E+04;
-    const double C8 = 0.40511340542057E+06;
-    const double C9 = -0.23855557567849E+00;
+    const double C1 = 0.11670521452767E+04, C2 = -0.72421316703206E+06, C3 = -0.17073846940092E+02;
+    const double C4 = 0.12020824702470E+05, C5 = -0.32325550322333E+07, C6 = 0.14915108613530E+02;
+    const double C7 = -0.48232657361591E+04, C8 = 0.40511340542057E+06, C9 = -0.23855557567849E+00;
     const double C10 = 0.65017534844798E+03;
 
     const double SS = std::pow(saturatedPressure_, 0.25);
     const double E = SS * SS + C3 * SS + C6;
     const double F = C1 * SS * SS + C4 * SS + C7;
     const double G = C2 * SS * SS + C5 * SS + C8;
-
-    double D = 2 * G / (-F - std::sqrt(pow(F, 2) - 4 * E * G));
+    const double D = 2 * G / (-F - std::sqrt(pow(F, 2) - 4 * E * G));
 
     return (C10 + D - std::sqrt(std::pow((C10 + D), 2) - 4 * (C9 + C10 * D))) / 2;
 }
 
 double SaturatedPressure::calculate() const {
-    const double C1 = 0.11670521452767E+04;
-    const double C2 = -0.72421316703206E+06;
-    const double C3 = -0.17073846940092E+02;
-    const double C4 = 0.12020824702470E+05;
-    const double C5 = -0.32325550322333E+07;
-    const double C6 = 0.14915108613530E+02;
-    const double C7 = -0.48232657361591E+04;
-    const double C8 = 0.40511340542057E+06;
-    const double C9 = -0.23855557567849E+00;
+    const double C1 = 0.11670521452767E+04, C2 = -0.72421316703206E+06, C3 = -0.17073846940092E+02;
+    const double C4 = 0.12020824702470E+05, C5 = -0.32325550322333E+07, C6 = 0.14915108613530E+02;
+    const double C7 = -0.48232657361591E+04, C8 = 0.40511340542057E+06, C9 = -0.23855557567849E+00;
     const double C10 = 0.65017534844798E+03;
 
     const double v = saturatedTemperature_ + (C9 / (saturatedTemperature_ - C10));
