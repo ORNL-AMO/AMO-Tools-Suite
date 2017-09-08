@@ -30,14 +30,11 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
 
 	double gibbs = 0;
     double gibbsPi = 0;
-    //double gibbsPiPi = 0;
     double gibbsT = 0;
-    //double gibbsTT = 0;
-    //double gibbsPit = 0;
 
 	for ( auto k = 0; k < (int) n.size(); k++ ) {
 		gibbs += n[k] * pow((7.1 - reducedPressure), i[k]) * pow((inversedReducedTemp - 1.222), j[k]);
-		gibbsPi += (-1 * n[k]) * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * pow((inversedReducedTemp - 1.222), j[k]);
+		gibbsPi += -n[k] * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsT += n[k] * pow((7.1 - reducedPressure), i[k]) * j[k] * pow((inversedReducedTemp - 1.222), j[k] - 1);
 	}
 
@@ -92,9 +89,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
 
 	double gibbs0 = log(reducedPressure);
 	double gibbsPi0 = 1 / reducedPressure;
-	//double gibbsPiPi0 = -1 / std::pow(reducedPressure, 2.0);
 	double gibbsT0 = 0, gibbsTT0 = 0;
-    //double gibbsPit0 = 0;
 
 	for (int k = 0; k < 9; k++) {
 		gibbs0 += n0[k] * std::pow(inverseReducedTemp, j0[k]);
@@ -104,10 +99,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
 
 	double gibbs1 = 0;
     double gibbsPi1 = 0;
-    //double gibbsPiPi1 = 0;
     double gibbsT1 = 0;
-    //double gibbsTT1 = 0;
-    //double gibbsPit1 = 0;
 
 	for (int k = 0; k < 43; k++) {
 		gibbs1 += n1[k] * std::pow(reducedPressure, i1[k]) * std::pow((inverseReducedTemp - 0.5), j1[k]);
@@ -142,8 +134,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 	region3propNew = region3Density(densityB, t);
 	auto testPressureB = region3propNew["pressure"];
 
-//    auto densityNew = 0.0;
-	double pressureNew;
+	double pressureNew = 0;
 	for ( size_t i = 0; i < 4; i++ ) {
 		auto const densityNew = (densityA + densityB) / 2.0;
 		region3propNew = region3Density(densityNew, t);
@@ -201,10 +192,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 	auto const inverseReducedTemp = 647.096 / t;
 	auto helmholtz = n[0] * std::log(reducedDensity);
 	auto helmholtzS = n[0] / reducedDensity;
-	//auto helmholtzSS = -n[0] / std::pow(reducedDensity, 2);
 	double helmholtzT = 0;
-    //double helmholtzTT = 0;
-    //double helmholtzST = 0;
 
 	for (size_t k = 1; k < 40; k++) {
 		helmholtz += n[k] * std::pow(reducedDensity, i[k]) * std::pow(inverseReducedTemp, j[k]);
@@ -231,8 +219,7 @@ double SteamSystemModelerTool::backwardRegion3Exact(const double pressure, const
     double temperatureB = SteamSystemModelerTool::linearTestPoint(X, pointA, pointB);
     int counter = 0;
 
-    while((std::abs(temperature - temperatureB) > 1e-6) && (counter++ < 15))
-    {
+    while((std::abs(temperature - temperatureB) > 1e-6) && (counter++ < 15)) {
         pointA = pointB;
         pointB = SteamSystemModelerTool::generatePoint(3, key, pressure, temperatureB);
         temperature = temperatureB;
@@ -240,17 +227,16 @@ double SteamSystemModelerTool::backwardRegion3Exact(const double pressure, const
     }
 
     return temperatureB;
-
 }
 
 
 double SteamSystemModelerTool::region4(const double t) {
-	auto const v = t + -0.23855557567849E+00 / (t - 0.65017534844798E+03);
-	auto const a = v * v + 0.11670521452767E+04 * v + -0.72421316703206E+06;
-	auto const b = -0.17073846940092E+02 * v * v + 0.12020824702470E+05 * v + -0.32325550322333E+07;
-	auto const c = 0.14915108613530E+02 * v * v + -0.48232657361591E+04 * v + 0.40511340542057E+06;
+	auto const v = t - 0.23855557567849E+00 / (t - 0.65017534844798E+03);
+	auto const a = v * v + 0.11670521452767E+04 * v - 0.72421316703206E+06;
+	auto const b = -0.17073846940092E+02 * v * v + 0.12020824702470E+05 * v - 0.32325550322333E+07;
+	auto const c = 0.14915108613530E+02 * v * v - 0.48232657361591E+04 * v + 0.40511340542057E+06;
 
-	return pow(2 * c / (-b + sqrt(pow(b, 2) - 4 * a * c)), 4);
+	return std::pow(2 * c / (-b + sqrt(std::pow(b, 2) - 4 * a * c)), 4);
 }
 
 // where t is temperature in K and p is pressure in MPa
@@ -302,7 +288,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2A(const double pre
                        0.37154085996233E+7, 0.19127729239660E+5, -0.41535164835634E+6, -0.62459855192507E+2};
 
     double temperature = 0.0;
-    double nu = enthalpy/2000;
+    double nu = enthalpy / 2000;
 
     for(int i = 0; i < 34; i++){
         temperature += array2[i] * pow(pressure, array0[i]) * pow((nu - 2.1), array1[i]);
@@ -324,7 +310,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2B(const double pre
                   -0.17565233969407E-17, 0.86934156344163E-14};
 
     double temperature = 0.0;
-    double nu = enthalpy/2000;
+    double nu = enthalpy / 2000;
 
     for (int i = 0; i < 38; i++){
         temperature += n[i] * pow((pressure - 2), I[i]) * pow((nu - 2.6), J[i]);
@@ -343,7 +329,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2C(const double pre
                   -0.17804982240686E-10, 0.12324579690832E-6, -0.11606921130984E-5, 0.27846367088554E-4, -0.59270038474176E-3, 0.12918582991878E-2};
 
     double temperature = 0.0;
-    double nu = enthalpy/2000;
+    double nu = enthalpy / 2000;
 
     for (int i = 0; i < 23; i++){
         temperature += n[i] * pow((pressure + 25), I[i]) * pow((nu - 1.8), J[i]);
@@ -444,13 +430,11 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
     return temp;
 }
 
-Point SteamSystemModelerTool::generatePoint(int region, SteamSystemModelerTool::Key key, double pressure, double temperature){
+Point SteamSystemModelerTool::generatePoint(int region, SteamSystemModelerTool::Key key, double pressure, double temperature) {
     std::unordered_map<std::string, double> result;
-	Point point(0.0, 0.0);
 
     switch (region) {
         case 1: {
-//            result =  SteamSystemModelerTool::region1(var1, var2);
 	        result =  SteamSystemModelerTool::region1(temperature, pressure);
 	        break;
         }
@@ -464,20 +448,17 @@ Point SteamSystemModelerTool::generatePoint(int region, SteamSystemModelerTool::
         }
     }
 
-	if (key == SteamSystemModelerTool::Key::ENTHALPY)
-		point = Point(result["specificEnthalpy"], temperature);
-	if (key == SteamSystemModelerTool::Key::ENTROPY)
-		point = Point(result["specificEntropy"], temperature);
+	if (key == SteamSystemModelerTool::Key::ENTHALPY) return {result["specificEnthalpy"], temperature};
 
-    return point;
+	return {result["specificEntropy"], temperature}; // else key must be ENTROPY
 }
 
-double SteamSystemModelerTool::linearTestPoint(const double X, Point point1, Point point2){
+double SteamSystemModelerTool::linearTestPoint(const double X, Point const point1, Point const point2){
     double slope = 0.0;
     if ((point1.getX() - point2.getX()) != 0.0) {
         slope = (point1.getY() - point2.getY()) / (point1.getX() - point2.getX());
     }
-    double yIntercept = point1.getY() - slope * point1.getX();
+    const double yIntercept = point1.getY() - slope * point1.getX();
     return X * slope + yIntercept;
 }
 
@@ -492,60 +473,48 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion3(const double press
 double SteamSystemModelerTool::backwardExact(int region, SteamSystemModelerTool::Key key,
                                              SteamSystemModelerTool::Region regionFunction, const double pressure,
                                              const double entropyOrEnthalpy) {
-    double temperature = 0.0;
     Point pointA = Point(0.0, 0.0);
     Point pointB = Point(0.0, 0.0);
 
-    if (key == SteamSystemModelerTool::Key::ENTHALPY)
-    {
-        if(regionFunction == SteamSystemModelerTool::Region::REGION1)
-        {
+    if (key == SteamSystemModelerTool::Key::ENTHALPY) {
+        if(regionFunction == SteamSystemModelerTool::Region::REGION1) {
             pointA = generatePoint(region, key, pressure, backwardPressureEnthalpyRegion1(pressure, entropyOrEnthalpy));
             pointB = generatePoint(region, key, pressure, backwardPressureEnthalpyRegion1(pressure, pointA.getX()));
         }
-        if(regionFunction == SteamSystemModelerTool::Region::REGION2A)
-        {
+        if(regionFunction == SteamSystemModelerTool::Region::REGION2A) {
             pointA = generatePoint(region, key, pressure, backwardPressureEnthalpyRegion2A(pressure, entropyOrEnthalpy));
             pointB = generatePoint(region, key, pressure, backwardPressureEnthalpyRegion2A(pressure, pointA.getX()));
         }
-        if(regionFunction == SteamSystemModelerTool::Region::REGION2B)
-        {
+        if(regionFunction == SteamSystemModelerTool::Region::REGION2B) {
             pointA = generatePoint(region, key, pressure, backwardPressureEnthalpyRegion2B(pressure, entropyOrEnthalpy));
             pointB = generatePoint(region, key, pressure, backwardPressureEnthalpyRegion2B(pressure, pointA.getX()));
         }
-        if(regionFunction == SteamSystemModelerTool::Region::REGION2C)
-        {
+        if(regionFunction == SteamSystemModelerTool::Region::REGION2C) {
             pointA = generatePoint(region, key, pressure, backwardPressureEnthalpyRegion2C(pressure, entropyOrEnthalpy));
             pointB = generatePoint(region, key, pressure, backwardPressureEnthalpyRegion2C(pressure, pointA.getX()));
         }
-    }
-
-    if (key == SteamSystemModelerTool::Key::ENTROPY) {
-        if(regionFunction == SteamSystemModelerTool::Region::REGION1)
-        {
+    } else if (key == SteamSystemModelerTool::Key::ENTROPY) {
+        if(regionFunction == SteamSystemModelerTool::Region::REGION1) {
             pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion1(pressure, entropyOrEnthalpy));
             pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion1(pressure, pointA.getX()));
         }
-        if(regionFunction == SteamSystemModelerTool::Region::REGION2A)
-        {
+        if(regionFunction == SteamSystemModelerTool::Region::REGION2A) {
             pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion2A(pressure, entropyOrEnthalpy));
             pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion2A(pressure, pointA.getX()));
         }
-        if(regionFunction == SteamSystemModelerTool::Region::REGION2B)
-        {
+        if(regionFunction == SteamSystemModelerTool::Region::REGION2B) {
 	        pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion2B(pressure, entropyOrEnthalpy));
 	        pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion2B(pressure, pointA.getX()));
         }
-        if(regionFunction == SteamSystemModelerTool::Region::REGION2C)
-        {
+        if(regionFunction == SteamSystemModelerTool::Region::REGION2C) {
             pointA = generatePoint(region, key, pressure, backwardPressureEntropyRegion2C(pressure, entropyOrEnthalpy));
             pointB = generatePoint(region, key, pressure, backwardPressureEntropyRegion2C(pressure, pointA.getX()));
         }
     }
 
-    temperature = linearTestPoint(entropyOrEnthalpy, pointA, pointB);
-
+    auto temperature = linearTestPoint(entropyOrEnthalpy, pointA, pointB);
     pointA = generatePoint(region, key, pressure, temperature);
+
     temperature = linearTestPoint(entropyOrEnthalpy, pointA, pointB);
     return temperature;
 }

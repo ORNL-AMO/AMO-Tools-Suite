@@ -8,82 +8,23 @@
 #include <cmath>
 #include <string>
 #include <unordered_map>
-#include <functional>
 
 class Point {
 public:
-    /**
-     *
-     * Constructor for a point
-     *
-     * @param x double, x-value of point
-     * @param y double, y-value of point
-     *
-     * @return nothing
-     *
-     * */
-    Point(
-            double x,
-            double y)
-            : x_(x),
-              y_(y)
-    {}
+    Point(double x, double y)
+            : x_(x), y_(y) {}
 
-    /**
-    * Gets the x-value
-    *
-    * @return double, x-value
-    */
-    double getX() const {
-        return x_;
-    }
+    double getX() const { return x_; }
 
-    /**
-     * Sets the x-value
-     *
-     * @param x double, x-value
-     *
-     * @return nothing
-     */
-    void setX(double x) {
-        x_ = x;
-    }
-
-    /**
-    * Gets the y-value
-    *
-    * @return double, y-value
-    */
-    double getY() const {
-        return y_;
-    }
-
-    /**
-     * Sets the y-value
-     *
-     * @param y double, y-value
-     *
-     * @return nothing
-     */
-    void setY(double y) {
-        y_ = y;
-    }
+    double getY() const { return y_; }
 
 private:
-    // In values
-    double x_ = 0.0;
-    double y_ = 0.0;
+    double x_, y_;
 };
 
 
 class SteamSystemModelerTool {
 public:
-//	enum class Region {
-//		LIQUIDREGION1,
-//		GASREGION2,
-//		LIQUIDREGION3
-//	};
-
     enum class Key{
         ENTHALPY,
         ENTROPY
@@ -375,8 +316,6 @@ private:
      */
     static constexpr double TEMPERATURE_REGION3_MAX = 863.15;
 
-    // helper functions?
-
     /**
      * Calculates the boundary pressure associated with the given temperature
      * @param t double, temperature in Kelvins
@@ -395,11 +334,8 @@ private:
      * @return double, temperature in Kelvins
      */
     static inline double boundaryByPressureRegion3to2(const double p) {
-        return 0.57254459862746E+03 + pow( (p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5 );
+        return 0.57254459862746E+03 + std::pow((p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5);
     }
-
-private:
-
 
 //	static int regionSelect(const double pressure, const double temperature);
 //	static std::unordered_map <std::string, double> region1(const double pressure, const double temperature);
