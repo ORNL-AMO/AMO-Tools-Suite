@@ -9,9 +9,9 @@ function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
 }
 
-test('phast', function (t) {
+test('phast energy Input EAF', function (t) {
     t.plan(3);
-    t.type(bindings.energyInput, 'function');
+    t.type(bindings.energyInputEAF, 'function');
     var inp = {
         naturalGasHeatInput: 50,
         coalCarbonInjection: 3300,
@@ -21,7 +21,7 @@ test('phast', function (t) {
         otherFuels: 20,
         electricityInput: 18000
     };
-    var res = bindings.energyInput(inp);
+    var res = bindings.energyInputEAF(inp);
     t.equal(res.heatDelivered, 167116000.0, 'res.heatDelivered is ' + res.heatDelivered);
     t.equal(rnd(res.totalChemicalEnergyInput), rnd(105700000), 'res.totalChemicalEnergyInput is ' + res.totalChemicalEnergyInput);
 });

@@ -286,15 +286,15 @@ test('wallLosses', function (t) {
     t.equal(rnd(res), rnd(1989032.7936134234), res + ' != 1989032.7936134234');
 });
 
-test('exhaustGas', function (t) {
+test('exhaustGasEAF', function (t) {
     t.plan(2);
-    t.type(bindings.exhaustGas, 'function');
+    t.type(bindings.exhaustGasEAF, 'function');
 
     var inp = {
         offGasTemp: 2800, CO: 12, H2: 10, combustibleGases: 3, vfr: 8000, dustLoading: 0.001
     };
 
-    var res = bindings.exhaustGas(inp);
+    var res = bindings.exhaustGasEAF(inp);
     t.equal(rnd(res), rnd(12553119.018404908), res + ' != 12553119.018405');
 });
 

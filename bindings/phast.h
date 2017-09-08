@@ -104,7 +104,7 @@ NAN_METHOD(auxiliaryPowerLoss) {
 }
 
 
-NAN_METHOD(energyInput) {
+NAN_METHOD(energyInputEAF) {
 
 /**
      * Constructor for the Electric Arc Furnace (EAF) heat loss with all inputs specified
@@ -133,7 +133,7 @@ NAN_METHOD(energyInput) {
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(exhaustGas) {
+NAN_METHOD(exhaustGasEAF) {
     inp = info[0]->ToObject();
     ExhaustGasEAF eg(Get("offGasTemp"), Get("CO"), Get("H2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"));
 	const double totalHeatExhaust = eg.getTotalHeatExhaust();
