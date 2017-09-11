@@ -11,33 +11,21 @@
 class Planar {
 protected:
 
-	Planar(const double circularDuctDiameter, const double tdx, const double pbx) :
-			shape(Shape::CIRCULAR), tdx(tdx), pbx(pbx),
-			area(((3.14159265358979 / 4) * (circularDuctDiameter * circularDuctDiameter)) / 144.0)
+	Planar(const double circularDuctDiameter, const double tdx, const double pbx)
+			: tdx(tdx), pbx(pbx), area(((3.14159265358979 / 4) * (circularDuctDiameter * circularDuctDiameter)) / 144.0)
 	{}
 
-	Planar(const double rectLength, const double rectWidth, const double tdx, const double pbx) :
-			shape(Shape::RECTANGULAR), tdx(tdx),
-			pbx(pbx), area((rectLength * rectWidth) / 144.0)
+	Planar(const double rectLength, const double rectWidth, const double tdx, const double pbx)
+			: tdx(tdx), pbx(pbx), area((rectLength * rectWidth) / 144.0)
 	{}
 
 	Planar(const double rectLength, const double rectWidth, unsigned const noInletBoxes, const double tdx,
-	       const double pbx) :
-			shape(Shape::RECTANGULAR), tdx(tdx),
-			pbx(pbx), area((rectLength * rectWidth * noInletBoxes) / 144.0)
+	       const double pbx)
+			: tdx(tdx), pbx(pbx), area((rectLength * rectWidth * noInletBoxes) / 144.0)
 	{}
-
-	enum class Shape {
-		RECTANGULAR,
-		CIRCULAR
-	};
-
-//	const double rectLength = 0, rectWidth = 0, dryBulbTemp = 0, pbx = 0;
-//	const unsigned noInletBoxes = 0; // TODO should delete this variable along with all others besides area?
 
 //	where tdx = dryBulbTemperature and pbx = barometric pressure
 	const double tdx, pbx;
-	const Shape shape; // TODO should probably delete this one too
 	double area = 0, gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
 
 	friend class PlaneData;
@@ -55,6 +43,12 @@ public:
 	               const double tdx, const double pbx)
 			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx)
 	{}
+
+private:
+
+	// TODO consider getting rid of these vairables if they are unused later in the calcs, could just be localized
+	double fanInletStaticPressure = 0, fanInletGasDensity = 0;
+	friend class PlaneData;
 };
 
 class FanOrEvaseOutletFlange : private Planar {
@@ -81,7 +75,7 @@ public:
 
 protected:
 
-//	// TODO pretty sure the constructor body here needs to be repeated for 3+ planes w/ different input data
+	// protected constructor to be used only during the construction of its derived classes
 	VelocityPressureTraverseData(const TubeType pitotTubeType, const double pitotTubeCoefficient,
 	                             std::vector< std::vector< double > > & traverseHoleData)
 			: pitotTubeType(pitotTubeType), pitotTubeCoefficient(pitotTubeCoefficient),
@@ -179,7 +173,7 @@ public:
 			  psx(psx)
 	{}
 
-	double getPsx() { return psx; }
+	double getPsx() const { return psx; }
 
 private:
 	const double psx;
@@ -306,24 +300,35 @@ public:
 			  totalPressureLossBtwnPlanes1and4(totalPressureLossBtwnPlanes1and4), totalPressureLossBtwnPlanes2and5(totalPressureLossBtwnPlanes2and5) {}
 
 private:
+//	void calculatePlanes3through5density(BaseGasDensity & bgd) {
+//		auto const calcDensity = [&bgd] (Planar & plane, const double psx) {
+//			plane.gasDensity = bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx)
+//			                   / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
+//		};
+//
+//		calcDensity(flowTraverse, flowTraverse.getPsx());
+//
+//		for (auto & plane : addlTravPlanes) {
+//			calcDensity(plane, plane.getPsx());
+//		}
+//
+//		calcDensity(inletMstPlane, inletMstPlane.getPsx());
+//		calcDensity(outletMstPlane, outletMstPlane.getPsx());
+//	}
 
-	void calculatePlanes3through5density(BaseGasDensity & bgd) {
-		auto const calcDensity = [&bgd] (Planar & plane, const double psx) {
-			plane.gasDensity = bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx)
-			                   / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
+	void calculate(BaseGasDensity const & bgd) {
+		auto const calcDensity = [&bgd] (Planar const & plane, const double psx) {
+			return bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx) / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
 		};
 
-		calcDensity(flowTraverse, flowTraverse.getPsx());
-
-		for (auto & plane : addlTravPlanes) {
-			calcDensity(plane, plane.getPsx());
+		flowTraverse.gasDensity = calcDensity(flowTraverse, flowTraverse.getPsx());
+		for (auto & p : addlTravPlanes) {
+			p.gasDensity = calcDensity(p, p.getPsx());
 		}
+		inletMstPlane.gasDensity = calcDensity(inletMstPlane, inletMstPlane.getPsx());
+		outletMstPlane.gasDensity = calcDensity(outletMstPlane, outletMstPlane.getPsx());
 
-		calcDensity(inletMstPlane, inletMstPlane.getPsx());
-		calcDensity(outletMstPlane, outletMstPlane.getPsx());
-	}
 
-	void calculate() {
 		flowTraverse.gasVelocity = 1096 * std::sqrt(flowTraverse.pv3 / flowTraverse.gasDensity);
 		flowTraverse.gasVolumeFlowRate = flowTraverse.gasVelocity * flowTraverse.area;
 
@@ -345,9 +350,15 @@ private:
 		// step 8
 		fanInletFlange.gasDensity = inletMstPlane.gasDensity;
 
+		// step 9
+		fanInletFlange.gasVolumeFlowRate = mTotal / fanInletFlange.gasDensity;
+		fanInletFlange.gasVelocity = fanInletFlange.gasVolumeFlowRate / fanInletFlange.area;
+		fanInletFlange.gasVelocityPressure = fanInletFlange.gasDensity * std::pow(fanInletFlange.gasVelocity / 1096, 2);
+		fanInletFlange.fanInletStaticPressure = fanInletFlange.gasTotalPressure - fanInletFlange.gasVelocityPressure;
+		fanInletFlange.fanInletGasDensity = calcDensity(fanInletFlange, fanInletFlange.fanInletStaticPressure);
 
-
-//		outletMstPlane
+		// step 14 - iteration begins
+		// stuff
 	}
 
 	FanInletFlange fanInletFlange;
@@ -370,8 +381,8 @@ public:
 	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity)
 			: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)), baseGasDensity(baseGasDensity)
 	{
-		this->planeData.calculatePlanes3through5density(baseGasDensity);
-		this->planeData.calculate();
+//		this->planeData.calculatePlanes3through5density(baseGasDensity);
+		this->planeData.calculate(this->baseGasDensity);
 	};
 
 private:
