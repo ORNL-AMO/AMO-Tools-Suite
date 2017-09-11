@@ -32,136 +32,23 @@ public:
      * */
 
 
-    GasCoolingLosses(double flowRate,
-                     double initialTemperature,
-                     double finalTemperature,
-                     double specificHeat,
-                     double correctionFactor)
+    GasCoolingLosses(const double flowRate, const double initialTemperature, const double finalTemperature,
+                     const double specificHeat, const double correctionFactor, const double gasDensity)
             : flowRate_(flowRate),
               initialTemperature_(initialTemperature),
               finalTemperature_(finalTemperature),
               specificHeat_(specificHeat),
-              correctionFactor_(correctionFactor)
-    {
-        heatLoss_ = 0.0;
-    }
-
-    GasCoolingLosses() = default;
-
-    /**
-     * Gets the air or gas volumetric flow rate
-     *
-     * @return double, flow rate in scfm
-     */
-    double getFlowRate() const {
-        return flowRate_;
-    }
-
-    /**
-     * Sets the air or gas volumetric flow rate
-     *
-     * @param flowRate double, flow rate in scfm
-     *
-     * @return nothing
-     */
-    void setFlowRate(double flowRate) {
-        flowRate_ = flowRate;
-    }
-
-    /**
-     * Gets the initial temperature
-     *
-     * @return double, initial temperature in °F
-     */
-    double getInitialTemperature() const {
-        return initialTemperature_;
-    }
-
-    /**
-     * Sets the initial temperature
-     *
-     * @param initialTemperature double, initial temperature in °F
-     *
-     * @return nothing
-     */
-    void setInitialTemperature(double initialTemperature) {
-        initialTemperature_ = initialTemperature;
-    }
-
-    /**
-     * Gets the final temperature
-     *
-     * @return double, final temeprature in °F
-     */
-    double getFinalTemperature() const {
-        return finalTemperature_;
-    }
-
-    /**
-     * Sets the final temperature
-     *
-     * @param finalTemperature double, final temperature in °F
-     *
-     * @return nothing
-     */
-    void setFinalTemperature(double finalTemperature) {
-        finalTemperature_ = finalTemperature;
-    }
-
-    /**
-     * Gets the specific heat of air or gas at average air temperature
-     *
-     * @return double, specific heat of air or gas in btu/(scf*°F)
-     */
-    double getSpecificHeat() const {
-        return specificHeat_;
-    }
-
-    /**
-     * Sets the specific heat of air or gas at average air temperature
-     *
-     * @param specificHeat double, specific heat of air or gas in btu/(scf*°F)
-     *
-     * @return nothing
-     */
-    void setSpecificHeat(double specificHeat) {
-        specificHeat_ = specificHeat;
-    }
-
-    /**
-     * Gets the correction factor
-     *
-     * @return double, correction factor - unitless
-     */
-    double getCorrectionFactor() const {
-        return correctionFactor_;
-    }
-
-    /**
-     * Sets the correction factor
-     *
-     * @param correctionFactor double, correction factor - unitless
-     *
-     * @return nothing
-     */
-    void setCorrectionFactor(double correctionFactor) {
-        correctionFactor_ = correctionFactor;
-    }
+              correctionFactor_(correctionFactor),
+              gasDensity_(gasDensity) {}
 
     /**
      * Gets the total heat loss
      *
      * @return double, heat loss in btu/hr
      */
-    double getHeatLoss();
+    double getHeatLoss() const;
 
 private:
-    // In values
-    double flowRate_;
-    double initialTemperature_;
-    double finalTemperature_;
-    double specificHeat_;
-    double correctionFactor_;
-    double heatLoss_;
+    const double flowRate_, initialTemperature_, finalTemperature_, specificHeat_, correctionFactor_, gasDensity_;
 };
 #endif //AMO_SUITE_GASCOOLINGLOSSES_H

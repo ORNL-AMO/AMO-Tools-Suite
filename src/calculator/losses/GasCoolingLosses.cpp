@@ -8,8 +8,6 @@
  */
 #include "calculator/losses/GasCoolingLosses.h"
 
-double GasCoolingLosses::getHeatLoss() {
-// return the heat loss for the air test case
-    this->heatLoss_ = (this->flowRate_ * 60.0) * this->specificHeat_ * (this->finalTemperature_ - this->initialTemperature_) * this->correctionFactor_;
-    return this->heatLoss_;
+double GasCoolingLosses::getHeatLoss() const {
+    return flowRate_ * 60.0 * gasDensity_ * specificHeat_ * (finalTemperature_ - initialTemperature_) * correctionFactor_;
 }

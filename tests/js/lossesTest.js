@@ -140,7 +140,8 @@ test('gasCoolingLosses', function (t) {
     t.type(bindings.gasCoolingLosses, 'function');
 
     var inp = {
-        flowRate: 2500, initialTemperature: 80, finalTemperature: 280, specificHeat: 0.02, correctionFactor: 1.0
+        flowRate: 2500, initialTemperature: 80, finalTemperature: 280, specificHeat: 0.02, correctionFactor: 1.0,
+        gasDensity: 1
     };
 
     var res = bindings.gasCoolingLosses(inp);
