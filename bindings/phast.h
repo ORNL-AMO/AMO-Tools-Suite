@@ -173,8 +173,9 @@ NAN_METHOD(gasCoolingLosses) {
   * @return heatLoss double
   * */
     inp = info[0]->ToObject();
-    GasCoolingLosses gcl(Get("flowRate"), Get("initialTemperature"), Get("finalTemperature"), Get("specificHeat"), Get("correctionFactor"));
-    double heatLoss = gcl.getHeatLoss();
+    GasCoolingLosses gcl(Get("flowRate"), Get("initialTemperature"), Get("finalTemperature"), Get("specificHeat"),
+                         Get("correctionFactor"), Get("gasDensity"));
+    const double heatLoss = gcl.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
 }
