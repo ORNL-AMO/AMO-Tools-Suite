@@ -45,8 +45,7 @@ TEST_CASE( "Fan", "Fan stuff") {
 	OutletMstPlane outletMstPlane(55.42, 60.49, 132.7, 26.57, 1.8);
 
 	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
-	                           outletMstPlane, false, false, 0, 0.627);
-
+	                           outletMstPlane, false, false, 0, 0.627, true);
 
 	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547);
 

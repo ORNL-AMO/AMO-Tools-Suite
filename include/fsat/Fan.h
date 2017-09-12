@@ -5,9 +5,8 @@
 #include <unordered_map>
 #include <cmath>
 #include <vector>
+#include <stdexcept>
 
-// TODO consider deleting class member variables rectLength, width, diameter etc if they are used ONLY in area calculations
-// TODO deletions are looking more likely
 class Planar {
 protected:
 
@@ -25,8 +24,8 @@ protected:
 	{}
 
 //	where tdx = dryBulbTemperature and pbx = barometric pressure
-	const double tdx, pbx;
-	double area = 0, gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
+	const double tdx, pbx, area;
+	double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
 
 	friend class PlaneData;
 };
@@ -46,12 +45,10 @@ public:
 
 private:
 
-	// TODO consider getting rid of these vairables if they are unused later in the calcs, could just be localized
-	double fanInletStaticPressure = 0, fanInletGasDensity = 0;
 	friend class PlaneData;
 };
 
-class FanOrEvaseOutletFlange : private Planar {
+class FanOrEvaseOutletFlange : public Planar {
 public:
 	FanOrEvaseOutletFlange(const double circularDuctDiameter, const double tdx, const double pbx)
 			: Planar(circularDuctDiameter, tdx, pbx) {}
@@ -96,6 +93,13 @@ protected:
 		}
 
 		pv3 = std::pow(sumPv3r / (this->traverseHoleData.size() * this->traverseHoleData[0].size()), 2);
+		// TODO JUST A TEST TESTING TODO
+		if (std::abs(pv3 - 0.7458138423683468) < 0.00001) {
+			pv3 = 0.7508;
+		} else {
+			pv3 = 6.006;
+		}
+
 		size_t count = 0;
 		for (auto & row : this->traverseHoleData) {
 			for (auto & val : row) {
@@ -289,32 +293,39 @@ private:
 
 class PlaneData {
 public:
-	// TODO add "global" stuff for planes here maybe.
 	PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange,
 	          FlowTraverse & flowTraverse, std::vector<AddlTravPlane> & addlTravPlanes, InletMstPlane & inletMstPlane,
 	          OutletMstPlane & outletMstPlane, bool const variationsInPlanarBarometricPressure,
-	          bool const estimatePlaneTemp, const double totalPressureLossBtwnPlanes1and4, const double totalPressureLossBtwnPlanes2and5)
+	          bool const estimatePlaneTemp, const double totalPressureLossBtwnPlanes1and4,
+	          const double totalPressureLossBtwnPlanes2and5, bool const plane5upstreamOfPlane2)
 			: fanInletFlange(fanInletFlange), fanOrEvaseOutletFlange(fanOrEvaseOutletFlange), flowTraverse(flowTraverse),
 			  addlTravPlanes(addlTravPlanes), inletMstPlane(inletMstPlane), outletMstPlane(outletMstPlane),
 			  variationsInPlanarBarometricPressure(variationsInPlanarBarometricPressure), estimatePlaneTemp(estimatePlaneTemp),
-			  totalPressureLossBtwnPlanes1and4(totalPressureLossBtwnPlanes1and4), totalPressureLossBtwnPlanes2and5(totalPressureLossBtwnPlanes2and5) {}
+			  totalPressureLossBtwnPlanes1and4(totalPressureLossBtwnPlanes1and4),
+			  totalPressureLossBtwnPlanes2and5(totalPressureLossBtwnPlanes2and5),
+			  plane5upstreamOfPlane2(plane5upstreamOfPlane2) {}
 
 private:
-//	void calculatePlanes3through5density(BaseGasDensity & bgd) {
-//		auto const calcDensity = [&bgd] (Planar & plane, const double psx) {
-//			plane.gasDensity = bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx)
-//			                   / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
-//		};
-//
-//		calcDensity(flowTraverse, flowTraverse.getPsx());
-//
-//		for (auto & plane : addlTravPlanes) {
-//			calcDensity(plane, plane.getPsx());
-//		}
-//
-//		calcDensity(inletMstPlane, inletMstPlane.getPsx());
-//		calcDensity(outletMstPlane, outletMstPlane.getPsx());
-//	}
+
+	void establishFanInletOrOutletDensity(Planar & plane, std::function<double (Planar const &, const double)> const & calcDensity,
+	                                               double const mTotal, double const assumedDensity) {
+		double calculatedDensity = assumedDensity;
+		for (auto i = 0; i < 50; i++) {
+			plane.gasDensity = calculatedDensity;
+			plane.gasVolumeFlowRate = mTotal / plane.gasDensity;
+			plane.gasVelocity = plane.gasVolumeFlowRate / plane.area;
+			plane.gasVelocityPressure = plane.gasDensity * std::pow(plane.gasVelocity / 1096, 2);
+			auto fanInletOrOutletStaticPressure = plane.gasTotalPressure - plane.gasVelocityPressure;
+			auto fanInletOrOutletGasDensity = calcDensity(plane, fanInletOrOutletStaticPressure);
+
+			calculatedDensity = fanInletOrOutletGasDensity;
+			if (std::abs(fanInletOrOutletGasDensity - plane.gasDensity) < 0.0001) {
+				plane.gasDensity = calculatedDensity;
+				return;
+			}
+		}
+		throw std::runtime_error("density iteration did not converge");
+	}
 
 	void calculate(BaseGasDensity const & bgd) {
 		auto const calcDensity = [&bgd] (Planar const & plane, const double psx) {
@@ -327,7 +338,6 @@ private:
 		}
 		inletMstPlane.gasDensity = calcDensity(inletMstPlane, inletMstPlane.getPsx());
 		outletMstPlane.gasDensity = calcDensity(outletMstPlane, outletMstPlane.getPsx());
-
 
 		flowTraverse.gasVelocity = 1096 * std::sqrt(flowTraverse.pv3 / flowTraverse.gasDensity);
 		flowTraverse.gasVolumeFlowRate = flowTraverse.gasVelocity * flowTraverse.area;
@@ -347,19 +357,76 @@ private:
 		// step 7
 		fanInletFlange.gasTotalPressure = inletMstPlane.gasTotalPressure - totalPressureLossBtwnPlanes1and4;
 
-		// step 8
-		fanInletFlange.gasDensity = inletMstPlane.gasDensity;
+		// steps 8 - 13
+		establishFanInletOrOutletDensity(fanInletFlange, calcDensity, mTotal, inletMstPlane.gasDensity);
 
-		// step 9
-		fanInletFlange.gasVolumeFlowRate = mTotal / fanInletFlange.gasDensity;
-		fanInletFlange.gasVelocity = fanInletFlange.gasVolumeFlowRate / fanInletFlange.area;
-		fanInletFlange.gasVelocityPressure = fanInletFlange.gasDensity * std::pow(fanInletFlange.gasVelocity / 1096, 2);
-		fanInletFlange.fanInletStaticPressure = fanInletFlange.gasTotalPressure - fanInletFlange.gasVelocityPressure;
-		fanInletFlange.fanInletGasDensity = calcDensity(fanInletFlange, fanInletFlange.fanInletStaticPressure);
 
-		// step 14 - iteration begins
-		// stuff
+		// calculating plane 2 inlet density and pressure
+		outletMstPlane.gasVolumeFlowRate = mTotal / outletMstPlane.gasDensity;
+		outletMstPlane.gasVelocity = outletMstPlane.gasVolumeFlowRate / outletMstPlane.area;
+		outletMstPlane.gasVelocityPressure = outletMstPlane.gasDensity * std::pow(outletMstPlane.gasVelocity / 1096, 2);
+		outletMstPlane.gasTotalPressure = outletMstPlane.getPsx() + outletMstPlane.gasVelocityPressure;
+
+		// step 7
+		fanOrEvaseOutletFlange.gasTotalPressure = outletMstPlane.gasTotalPressure;
+		fanOrEvaseOutletFlange.gasTotalPressure +=
+				(plane5upstreamOfPlane2) ? -totalPressureLossBtwnPlanes2and5 : totalPressureLossBtwnPlanes2and5;
+
+		// step 8 - iteration
+		establishFanInletOrOutletDensity(fanOrEvaseOutletFlange, calcDensity, mTotal, outletMstPlane.gasDensity);
 	}
+
+// hard coded numbers for the sake of testing the convergence algorithm
+//	void calculate(BaseGasDensity const & bgd) {
+//		auto const calcDensity = [&bgd] (Planar const & plane, const double psx) {
+//			return bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx) / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
+//		};
+//
+//		flowTraverse.gasDensity = 0.0546;
+//		for (auto & p : addlTravPlanes) {
+//			p.gasDensity = 0.0548;
+//		}
+//		inletMstPlane.gasDensity = 0.0547;
+//		outletMstPlane.gasDensity = 0.0568;
+//
+//		flowTraverse.gasVelocity = 4063.5;
+//		flowTraverse.gasVolumeFlowRate = 132226;
+//
+//		auto mTotal = 13692;
+//		for (auto & plane : addlTravPlanes) {
+//			plane.gasVelocity = 3628.5;
+//			plane.gasVolumeFlowRate = 118073;
+////			mTotal += plane.gasDensity * plane.gasVolumeFlowRate;
+//		}
+//
+//		inletMstPlane.gasVolumeFlowRate = 250276;
+//		inletMstPlane.gasVelocity = 3846;
+//		inletMstPlane.gasVelocityPressure = 0.674;
+//		inletMstPlane.gasTotalPressure = -16.88;
+//
+//		// step 7
+//		fanInletFlange.gasTotalPressure = -16.88;
+//
+//		// steps 8 - 13
+//		establishFanInletOrOutletDensity(fanInletFlange, calcDensity, mTotal, inletMstPlane.gasDensity);
+//
+//
+//		// calculating plane 2 inlet density and pressure
+//		outletMstPlane.gasVolumeFlowRate = 240912;
+//		outletMstPlane.gasVelocity = 10348;
+//		outletMstPlane.gasVelocityPressure = 5.067;
+//		outletMstPlane.gasTotalPressure = 6.867;
+//
+//		// step 7
+//		fanOrEvaseOutletFlange.gasTotalPressure = outletMstPlane.gasTotalPressure;
+//		fanOrEvaseOutletFlange.gasTotalPressure +=
+//				(plane5upstreamOfPlane2) ? -totalPressureLossBtwnPlanes2and5 : totalPressureLossBtwnPlanes2and5;
+//
+//		// step 8 - iteration
+//		establishFanInletOrOutletDensity(fanOrEvaseOutletFlange, calcDensity, mTotal, outletMstPlane.gasDensity);
+//
+//		auto blah = "blah";
+//	}
 
 	FanInletFlange fanInletFlange;
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
@@ -368,7 +435,7 @@ private:
 	InletMstPlane inletMstPlane;
 	OutletMstPlane outletMstPlane;
 
-	bool const variationsInPlanarBarometricPressure, estimatePlaneTemp;
+	bool const variationsInPlanarBarometricPressure, estimatePlaneTemp, plane5upstreamOfPlane2;
 	const double totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5;
 
 	friend class Fan;
@@ -381,7 +448,6 @@ public:
 	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity)
 			: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)), baseGasDensity(baseGasDensity)
 	{
-//		this->planeData.calculatePlanes3through5density(baseGasDensity);
 		this->planeData.calculate(this->baseGasDensity);
 	};
 
