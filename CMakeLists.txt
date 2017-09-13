@@ -196,7 +196,7 @@ set(INCLUDE_FILES
         include/ssmt/PRV.h
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
-        include/fsat/Fan.h)
+        include/fsat/Fan.h include/fsat/FanShaftPower.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

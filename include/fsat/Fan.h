@@ -94,11 +94,11 @@ protected:
 
 		pv3 = std::pow(sumPv3r / (this->traverseHoleData.size() * this->traverseHoleData[0].size()), 2);
 		// TODO JUST A TEST TESTING TODO
-		if (std::abs(pv3 - 0.7458138423683468) < 0.00001) {
-			pv3 = 0.7508;
-		} else {
-			pv3 = 6.006;
-		}
+//		if (std::abs(pv3 - 0.7458138423683468) < 0.00001) {
+//			pv3 = 0.7508;
+//		} else {
+//			pv3 = 6.006;
+//		}
 
 		size_t count = 0;
 		for (auto & row : this->traverseHoleData) {
