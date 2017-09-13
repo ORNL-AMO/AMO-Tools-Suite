@@ -52,6 +52,8 @@ else (WIN32)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif (WIN32)
 
+set (CMAKE_CXX_FLAGS "-Wall -Wextra")
+
 file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
@@ -119,7 +121,7 @@ set(SOURCE_FILES
         src/ssmt/FlashTank.cpp
         src/ssmt/PRV.cpp
         src/ssmt/Deaerator.cpp
-        src/fsat/Fan.cpp)
+        src/fsat/Fan.cpp src/fsat/FanShaftPower.cpp src/fsat/Planar.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -196,7 +198,7 @@ set(INCLUDE_FILES
         include/ssmt/PRV.h
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
-        include/fsat/Fan.h include/fsat/FanShaftPower.h)
+        include/fsat/Fan.h include/fsat/FanShaftPower.h include/fsat/Planar.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

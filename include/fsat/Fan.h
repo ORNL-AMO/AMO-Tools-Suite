@@ -6,247 +6,17 @@
 #include <cmath>
 #include <vector>
 #include <stdexcept>
+#include "Planar.h"
+#include "FanShaftPower.h"
 
-class Planar {
-protected:
-
-	Planar(const double circularDuctDiameter, const double tdx, const double pbx)
-			: tdx(tdx), pbx(pbx), area(((3.14159265358979 / 4) * (circularDuctDiameter * circularDuctDiameter)) / 144.0)
-	{}
-
-	Planar(const double rectLength, const double rectWidth, const double tdx, const double pbx)
-			: tdx(tdx), pbx(pbx), area((rectLength * rectWidth) / 144.0)
-	{}
-
-	Planar(const double rectLength, const double rectWidth, unsigned const noInletBoxes, const double tdx,
-	       const double pbx)
-			: tdx(tdx), pbx(pbx), area((rectLength * rectWidth * noInletBoxes) / 144.0)
-	{}
-
-//	where tdx = dryBulbTemperature and pbx = barometric pressure
-	const double tdx, pbx, area;
-	double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
-
-	friend class PlaneData;
-};
-
-class FanInletFlange : public Planar {
-public:
-	FanInletFlange(const double circularDuctDiameter, const double tdx, const double pbx)
-			: Planar(circularDuctDiameter, tdx, pbx) {}
-
-	FanInletFlange(const double rectLength, const double rectWidth, const double tdx, const double pbx)
-			: Planar(rectLength, rectWidth, tdx, pbx) {}
-
-	FanInletFlange(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	               const double tdx, const double pbx)
-			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx)
-	{}
-
-private:
-
-	friend class PlaneData;
-};
-
-class FanOrEvaseOutletFlange : public Planar {
-public:
-	FanOrEvaseOutletFlange(const double circularDuctDiameter, const double tdx, const double pbx)
-			: Planar(circularDuctDiameter, tdx, pbx) {}
-
-	FanOrEvaseOutletFlange(const double rectLength, const double rectWidth, const double tdx,
-	               const double pbx) : Planar(rectLength, rectWidth, tdx, pbx) {}
-
-	FanOrEvaseOutletFlange(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	               const double tdx, const double pbx)
-			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx)
-	{}
-};
-
-// to be inherited by planes 3 and 3a, 3b
-class VelocityPressureTraverseData {
-public:
-	enum class TubeType {
-		STANDARD,
-		STYPE
-	};
-
-protected:
-
-	// protected constructor to be used only during the construction of its derived classes
-	VelocityPressureTraverseData(const TubeType pitotTubeType, const double pitotTubeCoefficient,
-	                             std::vector< std::vector< double > > & traverseHoleData)
-			: pitotTubeType(pitotTubeType), pitotTubeCoefficient(pitotTubeCoefficient),
-			  traverseHoleData(std::move(traverseHoleData))
-	{
-		auto maxPv3r = 0.0;
-		auto sumPv3r = 0.0;
-		for (auto & row : this->traverseHoleData) {
-			for (auto & val : row) {
-				if (val <= 0) {
-					val = 0;
-					continue;
-				}
-				val *= std::pow(pitotTubeCoefficient, 2);
-				if (val > maxPv3r) maxPv3r = val;
-				sumPv3r += std::sqrt(val);
-			}
-		}
-
-		pv3 = std::pow(sumPv3r / (this->traverseHoleData.size() * this->traverseHoleData[0].size()), 2);
-		// TODO JUST A TEST TESTING TODO
-//		if (std::abs(pv3 - 0.7458138423683468) < 0.00001) {
-//			pv3 = 0.7508;
-//		} else {
-//			pv3 = 6.006;
-//		}
-
-		size_t count = 0;
-		for (auto & row : this->traverseHoleData) {
-			for (auto & val : row) {
-				if (val > (0.1 * maxPv3r)) count++;
-			}
-		}
-
-		percent75Rule = count / static_cast<double>(this->traverseHoleData.size() * this->traverseHoleData[0].size());
-	};
-
-	const TubeType pitotTubeType;
-	const double pitotTubeCoefficient;
-	double pv3 = 0, percent75Rule = 0;
-
-	std::vector< std::vector< double > > traverseHoleData;
-
-	friend class PlaneData;
-};
-
-class FlowTraverse : public Planar, public VelocityPressureTraverseData {
-public:
-	FlowTraverse(const double circularDuctDiameter, const double tdx, const double pbx,
-	             const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > & traverseHoleData)
-			: Planar(circularDuctDiameter, tdx, pbx),
-			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
-			  psx(psx)
-	{}
-
-	FlowTraverse(const double rectLength, const double rectWidth, const double tdx,
-	                       const double pbx, const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > & traverseHoleData)
-			: Planar(rectLength, rectWidth, tdx, pbx),
-			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
-			  psx(psx)
-	{}
-
-	FlowTraverse(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	                       const double tdx, const double pbx, const double psx, const TubeType tubeType,
-	             const double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData)
-			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx),
-			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
-			  psx(psx)
-	{}
-
-	double getPsx() { return psx; }
-
-private:
-	const double psx;
-};
-
-class AddlTravPlane : public Planar, public VelocityPressureTraverseData {
-public:
-	AddlTravPlane(const double circularDuctDiameter, const double tdx, const double pbx,
-	             const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > & traverseHoleData)
-			: Planar(circularDuctDiameter, tdx, pbx),
-			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
-			  psx(psx)
-	{}
-
-	AddlTravPlane(const double rectLength, const double rectWidth, const double tdx,
-	             const double pbx, const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > & traverseHoleData)
-			: Planar(rectLength, rectWidth, tdx, pbx),
-			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
-			  psx(psx)
-	{}
-
-	AddlTravPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	             const double tdx, const double pbx, const double psx, const TubeType tubeType,
-	             const double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData)
-			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx),
-			  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData),
-			  psx(psx)
-	{}
-
-	double getPsx() const { return psx; }
-
-private:
-	const double psx;
-};
-
-class InletMstPlane : public Planar {
-public:
-	InletMstPlane(const double circularDuctDiameter, const double tdx, const double pbx,
-	             const double psx)
-			: Planar(circularDuctDiameter, tdx, pbx), psx(psx) {}
-
-	InletMstPlane(const double rectLength, const double rectWidth, const double tdx,
-	             const double pbx, const double psx)
-			: Planar(rectLength, rectWidth, tdx, pbx), psx(psx) {}
-
-	InletMstPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	             const double tdx, const double pbx, const double psx)
-			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx), psx(psx)
-	{}
-
-	double getPsx() { return psx; }
-
-private:
-	const double psx;
-};
-
-class OutletMstPlane : public Planar {
-public:
-	OutletMstPlane(const double circularDuctDiameter, const double tdx, const double pbx,
-	             const double psx)
-			: Planar(circularDuctDiameter, tdx, pbx), psx(psx) {}
-
-	OutletMstPlane(const double rectLength, const double rectWidth, const double tdx,
-	             const double pbx, const double psx)
-			: Planar(rectLength, rectWidth, tdx, pbx), psx(psx) {}
-
-	OutletMstPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-	             const double tdx, const double pbx, const double psx)
-			: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx), psx(psx)
-	{}
-
-	double getPsx() { return psx; }
-
-private:
-	const double psx;
-};
-
-
-class FanRatedInfo {
-public:
-	enum class DriveType {
-		DIRECT,
-		BELT
-	};
-
-	// this currently does not take the field SystemDamperPosition, as it is used "only for reference purposes" as per
-	// page 8 in the algorithm document
-	FanRatedInfo(double const fanDamperPosition, double const fanSpeed, double const motorSpeed, double const nc,
-	             double const pc, double const pbc, DriveType const driveType) :
-			fanDamperPosition(fanDamperPosition / 100.0), fanSpeed(fanSpeed), motorSpeed(motorSpeed),
-			nc(nc), pc(pc), pbc(pbc), driveType(driveType)
-	{};
-
-private:
-	double const fanDamperPosition, fanSpeed, motorSpeed, nc, pc, pbc;
-	DriveType const driveType;
-
-};
-
+class FanRatedInfo;
+class Planar;
+class FanInletFlange;
+class FanOrEvaseOutletFlange;
+class FlowTraverse;
+class AddlTravPlane;
+class InletMstPlane;
+class OutletMstPlane;
 
 class BaseGasDensity {
 public:
@@ -258,27 +28,26 @@ public:
 	};
 
 	// used for method 1
-	BaseGasDensity(const double tdo, const double pso, const double pbo, const double po)
-			: tdo(tdo), pso(pso), pbo(pbo), po(po) {}
+	BaseGasDensity(double tdo, double pso, double pbo, double po);
 
 	// TODO incomplete, po (density) shouldn't be an input in either of the constructors below bc it needs to be calculated
 //	// used for method 2 without wet bulb temperature as "data to establish gas humidity"
-//	BaseGasDensity(const double tdo, const double pso, const double pbo, const double po, const double g,
-//	               const double two)
+//	BaseGasDensity(double tdo, double pso, double pbo, double po, double g,
+//	               double two)
 //			: tdo(tdo), pso(pso), pbo(pbo), po(po), g(g), two(two) {}
 
 //	// used for method 2 with wet bulb temp being used for "data to establish gas humidity"
-//	BaseGasDensity(const double tdo, const double pso, const double pbo, const double po, const double g,
-//	               const double percentRH)
+//	BaseGasDensity(double tdo, double pso, double pbo, double po, double g,
+//	               double percentRH)
 //			: tdo(tdo), pso(pso), pbo(pbo), po(po), g(g), percentRH(percentRH) {}
 
 private:
 
-//	double calcWaterVaporDensityToDryAirDensityRatio(const double pws) {
+//	double calcWaterVaporDensityToDryAirDensityRatio(double pws) {
 //		return 0.6214 + (percentRH * std::pow(pws, 1 / 1.42)) / 1130;
 //	}
 //
-//	double calcBaseGasDensity(const double p, const double pws) {
+//	double calcBaseGasDensity(double p, double pws) {
 //		return ((p - pws * percentRH) * g + pws * percentRH * calcWaterVaporDensityToDryAirDensityRatio(pws))
 //		       / (0.7543 * (tdo + 459.7));
 //	}
@@ -295,138 +64,17 @@ class PlaneData {
 public:
 	PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange,
 	          FlowTraverse & flowTraverse, std::vector<AddlTravPlane> & addlTravPlanes, InletMstPlane & inletMstPlane,
-	          OutletMstPlane & outletMstPlane, bool const variationsInPlanarBarometricPressure,
-	          bool const estimatePlaneTemp, const double totalPressureLossBtwnPlanes1and4,
-	          const double totalPressureLossBtwnPlanes2and5, bool const plane5upstreamOfPlane2)
-			: fanInletFlange(fanInletFlange), fanOrEvaseOutletFlange(fanOrEvaseOutletFlange), flowTraverse(flowTraverse),
-			  addlTravPlanes(addlTravPlanes), inletMstPlane(inletMstPlane), outletMstPlane(outletMstPlane),
-			  variationsInPlanarBarometricPressure(variationsInPlanarBarometricPressure), estimatePlaneTemp(estimatePlaneTemp),
-			  totalPressureLossBtwnPlanes1and4(totalPressureLossBtwnPlanes1and4),
-			  totalPressureLossBtwnPlanes2and5(totalPressureLossBtwnPlanes2and5),
-			  plane5upstreamOfPlane2(plane5upstreamOfPlane2) {}
+	          OutletMstPlane & outletMstPlane, bool variationsInPlanarBarometricPressure,
+	          bool estimatePlaneTemp, double totalPressureLossBtwnPlanes1and4,
+	          double totalPressureLossBtwnPlanes2and5, bool plane5upstreamOfPlane2);
 
 private:
 
-	void establishFanInletOrOutletDensity(Planar & plane, std::function<double (Planar const &, const double)> const & calcDensity,
-	                                               double const mTotal, double const assumedDensity) {
-		double calculatedDensity = assumedDensity;
-		for (auto i = 0; i < 50; i++) {
-			plane.gasDensity = calculatedDensity;
-			plane.gasVolumeFlowRate = mTotal / plane.gasDensity;
-			plane.gasVelocity = plane.gasVolumeFlowRate / plane.area;
-			plane.gasVelocityPressure = plane.gasDensity * std::pow(plane.gasVelocity / 1096, 2);
-			auto fanInletOrOutletStaticPressure = plane.gasTotalPressure - plane.gasVelocityPressure;
-			auto fanInletOrOutletGasDensity = calcDensity(plane, fanInletOrOutletStaticPressure);
+	void establishFanInletOrOutletDensity(Planar & plane,
+	                                      std::function<double (Planar const &, const double)> const & calcDensity,
+	                                      double mTotal, double assumedDensity);
 
-			calculatedDensity = fanInletOrOutletGasDensity;
-			if (std::abs(fanInletOrOutletGasDensity - plane.gasDensity) < 0.0001) {
-				plane.gasDensity = calculatedDensity;
-				return;
-			}
-		}
-		throw std::runtime_error("density iteration did not converge");
-	}
-
-	void calculate(BaseGasDensity const & bgd) {
-		auto const calcDensity = [&bgd] (Planar const & plane, const double psx) {
-			return bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx) / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
-		};
-
-		flowTraverse.gasDensity = calcDensity(flowTraverse, flowTraverse.getPsx());
-		for (auto & p : addlTravPlanes) {
-			p.gasDensity = calcDensity(p, p.getPsx());
-		}
-		inletMstPlane.gasDensity = calcDensity(inletMstPlane, inletMstPlane.getPsx());
-		outletMstPlane.gasDensity = calcDensity(outletMstPlane, outletMstPlane.getPsx());
-
-		flowTraverse.gasVelocity = 1096 * std::sqrt(flowTraverse.pv3 / flowTraverse.gasDensity);
-		flowTraverse.gasVolumeFlowRate = flowTraverse.gasVelocity * flowTraverse.area;
-
-		auto mTotal = flowTraverse.gasDensity * flowTraverse.gasVolumeFlowRate;
-		for (auto & plane : addlTravPlanes) {
-			plane.gasVelocity = 1096 * std::sqrt(plane.pv3 / plane.gasDensity);
-			plane.gasVolumeFlowRate = plane.gasVelocity * plane.area;
-			mTotal += plane.gasDensity * plane.gasVolumeFlowRate;
-		}
-
-		inletMstPlane.gasVolumeFlowRate = mTotal / inletMstPlane.gasDensity;
-		inletMstPlane.gasVelocity = inletMstPlane.gasVolumeFlowRate / inletMstPlane.area;
-		inletMstPlane.gasVelocityPressure = inletMstPlane.gasDensity * std::pow((inletMstPlane.gasVelocity / 1096), 2);
-		inletMstPlane.gasTotalPressure = inletMstPlane.getPsx() + inletMstPlane.gasVelocityPressure;
-
-		// step 7
-		fanInletFlange.gasTotalPressure = inletMstPlane.gasTotalPressure - totalPressureLossBtwnPlanes1and4;
-
-		// steps 8 - 13
-		establishFanInletOrOutletDensity(fanInletFlange, calcDensity, mTotal, inletMstPlane.gasDensity);
-
-
-		// calculating plane 2 inlet density and pressure
-		outletMstPlane.gasVolumeFlowRate = mTotal / outletMstPlane.gasDensity;
-		outletMstPlane.gasVelocity = outletMstPlane.gasVolumeFlowRate / outletMstPlane.area;
-		outletMstPlane.gasVelocityPressure = outletMstPlane.gasDensity * std::pow(outletMstPlane.gasVelocity / 1096, 2);
-		outletMstPlane.gasTotalPressure = outletMstPlane.getPsx() + outletMstPlane.gasVelocityPressure;
-
-		// step 7
-		fanOrEvaseOutletFlange.gasTotalPressure = outletMstPlane.gasTotalPressure;
-		fanOrEvaseOutletFlange.gasTotalPressure +=
-				(plane5upstreamOfPlane2) ? -totalPressureLossBtwnPlanes2and5 : totalPressureLossBtwnPlanes2and5;
-
-		// step 8 - iteration
-		establishFanInletOrOutletDensity(fanOrEvaseOutletFlange, calcDensity, mTotal, outletMstPlane.gasDensity);
-	}
-
-// hard coded numbers for the sake of testing the convergence algorithm
-//	void calculate(BaseGasDensity const & bgd) {
-//		auto const calcDensity = [&bgd] (Planar const & plane, const double psx) {
-//			return bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx) / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
-//		};
-//
-//		flowTraverse.gasDensity = 0.0546;
-//		for (auto & p : addlTravPlanes) {
-//			p.gasDensity = 0.0548;
-//		}
-//		inletMstPlane.gasDensity = 0.0547;
-//		outletMstPlane.gasDensity = 0.0568;
-//
-//		flowTraverse.gasVelocity = 4063.5;
-//		flowTraverse.gasVolumeFlowRate = 132226;
-//
-//		auto mTotal = 13692;
-//		for (auto & plane : addlTravPlanes) {
-//			plane.gasVelocity = 3628.5;
-//			plane.gasVolumeFlowRate = 118073;
-////			mTotal += plane.gasDensity * plane.gasVolumeFlowRate;
-//		}
-//
-//		inletMstPlane.gasVolumeFlowRate = 250276;
-//		inletMstPlane.gasVelocity = 3846;
-//		inletMstPlane.gasVelocityPressure = 0.674;
-//		inletMstPlane.gasTotalPressure = -16.88;
-//
-//		// step 7
-//		fanInletFlange.gasTotalPressure = -16.88;
-//
-//		// steps 8 - 13
-//		establishFanInletOrOutletDensity(fanInletFlange, calcDensity, mTotal, inletMstPlane.gasDensity);
-//
-//
-//		// calculating plane 2 inlet density and pressure
-//		outletMstPlane.gasVolumeFlowRate = 240912;
-//		outletMstPlane.gasVelocity = 10348;
-//		outletMstPlane.gasVelocityPressure = 5.067;
-//		outletMstPlane.gasTotalPressure = 6.867;
-//
-//		// step 7
-//		fanOrEvaseOutletFlange.gasTotalPressure = outletMstPlane.gasTotalPressure;
-//		fanOrEvaseOutletFlange.gasTotalPressure +=
-//				(plane5upstreamOfPlane2) ? -totalPressureLossBtwnPlanes2and5 : totalPressureLossBtwnPlanes2and5;
-//
-//		// step 8 - iteration
-//		establishFanInletOrOutletDensity(fanOrEvaseOutletFlange, calcDensity, mTotal, outletMstPlane.gasDensity);
-//
-//		auto blah = "blah";
-//	}
+	void calculate(BaseGasDensity const & bgd);
 
 	FanInletFlange fanInletFlange;
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
@@ -442,19 +90,16 @@ private:
 };
 
 
-
 class Fan {
 public:
-	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity)
-			: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)), baseGasDensity(baseGasDensity)
-	{
-		this->planeData.calculate(this->baseGasDensity);
-	};
+	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity,
+	    FanShaftPower & fanShaftPower);
 
 private:
 	FanRatedInfo const fanRatedInfo;
 	PlaneData planeData;
 	BaseGasDensity const baseGasDensity;
+	FanShaftPower const fanShaftPower;
 };
 
 #endif //AMO_TOOLS_SUITE_FAN_H

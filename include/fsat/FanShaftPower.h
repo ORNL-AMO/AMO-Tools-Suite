@@ -1,22 +1,46 @@
 #ifndef AMO_TOOLS_SUITE_FANSHAFTPOWER_H
 #define AMO_TOOLS_SUITE_FANSHAFTPOWER_H
 
-#include "fsat/Fan.h"
+class FanRatedInfo {
+public:
+	enum class DriveType {
+		DIRECT,
+		BELT
+	};
+
+	// this currently does not take the field SystemDamperPosition, as it is used "only for reference purposes" as per
+	// page 8 in the algorithm document
+	FanRatedInfo(double fanDamperPosition, double fanSpeed, double motorSpeed, double nc,
+	             double pc, double pbc, DriveType driveType);
+
+private:
+	double const fanDamperPosition, fanSpeed, motorSpeed, nc, pc, pbc;
+	DriveType const driveType;
+};
 
 class FanShaftPower {
 public:
-	FanShaftPower(const bool fanEquippedWithVFD, const bool mainsVoltageDataAvailable, const double ratedHp,
-	              const double synchronousSpeed, const double npv, const double fla,
-	              const FanRatedInfo::DriveType driveType)
-			: fanEquippedWithVFD(fanEquippedWithVFD), mainsVoltageDataAvailable(mainsVoltageDataAvailable),
-			  ratedHp(ratedHp), synchronousSpeed(synchronousSpeed), npv(npv), fla(fla), driveType(driveType)
-	{}
+	// method 1
+	FanShaftPower(bool fanEquippedWithVFD, bool mainsVoltageDataAvailable, double ratedHp,
+	              double synchronousSpeed, double npv, double fla, double hi,
+	              double efficiencyMotor, double efficiencyVFD, double efficiencyBelt,
+	              FanRatedInfo::DriveType driveType);
+
+	// method 2
+	FanShaftPower(bool fanEquippedWithVFD, bool mainsVoltageDataAvailable, double ratedHp,
+	              double synchronousSpeed, double npv, double fla, double voltage,
+	              double amps, double powerFactorAtLoad, double efficiencyMotor,
+	              double efficiencyVFD, double efficiencyBelt, FanRatedInfo::DriveType driveType);
 
 private:
 	const bool fanEquippedWithVFD, mainsVoltageDataAvailable;
 	const double ratedHp, synchronousSpeed, npv, fla;
+	const double voltage = 0, amps = 0, powerFactorAtLoad = 0;
+	const double hi = 0;
+	const double efficiencyMotor, efficiencyVFD, efficiencyBelt, powerFactor = 0;
 	const FanRatedInfo::DriveType driveType;
 
+	double hMo, hFi;
 };
 
 
