@@ -1,8 +1,8 @@
 #include "fsat/Fan.h"
 
 // used for method 1
-BaseGasDensity::BaseGasDensity(const double tdo, const double pso, const double pbo, const double po)
-			: tdo(tdo), pso(pso), pbo(pbo), po(po) {}
+BaseGasDensity::BaseGasDensity(const double tdo, const double pso, const double pbo, const double po, const GasType gasType)
+			: tdo(tdo), pso(pso), pbo(pbo), po(po), gasType(gasType) {}
 
 	// TODO incomplete, po (density) shouldn't be an input in either of the constructors below bc it needs to be calculated
 //	// used for method 2 without wet bulb temperature as "data to establish gas humidity"
@@ -98,6 +98,26 @@ void PlaneData::calculate(BaseGasDensity const & bgd) {
 	establishFanInletOrOutletDensity(fanOrEvaseOutletFlange, calcDensity, mTotal, outletMstPlane.gasDensity);
 }
 
+void Fan::calculate() {
+	// TODO pbx = barometric pressure, what to do if barometric pressure does vary between planes ? pg
+	auto x = (planeData.fanOrEvaseOutletFlange.gasTotalPressure - planeData.fanInletFlange.gasTotalPressure)
+	         / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.pbx);
+
+	double isentropicExponent = 0; // TODO what value to use for GasTypes other than Air ?
+	if (baseGasDensity.gasType == BaseGasDensity::GasType::AIR) isentropicExponent = 1.4;
+
+
+	// TODO pbx = barometric pressure, what to do if barometric pressure does vary between planes ? pg 61
+	// TODO the calculation of z returns 0.430 instead of 0.03515
+	auto z = (isentropicExponent / (isentropicExponent - 1))
+	         * ((6362 * (fanShaftPower.getFanShaftPower() / planeData.fanInletFlange.gasVolumeFlowRate))
+	            / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.pbx));
+
+
+
+	auto blah = "blah";
+}
+
 // hard coded numbers for the sake of testing the convergence algorithm
 //	void PlaneData::calculate(BaseGasDensity const & bgd) {
 //		auto const calcDensity = [&bgd] (Planar const & plane, const double psx) {
@@ -153,7 +173,8 @@ void PlaneData::calculate(BaseGasDensity const & bgd) {
 Fan::Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity,
          FanShaftPower & fanShaftPower)
 		: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)), baseGasDensity(baseGasDensity),
-		  fanShaftPower(std::move(fanShaftPower))
+		  fanShaftPower(fanShaftPower)
 {
 	this->planeData.calculate(this->baseGasDensity);
+	this->calculate();
 };

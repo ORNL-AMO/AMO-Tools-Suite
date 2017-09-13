@@ -47,7 +47,7 @@ TEST_CASE( "Fan", "Fan stuff") {
 	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
 	                           outletMstPlane, false, false, 0, 0.627, true);
 
-	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547);
+	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547, BaseGasDensity::GasType::AIR);
 
 	auto fanShaftPower = FanShaftPower(true, false, 1750, 1200, 4160, 210, 4200, 205, 0.88, 95.0, 100, 100, FanRatedInfo::DriveType::DIRECT);
 

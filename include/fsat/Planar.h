@@ -42,6 +42,7 @@ protected:
 	double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
 
 	friend class PlaneData;
+	friend class Fan;
 };
 
 class FanInletFlange : public Planar {

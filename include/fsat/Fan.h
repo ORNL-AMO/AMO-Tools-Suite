@@ -28,7 +28,7 @@ public:
 	};
 
 	// used for method 1
-	BaseGasDensity(double tdo, double pso, double pbo, double po);
+	BaseGasDensity(double tdo, double pso, double pbo, double po, GasType gasType);
 
 	// TODO incomplete, po (density) shouldn't be an input in either of the constructors below bc it needs to be calculated
 //	// used for method 2 without wet bulb temperature as "data to establish gas humidity"
@@ -53,8 +53,10 @@ private:
 //	}
 
 	const double tdo, pso, pbo, po;
+	const GasType gasType;
 
 	friend class PlaneData;
+	friend class Fan;
 
 //	const double g = 0, two = 0, percentRH = 0, tdp = 0;
 };
@@ -76,6 +78,7 @@ private:
 
 	void calculate(BaseGasDensity const & bgd);
 
+
 	FanInletFlange fanInletFlange;
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
 	FlowTraverse flowTraverse;
@@ -96,6 +99,8 @@ public:
 	    FanShaftPower & fanShaftPower);
 
 private:
+	void calculate();
+
 	FanRatedInfo const fanRatedInfo;
 	PlaneData planeData;
 	BaseGasDensity const baseGasDensity;

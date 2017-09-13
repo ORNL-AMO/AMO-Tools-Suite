@@ -32,6 +32,8 @@ public:
 	              double amps, double powerFactorAtLoad, double efficiencyMotor,
 	              double efficiencyVFD, double efficiencyBelt, FanRatedInfo::DriveType driveType);
 
+	double getFanShaftPower() const { return hFi; }
+
 private:
 	const bool fanEquippedWithVFD, mainsVoltageDataAvailable;
 	const double ratedHp, synchronousSpeed, npv, fla;
