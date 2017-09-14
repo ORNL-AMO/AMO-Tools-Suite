@@ -98,8 +98,11 @@ public:
 	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity,
 	    FanShaftPower & fanShaftPower);
 
+	std::unordered_map<std::string, double> calculate();
+
 private:
-	void calculate();
+
+	double calculateCompressibilityFactor(double x, double z, double kp, double isentropicExponent);
 
 	FanRatedInfo const fanRatedInfo;
 	PlaneData planeData;

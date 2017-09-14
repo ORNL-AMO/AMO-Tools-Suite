@@ -16,6 +16,7 @@ public:
 private:
 	double const fanDamperPosition, fanSpeed, motorSpeed, nc, pc, pbc;
 	DriveType const driveType;
+	friend class Fan;
 };
 
 class FanShaftPower {
@@ -24,15 +25,17 @@ public:
 	FanShaftPower(bool fanEquippedWithVFD, bool mainsVoltageDataAvailable, double ratedHp,
 	              double synchronousSpeed, double npv, double fla, double hi,
 	              double efficiencyMotor, double efficiencyVFD, double efficiencyBelt,
-	              FanRatedInfo::DriveType driveType);
+	              FanRatedInfo::DriveType driveType, double sumSEF);
 
 	// method 2
 	FanShaftPower(bool fanEquippedWithVFD, bool mainsVoltageDataAvailable, double ratedHp,
 	              double synchronousSpeed, double npv, double fla, double voltage,
 	              double amps, double powerFactorAtLoad, double efficiencyMotor,
-	              double efficiencyVFD, double efficiencyBelt, FanRatedInfo::DriveType driveType);
+	              double efficiencyVFD, double efficiencyBelt, FanRatedInfo::DriveType driveType, double sumSEF);
 
 	double getFanShaftPower() const { return hFi; }
+
+	double getSEF() const { return sumSEF; }
 
 private:
 	const bool fanEquippedWithVFD, mainsVoltageDataAvailable;
@@ -41,6 +44,7 @@ private:
 	const double hi = 0;
 	const double efficiencyMotor, efficiencyVFD, efficiencyBelt, powerFactor = 0;
 	const FanRatedInfo::DriveType driveType;
+	const double sumSEF;
 
 	double hMo, hFi;
 };

@@ -30,16 +30,17 @@ protected:
 class Planar {
 protected:
 
-	Planar(double circularDuctDiameter, double tdx, double pbx);
+	Planar(double circularDuctDiameter, double tdx, double pbx, double psx);
 
-	Planar(double rectLength, double rectWidth, double tdx, double pbx);
+	Planar(double rectLength, double rectWidth, double tdx, double pbx, double psx);
 
 	Planar(double rectLength, double rectWidth, unsigned noInletBoxes, double tdx,
-	       double pbx);
+	       double pbx, double psx);
 
 //	where tdx = dryBulbTemperature and pbx = barometric pressure
 	const double tdx, pbx, area;
 	double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
+	double psx = 0;
 
 	friend class PlaneData;
 	friend class Fan;
@@ -53,10 +54,6 @@ public:
 
 	FanInletFlange(double rectLength, double rectWidth, unsigned noInletBoxes,
 	               double tdx, double pbx);
-
-private:
-
-	friend class PlaneData;
 };
 
 class FanOrEvaseOutletFlange : public Planar {
@@ -83,11 +80,6 @@ public:
 	FlowTraverse(double rectLength, double rectWidth, unsigned noInletBoxes,
 	             double tdx, double pbx, double psx, TubeType tubeType,
 	             double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
-
-	double getPsx() const { return psx; }
-
-private:
-	const double psx;
 };
 
 class AddlTravPlane : public Planar, public VelocityPressureTraverseData {
@@ -103,11 +95,6 @@ public:
 	AddlTravPlane(double rectLength, double rectWidth, unsigned noInletBoxes,
 	              double tdx, double pbx, double psx, TubeType tubeType,
 	              double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
-
-	double getPsx() const { return psx; }
-
-private:
-	const double psx;
 };
 
 class InletMstPlane : public Planar {
@@ -118,11 +105,6 @@ public:
 
 	InletMstPlane(double rectLength, double rectWidth, unsigned noInletBoxes, double tdx,
 	              double pbx, double psx);
-
-	double getPsx() const { return psx; }
-
-private:
-	const double psx;
 };
 
 class OutletMstPlane : public Planar {
@@ -134,13 +116,7 @@ public:
 
 	OutletMstPlane(double rectLength, double rectWidth, unsigned noInletBoxes,
 	               double tdx, double pbx, double psx);
-
-	double getPsx() const { return psx; }
-
-private:
-	const double psx;
 };
-
 
 
 #endif //AMO_TOOLS_SUITE_PLANAR_H

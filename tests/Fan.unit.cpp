@@ -49,9 +49,20 @@ TEST_CASE( "Fan", "Fan stuff") {
 
 	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547, BaseGasDensity::GasType::AIR);
 
-	auto fanShaftPower = FanShaftPower(true, false, 1750, 1200, 4160, 210, 4200, 205, 0.88, 95.0, 100, 100, FanRatedInfo::DriveType::DIRECT);
+	auto fanShaftPower = FanShaftPower(true, false, 1750, 1200, 4160, 210, 4200, 205, 0.88, 95.0, 100, 100, FanRatedInfo::DriveType::DIRECT, 0);
 
 	auto fan = Fan(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
+	auto results = fan.calculate();
+
+	auto const fanEfficiencyTp = results["fanEfficiencyTp"];
+	auto const fanEfficiencySp = results["fanEfficiencySp"];
+	auto const fanEfficiencySpr = results["fanEfficiencySpr"];
+	auto const Kpc = results["Kpc"];
+	auto const Hc = results["Hc"];
+	auto const Qc = results["Qc"];
+	auto const Ptc = results["Ptc"];
+	auto const Psc = results["Psc"];
+	auto const SPRc = results["SPRc"];
 
 
 	auto test = 0;
