@@ -27,38 +27,40 @@ public:
 		OTHERGAS
 	};
 
+	enum class InputType {
+		DEW,
+		RH,
+		WET
+	};
+
 	// used for method 1
 	BaseGasDensity(double tdo, double pso, double pbo, double po, GasType gasType);
 
-	// TODO incomplete, po (density) shouldn't be an input in either of the constructors below bc it needs to be calculated
-//	// used for method 2 without wet bulb temperature as "data to establish gas humidity"
-//	BaseGasDensity(double tdo, double pso, double pbo, double po, double g,
-//	               double two)
-//			: tdo(tdo), pso(pso), pbo(pbo), po(po), g(g), two(two) {}
-
-//	// used for method 2 with wet bulb temp being used for "data to establish gas humidity"
-//	BaseGasDensity(double tdo, double pso, double pbo, double po, double g,
-//	               double percentRH)
-//			: tdo(tdo), pso(pso), pbo(pbo), po(po), g(g), percentRH(percentRH) {}
+	// TODO ensure correctness
+//	BaseGasDensity(double tdo, double pso, double pbo, double relativeHumidityOrDewPointTempOrHumidityRatio,
+//	               GasType gasType, InputType inputType, double specificGravity);
+//
+//	BaseGasDensity(double tdo, double pso, double pbo, double wetBulbTemp,
+//	               GasType gasType, InputType inputType, double specificGravity, double cpGas);
 
 private:
 
-//	double calcWaterVaporDensityToDryAirDensityRatio(double pws) {
-//		return 0.6214 + (percentRH * std::pow(pws, 1 / 1.42)) / 1130;
-//	}
-//
-//	double calcBaseGasDensity(double p, double pws) {
-//		return ((p - pws * percentRH) * g + pws * percentRH * calcWaterVaporDensityToDryAirDensityRatio(pws))
-//		       / (0.7543 * (tdo + 459.7));
-//	}
+	double calculateSaturationPressure(double dryBulbTemp) const;
 
-	const double tdo, pso, pbo, po;
+	double calculateRatioRH(double dryBulbTemp, double relativeHumidity, double barometricPressure,
+	                        double specificGravity) const;
+
+	double calculateRelativeHumidityFromWetBulb(double dryBulbTemp, double wetBulbTemp, double cpGas) const;
+
+	// dry bulb temp, reference static pressure, reference barometric pressure, gas density respectively
+	const double tdo, pso, pbo;
+
+	// gasDensity, specificGravity
+	double po, g;
 	const GasType gasType;
 
 	friend class PlaneData;
 	friend class Fan;
-
-//	const double g = 0, two = 0, percentRH = 0, tdp = 0;
 };
 
 
@@ -77,7 +79,6 @@ private:
 	                                      double mTotal, double assumedDensity);
 
 	void calculate(BaseGasDensity const & bgd);
-
 
 	FanInletFlange fanInletFlange;
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
@@ -102,7 +103,7 @@ public:
 
 private:
 
-	double calculateCompressibilityFactor(double x, double z, double kp, double isentropicExponent);
+	double calculateCompressibilityFactor(double x, double z, double isentropicExponent);
 
 	FanRatedInfo const fanRatedInfo;
 	PlaneData planeData;

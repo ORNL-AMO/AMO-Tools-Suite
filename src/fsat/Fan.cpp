@@ -1,19 +1,81 @@
 #include "fsat/Fan.h"
 
 // used for method 1
-BaseGasDensity::BaseGasDensity(const double tdo, const double pso, const double pbo, const double po, const GasType gasType)
-			: tdo(tdo), pso(pso), pbo(pbo), po(po), gasType(gasType) {}
+BaseGasDensity::BaseGasDensity(const double dryBulbTemp, const double staticPressure, const double barometricPressure,
+                               const double gasDensity, const GasType gasType)
+			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), po(gasDensity), gasType(gasType)
+{}
 
-	// TODO incomplete, po (density) shouldn't be an input in either of the constructors below bc it needs to be calculated
-//	// used for method 2 without wet bulb temperature as "data to establish gas humidity"
-//	BaseGasDensity(const double tdo, const double pso, const double pbo, const double po, const double g,
-//	               const double two)
-//			: tdo(tdo), pso(pso), pbo(pbo), po(po), g(g), two(two) {}
+// TODO ensure correctness
+//BaseGasDensity::BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
+//                               double const relativeHumidityOrDewPoint, GasType const gasType,
+//                               InputType const inputType, double const specificGravity)
+//		: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType) {
+//	auto const satPress = calculateSaturationPressure(tdo);
+//	double rh = 0;
+//	if (inputType == InputType::RH) {
+//		rh = relativeHumidityOrDewPoint;
+//	} else if (inputType == InputType::DEW) {
+//		rh = calculateSaturationPressure(relativeHumidityOrDewPoint) / satPress;
+//	} else if (inputType == InputType::WET) {
+//		throw std::runtime_error("The wrong constructor for BaseGasDensity was called here.");
+//	}
+//
+//	auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
+//	po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+//}
+//
+//BaseGasDensity::BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
+//                               double const wetBulbTemp, GasType const gasType,
+//                               InputType const inputType, double const specificGravity, const double cpGas)
+//		: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
+//{
+//	if (inputType != InputType::WET) throw std::runtime_error("The wrong constructor for BaseGasDensity was called");
+//	auto const satPress = calculateSaturationPressure(tdo);
+//	auto const rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
+//	auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
+//	po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+//}
 
-//	// used for method 2 with wet bulb temp being used for "data to establish gas humidity"
-//	BaseGasDensity(const double tdo, const double pso, const double pbo, const double po, const double g,
-//	               const double percentRH)
-//			: tdo(tdo), pso(pso), pbo(pbo), po(po), g(g), percentRH(percentRH) {}
+double BaseGasDensity::calculateSaturationPressure(double dryBulbTemp) const {
+	auto const C1 = -5674.5359, C2 = -0.51523058, C3 = -0.009677843, C4 = 0.00000062215701;
+	auto const C5 = 2.0747825 * std::pow(10, -9), C6 = -9.0484024 * std::pow(10, -13), C7 = 4.1635019, C8 = -5800.2206;
+	auto const C9 = -5.516256, C10 = -0.048640239, C11 = 0.000041764768, C12 = -0.000000014452093, C13 = 6.5459673;
+
+	auto const tKelvin = (dryBulbTemp + 459.67) *  0.555556;
+
+	if (tKelvin < 273.15) {
+		auto const p = std::exp(C1 / tKelvin + C2 + tKelvin * C3 + tKelvin * tKelvin
+		                                                           * (C4 + tKelvin * (C5 + C6 * tKelvin))
+		                        + C7 * std::log(tKelvin));
+		return p * (29.9216 / 101.325);
+	}
+	auto const p = std::exp(C8 / tKelvin + C9 + tKelvin * (C10 + tKelvin * (C11 + tKelvin * C12))
+	                        + C13 * std::log(tKelvin));
+
+	return p * (29.9216 / 101.325);
+}
+
+double BaseGasDensity::calculateRatioRH(const double dryBulbTemp, const double relativeHumidity,
+                                        const double barometricPressure, const double specificGravity) const
+{
+	auto const pw = (calculateSaturationPressure(dryBulbTemp) * relativeHumidity);
+	return (18.02 / (specificGravity * 28.98)) * pw / (barometricPressure - pw);
+}
+
+double BaseGasDensity::calculateRelativeHumidityFromWetBulb(const double dryBulbTemp, const double wetBulbTemp,
+                                                            const double cpGas) const {
+	auto const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
+	auto const psatDb = calculateSaturationPressure(dryBulbTemp);
+//	auto const wSat = nMol * psatDb / (pAtm - psatDb);
+	auto const psatWb = calculateSaturationPressure(wetBulbTemp);
+	auto const wStar = nMol * psatWb / (pAtm - psatWb);
+	auto const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp))
+	               / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
+
+	auto const pV = pAtm * w / (nMol + w);
+	return pV / psatDb;
+}
 
 PlaneData::PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange,
                      FlowTraverse & flowTraverse, std::vector<AddlTravPlane> & addlTravPlanes,
@@ -29,8 +91,10 @@ PlaneData::PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & f
 		  totalPressureLossBtwnPlanes2and5(totalPressureLossBtwnPlanes2and5)
 {}
 
-void PlaneData::establishFanInletOrOutletDensity(Planar & plane, std::function<double (Planar const &, const double)> const & calcDensity,
-                                                 double const mTotal, double const assumedDensity) {
+void PlaneData::establishFanInletOrOutletDensity(Planar & plane,
+                                                 std::function<double (Planar const &, const double)> const & calcDensity,
+                                                 double const mTotal, double const assumedDensity)
+{
 	double calculatedDensity = assumedDensity;
 	for (auto i = 0; i < 50; i++) {
 		plane.gasDensity = calculatedDensity;
@@ -110,10 +174,9 @@ std::unordered_map<std::string, double> Fan::calculate() {
 
 	// TODO pbx = barometric pressure, what to do if barometric pressure does vary between planes ? pg 61
 	// TODO the calculation of z returns 0.430 instead of 0.03515
-//	auto const z = (isentropicExponent / (isentropicExponent - 1))
-//	         * ((6362 * fanShaftPower.getFanShaftPower() / planeData.fanInletFlange.gasVolumeFlowRate)
-//	            / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.pbx));
-	auto const z = 0.03515;
+	auto const z = ((isentropicExponent - 1) / isentropicExponent)
+	         * ((6362 * fanShaftPower.getFanShaftPower() / planeData.fanInletFlange.gasVolumeFlowRate)
+	            / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.pbx));
 
 	auto const kp = (std::log(1 + x) / x) * (z / (std::log(1 + z)));
 
@@ -130,7 +193,7 @@ std::unordered_map<std::string, double> Fan::calculate() {
 
 	auto const staticPressureRise = planeData.fanOrEvaseOutletFlange.psx - planeData.fanInletFlange.psx + fanShaftPower.getSEF();
 
-	auto const kpFactorRatio = calculateCompressibilityFactor(x, z, kp, isentropicExponent);
+	auto const kpFactorRatio = calculateCompressibilityFactor(x, z, isentropicExponent);
 
 	// corrected variables
 	auto const qc = planeData.fanInletFlange.gasVolumeFlowRate * (fanRatedInfo.nc / fanRatedInfo.fanSpeed)
@@ -166,7 +229,7 @@ std::unordered_map<std::string, double> Fan::calculate() {
 	};
 }
 
-double Fan::calculateCompressibilityFactor(const double x, const double z, const double kp, const double isentropic) {
+double Fan::calculateCompressibilityFactor(const double x, const double z, const double isentropic) {
 	double assumedKpOverKpc = 1.0;
 	auto const & p1 = planeData.fanInletFlange;
 	for (auto i = 0; i < 50; i++) {
