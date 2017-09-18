@@ -199,8 +199,8 @@ NAN_METHOD(boiler) {
     SetR("steamSpecificEnthalpy", results["specificEnthalpy"]);
     SetR("steamSpecificEntropy", results["specificEntropy"]);
     SetR("steamQuality", results["quality"]);
-    SetR("steamMassFlow", b.getSteamMassFlow());
-    SetR("steamEnergyFlow", b.getSteamEnergyFlow());
+    SetR("steamMassFlow", results["steamMassFlow"]);
+    SetR("steamEnergyFlow", results["steamEnergyFlow"]);
 
     results = b.getBlowdownProperties();
     SetR("blowdownPressure", results["pressure"]);
@@ -208,8 +208,8 @@ NAN_METHOD(boiler) {
     SetR("blowdownSpecificEnthalpy", results["specificEnthalpy"]);
     SetR("blowdownSpecificEntropy", results["specificEntropy"]);
     SetR("blowdownQuality", results["quality"]);
-    SetR("blowdownMassFlow", b.getBlowdownMassFlow());
-    SetR("blowdownEnergyFlow", b.getBlowdownEnergyFlow());
+    SetR("blowdownMassFlow", results["blowdownMassFlow"]);
+    SetR("blowdownEnergyFlow", results["blowdownEnergyFlow"]);
 
 	results = b.getFeedwaterProperties();
     SetR("feedwaterPressure", results["pressure"]);
@@ -217,8 +217,8 @@ NAN_METHOD(boiler) {
     SetR("feedwaterSpecificEnthalpy", results["specificEnthalpy"]);
     SetR("feedwaterSpecificEntropy", results["specificEntropy"]);
     SetR("feedwaterQuality", results["quality"]);
-    SetR("feedwaterMassFlow", b.getFeedwaterMassFlow());
-    SetR("feedwaterEnergyFlow", b.getFeedwaterEnergyFlow());
+    SetR("feedwaterMassFlow", results["feedwaterMassFlow"]);
+    SetR("feedwaterEnergyFlow", results["feedwaterEnergyFlow"]);
     SetR("boilerEnergy", b.getBoilerEnergy());
     SetR("fuelEnergy", b.getFuelEnergy());
 
