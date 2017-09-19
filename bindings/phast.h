@@ -17,7 +17,7 @@
 #include "calculator/losses/AuxiliaryPower.h"
 #include "calculator/losses/EnergyInputExhaustGasLosses.h"
 #include "calculator/losses/EnergyInputEAF.h"
-#include "calculator/losses/ExhaustGasEAF.h"
+//#include "calculator/losses/ExhaustGasEAF.h"
 #include "calculator/losses/FixtureLosses.h"
 #include "calculator/losses/GasFlueGasMaterial.h"
 #include "calculator/losses/SolidLiquidFlueGasMaterial.h"
@@ -133,13 +133,13 @@ NAN_METHOD(energyInputEAF) {
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(exhaustGasEAF) {
-    inp = info[0]->ToObject();
-    ExhaustGasEAF eg(Get("offGasTemp"), Get("CO"), Get("H2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"));
-	const double totalHeatExhaust = eg.getTotalHeatExhaust();
-    Local<Number> retval = Nan::New(totalHeatExhaust);
-    info.GetReturnValue().Set(retval);
-}
+//NAN_METHOD(exhaustGasEAF) {
+//    inp = info[0]->ToObject();
+//    ExhaustGasEAF eg(Get("offGasTemp"), Get("CO"), Get("H2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"));
+//	const double totalHeatExhaust = eg.getTotalHeatExhaust();
+//    Local<Number> retval = Nan::New(totalHeatExhaust);
+//    info.GetReturnValue().Set(retval);
+//}
 
 NAN_METHOD(fixtureLosses) {
 
