@@ -7,7 +7,7 @@
  *
  */
 
-#include "calculator/losses/ExhaustGasEAF.h"
+#include "calculator/ExhaustGasEAF.h"
 
 void ExhaustGasEAF::calculateTotalHeatExhaust(){
     const double COheatingValue = CO_ * 321 / 100;
