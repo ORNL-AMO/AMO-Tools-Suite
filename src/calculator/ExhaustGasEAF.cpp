@@ -43,19 +43,28 @@ NAN_GETTER(ExhaustGasEAF::GetVar) {
 
 NAN_SETTER(ExhaustGasEAF::SetVar) {
 		auto * obj = ObjectWrap::Unwrap<ExhaustGasEAF>(info.This());
-
 		v8::String::Utf8Value s(property);
 		std::string str(*s);
-
-		if ( str == "a") obj->a_ = value->NumberValue();
-		else if (str == "b") obj->b_ = value->NumberValue();
-		else if (str == "c") obj->c_ = value->NumberValue();
 
 		if (str == "offGasTemp") obj->offGasTemp_ = value->NumberValue();
 		else if (str == "CO") obj->CO_ = value->NumberValue();
 		else if (str == "H2") obj->H2_ = value->NumberValue();
-		else if (str == "combustibleGases") info.GetReturnValue().Set(v8::Number::New(isolate, obj->combustibleGases_));
-		else if (str == "vfr") info.GetReturnValue().Set(v8::Number::New(isolate, obj->vfr_));
-		else if (str == "dustLoading") info.GetReturnValue().Set(v8::Number::New(isolate, obj->dustLoading_));
+		else if (str == "combustibleGases") obj->combustibleGases_ = value->NumberValue();
+		else if (str == "vfr") obj->vfr_ = value->NumberValue();
+		else if (str == "dustLoading") obj->dustLoading_ = value->NumberValue();
 }
 
+//void ExhaustGasEAF::GetOffGasTemp(v8::Local<v8::String> property, const PropertyCallbackInfo<v8::Value>& info) {
+//	v8::Local<v8::Object> self = info.Holder();
+//	v8::Local<v8::External> wrap = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+//	void * ptr = wrap->Value();
+//	double value = static_cast<ExhaustGasEAF *>(ptr)->offGasTemp_;
+//	info.GetReturnValue().Set(value);
+//}
+//
+//void ExhaustGasEAF::SetOffGasTemp(v8::Local<v8::String> property, v8::Local<v8::Value> value, const PropertyCallbackInfo<v8::Value>& info) {
+//	v8::Local<v8::Object> self = info.Holder();
+//	v8::Local<v8::External> wrap = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+//	void * ptr = wrap->Value();
+//	static_cast<ExhaustGasEAF *>(ptr)->offGasTemp_ = value->NumberValue();
+//}

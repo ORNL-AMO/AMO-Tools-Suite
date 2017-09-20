@@ -25,16 +25,22 @@ static Nan::Persistent<v8::FunctionTemplate> constructor;
  */
 class ExhaustGasEAF : public Nan::ObjectWrap {
 public:
-    static NAN_MODULE_INIT(Init) {
-            v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(ExhaustGasEAF::New);
-            constructor.Reset(tpl);
-            tpl->SetClassName(Nan::New<v8::String>("ExhaustGasEAF").ToLocalChecked());
-            tpl->InstanceTemplate()->SetInternalFieldCount(1);
-            SetPrototypeMethod(tpl, "getTotalHeatExhaustNAN", ExhaustGasEAF::getTotalHeatExhaustNAN);
-            v8::Local<v8::ObjectTemplate> itpl = tpl->InstanceTemplate();
-            SetAccessor(itpl, Nan::New<v8::String>("offGasTemp").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
-            Set(target, Nan::New<v8::String>("ExhaustGasEAF").ToLocalChecked(), tpl->GetFunction());
-    }
+	static NAN_MODULE_INIT(Init) {
+		v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(ExhaustGasEAF::New);
+		constructor.Reset(tpl);
+		tpl->SetClassName(Nan::New<v8::String>("ExhaustGasEAF").ToLocalChecked());
+		tpl->InstanceTemplate()->SetInternalFieldCount(1);
+		SetPrototypeMethod(tpl, "getTotalHeatExhaustNAN", ExhaustGasEAF::getTotalHeatExhaustNAN);
+
+		v8::Local<v8::ObjectTemplate> itpl = tpl->InstanceTemplate();
+		SetAccessor(itpl, Nan::New<v8::String>("offGasTemp").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
+		SetAccessor(itpl, Nan::New<v8::String>("CO").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
+		SetAccessor(itpl, Nan::New<v8::String>("H2").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
+		SetAccessor(itpl, Nan::New<v8::String>("combustibleGases").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
+		SetAccessor(itpl, Nan::New<v8::String>("vfr").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
+		SetAccessor(itpl, Nan::New<v8::String>("dustLoading").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
+		Set(target, Nan::New<v8::String>("ExhaustGasEAF").ToLocalChecked(), tpl->GetFunction());
+	}
 
     /**
      * Constructor for the exhaust gas EAF heat loss with all inputs specified
@@ -58,10 +64,8 @@ public:
 
     double getTotalHeatExhaust() const { return totalHeatExhaust; }
 
-
-
 private:
-    const double offGasTemp_, CO_, H2_, combustibleGases_, vfr_, dustLoading_;
+    double offGasTemp_, CO_, H2_, combustibleGases_, vfr_, dustLoading_;
     double totalHeatExhaust = 0;
 
     void calculateTotalHeatExhaust();
@@ -77,6 +81,21 @@ private:
     static NAN_GETTER(GetVar);
     static NAN_SETTER(SetVar);
     static NAN_METHOD(getTotalHeatExhaustNAN);
+
+//	void GetOffGasTemp(v8::Local<v8::String> property, const PropertyCallbackInfo<v8::Value>& info) {
+//		v8::Local<v8::Object> self = info.Holder();
+//		v8::Local<v8::External> wrap = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+//		void * ptr = wrap->Value();
+//		double value = static_cast<ExhaustGasEAF *>(ptr)->offGasTemp_;
+//		info.GetReturnValue().Set(value);
+//	}
+//
+//	void SetOffGasTemp(v8::Local<v8::String> property, v8::Local<v8::Value> value, const PropertyCallbackInfo<v8::Value>& info) {
+//		v8::Local<v8::Object> self = info.Holder();
+//		v8::Local<v8::External> wrap = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+//		void * ptr = wrap->Value();
+//		static_cast<ExhaustGasEAF *>(ptr)->offGasTemp_ = value->NumberValue();
+//	}
 };
 
 //NAN_METHOD(ExhaustGasEAF::getTotalHeatExhaustNAN) {
