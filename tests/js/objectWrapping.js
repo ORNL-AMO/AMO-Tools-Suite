@@ -30,13 +30,10 @@ obj.offGasTemp = 7550;
 obj.H2 = 13;
 console.log(obj);
 
-var res = obj.getTotalHeatExhaustNAN();
-
-console.log(res + " should be 12553119.02");
-
+console.log(obj);
 
 obj = new addon.ExhaustGasEAF(2800, 8, 6, 3, 6500, 0.001);
-res = obj.getTotalHeatExhaustNAN();
+var res = obj.totalHeatExhaust;
 console.log(res + " should be 8591939.26");
 
 // });
