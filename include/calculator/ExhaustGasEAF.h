@@ -32,6 +32,7 @@ public:
             tpl->InstanceTemplate()->SetInternalFieldCount(1);
             SetPrototypeMethod(tpl, "getTotalHeatExhaustNAN", ExhaustGasEAF::getTotalHeatExhaustNAN);
             v8::Local<v8::ObjectTemplate> itpl = tpl->InstanceTemplate();
+            SetAccessor(itpl, Nan::New<v8::String>("offGasTemp").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
             Set(target, Nan::New<v8::String>("ExhaustGasEAF").ToLocalChecked(), tpl->GetFunction());
     }
 
@@ -73,6 +74,8 @@ private:
         info.GetReturnValue().Set(info.This());
     }
 
+    static NAN_GETTER(GetVar);
+    static NAN_SETTER(SetVar);
     static NAN_METHOD(getTotalHeatExhaustNAN);
 };
 

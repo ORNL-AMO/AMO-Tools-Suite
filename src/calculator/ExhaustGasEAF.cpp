@@ -26,3 +26,36 @@ NAN_METHOD(ExhaustGasEAF::getTotalHeatExhaustNAN) {
 		ExhaustGasEAF * obj = ObjectWrap::Unwrap<ExhaustGasEAF>(info.Holder());
 		info.GetReturnValue().Set(Nan::New<v8::Number>(obj->getTotalHeatExhaust()));
 }
+
+NAN_GETTER(ExhaustGasEAF::GetVar) {
+		v8::Isolate* isolate = info.GetIsolate();
+		auto * obj = ObjectWrap::Unwrap<ExhaustGasEAF>(info.This());
+		v8::String::Utf8Value s(property);
+		std::string str(*s);
+
+		if (str == "offGasTemp") info.GetReturnValue().Set(v8::Number::New(isolate, obj->offGasTemp_));
+		else if (str == "CO") info.GetReturnValue().Set(v8::Number::New(isolate, obj->CO_));
+		else if (str == "H2") info.GetReturnValue().Set(v8::Number::New(isolate, obj->H2_));
+		else if (str == "combustibleGases") info.GetReturnValue().Set(v8::Number::New(isolate, obj->combustibleGases_));
+		else if (str == "vfr") info.GetReturnValue().Set(v8::Number::New(isolate, obj->vfr_));
+		else if (str == "dustLoading") info.GetReturnValue().Set(v8::Number::New(isolate, obj->dustLoading_));
+}
+
+NAN_SETTER(ExhaustGasEAF::SetVar) {
+		auto * obj = ObjectWrap::Unwrap<ExhaustGasEAF>(info.This());
+
+		v8::String::Utf8Value s(property);
+		std::string str(*s);
+
+		if ( str == "a") obj->a_ = value->NumberValue();
+		else if (str == "b") obj->b_ = value->NumberValue();
+		else if (str == "c") obj->c_ = value->NumberValue();
+
+		if (str == "offGasTemp") obj->offGasTemp_ = value->NumberValue();
+		else if (str == "CO") obj->CO_ = value->NumberValue();
+		else if (str == "H2") obj->H2_ = value->NumberValue();
+		else if (str == "combustibleGases") info.GetReturnValue().Set(v8::Number::New(isolate, obj->combustibleGases_));
+		else if (str == "vfr") info.GetReturnValue().Set(v8::Number::New(isolate, obj->vfr_));
+		else if (str == "dustLoading") info.GetReturnValue().Set(v8::Number::New(isolate, obj->dustLoading_));
+}
+
