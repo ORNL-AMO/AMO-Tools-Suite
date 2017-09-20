@@ -13,7 +13,12 @@ var inp = {
 };
 
 var obj = new addon.ExhaustGasEAF(2800, 12, 10, 3, 8000, 0.001);
-// var obj = new bindings.ExhaustGasEAF(inp.exhaustGasTemp, inp.CO, inp.H2, inp.combustibleGases, inp.vfr, inp.dustLoading);
+var res = obj.getTotalHeatExhaustNAN();
+console.log(res + " should be 12553119.02");
 
-var help = 'idk';
+
+obj = new addon.ExhaustGasEAF(2800, 8, 6, 3, 6500, 0.001);
+res = obj.getTotalHeatExhaustNAN();
+console.log(res + " should be 8591939.26");
+
 // });

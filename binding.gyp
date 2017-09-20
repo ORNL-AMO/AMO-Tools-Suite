@@ -31,10 +31,10 @@
         {
             "target_name": "exhaustGasEAF",
             'include_dirs': [
-               "<!(node -e \"require('nan')\")"
+              "include", "<!(node -e \"require('nan')\")"
             ],
             'sources' : [
-                'include/calculator/losses/ExhaustGasEAF.h'
+                'src/calculator/losses/ExhaustGasEAF.cpp'
             ],
             "conditions": [
                 [ 'OS=="mac"', {

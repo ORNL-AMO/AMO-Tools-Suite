@@ -30,6 +30,7 @@ public:
             constructor.Reset(tpl);
             tpl->SetClassName(Nan::New<v8::String>("ExhaustGasEAF").ToLocalChecked());
             tpl->InstanceTemplate()->SetInternalFieldCount(1);
+            SetPrototypeMethod(tpl, "getTotalHeatExhaustNAN", ExhaustGasEAF::getTotalHeatExhaustNAN);
             v8::Local<v8::ObjectTemplate> itpl = tpl->InstanceTemplate();
             Set(target, Nan::New<v8::String>("ExhaustGasEAF").ToLocalChecked(), tpl->GetFunction());
     }
@@ -52,18 +53,33 @@ public:
               vfr_(vfr), dustLoading_(dustLoading)
     {}
 
-    double getTotalHeatExhaust();
+
+
+    double getTotalHeatExhaust() const { return totalHeatExhaust; }
+
+
 
 private:
     const double offGasTemp_, CO_, H2_, combustibleGases_, vfr_, dustLoading_;
+    double totalHeatExhaust = 0;
 
+    void calculateTotalHeatExhaust();
 
     static NAN_METHOD(New) {
-        auto * obj = new ExhaustGasEAF(2800, 12, 10, 3, 8000, 0.001);
+        auto * obj = new ExhaustGasEAF(info[0]->NumberValue(), info[1]->NumberValue(), info[2]->NumberValue(),
+                                       info[3]->NumberValue(), info[4]->NumberValue(), info[5]->NumberValue());
+        obj->calculateTotalHeatExhaust();
         obj->Wrap(info.This());
         info.GetReturnValue().Set(info.This());
     }
+
+    static NAN_METHOD(getTotalHeatExhaustNAN);
 };
+
+//NAN_METHOD(ExhaustGasEAF::getTotalHeatExhaustNAN) {
+//	ExhaustGasEAF * obj = ObjectWrap::Unwrap<ExhaustGasEAF>(info.Holder());
+//	info.GetReturnValue().Set(Nan::New<v8::Number>(obj->getTotalHeatExhaust()));
+//}
 
 void InitExhaustGasEAF(v8::Local<v8::Object> exports) {
     ExhaustGasEAF::Init(exports);
