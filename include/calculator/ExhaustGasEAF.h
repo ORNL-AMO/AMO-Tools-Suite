@@ -32,17 +32,17 @@ public:
 		tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
 		v8::Local <v8::ObjectTemplate> itpl = tpl->InstanceTemplate();
-		SetAccessor(itpl, Nan::New<v8::String>("offGasTemp").ToLocalChecked(), ExhaustGasEAF::GetVar,
-		            ExhaustGasEAF::SetVar);
-		SetAccessor(itpl, Nan::New<v8::String>("CO").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
-		SetAccessor(itpl, Nan::New<v8::String>("H2").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
-		SetAccessor(itpl, Nan::New<v8::String>("combustibleGases").ToLocalChecked(), ExhaustGasEAF::GetVar,
-		            ExhaustGasEAF::SetVar);
-		SetAccessor(itpl, Nan::New<v8::String>("vfr").ToLocalChecked(), ExhaustGasEAF::GetVar, ExhaustGasEAF::SetVar);
-		SetAccessor(itpl, Nan::New<v8::String>("dustLoading").ToLocalChecked(), ExhaustGasEAF::GetVar,
-		            ExhaustGasEAF::SetVar);
-		SetAccessor(itpl, Nan::New<v8::String>("totalHeatExhaust").ToLocalChecked(), ExhaustGasEAF::GetVar,
-		            ExhaustGasEAF::SetVar);
+		SetAccessor(itpl, Nan::New<v8::String>("offGasTemp").ToLocalChecked(), ExhaustGasEAF::GetOffGasTemp,
+		            ExhaustGasEAF::SetOffGasTemp);
+		SetAccessor(itpl, Nan::New<v8::String>("CO").ToLocalChecked(), ExhaustGasEAF::GetCO, ExhaustGasEAF::SetCO);
+		SetAccessor(itpl, Nan::New<v8::String>("H2").ToLocalChecked(), ExhaustGasEAF::GetH2, ExhaustGasEAF::SetH2);
+		SetAccessor(itpl, Nan::New<v8::String>("combustibleGases").ToLocalChecked(), ExhaustGasEAF::GetCombustibleGases,
+		            ExhaustGasEAF::SetCombustibleGases);
+		SetAccessor(itpl, Nan::New<v8::String>("vfr").ToLocalChecked(), ExhaustGasEAF::GetVFR, ExhaustGasEAF::SetVFR);
+		SetAccessor(itpl, Nan::New<v8::String>("dustLoading").ToLocalChecked(), ExhaustGasEAF::GetDustLoading,
+		            ExhaustGasEAF::SetDustLoading);
+		SetAccessor(itpl, Nan::New<v8::String>("totalHeatExhaust").ToLocalChecked(), ExhaustGasEAF::GetTotalHeatExhaust,
+		            ExhaustGasEAF::SetTotalHeatExhaust);
 		Set(target, Nan::New<v8::String>("ExhaustGasEAF").ToLocalChecked(), tpl->GetFunction());
 	}
 
@@ -79,11 +79,21 @@ private:
 		info.GetReturnValue().Set(info.This());
 	}
 
-	static NAN_GETTER(GetVar);
+	static NAN_GETTER(GetOffGasTemp);
+	static NAN_GETTER(GetCO);
+	static NAN_GETTER(GetH2);
+	static NAN_GETTER(GetCombustibleGases);
+	static NAN_GETTER(GetVFR);
+	static NAN_GETTER(GetDustLoading);
+	static NAN_GETTER(GetTotalHeatExhaust);
 
-	static NAN_SETTER(SetVar);
-
-	static NAN_METHOD(getTotalHeatExhaustNAN);
+	static NAN_SETTER(SetOffGasTemp);
+	static NAN_SETTER(SetCO);
+	static NAN_SETTER(SetH2);
+	static NAN_SETTER(SetCombustibleGases);
+	static NAN_SETTER(SetVFR);
+	static NAN_SETTER(SetDustLoading);
+	static NAN_SETTER(SetTotalHeatExhaust);
 };
 
 void InitExhaustGasEAF(v8::Local<v8::Object> exports) {
