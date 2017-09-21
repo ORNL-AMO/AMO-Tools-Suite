@@ -176,21 +176,6 @@ NAN_METHOD(boiler) {
 
     SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
 
-    /**
- *
- * Constructor for the boiler calculator
- *
- * @param deaeratorPressure double, pressure of deaerator in MPa
- * @param combustionEfficiency double, combustion efficiency of the boiler as %
- * @param blowdownRate double, blowdown rate as a % of inlet mass flow
- * @param steamPressure double, pressure of steam in MPa
- * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
- * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
- * @param steamMassFlow double, steam mass flow in kg/hr
- *
- * @return nothing
- *
- * */
     Boiler b(Get("deaeratorPressure"), Get("combustionEfficiency"), Get("blowdownRate"), Get("steamPressure"), quantityType, Get("quantityValue"), Get("steamMassFlow"));
 
     std::unordered_map <std::string, double> results = b.getSteamProperties();
@@ -422,24 +407,9 @@ NAN_METHOD(deaerator) {
     SteamProperties::ThermodynamicQuantity waterQuantityType = waterThermodynamicQuantity();
     SteamProperties::ThermodynamicQuantity steamQuantityType = steamThermodynamicQuantity();
 
-    /**
-     *
-     * Constructor for the deaerator calculator
-     *
-     * @param deaeratorPressure double, deaerator pressure in MPa
-     * @param ventRate double, vent rate as %
-     * @param feedwaterMassFlow double, mass flow of the feedwater in kg/hr
-     * @param waterPressure double, pressure of water in MPa
-     * @param waterQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param waterQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param steamPressure double, pressure of steam in MPa
-     * @param steamQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param steamQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-
-     * @return nothing
-     *
-     * */
-    Deaerator d(Get("deaeratorPressure"), Get("ventRate"), Get("feedwaterMassFlow"), Get("waterPressure"), waterQuantityType, Get("waterQuantityValue"), Get("steamPressure"), steamQuantityType, Get("steamQuantityValue"));
+    Deaerator d(Get("deaeratorPressure"), Get("ventRate"), Get("feedwaterMassFlow"), Get("waterPressure"),
+                waterQuantityType, Get("waterQuantityValue"), Get("steamPressure"), steamQuantityType,
+                Get("steamQuantityValue"));
 
     std::unordered_map <std::string, double> results = d.getFeedwaterProperties();
     SetR("feedwaterPressure", results["pressure"]);
@@ -447,8 +417,8 @@ NAN_METHOD(deaerator) {
     SetR("feedwaterSpecificEnthalpy", results["specificEnthalpy"]);
     SetR("feedwaterSpecificEntropy", results["specificEntropy"]);
     SetR("feedwaterQuality", results["quality"]);
-    SetR("feedwaterMassFlow", d.getFeedwaterMassFlow());
-    SetR("feedwaterEnergyFlow", d.getFeedwaterEnergyFlow());
+    SetR("feedwaterMassFlow", results["massFlow"]);
+    SetR("feedwaterEnergyFlow", results["energyFlow"]);
 
     results = d.getVentedSteamProperties();
     SetR("ventedSteamPressure", results["saturatedPressure"]);
@@ -456,8 +426,8 @@ NAN_METHOD(deaerator) {
     SetR("ventedSteamSpecificEnthalpy", results["gasSpecificEnthalpy"]);
     SetR("ventedSteamSpecificEntropy", results["gasSpecificEntropy"]);
     SetR("ventedSteamQuality", results["quality"]);
-    SetR("ventedSteamMassFlow", d.getVentedSteamMassFlow());
-    SetR("ventedSteamEnergyFlow", d.getVentedSteamEnergyFlow());
+    SetR("ventedSteamMassFlow", results["massFlow"]);
+    SetR("ventedSteamEnergyFlow", results["energyFlow"]);
 
     results = d.getInletWaterProperties();
     SetR("inletWaterPressure", results["saturatedPressure"]);
@@ -465,8 +435,8 @@ NAN_METHOD(deaerator) {
     SetR("inletWaterSpecificEnthalpy", results["liquidSpecificEnthalpy"]);
     SetR("inletWaterSpecificEntropy", results["liquidSpecificEntropy"]);
     SetR("inletWaterQuality", results["quality"]);
-    SetR("inletWaterMassFlow", d.getInletWaterMassFlow());
-    SetR("inletWaterEnergyFlow", d.getInletWaterEnergyFlow());
+    SetR("inletWaterMassFlow", results["massFlow"]);
+    SetR("inletWaterEnergyFlow", results["energyFlow"]);
 
     results = d.getInletSteamProperties();
     SetR("inletSteamPressure", results["saturatedPressure"]);
@@ -474,8 +444,8 @@ NAN_METHOD(deaerator) {
     SetR("inletSteamSpecificEnthalpy", results["liquidSpecificEnthalpy"]);
     SetR("inletSteamSpecificEntropy", results["liquidSpecificEntropy"]);
     SetR("inletSteamQuality", results["quality"]);
-    SetR("inletSteamMassFlow", d.getInletSteamMassFlow());
-    SetR("inletSteamEnergyFlow", d.getInletSteamEnergyFlow());
+    SetR("inletSteamMassFlow", results["massFlow"]);
+    SetR("inletSteamEnergyFlow", results["energyFlow"]);
 
     info.GetReturnValue().Set(r);
 }
