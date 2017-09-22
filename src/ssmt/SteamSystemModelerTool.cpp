@@ -43,7 +43,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
 			{"temperature", t}, //temperature in Kelvin
 			{"pressure", p}, //pressure in MPa
 //			{"phase", "Liquid"},
-//			{"quality", t},
+			{"quality", 0},
 			{"specificVolume", reducedPressure * gibbsPi * t * r / p / 1000.0}, //volume in m³/kg
 			{"density", 1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³
 			{"specificEnthalpy", inversedReducedTemp * gibbsT * t * r}, // enthalpy in kJ/kg
@@ -111,7 +111,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
 			{"temperature", t}, // temperature in Kelvin
 			{"pressure", p}, //pressure in MPa
 //			{"phase", "Gas"},
-//			{"quality", NULL},
+			{"quality", 1},
 			{"specificVolume", reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0}, // volume in m³/kg
 			{"density", 1 / (reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0)}, // density in kg/m³
 			{"internalEnergy", (inverseReducedTemp * (gibbsT0 + gibbsT1) - reducedPressure
@@ -205,6 +205,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 			{"temperature", t}, // temperature in Kelvin
 			{"pressure", reducedDensity * helmholtzS * d * t * r / 1000.0},
 			{"density", d },
+//			{"quality", 0 }, // TODO determine what quality should be in this region
 			{"specificVolume", 1 / d},
 			{"internalEnergy", (inverseReducedTemp * helmholtzT * t * r)},
 			{"specificEnthalpy", (inverseReducedTemp * helmholtzT + reducedDensity * helmholtzS) * t * r},

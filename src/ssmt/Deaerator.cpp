@@ -25,8 +25,8 @@ void Deaerator::calculateProperties() {
     ventedSteamProperties = {
             {"temperature", sp.at("temperature")},
             {"pressure", sp.at("pressure")},
-            {"specificEnthalpy", sp.at("gasSpecificEnthalpy")},
-            {"specificEntropy", sp.at("gasSpecificEntropy")},
+            {"gasSpecificEnthalpy", sp.at("gasSpecificEnthalpy")},
+            {"gasSpecificEntropy", sp.at("gasSpecificEntropy")},
             {"quality", 1},
             {"massFlow", ventedSteamMassFlow},
             {"energyFlow", sp.at("gasSpecificEnthalpy") * ventedSteamMassFlow / 1000}

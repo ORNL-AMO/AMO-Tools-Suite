@@ -43,9 +43,9 @@ public:
               const double waterQuantityValue, const double steamPressure,
               const SteamProperties::ThermodynamicQuantity steamQuantityType, const double steamQuantityValue)
             : deaeratorPressure(deaeratorPressure), ventRate(ventRate), feedwaterMassFlow(feedwaterMassFlow),
-              waterPressure(waterPressure), waterQuantityType(waterQuantityType),
-              waterQuantityValue(waterQuantityValue), steamPressure(steamPressure),
-              steamQuantityType(steamQuantityType), steamQuantityValue(steamQuantityValue)
+              waterPressure(waterPressure), waterQuantityValue(waterQuantityValue), steamPressure(steamPressure),
+              steamQuantityValue(steamQuantityValue), waterQuantityType(waterQuantityType),
+              steamQuantityType(steamQuantityType)
     {
         calculateProperties();
     }
@@ -59,8 +59,8 @@ private:
 
     void calculateProperties();
 
-    const double deaeratorPressure = 0, ventRate = 0, feedwaterMassFlow = 0, waterPressure = 0, waterQuantityValue = 0;
-    const double steamPressure = 0, steamQuantityValue = 0;
+    const double deaeratorPressure, ventRate, feedwaterMassFlow, waterPressure, waterQuantityValue;
+    const double steamPressure, steamQuantityValue;
     const SteamProperties::ThermodynamicQuantity waterQuantityType, steamQuantityType;
 
     std::unordered_map <std::string, double> feedwaterProperties, ventedSteamProperties, inletWaterProperties;

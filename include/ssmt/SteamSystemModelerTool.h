@@ -270,7 +270,7 @@ private:
      * @param regionFunction Region, the region of which function to be used (REGION1, REGION2A, etc)
      * @param pressure double, pressure in MPa
      * @param var2 double, value of either entropy (in kJ/kg/K) or enthalpy (in kJ/kg)
-     * @return doubble, temperature in Kelvin
+     * @return double, temperature in Kelvin
      */
     static double backwardExact(int region, SteamSystemModelerTool::Key key, SteamSystemModelerTool::Region regionFunction , double pressure, double var2);
 

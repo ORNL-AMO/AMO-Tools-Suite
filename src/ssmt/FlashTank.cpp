@@ -9,47 +9,37 @@
 
 #include "ssmt/FlashTank.h"
 
-std::unordered_map <std::string, double> FlashTank::getInletWaterProperties() {
-    SteamProperties sp = SteamProperties(this->inletWaterPressure_, this->quantityType_, this->quantityValue_);
-    std::unordered_map <std::string, double> waterProperties = sp.calculate();
-    this->inletWaterProperties_ = waterProperties;
-    return this->inletWaterProperties_;
+FlashTank::FlashTank(const double inletWaterPressure, const SteamProperties::ThermodynamicQuantity quantityType,
+          const double quantityValue, const double inletWaterMassFlow, const double tankPressure)
+		: inletWaterPressure(inletWaterPressure), quantityValue(quantityValue), inletWaterMassFlow(inletWaterMassFlow),
+		  tankPressure(tankPressure), quantityType(quantityType)
+{
+	calculateProperties();
 }
 
-std::unordered_map <std::string, double> FlashTank::getOutletSaturatedProperties() {
-    SaturatedTemperature temperature = SaturatedTemperature(this->tankPressure_);
-    double saturatedTemperature = temperature.calculate();
-    SaturatedProperties sp = SaturatedProperties(this->tankPressure_, saturatedTemperature);
-    this->outletSaturatedProperties_ = sp.calculate();
-    return this->outletSaturatedProperties_;
-}
+void FlashTank::calculateProperties() {
+    inletWaterProperties = SteamProperties(inletWaterPressure, quantityType, quantityValue).calculate();
+	inletWaterProperties["massFlow"] = inletWaterMassFlow;
+	inletWaterProperties["energyFlow"] = inletWaterMassFlow * inletWaterProperties.at("specificEnthalpy") / 1000;
 
-double FlashTank::getInletWaterEnergyFlow(){
-    std::unordered_map <std::string, double> inletWaterProps = getInletWaterProperties();
-    this->inletWaterEnergyFlow_ = this->inletWaterMassFlow_ * inletWaterProps["specificEnthalpy"];
-    return this->inletWaterEnergyFlow_/1000;
-}
+//	if (quantityType == SteamProperties::ThermodynamicQuantity::QUALITY) inletWaterProperties["quality"] = quantityValue;
+//	else inletWaterProperties["quality"] = 0;
 
-double FlashTank::getOutletLiquidMassFlow() {
-    std::unordered_map <std::string, double> inletWaterProps = getInletWaterProperties();
-    std::unordered_map <std::string, double> satProps = getOutletSaturatedProperties();
-    this->outletLiquidMassFlow_ = this->inletWaterMassFlow_ * (inletWaterProps["specificEnthalpy"] - satProps["gasSpecificEnthalpy"]) / (satProps["liquidSpecificEnthalpy"] - satProps["gasSpecificEnthalpy"]);
-    return this->outletLiquidMassFlow_;
-}
 
-double FlashTank::getOutletGasMassFlow() {
-    this->outletGasMassFlow_ = this->inletWaterMassFlow_ - getOutletLiquidMassFlow();
-    return this->outletGasMassFlow_;
-}
+	outletSaturatedProperties = SaturatedProperties(tankPressure, SaturatedTemperature(tankPressure).calculate()).calculate();
+    outletSaturatedProperties["liquidMassFlow"] = inletWaterMassFlow
+                                                  * (inletWaterProperties.at("specificEnthalpy")
+                                                     - outletSaturatedProperties.at("gasSpecificEnthalpy"))
+                                                  / (outletSaturatedProperties.at("liquidSpecificEnthalpy")
+                                                     - outletSaturatedProperties.at("gasSpecificEnthalpy"));
 
-double FlashTank::getOutletGasEnergyFlow(){
-    std::unordered_map <std::string, double> satProps = getOutletSaturatedProperties();
-    this->outletGasEnergyFlow_ = getOutletGasMassFlow() * satProps["gasSpecificEnthalpy"];
-    return this->outletGasEnergyFlow_/1000;
-}
+    outletSaturatedProperties["gasMassFlow"] = inletWaterMassFlow - outletSaturatedProperties.at("liquidMassFlow");
+	outletSaturatedProperties["gasQuality"] = 1;
 
-double FlashTank::getOutletLiquidEnergyFlow(){
-    std::unordered_map <std::string, double> satProps = getOutletSaturatedProperties();
-    this->outletLiquidEnergyFlow_ = getOutletLiquidMassFlow() * satProps["liquidSpecificEnthalpy"];
-    return this->outletLiquidEnergyFlow_/1000;
+    outletSaturatedProperties["gasEnergyFlow"] = outletSaturatedProperties.at("gasMassFlow")
+                                                 * outletSaturatedProperties.at("gasSpecificEnthalpy") / 1000;
+
+    outletSaturatedProperties["liquidEnergyFlow"] = outletSaturatedProperties.at("liquidMassFlow")
+                                                    * outletSaturatedProperties.at("liquidSpecificEnthalpy") / 1000;
+	outletSaturatedProperties["liquidQuality"] = 0;
 }

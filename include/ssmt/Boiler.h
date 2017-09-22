@@ -37,66 +37,50 @@ public:
      *
      * */
     Boiler(double deaeratorPressure, double combustionEfficiency, double blowdownRate, double steamPressure,
-           SteamProperties::ThermodynamicQuantity quantityType, double quantityValue, double steamMassFlow)
-            : deaeratorPressure_(deaeratorPressure), combustionEfficiency_(combustionEfficiency),
-              blowdownRate_(blowdownRate), steamPressure_(steamPressure), quantityType_(quantityType),
-              quantityValue_(quantityValue), steamMassFlow_(steamMassFlow)
-    {
-        steamProperties_ = SteamProperties(steamPressure_, quantityType_, quantityValue_).calculate();
-        steamProperties_["steamEnergyFlow"] = steamProperties_["specificEnthalpy"] * steamMassFlow_ / 1000;
-        steamProperties_["steamMassFlow"] = steamMassFlow_;
-        feedwaterProperties_ = SteamProperties(deaeratorPressure_, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
-	    feedwaterProperties_["feedwaterMassFlow"] = steamMassFlow_ / (1 - blowdownRate / 100);
-        feedwaterProperties_["feedwaterEnergyFlow"] = feedwaterProperties_["specificEnthalpy"] * feedwaterProperties_["feedwaterMassFlow"] / 1000;
-
-        blowdownProperties_ = SteamProperties(steamPressure_, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
-        blowdownProperties_["blowdownMassFlow"] = feedwaterProperties_["feedwaterMassFlow"] * (blowdownRate_ / 100);
-        blowdownProperties_["blowdownEnergyFlow"] = blowdownProperties_["specificEnthalpy"] * blowdownProperties_["blowdownMassFlow"] / 1000;
-
-        boilerEnergy_ = steamProperties_["steamEnergyFlow"] + blowdownProperties_["blowdownEnergyFlow"] - feedwaterProperties_["feedwaterEnergyFlow"];
-        fuelEnergy_ = boilerEnergy_ / (combustionEfficiency_ / 100);
-    }
+           SteamProperties::ThermodynamicQuantity quantityType, double quantityValue, double steamMassFlow);
 
     /**
      * Calculates all of the properties of the steam
      * @return std::unordered_map <std::string, double>, steam properties
      */
-    std::unordered_map <std::string, double> getSteamProperties() const;
+    std::unordered_map <std::string, double> getSteamProperties() const { return steamProperties; }
 
     /**
      * Calculates all of the steam properties of the blowdown
      * @return std::unordered_map <std::string, double>, steam properties of blowdown
      */
-    std::unordered_map <std::string, double> getBlowdownProperties() const;
+    std::unordered_map <std::string, double> getBlowdownProperties() const { return blowdownProperties; }
 
     /**
      * Calculates all of the steam properties of the feedwater
      * @return std::unordered_map <std::string, double>, steam properties of feedwater
      */
-    std::unordered_map <std::string, double> getFeedwaterProperties();
+    std::unordered_map <std::string, double> getFeedwaterProperties() const { return feedwaterProperties; }
 
     /**
      * Calculates the boiler energy
      * @return double, boiler energy in MJ
      */
-    double getBoilerEnergy();
+    double getBoilerEnergy() const { return boilerEnergy; };
 
     /**
      * Calculates the fuel energy
      * @return double, fuel energy in MJ
      */
-    double getFuelEnergy();
+    double getFuelEnergy() const { return fuelEnergy; };
 
 
 private:
-    const double deaeratorPressure_, combustionEfficiency_, blowdownRate_, steamPressure_;
-    const SteamProperties::ThermodynamicQuantity quantityType_;
-    const double quantityValue_, steamMassFlow_;
+    void calculateProperties();
 
-    std::unordered_map <std::string, double> steamProperties_;
-    std::unordered_map <std::string, double> blowdownProperties_;
-    std::unordered_map <std::string, double> feedwaterProperties_;
-    double boilerEnergy_, fuelEnergy_;
+    const double deaeratorPressure, combustionEfficiency, blowdownRate, steamPressure;
+    const SteamProperties::ThermodynamicQuantity quantityType;
+    const double quantityValue, steamMassFlow;
+
+    std::unordered_map <std::string, double> steamProperties;
+    std::unordered_map <std::string, double> blowdownProperties;
+    std::unordered_map <std::string, double> feedwaterProperties;
+    double boilerEnergy, fuelEnergy;
 };
 
 
