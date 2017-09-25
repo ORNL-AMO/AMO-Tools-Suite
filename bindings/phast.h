@@ -629,10 +629,10 @@ NAN_METHOD(energyInputExhaustGasLosses) {
 
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    EnergyInputExhaustGasLosses eiegl(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
-    double heatDeliveredInKw = eiegl.getHeatDeliveredInKw();
-    Local<Number> retval = Nan::New(heatDeliveredInKw);
-    info.GetReturnValue().Set(retval);
+    EnergyInputExhaustGasLosses e(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
+	SetR("heatDelivered", e.getHeatDelivered());
+    SetR("exhaustGasLosses", e.getExhaustGasLosses());
+	info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(humidityRatio) {
