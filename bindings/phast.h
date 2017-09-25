@@ -630,8 +630,6 @@ NAN_METHOD(energyInputExhaustGasLosses) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
     EnergyInputExhaustGasLosses e(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
-    double heatDelivered = e.getHeatDelivered();
-	const double exhaustGasLosses = e.getExhaustGasLosses();
 	SetR("heatDelivered", e.getHeatDelivered());
     SetR("exhaustGasLosses", e.getExhaustGasLosses());
 	info.GetReturnValue().Set(r);
