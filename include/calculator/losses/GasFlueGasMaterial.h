@@ -91,10 +91,10 @@ public:
 	 * @param O2 % - double
 	 *
 	 * */
-	GasCompositions(const std::string & substance, const double CH4, const double C2H6, const double N2,
+	GasCompositions(std::string substance, const double CH4, const double C2H6, const double N2,
 	                const double H2, const double C3H8, const double C4H10_CnH2n, const double H2O,
 	                const double CO, const double CO2, const double SO2, const double O2) :
-			substance(substance),
+			substance(std::move(substance)),
 			totalPercent(CH4 + C2H6 + N2 + H2 + C3H8 + C4H10_CnH2n + H2O + CO + CO2 + SO2 + O2),
 			CH4(std::make_shared<GasProperties>([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417, CH4,
 			                  CH4 / totalPercent, 64, 23875, 36.032, 44.01)),
@@ -122,6 +122,10 @@ public:
 		gasses = {{"CH4", this->CH4}, {"C2H6", this->C2H6}, {"N2", this->N2}, {"H2", this->H2},
 		          {"C3H8", this->C3H8}, {"C4H10_CnH2n", this->C4H10_CnH2n}, {"H2O", this->H2O}, {"CO", this->CO},
 		          {"CO2", this->CO2}, {"SO2", this->SO2}, {"O2", this->O2}};
+
+		calculateCompByWeight();
+		heatingValue =  calculateHeatingValueFuel();
+		specificGravity = calculateSpecificGravity();
 	}
 
     /**
@@ -139,32 +143,10 @@ public:
 		return gas->second->compByVol;
 	}
 
-	/**
-	 * Gets existing specific gravity value
-	 *
-	 * @param none
-	 *
-	 * @return double, specificGravity
-	 */
-	double getSpecificGravity() const {
-		return specificGravity;
-	}
+	double getHeatingValue() const { return heatingValue; };
+	double getSpecificGravity() const { return specificGravity; };
 
-
-	/**
-	 * Gets existing heating value of fuel
-	 *
-	 * @param none
-	 *
-	 * @return double, heatingValue
-	 */
-	double getHeatingValue() const {
-		return heatingValue;
-	}
-
-	double calculateExcessAir(const double flueGasO2);
-	double calculateHeatingValue();
-	double calculateSpecificGravity();
+	double calculateExcessAir(double flueGasO2);
 
     /**
      * Gets the name of substance
@@ -196,6 +178,8 @@ public:
 private:
 	friend class GasFlueGasMaterial;
 	friend class SQLite;
+
+	double calculateSpecificGravity();
 
 	void calculateCompByWeight();
 	double calculateSensibleHeat(const double combustionAirTemp);
