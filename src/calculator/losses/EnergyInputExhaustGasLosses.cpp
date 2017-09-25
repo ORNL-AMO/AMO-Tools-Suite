@@ -37,14 +37,3 @@ double AvailableHeat::getAvailableHeat(){
     this->availableHeat_ = heat + airCorrection + combustionAirCorrection;
     return this->availableHeat_;
 }
-
-double EnergyInputExhaustGasLosses::getHeatDelivered() {
-    this->heatDelivered_ = (this->totalHeatInput_) * (this->availableHeat_) / 100;
-    return this->heatDelivered_;
-}
-
-double EnergyInputExhaustGasLosses::getHeatDeliveredInKw() {
-    double heatDelivered = getHeatDelivered();
-    this->heatDeliveredInKw_ = heatDelivered/3412;
-    return this->heatDeliveredInKw_;
-}

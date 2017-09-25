@@ -176,132 +176,27 @@ public:
      * @return nothing
      *
      * */
-    EnergyInputExhaustGasLosses(
-            double totalHeatInput,
-            double electricalPowerInput,
+    EnergyInputExhaustGasLosses(const double totalHeatInput,
+            const double electricalPowerInput,
             double availableHeat,
             double otherLosses)
             : totalHeatInput_(totalHeatInput),
               electricalPowerInput_(electricalPowerInput),
               availableHeat_(availableHeat),
-              otherLosses_(otherLosses)
+              otherLosses_(otherLosses),
+              heatDelivered_(totalHeatInput * availableHeat / 100),
+              exhaustGasLosses(this->heatDelivered_ * (100 - availableHeat_) / availableHeat_)
+    {}
 
-    {
-        heatDelivered_ = 0.0;
-        heatDeliveredInKw_ = 0.0;
-    }
+    double getHeatDelivered() const { return heatDelivered_; };
 
-    EnergyInputExhaustGasLosses() = default;
-
-    /**
-     * Gets the total heat input
-     *
-     * @return double, total heat input in Btu/hr
-     */
-    double getTotalHeatInput() const {
-        return totalHeatInput_;
-    }
-
-    /**
-     * Sets the total heat input
-     *
-     * @param totalHeatInput double, total heat input in Btu/hr
-     *
-     * @return nothing
-     */
-    void setTotalHeatInput(double totalHeatInput) {
-        totalHeatInput_ = totalHeatInput;
-    }
-
-
-
-    /**
-     * Gets the electrical power input
-     *
-     * @return double, electrical power input in kW
-     */
-    double getElectricalPowerInput() const {
-        return electricalPowerInput_;
-    }
-
-    /**
-     * Sets the electrical power input
-     *
-     * @param electricalPowerInput double, electrical power input in kW
-     *
-     * @return nothing
-     */
-    void setElectricalPowerInput(double electricalPowerInput) {
-        electricalPowerInput_ = electricalPowerInput;
-    }
-
-    /**
-     * Gets the available heat
-     *
-     * @return double, available heat as %
-     */
-    double getAvailableHeat() const {
-        return availableHeat_;
-    }
-
-    /**
-     * Sets the available heat
-     *
-     * @param userAvailableHeat double, available heat as %
-     *
-     * @return nothing
-     */
-    void setAvailableHeat(double availableHeat) {
-        availableHeat_ = availableHeat;
-    }
-
-    /**
-     * Gets the other losses
-     *
-     * @return double, other losses in Btu/hr
-     */
-    double getOtherLosses() const {
-        return otherLosses_;
-    }
-
-    /**
-     * Sets the other losses
-     *
-     * @param otherLosses double, other losses in Btu/hr
-     *
-     * @return nothing
-     */
-    void setOtherLosses(double otherLosses) {
-        otherLosses_ = otherLosses;
-    }
-
-    /**
-     * Gets the heat delivered to the furnace
-     *
-     * @return double, heat delivered
-     */
-    double getHeatDelivered();
-
-    /**
-     * Gets the heat delivered to the furnace in kW
-     *
-     * @return double, heat delivered in kW
-     */
-    double getHeatDeliveredInKw();
+    double getExhaustGasLosses() const { return exhaustGasLosses; };
 
 private:
-    // In values
-    double totalHeatInput_ = 0.0;
-    double electricalPowerInput_ = 0.0;
-    double availableHeat_ = 0.0;
-    double otherLosses_ = 0.0;
+    const double totalHeatInput_, electricalPowerInput_, availableHeat_, otherLosses_ = 0.0;
 
-    //In-Out values
-//    double combustionAirCorrection_;
-    double heatDelivered_;
-
-    // Out values
-    double heatDeliveredInKw_;
+    const double heatDelivered_;
+    double exhaustGasLosses;
 };
 
 #endif //AMO_TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
