@@ -39,3 +39,52 @@ void Boiler::calculateProperties() {
 	               - feedwaterProperties.at("feedwaterEnergyFlow");
 	fuelEnergy = boilerEnergy / (combustionEfficiency / 100);
 }
+
+double Boiler::getDeaeratorPressure() const { return deaeratorPressure; }
+
+void Boiler::setDeaeratorPressure(double deaeratorPressure) {
+	this->deaeratorPressure = deaeratorPressure;
+	calculateProperties();
+}
+
+double Boiler::getCombustionEfficiency() const { return combustionEfficiency; }
+
+void Boiler::setCombustionEfficiency(double combustionEfficiency) {
+	this->combustionEfficiency = combustionEfficiency;
+	calculateProperties();
+}
+
+double Boiler::getBlowdownRate() const { return blowdownRate; }
+
+void Boiler::setBlowdownRate(const double blowdownRate) {
+	this->blowdownRate = blowdownRate;
+	calculateProperties();
+}
+
+double Boiler::getSteamPressure() const { return steamPressure; }
+
+void Boiler::setSteamPressure(const double steamPressure) {
+	this->steamPressure = steamPressure;
+	calculateProperties();
+}
+
+SteamProperties::ThermodynamicQuantity Boiler::getQuantityType() const { return quantityType; }
+
+void Boiler::setQuantityType(SteamProperties::ThermodynamicQuantity quantity) {
+	this->quantityType = quantity;
+	calculateProperties();
+}
+
+double Boiler::getQuantityValue() const { return quantityValue; }
+
+void Boiler::setQuantityValue(const double quantityValue) {
+	this->quantityValue = quantityValue;
+	calculateProperties();
+}
+
+double Boiler::getSteamMassFlow() const { return steamMassFlow; }
+
+void Boiler::setSteamMassFlow(const double steamMassFlow) {
+	this->steamMassFlow = steamMassFlow;
+	calculateProperties();
+}
