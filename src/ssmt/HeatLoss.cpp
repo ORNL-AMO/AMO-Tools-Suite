@@ -9,38 +9,56 @@
 
 #include "ssmt/HeatLoss.h"
 
-std::unordered_map <std::string, double> HeatLoss::getInletProperties() {
-    SteamProperties sp = SteamProperties(this->inletPressure_, this->quantityType_, this->quantityValue_);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->inletProperties_ = steamProperties;
-    return this->inletProperties_;
+HeatLoss::HeatLoss(const double inletPressure, const SteamProperties::ThermodynamicQuantity quantityType,
+                   const double quantityValue, const double inletMassFlow, const double percentHeatLoss)
+        : inletPressure(inletPressure), quantityType(quantityType), quantityValue(quantityValue),
+          inletMassFlow(inletMassFlow), percentHeatLoss(percentHeatLoss / 100),
+          inletProperties(SteamProperties(inletPressure, quantityType, quantityValue).calculate()),
+          inletEnergyFlow(inletProperties.at("specificEnthalpy") * inletMassFlow / 1000),
+          outletEnergyFlow(inletEnergyFlow * (1 - this->percentHeatLoss)),
+          outletProperties(SteamProperties(inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
+                                           outletEnergyFlow / inletMassFlow).calculate()),
+          heatLoss(inletEnergyFlow - outletEnergyFlow)
+{
+	inletProperties["massFlow"] = inletMassFlow;
+	inletProperties["energyFlow"] = inletEnergyFlow;
+	outletProperties["massFlow"] = inletMassFlow;
+	outletProperties["energyFlow"] = outletEnergyFlow;
 }
 
-double HeatLoss::getInletEnergyFlow(){
-    std::unordered_map <std::string, double> inletProps = getInletProperties();
-    this->inletEnergyFlow_ = inletProps["specificEnthalpy"] * this->inletMassFlow_;
-    return inletEnergyFlow_/1000;
-}
+//std::unordered_map <std::string, double> HeatLoss::getInletProperties() {
+//    SteamProperties sp = SteamProperties(inletPressure, quantityType, quantityValue);
+//    std::unordered_map <std::string, double> steamProperties = sp.calculate();
+//    inletProperties = steamProperties;
+//    return inletProperties;
+//}
 
-double HeatLoss::getOutletMassFlow(){
-    this->outletMassFlow_ = this->inletMassFlow_;
-    return outletMassFlow_;
-}
+//double HeatLoss::getInletEnergyFlow(){
+////    std::unordered_map <std::string, double> inletProps = getInletProperties();
+//    inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow;
+//    return inletEnergyFlow/1000;
+//}
 
-double HeatLoss::getOutletEnergyFlow(){
-    this->outletEnergyFlow_ = getInletEnergyFlow() * (1 - this->percentHeatLoss_/100);
-    return outletEnergyFlow_;
-}
+//double HeatLoss::getOutletMassFlow(){
+//    outletMassFlow = inletMassFlow;
+//    return outletMassFlow;
+//}
 
-std::unordered_map <std::string, double> HeatLoss::getOutletProperties() {
-    double outletEnthalpy = getOutletEnergyFlow()/getInletMassFlow();
-    SteamProperties sp = SteamProperties(this->inletPressure_, SteamProperties::ThermodynamicQuantity::ENTHALPY, outletEnthalpy);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->outletProperties_ = steamProperties;
-    return this->outletProperties_;
-}
+//double HeatLoss::getOutletEnergyFlow(){
+//    outletEnergyFlow = inletEnergyFlow * (1 - percentHeatLoss/100);
+//    return outletEnergyFlow;
+//}
 
-double HeatLoss::getHeatLoss(){
-    this->heatLoss_ = getInletEnergyFlow() - getOutletEnergyFlow();
-    return this->heatLoss_;
-}
+//std::unordered_map <std::string, double> HeatLoss::getOutletProperties() {
+////    double outletEnthalpy = getOutletEnergyFlow()/getInletMassFlow();
+//    double outletEnthalpy = outletEnergyFlow / inletMassFlow;
+//    SteamProperties sp = SteamProperties(inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY, outletEnthalpy);
+//    std::unordered_map <std::string, double> steamProperties = sp.calculate();
+//    outletProperties = steamProperties;
+//    return outletProperties;
+//}
+
+//double HeatLoss::getHeatLoss(){
+//    heatLoss = getInletEnergyFlow() - getOutletEnergyFlow();
+//    return heatLoss;
+//}

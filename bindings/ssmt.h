@@ -233,8 +233,8 @@ NAN_METHOD(heatLoss) {
     SetR("inletSpecificEnthalpy", results.at("specificEnthalpy"));
     SetR("inletSpecificEntropy", results.at("specificEntropy"));
     SetR("inletQuality", results.at("quality"));
-    SetR("inletMassFlow", hl.getInletMassFlow());
-    SetR("inletEnergyFlow", hl.getInletEnergyFlow());
+    SetR("inletMassFlow", results.at("massFlow"));
+    SetR("inletEnergyFlow", results.at("energyFlow"));
 
     results = hl.getOutletProperties();
     SetR("outletPressure", results.at("pressure"));
@@ -242,8 +242,8 @@ NAN_METHOD(heatLoss) {
     SetR("outletSpecificEnthalpy", results.at("specificEnthalpy"));
     SetR("outletSpecificEntropy", results.at("specificEntropy"));
     SetR("outletQuality", results.at("quality"));
-    SetR("outletMassFlow", hl.getOutletMassFlow());
-    SetR("outletEnergyFlow", hl.getOutletEnergyFlow());
+    SetR("outletMassFlow", results.at("massFlow"));
+    SetR("outletEnergyFlow", results.at("energyFlow"));
     SetR("heatLoss", hl.getHeatLoss());
 
     info.GetReturnValue().Set(r);
