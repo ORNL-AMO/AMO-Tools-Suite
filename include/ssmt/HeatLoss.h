@@ -36,19 +36,13 @@ public:
     HeatLoss(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,
              double inletMassFlow, double percentHeatLoss);
 
-    std::unordered_map <std::string, double> & getInletProperties() { return inletProperties; };
+    std::unordered_map <std::string, double> const & getInletProperties() const { return inletProperties; };
 
     /**
      * Calculates all of the properties of the outlet steam
      * @return std::unordered_map <std::string, double>, outlet steam properties
      */
-    std::unordered_map <std::string, double> & getOutletProperties() { return outletProperties; };
-
-    /**
-     * Calculates the inlet energy flow
-     * @return double, inlet steam energy flow in MJ/hr
-     */
-//    double getInletEnergyFlow();
+    std::unordered_map <std::string, double> const & getOutletProperties() const { return outletProperties; };
 
     /**
      * Calculates the heat loss
@@ -56,28 +50,14 @@ public:
      */
     double getHeatLoss() const { return heatLoss; };
 
-    /**
-     * Calculates the outlet mass flow
-     * @return double, outlet mass flow in kg/hr
-     */
-//    double getOutletMassFlow();
-
-    /**
-     * Calculates the outlet energy flow
-     * @return double, outlet energy flow in MJ/hr
-     */
-//    double getOutletEnergyFlow();
-
 private:
-    // In values
     const double inletPressure, quantityValue, inletMassFlow, percentHeatLoss;
-    std::unordered_map <std::string, double> inletProperties, outletProperties;
-    const double inletEnergyFlow, outletEnergyFlow, heatLoss;
+    std::unordered_map <std::string, double> inletProperties;
+    const double inletEnergyFlow, outletEnergyFlow;
+    std::unordered_map <std::string, double> outletProperties;
+
+    const double heatLoss;
     SteamProperties::ThermodynamicQuantity quantityType;
-
-    // Out values
 };
-
-
 
 #endif //AMO_TOOLS_SUITE_HEATLOSS_H

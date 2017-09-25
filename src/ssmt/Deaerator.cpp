@@ -9,6 +9,18 @@
 
 #include "ssmt/Deaerator.h"
 
+Deaerator::Deaerator(const double deaeratorPressure, const double ventRate, const double feedwaterMassFlow,
+                     const double waterPressure, const SteamProperties::ThermodynamicQuantity waterQuantityType,
+                     const double waterQuantityValue, const double steamPressure,
+                     const SteamProperties::ThermodynamicQuantity steamQuantityType, const double steamQuantityValue)
+        : deaeratorPressure(deaeratorPressure), ventRate(ventRate), feedwaterMassFlow(feedwaterMassFlow),
+          waterPressure(waterPressure), waterQuantityValue(waterQuantityValue), steamPressure(steamPressure),
+          steamQuantityValue(steamQuantityValue), waterQuantityType(waterQuantityType),
+          steamQuantityType(steamQuantityType)
+{
+    calculateProperties();
+}
+
 void Deaerator::calculateProperties() {
     auto const & sp = SaturatedProperties(deaeratorPressure, SaturatedTemperature(deaeratorPressure).calculate()).calculate();
     feedwaterProperties = {

@@ -38,22 +38,15 @@ public:
      * @return nothing
      *
      * */
-    Deaerator(const double deaeratorPressure, const double ventRate, const double feedwaterMassFlow,
-              const double waterPressure, const SteamProperties::ThermodynamicQuantity waterQuantityType,
-              const double waterQuantityValue, const double steamPressure,
-              const SteamProperties::ThermodynamicQuantity steamQuantityType, const double steamQuantityValue)
-            : deaeratorPressure(deaeratorPressure), ventRate(ventRate), feedwaterMassFlow(feedwaterMassFlow),
-              waterPressure(waterPressure), waterQuantityValue(waterQuantityValue), steamPressure(steamPressure),
-              steamQuantityValue(steamQuantityValue), waterQuantityType(waterQuantityType),
-              steamQuantityType(steamQuantityType)
-    {
-        calculateProperties();
-    }
+    Deaerator(double deaeratorPressure, double ventRate, double feedwaterMassFlow,
+              double waterPressure, SteamProperties::ThermodynamicQuantity waterQuantityType,
+              double waterQuantityValue, double steamPressure,
+              SteamProperties::ThermodynamicQuantity steamQuantityType, double steamQuantityValue);
 
-	std::unordered_map<std::string, double> getFeedwaterProperties() { return feedwaterProperties; }
-    std::unordered_map<std::string, double> getVentedSteamProperties() { return ventedSteamProperties; }
-    std::unordered_map<std::string, double> getInletWaterProperties() { return inletWaterProperties; }
-    std::unordered_map<std::string, double> getInletSteamProperties() { return inletSteamProperties; }
+	std::unordered_map<std::string, double> const & getFeedwaterProperties() const { return feedwaterProperties; }
+    std::unordered_map<std::string, double> const & getVentedSteamProperties() const { return ventedSteamProperties; }
+    std::unordered_map<std::string, double> const & getInletWaterProperties() const { return inletWaterProperties; }
+    std::unordered_map<std::string, double> const & getInletSteamProperties() const { return inletSteamProperties; }
 
 private:
 

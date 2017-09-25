@@ -39,32 +39,19 @@ public:
     Boiler(double deaeratorPressure, double combustionEfficiency, double blowdownRate, double steamPressure,
            SteamProperties::ThermodynamicQuantity quantityType, double quantityValue, double steamMassFlow);
 
-    /**
-     * Calculates all of the properties of the steam
-     * @return std::unordered_map <std::string, double>, steam properties
-     */
-    std::unordered_map <std::string, double> getSteamProperties() const { return steamProperties; }
+    std::unordered_map <std::string, double> const & getSteamProperties() const { return steamProperties; }
+    std::unordered_map <std::string, double> const & getBlowdownProperties() const { return blowdownProperties; }
+
+    std::unordered_map <std::string, double> const & getFeedwaterProperties() const { return feedwaterProperties; }
 
     /**
-     * Calculates all of the steam properties of the blowdown
-     * @return std::unordered_map <std::string, double>, steam properties of blowdown
-     */
-    std::unordered_map <std::string, double> getBlowdownProperties() const { return blowdownProperties; }
-
-    /**
-     * Calculates all of the steam properties of the feedwater
-     * @return std::unordered_map <std::string, double>, steam properties of feedwater
-     */
-    std::unordered_map <std::string, double> getFeedwaterProperties() const { return feedwaterProperties; }
-
-    /**
-     * Calculates the boiler energy
+     * Returns the boiler energy
      * @return double, boiler energy in MJ
      */
     double getBoilerEnergy() const { return boilerEnergy; };
 
     /**
-     * Calculates the fuel energy
+     * Returns the fuel energy
      * @return double, fuel energy in MJ
      */
     double getFuelEnergy() const { return fuelEnergy; };

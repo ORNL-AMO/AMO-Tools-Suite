@@ -42,13 +42,13 @@ public:
      * Calculates all of the properties of the inlet water
      * @return std::unordered_map <std::string, double>, inlet water properties
      */
-    std::unordered_map <std::string, double> getInletWaterProperties() const { return inletWaterProperties; };
+    std::unordered_map <std::string, double> const & getInletWaterProperties() const { return inletWaterProperties; };
 
     /**
      * Calculates all of the saturated properties of the outlet gas and liquid
      * @return std::unordered_map <std::string, double>, outlet gas and liquid saturated properties
      */
-    std::unordered_map <std::string, double> getOutletSaturatedProperties() const { return outletSaturatedProperties; }
+    std::unordered_map <std::string, double> const & getOutletSaturatedProperties() const { return outletSaturatedProperties; }
 
 private:
     void calculateProperties();
