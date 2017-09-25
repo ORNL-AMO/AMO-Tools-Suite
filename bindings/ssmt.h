@@ -420,8 +420,8 @@ NAN_METHOD(deaerator) {
     results = d.getVentedSteamProperties();
     SetR("ventedSteamPressure", results.at("pressure"));
     SetR("ventedSteamTemperature", results.at("temperature"));
-    SetR("ventedSteamSpecificEnthalpy", results.at("gasSpecificEnthalpy"));
-    SetR("ventedSteamSpecificEntropy", results.at("gasSpecificEntropy"));
+    SetR("ventedSteamSpecificEnthalpy", results.at("specificEnthalpy"));
+    SetR("ventedSteamSpecificEntropy", results.at("specificEntropy"));
     SetR("ventedSteamQuality", results.at("quality"));
     SetR("ventedSteamMassFlow", results.at("massFlow"));
     SetR("ventedSteamEnergyFlow", results.at("energyFlow"));
