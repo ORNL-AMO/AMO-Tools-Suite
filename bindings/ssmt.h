@@ -320,7 +320,7 @@ NAN_METHOD(prvWithoutDesuperheating) {
     * */
     auto pwod = PrvWithoutDesuperheating(Get("inletPressure"),quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("outletPressure"));
 
-    std::unordered_map <std::string, double> results = pwod.getInletProperties();
+    auto results = pwod.getInletProperties();
     SetR("inletPressure", results.at("pressure"));
     SetR("inletTemperature", results.at("temperature"));
     SetR("inletSpecificEnthalpy", results.at("specificEnthalpy"));
@@ -329,12 +329,12 @@ NAN_METHOD(prvWithoutDesuperheating) {
     SetR("inletMassFlow", pwod.getInletMassFlow());
     SetR("inletEnergyFlow", pwod.getInletEnergyFlow());
 
-    results = pwod.getOutletProperties();
-    SetR("outletPressure", results.at("pressure"));
-    SetR("outletTemperature", results.at("temperature"));
-    SetR("outletSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("outletSpecificEntropy", results.at("specificEntropy"));
-    SetR("outletQuality", results.at("quality"));
+    auto results2= pwod.getOutletProperties();
+    SetR("outletPressure", results2.at("pressure"));
+    SetR("outletTemperature", results2.at("temperature"));
+    SetR("outletSpecificEnthalpy", results2.at("specificEnthalpy"));
+    SetR("outletSpecificEntropy", results2.at("specificEntropy"));
+    SetR("outletQuality", results2.at("quality"));
     SetR("outletMassFlow", pwod.getOutletMassFlow());
     SetR("outletEnergyFlow", pwod.getOutletEnergyFlow());
 
@@ -368,7 +368,7 @@ NAN_METHOD(prvWithDesuperheating) {
      * */
     auto pwd = PrvWithDesuperheating(Get("inletPressure"), quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("outletPressure"), Get("feedwaterPressure"), feedwaterQuantityType, Get("feedwaterQuantityValue"), Get("desuperheatingTemp"));
 
-    std::unordered_map <std::string, double> results = pwd.getInletProperties();
+    auto results = pwd.getInletProperties();
     SetR("inletPressure", results.at("pressure"));
     SetR("inletTemperature", results.at("temperature"));
     SetR("inletSpecificEnthalpy", results.at("specificEnthalpy"));
@@ -377,20 +377,21 @@ NAN_METHOD(prvWithDesuperheating) {
     SetR("inletMassFlow", pwd.getInletMassFlow());
     SetR("inletEnergyFlow", pwd.getInletEnergyFlow());
 
-    results = pwd.getOutletProperties();
-    SetR("outletPressure", results.at("pressure"));
-    SetR("outletTemperature", results.at("temperature"));
-    SetR("outletSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("outletSpecificEntropy", results.at("specificEntropy"));
-    SetR("outletQuality", results.at("quality"));
+    auto results2 = pwd.getOutletProperties();
+    SetR("outletPressure", results2.at("pressure"));
+    SetR("outletTemperature", results2.at("temperature"));
+    SetR("outletSpecificEnthalpy", results2.at("specificEnthalpy"));
+    SetR("outletSpecificEntropy", results2.at("specificEntropy"));
+    SetR("outletQuality", results2.at("quality"));
     SetR("outletMassFlow", pwd.getOutletMassFlow());
     SetR("outletEnergyFlow", pwd.getOutletEnergyFlow());
 
-    SetR("feedwaterPressure", results.at("pressure"));
-    SetR("feedwaterTemperature", results.at("temperature"));
-    SetR("feedwaterSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("feedwaterSpecificEntropy", results.at("specificEntropy"));
-    SetR("feedwaterQuality", results.at("quality"));
+    auto results3 = pwd.getFeedwaterProperties();
+    SetR("feedwaterPressure", results3.at("pressure"));
+    SetR("feedwaterTemperature", results3.at("temperature"));
+    SetR("feedwaterSpecificEnthalpy", results3.at("specificEnthalpy"));
+    SetR("feedwaterSpecificEntropy", results3.at("specificEntropy"));
+    SetR("feedwaterQuality", results3.at("quality"));
     SetR("feedwaterMassFlow", pwd.getFeedwaterMassFlow());
     SetR("feedwaterEnergyFlow", pwd.getFeedwaterEnergyFlow());
 

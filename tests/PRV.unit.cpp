@@ -3,6 +3,13 @@
 
 TEST_CASE( "Calculate the Inlet Energy Flow without Desuperheating", "[Inlet Energy Flow][PRV][ssmt]") {
     CHECK( PrvWithoutDesuperheating(4.8794, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 691.5, 37970, 4.0823).getInletEnergyFlow() == Approx(123148));
+    auto prv = PrvWithoutDesuperheating(4.0, SteamProperties::ThermodynamicQuantity::ENTHALPY, 600, 37000, 4.0);
+	prv.setInletPressure(4.8794);
+    prv.setQuantityType(SteamProperties::ThermodynamicQuantity::TEMPERATURE);
+    prv.setQuantityValue(691.5);
+    prv.setInletMassFlow(37970);
+    prv.setOutletPressure(4.0823);
+    CHECK( prv.getInletEnergyFlow() == Approx(123148));
 }
 
 TEST_CASE( "Calculate the Outlet Mass Flow without Desuperheating", "[Outlet Mass Flow][PRV][ssmt]") {
@@ -15,7 +22,7 @@ TEST_CASE( "Calculate the Outlet Energy Flow without Desuperheating", "[Outlet E
 
 TEST_CASE( "Calculate the Outlet Temperature without Desuperheating", "[Outlet Temperature][PRV][ssmt]") {
     std::unordered_map <std::string, double> props = PrvWithoutDesuperheating(4.8794, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 691.5, 37970, 4.0823).getOutletProperties();
-    CHECK( props["temperature"] == Approx(686.0087848902));
+    CHECK( props.at("temperature") == Approx(686.0087848902));
 }
 
 TEST_CASE( "Calculate the Inlet Energy Flow with Desuperheating", "[Inlet Energy Flow][PRV][ssmt]") {
