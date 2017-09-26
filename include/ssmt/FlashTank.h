@@ -39,27 +39,75 @@ public:
 
 
     /**
-     * Calculates all of the properties of the inlet water
+     * Gets all of the properties of the inlet water
      * @return std::unordered_map <std::string, double>, inlet water properties
      */
     std::unordered_map <std::string, double> const & getInletWaterProperties() const { return inletWaterProperties; };
 
     /**
-     * Calculates all of the saturated properties of the outlet gas and liquid
+     * Gets all of the saturated properties of the outlet gas and liquid
      * @return std::unordered_map <std::string, double>, outlet gas and liquid saturated properties
      */
     std::unordered_map <std::string, double> const & getOutletSaturatedProperties() const { return outletSaturatedProperties; }
 
+	/**
+     * Gets the inlet water pressure
+     * @return double, pressure of the inlet water in MPa
+     */
     double getInletWaterPressure() const;
+
+	/**
+     * Gets the quantity value
+     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
     double getQuantityValue() const;
+
+	/**
+     * Gets the inlet water mass flow
+     * @return double, mass flow of the inlet water in kg/hr
+     */
     double getInletWaterMassFlow() const;
+
+	/**
+     * Gets the pressure of the tank
+     * @return double, tank pressure in MPa
+     */
     double getTankPressure() const;
+
+	/**
+     * Gets the quantity type
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	SteamProperties::ThermodynamicQuantity getQuantityType() const;
 
+	/**
+     * Sets the inlet water pressure
+     * @param inletWaterPressure double, pressure of the inlet water in MPa
+     */
 	void setInletWaterPressure(double inletWaterPressure);
+
+	/**
+     * Sets the quantity value
+     * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	void setQuantityValue(double quantityValue);
+
+	/**
+     * Sets the inlet water mass flow
+     * @param inletWaterMassFlow double, mass flow of the inlet water in kg/hr
+     */
 	void setInletWaterMassFlow(double inletWaterMassFlow);
+
+	/**
+     * Sets the pressure of the tank
+     * @param tankPressure double, tank pressure in MPa
+     */
 	void setTankPressure(double tankPressure);
+
+	/**
+     * Sets the quantity type
+     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType);
 
 private:

@@ -43,29 +43,136 @@ public:
               double waterQuantityValue, double steamPressure,
               SteamProperties::ThermodynamicQuantity steamQuantityType, double steamQuantityValue);
 
+	/**
+     * Gets all of the feedwater properties
+     * @return std::unordered_map <std::string, double>, feedwater properties
+     */
 	std::unordered_map<std::string, double> const & getFeedwaterProperties() const { return feedwaterProperties; }
+
+	/**
+     * Gets all of the vented steam properties
+     * @return std::unordered_map <std::string, double>, vented steam properties
+     */
     std::unordered_map<std::string, double> const & getVentedSteamProperties() const { return ventedSteamProperties; }
+
+	/**
+     * Gets all of the inlet water properties
+     * @return std::unordered_map <std::string, double>, inlet water properties
+     */
     std::unordered_map<std::string, double> const & getInletWaterProperties() const { return inletWaterProperties; }
+
+	/**
+     * Gets all of the inlet steam properties
+     * @return std::unordered_map <std::string, double>, inlet steam properties
+     */
     std::unordered_map<std::string, double> const & getInletSteamProperties() const { return inletSteamProperties; }
 
+	/**
+     * Gets the deaerator pressure
+     * @return double, pressure of the deaerator in MPa
+     */
 	double getDeaeratorPressure() const;
+
+	/**
+     * Gets the vent rate
+     * @return double, vent rate as %
+     */
 	double getVentRate() const;
+
+	/**
+     * Gets the feedwater mass flow
+     * @return double, feedwater mass flow in kg/hr
+     */
 	double getFeedwaterMassFlow() const;
+
+	/**
+     * Gets the water pressure
+     * @return double, pressure of the water in MPa
+     */
 	double getWaterPressure() const;
+
+	/**
+     * Gets the quantity type for water
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity for water (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	double getWaterQuantityValue() const;
+
+	/**
+     * Gets the steam pressure
+     * @return double, pressure of the steam in MPa
+     */
 	double getSteamPressure() const;
+
+	/**
+     * Gets the quantity value for steam
+     * @return double, value of quantity for steam (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	double getSteamQuantityValue() const;
+
+	/**
+     * Gets the quantity type for water
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity for water (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	SteamProperties::ThermodynamicQuantity getWaterQuantityType() const;
+
+	/**
+     * Gets the quantity type for steam
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity for steam (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	SteamProperties::ThermodynamicQuantity getSteamQuantityType() const;
 
+	/**
+     * Sets the deaerator pressure
+     * @param deaeratorPressure double, pressure of the deaerator in MPa
+     */
 	void setDeaeratorPressure(double deaeratorPressure);
+
+	/**
+     * Sets the vent rate
+     * @param ventRate double, vent rate as %
+     */
 	void setVentRate(double ventRate);
+
+	/**
+	* Sets the feedwater mass flow
+	* @param feedwaterMassFlow double, feedwater mass flow in kg/hr
+	*/
 	void setFeedwaterMassFlow(double feedwaterMassFlow);
+
+	/**
+     * Sets the pressure of the water
+     * @param waterPressure double, pressure of water in MPa
+     */
 	void setWaterPressure(double waterPressure);
+
+	/**
+     * Sets the quantity value for water
+     * @param waterQuantityValue double, value of quantity for water (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	void setWaterQuantityValue(double waterQuantityValue);
+
+	/**
+     * Sets the pressure of the steam
+     * @param steamPressure double, pressure of steam in MPa
+     */
 	void setSteamPressure(double steamPressure);
+
+	/**
+     * Sets the quantity value for steam
+     * @param steamQuantityValue double, value of quantity for steam (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	void setSteamQuantityValue(double steamQuantityValue);
+
+	/**
+     * Sets the quantity type for water
+     * @param waterQuantityType SteamProperties::ThermodynamicQuantity, type of quantity for water (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	void setWaterQuantityType(SteamProperties::ThermodynamicQuantity quantity);
+
+	/**
+     * Sets the quantity type for steam
+     * @param steamQuantityType SteamProperties::ThermodynamicQuantity, type of quantity for steam (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
 	void setSteamQuantityType(SteamProperties::ThermodynamicQuantity quantity);
 
 private:
