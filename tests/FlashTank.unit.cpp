@@ -3,6 +3,13 @@
 
 TEST_CASE( "Calculate the Inlet Water Energy Flow #1", "[Inlet Water Energy Flow][FlashTank][ssmt]") {
     CHECK( FlashTank(4.54484, SteamProperties::ThermodynamicQuantity::ENTHALPY, 2000, 36133, 3.3884).getInletWaterProperties().at("energyFlow") == Approx(72266));
+    auto ft = FlashTank(4, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 1000, 33133, 4.3884);
+	ft.setInletWaterPressure(4.54484);
+    ft.setQuantityType(SteamProperties::ThermodynamicQuantity::ENTHALPY);
+    ft.setQuantityValue(2000);
+    ft.setInletWaterMassFlow(36133);
+	ft.setTankPressure(4.3884);
+    CHECK( ft.getInletWaterProperties().at("energyFlow") == Approx(72266));
 }
 
 TEST_CASE( "Calculate the Outlet Gas Mass Flow #1", "[Outlet Gas Mass Flow][FlashTank][ssmt]") {

@@ -3,6 +3,17 @@
 
 TEST_CASE( "Calculate the Feedwater Energy Flow for Deaerator calculator #1", "[Feedwater Energy Flow][Deaerator][ssmt]") {
     CHECK( Deaerator(0.36, 0.2, 40279, 0.15, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 344.55, 0.4, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 528.65).getFeedwaterProperties().at("energyFlow") == Approx(23707));
+    auto d = Deaerator(0.3, 0.3, 40275, 0.25, SteamProperties::ThermodynamicQuantity::ENTROPY, 354.55, 0.5, SteamProperties::ThermodynamicQuantity::ENTROPY, 538.65);
+    d.setDeaeratorPressure(0.36);
+    d.setVentRate(0.2);
+    d.setFeedwaterMassFlow(40279);
+    d.setWaterPressure(0.15);
+    d.setWaterQuantityType(SteamProperties::ThermodynamicQuantity::TEMPERATURE);
+    d.setWaterQuantityValue(344.55);
+    d.setSteamPressure(0.4);
+    d.setSteamQuantityType(SteamProperties::ThermodynamicQuantity::TEMPERATURE);
+    d.setSteamQuantityValue(528.65);
+    CHECK(d.getFeedwaterProperties().at("energyFlow") == Approx(23707));
 }
 
 TEST_CASE( "Calculate the Vented Steam Mass Flow for Deaerator calculator #1", "[Vented Steam Mass Flow][Deaerator][ssmt]") {
