@@ -43,3 +43,38 @@ void FlashTank::calculateProperties() {
                                                     * outletSaturatedProperties.at("liquidSpecificEnthalpy") / 1000;
 	outletSaturatedProperties["liquidQuality"] = 0;
 }
+
+double FlashTank::getInletWaterPressure() const { return inletWaterPressure; }
+
+double FlashTank::getQuantityValue() const { return quantityValue; }
+
+double FlashTank::getInletWaterMassFlow() const { return inletWaterMassFlow; }
+
+double FlashTank::getTankPressure() const { return tankPressure; }
+
+SteamProperties::ThermodynamicQuantity FlashTank::getQuantityType() const { return quantityType; }
+
+void FlashTank::setInletWaterPressure(double inletWaterPressure) {
+	this->inletWaterPressure = inletWaterPressure;
+	calculateProperties();
+}
+
+void FlashTank::setQuantityValue(double quantityValue) {
+	this->quantityValue = quantityValue;
+	calculateProperties();
+}
+
+void FlashTank::setInletWaterMassFlow(double inletWaterMassFlow) {
+	this->inletWaterMassFlow = inletWaterMassFlow;
+	calculateProperties();
+}
+
+void FlashTank::setTankPressure(double tankPressure) {
+	this->tankPressure = tankPressure;
+	calculateProperties();
+}
+
+void FlashTank::setQuantityType(SteamProperties::ThermodynamicQuantity quantityType) {
+	this->quantityType = quantityType;
+	calculateProperties();
+}

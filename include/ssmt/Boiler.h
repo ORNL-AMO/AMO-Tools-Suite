@@ -46,32 +46,20 @@ public:
     std::unordered_map <std::string, double> const & getFeedwaterProperties() const { return feedwaterProperties; }
 
     double getDeaeratorPressure() const;
-
-    void setDeaeratorPressure(double deaeratorPressure);
-
     double getCombustionEfficiency() const;
-
-    void setCombustionEfficiency(double combustionEfficiency);
-
     double getBlowdownRate() const;
-
-    void setBlowdownRate(double blowdownRate);
-
     double getSteamPressure() const;
-
-    void setSteamPressure(double steamPressure);
-
+    double getQuantityValue() const;
+    double getSteamMassFlow() const;
     SteamProperties::ThermodynamicQuantity getQuantityType() const;
 
-    void setQuantityType(SteamProperties::ThermodynamicQuantity quantity);
-
-    double getQuantityValue() const;
-
+    void setDeaeratorPressure(double deaeratorPressure);
+    void setCombustionEfficiency(double combustionEfficiency);
+    void setBlowdownRate(double blowdownRate);
+    void setSteamPressure(double steamPressure);
     void setQuantityValue(double quantityValue);
-
-    double getSteamMassFlow() const;
-
     void setSteamMassFlow(double steamMassFlow);
+    void setQuantityType(SteamProperties::ThermodynamicQuantity quantity);
 
     /**
      * Returns the boiler energy

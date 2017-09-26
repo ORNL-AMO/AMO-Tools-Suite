@@ -9,7 +9,6 @@
 
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
-#include <cmath>
 
 double SaturatedTemperature::calculate() const {
     const double C1 = 0.11670521452767E+04, C2 = -0.72421316703206E+06, C3 = -0.17073846940092E+02;
@@ -43,32 +42,32 @@ double SaturatedPressure::calculate() const {
 }
 
 std::unordered_map<std::string, double> SaturatedProperties::calculate() {
-    std::unordered_map<std::string, double> gasProperties = SteamSystemModelerTool::region2(this->saturatedTemperature_, this->saturatedPressure_);
+    auto const gasProperties = SteamSystemModelerTool::region2(saturatedTemperature_, saturatedPressure_);
     std::unordered_map<std::string, double> liquidProperties;
 
-    if ((this->saturatedTemperature_ >= SteamSystemModelerTool::TEMPERATURE_MIN)
-        && (this->saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_Tp)) {
-        liquidProperties = SteamSystemModelerTool::region1(this->saturatedTemperature_, this->saturatedPressure_);
+    if ((saturatedTemperature_ >= SteamSystemModelerTool::TEMPERATURE_MIN)
+        && (saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_Tp)) {
+        liquidProperties = SteamSystemModelerTool::region1(saturatedTemperature_, saturatedPressure_);
     }
 
-    if ((this->saturatedTemperature_ > SteamSystemModelerTool::TEMPERATURE_Tp)
-        && (this->saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_CRIT)) {
-        liquidProperties = SteamSystemModelerTool::region3(this->saturatedTemperature_, this->saturatedPressure_);
+    if ((saturatedTemperature_ > SteamSystemModelerTool::TEMPERATURE_Tp)
+        && (saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_CRIT)) {
+        liquidProperties = SteamSystemModelerTool::region3(saturatedTemperature_, saturatedPressure_);
     }
 
-    const double evaporationEnthalpy = gasProperties["specificEnthalpy"] - liquidProperties["specificEnthalpy"]; //liquidEnthalpy;
-    const double evaporationEntropy = gasProperties["specificEntropy"] - liquidProperties["specificEntropy"]; //liquidEntropy;
-    const double evaporationVolume = gasProperties["specificVolume"] - liquidProperties["specificVolume"]; //liquidVolume;
+    const double evaporationEnthalpy = gasProperties.at("specificEnthalpy") - liquidProperties.at("specificEnthalpy");
+    const double evaporationEntropy = gasProperties.at("specificEntropy") - liquidProperties.at("specificEntropy");
+    const double evaporationVolume = gasProperties.at("specificVolume") - liquidProperties.at("specificVolume");
 
     return {
             {"pressure", saturatedPressure_}, //pressure in MPa
             {"temperature", saturatedTemperature_}, // temperature in Kelvin
-            {"gasSpecificEnthalpy", gasProperties["specificEnthalpy"]}, //enthalpy in kJ/kg
-            {"gasSpecificEntropy", gasProperties["specificEntropy"]}, // entropy in kJ/kg/K
-            {"gasSpecificVolume", gasProperties["specificVolume"]}, // volume in m³/kg
-            {"liquidSpecificEnthalpy", liquidProperties["specificEnthalpy"]}, // enthalpy in kJ/kg
-            {"liquidSpecificEntropy", liquidProperties["specificEntropy"]}, // entropy in kJ/kg/K
-            {"liquidSpecificVolume", liquidProperties["specificVolume"]}, // volume in m³/kg
+            {"gasSpecificEnthalpy", gasProperties.at("specificEnthalpy")}, //enthalpy in kJ/kg
+            {"gasSpecificEntropy", gasProperties.at("specificEntropy")}, // entropy in kJ/kg/K
+            {"gasSpecificVolume", gasProperties.at("specificVolume")}, // volume in m³/kg
+            {"liquidSpecificEnthalpy", liquidProperties.at("specificEnthalpy")}, // enthalpy in kJ/kg
+            {"liquidSpecificEntropy", liquidProperties.at("specificEntropy")}, // entropy in kJ/kg/K
+            {"liquidSpecificVolume", liquidProperties.at("specificVolume")}, // volume in m³/kg
             {"evaporationSpecificEnthalpy", evaporationEnthalpy}, // enthalpy in kJ/kg
             {"evaporationSpecificEntropy", evaporationEntropy}, // entropy in kJ/kg/K
             {"evaporationSpecificVolume", evaporationVolume}, // volume in m³/kg

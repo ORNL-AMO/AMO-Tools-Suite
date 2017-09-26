@@ -22,7 +22,7 @@ Deaerator::Deaerator(const double deaeratorPressure, const double ventRate, cons
 }
 
 void Deaerator::calculateProperties() {
-    auto const & sp = SaturatedProperties(deaeratorPressure, SaturatedTemperature(deaeratorPressure).calculate()).calculate();
+    auto const sp = SaturatedProperties(deaeratorPressure, SaturatedTemperature(deaeratorPressure).calculate()).calculate();
     feedwaterProperties = {
             {"temperature", sp.at("temperature")},
             {"pressure", sp.at("pressure")},
@@ -64,4 +64,59 @@ void Deaerator::calculateProperties() {
 
     inletSteamProperties["massFlow"] = inletSteamMassFlow;
     inletSteamProperties["energyFlow"] = inletSteamEnergyFlow;
+}
+
+double Deaerator::getDeaeratorPressure() const { return deaeratorPressure; }
+double Deaerator::getVentRate() const { return ventRate; }
+double Deaerator::getFeedwaterMassFlow() const { return feedwaterMassFlow; }
+double Deaerator::getWaterPressure() const { return waterPressure; }
+double Deaerator::getWaterQuantityValue() const { return waterQuantityValue; }
+double Deaerator::getSteamPressure() const { return steamPressure; }
+double Deaerator::getSteamQuantityValue() const { return steamQuantityValue; }
+SteamProperties::ThermodynamicQuantity Deaerator::getWaterQuantityType() const { return waterQuantityType; }
+SteamProperties::ThermodynamicQuantity Deaerator::getSteamQuantityType() const { return steamQuantityType; }
+
+void Deaerator::setDeaeratorPressure(double deaeratorPressure) {
+	this->deaeratorPressure = deaeratorPressure;
+	calculateProperties();
+}
+
+void Deaerator::setVentRate(double ventRate) {
+	this->ventRate = ventRate;
+	calculateProperties();
+}
+
+void Deaerator::setFeedwaterMassFlow(double feedwaterMassFlow) {
+	this->feedwaterMassFlow = feedwaterMassFlow;
+	calculateProperties();
+}
+
+void Deaerator::setWaterPressure(double waterPressure) {
+	this->waterPressure = waterPressure;
+	calculateProperties();
+}
+
+void Deaerator::setWaterQuantityValue(double waterQuantityValue) {
+	this->waterQuantityValue = waterQuantityValue;
+	calculateProperties();
+}
+
+void Deaerator::setSteamPressure(double steamPressure) {
+	this->steamPressure = steamPressure;
+	calculateProperties();
+}
+
+void Deaerator::setSteamQuantityValue(double steamQuantityValue) {
+	this->steamQuantityValue = steamQuantityValue;
+	calculateProperties();
+}
+
+void Deaerator::setWaterQuantityType(SteamProperties::ThermodynamicQuantity waterQuantityType) {
+	this->waterQuantityType = waterQuantityType;
+	calculateProperties();
+}
+
+void Deaerator::setSteamQuantityType(SteamProperties::ThermodynamicQuantity steamQuantityType) {
+	this->steamQuantityType = steamQuantityType;
+	calculateProperties();
 }

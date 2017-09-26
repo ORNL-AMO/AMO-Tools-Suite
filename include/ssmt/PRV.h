@@ -33,26 +33,10 @@ public:
      * @return nothing
      *
      * */
-    PrvWithoutDesuperheating(
-            double inletPressure,
-            SteamProperties::ThermodynamicQuantity quantityType,
-            double quantityValue,
-            double inletMassFlow,
-            double outletPressure)
-            : inletPressure_(inletPressure),
-              quantityType_(quantityType),
-              quantityValue_(quantityValue),
-              inletMassFlow_(inletMassFlow),
-              outletPressure_(outletPressure)
+    PrvWithoutDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
+                             double quantityValue, double inletMassFlow, double outletPressure);
 
-    {
-        inletEnergyFlow_ = 0.0;
-        outletMassFlow_ = 0.0;
-        outletEnergyFlow_ = 0.0;
-
-    }
-
-    PrvWithoutDesuperheating() = default;
+//    PrvWithoutDesuperheating() = default;
 
     /**
      * Sets the inlet pressure

@@ -9,6 +9,17 @@
 
 #include "ssmt/PRV.h"
 
+PrvWithoutDesuperheating::PrvWithoutDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
+                         double quantityValue, double inletMassFlow, double outletPressure)
+        : inletPressure_(inletPressure), quantityType_(quantityType), quantityValue_(quantityValue),
+          inletMassFlow_(inletMassFlow), outletPressure_(outletPressure)
+{
+    inletEnergyFlow_ = 0.0;
+    outletMassFlow_ = 0.0;
+    outletEnergyFlow_ = 0.0;
+
+}
+
 std::unordered_map <std::string, double> PrvWithoutDesuperheating::getInletProperties() {
     SteamProperties sp = SteamProperties(this->inletPressure_, this->quantityType_, this->quantityValue_);
     this->inletProperties_ = sp.calculate();

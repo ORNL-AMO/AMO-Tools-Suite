@@ -11,17 +11,46 @@
 
 HeatLoss::HeatLoss(const double inletPressure, const SteamProperties::ThermodynamicQuantity quantityType,
                    const double quantityValue, const double inletMassFlow, const double percentHeatLoss)
-        : inletPressure(inletPressure), quantityValue(quantityValue),
-          inletMassFlow(inletMassFlow), percentHeatLoss(percentHeatLoss / 100),
-          inletProperties(SteamProperties(this->inletPressure, quantityType, this->quantityValue).calculate()),
-          inletEnergyFlow(inletProperties.at("specificEnthalpy") * this->inletMassFlow / 1000),
-          outletEnergyFlow(inletEnergyFlow * (1 - this->percentHeatLoss)),
-          outletProperties(SteamProperties(this->inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-                                           outletEnergyFlow / this->inletMassFlow).calculate()),
-          heatLoss(inletEnergyFlow - outletEnergyFlow), quantityType(quantityType)
+        : inletPressure(inletPressure), quantityValue(quantityValue), inletMassFlow(inletMassFlow),
+          percentHeatLoss(percentHeatLoss / 100), quantityType(quantityType)
 {
+	calculateProperties();
+}
+
+void HeatLoss::calculateProperties() {
+	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
+	inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow / 1000;
+	outletEnergyFlow = inletEnergyFlow * (1 - percentHeatLoss);
+	outletProperties  = SteamProperties(inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
+	                                    outletEnergyFlow / inletMassFlow).calculate();
 	inletProperties["massFlow"] = inletMassFlow;
 	inletProperties["energyFlow"] = inletEnergyFlow;
 	outletProperties["massFlow"] = inletMassFlow;
 	outletProperties["energyFlow"] = outletEnergyFlow;
+	heatLoss = inletEnergyFlow - outletEnergyFlow;
+}
+
+void HeatLoss::setInletPressure(double inletPressure) {
+	this->inletPressure = inletPressure;
+	calculateProperties();
+}
+
+void HeatLoss::setQuantityValue(double quantityValue) {
+	this->quantityValue = quantityValue;
+	calculateProperties();
+}
+
+void HeatLoss::setInletMassFlow(double inletMassFlow) {
+	this->inletMassFlow = inletMassFlow;
+	calculateProperties();
+}
+
+void HeatLoss::setPercentHeatLoss(double percentHeatLoss) {
+	this->percentHeatLoss = percentHeatLoss;
+	calculateProperties();
+}
+
+void HeatLoss::setQuantityType(SteamProperties::ThermodynamicQuantity quantityType) {
+	this->quantityType = quantityType;
+	calculateProperties();
 }

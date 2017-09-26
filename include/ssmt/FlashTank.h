@@ -50,14 +50,25 @@ public:
      */
     std::unordered_map <std::string, double> const & getOutletSaturatedProperties() const { return outletSaturatedProperties; }
 
+    double getInletWaterPressure() const;
+    double getQuantityValue() const;
+    double getInletWaterMassFlow() const;
+    double getTankPressure() const;
+	SteamProperties::ThermodynamicQuantity getQuantityType() const;
+
+	void setInletWaterPressure(double inletWaterPressure);
+	void setQuantityValue(double quantityValue);
+	void setInletWaterMassFlow(double inletWaterMassFlow);
+	void setTankPressure(double tankPressure);
+	void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType);
+
 private:
     void calculateProperties();
 
     double inletWaterPressure, quantityValue, inletWaterMassFlow, tankPressure;
     SteamProperties::ThermodynamicQuantity quantityType;
 
-    std::unordered_map <std::string, double> inletWaterProperties;
-    std::unordered_map <std::string, double> outletSaturatedProperties;
+    std::unordered_map <std::string, double> inletWaterProperties, outletSaturatedProperties;
 };
 
 
