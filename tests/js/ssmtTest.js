@@ -237,3 +237,51 @@ test('deaerator', function (t) {
     t.equal(rnd(res.inletSteamMassFlow), rnd(7546.382202196729), 'res.inletSteamMassFlow is ' + res.inletSteamMassFlow);
     t.equal(rnd(res.inletSteamEnergyFlow), rnd(18052.836547375577), 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
 });
+
+test('header', function (t) {
+    t.plan(5);
+    t.type(bindings.header, 'function');
+
+    var inp = {
+        headerPressure: 0.173,
+        inlets: [
+            {
+                pressure: 1.9332,
+                thermodynamicQuantity: 0,
+                quantityValue: 579.8,
+                massFlow: 0.686
+            },
+            {
+                pressure: 2.8682,
+                thermodynamicQuantity: 0,
+                quantityValue: 308.5,
+                massFlow: 0.5019
+            },
+            {
+                pressure: 1.0348,
+                thermodynamicQuantity: 0,
+                quantityValue: 458,
+                massFlow: 0.5633
+            },
+            {
+                pressure: 1.8438,
+                thermodynamicQuantity: 0,
+                quantityValue: 475.8,
+                massFlow: 0.3082
+            }
+        ]
+    };
+
+    var res = bindings.header(inp);
+    var header = res.header;
+    var inlet1 = res.inlet1;
+    var inlet2 = res.inlet2;
+    var inlet3 = res.inlet3;
+    var inlet4 = res.inlet4;
+    t.equal(header.headerPressure, 0.173, header.headerPressure + " != 0.173");
+    t.equal(inlet1.inletEnergyFlow, 2000, 's');
+    t.equal(inlet2.inletEnergyFlow, 2000, 's');
+    t.equal(inlet3.inletEnergyFlow, 2000, 's');
+
+    var idk = 10;
+});

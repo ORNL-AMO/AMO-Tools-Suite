@@ -17,6 +17,8 @@
 #include "ssmt/FlashTank.h"
 #include "ssmt/PRV.h"
 #include "ssmt/Deaerator.h"
+#include "ssmt/Header.h"
+#include <string>
 
 
 using namespace Nan;
@@ -445,6 +447,55 @@ NAN_METHOD(deaerator) {
     SetR("inletSteamMassFlow", results4.at("massFlow"));
     SetR("inletSteamEnergyFlow", results4.at("energyFlow"));
 
+    info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(header) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    auto const headerPressure = Get("headerPressure");
+
+    Local<String> arrayStr = Nan::New<String>("inlets").ToLocalChecked();
+    auto array = inp->ToObject()->Get(arrayStr);
+    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
+
+	std::vector<Inlet> inlets;
+
+    Local<String> pressureStr = Nan::New<String>("pressure").ToLocalChecked();
+    Local<String> thermodynamicQuantityStr = Nan::New<String>("thermodynamicQuantity").ToLocalChecked();
+    Local<String> quantityValueStr = Nan::New<String>("quantityValue").ToLocalChecked();
+    Local<String> massFlowStr = Nan::New<String>("massFlow").ToLocalChecked();
+
+
+    for (size_t i = 0; i < arr->Length(); i++) {
+        auto const pressure = arr->Get(i)->ToObject()->Get(pressureStr)->NumberValue();
+        auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(arr->Get(i)->ToObject()->Get(thermodynamicQuantityStr)->NumberValue());
+        auto const quantityValue = arr->Get(i)->ToObject()->Get(quantityValueStr)->NumberValue();
+        auto const massFlow = arr->Get(i)->ToObject()->Get(massFlowStr)->NumberValue();
+        inlets.emplace_back(Inlet(pressure, quantity, quantityValue, massFlow));
+//        inlets.emplace_back(Inlet(pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE, quantityValue, massFlow));
+
+        // TODO check this locality, might need to be "escapable" or something
+        Local<Object> obj1 = Nan::New<Object>();
+        Local<String> inletNum = Nan::New<String>("inlet" + std::to_string(++i)).ToLocalChecked();
+        Local<String> inletEnergyFlowStr = Nan::New<String>("inletEnergyFlow").ToLocalChecked();
+        Local<Number> inletEnergyFlow = Nan::New<Number>(inlets[i].getInletEnergyFlow());
+        Nan::Set(obj1, inletEnergyFlowStr, inletEnergyFlow);
+
+        Nan::Set(r, inletNum, obj1);
+    }
+
+	auto header = Header(headerPressure, inlets);
+    Local<String> headerStr = Nan::New<String>("header").ToLocalChecked();
+
+
+    Local<Object> obj = Nan::New<Object>();
+    Local<String> headerPressureStr = Nan::New<String>("headerPressure").ToLocalChecked();
+    Local<Number> headerPressureN = Nan::New<Number>(header.getHeaderPressure());
+    Nan::Set(obj, headerPressureStr, headerPressureN);
+
+    Nan::Set(r, headerStr, obj);
     info.GetReturnValue().Set(r);
 }
 
