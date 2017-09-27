@@ -118,7 +118,9 @@ set(SOURCE_FILES
         src/ssmt/HeatLoss.cpp
         src/ssmt/FlashTank.cpp
         src/ssmt/PRV.cpp
-        src/ssmt/Deaerator.cpp src/ssmt/Header.cpp)
+        src/ssmt/Deaerator.cpp
+        src/ssmt/Header.cpp
+        src/ssmt/Turbine.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -194,7 +196,9 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/PRV.h
         include/ssmt/FlashTank.h
-        include/ssmt/Deaerator.h include/ssmt/Header.h)
+        include/ssmt/Deaerator.h
+        include/ssmt/Header.h
+        include/ssmt/Turbine.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -232,7 +236,9 @@ set(TEST_FILES
         tests/FlashTank.unit.cpp
         tests/PRV.unit.cpp
         tests/FlashTank.unit.cpp
-        tests/Deaerator.unit.cpp tests/Header.unit.cpp)
+        tests/Deaerator.unit.cpp
+        tests/Header.unit.cpp
+        tests/Turbine.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
