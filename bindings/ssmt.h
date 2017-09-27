@@ -460,40 +460,52 @@ NAN_METHOD(header) {
     auto array = inp->ToObject()->Get(arrayStr);
     v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
 
+    auto pressureStr = Nan::New<String>("pressure").ToLocalChecked();
+    auto temperatureStr = Nan::New<String>("temperature").ToLocalChecked();
+	auto qualityStr = Nan::New<String>("quality").ToLocalChecked();
+    auto massFlowStr = Nan::New<String>("massFlow").ToLocalChecked();
+    auto specificEnthalpyStr = Nan::New<String>("specificEnthalpy").ToLocalChecked();
+    auto specificEntropyStr = Nan::New<String>("specificEntropy").ToLocalChecked();
+    auto energyFlowStr = Nan::New<String>("energyFlow").ToLocalChecked();
+
 	std::vector<Inlet> inlets;
-
-    Local<String> pressureStr = Nan::New<String>("pressure").ToLocalChecked();
-    Local<String> thermodynamicQuantityStr = Nan::New<String>("thermodynamicQuantity").ToLocalChecked();
-    Local<String> quantityValueStr = Nan::New<String>("quantityValue").ToLocalChecked();
-    Local<String> massFlowStr = Nan::New<String>("massFlow").ToLocalChecked();
-
 
     for (size_t i = 0; i < arr->Length(); i++) {
         auto const pressure = arr->Get(i)->ToObject()->Get(pressureStr)->NumberValue();
-        auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(arr->Get(i)->ToObject()->Get(thermodynamicQuantityStr)->NumberValue());
-        auto const quantityValue = arr->Get(i)->ToObject()->Get(quantityValueStr)->NumberValue();
+        auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(arr->Get(i)->ToObject()->Get(Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
+        auto const quantityValue = arr->Get(i)->ToObject()->Get(Nan::New<String>("quantityValue").ToLocalChecked())->NumberValue();
         auto const massFlow = arr->Get(i)->ToObject()->Get(massFlowStr)->NumberValue();
         inlets.emplace_back(Inlet(pressure, quantity, quantityValue, massFlow));
-//        inlets.emplace_back(Inlet(pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE, quantityValue, massFlow));
 
-        // TODO check this locality, might need to be "escapable" or something
-        Local<Object> obj1 = Nan::New<Object>();
-        Local<String> inletNum = Nan::New<String>("inlet" + std::to_string(++i)).ToLocalChecked();
-        Local<String> inletEnergyFlowStr = Nan::New<String>("inletEnergyFlow").ToLocalChecked();
-        Local<Number> inletEnergyFlow = Nan::New<Number>(inlets[i].getInletEnergyFlow());
-        Nan::Set(obj1, inletEnergyFlowStr, inletEnergyFlow);
+        Local<Object> obj = Nan::New<Object>();
+        Local<String> inletNum = Nan::New<String>("inlet" + std::to_string(i + 1)).ToLocalChecked();
+        auto const inletProps = inlets[i].getInletProperties();
 
-        Nan::Set(r, inletNum, obj1);
+        Nan::Set(obj, pressureStr, Nan::New<Number>(inletProps.at("pressure")));
+        Nan::Set(obj, temperatureStr, Nan::New<Number>(inletProps.at("temperature")));
+        Nan::Set(obj, qualityStr, Nan::New<Number>(inletProps.at("quality")));
+        Nan::Set(obj, specificEnthalpyStr, Nan::New<Number>(inletProps.at("specificEnthalpy")));
+        Nan::Set(obj, specificEntropyStr, Nan::New<Number>(inletProps.at("specificEntropy")));
+        Nan::Set(obj, energyFlowStr, Nan::New<Number>(inlets[i].getInletEnergyFlow()));
+        Nan::Set(obj, massFlowStr, Nan::New<Number>(inlets[i].getMassFlow()));
+
+        Nan::Set(r, inletNum, obj);
     }
 
 	auto header = Header(headerPressure, inlets);
     Local<String> headerStr = Nan::New<String>("header").ToLocalChecked();
 
+    auto const headerProps = header.getHeaderProperties();
 
     Local<Object> obj = Nan::New<Object>();
-    Local<String> headerPressureStr = Nan::New<String>("headerPressure").ToLocalChecked();
-    Local<Number> headerPressureN = Nan::New<Number>(header.getHeaderPressure());
-    Nan::Set(obj, headerPressureStr, headerPressureN);
+
+    Nan::Set(obj, pressureStr, Nan::New<Number>(header.getHeaderPressure()));
+    Nan::Set(obj, temperatureStr, Nan::New<Number>(headerProps.at("temperature")));
+    Nan::Set(obj, qualityStr, Nan::New<Number>(headerProps.at("quality")));
+    Nan::Set(obj, specificEnthalpyStr, Nan::New<Number>(headerProps.at("specificEnthalpy")));
+    Nan::Set(obj, specificEntropyStr, Nan::New<Number>(headerProps.at("specificEntropy")));
+    Nan::Set(obj, energyFlowStr, Nan::New<Number>(header.getInletEnergyFlow()));
+    Nan::Set(obj, massFlowStr, Nan::New<Number>(header.getInletMassFlow()));
 
     Nan::Set(r, headerStr, obj);
     info.GetReturnValue().Set(r);

@@ -239,7 +239,7 @@ test('deaerator', function (t) {
 });
 
 test('header', function (t) {
-    t.plan(5);
+    t.plan(22);
     t.type(bindings.header, 'function');
 
     var inp = {
@@ -275,13 +275,29 @@ test('header', function (t) {
     var res = bindings.header(inp);
     var header = res.header;
     var inlet1 = res.inlet1;
-    var inlet2 = res.inlet2;
-    var inlet3 = res.inlet3;
     var inlet4 = res.inlet4;
-    t.equal(header.headerPressure, 0.173, header.headerPressure + " != 0.173");
-    t.equal(inlet1.inletEnergyFlow, 2000, 's');
-    t.equal(inlet2.inletEnergyFlow, 2000, 's');
-    t.equal(inlet3.inletEnergyFlow, 2000, 's');
 
-    var idk = 10;
+    t.equal(header.pressure, 0.173, header.pressure + " != 0.173");
+    t.equal(rnd(header.temperature), rnd(388.8366691795), header.temperature + " != 388.8");
+    t.equal(rnd(header.massFlow), rnd(2.059399999), header.massFlow + " != something");
+    t.equal(rnd(header.energyFlow), rnd(3998.8128348989585), header.energyFlow + " != something");
+    t.equal(rnd(header.quality), rnd(0.6577144796131725), header.quality + " != something");
+    t.equal(rnd(header.specificEnthalpy), rnd(1941.7368334946873), header.specificEnthalpy + " != something");
+    t.equal(rnd(header.specificEntropy), rnd(5.226216653050388), header.specificEntropy + " != something");
+
+    t.equal(rnd(inlet1.energyFlow), rnd(2086.4298803), inlet1.energyFlow + ' != something');
+    t.equal(rnd(inlet1.massFlow), rnd(0.686), inlet1.massFlow += ' != something');
+    t.equal(rnd(inlet1.pressure), rnd(1.9332), inlet1.pressure += ' != something');
+    t.equal(rnd(inlet1.quality), 1, inlet1.quality += ' != 1');
+    t.equal(rnd(inlet1.specificEnthalpy), rnd(3041.442974242245), inlet1.specificEnthalpy += ' != something');
+    t.equal(rnd(inlet1.specificEntropy), rnd(6.81324727632225), inlet1.specificEntropy += ' != something');
+    t.equal(rnd(inlet1.temperature), rnd(579.8), inlet1.temperature += ' != something');
+
+    t.equal(rnd(inlet4.energyFlow), rnd(266.41815154210417), inlet4.energyFlow + ' != something');
+    t.equal(rnd(inlet4.massFlow), rnd(0.3082), inlet4.massFlow += ' != something');
+    t.equal(rnd(inlet4.pressure), rnd(1.8438), inlet4.pressure += ' != something');
+    t.equal(rnd(inlet4.quality), 0, inlet4.quality += ' != 1');
+    t.equal(rnd(inlet4.specificEnthalpy), rnd(864.4326785921616), inlet4.specificEnthalpy += ' != something');
+    t.equal(rnd(inlet4.specificEntropy), rnd(2.3554693941761826), inlet4.specificEntropy += ' != something');
+    t.equal(rnd(inlet4.temperature), rnd(475.8), inlet4.temperature += ' != something');
 });
