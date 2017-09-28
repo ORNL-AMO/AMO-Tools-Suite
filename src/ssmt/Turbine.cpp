@@ -11,7 +11,7 @@ Turbine::Turbine(Solve solveFor, double inletPressure, SteamProperties::Thermody
 	if (solveFor == Solve::IsentropicEfficiency) {
 		throw std::runtime_error("Must use the other Turbine constructor to solve for Isentropic Efficiency");
 	}
-	calculateOutletProperties();
+	calculate();
 }
 
 Turbine::Turbine(const Solve solveFor, const double inletPressure,
@@ -27,10 +27,18 @@ Turbine::Turbine(const Solve solveFor, const double inletPressure,
 	if (solveFor == Solve::OutletProperties) {
 		throw std::runtime_error("Must use the other Turbine constructor to solve for Outlet Properties");
 	}
-	calculateIsentropicEfficiency();
+	calculate();
 }
 
-void Turbine::calculateOutletProperties() {
+void Turbine::calculate() {
+	if (solveFor == Solve::OutletProperties) {
+		solveForOutletProperties();
+	} else {
+		solveForIsentropicEfficiency();
+	}
+}
+
+void Turbine::solveForOutletProperties() {
 	inletProperties = SteamProperties(inletPressure, inletQuantity, inletQuantityValue).calculate();
 	auto const inletSpecificEnthalpy = inletProperties.at("specificEnthalpy");
 
@@ -47,7 +55,7 @@ void Turbine::calculateOutletProperties() {
 	calculateTurbineProperties(inletSpecificEnthalpy, outletSpecificEnthalpy);
 }
 
-void Turbine::calculateIsentropicEfficiency() {
+void Turbine::solveForIsentropicEfficiency() {
 	inletProperties = SteamProperties(inletPressure, inletQuantity, inletQuantityValue).calculate();
 	auto const inletSpecificEnthalpy = inletProperties.at("specificEnthalpy");
 
@@ -62,7 +70,6 @@ void Turbine::calculateIsentropicEfficiency() {
 	                       / (inletSpecificEnthalpy - idealOutletSpecificEnthalpy);
 
 	calculateTurbineProperties(inletSpecificEnthalpy, outletProperties.at("specificEnthalpy"));
-	// outletEnergyFlow ???? TODO
 }
 
 void Turbine::calculateTurbineProperties(const double inletSpecificEnthalpy, const double outletSpecificEnthalpy) {
@@ -71,54 +78,66 @@ void Turbine::calculateTurbineProperties(const double inletSpecificEnthalpy, con
 		massFlow = energyOut / (inletSpecificEnthalpy - outletSpecificEnthalpy);
 		powerOut = massFlowOrPowerOut;
 	} else {
-		massFlow = massFlowOrPowerOut;
+		massFlow = massFlowOrPowerOut / 1000;
 		energyOut = (inletSpecificEnthalpy - outletSpecificEnthalpy) * massFlow;
 		powerOut = energyOut * generatorEfficiency;
 	}
 
 	inletEnergyFlow = inletSpecificEnthalpy * massFlow;
+	outletEnergyFlow = outletSpecificEnthalpy * massFlow;
 }
 
 void Turbine::setSolveFor(Turbine::Solve solveFor) {
 	this->solveFor = solveFor;
+	calculate();
 }
 
 void Turbine::setInletPressure(double inletPressure) {
 	this->inletPressure = inletPressure;
+	calculate();
 }
 
 void Turbine::setIsentropicEfficiency(double isentropicEfficiency) {
 	this->isentropicEfficiency = isentropicEfficiency / 100;
+	calculate();
 }
 
 void Turbine::setGeneratorEfficiency(double generatorEfficiency) {
 	this->generatorEfficiency = generatorEfficiency / 100;
+	calculate();
 }
 
 void Turbine::setMassFlowOrPowerOut(double massFlowOrPowerOut) {
 	this->massFlowOrPowerOut = massFlowOrPowerOut;
+	calculate();
 }
 
 void Turbine::setOutletSteamPressure(double outletSteamPressure) {
 	this->outletSteamPressure = outletSteamPressure;
+	calculate();
 }
 
 void Turbine::setInletQuantity(SteamProperties::ThermodynamicQuantity inletQuantity) {
 	this->inletQuantity = inletQuantity;
+	calculate();
 }
 
 void Turbine::setOutletQuantity(SteamProperties::ThermodynamicQuantity outletQuantity) {
 	this->outletQuantity = outletQuantity;
+	calculate();
 }
 
 void Turbine::setInletQuantityValue(double inletQuantityValue) {
 	this->inletQuantityValue = inletQuantityValue;
+	calculate();
 }
 
 void Turbine::setOutletQuantityValue(double outletQuantityValue) {
 	this->outletQuantityValue = outletQuantityValue;
+	calculate();
 }
 
 void Turbine::setTurbineProperty(Turbine::TurbineProperty turbineProperty) {
 	this->turbineProperty = turbineProperty;
+	calculate();
 }

@@ -18,6 +18,7 @@
 #include "ssmt/PRV.h"
 #include "ssmt/Deaerator.h"
 #include "ssmt/Header.h"
+#include "ssmt/Turbine.h"
 #include <string>
 
 
@@ -509,6 +510,49 @@ NAN_METHOD(header) {
 
     Nan::Set(r, headerStr, obj);
     info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(turbine) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    Turbine::Solve solveFor = static_cast<Turbine::Solve>(inp->ToObject()->Get(Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
+    Turbine::TurbineProperty turbineProperty = static_cast<Turbine::TurbineProperty>(inp->ToObject()->Get(Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue());
+    SteamProperties::ThermodynamicQuantity inletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(inp->ToObject()->Get(Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue());
+
+	std::unique_ptr<Turbine> t;
+
+    if (solveFor == Turbine::Solve::OutletProperties) {
+        t = std::unique_ptr<Turbine>(new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
+                    turbineProperty, Get("isentropicEfficiency"), Get("generatorEfficiency"),
+                    Get("massFlowOrPowerOut"), Get("outletSteamPressure")));
+    } else {
+        auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(inp->ToObject()->Get(Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue());
+        t = std::unique_ptr<Turbine>(new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
+                    turbineProperty, Get("generatorEfficiency"), Get("massFlowOrPowerOut"),
+                    Get("outletSteamPressure"), outletQuantity, Get("outletQuantityValue")));
+    }
+
+    SetR("inletPressure", t->getInletProperties().at("pressure"));
+    SetR("inletTemperature", t->getInletProperties().at("temperature"));
+    SetR("inletSpecificEnthalpy", t->getInletProperties().at("specificEnthalpy"));
+    SetR("inletSpecificEntropy", t->getInletProperties().at("specificEntropy"));
+    SetR("inletQuality", t->getInletProperties().at("quality"));
+    SetR("inletEnergyFlow", t->getInletEnergyFlow());
+
+    SetR("outletPressure", t->getOutletProperties().at("pressure"));
+    SetR("outletTemperature", t->getOutletProperties().at("temperature"));
+    SetR("outletSpecificEnthalpy", t->getOutletProperties().at("specificEnthalpy"));
+    SetR("outletSpecificEntropy", t->getOutletProperties().at("specificEntropy"));
+    SetR("outletQuality", t->getOutletProperties().at("quality"));
+    SetR("outletEnergyFlow", t->getOutletEnergyFlow());
+
+    SetR("massFlow", t->getMassFlow());
+    SetR("isentropicEfficiency", t->getIsentropicEfficiency());
+    SetR("energyOut", t->getEnergyOut());
+    SetR("powerOut", t->getPowerOut());
+    SetR("generatorEfficiency", t->getGeneratorEfficiency());
+	info.GetReturnValue().Set(r);
 }
 
 

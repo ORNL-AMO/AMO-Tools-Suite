@@ -56,8 +56,9 @@ public:
 	void setTurbineProperty(TurbineProperty turbineProperty);
 
 private:
-	void calculateOutletProperties();
-	void calculateIsentropicEfficiency();
+	void calculate();
+	void solveForOutletProperties();
+	void solveForIsentropicEfficiency();
 	void calculateTurbineProperties(double inletSpecificEnthalpy, double outletSpecificEnthalpy);
 
 	Solve solveFor;
