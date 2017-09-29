@@ -7,7 +7,7 @@
               "include", "<!(node -e \"require('nan')\")"
             ],
             'sources' : [
-                'src/calculator/ExhaustGasEAF.cpp'
+                'bindings/ExhaustGasEAF.cpp'
             ],
             "conditions": [
                 [ 'OS=="mac"', {

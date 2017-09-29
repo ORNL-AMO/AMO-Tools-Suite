@@ -104,7 +104,7 @@ set(SOURCE_FILES
         src/calculator/losses/SlagOtherMaterialLosses.cpp
         src/calculator/losses/SolidLiquidFlueGasMaterial.cpp
         src/calculator/losses/AuxiliaryPower.cpp
-        src/calculator/ExhaustGasEAF.cpp
+#        bindings/ExhaustGasEAF.cpp
         src/calculator/furnace/EnergyEquivalency.cpp
         src/calculator/furnace/EfficiencyImprovement.cpp
         src/calculator/furnace/O2Enrichment.cpp
@@ -118,7 +118,7 @@ set(SOURCE_FILES
         src/ssmt/HeatLoss.cpp
         src/ssmt/FlashTank.cpp
         src/ssmt/PRV.cpp
-        src/ssmt/Deaerator.cpp)
+        src/ssmt/Deaerator.cpp src/calculator/losses/ExhaustGasEAF.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -177,7 +177,7 @@ set(INCLUDE_FILES
         include/calculator/losses/SlagOtherMaterialLosses.h
         include/calculator/losses/SolidLiquidFlueGasMaterial.h
         include/calculator/losses/AuxiliaryPower.h
-        include/calculator/ExhaustGasEAF.h
+        include/calculator/losses/ExhaustGasEAF.h
         include/calculator/furnace/EnergyEquivalency.h
         include/calculator/furnace/EfficiencyImprovement.h
         include/calculator/furnace/O2Enrichment.h
