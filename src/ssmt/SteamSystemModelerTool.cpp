@@ -39,7 +39,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
     double gibbsPi = 0;
     double gibbsT = 0;
 
-	for ( auto k = 0; k < (int) n.size(); k++ ) {
+	for (size_t k = 0; k < n.size(); k++ ) {
 		gibbs += n[k] * pow((7.1 - reducedPressure), i[k]) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsPi += -n[k] * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsT += n[k] * pow((7.1 - reducedPressure), i[k]) * j[k] * pow((inversedReducedTemp - 1.222), j[k] - 1);
@@ -105,7 +105,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
 	double gibbsPi0 = 1 / reducedPressure;
 	double gibbsT0 = 0, gibbsTT0 = 0;
 
-	for (int k = 0; k < 9; k++) {
+	for (size_t k = 0; k < n0.size(); k++) {
 		gibbs0 += n0[k] * std::pow(inverseReducedTemp, j0[k]);
 		gibbsT0 += n0[k] * j0[k] * std::pow(inverseReducedTemp, j0[k] - 1);
 		gibbsTT0 += n0[k] * j0[k] * (j0[k] - 1) * std::pow(inverseReducedTemp, j0[k] - 2);
@@ -149,7 +149,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 	auto testPressureB = region3propNew["pressure"];
 
 	double pressureNew = 0;
-	for ( size_t i = 0; i < 4; i++ ) {
+	for (size_t i = 0; i < 4; i++) {
 		auto const densityNew = (densityA + densityB) / 2.0;
 		region3propNew = region3Density(densityNew, t);
 		pressureNew = region3propNew["pressure"];
@@ -214,7 +214,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 	auto helmholtzS = n[0] / reducedDensity;
 	double helmholtzT = 0;
 
-	for (size_t k = 1; k < 40; k++) {
+	for (size_t k = 1; k < n.size(); k++) {
 		helmholtz += n[k] * std::pow(reducedDensity, i[k]) * std::pow(inverseReducedTemp, j[k]);
 		helmholtzS += n[k] * i[k] * std::pow(reducedDensity, i[k] - 1.0) * std::pow(inverseReducedTemp, j[k]);
 		helmholtzT += n[k] * std::pow(reducedDensity, i[k]) * j[k] * std::pow(inverseReducedTemp, j[k] - 1);
@@ -295,7 +295,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pres
 	auto const nu = enthalpy / 2500.0;
 	double temp = 0.0;
 
-	for(size_t i = 0; i < n.size(); i++) {
+	for (size_t i = 0; i < n.size(); i++) {
 		temp += n[i] * std::pow(pressure, I[i]) * std::pow((nu + 1), J[i]);
 	}
 	return temp;
@@ -500,7 +500,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 
     double temp = 0.0;
 
-    for(size_t i = 0; i < array2.size(); i++) {
+    for (size_t i = 0; i < array2.size(); i++) {
         temp += array2[i] * std::pow(pressure, array0[i]) * std::pow((entropy + 2), array1[i]);
     }
     return temp;
