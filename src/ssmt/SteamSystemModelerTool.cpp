@@ -206,7 +206,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 			{"temperature", t}, // temperature in Kelvin
 			{"pressure", reducedDensity * helmholtzS * d * t * r / 1000.0},
 			{"density", d },
-//			{"quality", 0 }, // TODO determine what quality should be in this region
+			{"quality", 1 }, // TODO determine what quality should be in this region
 			{"specificVolume", 1 / d},
 			{"internalEnergy", (inverseReducedTemp * helmholtzT * t * r)},
 			{"specificEnthalpy", (inverseReducedTemp * helmholtzT + reducedDensity * helmholtzS) * t * r},
