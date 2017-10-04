@@ -21,15 +21,12 @@ public:
     /**
      * Constructor for SteamProperties class
      * @param pressure double, pressure in MPa
-     * @param quantity ThermodynamicQuantity, the value type used to calculate steam propeties (TEMPERATURE, ENTHALPY, etc.)
+     * @param quantity ThermodynamicQuantity, the value type used to calculate steam properties (TEMPERATURE, ENTHALPY, etc.)
      */
-	SteamProperties(
-			double pressure,
-			ThermodynamicQuantity quantity,
-			double quantityValue):
-			pressure_(pressure),
-			thermodynamicQuantity_(quantity),
-			quantityValue_(quantityValue)
+	SteamProperties(const double pressure, const ThermodynamicQuantity quantity, const double quantityValue)
+			: pressure_(pressure),
+			  quantityValue_(quantityValue),
+			  thermodynamicQuantity_(quantity)
 	{}
 
     /**
@@ -41,16 +38,15 @@ public:
      * @return unordered_map <string, double>, steam properties
      */
 	std::unordered_map <std::string, double> calculate();
-	//std::unordered_map <std::string, double> calculate(const double pressure, const double quantityValue);
 
-//private:
+private:
     /**
      * Calculates the steam properties using temperature
      * @param pressure double, pressure in MPa
      * @param temperature double, temperature in Kelvins
      * @return unordered_map <string, double>, steam properties
      */
-	std::unordered_map <std::string, double> waterPropertiesPressureTemperature(const double pressure, const double temperature);
+	std::unordered_map <std::string, double> waterPropertiesPressureTemperature(double pressure, double temperature);
 
     /**
      * Calculates the steam properties using specific enthalpy
@@ -58,7 +54,7 @@ public:
      * @param enthalpy double, specific enthalpy in kJ/kg
      * @return unordered_map <string, double>, steam properties
      */
-	std::unordered_map <std::string, double> waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy);
+	std::unordered_map <std::string, double> waterPropertiesPressureEnthalpy(double pressure, double enthalpy);
 
     /**
      * Calculates the steam properties using specific entropy
@@ -66,7 +62,7 @@ public:
      * @param entropy double, specific entropy in kJ/kg/K
      * @return unordered_map <string, double>, steam properties
      */
-	std::unordered_map <std::string, double> waterPropertiesPressureEntropy(const double pressure, const double entropy);
+	std::unordered_map <std::string, double> waterPropertiesPressureEntropy(double pressure, double entropy);
 
     /**
      * Calculates the steam properties using specific quality
@@ -74,7 +70,7 @@ public:
      * @param quality double, specific quality - unitless
      * @return unordered_map <string, double>, steam properties
      */
-	std::unordered_map <std::string, double> waterPropertiesPressureQuality(const double pressure, const double quality);
+	std::unordered_map <std::string, double> waterPropertiesPressureQuality(double pressure, double quality);
 
 //	enum class Region {
 //		LIQUIDREGION1,
@@ -84,9 +80,8 @@ public:
 
 //	Region regionSelect(const double pressure, const double temperature);
 private:
-	double pressure_ = 0.0;
-	ThermodynamicQuantity thermodynamicQuantity_;
-	double quantityValue_ = 0.0;
+	const double pressure_, quantityValue_;
+	const ThermodynamicQuantity thermodynamicQuantity_;
 
 };
 
