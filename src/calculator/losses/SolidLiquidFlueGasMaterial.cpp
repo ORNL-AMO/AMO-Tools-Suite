@@ -44,6 +44,18 @@ double SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(
 	return excessAir;
 }
 
+
+double SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur,
+                                                             double inertAsh, double o2, double moisture,
+                                                             double nitrogen)
+{
+	const double percentTotalFuelComponents = carbon + hydrogen + sulphur + inertAsh + o2 + moisture + nitrogen;
+	const double carbonBar = carbon / percentTotalFuelComponents;
+	const double hydrogenBar = hydrogen / percentTotalFuelComponents;
+	const double sulphurBar = sulphur / percentTotalFuelComponents;
+	return carbonBar * 14100 + hydrogenBar * 61100 + sulphurBar * 3980;
+}
+
 double SolidLiquidFlueGasMaterial::getHeatLoss() {
 	// adjust input by weight - step 1
 	const double percentTotalFuelComponents = carbon + hydrogen + sulphur + inertAsh + o2 + moisture + nitrogen;
@@ -63,7 +75,7 @@ double SolidLiquidFlueGasMaterial::getHeatLoss() {
 	const double hCombustionAir = mCombustionAir * cpCombustionAir * (combustionAirTemperature - 60) / 0.075;
 
 	// steps 4 and 5
-	const double hvFuel = carbonBar * 14100 + hydrogenBar * 61100 + sulphurBar * 3980;
+	const double heatingValueFuel = carbonBar * 14100 + hydrogenBar * 61100 + sulphurBar * 3980;
 	const double mCO2 = carbonBar * (44.0 / 12);
 	const double mH2O = hydrogenBar * 9 + moistureBar + (moistureInAirCombustion / 100.0) * mCombustionAir;
 	const double mSO2 = sulphurBar * 2;
@@ -94,8 +106,8 @@ double SolidLiquidFlueGasMaterial::getHeatLoss() {
 	const double hMoisture = moisture * (flueGasTemperature - 60);
 	const double hCarbon = 14093 * unburnedCarbonInAsh * (inertAsh / percentTotalFuelComponents);
 	const double hAsh = (inertAsh / percentTotalFuelComponents) * 0.25 * (1.8 * ashDischargeTemperature + 32 - 60);
-	const double hIn = hFuel + hCombustionAir + hvFuel + hMoisture;
+	const double hIn = hFuel + hCombustionAir + heatingValueFuel + hMoisture;
 
-	const double availableHeatPercent = (hIn - hFG - hAsh - hCarbon) / hvFuel;
+	const double availableHeatPercent = (hIn - hFG - hAsh - hCarbon) / heatingValueFuel;
 	return availableHeatPercent;
 }
