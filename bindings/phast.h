@@ -104,7 +104,7 @@ NAN_METHOD(auxiliaryPowerLoss) {
 }
 
 
-NAN_METHOD(energyInput) {
+NAN_METHOD(energyInputEAF) {
 
 /**
      * Constructor for the Electric Arc Furnace (EAF) heat loss with all inputs specified
@@ -112,8 +112,6 @@ NAN_METHOD(energyInput) {
      * @param naturalGasHeatInput double, value of total heat input to the heating system (furnace/oven) from all
      *                              sources of heat supplied (natural gas, carbon, fuel oil, etc.)
      *                              measured in mm btu/cycle
-     * @param naturalGasFlow double, natural gas flow measured in cu.ft/cycle
-     * @param measuredOxygenFlow double, oxygen flow to the furnace measured in scfh
      * @param coalCarbonInjection double, mass of coal or carbon injection for the cycle measured in lbs/cycle
      * @param coalHeatingValue double, heating value for the coal or carbon injected measured in btu/lb
      * @param electrodeUse double, electrode use measured in lbs/cycle
@@ -125,22 +123,21 @@ NAN_METHOD(energyInput) {
      * */
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    EnergyInputEAF eaf(Get("naturalGasHeatInput"), Get("naturalGasFlow"), Get("measuredOxygenFlow"), Get("coalCarbonInjection"), Get("coalHeatingValue"), Get("electrodeUse"), Get("electrodeHeatingValue"), Get("otherFuels"), Get("electricityInput"));
-    double heatDelivered = eaf.getHeatDelivered();
-    double kwhCycle = eaf.getKwhCycle();
-    double totalKwhCycle = eaf.getTotalKwhPerCycle();
+    EnergyInputEAF eaf(Get("naturalGasHeatInput"), Get("coalCarbonInjection"), Get("coalHeatingValue"), Get("electrodeUse"),
+                       Get("electrodeHeatingValue"), Get("otherFuels"), Get("electricityInput"));
+    const double heatDelivered = eaf.getHeatDelivered();
+    const double totalChemicalEnergyInput = eaf.getTotalChemicalEnergyInput();
+
     SetR("heatDelivered", heatDelivered);
-    SetR("kwhCycle", kwhCycle);
-    SetR("totalKwhCycle", totalKwhCycle);
+    SetR("totalChemicalEnergyInput", totalChemicalEnergyInput);
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(exhaustGas) {
-
+NAN_METHOD(exhaustGasEAF) {
     inp = info[0]->ToObject();
-    ExhaustGasEAF eg(Get("cycleTime"), Get("offGasTemp"), Get("CO"), Get("H2"), Get("O2"), Get("CO2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"), Get("otherLosses"));
-    double heatLoss = eg.getTotalKwhPerCycle();
-    Local<Number> retval = Nan::New(heatLoss);
+    ExhaustGasEAF eg(Get("offGasTemp"), Get("CO"), Get("H2"), Get("combustibleGases"), Get("vfr"), Get("dustLoading"));
+	const double totalHeatExhaust = eg.getTotalHeatExhaust();
+    Local<Number> retval = Nan::New(totalHeatExhaust);
     info.GetReturnValue().Set(retval);
 }
 
@@ -176,8 +173,9 @@ NAN_METHOD(gasCoolingLosses) {
   * @return heatLoss double
   * */
     inp = info[0]->ToObject();
-    GasCoolingLosses gcl(Get("flowRate"), Get("initialTemperature"), Get("finalTemperature"), Get("specificHeat"), Get("correctionFactor"));
-    double heatLoss = gcl.getHeatLoss();
+    GasCoolingLosses gcl(Get("flowRate"), Get("initialTemperature"), Get("finalTemperature"), Get("specificHeat"),
+                         Get("correctionFactor"), Get("gasDensity"));
+    const double heatLoss = gcl.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
 }
@@ -631,10 +629,10 @@ NAN_METHOD(energyInputExhaustGasLosses) {
 
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    EnergyInputExhaustGasLosses eiegl(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
-    double heatDeliveredInKw = eiegl.getHeatDeliveredInKw();
-    Local<Number> retval = Nan::New(heatDeliveredInKw);
-    info.GetReturnValue().Set(retval);
+    EnergyInputExhaustGasLosses e(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
+	SetR("heatDelivered", e.getHeatDelivered());
+    SetR("exhaustGasLosses", e.getExhaustGasLosses());
+	info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(humidityRatio) {

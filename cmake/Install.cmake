@@ -60,7 +60,7 @@ INSTALL(FILES third_party/sqlite/sqlite3.h
         COMPONENT headers
         )
 
-install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db" DESTINATION "./db/")
+#install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db" DESTINATION "./db/")
 
 set(CPACK_COMPONENTS_ALL libraries headers)
 set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")

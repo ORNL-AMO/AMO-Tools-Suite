@@ -33,26 +33,83 @@ public:
      * @return nothing
      *
      * */
-    PrvWithoutDesuperheating(
-            double inletPressure,
-            SteamProperties::ThermodynamicQuantity quantityType,
-            double quantityValue,
-            double inletMassFlow,
-            double outletPressure)
-            : inletPressure_(inletPressure),
-              quantityType_(quantityType),
-              quantityValue_(quantityValue),
-              inletMassFlow_(inletMassFlow),
-              outletPressure_(outletPressure)
+    PrvWithoutDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
+                             double quantityValue, double inletMassFlow, double outletPressure);
 
-    {
-        inletEnergyFlow_ = 0.0;
-        outletMassFlow_ = 0.0;
-        outletEnergyFlow_ = 0.0;
-
+    /**
+     * Gets the inlet pressure
+     *
+     * @return double, pressure of the inlet steam in MPa
+     */
+    double getInletPressure() const {
+        return inletPressure;
     }
 
-    PrvWithoutDesuperheating() = default;
+    /**
+     * Gets the quantity type
+     *
+     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
+    SteamProperties::ThermodynamicQuantity getQuantityType() const {
+        return quantityType;
+    }
+
+    /**
+     * Gets the quantity value
+     *
+     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
+     */
+    double getQuantityValue() const {
+        return quantityValue;
+    }
+
+    /**
+     * Gets the inlet mass flow
+     *
+     * @return double, mass flow of the inlet steam in kg/hr
+     */
+    double getInletMassFlow() const {
+        return inletMassFlow;
+    }
+
+    /**
+     * Gets the outlet pressure
+     *
+     * @return double, outlet pressure in MPa
+     */
+    double getOutletPressure() const {
+        return outletPressure;
+    }
+
+    /**
+     * Gets all of the properties of the inlet steam
+     * @return std::unordered_map <std::string, double>, inlet steam properties
+     */
+    std::unordered_map <std::string, double> const & getInletProperties() const { return inletProperties; };
+
+    /**
+     * Gets all of the properties of the outlet steam
+     * @return std::unordered_map <std::string, double>, outlet steam properties
+     */
+    std::unordered_map <std::string, double> const & getOutletProperties() const { return outletProperties; };
+
+    /**
+     * Gets the inlet energy flow
+     * @return double, inlet steam energy flow in MJ/hr
+     */
+    double getInletEnergyFlow() const { return inletEnergyFlow; }
+
+    /**
+     * Gets the outlet mass flow
+     * @return double, outlet mass flow in kg/hr
+     */
+    double getOutletMassFlow() const { return inletMassFlow; }
+
+    /**
+     * Gets the outlet energy flow
+     * @return double, outlet energy flow in MJ/hr
+     */
+    double getOutletEnergyFlow() const { return inletEnergyFlow; }
 
     /**
      * Sets the inlet pressure
@@ -62,16 +119,8 @@ public:
      * @return nothing
      */
     void setInletPressure(double inletPressure) {
-        inletPressure_ = inletPressure;
-    }
-
-    /**
-     * Gets the inlet pressure
-     *
-     * @return double, pressure of the inlet steam in MPa
-     */
-    double getInletPressure() const {
-        return inletPressure_;
+        this->inletPressure = inletPressure;
+        calculateProperties();
     }
 
     /**
@@ -82,18 +131,9 @@ public:
      * @return nothing
      */
     void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType) {
-        quantityType_ = quantityType;
+        this->quantityType = quantityType;
+        calculateProperties();
     }
-
-    /**
-     * Gets the quantity type
-     *
-     * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     */
-    SteamProperties::ThermodynamicQuantity getQuantityType() const {
-        return quantityType_;
-    }
-
     /**
      * Sets the quantity value
      *
@@ -102,16 +142,8 @@ public:
      * @return nothing
      */
     void setQuantityValue(double quantityValue) {
-        quantityValue_ = quantityValue;
-    }
-
-    /**
-     * Gets the quantity value
-     *
-     * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     */
-    double getQuantityValue() const {
-        return quantityValue_;
+        this->quantityValue = quantityValue;
+        calculateProperties();
     }
 
     /**
@@ -122,16 +154,8 @@ public:
      * @return nothing
      */
     void setInletMassFlow(double inletMassFlow) {
-        inletMassFlow_ = inletMassFlow;
-    }
-
-    /**
-     * Gets the inlet mass flow
-     *
-     * @return double, mass flow of the inlet steam in kg/hr
-     */
-    double getInletMassFlow() const {
-        return inletMassFlow_;
+        this->inletMassFlow = inletMassFlow;
+        calculateProperties();
     }
 
     /**
@@ -142,63 +166,17 @@ public:
      * @return nothing
      */
     void setOutletPressure(double outletPressure) {
-        outletPressure_ = outletPressure;
+        this->outletPressure = outletPressure;
+        calculateProperties();
     }
-
-    /**
-     * Gets the outlet pressure
-     *
-     * @return double, outlet pressure in MPa
-     */
-    double getOutletPressure() const {
-        return outletPressure_;
-    }
-
-    /**
-     * Calculates all of the properties of the inlet steam
-     * @return std::unordered_map <std::string, double>, inlet steam properties
-     */
-    std::unordered_map <std::string, double> getInletProperties();
-
-    /**
-     * Calculates all of the properties of the outlet steam
-     * @return std::unordered_map <std::string, double>, outlet steam properties
-     */
-    std::unordered_map <std::string, double> getOutletProperties();
-
-    /**
-     * Calculates the inlet energy flow
-     * @return double, inlet steam energy flow in MJ/hr
-     */
-    double getInletEnergyFlow();
-
-    /**
-     * Calculates the outlet mass flow
-     * @return double, outlet mass flow in kg/hr
-     */
-    double getOutletMassFlow();
-
-    /**
-     * Calculates the outlet energy flow
-     * @return double, outlet energy flow in MJ/hr
-     */
-    double getOutletEnergyFlow();
 
 private:
-    // In values
-    double inletPressure_ = 0.0;
-    SteamProperties::ThermodynamicQuantity quantityType_;
-    double quantityValue_ = 0.0;
-    double inletMassFlow_ = 0.0;
-    double outletPressure_ = 0.0;
+	void calculateProperties();
 
+    double inletPressure, quantityValue, inletMassFlow, outletPressure, inletEnergyFlow;
+    SteamProperties::ThermodynamicQuantity quantityType;
 
-    // Out values
-    std::unordered_map <std::string, double> inletProperties_;
-    std::unordered_map <std::string, double> outletProperties_;
-    double inletEnergyFlow_;
-    double outletMassFlow_;
-    double outletEnergyFlow_;
+    std::unordered_map <std::string, double> inletProperties, outletProperties;
 };
 
 
@@ -226,36 +204,10 @@ public:
      * @return nothing
      *
      * */
-    PrvWithDesuperheating(
-            double inletPressure,
-            SteamProperties::ThermodynamicQuantity quantityType,
-            double quantityValue,
-            double inletMassFlow,
-            double outletPressure,
-            double feedwaterPressure,
-            SteamProperties::ThermodynamicQuantity feedwaterQuantityType,
-            double feedwaterQuantityValue,
-            double desuperheatingTemp)
-            : inletPressure_(inletPressure),
-              quantityType_(quantityType),
-              quantityValue_(quantityValue),
-              inletMassFlow_(inletMassFlow),
-              outletPressure_(outletPressure),
-              feedwaterPressure_(feedwaterPressure),
-              feedwaterQuantityType_(feedwaterQuantityType),
-              feedwaterQuantityValue_(feedwaterQuantityValue),
-              desuperheatingTemp_(desuperheatingTemp)
-
-    {
-        inletEnergyFlow_ = 0.0;
-        outletMassFlow_ = 0.0;
-        outletEnergyFlow_ = 0.0;
-        feedwaterMassFlow_ = 0.0;
-        feedwaterEnergyFlow_ = 0.0;
-
-    }
-
-    PrvWithDesuperheating() = default;
+    PrvWithDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
+                          double quantityValue, double inletMassFlow, double outletPressure, double feedwaterPressure,
+                          SteamProperties::ThermodynamicQuantity feedwaterQuantityType, double feedwaterQuantityValue,
+                          double desuperheatingTemp);
 
     /**
      * Sets the inlet pressure
@@ -265,7 +217,8 @@ public:
      * @return nothing
      */
     void setInletPressure(double inletPressure) {
-        inletPressure_ = inletPressure;
+        this->inletPressure = inletPressure;
+		calculateProperties();
     }
 
     /**
@@ -274,7 +227,7 @@ public:
      * @return double, pressure of the inlet steam in MPa
      */
     double getInletPressure() const {
-        return inletPressure_;
+        return inletPressure;
     }
 
     /**
@@ -285,7 +238,8 @@ public:
      * @return nothing
      */
     void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType) {
-        quantityType_ = quantityType;
+        this->quantityType = quantityType;
+		calculateProperties();
     }
 
     /**
@@ -294,7 +248,7 @@ public:
      * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      */
     SteamProperties::ThermodynamicQuantity getQuantityType() const {
-        return quantityType_;
+        return quantityType;
     }
 
     /**
@@ -305,7 +259,8 @@ public:
      * @return nothing
      */
     void setQuantityValue(double quantityValue) {
-        quantityValue_ = quantityValue;
+        this->quantityValue = quantityValue;
+		calculateProperties();
     }
 
     /**
@@ -314,7 +269,7 @@ public:
      * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      */
     double getQuantityValue() const {
-        return quantityValue_;
+        return quantityValue;
     }
 
     /**
@@ -325,7 +280,8 @@ public:
      * @return nothing
      */
     void setInletMassFlow(double inletMassFlow) {
-        inletMassFlow_ = inletMassFlow;
+        this->inletMassFlow = inletMassFlow;
+		calculateProperties();
     }
 
     /**
@@ -333,9 +289,7 @@ public:
      *
      * @return double, mass flow of the inlet steam in kg/hr
      */
-    double getInletMassFlow() const {
-        return inletMassFlow_;
-    }
+    double getInletMassFlow() const { return inletMassFlow; }
 
     /**
      * Sets the outlet pressure
@@ -345,7 +299,8 @@ public:
      * @return nothing
      */
     void setOutletPressure(double outletPressure) {
-        outletPressure_ = outletPressure;
+        this->outletPressure = outletPressure;
+		calculateProperties();
     }
 
     /**
@@ -353,9 +308,7 @@ public:
      *
      * @return double, outlet pressure in MPa
      */
-    double getOutletPressure() const {
-        return outletPressure_;
-    }
+    double getOutletPressure() const { return outletPressure; }
 
     /**
      * Sets the feedwater pressure
@@ -365,7 +318,8 @@ public:
      * @return nothing
      */
     void setFeedwaterPressure(double feedwaterPressure) {
-        feedwaterPressure_ = feedwaterPressure;
+        this->feedwaterPressure = feedwaterPressure;
+		calculateProperties();
     }
 
     /**
@@ -373,9 +327,7 @@ public:
      *
      * @return double, feedwater pressure in MPa
      */
-    double getFeedwaterPressure() const {
-        return feedwaterPressure_;
-    }
+    double getFeedwaterPressure() const { return feedwaterPressure; }
 
     /**
      * Sets the feedwater quantity type
@@ -385,7 +337,8 @@ public:
      * @return nothing
      */
     void setFeedwaterQuantityType(SteamProperties::ThermodynamicQuantity feedwaterQuantityType) {
-        feedwaterQuantityType_ = feedwaterQuantityType;
+        this->feedwaterQuantityType = feedwaterQuantityType;
+		calculateProperties();
     }
 
     /**
@@ -393,9 +346,7 @@ public:
      *
      * @return SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      */
-    SteamProperties::ThermodynamicQuantity getFeedwaterQuantityType() const {
-        return feedwaterQuantityType_;
-    }
+    SteamProperties::ThermodynamicQuantity getFeedwaterQuantityType() const { return feedwaterQuantityType; }
 
     /**
      * Sets the feedwater quantity value
@@ -405,7 +356,8 @@ public:
      * @return nothing
      */
     void setFeedwaterQuantityValue(double feedwaterQuantityValue) {
-        feedwaterQuantityValue_ = feedwaterQuantityValue;
+        this->feedwaterQuantityValue = feedwaterQuantityValue;
+		calculateProperties();
     }
 
     /**
@@ -413,9 +365,7 @@ public:
      *
      * @return double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      */
-    double getFeedwaterQuantityValue() const {
-        return feedwaterQuantityValue_;
-    }
+    double getFeedwaterQuantityValue() const { return feedwaterQuantityValue; }
 
     /**
      * Sets the desuperheating temperature
@@ -425,7 +375,8 @@ public:
      * @return nothing
      */
     void setDesuperheatingTemp(double desuperheatingTemp) {
-        desuperheatingTemp_ = desuperheatingTemp;
+        this->desuperheatingTemp = desuperheatingTemp;
+		calculateProperties();
     }
 
     /**
@@ -433,80 +384,67 @@ public:
      *
      * @return double, desuperheating temperature in K
      */
-    double getDesuperheatingTemp() const {
-        return desuperheatingTemp_;
-    }
+    double getDesuperheatingTemp() const { return desuperheatingTemp; }
 
     /**
-     * Calculates all of the properties of the inlet steam
+     * Gets all of the properties of the inlet steam
      * @return std::unordered_map <std::string, double>, inlet steam properties
      */
-    std::unordered_map <std::string, double> getInletProperties();
+    std::unordered_map <std::string, double> const & getInletProperties() const { return inletProperties; };
 
     /**
-     * Calculates all of the properties of the outlet steam
+     * Gets all of the properties of the outlet steam
      * @return std::unordered_map <std::string, double>, outlet steam properties
      */
-    std::unordered_map <std::string, double> getOutletProperties();
+    std::unordered_map <std::string, double> const & getOutletProperties() const { return outletProperties; };
 
     /**
-     * Calculates all of the properties of the feedwater steam
+     * Gets all of the properties of the feedwater steam
      * @return std::unordered_map <std::string, double>, feedwater steam properties
      */
-    std::unordered_map <std::string, double> getFeedwaterProperties();
+    std::unordered_map <std::string, double> const & getFeedwaterProperties() const { return feedwaterProperties; };
 
     /**
-     * Calculates the inlet energy flow
+     * Gets the inlet energy flow
      * @return double, inlet steam energy flow in MJ/hr
      */
-    double getInletEnergyFlow();
+    double getInletEnergyFlow() const { return inletEnergyFlow; };
 
     /**
-     * Calculates the outlet mass flow
+     * Gets the outlet mass flow
      * @return double, outlet mass flow in kg/hr
      */
-    double getOutletMassFlow();
+    double getOutletMassFlow() const { return outletMassFlow; };
 
     /**
-     * Calculates the outlet energy flow
+     * Gets the outlet energy flow
      * @return double, outlet energy flow in MJ/hr
      */
-    double getOutletEnergyFlow();
+    double getOutletEnergyFlow() const { return outletEnergyFlow; };
 
     /**
-     * Calculates the feedwater mass flow
+     * Gets the feedwater mass flow
      * @return double, feedwater mass flow in kg/hr
      */
-    double getFeedwaterMassFlow();
+    double getFeedwaterMassFlow() const { return feedwaterMassFlow; };
 
     /**
-     * Calculates the feedwater energy flow
+     * Gets the feedwater energy flow
      * @return double, feedwater energy flow in MJ/hr
      */
-    double getFeedwaterEnergyFlow();
+    double getFeedwaterEnergyFlow() const { return feedwaterEnergyFlow; };
 
 private:
-    // In values
-    double inletPressure_ = 0.0;
-    SteamProperties::ThermodynamicQuantity quantityType_;
-    double quantityValue_ = 0.0;
-    double inletMassFlow_ = 0.0;
-    double outletPressure_ = 0.0;
-    double feedwaterPressure_ = 0.0;
-    SteamProperties::ThermodynamicQuantity feedwaterQuantityType_;
-    double feedwaterQuantityValue_ = 0.0;
-    double desuperheatingTemp_ = 0.0;
+	void calculateProperties();
 
+    // In values
+    double inletPressure, quantityValue, inletMassFlow, outletPressure, feedwaterPressure, feedwaterQuantityValue;
+    double desuperheatingTemp;
+    SteamProperties::ThermodynamicQuantity quantityType, feedwaterQuantityType;
 
     // Out values
-    std::unordered_map <std::string, double> inletProperties_;
-    std::unordered_map <std::string, double> outletProperties_;
-    std::unordered_map <std::string, double> feedwaterProperties_;
-    double inletEnergyFlow_;
-    double outletMassFlow_;
-    double outletEnergyFlow_;
-    double feedwaterMassFlow_;
-    double feedwaterEnergyFlow_;
+    std::unordered_map <std::string, double> inletProperties, outletProperties, feedwaterProperties;
+    double inletEnergyFlow, outletMassFlow, outletEnergyFlow, feedwaterMassFlow, feedwaterEnergyFlow;
 };
 
 

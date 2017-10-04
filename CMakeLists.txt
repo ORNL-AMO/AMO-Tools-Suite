@@ -121,7 +121,12 @@ set(SOURCE_FILES
         src/ssmt/FlashTank.cpp
         src/ssmt/PRV.cpp
         src/ssmt/Deaerator.cpp
-        src/fsat/Fan.cpp src/fsat/FanShaftPower.cpp src/fsat/Planar.cpp)
+        src/ssmt/Header.cpp
+        src/ssmt/Turbine.cpp
+        src/ssmt/Deaerator.cpp
+        src/fsat/Fan.cpp
+        src/fsat/FanShaftPower.cpp
+        src/fsat/Planar.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -198,7 +203,12 @@ set(INCLUDE_FILES
         include/ssmt/PRV.h
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
-        include/fsat/Fan.h include/fsat/FanShaftPower.h include/fsat/Planar.h)
+        include/ssmt/Header.h
+        include/ssmt/Turbine.h
+        include/ssmt/Deaerator.h
+        include/fsat/Fan.h
+        include/fsat/FanShaftPower.h
+        include/fsat/Planar.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -236,7 +246,11 @@ set(TEST_FILES
         tests/FlashTank.unit.cpp
         tests/PRV.unit.cpp
         tests/FlashTank.unit.cpp
-        tests/Deaerator.unit.cpp tests/Fan.unit.cpp)
+        tests/Deaerator.unit.cpp
+        tests/Header.unit.cpp
+        tests/Turbine.unit.cpp
+        tests/Deaerator.unit.cpp
+        tests/Fan.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

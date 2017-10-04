@@ -140,7 +140,8 @@ test('gasCoolingLosses', function (t) {
     t.type(bindings.gasCoolingLosses, 'function');
 
     var inp = {
-        flowRate: 2500, initialTemperature: 80, finalTemperature: 280, specificHeat: 0.02, correctionFactor: 1.0
+        flowRate: 2500, initialTemperature: 80, finalTemperature: 280, specificHeat: 0.02, correctionFactor: 1.0,
+        gasDensity: 1
     };
 
     var res = bindings.gasCoolingLosses(inp);
@@ -286,16 +287,16 @@ test('wallLosses', function (t) {
     t.equal(rnd(res), rnd(1989032.7936134234), res + ' != 1989032.7936134234');
 });
 
-test('exhaustGas', function (t) {
+test('exhaustGasEAF', function (t) {
     t.plan(2);
-    t.type(bindings.exhaustGas, 'function');
+    t.type(bindings.exhaustGasEAF, 'function');
 
     var inp = {
-        cycleTime: 2, offGasTemp: 2800, CO: 10, H2: 10, O2: 0, CO2: 5, combustibleGases: 5, vfr: 50000, dustLoading: 0.005, otherLosses: 8648946
+        offGasTemp: 2800, CO: 12, H2: 10, combustibleGases: 3, vfr: 8000, dustLoading: 0.001
     };
 
-    var res = bindings.exhaustGas(inp);
-    t.equal(rnd(res), rnd(52933.130628816376), res + ' != 52933.130628816376');
+    var res = bindings.exhaustGasEAF(inp);
+    t.equal(rnd(res), rnd(12553119.018404908), res + ' != 12553119.018405');
 });
 
 test('availableHeat', function (t) {
@@ -311,7 +312,7 @@ test('availableHeat', function (t) {
 });
 
 test('energyInputExhaustGasLosses', function (t) {
-    t.plan(2);
+    t.plan(3);
     t.type(bindings.energyInputExhaustGasLosses, 'function');
 
     var inp = {
@@ -319,5 +320,6 @@ test('energyInputExhaustGasLosses', function (t) {
     };
 
     var res = bindings.energyInputExhaustGasLosses(inp);
-    t.equal(rnd(res), rnd(1212.3388042203985), res + ' != 1212.3388042203985');
+    t.equal(rnd(res["heatDelivered"]), rnd(1212.3388042203985 * 3412), res["heatDelivered"] + ' != 1212.339 * 3412');
+    t.equal(rnd(res["exhaustGasLosses"]), rnd(863499.9999999998), res["exhaustGasLosses"] + ' != 863500');
 });
