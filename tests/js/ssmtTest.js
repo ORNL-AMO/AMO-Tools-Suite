@@ -237,3 +237,136 @@ test('deaerator', function (t) {
     t.equal(rnd(res.inletSteamMassFlow), rnd(7546.382202196729), 'res.inletSteamMassFlow is ' + res.inletSteamMassFlow);
     t.equal(rnd(res.inletSteamEnergyFlow), rnd(18052.836547375577), 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
 });
+
+test('header', function (t) {
+    t.plan(22);
+    t.type(bindings.header, 'function');
+
+    var inp = {
+        headerPressure: 0.173,
+        inlets: [
+            {
+                pressure: 1.9332,
+                thermodynamicQuantity: 0,
+                quantityValue: 579.8,
+                massFlow: 0.686
+            },
+            {
+                pressure: 2.8682,
+                thermodynamicQuantity: 0,
+                quantityValue: 308.5,
+                massFlow: 0.5019
+            },
+            {
+                pressure: 1.0348,
+                thermodynamicQuantity: 0,
+                quantityValue: 458,
+                massFlow: 0.5633
+            },
+            {
+                pressure: 1.8438,
+                thermodynamicQuantity: 0,
+                quantityValue: 475.8,
+                massFlow: 0.3082
+            }
+        ]
+    };
+
+    var res = bindings.header(inp);
+    var header = res.header;
+    var inlet1 = res.inlet1;
+    var inlet4 = res.inlet4;
+
+    t.equal(header.pressure, 0.173, header.pressure + " != 0.173");
+    t.equal(rnd(header.temperature), rnd(388.8366691795), header.temperature + " != 388.8");
+    t.equal(rnd(header.massFlow), rnd(2.059399999));
+    t.equal(rnd(header.energyFlow), rnd(3998.8128348989585));
+    t.equal(rnd(header.quality), rnd(0.6577144796131725));
+    t.equal(rnd(header.specificEnthalpy), rnd(1941.7368334946873));
+    t.equal(rnd(header.specificEntropy), rnd(5.226216653050388));
+
+    t.equal(rnd(inlet1.energyFlow), rnd(2086.4298803));
+    t.equal(rnd(inlet1.massFlow), rnd(0.686));
+    t.equal(rnd(inlet1.pressure), rnd(1.9332));
+    t.equal(rnd(inlet1.quality), 1);
+    t.equal(rnd(inlet1.specificEnthalpy), rnd(3041.442974242245));
+    t.equal(rnd(inlet1.specificEntropy), rnd(6.81324727632225));
+    t.equal(rnd(inlet1.temperature), rnd(579.8));
+
+    t.equal(rnd(inlet4.energyFlow), rnd(266.41815154210417));
+    t.equal(rnd(inlet4.massFlow), rnd(0.3082));
+    t.equal(rnd(inlet4.pressure), rnd(1.8438));
+    t.equal(rnd(inlet4.quality), 0);
+    t.equal(rnd(inlet4.specificEnthalpy), rnd(864.4326785921616));
+    t.equal(rnd(inlet4.specificEntropy), rnd(2.3554693941761826));
+    t.equal(rnd(inlet4.temperature), rnd(475.8));
+});
+
+test('turbine', function (t) {
+    t.plan(31);
+    t.type(bindings.turbine, 'function');
+
+    var inp = {
+        solveFor: 0, // outlet properties - unknown to solve for
+        inletPressure: 4.2112,
+        inletQuantity: 0, // SteamProperties::ThermodynamicQuantity::temperature
+        inletQuantityValue: 888,
+        turbineProperty: 0, // massFlow
+        isentropicEfficiency: 40.1,
+        generatorEfficiency: 94.2,
+        massFlowOrPowerOut: 15844, // massFlow in this case
+        outletSteamPressure: 3.4781
+    };
+
+    var res = bindings.turbine(inp);
+    t.equal(rnd(res.inletPressure), rnd(4.2112));
+    t.equal(rnd(res.inletTemperature), rnd(888));
+    t.equal(rnd(res.inletSpecificEnthalpy), rnd(3707.397118));
+    t.equal(rnd(res.inletSpecificEntropy), rnd(7.384098));
+    t.equal(rnd(res.inletQuality), rnd(1));
+    t.equal(rnd(res.inletEnergyFlow), rnd(58739.99993));
+
+    t.equal(rnd(res.outletPressure), rnd(3.4781));
+    t.equal(rnd(res.outletTemperature), rnd(872.338861));
+    t.equal(rnd(res.outletSpecificEnthalpy), rnd(3677.155392));
+    t.equal(rnd(res.outletSpecificEntropy), rnd(7.436479));
+    t.equal(rnd(res.outletQuality), rnd(1));
+    t.equal(rnd(res.outletEnergyFlow), rnd(58260.850027));
+
+    t.equal(rnd(res.massFlow), rnd(15.844));
+    t.equal(rnd(res.isentropicEfficiency), rnd(40.1));
+    t.equal(rnd(res.energyOut), rnd(479.149903));
+    t.equal(rnd(res.powerOut), rnd(451.359209));
+    t.equal(rnd(res.generatorEfficiency), rnd(94.2));
+
+    inp = {
+        solveFor: 1, // isentropicEfficiency - unknown to solve for
+        inletPressure: 5.5627,
+        inletQuantity: 0, // SteamProperties::ThermodynamicQuantity::temperature
+        inletQuantityValue: 823.8,
+        turbineProperty: 1, // powerOut
+        generatorEfficiency: 82,
+        massFlowOrPowerOut: 1000, // powerOut in this case
+        outletSteamPressure: 4.4552,
+        outletQuantity: 0, // SteamProperties::ThermodynamicQuantity::temperature
+        outletQuantityValue: 798.1
+    };
+
+    res = bindings.turbine(inp);
+    t.equal(rnd(res.inletSpecificEnthalpy), rnd(3546.905437));
+    t.equal(rnd(res.inletSpecificEntropy), rnd(7.071209));
+    t.equal(rnd(res.inletQuality), rnd(1));
+    t.equal(rnd(res.inletEnergyFlow), rnd(88851.276592));
+
+    t.equal(rnd(res.outletSpecificEnthalpy), rnd(3498.223025));
+    t.equal(rnd(res.outletSpecificEntropy), rnd(7.110366));
+    t.equal(rnd(res.outletQuality), rnd(1));
+    t.equal(rnd(res.outletEnergyFlow), rnd(87631.764397));
+
+    t.equal(rnd(res.massFlow), rnd(25.050365));
+    t.equal(rnd(res.isentropicEfficiency), rnd(61.105109));
+    t.equal(rnd(res.energyOut), rnd(1219.512195));
+    t.equal(rnd(res.powerOut), rnd(1000));
+    t.equal(rnd(res.generatorEfficiency), rnd(82));
+
+});

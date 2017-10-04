@@ -30,48 +30,17 @@ public:
      * @return nothing
      *
      * */
-    SaturatedTemperature(
-            double saturatedPressure)
-            : saturatedPressure_(saturatedPressure)
-    {
-        saturatedTemperature_ = 0.0;
-    }
-
-
-    /**
-     * Gets the saturated pressure
-     *
-     * @return double, saturated pressure in MPa
-     */
-    double getSaturatedPressure() const {
-        return saturatedPressure_;
-    }
-
-    /**
-     * Sets the saturated pressure
-     *
-     * @param saturatedPressure double, saturated pressure in MPa
-     *
-     * @return nothing
-     */
-    void setSaturatedPressure(double saturatedPressure) {
-        saturatedPressure_ = saturatedPressure;
-    }
-
+    explicit SaturatedTemperature(double saturatedPressure)
+            : saturatedPressure_(saturatedPressure) {}
     /**
      * Calculates the saturated temperature
      *
      * @return double, saturated temperature in Kelvin
      */
-    double calculate();
+    double calculate() const;
 
 private:
-    // In values
-    double saturatedPressure_ = 0.0;
-
-
-    //Out values
-    double saturatedTemperature_;
+    const double saturatedPressure_;
 };
 
 
@@ -89,48 +58,17 @@ public:
      * @return nothing
      *
      * */
-    SaturatedPressure(
-            double saturatedTemperature)
-            : saturatedTemperature_(saturatedTemperature)
-    {
-        saturatedPressure_ = 0.0;
-    }
-
-
-    /**
-     * Gets the saturated temperature
-     *
-     * @return double, saturated temperature in Kelvin
-     */
-    double getSaturatedTemperature() const {
-        return saturatedTemperature_;
-    }
-
-    /**
-     * Sets the saturated temperature
-     *
-     * @param saturatedTemperature double, saturated temperature in Kelvin
-     *
-     * @return nothing
-     */
-    void setSaturatedTemperature(double saturatedTemperature) {
-        saturatedTemperature_ = saturatedTemperature;
-    }
+    explicit SaturatedPressure(double saturatedTemperature) : saturatedTemperature_(saturatedTemperature) {}
 
     /**
      * Calculates the saturated pressure
      *
      * @return double, saturated pressure in MPa
      */
-    double calculate();
+    double calculate() const;
 
 private:
-    // In values
-    double saturatedTemperature_ = 0.0;
-
-
-    //Out values
-    double saturatedPressure_;
+    const double saturatedTemperature_;
 };
 
 
@@ -151,65 +89,14 @@ public:
      * @return nothing
      *
      * */
-    SaturatedProperties(
-            double saturatedPressure,
-            double saturatedTemperature)
+    SaturatedProperties(double saturatedPressure, double saturatedTemperature)
             : saturatedPressure_(saturatedPressure),
-              saturatedTemperature_(saturatedTemperature)
-    {}
-
-
-    /**
-     * Gets the saturated pressure
-     *
-     * @return double, saturated pressure in psig
-     */
-    double getSaturatedPressure() const {
-        return saturatedPressure_;
-    }
-
-    /**
-     * Sets the saturated pressure
-     *
-     * @param saturatedPressure double, saturated pressure in psig
-     *
-     * @return nothing
-     */
-    void setSaturatedPressure(double saturatedPressure) {
-        saturatedPressure_ = saturatedPressure;
-    }
-
-    /**
-     * Gets the saturated temperature
-     *
-     * @return double, saturated temperature in °F
-     */
-    double getSaturatedTemperature() const {
-        return saturatedTemperature_;
-    }
-
-    /**
-     * Sets the saturated temperature
-     *
-     * @param saturatedTemperature double, saturated temperature in °F
-     *
-     * @return nothing
-     */
-    void setSaturatedTemperature(double saturatedTemperature) {
-        saturatedTemperature_ = saturatedTemperature;
-    }
+              saturatedTemperature_(saturatedTemperature) {}
 
     std::unordered_map<std::string, double> calculate();
 
-
 private:
-    // In values
-    double saturatedPressure_ = 0.0;
-    double saturatedTemperature_ = 0.0;
-
-
-    //Out values
-    std::unordered_map<std::string, double> saturatedProperties;
+    const double saturatedPressure_, saturatedTemperature_;
 };
 
 
