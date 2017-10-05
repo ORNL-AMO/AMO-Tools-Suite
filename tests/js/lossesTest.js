@@ -333,7 +333,7 @@ test('availableHeat', function (t) {
 });
 
 test('energyInputExhaustGasLosses', function (t) {
-    t.plan(2);
+    t.plan(3);
     t.type(bindings.energyInputExhaustGasLosses, 'function');
 
     var inp = {
@@ -341,5 +341,6 @@ test('energyInputExhaustGasLosses', function (t) {
     };
 
     var res = bindings.energyInputExhaustGasLosses(inp);
-    t.equal(rnd(res), rnd(1212.3388042203985), res + ' != 1212.3388042203985');
+    t.equal(rnd(res["heatDelivered"]), rnd(1212.3388042203985 * 3412), res["heatDelivered"] + ' != 1212.339 * 3412');
+    t.equal(rnd(res["exhaustGasLosses"]), rnd(863499.9999999998), res["exhaustGasLosses"] + ' != 863500');
 });

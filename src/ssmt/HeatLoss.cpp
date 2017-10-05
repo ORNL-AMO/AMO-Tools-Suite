@@ -9,38 +9,48 @@
 
 #include "ssmt/HeatLoss.h"
 
-std::unordered_map <std::string, double> HeatLoss::getInletProperties() {
-    SteamProperties sp = SteamProperties(this->inletPressure_, this->quantityType_, this->quantityValue_);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->inletProperties_ = steamProperties;
-    return this->inletProperties_;
+HeatLoss::HeatLoss(const double inletPressure, const SteamProperties::ThermodynamicQuantity quantityType,
+                   const double quantityValue, const double inletMassFlow, const double percentHeatLoss)
+        : inletPressure(inletPressure), quantityValue(quantityValue), inletMassFlow(inletMassFlow),
+          percentHeatLoss(percentHeatLoss / 100), quantityType(quantityType)
+{
+	calculateProperties();
 }
 
-double HeatLoss::getInletEnergyFlow(){
-    std::unordered_map <std::string, double> inletProps = getInletProperties();
-    this->inletEnergyFlow_ = inletProps["specificEnthalpy"] * this->inletMassFlow_;
-    return inletEnergyFlow_/1000;
+void HeatLoss::calculateProperties() {
+	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
+	inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow / 1000;
+	outletEnergyFlow = inletEnergyFlow * (1 - percentHeatLoss);
+	outletProperties  = SteamProperties(inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
+	                                    outletEnergyFlow / inletMassFlow).calculate();
+	inletProperties["massFlow"] = inletMassFlow;
+	inletProperties["energyFlow"] = inletEnergyFlow;
+	outletProperties["massFlow"] = inletMassFlow;
+	outletProperties["energyFlow"] = outletEnergyFlow;
+	heatLoss = inletEnergyFlow - outletEnergyFlow;
 }
 
-double HeatLoss::getOutletMassFlow(){
-    this->outletMassFlow_ = this->inletMassFlow_;
-    return outletMassFlow_;
+void HeatLoss::setInletPressure(double inletPressure) {
+	this->inletPressure = inletPressure;
+	calculateProperties();
 }
 
-double HeatLoss::getOutletEnergyFlow(){
-    this->outletEnergyFlow_ = getInletEnergyFlow() * (1 - this->percentHeatLoss_/100);
-    return outletEnergyFlow_;
+void HeatLoss::setQuantityValue(double quantityValue) {
+	this->quantityValue = quantityValue;
+	calculateProperties();
 }
 
-std::unordered_map <std::string, double> HeatLoss::getOutletProperties() {
-    double outletEnthalpy = getOutletEnergyFlow()/getInletMassFlow();
-    SteamProperties sp = SteamProperties(this->inletPressure_, SteamProperties::ThermodynamicQuantity::ENTHALPY, outletEnthalpy);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->outletProperties_ = steamProperties;
-    return this->outletProperties_;
+void HeatLoss::setInletMassFlow(double inletMassFlow) {
+	this->inletMassFlow = inletMassFlow;
+	calculateProperties();
 }
 
-double HeatLoss::getHeatLoss(){
-    this->heatLoss_ = getInletEnergyFlow() - getOutletEnergyFlow();
-    return this->heatLoss_;
+void HeatLoss::setPercentHeatLoss(double percentHeatLoss) {
+	this->percentHeatLoss = percentHeatLoss;
+	calculateProperties();
+}
+
+void HeatLoss::setQuantityType(SteamProperties::ThermodynamicQuantity quantityType) {
+	this->quantityType = quantityType;
+	calculateProperties();
 }

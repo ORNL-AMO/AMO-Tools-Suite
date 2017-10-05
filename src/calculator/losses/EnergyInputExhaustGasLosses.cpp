@@ -8,43 +8,17 @@
  */
 #include "calculator/losses/EnergyInputExhaustGasLosses.h"
 
-double  AvailableHeat::getHeat() {
-    this->heat_ = 95 + (-0.025) * (this->exhaustGasTemp_);
-    return this->heat_;
-}
 
-double AvailableHeat::getSpecificHeatAir(){
-    this->specificHeatAir_ = 0.017828518 + 0.000002556 * (this->combustionAirTemp_);
-    return this->specificHeatAir_;
-}
+AvailableHeat::AvailableHeat(const double excessAir, const double combustionAirTemp, const double exhaustGasTemp)
+		:  excessAir(excessAir / 100), heat(95 - 0.025 * exhaustGasTemp),
+		   specificHeatAir(0.017828518 + 0.000002556 * combustionAirTemp),
+		   airCorrection(-((-1.078913827 + specificHeatAir * exhaustGasTemp) * this->excessAir)),
+		   combustionAirCorrection((-1.078913827 + specificHeatAir * combustionAirTemp) * (1 + this->excessAir)),
+		   availableHeat(heat + airCorrection + combustionAirCorrection)
+{}
 
-double AvailableHeat::getAirCorrection(){
-    double specificHeatAir = getSpecificHeatAir();
-    this->airCorrection_ = -((-1.078913827 + specificHeatAir * (this->exhaustGasTemp_)) * ((this->excessAir_)/100));
-    return this->airCorrection_;
-}
-
-double AvailableHeat::getCombustionAirCorrection() {
-    double specificHeatAir = getSpecificHeatAir();
-    this->combustionAirCorrection_ = (-1.078913827 + specificHeatAir * (this->combustionAirTemp_)) * (1 + (this->excessAir_)/100);
-    return this->combustionAirCorrection_;
-}
-
-double AvailableHeat::getAvailableHeat(){
-    double heat = getHeat();
-    double airCorrection = getAirCorrection();
-    double combustionAirCorrection = getCombustionAirCorrection();
-    this->availableHeat_ = heat + airCorrection + combustionAirCorrection;
-    return this->availableHeat_;
-}
-
-double EnergyInputExhaustGasLosses::getHeatDelivered() {
-    this->heatDelivered_ = (this->totalHeatInput_) * (this->availableHeat_) / 100;
-    return this->heatDelivered_;
-}
-
-double EnergyInputExhaustGasLosses::getHeatDeliveredInKw() {
-    double heatDelivered = getHeatDelivered();
-    this->heatDeliveredInKw_ = heatDelivered/3412;
-    return this->heatDeliveredInKw_;
-}
+EnergyInputExhaustGasLosses::EnergyInputExhaustGasLosses(const double totalHeatInput, const double electricalPowerInput,
+                            const double availableHeat, const double otherLosses)
+		: heatDelivered(totalHeatInput * availableHeat / 100),
+		  exhaustGasLosses(this->heatDelivered * (100 - availableHeat) / availableHeat)
+{}
