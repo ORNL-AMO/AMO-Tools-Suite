@@ -120,7 +120,8 @@ set(SOURCE_FILES
         src/ssmt/PRV.cpp
         src/ssmt/Deaerator.cpp
         src/ssmt/Header.cpp
-        src/ssmt/Turbine.cpp)
+        src/ssmt/Turbine.cpp
+        src/calculator/util/CHP.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -198,7 +199,8 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
         include/ssmt/Header.h
-        include/ssmt/Turbine.h)
+        include/ssmt/Turbine.h
+        include/calculator/util/CHP.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -238,7 +240,8 @@ set(TEST_FILES
         tests/FlashTank.unit.cpp
         tests/Deaerator.unit.cpp
         tests/Header.unit.cpp
-        tests/Turbine.unit.cpp)
+        tests/Turbine.unit.cpp
+        tests/CHP.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
