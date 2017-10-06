@@ -1,15 +1,18 @@
 #include <algorithm>
+#include <unordered_map>
 #include "calculator/util/CHP.h"
 
 CHP::CHP(double annualOperatingHours, double annualElectricityConsumption, double annualThermalDemand,
          double boilerThermalFuelCosts, double avgElectricityCosts, Option calculationOption,
          double boilerThermalFuelCostsCHPcase, double CHPfuelCosts,
-         double percentAvgkWhElectricCostAvoidedOrStandbyRate, double displacedThermalEfficiency)
+         double percentAvgkWhElectricCostAvoidedOrStandbyRate, double displacedThermalEfficiency,
+         double chpAvailability, double thermalUtilization)
 		: annualOperatingHours(annualOperatingHours), annualElectricityConsumption(annualElectricityConsumption),
 		  annualThermalDemand(annualThermalDemand), boilerThermalFuelCosts(boilerThermalFuelCosts),
 		  chpFuelCosts(CHPfuelCosts), avgElectricityCosts(avgElectricityCosts), calculationOption(calculationOption),
 		  boilerThermalFuelCostsCHPcase(boilerThermalFuelCostsCHPcase),
-		  displacedThermalEfficiency(displacedThermalEfficiency)
+		  displacedThermalEfficiency(displacedThermalEfficiency / 100), chpAvailability(chpAvailability / 100),
+		  thermalUtilization(thermalUtilization / 100)
 {
 	if (calculationOption == Option::PercentAvgkWhElectricCostAvoided) {
 		percentAvgkWhElectricCostAvoided = percentAvgkWhElectricCostAvoidedOrStandbyRate;
@@ -48,23 +51,49 @@ void CHP::calculate() {
 	}
 	chpThermalOutput = nearest->first;
 
-	auto chpThermalOutputMMBtuHr = chpThermalOutput * netCHPpower / 1000000;
+	auto const chpThermalOutputMMBtuHr = chpThermalOutput * netCHPpower / 1000000;
+
+	nearest = findNearest(avgThermalDemand, 3);
+	val = chpSystemByIndex[4][nearest->second];
+	if (netCHPpower < val) {
+		nearest = findNearest(netCHPpower, 4);
+	} else {
+		nearest = findNearest(val, 4);
+	}
+	auto const incrementalOandMcost = nearest->first;
+
+	nearest = findNearest(avgThermalDemand, 3);
+	val = chpSystemByIndex[5][nearest->second];
+	if (netCHPpower < val) {
+		nearest = findNearest(netCHPpower, 5);
+	} else {
+		nearest = findNearest(val, 5);
+	}
+	auto const totalInstalledCosts = nearest->first;
+
+	class Cases {
+	public:
+		Cases(const double base, const double chp) : baseCase(base), chpCase(chp) {}
+		const double baseCase, chpCase;
+	};
+
+	// standby rate is N, percentAvgPerKwhElectricCostAvoided is M
+
+	auto const generatedElectricity = Cases(0, netCHPpower * annualOperatingHours * chpAvailability); // this becomes Y
+	auto const purchasedElectricity = Cases(annualElectricityConsumption,
+	                                        annualElectricityConsumption - generatedElectricity.chpCase); // this is Z now
+	auto const chpThermal = Cases(0, (generatedElectricity.chpCase * chpThermalOutput * thermalUtilization) / 1000000);
+	auto const onSiteBoiler = Cases(annualThermalDemand, (annualThermalDemand - chpThermal.chpCase < 0) ? 0 : annualThermalDemand - chpThermal.chpCase); // B'
+
+	auto const boilerHeaterFuel = Cases(annualThermalDemand / displacedThermalEfficiency,
+	                                    onSiteBoiler.chpCase / displacedThermalEfficiency); // C' and D' respectively
+
+	auto const chpFuel = Cases(0, generatedElectricity.chpCase * 3412 / chpElectricEfficiency * 1000000); // E'
+	auto const totalFuel = Cases(boilerHeaterFuel.baseCase, boilerHeaterFuel.chpCase + chpFuel.chpCase); // F'
+
+//	auto const purchasedElectricity = annualElectricityConsumption * avgElectricityCosts;
 
 
-//	if (netCHPpower < findNearest(avgThermalDemand, 0)->first) {
-//		nearest = findNearest(netCHPpower, 4);
-//	} else {
-//		nearest = findNearest(avgThermalDemand, 4);
-//	}
-//	auto const incrementalOandMcosts = nearest->first;
-//
-//	if (netCHPpower < findNearest(avgThermalDemand, 0)->first) {
-//		nearest = findNearest(netCHPpower, 5);
-//	} else {
-//		nearest = findNearest(avgThermalDemand, 5);
-//	}
-//
-//	auto const totalInstalledCosts = nearest->first;
 
 
 	auto blah = 0;

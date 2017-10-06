@@ -14,7 +14,8 @@ public:
 	CHP(double annualOperatingHours, double annualElectricityConsumption, double annualThermalDemand,
 	    double boilerThermalFuelCosts, double avgElectricityCosts, Option calculationOption,
 	    double boilerThermalFuelCostsCHPcase, double CHPfuelCosts,
-	    double percentAvgkWhElectricCostAvoidedOrStandbyRate, double displacedThermalEfficiency);
+	    double percentAvgkWhElectricCostAvoidedOrStandbyRate, double displacedThermalEfficiency, double chpAvailability,
+		double thermalUtilization);
 
 private:
 	void calculate();
@@ -25,7 +26,7 @@ private:
 	double boilerThermalFuelCosts, chpFuelCosts, avgElectricityCosts;
 	Option calculationOption;
 	double boilerThermalFuelCostsCHPcase, percentAvgkWhElectricCostAvoided = 0, standbyRate = 0;
-	double displacedThermalEfficiency, chpElectricEfficiency, chpThermalOutput;
+	double displacedThermalEfficiency, chpElectricEfficiency, chpThermalOutput, chpAvailability, thermalUtilization;
 
 	double avgPowerDemand, avgThermalDemand, netCHPpower;
 
