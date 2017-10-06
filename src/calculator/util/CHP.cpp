@@ -19,22 +19,28 @@ CHP::CHP(double annualOperatingHours, double annualElectricityConsumption, doubl
 	calculate();
 }
 
+std::map<double, size_t>::const_iterator CHP::findNearest(const double val, const size_t index) {
+	auto nearest = chpSystemByKey[index].upper_bound(val);
+	if (nearest != chpSystemByKey[index].begin()) return std::prev(nearest);
+	return nearest;
+};
+
 void CHP::calculate() {
 	avgPowerDemand = annualElectricityConsumption / annualOperatingHours;
 	avgThermalDemand = annualThermalDemand / annualOperatingHours;
 
-	// index 6 is row 7 of the table
-	auto lower = chpSystemByKey[6].upper_bound(avgThermalDemand);
+	auto nearest = findNearest(avgThermalDemand, 3);
+	netCHPpower = std::min(avgPowerDemand, (avgThermalDemand / nearest->first) * chpSystemByIndex[0][nearest->second]);
 
-	// index 6 is row 7 of the table
-	if (lower != chpSystemByKey[6].begin()) lower = std::prev(lower);
+	if (netCHPpower < findNearest(avgThermalDemand, 0)->first) {
+		nearest = chpSystemByKey[1].upper_bound(netCHPpower);
+	} else {
+		nearest = findNearest(avgThermalDemand, 1);
+	}
+	chpElectricEfficiency = nearest->first;
 
-	// index 0 is row 1 of the table
-	auto const val = chpSystemByIndex[0][lower->second];
 
-	netCHPpower = std::min(avgPowerDemand, (avgThermalDemand / lower->first) * val);
+
 
 	auto blah = 0;
-
-
 }
