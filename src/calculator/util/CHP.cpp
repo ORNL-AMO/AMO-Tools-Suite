@@ -33,13 +33,38 @@ void CHP::calculate() {
 	netCHPpower = std::min(avgPowerDemand, (avgThermalDemand / nearest->first) * chpSystemByIndex[0][nearest->second]);
 
 	if (netCHPpower < findNearest(avgThermalDemand, 0)->first) {
-		nearest = chpSystemByKey[1].upper_bound(netCHPpower);
+		nearest = findNearest(netCHPpower, 1);
 	} else {
 		nearest = findNearest(avgThermalDemand, 1);
 	}
 	chpElectricEfficiency = nearest->first;
 
+	nearest = findNearest(avgThermalDemand, 3);
+	auto val = chpSystemByIndex[0][nearest->second];
+	if (netCHPpower < val) {
+		nearest = findNearest(netCHPpower, 2);
+	} else {
+		nearest = findNearest(val, 2);
+	}
+	chpThermalOutput = nearest->first;
 
+	auto chpThermalOutputMMBtuHr = chpThermalOutput * netCHPpower / 1000000;
+
+
+//	if (netCHPpower < findNearest(avgThermalDemand, 0)->first) {
+//		nearest = findNearest(netCHPpower, 4);
+//	} else {
+//		nearest = findNearest(avgThermalDemand, 4);
+//	}
+//	auto const incrementalOandMcosts = nearest->first;
+//
+//	if (netCHPpower < findNearest(avgThermalDemand, 0)->first) {
+//		nearest = findNearest(netCHPpower, 5);
+//	} else {
+//		nearest = findNearest(avgThermalDemand, 5);
+//	}
+//
+//	auto const totalInstalledCosts = nearest->first;
 
 
 	auto blah = 0;
