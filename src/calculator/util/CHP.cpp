@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <unordered_map>
 #include "calculator/util/CHP.h"
 
 CHP::CHP(double annualOperatingHours, double annualElectricityConsumption, double annualThermalDemand,
@@ -103,6 +102,24 @@ void CHP::calculate() {
 			                                       chpFuelDollars.chpCase +
 			                                       onSiteBoilerFuelDollars.chpCase + incrementalOandM.chpCase);
 
+	// simple payback
+	auto const annualOperationSavings = totalOperatingCosts.baseCase - totalOperatingCosts.chpCase;
+	auto const totalInstalledCostsPayback = totalInstalledCosts * netCHPpower;
+	auto const simplePayback = (totalInstalledCostsPayback - 200000) / annualOperationSavings;
 
-	auto blah = 0;
+	// operating costs to generate
+	auto const fuelCosts = chpFuelDollars.chpCase / generatedElectricity.chpCase;
+	auto const thermalCredit = -(onSiteBoilerFuelDollars.baseCase - onSiteBoilerFuelDollars.chpCase) / generatedElectricity.chpCase;
+	auto const incrementalOandMDollarsKwH = incrementalOandM.chpCase / generatedElectricity.chpCase;
+	auto const totalOperatingCostsToGenerate = fuelCosts + thermalCredit + incrementalOandMDollarsKwH;
+
+	costInfo = {
+			{"annualOperationSavings", annualOperationSavings},
+			{"totalInstalledCostsPayback", totalInstalledCostsPayback},
+			{"simplePayback", simplePayback},
+			{"fuelCosts", fuelCosts},
+			{"thermalCredit", thermalCredit},
+			{"incrementalOandM", incrementalOandMDollarsKwH},
+			{"totalOperatingCosts", totalOperatingCostsToGenerate}
+	};
 }

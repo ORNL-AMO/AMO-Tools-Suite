@@ -2,7 +2,9 @@
 #define AMO_TOOLS_SUITE_CHP_H
 
 #include <array>
+#include <string>
 #include <map>
+#include <unordered_map>
 
 class CHP {
 public:
@@ -17,6 +19,8 @@ public:
 	    double percentAvgkWhElectricCostAvoidedOrStandbyRate, double displacedThermalEfficiency, double chpAvailability,
 		double thermalUtilization);
 
+	std::unordered_map<std::string, double> const & getCostInfo() const { return costInfo; }
+
 private:
 	void calculate();
 
@@ -29,6 +33,8 @@ private:
 	double displacedThermalEfficiency, chpElectricEfficiency, chpThermalOutput, chpAvailability, thermalUtilization;
 
 	double avgPowerDemand, avgThermalDemand, netCHPpower;
+
+	std::unordered_map<std::string, double> costInfo;
 
 	const std::array<std::array<double, 8>, 7> chpSystemByIndex = {
 			{
