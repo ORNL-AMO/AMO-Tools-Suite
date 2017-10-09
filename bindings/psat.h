@@ -154,22 +154,28 @@ NAN_METHOD(headTool) {
 // Fields
 
 Motor::LineFrequency line() {
-    return (Motor::LineFrequency)(int)(!Get("line_frequency"));
+    unsigned val = static_cast<unsigned>(!Get("line_frequency"));
+    return static_cast<Motor::LineFrequency>(val);
 }
 Motor::EfficiencyClass effCls() {
-    return (Motor::EfficiencyClass)(int)Get("efficiency_class");
+	unsigned val = static_cast<unsigned>(Get("efficiency_class"));
+    return static_cast<Motor::EfficiencyClass>(val);
 }
 Pump::Drive drive() {
-    return (Pump::Drive)(int)Get("drive");
+    unsigned val = static_cast<unsigned>(Get("drive"));
+    return static_cast<Pump::Drive>(val);
 }
 Pump::Style style() {
-    return (Pump::Style)(int)Get("pump_style");
+    unsigned val = static_cast<unsigned>(Get("pump_style"));
+    return static_cast<Pump::Style>(val);
 }
 FieldData::LoadEstimationMethod  loadEstimationMethod() {
-    return (FieldData::LoadEstimationMethod)(int)Get("load_estimation_method");
+    unsigned val = static_cast<unsigned>(Get("load_estimation_method"));
+    return static_cast<FieldData::LoadEstimationMethod>(val);
 }
 Pump::Speed speed() {
-    return (Pump::Speed)(int)(!Get("fixed_speed"));
+    unsigned val = static_cast<unsigned>(!Get("fixed_speed"));
+    return static_cast<Pump::Speed>(val);
 }
 //
 //// Operations

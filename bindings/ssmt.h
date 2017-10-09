@@ -47,25 +47,21 @@ void SetR(std::string const & nm, double n) {
 SteamProperties::ThermodynamicQuantity thermodynamicQuantity() {
     unsigned val = static_cast<unsigned>(Get("thermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
-//    return (SteamProperties::ThermodynamicQuantity)(int)Get("thermodynamicQuantity");
 }
 
 SteamProperties::ThermodynamicQuantity feedwaterThermodynamicQuantity() {
     unsigned val = static_cast<unsigned>(Get("feedwaterThermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
-//    return (SteamProperties::ThermodynamicQuantity)(int)Get("feedwaterThermodynamicQuantity");
 }
 
 SteamProperties::ThermodynamicQuantity waterThermodynamicQuantity() {
     unsigned val = static_cast<unsigned>(Get("waterThermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
-//    return (SteamProperties::ThermodynamicQuantity)(int)Get("waterThermodynamicQuantity");
 }
 
 SteamProperties::ThermodynamicQuantity steamThermodynamicQuantity() {
     unsigned val = static_cast<unsigned>(Get("steamThermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
-//    return (SteamProperties::ThermodynamicQuantity)(int)Get("steamThermodynamicQuantity");
 }
 
 NAN_METHOD(saturatedPressure) {
