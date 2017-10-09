@@ -4,8 +4,8 @@
 using namespace Nan;
 
 NAN_MODULE_INIT(InitStandalone) {
-	Nan::Set(target, New<String>("CHP").ToLocalChecked(),
-	         GetFunction(New<FunctionTemplate>(CHP)).ToLocalChecked());
+	Nan::Set(target, New<String>("CHPcalculator").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(CHPcalculator)).ToLocalChecked());
 }
 
 NODE_MODULE(standalone, InitStandalone)

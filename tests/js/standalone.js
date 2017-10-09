@@ -8,7 +8,7 @@ function rnd(value) {
 
 test('CHP', function (t) {
     t.plan(10);
-    t.type(bindings.CHP, 'function');
+    t.type(bindings.CHPcalculator, 'function');
 
     var inp = {
         "annualOperatingHours": 4160,
@@ -25,7 +25,7 @@ test('CHP', function (t) {
         "thermalUtilization": 90
     };
 
-    var res = bindings.CHP(inp);
+    var res = bindings.CHPcalculator(inp);
 
     t.equal(rnd(res.annualOperationSavings), rnd(3251705.06182641));
     t.equal(rnd(res.totalInstalledCostsPayback), rnd(11890954.0));
@@ -37,7 +37,7 @@ test('CHP', function (t) {
 
     inp.option = 1;
     inp.percentAvgkWhElectricCostAvoidedOrStandbyRate = 9.75;
-    res = bindings.CHP(inp);
+    res = bindings.CHPcalculator(inp);
     t.equal(rnd(res.annualOperationSavings), rnd(3066325.0889664106));
     t.equal(rnd(res.simplePayback), rnd(3.8126922817));
 });

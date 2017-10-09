@@ -29,13 +29,13 @@ void SetR(std::string const & nm, double n) {
 	Nan::Set(r, getName, getNum);
 }
 
-NAN_METHOD(CHP) {
+NAN_METHOD(CHPcalculator) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
 	CHP::Option option = static_cast<CHP::Option>(Get("option"));
 
-	auto const chp = CHP::CHP(Get("annualOperatingHours"), Get("annualElectricityConsumption"), Get("annualThermalDemand"),
+	auto const chp = CHP(Get("annualOperatingHours"), Get("annualElectricityConsumption"), Get("annualThermalDemand"),
 	                     Get("boilerThermalFuelCosts"), Get("avgElectricityCosts"), option, Get("boilerThermalFuelCostsCHPcase"),
 	                     Get("CHPfuelCosts"), Get("percentAvgkWhElectricCostAvoidedOrStandbyRate"), Get("displacedThermalEfficiency"),
 	                     Get("chpAvailability"), Get("thermalUtilization"));
