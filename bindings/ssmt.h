@@ -473,7 +473,9 @@ NAN_METHOD(header) {
 
     for (size_t i = 0; i < arr->Length(); i++) {
         auto const pressure = arr->Get(i)->ToObject()->Get(pressureStr)->NumberValue();
-        auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(arr->Get(i)->ToObject()->Get(Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
+	    unsigned val = arr->Get(i)->ToObject()->Get(Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue();
+	    auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
+//        auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(arr->Get(i)->ToObject()->Get(Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
         auto const quantityValue = arr->Get(i)->ToObject()->Get(Nan::New<String>("quantityValue").ToLocalChecked())->NumberValue();
         auto const massFlow = arr->Get(i)->ToObject()->Get(massFlowStr)->NumberValue();
         inlets.emplace_back(Inlet(pressure, quantity, quantityValue, massFlow));
@@ -516,9 +518,16 @@ NAN_METHOD(turbine) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    Turbine::Solve solveFor = static_cast<Turbine::Solve>(inp->ToObject()->Get(Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
-    Turbine::TurbineProperty turbineProperty = static_cast<Turbine::TurbineProperty>(inp->ToObject()->Get(Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue());
-    SteamProperties::ThermodynamicQuantity inletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(inp->ToObject()->Get(Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue());
+	unsigned val = inp->ToObject()->Get(Nan::New<String>("solveFor").ToLocalChecked())->NumberValue();
+    Turbine::Solve solveFor = static_cast<Turbine::Solve>(val);
+    val = inp->ToObject()->Get(Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue();
+    Turbine::TurbineProperty turbineProperty = static_cast<Turbine::TurbineProperty>(val);
+    val = inp->ToObject()->Get(Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue();
+    SteamProperties::ThermodynamicQuantity inletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
+
+//    Turbine::Solve solveFor = static_cast<Turbine::Solve>(inp->ToObject()->Get(Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
+//    Turbine::TurbineProperty turbineProperty = static_cast<Turbine::TurbineProperty>(inp->ToObject()->Get(Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue());
+//    SteamProperties::ThermodynamicQuantity inletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(inp->ToObject()->Get(Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue());
 
 	std::unique_ptr<Turbine> t;
 
