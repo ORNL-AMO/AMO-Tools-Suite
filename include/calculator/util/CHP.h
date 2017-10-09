@@ -21,6 +21,44 @@ public:
 
 	std::unordered_map<std::string, double> const & getCostInfo() const { return costInfo; }
 
+	double getAnnualOperatingHours() const { return annualOperatingHours; }
+	double getAnnualElectricityConsumption() const { return annualElectricityConsumption; }
+	double getAnnualThermalDemand() const { return annualThermalDemand; }
+	double getBoilerThermalFuelCosts() const { return boilerThermalFuelCosts; }
+	double getChpFuelCosts() const { return chpFuelCosts; }
+	double getAvgElectricityCosts() const { return avgElectricityCosts; }
+	Option getCalculationOption() const { return calculationOption; }
+	double getBoilerThermalFuelCostsCHPcase() const { return boilerThermalFuelCostsCHPcase; }
+	double getPercentAvgkWhElectricCostAvoided() const { return percentAvgkWhElectricCostAvoided; }
+	double getStandbyRate() const { return standbyRate; }
+	double getDisplacedThermalEfficiency() const { return displacedThermalEfficiency; }
+	double getChpElectricEfficiency() const { return chpElectricEfficiency; }
+	double getChpThermalOutput() const { return chpThermalOutput; }
+	double getChpAvailability() const { return chpAvailability; }
+	double getThermalUtilization() const { return thermalUtilization; }
+	double getAvgPowerDemand() const { return avgPowerDemand; }
+	double getAvgThermalDemand() const { return avgThermalDemand; }
+	double getNetCHPpower() const { return netCHPpower; }
+
+	void setAnnualOperatingHours(double annualOperatingHours);
+	void setAnnualElectricityConsumption(double annualElectricityConsumption);
+	void setAnnualThermalDemand(double annualThermalDemand);
+	void setBoilerThermalFuelCosts(double boilerThermalFuelCosts);
+	void setChpFuelCosts(double chpFuelCosts);
+	void setAvgElectricityCosts(double avgElectricityCosts);
+	void setCalculationOption(Option calculationOption, double percentAvgkWhElectricCostAvoidedOrStandbyRate);
+	void setBoilerThermalFuelCostsCHPcase(double boilerThermalFuelCostsCHPcase);
+	void setPercentAvgkWhElectricCostAvoided(double percentAvgkWhElectricCostAvoided);
+	void setStandbyRate(double standbyRate);
+	void setDisplacedThermalEfficiency(double displacedThermalEfficiency);
+	void setChpElectricEfficiency(double chpElectricEfficiency);
+	void setChpThermalOutput(double chpThermalOutput);
+	void setChpAvailability(double chpAvailability);
+	void setThermalUtilization(double thermalUtilization);
+	void setAvgPowerDemand(double avgPowerDemand);
+	void setAvgThermalDemand(double avgThermalDemand);
+	void setNetCHPpower(double netCHPpower);
+
 private:
 	void calculate();
 

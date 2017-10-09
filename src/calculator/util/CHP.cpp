@@ -13,11 +13,7 @@ CHP::CHP(double annualOperatingHours, double annualElectricityConsumption, doubl
 		  displacedThermalEfficiency(displacedThermalEfficiency / 100), chpAvailability(chpAvailability / 100),
 		  thermalUtilization(thermalUtilization / 100)
 {
-	if (calculationOption == Option::PercentAvgkWhElectricCostAvoided) {
-		percentAvgkWhElectricCostAvoided = percentAvgkWhElectricCostAvoidedOrStandbyRate / 100;
-	} else {
-		standbyRate = percentAvgkWhElectricCostAvoidedOrStandbyRate;
-	}
+	setCalculationOption(calculationOption, percentAvgkWhElectricCostAvoidedOrStandbyRate);
 	calculate();
 }
 
@@ -90,7 +86,7 @@ void CHP::calculate() {
 	                                                                          * percentAvgkWhElectricCostAvoided);
 	auto const purchasedElectricityDollars = Cases(annualElectricityConsumption * avgElectricityCosts,
 	                                               (!standbyRate) ? cost : purchasedElectricity.chpCase * avgElectricityCosts);
-	auto const standbyCharges = Cases(0, (!percentAvgkWhElectricCostAvoided) ? 0 : standbyRate * netCHPpower * 12);
+	auto const standbyCharges = Cases(0, (percentAvgkWhElectricCostAvoided) ? 0 : standbyRate * netCHPpower * 12);
 	auto const chpFuelDollars = Cases(0, chpFuel.chpCase * chpFuelCosts);
 	auto const onSiteBoilerFuelDollars = Cases(boilerHeaterFuel.baseCase * boilerThermalFuelCosts,
 	                                    boilerHeaterFuel.chpCase * boilerThermalFuelCostsCHPcase);
@@ -120,4 +116,90 @@ void CHP::calculate() {
 			{"incrementalOandM", incrementalOandMDollarsKwH},
 			{"totalOperatingCosts", totalOperatingCostsToGenerate}
 	};
+}
+
+void CHP::setAnnualOperatingHours(const double annualOperatingHours) {
+	this->annualOperatingHours = annualOperatingHours;
+	calculate();
+}
+
+void CHP::setAnnualElectricityConsumption(const double annualElectricityConsumption) {
+	this->annualElectricityConsumption = annualElectricityConsumption;
+	calculate();
+}
+
+void CHP::setAnnualThermalDemand(const double annualThermalDemand) {
+	this->annualThermalDemand = annualThermalDemand;
+	calculate();
+}
+
+void CHP::setBoilerThermalFuelCosts(const double boilerThermalFuelCosts) {
+	this->boilerThermalFuelCosts = boilerThermalFuelCosts;
+	calculate();
+}
+
+void CHP::setChpFuelCosts(const double chpFuelCosts) {
+	this->chpFuelCosts = chpFuelCosts;
+	calculate();
+}
+
+void CHP::setAvgElectricityCosts(const double avgElectricityCosts) {
+	this->avgElectricityCosts = avgElectricityCosts;
+	calculate();
+}
+
+void CHP::setCalculationOption(const CHP::Option calculationOption,
+                               const double percentAvgkWhElectricCostAvoidedOrStandbyRate) {
+	this->calculationOption = calculationOption;
+	if (calculationOption == Option::PercentAvgkWhElectricCostAvoided) {
+		percentAvgkWhElectricCostAvoided = percentAvgkWhElectricCostAvoidedOrStandbyRate / 100;
+	} else {
+		standbyRate = percentAvgkWhElectricCostAvoidedOrStandbyRate;
+	}
+	calculate();
+}
+
+void CHP::setBoilerThermalFuelCostsCHPcase(const double boilerThermalFuelCostsCHPcase) {
+	this->boilerThermalFuelCostsCHPcase = boilerThermalFuelCostsCHPcase;
+}
+
+
+void CHP::setPercentAvgkWhElectricCostAvoided(const double percentAvgkWhElectricCostAvoided) {
+	this->percentAvgkWhElectricCostAvoided = percentAvgkWhElectricCostAvoided;
+}
+
+void CHP::setStandbyRate(const double standbyRate) {
+	this->standbyRate = standbyRate;
+}
+
+void CHP::setDisplacedThermalEfficiency(const double displacedThermalEfficiency) {
+	this->displacedThermalEfficiency = displacedThermalEfficiency;
+}
+
+void CHP::setChpElectricEfficiency(const double chpElectricEfficiency) {
+	this->chpElectricEfficiency = chpElectricEfficiency;
+}
+
+void CHP::setChpThermalOutput(const double chpThermalOutput) {
+	this->chpThermalOutput = chpThermalOutput;
+}
+
+void CHP::setChpAvailability(const double chpAvailability) {
+	this->chpAvailability = chpAvailability;
+}
+
+void CHP::setThermalUtilization(const double thermalUtilization) {
+	this->thermalUtilization = thermalUtilization;
+}
+
+void CHP::setAvgPowerDemand(const double avgPowerDemand) {
+	this->avgPowerDemand = avgPowerDemand;
+}
+
+void CHP::setAvgThermalDemand(const double avgThermalDemand) {
+	this->avgThermalDemand = avgThermalDemand;
+}
+
+void CHP::setNetCHPpower(const double netCHPpower) {
+	this->netCHPpower = netCHPpower;
 }

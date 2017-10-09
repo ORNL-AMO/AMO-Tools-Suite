@@ -7,7 +7,7 @@ function rnd(value) {
 }
 
 test('CHP', function (t) {
-    t.plan(8);
+    t.plan(10);
     t.type(bindings.CHP, 'function');
 
     var inp = {
@@ -34,4 +34,10 @@ test('CHP', function (t) {
     t.equal(rnd(res.thermalCredit), rnd(-0.0284427212));
     t.equal(rnd(res.incrementalOandM), rnd(0.0123));
     t.equal(rnd(res.totalOperatingCosts), rnd(0.0486734726));
+
+    inp.option = 1;
+    inp.percentAvgkWhElectricCostAvoidedOrStandbyRate = 9.75;
+    res = bindings.CHP(inp);
+    t.equal(rnd(res.annualOperationSavings), rnd(3066325.0889664106));
+    t.equal(rnd(res.simplePayback), rnd(3.8126922817));
 });
