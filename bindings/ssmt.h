@@ -536,7 +536,9 @@ NAN_METHOD(turbine) {
                     turbineProperty, Get("isentropicEfficiency"), Get("generatorEfficiency"),
                     Get("massFlowOrPowerOut"), Get("outletSteamPressure")));
     } else {
-        auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(inp->ToObject()->Get(Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue());
+//        auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(inp->ToObject()->Get(Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue());
+	    unsigned val = inp->ToObject()->Get(Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue();
+        auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
         t = std::unique_ptr<Turbine>(new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
                     turbineProperty, Get("generatorEfficiency"), Get("massFlowOrPowerOut"),
                     Get("outletSteamPressure"), outletQuantity, Get("outletQuantityValue")));
