@@ -2,6 +2,33 @@
 {
     "targets": [
         {
+            "target_name": "standalone",
+            'include_dirs': [
+                "include",
+                "include/calculator/util",
+                "<!(node -e \"require('nan')\")",
+            ],
+            'sources' : [
+                'bindings/standalone.cpp',
+                'src/calculator/util/CHP.cpp'
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
+        },
+        {
             "target_name": "phast",
             'include_dirs': ['include', 'include/calculator/losses', 'include/phast', 'include/calculator/furnace' ,
                 "<!(node -e \"require('nan')\")"

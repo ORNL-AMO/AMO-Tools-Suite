@@ -21,7 +21,7 @@ CHP::CHP(double annualOperatingHours, double annualElectricityConsumption, doubl
 	calculate();
 }
 
-std::map<double, size_t>::const_iterator CHP::findNearest(const double val, const size_t index) {
+std::map<double, size_t>::const_iterator CHP::findNearest(const double val, const size_t index) const {
 	auto nearest = chpSystemByKey[index].upper_bound(val);
 	if (nearest != chpSystemByKey[index].begin()) return std::prev(nearest);
 	return nearest;
@@ -50,10 +50,10 @@ void CHP::calculate() {
 	}
 	chpThermalOutput = nearest->first;
 
-	auto const chpThermalOutputMMBtuHr = chpThermalOutput * netCHPpower / 1000000;
+//	auto const chpThermalOutputMMBtuHr = chpThermalOutput * netCHPpower / 1000000;
 
 	nearest = findNearest(avgThermalDemand, 3);
-	val = chpSystemByIndex[4][nearest->second];
+	val = chpSystemByIndex[1][nearest->second];
 	if (netCHPpower < val) {
 		nearest = findNearest(netCHPpower, 4);
 	} else {
@@ -62,7 +62,7 @@ void CHP::calculate() {
 	auto const incrementalOandMcost = nearest->first;
 
 	nearest = findNearest(avgThermalDemand, 3);
-	val = chpSystemByIndex[5][nearest->second];
+	val = chpSystemByIndex[2][nearest->second];
 	if (netCHPpower < val) {
 		nearest = findNearest(netCHPpower, 5);
 	} else {
@@ -76,27 +76,25 @@ void CHP::calculate() {
 		const double baseCase, chpCase;
 	};
 
-	// standby rate is N, percentAvgPerKwhElectricCostAvoided is M
-
-	auto const generatedElectricity = Cases(0, netCHPpower * annualOperatingHours * chpAvailability); // this becomes Y
-	auto const purchasedElectricity = Cases(annualElectricityConsumption,
-	                                        annualElectricityConsumption - generatedElectricity.chpCase); // this is Z now
+	auto const generatedElectricity = Cases(0, netCHPpower * annualOperatingHours * chpAvailability);
+	auto const purchasedElectricity = Cases(annualElectricityConsumption, annualElectricityConsumption - generatedElectricity.chpCase);
 	auto const chpThermal = Cases(0, (generatedElectricity.chpCase * chpThermalOutput * thermalUtilization) / 1000000);
-	auto const onSiteBoiler = Cases(annualThermalDemand, (annualThermalDemand - chpThermal.chpCase < 0) ? 0 : annualThermalDemand - chpThermal.chpCase); // B'
-	auto const boilerHeaterFuel = Cases(annualThermalDemand / displacedThermalEfficiency,
-	                                    onSiteBoiler.chpCase / displacedThermalEfficiency); // C' and D' respectively
-	auto const chpFuel = Cases(0, (generatedElectricity.chpCase * 3412) / (chpElectricEfficiency * 1000000)); // E'
-	auto const totalFuel = Cases(boilerHeaterFuel.baseCase, boilerHeaterFuel.chpCase + chpFuel.chpCase); // F'
+	auto const onSiteBoiler = Cases(annualThermalDemand, (annualThermalDemand - chpThermal.chpCase < 0) ? 0 : annualThermalDemand - chpThermal.chpCase);
+	auto const boilerHeaterFuel = Cases(annualThermalDemand / displacedThermalEfficiency, onSiteBoiler.chpCase / displacedThermalEfficiency);
+	auto const chpFuel = Cases(0, (generatedElectricity.chpCase * 3412) / (chpElectricEfficiency * 1000000));
+//	auto const totalFuel = Cases(boilerHeaterFuel.baseCase, boilerHeaterFuel.chpCase + chpFuel.chpCase); // unused
 
 	// cost in $ stuff
-	auto const cost = (annualElectricityConsumption * avgElectricityCosts) - (generatedElectricity.chpCase * avgElectricityCosts * percentAvgkWhElectricCostAvoided);
+	auto const cost = (annualElectricityConsumption * avgElectricityCosts) - (generatedElectricity.chpCase
+	                                                                          * avgElectricityCosts
+	                                                                          * percentAvgkWhElectricCostAvoided);
 	auto const purchasedElectricityDollars = Cases(annualElectricityConsumption * avgElectricityCosts,
 	                                               (!standbyRate) ? cost : purchasedElectricity.chpCase * avgElectricityCosts);
-	auto const standbyCharges = Cases(0, (!percentAvgkWhElectricCostAvoided) ? 0 : standbyRate * netCHPpower * 12); // H'
+	auto const standbyCharges = Cases(0, (!percentAvgkWhElectricCostAvoided) ? 0 : standbyRate * netCHPpower * 12);
 	auto const chpFuelDollars = Cases(0, chpFuel.chpCase * chpFuelCosts);
 	auto const onSiteBoilerFuelDollars = Cases(boilerHeaterFuel.baseCase * boilerThermalFuelCosts,
-	                                    boilerHeaterFuel.chpCase * boilerThermalFuelCostsCHPcase); // J' and K'
-	auto const incrementalOandM = Cases(0, incrementalOandMcost * generatedElectricity.chpCase); // L'
+	                                    boilerHeaterFuel.chpCase * boilerThermalFuelCostsCHPcase);
+	auto const incrementalOandM = Cases(0, incrementalOandMcost * generatedElectricity.chpCase);
 	auto const totalOperatingCosts = Cases(purchasedElectricityDollars.baseCase + onSiteBoilerFuelDollars.baseCase,
 	                                       purchasedElectricityDollars.chpCase + standbyCharges.chpCase +
 			                                       chpFuelDollars.chpCase +
