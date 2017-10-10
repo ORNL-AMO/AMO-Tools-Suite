@@ -22,7 +22,7 @@ public:
      * @return nothing
      */
     Poles(
-        int motorRpm,
+        double motorRpm,
         Motor::LineFrequency lineFreq
     ) :
         motorRpm_(motorRpm),
@@ -38,7 +38,7 @@ public:
     int calculate();
 
 private:
-    int motorRpm_;
+    double motorRpm_;
     Motor::LineFrequency lineFreq_;
     int poles_;
 };

@@ -228,7 +228,7 @@ NAN_METHOD(resultsExistingAndOptimal) {
     Pump::Drive drive1 = drive();
     double viscosity = Get("kinematic_viscosity");
     double specifc_gravity = Get("specific_gravity");
-    double stages = Get("stages");
+    int stages = static_cast<int>(Get("stages"));
     Pump::Speed fixed_speed = speed();
     double pump_specified = Get("pump_specified")/100;
     double pump_rated_speed = Get("pump_rated_speed");
@@ -300,7 +300,7 @@ NAN_METHOD(resultsExisting) {
     FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
-              Get("specific_gravity"), Get("stages"), Pump::Speed::FIXED_SPEED);
+              Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::Speed::FIXED_SPEED);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"));
@@ -353,7 +353,7 @@ NAN_METHOD(resultsModified) {
     FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
-              Get("specific_gravity"), Get("stages"), fixed_speed);
+              Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
@@ -404,7 +404,7 @@ NAN_METHOD(resultsOptimal) {
     FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
-              Get("specific_gravity"), Get("stages"), fixed_speed);
+              Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));

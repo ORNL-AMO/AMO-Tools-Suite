@@ -26,7 +26,7 @@ public:
      * @param fullLoadAmps double, Current at full load in Amps
      * @return nothing
      */
-    MotorCurrent(double motorRatedPower, int motorRPM, Motor::LineFrequency lineFrequency,
+    MotorCurrent(double motorRatedPower, double motorRPM, Motor::LineFrequency lineFrequency,
                  Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor,
                  double ratedVoltage, double fullLoadAmps) :
             motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
@@ -60,7 +60,7 @@ private:
     /**
      * RPM of motor
      */
-    int motorRPM_ = 0;
+    double motorRPM_ = 0;
     Motor::LineFrequency lineFrequency_;
     Motor::EfficiencyClass efficiencyClass_;
     double specifiedEfficiency_ = 0.0;

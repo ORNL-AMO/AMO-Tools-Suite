@@ -35,14 +35,14 @@ double MotorCurrent::calculate() {
     estimatedFLA_ = estimateFLA.getEstimatedFLA();
 
     /// Adjustment based on the rated voltage.
-    for (int i = 0; i < 6; i++) {
+    for (size_t i = 0; i < 6; i++) {
         plValues[i] = plValues[i] * 460 / ratedVoltage_;
 
     }
 
     /// Adjustment based on the specified FLA
     double temp_fullLoadAmps = plValues[4];
-    for (int i = 0; i < 6; i++) {
+    for (size_t i = 0; i < 6; i++) {
         plValues[i] = plValues[i] * fullLoadAmps_ / temp_fullLoadAmps;
     }
     if (loadFactor_ < 0.25 || loadFactor_ == 0.25 || std::abs(loadFactor_ - 0.25) < 0.001) {
