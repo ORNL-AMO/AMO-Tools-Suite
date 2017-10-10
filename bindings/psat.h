@@ -154,7 +154,7 @@ NAN_METHOD(headTool) {
 // Fields
 
 Motor::LineFrequency line() {
-    unsigned val = static_cast<unsigned>(!Get("line_frequency"));
+    unsigned val = static_cast<unsigned>(Get("line_frequency"));
     return static_cast<Motor::LineFrequency>(val);
 }
 Motor::EfficiencyClass effCls() {
@@ -174,7 +174,7 @@ FieldData::LoadEstimationMethod  loadEstimationMethod() {
     return static_cast<FieldData::LoadEstimationMethod>(val);
 }
 Pump::Speed speed() {
-    unsigned val = static_cast<unsigned>(!Get("fixed_speed"));
+    unsigned val = static_cast<unsigned>(Get("fixed_speed"));
     return static_cast<Pump::Speed>(val);
 }
 //

@@ -15,7 +15,7 @@
             "conditions": [
                 [ 'OS=="mac"', {
                     "xcode_settings": {
-                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++', '-Wconversion'],
                         'OTHER_LDFLAGS': ['-stdlib=libc++'],
                         'MACOSX_DEPLOYMENT_TARGET': '10.9',
                         'CLANG_CXX_LIBRARY': 'libc++',
@@ -42,7 +42,7 @@
             "conditions": [
                 [ 'OS=="mac"', {
                     "xcode_settings": {
-                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++', '-Wconversion'],
                         'OTHER_LDFLAGS': ['-stdlib=libc++'],
                         'MACOSX_DEPLOYMENT_TARGET': '10.9',
                         'CLANG_CXX_LIBRARY': 'libc++',
@@ -70,7 +70,7 @@
             "conditions": [
                 [ 'OS=="mac"', {
                     "xcode_settings": {
-                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++', '-Wconversion'],
                         'OTHER_LDFLAGS': ['-stdlib=libc++'],
                         'MACOSX_DEPLOYMENT_TARGET': '10.9',
                         'CLANG_CXX_LIBRARY': 'libc++',
@@ -95,7 +95,7 @@
                  "conditions": [
                      [ 'OS=="mac"', {
                          "xcode_settings": {
-                             'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                             'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++', '-Wconversion'],
                              'OTHER_LDFLAGS': ['-stdlib=libc++'],
                              'MACOSX_DEPLOYMENT_TARGET': '10.9',
                              'CLANG_CXX_LIBRARY': 'libc++',
@@ -122,7 +122,7 @@
             "conditions": [
                 [ 'OS=="mac"', {
                     "xcode_settings": {
-                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++', '-Wconversion'],
                         'OTHER_LDFLAGS': ['-stdlib=libc++'],
                         'MACOSX_DEPLOYMENT_TARGET': '10.9',
                         'CLANG_CXX_LIBRARY': 'libc++',
