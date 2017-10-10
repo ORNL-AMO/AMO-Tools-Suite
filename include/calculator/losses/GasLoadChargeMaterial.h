@@ -281,8 +281,8 @@ public:
      *
      * @return nothing
      */
-    void setSubstance(std::string const & substance) {
-        substance_ = substance;
+    void setSubstance(std::string substance) {
+        substance_ = std::move(substance);
     }
 
     /**
@@ -299,9 +299,9 @@ public:
     /**
      * Gets the ID of material
      *
-     * @return double, ID of material
+     * @return size_t, ID of material
      */
-    double getID() const {
+    size_t getID() const {
         return this->id;
     }
 
@@ -362,10 +362,10 @@ private:
      *
      * */
     GasLoadChargeMaterial(
-            std::string const & substance,
+            std::string substance,
             double specificHeatVapor)
             : specificHeatVapor_(specificHeatVapor),
-              substance_(substance)
+              substance_(std::move(substance))
     {}
 };
 
