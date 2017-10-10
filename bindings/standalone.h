@@ -33,7 +33,8 @@ NAN_METHOD(CHPcalculator) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	CHP::Option option = static_cast<CHP::Option>(Get("option"));
+	unsigned val = static_cast<unsigned>(Get("option"));
+	CHP::Option option = static_cast<CHP::Option>(val);
 
 	auto const chp = CHP(Get("annualOperatingHours"), Get("annualElectricityConsumption"), Get("annualThermalDemand"),
 	                     Get("boilerThermalFuelCosts"), Get("avgElectricityCosts"), option, Get("boilerThermalFuelCostsCHPcase"),
