@@ -39,7 +39,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
     double gibbsPi = 0;
     double gibbsT = 0;
 
-	for (size_t k = 0; k < n.size(); k++ ) {
+	for (std::size_t k = 0; k < n.size(); k++ ) {
 		gibbs += n[k] * pow((7.1 - reducedPressure), i[k]) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsPi += -n[k] * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsT += n[k] * pow((7.1 - reducedPressure), i[k]) * j[k] * pow((inversedReducedTemp - 1.222), j[k] - 1);
@@ -105,7 +105,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
 	double gibbsPi0 = 1 / reducedPressure;
 	double gibbsT0 = 0, gibbsTT0 = 0;
 
-	for (size_t k = 0; k < n0.size(); k++) {
+	for (std::size_t k = 0; k < n0.size(); k++) {
 		gibbs0 += n0[k] * std::pow(inverseReducedTemp, j0[k]);
 		gibbsT0 += n0[k] * j0[k] * std::pow(inverseReducedTemp, j0[k] - 1);
 		gibbsTT0 += n0[k] * j0[k] * (j0[k] - 1) * std::pow(inverseReducedTemp, j0[k] - 2);
@@ -115,7 +115,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
     double gibbsPi1 = 0;
     double gibbsT1 = 0;
 
-	for (size_t k = 0; k < n1.size(); k++) {
+	for (std::size_t k = 0; k < n1.size(); k++) {
 		gibbs1 += n1[k] * std::pow(reducedPressure, i1[k]) * std::pow((inverseReducedTemp - 0.5), j1[k]);
 		gibbsPi1 += n1[k] * i1[k] * std::pow(reducedPressure, i1[k] - 1) * std::pow((inverseReducedTemp - 0.5), j1[k]);
 		gibbsT1 += n1[k] * std::pow(reducedPressure, i1[k]) * j1[k] * std::pow((inverseReducedTemp - 0.5), j1[k] - 1);
@@ -149,7 +149,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 	auto testPressureB = region3propNew["pressure"];
 
 	double pressureNew = 0;
-	for (size_t i = 0; i < 4; i++) {
+	for (std::size_t i = 0; i < 4; i++) {
 		auto const densityNew = (densityA + densityB) / 2.0;
 		region3propNew = region3Density(densityNew, t);
 		pressureNew = region3propNew["pressure"];
@@ -164,7 +164,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 
 
 	// Uses Linear Interpolation
-	size_t counter = 0;
+	std::size_t counter = 0;
 	while ((std::abs(pressureNew - p) > 1e-10) && (counter++ < 50) && (testPressureA != testPressureB)) {
 		auto const densityNew = p * (densityA - densityB) / (testPressureA - testPressureB) + densityA - testPressureA * (densityA - densityB) / (testPressureA - testPressureB);
 		region3propNew = region3Density(densityNew, t);
@@ -214,7 +214,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 	auto helmholtzS = n[0] / reducedDensity;
 	double helmholtzT = 0;
 
-	for (size_t k = 1; k < n.size(); k++) {
+	for (std::size_t k = 1; k < n.size(); k++) {
 		helmholtz += n[k] * std::pow(reducedDensity, i[k]) * std::pow(inverseReducedTemp, j[k]);
 		helmholtzS += n[k] * i[k] * std::pow(reducedDensity, i[k] - 1.0) * std::pow(inverseReducedTemp, j[k]);
 		helmholtzT += n[k] * std::pow(reducedDensity, i[k]) * j[k] * std::pow(inverseReducedTemp, j[k] - 1);
@@ -295,7 +295,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pres
 	auto const nu = enthalpy / 2500.0;
 	double temp = 0.0;
 
-	for (size_t i = 0; i < n.size(); i++) {
+	for (std::size_t i = 0; i < n.size(); i++) {
 		temp += n[i] * std::pow(pressure, I[i]) * std::pow((nu + 1), J[i]);
 	}
 	return temp;
@@ -323,7 +323,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2A(const double pre
     double temperature = 0.0;
     auto const nu = enthalpy / 2000.0;
 
-    for(size_t i = 0; i < array0.size(); i++) {
+    for(std::size_t i = 0; i < array0.size(); i++) {
         temperature += array2[i] * std::pow(pressure, array0[i]) * std::pow((nu - 2.1), array1[i]);
     }
     return temperature;
@@ -354,7 +354,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2B(const double pre
     double temperature = 0.0;
     auto const nu = enthalpy / 2000.0;
 
-    for (size_t i = 0; i < n.size(); i++) {
+    for (std::size_t i = 0; i < n.size(); i++) {
         temperature += n[i] * std::pow((pressure - 2), I[i]) * std::pow((nu - 2.6), J[i]);
     }
     return temperature;
@@ -377,7 +377,7 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2C(const double pre
     double temperature = 0.0;
     auto const nu = enthalpy / 2000.0;
 
-    for (size_t i = 0; i < n.size(); i++) {
+    for (std::size_t i = 0; i < n.size(); i++) {
         temperature += n[i] * std::pow((pressure + 25), I[i]) * std::pow((nu - 1.8), J[i]);
     }
     return temperature;
@@ -417,7 +417,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2A(const double pres
 
     double temperature = 0.0;
 
-    for (size_t i = 0; i < array2.size(); i++) {
+    for (std::size_t i = 0; i < array2.size(); i++) {
         temperature += array2[i] * std::pow(pressure, array0[i]) * std::pow((entropy/2 - 2), array1[i]);
     }
     return temperature;
@@ -453,7 +453,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2B(const double pres
 
     double temperature = 0.0;
 
-    for (size_t i = 0; i < array2.size(); i++) {
+    for (std::size_t i = 0; i < array2.size(); i++) {
         temperature += array2[i] * std::pow(pressure, array0[i]) * std::pow((10 - entropy/0.7853), array1[i]);
     }
     return temperature;
@@ -480,7 +480,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 
     double temperature = 0.0;
 
-    for (size_t i = 0; i < array2.size(); i++) {
+    for (std::size_t i = 0; i < array2.size(); i++) {
         temperature += array2[i] * std::pow(pressure, array0[i]) * std::pow((2 - entropy / 2.9251), array1[i]);
     }
     return temperature;
@@ -500,7 +500,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 
     double temp = 0.0;
 
-    for (size_t i = 0; i < array2.size(); i++) {
+    for (std::size_t i = 0; i < array2.size(); i++) {
         temp += array2[i] * std::pow(pressure, array0[i]) * std::pow((entropy + 2), array1[i]);
     }
     return temp;

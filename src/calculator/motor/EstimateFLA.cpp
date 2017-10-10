@@ -185,7 +185,7 @@ std::vector<double> EstimateFLA::calculate() {
      */
     double plMultiplier[6] = {};
 
-    for (size_t i = 0; i < 6; i++) {
+    for (std::size_t i = 0; i < 6; i++) {
         plMultiplier[i] = (tempCoeff[0][i] +
                            (tempCoeff[1][i] *
                             exp(-1 * tempCoeff[2][i] * motorRatedPower_)) +
@@ -200,12 +200,12 @@ std::vector<double> EstimateFLA::calculate() {
     double effVal = 0.0;
 
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
-        for (size_t i = 0; i < 6; i++) {
+        for (std::size_t i = 0; i < 6; i++) {
             plValues[i] = eeFLAValue * plMultiplier[i];
         }
 
     } else if (efficiencyClass_ == Motor::EfficiencyClass::STANDARD) {
-        for (size_t i = 0; i < 6; i++) {
+        for (std::size_t i = 0; i < 6; i++) {
             plValues[i] = seFLAValue * plMultiplier[i];
         }
     } else if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
@@ -222,7 +222,7 @@ std::vector<double> EstimateFLA::calculate() {
                                             motorRatedPower_, 1);
             effVal = motorEfficiency.calculate();
             /// SE is the nominal efficiency
-            for (size_t i = 0; i < 6; i++) {
+            for (std::size_t i = 0; i < 6; i++) {
                 plValues[i] = seFLAValue * plMultiplier[i];
 
                 //plValues[i] = seEff * plValues[i] * 100 / specifiedEfficiency_;
@@ -232,7 +232,7 @@ std::vector<double> EstimateFLA::calculate() {
             MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
                                             motorRatedPower_, 1);
             effVal = motorEfficiency.calculate();
-            for (size_t i = 0; i < 6; i++) {
+            for (std::size_t i = 0; i < 6; i++) {
                 plValues[i] = eeFLAValue * plMultiplier[i];
                 //plValues[i] = eeEff * plValues[i] * 100 / specifiedEfficiency_;
             }

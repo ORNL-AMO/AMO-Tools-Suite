@@ -142,7 +142,7 @@ double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
     };
 
 	double result = 0.0;
-    for ( size_t i = 0; i < gasArray.size(); i++ ) {
+    for ( std::size_t i = 0; i < gasArray.size(); i++ ) {
 	    auto const & tup = gasArray[i];
 	    auto const & c = std::get<0>(tup);
         const double mass = std::get<1>(tup);
