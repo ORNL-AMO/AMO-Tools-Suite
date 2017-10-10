@@ -15,14 +15,14 @@ TEST_CASE( "Calculate Heat Loss for flue gas Losses", "[Heat Loss]" ) {
 
 
 	composition = GasCompositions("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
-	REQUIRE(composition.calculateHeatingValue() == Approx(22030.67089880065));
-	REQUIRE(composition.calculateSpecificGravity() == Approx(0.6571206283343215));
+	REQUIRE(composition.getHeatingValue() == Approx(22030.67089880065));
+	REQUIRE(composition.getSpecificGravity() == Approx(0.6571206283343215));
 
 	composition = GasCompositions("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
-	REQUIRE(composition.calculateHeatingValue() == Approx(19185.932389233436));
-	REQUIRE(composition.calculateSpecificGravity() == Approx(0.44638781861292243));
+	REQUIRE(composition.getHeatingValue() == Approx(19185.932389233436));
+	REQUIRE(composition.getSpecificGravity() == Approx(0.44638781861292243));
 
 	composition = GasCompositions("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
-	REQUIRE(composition.calculateHeatingValue() == Approx(1080.6848266529887));
-	REQUIRE(composition.calculateSpecificGravity() == Approx(1.0870540901007706));
+	REQUIRE(composition.getHeatingValue() == Approx(1080.6848266529887));
+	REQUIRE(composition.getSpecificGravity() == Approx(1.0870540901007706));
 }

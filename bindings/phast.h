@@ -505,6 +505,17 @@ NAN_METHOD(flueGasLossesByVolume) {
 	info.GetReturnValue().Set(retval);
 }
 
+NAN_METHOD(flueGasByVolumeCalculateHeatingValue) {
+    inp = info[0]->ToObject();
+    GasCompositions comps("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
+
+    r = Nan::New<Object>();
+    SetR("heatingValue", comps.getHeatingValue());
+    SetR("specificGravity", comps.getSpecificGravity());
+    info.GetReturnValue().Set(r);
+}
+
 NAN_METHOD(flueGasLossesByMass) {
 	/**
 	 * Constructor for the flue gas losses by weight with all inputs specified
@@ -530,6 +541,17 @@ NAN_METHOD(flueGasLossesByMass) {
 	double heatLoss = slfgm.getHeatLoss();
 	Local<Number> retval = Nan::New(heatLoss);
 	info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(flueGasByMassCalculateHeatingValue) {
+    inp = info[0]->ToObject();
+
+    auto const hv = SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(Get("carbon"), Get("hydrogen"),
+                                                                          Get("sulphur"), Get("inertAsh"), Get("o2"),
+                                                                          Get("moisture"), Get("nitrogen"));
+
+    Local<Number> retval = Nan::New(hv);
+    info.GetReturnValue().Set(retval);
 }
 
 NAN_METHOD(flueGasLossesByVolumeGivenO2) {
