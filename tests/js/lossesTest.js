@@ -27,23 +27,23 @@ test('auxiliaryPower', function (t) {
     };
 
     var res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(12.867405449429189), res + " != 12.867405449429189");
+    t.equal(rnd(res), rnd(43905.3405494047));
 
     inp.supplyVoltage = 510;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(14.266036476541055), res + " != 14.266036476541055");
+    t.equal(rnd(res), rnd(48677.66017434));
 
     inp.avgCurrent = 25;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(18.771100627027707), res + " != 18.771100627027707");
+    t.equal(rnd(res), rnd(64049.5528609737));
 
     inp.powerFactor = 0.55;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(12.146006288076753), res + " != 12.146006288076753");
+    t.equal(rnd(res), rnd(41443.8283218065));
 
     inp.operatingTime = 75;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(9.109504716057565), res + " != 9.109504716057565");
+    t.equal(rnd(res), rnd(31082.8712413549));
 });
 
 test('fixtureLosses', function (t) {

@@ -215,7 +215,7 @@ std::vector<double> MotorEfficiency25::calculate() {
     std::vector<double> motorEfficiency_(5);
 
     if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
-        for (size_t i = 0; i < 4; ++i) { //cols
+        for (std::size_t i = 0; i < 4; ++i) { //cols
             if (motorRatedPower_ <= 125) {
                 motorEfficiency_[i] = (eeLt125hp[polechooser][0][i] + (eeLt125hp[polechooser][1][i] *
                                                                        exp(-1 * eeLt125hp[polechooser][2][i] *
@@ -231,7 +231,7 @@ std::vector<double> MotorEfficiency25::calculate() {
             }
         }
     } else if (efficiencyClass_ == Motor::EfficiencyClass::STANDARD) {
-        for (size_t i = 0; i < 4; ++i) { //cols
+        for (std::size_t i = 0; i < 4; ++i) { //cols
             if (motorRatedPower_ <= 125) {
                 motorEfficiency_[i] = (seLt125hp[polechooser][0][i] + (seLt125hp[polechooser][1][i] *
                                                                        exp(-1 * seLt125hp[polechooser][2][i] *

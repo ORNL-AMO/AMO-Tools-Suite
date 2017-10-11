@@ -475,7 +475,7 @@ NAN_METHOD(header) {
 
 	std::vector<Inlet> inlets;
 
-    for (size_t i = 0; i < arr->Length(); i++) {
+    for (std::size_t i = 0; i < arr->Length(); i++) {
         auto const pressure = arr->Get(i)->ToObject()->Get(pressureStr)->NumberValue();
 	    unsigned val = static_cast<unsigned>(arr->Get(i)->ToObject()->Get(Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
 	    auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
