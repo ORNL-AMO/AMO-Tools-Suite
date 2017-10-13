@@ -5,4 +5,4 @@ before_install:
 - sudo apt-get install npm
 
 install: npm install
-script: make && ./bin/amo_tools_suite_tests
+script: cmake ./ && make && ./bin/amo_tools_suite_tests
