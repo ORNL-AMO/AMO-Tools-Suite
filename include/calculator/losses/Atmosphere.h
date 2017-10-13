@@ -43,11 +43,8 @@ public:
      * @return nothing
      *
      * */
-    Atmosphere(double inletTemperature,
-               double outletTemperature,
-               double flowRate,
-               double correctionFactor,
-               double specificHeat)
+    Atmosphere(const double inletTemperature, const double outletTemperature, const double flowRate,
+               const double correctionFactor, const double specificHeat)
             : inletTemperature_(inletTemperature),
               outletTemperature_(outletTemperature),
               flowRate_(flowRate),
