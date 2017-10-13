@@ -1,0 +1,8 @@
+language: cpp
+# os: osx
+before_install:
+- sudo apt-get update
+- sudo apt-get install npm
+
+install: npm install
+script: make && ./bin/amo_tools_suite_tests
