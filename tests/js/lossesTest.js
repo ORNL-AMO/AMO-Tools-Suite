@@ -15,7 +15,7 @@ test('atmosphere', function (t) {
     };
 
     var res = bindings.atmosphere(inp);
-    t.equal(res, 31200.0, res + " != 31200.0");
+    t.equal(res, rnd(31200.0), res + " != 31200.0");
 });
 
 test('auxiliaryPower', function (t) {
@@ -55,7 +55,7 @@ test('fixtureLosses', function (t) {
     };
 
     var res = bindings.fixtureLosses(inp);
-    t.equal(res, 228750.0, res + " != 228750.0");
+    t.equal(res, rnd(228750.0), res + " != 228750.0");
 });
 
 test('flueGasByVolume', function (t) {
@@ -116,18 +116,18 @@ test('flueGasLossesByVolumeGivenO2', function (t) {
     };
 
     var res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res['heatLoss'], 0.7758857340516403, res + ' != 0.7758857340516403');
-    t.equal(res['excessAir'], 2.3172209488353976, res + ' != 2.3172209488353976');
+    t.equal(rnd(res.heatLoss), rnd(0.7758857340516403), res + ' != 0.7758857340516403');
+    t.equal(rnd(res.excessAir), rnd(2.3172209488353976), res + ' != 2.3172209488353976');
 
     inp['flueGasO2'] = 3.0;
     res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res['heatLoss'], 0.7622712144825897, res + ' != 0.7622712144825897');
-    t.equal(res['excessAir'], 15.52234414568954, res + ' != 15.52234414568954');
+    t.equal(rnd(res.heatLoss), rnd(0.7622712144825897), res + ' != 0.7622712144825897');
+    t.equal(rnd(res.excessAir), rnd(15.52234414568954), res + ' != 15.52234414568954');
 
     inp['flueGasO2'] = 7.0;
     res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res['heatLoss'], 0.731683496609056, res + ' != 0.731683496609056');
-    t.equal(res['excessAir'], 45.197503654937584, res + ' != 45.197503654937584');
+    t.equal(rnd(res.heatLoss), rnd(0.731683496609056), res + ' != 0.731683496609056');
+    t.equal(rnd(res.excessAir), rnd(45.197503654937584), res + ' != 45.197503654937584');
 });
 
 test('flueGasLossesByMassGivenO2', function (t) {
@@ -141,18 +141,18 @@ test('flueGasLossesByMassGivenO2', function (t) {
     };
 
     var res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res['heatLoss'], 0.8297708723770466, res + ' != 0.8297708723770466');
-    t.equal(res['excessAir'], 2.29427816716376, res + ' != 2.29427816716376');
+    t.equal(rnd(res.heatLoss), rnd(0.8297708723770466), res + ' != 0.8297708723770466');
+    t.equal(rnd(res.excessAir), rnd(2.29427816716376), res + ' != 2.29427816716376');
 
     inp['flueGasO2'] = 3.0;
     res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res['heatLoss'], 0.8151987636583022, res + ' != 0.8151987636583022');
-    t.equal(res['excessAir'], 15.368657569989644, res + ' != 15.368657569989644');
+    t.equal(rnd(res.heatLoss), rnd(0.8151987636583022), res + ' != 0.8151987636583022');
+    t.equal(rnd(res.excessAir), rnd(15.368657569989644), res + ' != 15.368657569989644');
 
     inp['flueGasO2'] = 7.0;
     res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res['heatLoss'], 0.7824331921965915, res + ' != 0.7824331921965915');
-    t.equal(res['excessAir'], 44.75000361875009, res + ' != 44.75000361875009');
+    t.equal(rnd(res.heatLoss), rnd(0.7824331921965915), res + ' != 0.7824331921965915');
+    t.equal(rnd(res.excessAir), rnd(44.75000361875009), res + ' != 44.75000361875009');
 });
 
 
@@ -166,12 +166,12 @@ test('gasCoolingLosses', function (t) {
     };
 
     var res = bindings.gasCoolingLosses(inp);
-    t.equal(res, 600000.0, res + ' != 600000.0');
+    t.equal(res, rnd(600000.0), res + ' != 600000.0');
 
     inp.flowRate = 600;
     inp.finalTemperature = 350;
     res = bindings.gasCoolingLosses(inp);
-    t.equal(res, 194400.0, res + ' != 194400.0');
+    t.equal(res, rnd(194400.0), res + ' != 194400.0');
 });
 
 test('gasLoadChargeMaterial', function (t) {
@@ -184,7 +184,7 @@ test('gasLoadChargeMaterial', function (t) {
     };
 
     var res = bindings.gasLoadChargeMaterial(inp);
-    t.equal(res, 383530.0, res + ' != 383530.0');
+    t.equal(res, rnd(383530.0), res + ' != 383530.0');
 });
 
 test('leakageLosses', function (t) {
@@ -210,7 +210,7 @@ test('liquidCoolingLosses', function (t) {
     };
 
     var res = bindings.liquidCoolingLosses(inp);
-    t.equal(res, 3792360.0, res + ' != 3792360.0');
+    t.equal(res, rnd(3792360.0), res + ' != 3792360.0');
 });
 
 test('liquidLoadChargeMaterial', function (t) {
@@ -225,7 +225,7 @@ test('liquidLoadChargeMaterial', function (t) {
 
 
     var res = bindings.liquidLoadChargeMaterial(inp);
-    t.equal(res, 364100.0, res + ' != 364100.0');
+    t.equal(res, rnd(364100.0), res + ' != 364100.0');
 });
 
 test('openingLosses - both circular and quad', function (t) {
@@ -259,13 +259,13 @@ test('slagOtherMaterialLosses', function (t) {
     };
 
     var res = bindings.slagOtherMaterialLosses(inp);
-    t.equal(res, 37.185, res + ' != 37.185');
+    t.equal(res, rnd(37.185), res + ' != 37.185');
 
     inp = {
         weight: 10, inletTemperature: 725, outletTemperature: 850, specificHeat: 0.033, correctionFactor: 0.8
     };
     res = bindings.slagOtherMaterialLosses(inp);
-    t.equal(res, 33.0, res + ' != 33.0');
+    t.equal(res, rnd(33.0), res + ' != 33.0');
 });
 
 test('solidLoadChargeMaterial', function (t) {
@@ -280,7 +280,7 @@ test('solidLoadChargeMaterial', function (t) {
     };
 
     var res = bindings.solidLoadChargeMaterial(inp);
-    t.equal(res, 3204310.28, res + ' != 3204310.28');
+    t.equal(res, rnd(3204310.28), res + ' != 3204310.28');
 });
 
 test('wallLosses', function (t) {
