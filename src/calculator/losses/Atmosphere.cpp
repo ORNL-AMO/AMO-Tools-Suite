@@ -10,6 +10,6 @@
 
 double Atmosphere::getTotalHeat() {
     // return the total net heat for the example case
-    this->totalHeat_ = this->flowRate_ * this->specificHeat_ * (this->outletTemperature_ - this->inletTemperature_) * this->correctionFactor_;
-    return this->totalHeat_;
+    totalHeat = flowRate * specificHeat * (outletTemperature - inletTemperature) * correctionFactor;
+    return totalHeat;
 }
