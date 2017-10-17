@@ -1,5 +1,6 @@
 language: cpp
 
+
 os:
   - linux
   - osx
@@ -9,8 +10,16 @@ compiler:
 #  - clang
 
 before_install:
-- sudo apt-get update
-- sudo apt-get install npm
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew update;
+      brew install doxygen;
+      brew upgrade node;
+
+    else
+      sudo apt-get update;
+      sudo apt-get install doxygen;
+      sudo apt-get install npm;
+    fi
 
 install: npm install
 
@@ -19,3 +28,4 @@ script:
   - make
   - ./bin/amo_tools_suite_tests
   - npm run test
+  - doxygen Doxyfile.in
