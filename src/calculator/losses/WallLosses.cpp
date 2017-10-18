@@ -11,7 +11,7 @@
 
 double WallLosses::getHeatLoss() {
     const double boltzman = 0.1713 * std::pow(10, -8);
-    const double sqrt_wv = 1 + (1.227 * windVelocity);
+    const double sqrt_wv = 1 + (1.277 * windVelocity);
     const double hl_conv1 = conditionFactor * std::pow((1 / 24.0), 0.2);
     const double hl_conv2 = std::pow((1.0 / ((ambientTemperature  + surfaceTemperature) / 2.0)), 0.181);
     const double hl_conv3 = std::pow((surfaceTemperature - ambientTemperature), 0.266);
