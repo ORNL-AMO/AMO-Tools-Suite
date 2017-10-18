@@ -45,18 +45,18 @@ public:
      * */
 
     LiquidLoadChargeMaterial(
-            LoadChargeMaterial::ThermicReactionType thermicReactionType,
-            double specificHeatLiquid,
-            double vaporizingTemperature,
-            double latentHeat,
-            double specificHeatVapor,
-            double chargeFeedRate,
-            double initialTemperature,
-            double dischargeTemperature,
-            double percentVaporized,
-            double percentReacted,
-            double reactionHeat,
-            double additionalHeat)
+            const LoadChargeMaterial::ThermicReactionType thermicReactionType,
+            const double specificHeatLiquid,
+            const double vaporizingTemperature,
+            const double latentHeat,
+            const double specificHeatVapor,
+            const double chargeFeedRate,
+            const double initialTemperature,
+            const double dischargeTemperature,
+            const double percentVaporized,
+            const double percentReacted,
+            const double reactionHeat,
+            const double additionalHeat)
             : thermicReactionType(thermicReactionType),
               specificHeatLiquid(specificHeatLiquid),
               vaporizingTemperature(vaporizingTemperature),
@@ -101,7 +101,7 @@ public:
      * Sets the specific heat of liquid
      * @param specificHeatLiquid double, specific heat of liquid in btu/(lb*°F)
      */
-    void setSpecificHeatLiquid(double specificHeatLiquid) {
+    void setSpecificHeatLiquid(const double specificHeatLiquid) {
         this->specificHeatLiquid = specificHeatLiquid;
     }
 
@@ -117,7 +117,7 @@ public:
      * Sets the vaporizing temperature
      * @param vaporizingTemperature double, vaporizing temperature in °F
      */
-    void setVaporizingTemperature(double vaporizingTemperature) {
+    void setVaporizingTemperature(const double vaporizingTemperature) {
         this->vaporizingTemperature = vaporizingTemperature;
     }
 
@@ -133,7 +133,7 @@ public:
      * Sets the latent heat of vaporization
      * @param latentHeat double, latent heat in btu/lb
      */
-    void setLatentHeat(double latentHeat) {
+    void setLatentHeat(const double latentHeat) {
         this->latentHeat = latentHeat;
     }
 
@@ -149,7 +149,7 @@ public:
      * Sets the specific heat of vapor
      * @param specificHeatVapor double, specific heat of vapor in btu/(lb*°F)
      */
-    void setSpecificHeatVapor(double specificHeatVapor) {
+    void setSpecificHeatVapor(const double specificHeatVapor) {
         this->specificHeatVapor = specificHeatVapor;
     }
 
@@ -165,7 +165,7 @@ public:
      * Sets the charge (liquid)-feed rate
      * @param chargeFeedRate double, charge (liquid)-feed rate in lb/hr
      */
-    void setChargeFeedRate(double chargeFeedRate) {
+    void setChargeFeedRate(const double chargeFeedRate) {
         this->chargeFeedRate = chargeFeedRate;
     }
 
@@ -181,7 +181,7 @@ public:
      * Sets the initial temperature
      * @param initialTemperature double, initial temperature in °F
      */
-    void setInitialTemperature(double initialTemperature) {
+    void setInitialTemperature(const double initialTemperature) {
         this->initialTemperature = initialTemperature;
     }
 
@@ -197,7 +197,7 @@ public:
      * Sets the discharge temperature
      * @param dischargeTemperature double, discharge temperature in °F
      */
-    void setDischargeTemperature(double dischargeTemperature) {
+    void setDischargeTemperature(const double dischargeTemperature) {
         this->dischargeTemperature = dischargeTemperature;
     }
 
@@ -213,7 +213,7 @@ public:
      * Sets the percentage of charge vaporized
      * @param percentVaporized double, % of charge vaporized
      */
-    void setPercentVaporized(double percentVaporized) {
+    void setPercentVaporized(const double percentVaporized) {
         this->percentVaporized = percentVaporized / 100.0;
     }
 
@@ -229,7 +229,7 @@ public:
      * Sets the percentage of charge reacted
      * @param percentReacted double, % of charge reacted
      */
-    void setPercentReacted(double percentReacted) {
+    void setPercentReacted(const double percentReacted) {
         this->percentReacted = percentReacted / 100.0;
     }
 
@@ -245,7 +245,7 @@ public:
      * Sets the heat of reaction
      * @param reactionHeat double, heat of reaction in btu/lb
      */
-    void setReactionHeat(double reactionHeat) {
+    void setReactionHeat(const double reactionHeat) {
         this->reactionHeat = reactionHeat;
     }
 
@@ -261,7 +261,7 @@ public:
      * Sets the additional heat
      * @param additionalHeat double, additional heat as btu/hr
      */
-    void setAdditionalHeat(double additionalHeat) {
+    void setAdditionalHeat(const double additionalHeat) {
         this->additionalHeat = additionalHeat;
     }
 
@@ -285,7 +285,7 @@ public:
      * Sets the total heat required
      * @param totalHeat double, total heat required in btu/hr
      */
-    void setTotalHeat(double totalHeat) {
+    void setTotalHeat(const double totalHeat) {
         this->totalHeat = totalHeat;
     }
 

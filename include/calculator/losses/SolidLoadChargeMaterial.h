@@ -51,21 +51,21 @@ public:
  * @param additionalHeat double, Additional heat required in Btu/h
  * */
     SolidLoadChargeMaterial(
-            LoadChargeMaterial::ThermicReactionType thermicReactionType,
-            double specificHeatSolid,
-            double latentHeat,
-            double specificHeatLiquid,
-            double meltingPoint,
-            double chargeFeedRate,
-            double waterContentCharged,
-            double waterContentDischarged,
-            double initialTemperature,
-            double dischargeTemperature,
-            double waterVaporDischargeTemperature,
-            double chargeMelted,
-            double chargeReacted,
-            double reactionHeat,
-            double additionalHeat
+            const LoadChargeMaterial::ThermicReactionType thermicReactionType,
+            const double specificHeatSolid,
+            const double latentHeat,
+            const double specificHeatLiquid,
+            const double meltingPoint,
+            const double chargeFeedRate,
+            const double waterContentCharged,
+            const double waterContentDischarged,
+            const double initialTemperature,
+            const double dischargeTemperature,
+            const double waterVaporDischargeTemperature,
+            const double chargeMelted,
+            const double chargeReacted,
+            const double reactionHeat,
+            const double additionalHeat
     ) : thermicReactionType (thermicReactionType),
         specificHeatSolid(specificHeatSolid),
         latentHeat(latentHeat),
@@ -113,7 +113,7 @@ public:
      * Sets the average specific heat of the solid material (dry)
      * @param specificHeatSolid double, average specific heat of the solid material (dry) in btu/(lb*°F)
      */
-    void setSpecificHeatSolid(double specificHeatSolid) {
+    void setSpecificHeatSolid(const double specificHeatSolid) {
         this->specificHeatSolid = specificHeatSolid;
     }
 
@@ -129,7 +129,7 @@ public:
      * Sets the latent heat of fusion
      * @param latentHeat double, latent heat of fusion in btu/lb
      */
-    void setLatentHeat(double latentHeat) {
+    void setLatentHeat(const double latentHeat) {
         this->latentHeat = latentHeat;
     }
 
@@ -145,7 +145,7 @@ public:
      * Sets the specific heat of liquid from molten material
      * @param specificHeatLiquid double, specific heat of liquid from molten material in btu/(lb*°F)
      */
-    void setSpecificHeatLiquid(double specificHeatLiquid) {
+    void setSpecificHeatLiquid(const double specificHeatLiquid) {
         this->specificHeatLiquid = specificHeatLiquid;
     }
 
@@ -177,7 +177,7 @@ public:
      * Sets the melting point of the material
      * @param meltingPoint double, melthing point of material in °F
      */
-    void setMeltingPoint(double meltingPoint) {
+    void setMeltingPoint(const double meltingPoint) {
         this->meltingPoint = meltingPoint;
     }
 
@@ -193,7 +193,7 @@ public:
      * Sets the charge (wet)-feed rate
      * @param chargeFeedRate double, charge (wet)-feed rate in lb/hr
      */
-    void setChargeFeedRate(double chargeFeedRate) {
+    void setChargeFeedRate(const double chargeFeedRate) {
         this->chargeFeedRate = chargeFeedRate;
     }
 
@@ -210,7 +210,7 @@ public:
      * @param waterContentCharged double, % of water content charged
      * @return nothing
      */
-    void setWaterContentCharged(double waterContentCharged) {
+    void setWaterContentCharged(const double waterContentCharged) {
         this->waterContentCharged = waterContentCharged / 100.0;
     }
 
@@ -226,7 +226,7 @@ public:
      * Sets the water content as discharged (%)
      * @param waterContentDischarged double, % of water content discharged
      */
-    void setWaterContentDischarged(double waterContentDischarged) {
+    void setWaterContentDischarged(const double waterContentDischarged) {
         this->waterContentDischarged = waterContentDischarged / 100.0;
     }
 
@@ -242,7 +242,7 @@ public:
      * Sets the initial temperature
      * @param initialTemperature double, initial temperature in °F
      */
-    void setInitialTemperature(double initialTemperature) {
+    void setInitialTemperature(const double initialTemperature) {
         this->initialTemperature = initialTemperature;
     }
 
@@ -259,7 +259,7 @@ public:
      * @param dischargeTemperature double, charge material discharge temperature in °F
      * @return nothing
      */
-    void setDischargeTemperature(double dischargeTemperature) {
+    void setDischargeTemperature(const double dischargeTemperature) {
         	this->dischargeTemperature = dischargeTemperature;
     }
 
@@ -275,7 +275,7 @@ public:
      * Sets the water vapor discharge temperature
      * @param waterVaporDischargeTemperature double, water vapor discharge temperature in °F
      */
-    void setWaterVaporDischargeTemperature(double waterVaporDischargeTemperature) {
+    void setWaterVaporDischargeTemperature(const double waterVaporDischargeTemperature) {
         this->waterVaporDischargeTemperature = waterVaporDischargeTemperature;
     }
 
@@ -291,7 +291,7 @@ public:
      * Sets the charge melted (% of dry charge)
      * @param chargeMelted double, charge melted (% of dry charge)
      */
-    void setChargeMelted(double chargeMelted) {
+    void setChargeMelted(const double chargeMelted) {
         this->chargeMelted = chargeMelted / 100.0;
     }
 
@@ -307,7 +307,7 @@ public:
      * Sets the charged reacted
      * @param chargedReacted double, charge reacted (% of dry charge)
      */
-    void setChargedReacted(double chargedReacted) {
+    void setChargedReacted(const double chargedReacted) {
         this->chargeReacted = chargedReacted / 100.0;
     }
 
@@ -323,7 +323,7 @@ public:
      * Sets the reaction heat
      * @param reactionHeat double, reaction heat in btu/lb
      */
-    void setReactionHeat(double reactionHeat) {
+    void setReactionHeat(const double reactionHeat) {
         this->reactionHeat = reactionHeat;
     }
 
@@ -339,7 +339,7 @@ public:
      * Sets the additional heat required
      * @param additionalHeat double, additional heat required in btu/hr
      */
-    void setAdditionalHeat(double additionalHeat) {
+    void setAdditionalHeat(const double additionalHeat) {
         this->additionalHeat = additionalHeat;
     }
 
@@ -363,7 +363,7 @@ public:
      * Sets the total heat required
      * @param totalHeat double, total heat required in btu/hr
      */
-    void setTotalHeat(double totalHeat) {
+    void setTotalHeat(const double totalHeat) {
         this->totalHeat = totalHeat;
     }
 

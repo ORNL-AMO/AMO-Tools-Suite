@@ -38,14 +38,9 @@ public:
      * @param conditionFactor double, condition factor - unitless
      * @param correctionFactor double, correction factor - unitless
      */
-    WallLosses(
-            double surfaceArea,
-            double ambientTemperature,
-            double surfaceTemperature,
-            double windVelocity,
-            double surfaceEmissivity,
-            double conditionFactor,
-            double correctionFactor)
+    WallLosses(const double surfaceArea, const double ambientTemperature, const double surfaceTemperature,
+               const double windVelocity, const double surfaceEmissivity, const double conditionFactor,
+               const double correctionFactor)
             : surfaceArea(surfaceArea),
               ambientTemperature(ambientTemperature),
               surfaceTemperature(surfaceTemperature),
@@ -71,7 +66,7 @@ public:
      * Sets the total outside surface area
      * @param surfaceArea double, surface area in ft^2
      */
-    void setSurfaceArea(double surfaceArea) {
+    void setSurfaceArea(const double surfaceArea) {
         this->surfaceArea = surfaceArea;
     }
 
@@ -87,7 +82,7 @@ public:
      * Sets the ambient temperature
      * @param ambientTemperature double, ambient temperature in °F
      */
-    void setAmbientTemperature(double ambientTemperature) {
+    void setAmbientTemperature(const double ambientTemperature) {
         this->ambientTemperature = ambientTemperature;
     }
 
@@ -103,7 +98,7 @@ public:
      * Sets the average surface temperature (measured)
      * @param surfaceTemperature double, average surface temperature (measured) in °F
      */
-    void setSurfaceTemperature(double surfaceTemperature) {
+    void setSurfaceTemperature(const double surfaceTemperature) {
         this->surfaceTemperature = surfaceTemperature;
     }
 
@@ -119,7 +114,7 @@ public:
      * Sets the wind velocity
      * @param windVelocity double, wind velocity in miles/hr
      */
-    void setWindVelocity(double windVelocity) {
+    void setWindVelocity(const double windVelocity) {
         this->windVelocity = windVelocity;
     }
 
@@ -135,7 +130,7 @@ public:
      * Sets the surafce emissivity (Typical - 0.9)
      * @param surfaceEmissivity double, surface emissivity - unitless
      */
-    void setSurfaceEmissivity(double surfaceEmissivity) {
+    void setSurfaceEmissivity(const double surfaceEmissivity) {
         this->surfaceEmissivity = surfaceEmissivity;
     }
 
@@ -151,7 +146,7 @@ public:
      * Sets the condition factor. The condition factor is the surface shape/orientation factor.
      * @param conditionFactor double, condition factor
      */
-    void setConditionFactor(double conditionFactor) {
+    void setConditionFactor(const double conditionFactor) {
         this->conditionFactor = conditionFactor;
     }
 
@@ -167,7 +162,7 @@ public:
      * Sets the correction factor
      * @param correctionFactor double, correction factor - unitless
      */
-    void setCorrectionFactor(double correctionFactor) {
+    void setCorrectionFactor(const double correctionFactor) {
         this->correctionFactor = correctionFactor;
     }
 

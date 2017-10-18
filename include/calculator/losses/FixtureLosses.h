@@ -55,7 +55,7 @@ public:
     * Sets the specific heat
     * @param specificHeat double, specific heat in btu/(lb*°F)
     */
-    void setSpecificHeat(double specificHeat) {
+    void setSpecificHeat(const double specificHeat) {
 		this->specificHeat = specificHeat;
     }
 
@@ -71,7 +71,7 @@ public:
     * Sets the feed rate for gas mixture
     * @param feedRate double, feed rate for gas mixture in lb/hr
     */
-    void setFeedRate(double feedRate) {
+    void setFeedRate(const double feedRate) {
 		this->feedRate = feedRate;
     }
 
@@ -87,7 +87,7 @@ public:
     * Sets the initial temperature
     * @param initialTemperature double, initial temperature in °F
     */
-    void setInitialTemperature(double initialTemperature) {
+    void setInitialTemperature(const double initialTemperature) {
 		this->initialTemperature = initialTemperature;
     }
 
@@ -103,7 +103,7 @@ public:
     * Sets the final temperature
     * @param finalTemperature double, final temperature in °F
     */
-    void setFinalTemperature(double finalTemperature) {
+    void setFinalTemperature(const double finalTemperature) {
 		this->finalTemperature = finalTemperature;
     }
 
@@ -119,7 +119,7 @@ public:
     * Sets the correction factor
     * @param correctionFactor double, correction factor - unitless
     */
-    void setCorrectionFactor(double correctionFactor) {
+    void setCorrectionFactor(const double correctionFactor) {
 		this->correctionFactor = correctionFactor;
     }
 

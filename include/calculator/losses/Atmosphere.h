@@ -43,11 +43,8 @@ public:
      * @return nothing
      *
      * */
-    Atmosphere(double inletTemperature,
-               double outletTemperature,
-               double flowRate,
-               double correctionFactor,
-               double specificHeat)
+    Atmosphere(const double inletTemperature, const double outletTemperature, const double flowRate,
+               const double correctionFactor, const double specificHeat)
             : inletTemperature(inletTemperature),
               outletTemperature(outletTemperature),
               flowRate(flowRate),
@@ -71,7 +68,7 @@ public:
      * Sets the inlet/initial temperature
      * @param inletTemperature double, initial temperature in °F
      */
-    void setInletTemperature(double inletTemperature) {
+    void setInletTemperature(const double inletTemperature) {
         this->inletTemperature = inletTemperature;
     }
 
@@ -87,7 +84,7 @@ public:
      * Sets the outlet/final temperature
      * @param outletTemperature double, outlet/final temperature in °F
      */
-    void setOutletTemperature(double outletTemperature) {
+    void setOutletTemperature(const double outletTemperature) {
         this->outletTemperature = outletTemperature;
     }
 
@@ -103,7 +100,7 @@ public:
      * Sets the flow rate
      * @param flowRate double, flow rate in scfh
      */
-    void setFlowRate(double flowRate) {
+    void setFlowRate(const double flowRate) {
         this->flowRate = flowRate;
     }
 
@@ -119,7 +116,7 @@ public:
      * Sets the correction factor
      * @param correctionFactor double, correction factor - unitless
      */
-    void setCorrectionFactor(double correctionFactor) {
+    void setCorrectionFactor(const double correctionFactor) {
         this->correctionFactor = correctionFactor;
     }
 
@@ -135,7 +132,7 @@ public:
      * Sets the specific heat
      * @param specificHeat double, specific heat in btu/(scf*°F)
      */
-    void setSpecificHeat(double specificHeat) {
+    void setSpecificHeat(const double specificHeat) {
         this->specificHeat = specificHeat;
     }
 
