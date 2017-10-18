@@ -38,7 +38,7 @@ double MotorEfficiency::calculate() {
         if (fabs(motorEfficiencyE_[3] - specifiedEfficiency_) > fabs(motorEfficiencyS_[3] - specifiedEfficiency_)) {
             //SE chosen
             double C = specifiedEfficiency_ / motorEfficiencyS_[3];
-            for (int i = 0; i < 5; ++i) {
+            for (std::size_t i = 0; i < 5; ++i) {
                 motorEfficiency_[i] = motorEfficiencyS_[i] * C;
             }
         } else { // EE chosen
@@ -46,7 +46,7 @@ double MotorEfficiency::calculate() {
             double C = specifiedEfficiency_ / motorEfficiencyE_[3];
 
 
-            for (int i = 0; i < 5; ++i) {
+            for (std::size_t i = 0; i < 5; ++i) {
                 motorEfficiency_[i] = motorEfficiencyE_[i] * C;
 
             }

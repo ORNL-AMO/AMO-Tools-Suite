@@ -281,8 +281,8 @@ public:
      *
      * @return nothing
      */
-    void setSubstance(std::string const & substance) {
-        substance_ = substance;
+    void setSubstance(std::string substance) {
+        substance_ = std::move(substance);
     }
 
     /**
@@ -299,9 +299,9 @@ public:
     /**
      * Gets the ID of material
      *
-     * @return double, ID of material
+     * @return std::size_t, ID of material
      */
-    double getID() const {
+    std::size_t getID() const {
         return this->id;
     }
 
@@ -312,7 +312,7 @@ public:
      *
      * @return nothing
      */
-    void setID(const size_t id) {
+    void setID(const std::size_t id) {
         this->id = id;
     }
 
@@ -348,7 +348,7 @@ private:
     double reactionHeat_ = 0.0;
     double additionalHeat_ = 0.0;
     std::string substance_ = "Unknown";
-    size_t id = 0;
+    std::size_t id = 0;
     // Out value
     double totalHeat_ = 0.0;
 
@@ -362,10 +362,10 @@ private:
      *
      * */
     GasLoadChargeMaterial(
-            std::string const & substance,
+            std::string substance,
             double specificHeatVapor)
             : specificHeatVapor_(specificHeatVapor),
-              substance_(substance)
+              substance_(std::move(substance))
     {}
 };
 

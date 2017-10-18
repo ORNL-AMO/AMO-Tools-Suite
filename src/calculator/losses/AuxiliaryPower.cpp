@@ -10,5 +10,5 @@
 #include "calculator/losses/AuxiliaryPower.h"
 
 double AuxiliaryPower::getPowerUsed() const {
-	return pow(motorPhase, 0.5) * supplyVoltage * avgCurrent * powerFactor * operatingTime / 1000.0;
+	return std::pow(motorPhase, 0.5) * supplyVoltage * avgCurrent * powerFactor * operatingTime * 3.412136247820839;
 }

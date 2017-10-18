@@ -141,7 +141,7 @@ std::vector<GasLoadChargeMaterial> SQLite::getGasLoadChargeMaterials() const
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
-        glcm.setID(ID);
+        glcm.setID(static_cast<std::size_t>(ID));
         return glcm;
     };
     return get_all_objects<GasLoadChargeMaterial>(m_gas_load_charge_materials_select_stmt, cb);
@@ -155,7 +155,7 @@ GasLoadChargeMaterial SQLite::getGasLoadChargeMaterialById(int id) const
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
-        glcm.setID(ID);
+        glcm.setID(static_cast<std::size_t>(ID));
         return glcm;
     };
     return get_object<GasLoadChargeMaterial>(m_gas_load_charge_materials_select_single_stmt, id, cb);
@@ -169,7 +169,7 @@ std::vector<GasLoadChargeMaterial> SQLite::getCustomGasLoadChargeMaterials() con
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatVapor = sqlite3_column_double(stmt, 3);
         auto glcm = GasLoadChargeMaterial(substance, specificHeatVapor);
-        glcm.setID(ID);
+        glcm.setID(static_cast<std::size_t>(ID));
         return glcm;
     };
     return get_all_objects<GasLoadChargeMaterial>(m_gas_load_charge_materials_select_custom_stmt, cb);

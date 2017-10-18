@@ -46,8 +46,7 @@ public:
 	               const int o2Generated,
 	               const int heatingValue,
 	               const double h2oGenerated,
-	               const double co2Generated
-	) :
+	               const double co2Generated) :
 			specificHeat(std::move(specificHeat)), molecularWeight(molecularWeight), specificWeight(specificWeight),
 	        compByVol(compPercent), compAdjByVol(compByVol), h2oGenerated(h2oGenerated), co2Generated(co2Generated),
 			o2Generated(o2Generated), heatingValue(heatingValue)
@@ -122,6 +121,10 @@ public:
 		gasses = {{"CH4", this->CH4}, {"C2H6", this->C2H6}, {"N2", this->N2}, {"H2", this->H2},
 		          {"C3H8", this->C3H8}, {"C4H10_CnH2n", this->C4H10_CnH2n}, {"H2O", this->H2O}, {"CO", this->CO},
 		          {"CO2", this->CO2}, {"SO2", this->SO2}, {"O2", this->O2}};
+
+		calculateCompByWeight();
+		heatingValue =  calculateHeatingValueFuel();
+		specificGravity = calculateSpecificGravity();
 	}
 
     /**
@@ -139,32 +142,10 @@ public:
 		return gas->second->compByVol;
 	}
 
-	/**
-	 * Gets existing specific gravity value
-	 *
-	 * @param none
-	 *
-	 * @return double, specificGravity
-	 */
-	double getSpecificGravity() const {
-		return specificGravity;
-	}
-
-
-	/**
-	 * Gets existing heating value of fuel
-	 *
-	 * @param none
-	 *
-	 * @return double, heatingValue
-	 */
-	double getHeatingValue() const {
-		return heatingValue;
-	}
+	double getHeatingValue() const { return heatingValue; };
+	double getSpecificGravity() const { return specificGravity; };
 
 	double calculateExcessAir(double flueGasO2);
-	double calculateHeatingValue();
-	double calculateSpecificGravity();
 
     /**
      * Gets the name of substance
@@ -196,6 +177,8 @@ public:
 private:
 	friend class GasFlueGasMaterial;
 	friend class SQLite;
+
+	double calculateSpecificGravity();
 
 	void calculateCompByWeight();
 	double calculateSensibleHeat(double combustionAirTemp);
@@ -243,10 +226,10 @@ private:
 
 	// the hash map holds a reference to the GasProperties below for easier iterable summations
 	std::unordered_map <std::string, std::shared_ptr<GasProperties>> gasses;
-	int id = -1;
+	int id = 0;
 	std::string substance;
 	double totalPercent;
-	double hH2Osat, tH2Osat;
+	double hH2Osat = 0, tH2Osat = 0;
 	double mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
 	double heatingValue = 0, specificGravity = 0;
@@ -269,14 +252,11 @@ public:
      * @return nothing
      *
      * */
-    GasFlueGasMaterial(const double flueGasTemperature,
-            const double excessAirPercentage,
-            const double combustionAirTemperature,
-            GasCompositions & compositions) :
-            flueGasTemperature_(flueGasTemperature),
-            excessAirPercentage_(excessAirPercentage / 100.0),
-            combustionAirTemperature_(combustionAirTemperature),
-            compositions_(compositions)
+    GasFlueGasMaterial(const double flueGasTemperature, const double excessAirPercentage,
+                       const double combustionAirTemperature,
+                       GasCompositions compositions) :
+		    flueGasTemperature_(flueGasTemperature), excessAirPercentage_(excessAirPercentage / 100.0),
+            combustionAirTemperature_(combustionAirTemperature), compositions_(std::move(compositions))
     {}
 
 	/**

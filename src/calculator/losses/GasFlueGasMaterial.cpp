@@ -19,7 +19,6 @@ double GasCompositions::calculateExcessAir(const double flueGasO2) {
     double excessAir = (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2));
 	if (excessAir == 0) return 0;
 
-	// loop a max of 100 times, this loop doesn't take more than roughly 10 iterations right now
     for (auto i = 0; i < 100; i++) {
         calculateMassFlueGasComponents(excessAir);
         auto const O2i = mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
@@ -72,12 +71,6 @@ double GasCompositions::calculateHeatCombustionAir(const double combustionAirTem
     return mCombustionAir * cpCombustionAir * (combustionAirTemp - 32);
 }
 
-// public API component of calculating heating value, needs to calculateCompByWeight before calculating Heating Value
-double GasCompositions::calculateHeatingValue() {
-    calculateCompByWeight();
-    return calculateHeatingValueFuel();
-}
-
 double GasCompositions::calculateSpecificGravity() {
     double summationNumerator = 0;
     for ( auto const & compound : gasses ) {
@@ -86,7 +79,6 @@ double GasCompositions::calculateSpecificGravity() {
     return summationNumerator / (22.4 * 1.205);
 }
 
-// private function used internally
 double GasCompositions::calculateHeatingValueFuel() {
     double heatValueFuel = 0;
 	for ( auto const & comp : gasses ) {

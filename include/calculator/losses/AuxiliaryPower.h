@@ -43,7 +43,7 @@ public:
 	/**
      * Calculates the auxiliary power used
      *
-     * @return double, auxiliary power used in kwh/cycle
+     * @return double, auxiliary power used in btu/hr
      */
 	double getPowerUsed() const;
 
