@@ -293,10 +293,10 @@ test('wallLosses', function (t) {
     };
 
     var res = bindings.wallLosses(inp);
-    t.equal(rnd(res), rnd(399122.25367509428), res + ' != 399122.25367509428');
+    t.equal(rnd(res), rnd(404627.551342992), res + ' != 404627.551342992');
 });
 
-test('wallLosses', function (t) {
+test('waterCoolingLosses', function (t) {
     t.plan(2);
     t.type(bindings.waterCoolingLosses, 'function');
 
