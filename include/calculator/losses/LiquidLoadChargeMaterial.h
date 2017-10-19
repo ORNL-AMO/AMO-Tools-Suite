@@ -30,7 +30,6 @@ public:
 
     /**
      * Constructor for liquid load/charge material with all inputs specified
-     *
      * @param thermicReactionType LoadChargeMaterial::ThermicREactionType, Enumerated value for either endothermic or exothermic reactions
      * @param specificHeatLiquid double, Specific Heat of Liquid in Btu/(lb*°F)
      * @param vaporizingTemperature double, Vaporizing Temperature in °F
@@ -43,352 +42,266 @@ public:
      * @param percentReacted double, Charge Liquid Reacted (% of Charge)
      * @param reactionHeat double, Heat of Reaction in Btu/lb
      * @param additionalHeat double, Additional Heat Required in btu/hr
-     *
      * */
 
     LiquidLoadChargeMaterial(
-            LoadChargeMaterial::ThermicReactionType thermicReactionType,
-            double specificHeatLiquid,
-            double vaporizingTemperature,
-            double latentHeat,
-            double specificHeatVapor,
-            double chargeFeedRate,
-            double initialTemperature,
-            double dischargeTemperature,
-            double percentVaporized,
-            double percentReacted,
-            double reactionHeat,
-            double additionalHeat)
-            : thermicReactionType_(thermicReactionType),
-              specificHeatLiquid_(specificHeatLiquid),
-              vaporizingTemperature_(vaporizingTemperature),
-              latentHeat_(latentHeat),
-              specificHeatVapor_(specificHeatVapor),
-              chargeFeedRate_(chargeFeedRate),
-              initialTemperature_(initialTemperature),
-              dischargeTemperature_(dischargeTemperature),
-              percentVaporized_(percentVaporized / 100.0),
-              percentReacted_(percentReacted / 100.0),
-              reactionHeat_(reactionHeat),
-              additionalHeat_(additionalHeat)
+            const LoadChargeMaterial::ThermicReactionType thermicReactionType,
+            const double specificHeatLiquid,
+            const double vaporizingTemperature,
+            const double latentHeat,
+            const double specificHeatVapor,
+            const double chargeFeedRate,
+            const double initialTemperature,
+            const double dischargeTemperature,
+            const double percentVaporized,
+            const double percentReacted,
+            const double reactionHeat,
+            const double additionalHeat)
+            : thermicReactionType(thermicReactionType),
+              specificHeatLiquid(specificHeatLiquid),
+              vaporizingTemperature(vaporizingTemperature),
+              latentHeat(latentHeat),
+              specificHeatVapor(specificHeatVapor),
+              chargeFeedRate(chargeFeedRate),
+              initialTemperature(initialTemperature),
+              dischargeTemperature(dischargeTemperature),
+              percentVaporized(percentVaporized / 100.0),
+              percentReacted(percentReacted / 100.0),
+              reactionHeat(reactionHeat),
+              additionalHeat(additionalHeat)
     {}
 
     LiquidLoadChargeMaterial() = default;
 
     /**
-     *
      * Gets the classification of thermic reaction type
-     *
      * @return LoadChargeMaterial::ThermicReactionType, thermic reaction type
      */
     LoadChargeMaterial::ThermicReactionType getThermicReactionType() const {
-        return thermicReactionType_;
+        return thermicReactionType;
     }
 
     /**
      * Sets the classification of thermic reaction type
-     *
      * @param thermicReactionType LoadChargeMaterial::ThermicaReactionType, thermic reaction type
-     *
-     * @return nothing
      */
     void setThermicReactionType(LoadChargeMaterial::ThermicReactionType thermicReactionType) {
-        thermicReactionType_ = thermicReactionType;
+        this->thermicReactionType = thermicReactionType;
     }
 
     /**
      * Gets the specific heat of liquid
-     *
      * @return double, specific heat in btu/(lb*°F)
      */
     double getSpecificHeatLiquid() const {
-        return specificHeatLiquid_;
+        return specificHeatLiquid;
     }
 
     /**
-     *
      * Sets the specific heat of liquid
-     *
      * @param specificHeatLiquid double, specific heat of liquid in btu/(lb*°F)
-     *
-     * @return nothing
      */
-    void setSpecificHeatLiquid(double specificHeatLiquid) {
-        specificHeatLiquid_ = specificHeatLiquid;
+    void setSpecificHeatLiquid(const double specificHeatLiquid) {
+        this->specificHeatLiquid = specificHeatLiquid;
     }
 
     /**
-     *
      * Gets the vaporizing temperature
-     *
      * @return double, vaporizing temperature in °F
      */
     double getVaporizingTemperature() const {
-        return vaporizingTemperature_;
+        return vaporizingTemperature;
     }
 
     /**
-     *
      * Sets the vaporizing temperature
-     *
      * @param vaporizingTemperature double, vaporizing temperature in °F
-     *
-     * @return nothing
      */
-    void setVaporizingTemperature(double vaporizingTemperature) {
-        vaporizingTemperature_ = vaporizingTemperature;
+    void setVaporizingTemperature(const double vaporizingTemperature) {
+        this->vaporizingTemperature = vaporizingTemperature;
     }
 
     /**
-     *
      * Gets the latent heat of vaporization
-     *
      * @return double, latent heat in btu/lb
      */
     double getLatentHeat() const {
-        return latentHeat_;
+        return latentHeat;
     }
 
     /**
-     *
      * Sets the latent heat of vaporization
-     *
      * @param latentHeat double, latent heat in btu/lb
-     *
-     * @return nothing
      */
-    void setLatentHeat(double latentHeat) {
-        latentHeat_ = latentHeat;
+    void setLatentHeat(const double latentHeat) {
+        this->latentHeat = latentHeat;
     }
 
     /**
-     *
      * Gets the specific heat of vapor
-     *
      * @return double, specific heat of vapor in btu/(lb*°F)
      */
     double getSpecificHeatVapor() const {
-        return specificHeatVapor_;
+        return specificHeatVapor;
     }
 
     /**
-     *
      * Sets the specific heat of vapor
-     *
      * @param specificHeatVapor double, specific heat of vapor in btu/(lb*°F)
-     *
-     * @return nothing
      */
-    void setSpecificHeatVapor(double specificHeatVapor) {
-        specificHeatVapor_ = specificHeatVapor;
+    void setSpecificHeatVapor(const double specificHeatVapor) {
+        this->specificHeatVapor = specificHeatVapor;
     }
 
     /**
-     *
      * Gets the charge (liquid)-feed rate
-     *
      * @return ndouble, charge (liquid)-feed rate in lb/hr
      */
     double getChargeFeedRate() const {
-        return chargeFeedRate_;
+        return chargeFeedRate;
     }
 
     /**
-     *
      * Sets the charge (liquid)-feed rate
-     *
      * @param chargeFeedRate double, charge (liquid)-feed rate in lb/hr
-     *
-     * @return nothing
      */
-    void setChargeFeedRate(double chargeFeedRate) {
-        chargeFeedRate_ = chargeFeedRate;
+    void setChargeFeedRate(const double chargeFeedRate) {
+        this->chargeFeedRate = chargeFeedRate;
     }
 
     /**
-     *
      * Gets the initial temperature
-     *
      * @return double, initial temperature in °F
      */
     double getInitialTemperature() const {
-        return initialTemperature_;
+        return initialTemperature;
     }
 
     /**
-     *
      * Sets the initial temperature
-     *
      * @param initialTemperature double, initial temperature in °F
-     *
-     * @return nothing
      */
-    void setInitialTemperature(double initialTemperature) {
-        initialTemperature_ = initialTemperature;
+    void setInitialTemperature(const double initialTemperature) {
+        this->initialTemperature = initialTemperature;
     }
 
     /**
-     *
      * Sets the discharge temperature
-     *
      * @return double, discharge temperature in °F
      */
     double getDischargeTemperature() const {
-        return dischargeTemperature_;
+        return dischargeTemperature;
     }
 
     /**
-     *
      * Sets the discharge temperature
-     *
      * @param dischargeTemperature double, discharge temperature in °F
-     *
-     * @return nothing
      */
-    void setDischargeTemperature(double dischargeTemperature) {
-        dischargeTemperature_ = dischargeTemperature;
+    void setDischargeTemperature(const double dischargeTemperature) {
+        this->dischargeTemperature = dischargeTemperature;
     }
 
     /**
-     *
      * Gets the percentage of charge vaporized
-     *
      * @return double, % of charge vaporized
      */
     double getPercentVaporized() const {
-        return percentVaporized_ * 100.0;
+        return percentVaporized * 100.0;
     }
 
     /**
-     *
      * Sets the percentage of charge vaporized
-     *
      * @param percentVaporized double, % of charge vaporized
-     *
-     * @return nothing
      */
-    void setPercentVaporized(double percentVaporized) {
-        percentVaporized_ = percentVaporized / 100.0;
+    void setPercentVaporized(const double percentVaporized) {
+        this->percentVaporized = percentVaporized / 100.0;
     }
 
     /**
-     *
      * Gets the percentage of charge reacted
-     *
      * @return double, % of charge reacted
      */
     double getPercentReacted() const {
-        return percentReacted_ * 100.0;
+        return percentReacted * 100.0;
     }
 
     /**
-     *
      * Sets the percentage of charge reacted
-     *
      * @param percentReacted double, % of charge reacted
-     *
-     * @return nothing
      */
-    void setPercentReacted(double percentReacted) {
-        percentReacted_ = percentReacted / 100.0;
+    void setPercentReacted(const double percentReacted) {
+        this->percentReacted = percentReacted / 100.0;
     }
 
     /**
-     *
      * Gets the heat of reaction
-     *
      * @return double, heat of reaction in btu/lb
      */
     double getReactionHeat() const {
-        return reactionHeat_;
+        return reactionHeat;
     }
 
     /**
-     *
      * Sets the heat of reaction
-     *
      * @param reactionHeat double, heat of reaction in btu/lb
-     *
-     * @return nothing
      */
-    void setReactionHeat(double reactionHeat) {
-        reactionHeat_ = reactionHeat;
+    void setReactionHeat(const double reactionHeat) {
+        this->reactionHeat = reactionHeat;
     }
 
     /**
-     *
      * Gets the additional heat
-     *
      * @return double, additional heat as btu/hr
      */
     double getAdditionalHeat() const {
-        return additionalHeat_;
+        return additionalHeat;
     }
 
     /**
-     *
      * Sets the additional heat
-     *
      * @param additionalHeat double, additional heat as btu/hr
-     *
-     * @return nothing
      */
-    void setAdditionalHeat(double additionalHeat) {
-        additionalHeat_ = additionalHeat;
+    void setAdditionalHeat(const double additionalHeat) {
+        this->additionalHeat = additionalHeat;
     }
 
     /**
-     *
      * Gets the name of the substance
-     *
      * @return string, name of substance
      */
     std::string getSubstance() const {
-        return substance_;
+        return substance;
     }
 
     /**
-     *
-     * Sets the naem of substance
-     *
+     * Sets the name of substance
      * @param substance string&, substance name
-     *
-     * @return nothing
      */
     void setSubstance(std::string const & substance) {
-        substance_ = substance;
+        this->substance = substance;
     }
 
     /**
-     *
      * Sets the total heat required
-     *
      * @param totalHeat double, total heat required in btu/hr
-     *
-     * @return nothing
      */
-    void setTotalHeat(double totalHeat) {
-        totalHeat_ = totalHeat;
+    void setTotalHeat(const double totalHeat) {
+        this->totalHeat = totalHeat;
     }
 
     /**
-     *
      * Gets the ID of material
-     *
-     * @return double, ID of material
+     * @return size_t, ID of material
      */
-    double getID() const {
+    size_t getID() const {
         return id;
     }
 
     /**
      * Sets the ID of material
-     *
      * @param id int const, ID of material
-     *
-     * @return nothing
      */
-    void setID(int const id) {
+    void setID(size_t const id) {
         this->id = id;
     }
 
@@ -405,11 +318,11 @@ public:
      */
     bool operator == (const LiquidLoadChargeMaterial& rhs) const
     {
-        return specificHeatLiquid_ == rhs.specificHeatLiquid_ &&
-               latentHeat_ == rhs.latentHeat_ &&
-               specificHeatVapor_ == rhs.specificHeatVapor_ &&
-               vaporizingTemperature_ == rhs.vaporizingTemperature_ &&
-               substance_ == rhs.substance_ && id == rhs.id;
+        return specificHeatLiquid == rhs.specificHeatLiquid &&
+               latentHeat == rhs.latentHeat &&
+               specificHeatVapor == rhs.specificHeatVapor &&
+               vaporizingTemperature == rhs.vaporizingTemperature &&
+               substance == rhs.substance && id == rhs.id;
     }
 
     /**
@@ -423,45 +336,43 @@ public:
 
 private:
     // In values
-    LoadChargeMaterial::ThermicReactionType thermicReactionType_ = LoadChargeMaterial::ThermicReactionType::NONE;
-    double specificHeatLiquid_ = 0.0;
-    double vaporizingTemperature_ = 0.0;
-    double latentHeat_ = 0.0;
-    double specificHeatVapor_ = 0.0;
-    double chargeFeedRate_ = 0.0;
-    double initialTemperature_ = 0.0;
-    double dischargeTemperature_ = 0.0;
-    double percentVaporized_ = 0.0;
-    double percentReacted_ = 0.0;
-    double reactionHeat_ = 0.0;
-    double additionalHeat_ = 0.0;
-    std::string substance_ = "Unknown";
-    int id = 0;
+    LoadChargeMaterial::ThermicReactionType thermicReactionType = LoadChargeMaterial::ThermicReactionType::NONE;
+    double specificHeatLiquid = 0.0;
+    double vaporizingTemperature = 0.0;
+    double latentHeat = 0.0;
+    double specificHeatVapor = 0.0;
+    double chargeFeedRate = 0.0;
+    double initialTemperature = 0.0;
+    double dischargeTemperature = 0.0;
+    double percentVaporized = 0.0;
+    double percentReacted = 0.0;
+    double reactionHeat = 0.0;
+    double additionalHeat = 0.0;
+    std::string substance = "Unknown";
+    size_t id = 0;
     // Out value
-    double totalHeat_ = 0.0;
+    double totalHeat = 0.0;
 
     friend class SQLite;
 
     /**
      * Constructor for liquid load/charge material with subset of inputs specified.
-     *
      * @param substance Name of substance
      * @param specificHeatLiquid Specific Heat of Liquid in Btu/(lb*°F)
      * @param vaporizingTemperature Vaporizing Temperature in °F
      * @param latentHeat Latent Heat of Vaporization in Btu/lb
-     *
      * */
     LiquidLoadChargeMaterial(
-            std::string const & substance,
+            std::string substance,
             double specificHeatLiquid,
             double vaporizingTemperature,
             double latentHeat,
             double specificHeatVapor)
-            : specificHeatLiquid_(specificHeatLiquid),
-              vaporizingTemperature_(vaporizingTemperature),
-              latentHeat_(latentHeat),
-              specificHeatVapor_(specificHeatVapor),
-              substance_(substance)
+            : specificHeatLiquid(specificHeatLiquid),
+              vaporizingTemperature(vaporizingTemperature),
+              latentHeat(latentHeat),
+              specificHeatVapor(specificHeatVapor),
+              substance(std::move(substance))
     {}
 };
 #endif //AMO_SUITE_LIQUIDLOADCHARGEMATERIAL_H

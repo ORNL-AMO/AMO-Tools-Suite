@@ -34,7 +34,6 @@ public:
 
     /**
  * Constructor for the solid load/charge material with all inputs specified.
- *
  * @param thermicReactionType LoadChargeMaterial::ThermicReactionType, Enumerated value for either endothermic or exothermic reactions
  * @param specificHeatSolid double, Average specific heat of the solid material (dry) in Btu/(lb*°F)
  * @param latentHeat double, Latent heat of fusion in Btu/(lb)
@@ -50,135 +49,116 @@ public:
  * @param chargeReacted double, Charge Reacted (% of dry charge) in %
  * @param reactionHeat double, Heat of reaction in Btu/lb
  * @param additionalHeat double, Additional heat required in Btu/h
- *
  * */
     SolidLoadChargeMaterial(
-            LoadChargeMaterial::ThermicReactionType thermicReactionType,
-            double specificHeatSolid,
-            double latentHeat,
-            double specificHeatLiquid,
-            double meltingPoint,
-            double chargeFeedRate,
-            double waterContentCharged,
-            double waterContentDischarged,
-            double initialTemperature,
-            double dischargeTemperature,
-            double waterVaporDischargeTemperature,
-            double chargeMelted,
-            double chargeReacted,
-            double reactionHeat,
-            double additionalHeat
-    ) : thermicReactionType_ (thermicReactionType),
-        specificHeatSolid_(specificHeatSolid),
-        latentHeat_(latentHeat),
-        specificHeatLiquid_(specificHeatLiquid),
-        meltingPoint_(meltingPoint),
-        chargeFeedRate_(chargeFeedRate),
-        waterContentCharged_(waterContentCharged / 100.0),
-        waterContentDischarged_(waterContentDischarged / 100.0),
-        initialTemperature_(initialTemperature),
-        dischargeTemperature_(dischargeTemperature),
-        waterVaporDischargeTemperature_(waterVaporDischargeTemperature),
-        percentMelted_(chargeMelted / 100.0),
-        percentReacted_(chargeReacted / 100.0),
-        reactionHeat_(reactionHeat),
-        additionalHeat_(additionalHeat)
+            const LoadChargeMaterial::ThermicReactionType thermicReactionType,
+            const double specificHeatSolid,
+            const double latentHeat,
+            const double specificHeatLiquid,
+            const double meltingPoint,
+            const double chargeFeedRate,
+            const double waterContentCharged,
+            const double waterContentDischarged,
+            const double initialTemperature,
+            const double dischargeTemperature,
+            const double waterVaporDischargeTemperature,
+            const double chargeMelted,
+            const double chargeReacted,
+            const double reactionHeat,
+            const double additionalHeat
+    ) : thermicReactionType (thermicReactionType),
+        specificHeatSolid(specificHeatSolid),
+        latentHeat(latentHeat),
+        specificHeatLiquid(specificHeatLiquid),
+        meltingPoint(meltingPoint),
+        chargeFeedRate(chargeFeedRate),
+        waterContentCharged(waterContentCharged / 100.0),
+        waterContentDischarged(waterContentDischarged / 100.0),
+        initialTemperature(initialTemperature),
+        dischargeTemperature(dischargeTemperature),
+        waterVaporDischargeTemperature(waterVaporDischargeTemperature),
+        chargeMelted(chargeMelted / 100.0),
+        chargeReacted(chargeReacted / 100.0),
+        reactionHeat(reactionHeat),
+        additionalHeat(additionalHeat)
     {}
 
     SolidLoadChargeMaterial() = default;
 
     /**
      * Gets the thermic reaction type
-     *
      * @return LoadChargeMaterial::ThermicReactionType classification of thermic reaction type
      */
     LoadChargeMaterial::ThermicReactionType getThermicReactionType() const {
-        return thermicReactionType_;
+        return thermicReactionType;
     }
 
     /**
      * Sets the thermic reaction type
-     *
      * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
-     *
-     * @return nothing
      */
     void setThermicReactionType(LoadChargeMaterial::ThermicReactionType thermicReactionType) {
-        thermicReactionType_ = thermicReactionType;
+        this->thermicReactionType = thermicReactionType;
     }
 
     /**
      * Gets the average specific heat of the solid material(dry)
-     *
      * @return double, average specific heat of solid material (dry) in btu/(lb*°F)
      */
     double getSpecificHeatSolid() const {
-        return specificHeatSolid_;
+        return specificHeatSolid;
     }
 
     /**
      * Sets the average specific heat of the solid material (dry)
-     *
      * @param specificHeatSolid double, average specific heat of the solid material (dry) in btu/(lb*°F)
-     *
-     * @return nothing
      */
-    void setSpecificHeatSolid(double specificHeatSolid) {
-        specificHeatSolid_ = specificHeatSolid;
+    void setSpecificHeatSolid(const double specificHeatSolid) {
+        this->specificHeatSolid = specificHeatSolid;
     }
 
     /**
      * Gets the latent heat of fusion
-     *
      * @return double, latent heat of fusion in btu/lb
      */
     double getLatentHeat() const {
-        return latentHeat_;
+        return latentHeat;
     }
 
     /**
      * Sets the latent heat of fusion
-     *
      * @param latentHeat double, latent heat of fusion in btu/lb
-     *
-     * @return nothing
      */
-    void setLatentHeat(double latentHeat) {
-        latentHeat_ = latentHeat;
+    void setLatentHeat(const double latentHeat) {
+        this->latentHeat = latentHeat;
     }
 
     /**
      * Gets the specific heat of liquid from molten material
-     *
      * @return double, specific heat of liquid from molten material in btu/(lb*°F)
      */
     double getSpecificHeatLiquid() const {
-        return specificHeatLiquid_;
+        return specificHeatLiquid;
     }
 
     /**
      * Sets the specific heat of liquid from molten material
-     *
      * @param specificHeatLiquid double, specific heat of liquid from molten material in btu/(lb*°F)
-     *
-     * @return nothing
      */
-    void setSpecificHeatLiquid(double specificHeatLiquid) {
-        specificHeatLiquid_ = specificHeatLiquid;
+    void setSpecificHeatLiquid(const double specificHeatLiquid) {
+        this->specificHeatLiquid = specificHeatLiquid;
     }
 
     /**
      * Gets the melthing point of the material
-     *
      * @return double, melting point of material in °F
      */
     double getMeltingPoint() const {
-        return meltingPoint_;
+        return meltingPoint;
     }
 
     /**
      * Gets the ID of material
-     *
      * @return double, ID number of material
      */
     double getID() const {
@@ -187,10 +167,7 @@ public:
 
     /**
      * Sets the ID of a material
-     *
      * @param id int, ID of the material
-     *
-     * @return nothing
      */
     void setID(const int id) {
         this->id = id;
@@ -198,244 +175,196 @@ public:
 
     /**
      * Sets the melting point of the material
-     *
      * @param meltingPoint double, melthing point of material in °F
-     *
-     * @return nothing
      */
-    void setMeltingPoint(double meltingPoint) {
-        meltingPoint_ = meltingPoint;
+    void setMeltingPoint(const double meltingPoint) {
+        this->meltingPoint = meltingPoint;
     }
 
     /**
      * Gets the charge (wet)-feed rate
-     *
      * @return double, charge (wet)-feed rate in lb/hr
      */
     double getChargeFeedRate() const {
-        return chargeFeedRate_;
+        return chargeFeedRate;
     }
 
     /**
      * Sets the charge (wet)-feed rate
-     *
      * @param chargeFeedRate double, charge (wet)-feed rate in lb/hr
-     *
-     * @return nothing
      */
-    void setChargeFeedRate(double chargeFeedRate) {
-        chargeFeedRate_ = chargeFeedRate;
+    void setChargeFeedRate(const double chargeFeedRate) {
+        this->chargeFeedRate = chargeFeedRate;
     }
 
     /**
      * Gets the water content as charged (%)
-     *
      * @return double, % of water content charged
      */
     double getWaterContentCharged() const {
-        return waterContentCharged_ * 100.0;
+        return waterContentCharged * 100.0;
     }
 
     /**
      * Sets the water content as charged (%)
-     *
      * @param waterContentCharged double, % of water content charged
-     *
      * @return nothing
      */
-    void setWaterContentCharged(double waterContentCharged) {
-        waterContentCharged_ = waterContentCharged / 100.0;
+    void setWaterContentCharged(const double waterContentCharged) {
+        this->waterContentCharged = waterContentCharged / 100.0;
     }
 
     /**
      * Gets the water content as discharged (%)
-     *
      * @return double, % of water content discharged
      */
     double getWaterContentDischarged() const {
-        return waterContentDischarged_ * 100.0;
+        return waterContentDischarged * 100.0;
     }
 
     /**
      * Sets the water content as discharged (%)
-     *
      * @param waterContentDischarged double, % of water content discharged
-     *
-     * @return nothing
      */
-    void setWaterContentDischarged(double waterContentDischarged) {
-        waterContentDischarged_ = waterContentDischarged / 100.0;
+    void setWaterContentDischarged(const double waterContentDischarged) {
+        this->waterContentDischarged = waterContentDischarged / 100.0;
     }
 
     /**
      * Gets the initial temperature
-     *
      * @return double, initial temperature in °F
      */
     double getInitialTemperature() const {
-        return initialTemperature_;
+        return initialTemperature;
     }
 
     /**
      * Sets the initial temperature
-     *
      * @param initialTemperature double, initial temperature in °F
-     *
-     * @return nothing
      */
-    void setInitialTemperature(double initialTemperature) {
-        initialTemperature_ = initialTemperature;
+    void setInitialTemperature(const double initialTemperature) {
+        this->initialTemperature = initialTemperature;
     }
 
     /**
      * Gets the charge material discharge temperature
-     *
      * @return double, charge material discharge temperature in °F
      */
     double getDischargeTemperature() const {
-        return dischargeTemperature_;
+        return dischargeTemperature;
     }
 
     /**
      * Sets the charge material discharge temperature
-     *
      * @param dischargeTemperature double, charge material discharge temperature in °F
-     *
      * @return nothing
      */
-    void setDischargeTemperature(double dischargeTemperature) {
-        dischargeTemperature_ = dischargeTemperature;
+    void setDischargeTemperature(const double dischargeTemperature) {
+        	this->dischargeTemperature = dischargeTemperature;
     }
 
     /**
      * Gets the water vapor discharge temperature
-     *
      * @return double, water vapor discharge temperature in °F
      */
     double getWaterVaporDischargeTemperature() const {
-        return waterVaporDischargeTemperature_;
+        return waterVaporDischargeTemperature;
     }
 
     /**
      * Sets the water vapor discharge temperature
-     *
      * @param waterVaporDischargeTemperature double, water vapor discharge temperature in °F
-     *
-     * @return nothing
      */
-    void setWaterVaporDischargeTemperature(double waterVaporDischargeTemperature) {
-        waterVaporDischargeTemperature_ = waterVaporDischargeTemperature;
+    void setWaterVaporDischargeTemperature(const double waterVaporDischargeTemperature) {
+        this->waterVaporDischargeTemperature = waterVaporDischargeTemperature;
     }
 
     /**
      * Gets the charge melted (% of dry charge)
-     *
      * @return double, charge melted (% of dry charge)
      */
     double getChargeMelted() const {
-        return percentMelted_ * 100.0;
+        return chargeMelted * 100.0;
     }
 
     /**
      * Sets the charge melted (% of dry charge)
-     *
      * @param chargeMelted double, charge melted (% of dry charge)
-     *
-     * @return nothing
      */
-    void setChargeMelted(double chargeMelted) {
-        percentMelted_ = chargeMelted / 100.0;
+    void setChargeMelted(const double chargeMelted) {
+        this->chargeMelted = chargeMelted / 100.0;
     }
 
     /**
      * Gets the charge reacted
-     *
      * @return double, charge reacted (% of dry charge)
      */
     double getChargedReacted() const {
-        return percentReacted_ * 100.0;
+        return chargeReacted * 100.0;
     }
 
     /**
      * Sets the charged reacted
-     *
      * @param chargedReacted double, charge reacted (% of dry charge)
-     *
-     * @return nothing
      */
-    void setChargedReacted(double chargedReacted) {
-        percentReacted_ = chargedReacted / 100.0;
+    void setChargedReacted(const double chargedReacted) {
+        this->chargeReacted = chargedReacted / 100.0;
     }
 
     /**
      * Gets the reaction heat
-     *
      * @return double, reaction heat in btu/lb
      */
     double getReactionHeat() const {
-        return reactionHeat_;
+        return reactionHeat;
     }
 
     /**
      * Sets the reaction heat
-     *
      * @param reactionHeat double, reaction heat in btu/lb
-     *
-     * @return nothing
      */
-    void setReactionHeat(double reactionHeat) {
-        reactionHeat_ = reactionHeat;
+    void setReactionHeat(const double reactionHeat) {
+        this->reactionHeat = reactionHeat;
     }
 
     /**
      * Gets the additional heat required
-     *
      * @return double, additional heat required in btu/hr
      */
     double getAdditionalHeat() const {
-        return additionalHeat_;
+        return additionalHeat;
     }
 
     /**
      * Sets the additional heat required
-     *
      * @param additionalHeat double, additional heat required in btu/hr
-     *
-     * @return nothing
      */
-    void setAdditionalHeat(double additionalHeat) {
-        additionalHeat_ = additionalHeat;
+    void setAdditionalHeat(const double additionalHeat) {
+        this->additionalHeat = additionalHeat;
     }
 
     /**
      * Gets the substance
-     *
      * @return string, name of substance
      */
     std::string getSubstance() const {
-        return substance_;
+        return substance;
     }
 
     /**
      * Sets the substance
-     *
      * @param substance string, name of substance
-     *
-     * @return nothing
      */
     void setSubstance(std::string const & substance) {
-        substance_ = substance;
+        this->substance = substance;
     }
 
     /**
      * Sets the total heat required
-     *
      * @param totalHeat double, total heat required in btu/hr
-     *
-     * @return nothing
      */
-    void setTotalHeat(double totalHeat) {
-        totalHeat_ = totalHeat;
+    void setTotalHeat(const double totalHeat) {
+        this->totalHeat = totalHeat;
     }
 
 
@@ -444,11 +373,11 @@ public:
      */
     bool operator == (const SolidLoadChargeMaterial& rhs) const
     {
-        return specificHeatSolid_ == rhs.specificHeatSolid_ &&
-                latentHeat_ == rhs.latentHeat_ &&
-                specificHeatLiquid_ == rhs.specificHeatLiquid_ &&
-                meltingPoint_ == rhs.meltingPoint_ &&
-                substance_ == rhs.substance_ && id == rhs.id;
+        return specificHeatSolid == rhs.specificHeatSolid &&
+                latentHeat == rhs.latentHeat &&
+                specificHeatLiquid == rhs.specificHeatLiquid &&
+                meltingPoint == rhs.meltingPoint &&
+                substance == rhs.substance && id == rhs.id;
     }
 
     /**
@@ -467,50 +396,48 @@ public:
 private:
 
     // In/Out values
-    std::string substance_ = "Unknown";
+    std::string substance = "Unknown";
     // In values
-    LoadChargeMaterial::ThermicReactionType thermicReactionType_ = LoadChargeMaterial::ThermicReactionType::NONE;
-    double specificHeatSolid_ = 0.0;
-    double latentHeat_ = 0.0;
-    double specificHeatLiquid_ = 0.0;
-    double meltingPoint_ = 0.0;
-    double chargeFeedRate_ = 0.0;
-    double waterContentCharged_ = 0.0;
-    double waterContentDischarged_ = 0.0;
-    double initialTemperature_ = 0.0;
-    double dischargeTemperature_ = 0.0;
-    double waterVaporDischargeTemperature_ = 0.0;
-    double percentMelted_ = 0.0;
-    double percentReacted_ = 0.0;
-    double reactionHeat_ = 0.0;
-    double additionalHeat_ = 0.0;
+    LoadChargeMaterial::ThermicReactionType thermicReactionType = LoadChargeMaterial::ThermicReactionType::NONE;
+    double specificHeatSolid = 0.0;
+    double latentHeat = 0.0;
+    double specificHeatLiquid = 0.0;
+    double meltingPoint = 0.0;
+    double chargeFeedRate = 0.0;
+    double waterContentCharged = 0.0;
+    double waterContentDischarged = 0.0;
+    double initialTemperature = 0.0;
+    double dischargeTemperature = 0.0;
+    double waterVaporDischargeTemperature = 0.0;
+    double chargeMelted = 0.0;
+    double chargeReacted = 0.0;
+    double reactionHeat = 0.0;
+    double additionalHeat = 0.0;
     int id = 0;
     // Out values
-    double totalHeat_ = 0.0;
+    double totalHeat = 0.0;
 
     friend class SQLite;
 
     /**
     * Constructor for the solid load/charge material with subset of inputs specified.
-    *
     * @param substance string, Name of substance
     * @param specificHeatSolid double, Average specific heat of the solid material (dry) in Btu/(lb*°F)
     * @param latentHeat double, Latent heat of fusion in Btu/(lb)
     * @param specificHeatLiquid double, Specific heat of liquid from molten material in Btu/(lb*°F)
     * @param meltingPoint double, The melting point of the material in °F
-    *
     * */
     SolidLoadChargeMaterial(
-            const std::string & substance,
+            std::string substance,
             double specificHeatSolid,
             double latentHeat,
             double specificHeatLiquid,
             double meltingPoint
-    ) : substance_ (substance),
-        specificHeatSolid_ (specificHeatSolid),
-        latentHeat_ (latentHeat),
-        specificHeatLiquid_ (specificHeatLiquid),
-        meltingPoint_ (meltingPoint)
+    ) : substance(std::move(substance)),
+        specificHeatSolid(specificHeatSolid),
+        latentHeat(latentHeat),
+        specificHeatLiquid(specificHeatLiquid),
+        meltingPoint(meltingPoint)
     {}
 
 };
