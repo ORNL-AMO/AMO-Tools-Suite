@@ -33,7 +33,7 @@
         O2Enrichment(const double o2CombAir, const double o2CombAirEnriched, const double flueGasTemp,
                      const double flueGasTempEnriched, const double o2FlueGas, const double o2FlueGasEnriched,
                      const double combAirTemp, const double combAirTempEnriched, const double fuelConsumption)
-                : o2CombAir(o2CombAir / 100), o2CombAirEnriched(o2CombAirEnriched), flueGasTemp(flueGasTemp),
+                : o2CombAir(o2CombAir), o2CombAirEnriched(o2CombAirEnriched), flueGasTemp(flueGasTemp),
                   flueGasTempEnriched(flueGasTempEnriched), o2FlueGas(o2FlueGas),
                   o2FlueGasEnriched(o2FlueGasEnriched), combAirTemp(combAirTemp),
                   combAirTempEnriched(combAirTempEnriched), fuelConsumption(fuelConsumption)
@@ -43,19 +43,16 @@
 
     /**
      * Gets the O2 in combustion air
-     *
      * @return double, % of O2 in combustion air
      */
-    double getO2CombAir() const {
-        return o2CombAir;
-    }
+    double getO2CombAir() const { return o2CombAir; }
 
     /**
      * Sets the percentage of O2 in combustion air
      * @param o2CombAir double, % of O2 in combustion air
      */
     void setO2CombAir(const double o2CombAir) {
-        this->o2CombAir = o2CombAir;
+        this->o2CombAir = o2CombAir / 100;
     }
 
     /**
@@ -71,7 +68,7 @@
      * @param o2CombAirEnriched double, % of O2 in combustion air with oxygen enrichment
      */
     void setO2CombAirEnriched(double o2CombAirEnriched) {
-        this->o2CombAirEnriched = o2CombAirEnriched;
+        this->o2CombAirEnriched = o2CombAirEnriched / 100;
     }
 
     /**
@@ -119,7 +116,7 @@
      * @param o2FlueGas double, dry % of O2 in flue gases
      */
     void setO2FlueGas(double o2FlueGas) {
-        this->o2FlueGas = o2FlueGas;
+        this->o2FlueGas = o2FlueGas / 100;
     }
 
     /**
@@ -135,7 +132,7 @@
      * @param o2FlueGasEnriched double, dry % of O2 in flue gases with oxygen enrichment
      */
     void setO2FlueGasEnriched(double o2FlueGasEnriched) {
-        this->o2FlueGasEnriched = o2FlueGasEnriched;
+        this->o2FlueGasEnriched = o2FlueGasEnriched / 100;
     }
 
     /**
