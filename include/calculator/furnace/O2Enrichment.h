@@ -4,7 +4,7 @@
  *
  * This contains the inputs for calculations involving oxygen enrichment for a fuel fired furnace
  *
- * @author Autumn Ferree (ferreeak)
+ * @author Autumn Ferree (ferreeak) & Preston Shires (pshires)
  * @bug No known bugs.
  *
  */
@@ -37,7 +37,9 @@ public:
               flueGasTempEnriched(flueGasTempEnriched), o2FlueGas(o2FlueGas / 100),
               o2FlueGasEnriched(o2FlueGasEnriched / 100), combAirTemp(combAirTemp),
               combAirTempEnriched(combAirTempEnriched), fuelConsumption(fuelConsumption)
-    {}
+    {
+        calculate();
+    }
 
     O2Enrichment() = default;
 
@@ -53,15 +55,14 @@ public:
      */
     void setO2CombAir(const double o2CombAir) {
         this->o2CombAir = o2CombAir / 100;
+        calculate();
     }
 
     /**
      * Gets the O2 in combustion air with oxygen enrichment
      * @return double, % of O2 in combustion air with oxygen enrichment
      */
-    double getO2CombAirEnriched() const {
-        return o2CombAirEnriched;
-    }
+    double getO2CombAirEnriched() const { return o2CombAirEnriched; }
 
     /**
      * Sets the percentage of O2 in combustion air with oxygen enrichment
@@ -69,15 +70,14 @@ public:
      */
     void setO2CombAirEnriched(double o2CombAirEnriched) {
         this->o2CombAirEnriched = o2CombAirEnriched / 100;
+        calculate();
     }
 
     /**
      * Gets the flue gas temperature
      * @return double, flue gas temperature in °F
      */
-    double getFlueGasTemp() const {
-        return flueGasTemp;
-    }
+    double getFlueGasTemp() const { return flueGasTemp; }
 
     /**
      * Sets the flue gas temperature
@@ -85,15 +85,14 @@ public:
      */
     void setFlueGasTemp(double flueGasTemp) {
         this->flueGasTemp = flueGasTemp;
+        calculate();
     }
 
     /**
      * Gets the flue gas temperature with oxygen enrichment
      * @return double, flue gas temperature with oxygen enrichment in °F
      */
-    double getFlueGasTempEnriched() const {
-        return flueGasTempEnriched;
-    }
+    double getFlueGasTempEnriched() const { return flueGasTempEnriched; }
 
     /**
      * Sets the flue gas temperature with oxygen enrichment
@@ -101,15 +100,14 @@ public:
      */
     void setFlueGasTempEnriched(double flueGasTempEnriched) {
         this->flueGasTempEnriched = flueGasTempEnriched;
+        calculate();
     }
 
     /**
      * Gets the dry percentage of O2 in flue gases
      * @return double, dry % of O2 in flue gases
      */
-    double getO2FlueGas() const {
-        return o2FlueGas;
-    }
+    double getO2FlueGas() const { return o2FlueGas; }
 
     /**
      * Sets the dry percentage of O2 in flue gases
@@ -117,15 +115,14 @@ public:
      */
     void setO2FlueGas(double o2FlueGas) {
         this->o2FlueGas = o2FlueGas / 100;
+        calculate();
     }
 
     /**
      * Gets the dry percentage of O2 in flue gases with oxygen enrichment
      * @return double, dry % of O2 in flue gases with oxygen enrichment
      */
-    double getO2FlueGasEnriched() const {
-        return o2FlueGasEnriched;
-    }
+    double getO2FlueGasEnriched() const { return o2FlueGasEnriched; }
 
     /**
      * Sets the dry percentage of O2 in flue gases with oxygen enrichment
@@ -133,15 +130,14 @@ public:
      */
     void setO2FlueGasEnriched(double o2FlueGasEnriched) {
         this->o2FlueGasEnriched = o2FlueGasEnriched / 100;
+        calculate();
     }
 
     /**
      * Gets the combustion air preheat temperature
      * @return double, combustion air preheat temperature in °F
      */
-    double getCombAirTemp() const {
-        return combAirTemp;
-    }
+    double getCombAirTemp() const { return combAirTemp; }
 
     /**
      * Sets the combustion air preheat temperature
@@ -149,15 +145,14 @@ public:
      */
     void setCombAirTemp(double combAirTemp) {
         this->combAirTemp = combAirTemp;
+        calculate();
     }
 
     /**
      * Gets the combustion air preheat temperature with oxygen enrichment
      * @return double, combustion air preheat temperature with oxygen enrichment in °F
      */
-    double getCombAirTempEnriched() const {
-        return combAirTempEnriched;
-    }
+    double getCombAirTempEnriched() const { return combAirTempEnriched; }
 
     /**
      * Sets the combustion air preheat temperature with oxygen enrichment
@@ -165,15 +160,14 @@ public:
      */
     void setCombAirTempEnriched(double combAirTempEnriched) {
         this->combAirTempEnriched = combAirTempEnriched;
+        calculate();
     }
 
     /**
      * Gets the fuel consumption
      * @return double, fuel consumption in MM Btu/hr
      */
-    double getFuelConsumption() const {
-        return fuelConsumption;
-    }
+    double getFuelConsumption() const { return fuelConsumption; }
 
     /**
      * Sets the fuel consumption
@@ -181,103 +175,110 @@ public:
      */
     void setFuelConsumption(double fuelConsumption) {
         this->fuelConsumption = fuelConsumption;
+        calculate();
     }
 
     /**
      * Gets the excess air
      * @return double, excess air as %
      */
-    double getExcessAir();
+    double getExcessAir() { return excessAir; };
 
     /**
      * Gets the excess air with oxygen enrichment
      * @return double, excess air with oxygen enrichment as %
      */
-    double getExcessAirEnriched();
+    double getExcessAirEnriched() { return excessAirEnriched; };
 
     /**
      * Gets the heat input
      * @return double, heat input in °F
      */
-//    double getHeatInput();
+    double getHeatInput() { return heatInput; };
 
     /**
      * Gets the heat input with oxygen enrichment
      * @return double, heat input with oxygen enrichment in °F
      */
-    double getHeatInputEnriched();
+    double getHeatInputEnriched() { return heatInputEnriched; };
 
     /**
      * Gets the specific heat of air
      * @return double, specific heat of air in Btu/(lb*°F)
      */
-    double getAirSpecificHeat();
+    double getAirSpecificHeat() { return airSpecificHeat; };
 
     /**
      * Gets the specific heat of air with oxygen enrichment
      * @return double, specific heat of air with oxygen enrichment in Btu/(lb*°F)
      */
-    double getEnrichedAirSpecificHeat();
+    double getEnrichedAirSpecificHeat() { return enrichedAirSpecificHeat; };
 
     /**
      * Gets the air correction
      * @return double, air correction in btu
      */
-    double getAirCorrection();
+    double getAirCorrection() { return airCorrection; };
 
     /**
      * Gets the air correction with oxygen enrichment
      * @return double, air correction with oxygen enrichment in btu
      */
-    double getEnrichedAirCorrection();
+    double getEnrichedAirCorrection() { return enrichedAirCorrection; };
 
     /**
      * Gets the combustion air correction
      * @return double, combustion air correction in btu
      */
-    double getCombustionAirCorrection();
+    double getCombustionAirCorrection() { return combustionAirCorrection; };
 
     /**
      * Gets the combustion air correction with oxygen enrichment
      * @return double, combustion air correction with oxygen enrichment in btu
      */
-    double getCombustionAirCorrectionEnriched();
+    double getCombustionAirCorrectionEnriched() { return combustionAirCorrectionEnriched; };
 
     /**
      * Gets the standard available heat (this does not take % of O2 in combustion air into account)
      * @return double, standard available heat as %
      */
-    double getStdAvailableHeat();
+    double getStdAvailableHeat() { return stdAvailableHeat; };
 
     /**
      * Gets the standard available heat with oxygen enrichment (this does not take % of O2 in combustion air into account)
      * @return double, standard available heat with oxygen enrichment as %
      */
-    double getStdAvailableHeatEnriched();
+    double getStdAvailableHeatEnriched() { return stdAvailableHeatEnriched; };
 
     /**
      * Gets the available heat (uses % of O2 in combustion air)
      * @return double, available heat as % of HHV
      */
-    double getAvailableHeat();
+    double getAvailableHeat() { return availableHeat; };
 
     /**
      * Gets the available heat with oxygen enrichment (uses % of O2 in combustion air)
      * @return double, available heat with oxygen enrichment as % of HHV
      */
-    double getAvailableHeatEnriched();
+    double getAvailableHeatEnriched() { return availableHeatEnriched; };
 
     /**
      * Gets the fuel consumption with oxygen enrichment
      * @return double, fuel consumption with oxygen enrichment in MM Btu/hr
      */
-    double getFuelConsumptionEnriched();
+    double getFuelConsumptionEnriched() { return fuelConsumptionEnriched; };
 
     /**
      * Gets the fuel savings with oxygen enrichment
      * @return double, % of fuel savings
      */
-    double getFuelSavingsEnriched();
+    double getFuelSavingsEnriched() { return fuelSavingsEnriched; };
+
+    /**
+     * Calculates available heat, available heat enriched, fuel consumption enriched, and fuel saving enriched
+     * @return double, available heat as % of HHV
+     */
+    void calculate();
 
 
 private:
