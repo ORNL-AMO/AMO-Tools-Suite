@@ -33,7 +33,7 @@
         O2Enrichment(const double o2CombAir, const double o2CombAirEnriched, const double flueGasTemp,
                      const double flueGasTempEnriched, const double o2FlueGas, const double o2FlueGasEnriched,
                      const double combAirTemp, const double combAirTempEnriched, const double fuelConsumption)
-                : o2CombAir(o2CombAir), o2CombAirEnriched(o2CombAirEnriched), flueGasTemp(flueGasTemp),
+                : o2CombAir(o2CombAir / 100), o2CombAirEnriched(o2CombAirEnriched / 100), flueGasTemp(flueGasTemp),
                   flueGasTempEnriched(flueGasTempEnriched), o2FlueGas(o2FlueGas),
                   o2FlueGasEnriched(o2FlueGasEnriched), combAirTemp(combAirTemp),
                   combAirTempEnriched(combAirTempEnriched), fuelConsumption(fuelConsumption)

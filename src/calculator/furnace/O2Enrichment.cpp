@@ -85,13 +85,13 @@ double O2Enrichment::getStdAvailableHeatEnriched() {
 
 double O2Enrichment::getAvailableHeat() {
     double stdAvailableHeat = getStdAvailableHeat();
-    availableHeat = stdAvailableHeat + 100 * (9.38 * ((o2CombAir)/100 - 0.21)/((o2CombAir)/100) * 0.02 * (((flueGasTemp) - 60)/980));
+    availableHeat = stdAvailableHeat + 100 * (9.38 * (o2CombAir - 0.21) / o2CombAir * 0.02 * ((flueGasTemp - 60) / 980));
     return availableHeat;
 }
 
 double O2Enrichment::getAvailableHeatEnriched() {
     double stdAvailableHeatEnriched = getStdAvailableHeatEnriched();
-    availableHeatEnriched = stdAvailableHeatEnriched + 100 * (9.38 * ((o2CombAirEnriched)/100 - 0.21)/((o2CombAirEnriched)/100) * 0.02 * (((flueGasTempEnriched) - 60)/980));
+    availableHeatEnriched = stdAvailableHeatEnriched + 100 * (9.38 * (o2CombAirEnriched - 0.21) / o2CombAirEnriched * 0.02 * ((flueGasTempEnriched - 60) / 980));
     return availableHeatEnriched;
 }
 
