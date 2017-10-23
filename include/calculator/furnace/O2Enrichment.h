@@ -16,30 +16,30 @@
  * O2 Enrichment calculator class
  * Used to see the potential fuel savings of using O2 enriched fuel.
  */
-    class O2Enrichment {
-    public:
-        /**
-         * Constructor for the O2 enrichment calculator
-         * @param o2CombAir double, % of O2 in the combustion air
-         * @param o2CombAirEnriched double, % of O2 in the oxygen enriched combustion air
-         * @param flueGasTemp double, flue gas temperature in °F
-         * @param flueGasTempEnriched double, flue gas temperature with oxygen enriched air in °F
-         * @param o2FlueGas double, % of dry O2 in flue gas
-         * @param o2FlueGasEnriched double, % of dry O2 in flue gas with oxygen enriched air
-         * @param combAirTemp double, combustion air preheat temperature in °F
-         * @param combAirTempEnriched double, combustion air preheat temperature with oxygen enriched air in °F
-         * @param fuelConsumption double, fuel consumption in MM Btu/hr
-         * */
-        O2Enrichment(const double o2CombAir, const double o2CombAirEnriched, const double flueGasTemp,
-                     const double flueGasTempEnriched, const double o2FlueGas, const double o2FlueGasEnriched,
-                     const double combAirTemp, const double combAirTempEnriched, const double fuelConsumption)
-                : o2CombAir(o2CombAir / 100), o2CombAirEnriched(o2CombAirEnriched / 100), flueGasTemp(flueGasTemp),
-                  flueGasTempEnriched(flueGasTempEnriched), o2FlueGas(o2FlueGas),
-                  o2FlueGasEnriched(o2FlueGasEnriched), combAirTemp(combAirTemp),
-                  combAirTempEnriched(combAirTempEnriched), fuelConsumption(fuelConsumption)
-        {}
+class O2Enrichment {
+public:
+    /**
+	 * Constructor for the O2 enrichment calculator
+	 * @param o2CombAir double, % of O2 in the combustion air
+	 * @param o2CombAirEnriched double, % of O2 in the oxygen enriched combustion air
+	 * @param flueGasTemp double, flue gas temperature in °F
+	 * @param flueGasTempEnriched double, flue gas temperature with oxygen enriched air in °F
+	 * @param o2FlueGas double, % of dry O2 in flue gas
+	 * @param o2FlueGasEnriched double, % of dry O2 in flue gas with oxygen enriched air
+	 * @param combAirTemp double, combustion air preheat temperature in °F
+	 * @param combAirTempEnriched double, combustion air preheat temperature with oxygen enriched air in °F
+	 * @param fuelConsumption double, fuel consumption in MM Btu/hr
+	 * */
+    O2Enrichment(const double o2CombAir, const double o2CombAirEnriched, const double flueGasTemp,
+                 const double flueGasTempEnriched, const double o2FlueGas, const double o2FlueGasEnriched,
+                 const double combAirTemp, const double combAirTempEnriched, const double fuelConsumption)
+            : o2CombAir(o2CombAir / 100), o2CombAirEnriched(o2CombAirEnriched / 100), flueGasTemp(flueGasTemp),
+              flueGasTempEnriched(flueGasTempEnriched), o2FlueGas(o2FlueGas / 100),
+              o2FlueGasEnriched(o2FlueGasEnriched / 100), combAirTemp(combAirTemp),
+              combAirTempEnriched(combAirTempEnriched), fuelConsumption(fuelConsumption)
+    {}
 
-        O2Enrichment() = default;
+    O2Enrichment() = default;
 
     /**
      * Gets the O2 in combustion air
@@ -199,7 +199,7 @@
      * Gets the heat input
      * @return double, heat input in °F
      */
-    double getHeatInput();
+//    double getHeatInput();
 
     /**
      * Gets the heat input with oxygen enrichment
@@ -286,21 +286,10 @@ private:
     double combAirTempEnriched, fuelConsumption;
 
     // Out values
-    double excessAir, excessAirEnriched;
-    double heatInput;
-    double heatInputEnriched;
-    double airSpecificHeat;
-    double enrichedAirSpecificHeat;
-    double airCorrection;
-    double enrichedAirCorrection;
-    double combustionAirCorrection;
-    double combustionAirCorrectionEnriched;
-    double stdAvailableHeat;
-    double stdAvailableHeatEnriched;
-    double availableHeat;
-    double availableHeatEnriched;
-    double fuelConsumptionEnriched;
-    double fuelSavingsEnriched;
+    double excessAir, excessAirEnriched, heatInput, heatInputEnriched, airSpecificHeat, enrichedAirSpecificHeat;
+    double airCorrection, enrichedAirCorrection, combustionAirCorrection, combustionAirCorrectionEnriched;
+    double stdAvailableHeat, stdAvailableHeatEnriched, availableHeat, availableHeatEnriched;
+    double fuelConsumptionEnriched, fuelSavingsEnriched;
 };
 
 #endif //AMO_TOOLS_SUITE_O2ENRICHMENT_H
