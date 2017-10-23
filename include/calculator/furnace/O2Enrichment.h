@@ -33,35 +33,11 @@
         O2Enrichment(const double o2CombAir, const double o2CombAirEnriched, const double flueGasTemp,
                      const double flueGasTempEnriched, const double o2FlueGas, const double o2FlueGasEnriched,
                      const double combAirTemp, const double combAirTempEnriched, const double fuelConsumption)
-                : o2CombAir(o2CombAir),
-                  o2CombAirEnriched(o2CombAirEnriched),
-                  flueGasTemp(flueGasTemp),
-                  flueGasTempEnriched(flueGasTempEnriched),
-                  o2FlueGas(o2FlueGas),
-                  o2FlueGasEnriched(o2FlueGasEnriched),
-                  combAirTemp(combAirTemp),
-                  combAirTempEnriched(combAirTempEnriched),
-                  fuelConsumption(fuelConsumption)
-
-        {
-//            excessAir = 0.0;
-//            excessAirEnriched = 0.0;
-//            heatInput = 0.0;
-//            heatInputEnriched = 0.0;
-//            airSpecificHeat = 0.0;
-//            enrichedAirSpecificHeat = 0.0;
-//            airCorrection = 0.0;
-//            enrichedAirCorrection = 0.0;
-//            combustionAirCorrection = 0.0;
-//            combustionAirCorrectionEnriched = 0.0;
-//            stdAvailableHeat = 0.0;
-//            stdAvailableHeatEnriched = 0.0;
-//            availableHeat = 0.0;
-//            availableHeatEnriched = 0.0;
-//            fuelConsumptionEnriched = 0.0;
-//            fuelSavingsEnriched = 0.0;
-
-        }
+                : o2CombAir(o2CombAir / 100), o2CombAirEnriched(o2CombAirEnriched), flueGasTemp(flueGasTemp),
+                  flueGasTempEnriched(flueGasTempEnriched), o2FlueGas(o2FlueGas),
+                  o2FlueGasEnriched(o2FlueGasEnriched), combAirTemp(combAirTemp),
+                  combAirTempEnriched(combAirTempEnriched), fuelConsumption(fuelConsumption)
+        {}
 
         O2Enrichment() = default;
 
