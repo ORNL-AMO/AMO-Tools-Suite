@@ -7,7 +7,8 @@
 // const testRoot = require('path').resolve(__dirname, '../')
 //     , bindings = require('bindings')({ module_root: testRoot, bindings: 'db'});
 
-const db = require('./build/Release/db.node');
+console.log(window.location.pathname);
+const db = require('../build/Release/db.node');
 module.exports.db = db;
 console.log(module.exports.db);
 
