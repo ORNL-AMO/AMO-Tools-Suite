@@ -126,7 +126,7 @@ set(SOURCE_FILES
         src/calculator/util/CHP.cpp
         src/fsat/Fan.cpp
         src/fsat/FanShaftPower.cpp
-        src/fsat/Planar.cpp)
+        src/fsat/Planar.cpp src/fsat/FanCurve.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -208,7 +208,7 @@ set(INCLUDE_FILES
         include/fsat/FanShaftPower.h
         include/fsat/Planar.h
         include/ssmt/Turbine.h
-        include/calculator/util/CHP.h)
+        include/calculator/util/CHP.h include/fsat/FanCurve.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
