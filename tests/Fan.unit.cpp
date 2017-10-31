@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include <fsat/Fan.h>
+#include <fsat/FanCurve.h>
 
 TEST_CASE( "Fan", "Fan stuff") {
 	FanRatedInfo fanRatedInfo(40, 1191, 1191, 1170, 0.05, 26.28, FanRatedInfo::DriveType::DIRECT);
@@ -70,11 +71,7 @@ TEST_CASE( "Fan", "Fan stuff") {
 	// TODO add checks for other stuff besides efficiency
 }
 
-//TEST_CASE( "BaseGasDensity", "stuff") {
-////	auto bgd = BaseGasDensity(80, -17.6, 30.06, 63, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::DEW, 1.0);
-//
-//	auto bgd2 = BaseGasDensity(123, -17.6, 26.57, 119, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::WET, 1, 0.2403);
-//
-//	auto blah = "blah";
-//
-//}
+TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
+	FanCurve fc;
+//	fc.calculate();
+}
