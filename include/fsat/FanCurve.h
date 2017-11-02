@@ -16,10 +16,9 @@ enum class FanCurveType {
 };
 
 class FanCurve {
+public:
 	void calculate(double q, double p, double h, double density, double n, double densityC, double nC, double pb,
-	               double pbC, double pt1F, double gamma, double gammaC, double a1, double a2, FanCurveType curveType,
-	               double kp, double kpC, double estPt, double estPtc, double q1, double q2, double density1,
-	               double density2);
+	               double pbC, double pt1F, double gamma, double gammaC, double a1, double a2, FanCurveType curveType);
 };
 
 //class FanCurve {

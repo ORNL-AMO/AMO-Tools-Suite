@@ -73,5 +73,11 @@ TEST_CASE( "Fan", "Fan stuff") {
 
 TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 	FanCurve fc;
-//	fc.calculate();
+
+	// using row 2 appendix 1
+	double q = 14410, ps = 22.5, h = 154, density = 0.0308, n = 1180, densityC = 0.0332, nC = 1187, pb = 29.36;
+	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
+	// TODO estPt and estPtc should not be inputs
+	FanCurveType curveType = FanCurveType::FanStaticPressure;
+	fc.calculate(q, ps, h, density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, curveType);
 }
