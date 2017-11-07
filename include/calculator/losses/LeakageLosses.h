@@ -31,7 +31,6 @@ public:
      * @param coefficient double, coefficient - unitless
      * @param specificGravity double, specific gravity - unitless
      * @param correctionFactor double, correction factor - unitless
-     * @return nothing
      */
     LeakageLosses(
             double draftPressure,
@@ -68,7 +67,6 @@ public:
      *
      * @param draftPressure double, draft pressure in inch W.C.
      *
-     * @return nothing
      */
     void setDraftPressure(double draftPressure) {
         draftPressure_ = draftPressure;
@@ -88,7 +86,6 @@ public:
      *
      * @param openingArea double, opening area in ft^2
      *
-     * @return nothing
      */
     void setOpeningArea(double openingArea) {
         openingArea_ = openingArea;
@@ -108,7 +105,6 @@ public:
      *
      * @param leakageGasTemperature double, leakage gas temperature in °F
      *
-     * @return nothing
      */
     void setLeakageGasTemperature(double leakageGasTemperature) {
         leakageGasTemperature_ = leakageGasTemperature;
@@ -128,7 +124,6 @@ public:
      *
      * @param ambientTemperature double, ambient temperature in °F
      *
-     * @return nothing
      */
     void setAmbientTemperature(double ambientTemperature) {
         ambientTemperature_ = ambientTemperature;
@@ -148,7 +143,6 @@ public:
      *
      * @param coefficient double, coefficient - unitless
      *
-     * @return nothing
      */
     void setCoefficient(double coefficient) {
         coefficient_ = coefficient;
@@ -168,7 +162,6 @@ public:
      *
      * @param specificGravity double, specific gravity - unitless
      *
-     * @return nothing
      */
     void setSpecificGravity(double specificGravity) {
         specificGravity_ = specificGravity;
@@ -188,7 +181,6 @@ public:
      *
      * @param correctionFactor double, correction factor - unitless
      *
-     * @return nothing
      */
     void setCorrectionFactor(double correctionFactor) {
         correctionFactor_ = correctionFactor;

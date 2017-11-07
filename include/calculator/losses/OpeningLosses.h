@@ -37,7 +37,6 @@ public:
 	 * @param insideTemperature double, inside temperature in °F
 	 * @param percentTimeOpen double, amount of time open as a %
 	 * @param viewFactor double, view factor - unitless
-	 * @return nothing
 	 */
     OpeningLosses(double emissivity,
                   double diameterLength,
@@ -70,7 +69,6 @@ public:
     * @param insideTemperature double, inside temperature in °F
     * @param percentTimeOpen double, amount of time open as %
     * @param viewFactor double, view factor - unitless
-    * @return nothing
     */
     OpeningLosses(double emissivity,
                   double diameterLength,
@@ -101,7 +99,6 @@ public:
     * @param percentTimeOpen double, amount of time open as %
     * @param viewFactor double, view factor - unitless
      * @param openingShape OpeningShape, classification of shape of opening
-    * @return nothing
     */
     OpeningLosses(double diameterLength,
                   double thickness,
@@ -135,7 +132,6 @@ public:
     * @param insideTemperature double, inside temperature in °F
     * @param percentTimeOpen double, amount of time open as %
      * @param openingShape OpeningShape, classification of shape of opening
-    * @return nothing
     */
     OpeningLosses(double diameterLength,
                   double thickness,
@@ -178,7 +174,6 @@ public:
      *
      * @param emissivity double, emissivity - unitless
      *
-     * @return nothing
      */
     void setEmissivity(double emissivity) {
         emissivity_ = emissivity;
@@ -200,7 +195,6 @@ public:
      *
      * @param diameter double, diameter of opening in inches
      *
-     * @return nothing
      */
     void setDiameter(double diameter) {
         diameter_ = diameter;
@@ -220,7 +214,6 @@ public:
      *
      * @param width double, width of opening in inches
      *
-     * @return nothing
      */
     void setWidth(double width) {
         width_ = width;
@@ -240,7 +233,6 @@ public:
      *
      * @param thickness double, furnace wall thickness in inches
      *
-     * @return nothing
      */
     void setThickness(double thickness) {
         thickness_ = thickness;
@@ -260,7 +252,6 @@ public:
      *
      * @param ratio double, ratio - unitless
      *
-     * @return nothing
      */
     void setRatio(double ratio) {
         ratio_ = ratio;
@@ -280,7 +271,6 @@ public:
      *
      * @param ambientTemperature double, ambient temperature in °F
      *
-     * @return nothing
      */
     void setAmbientTemperature(double ambientTemperature) {
         ambientTemperature_ = ambientTemperature;
@@ -300,7 +290,6 @@ public:
      *
      * @param insideTemperature double, inside temperature in °F
      *
-     * @return nothing
      */
     void setInsideTemperature(double insideTemperature) {
         insideTemperature_ = insideTemperature;
@@ -320,7 +309,6 @@ public:
      *
      * @param percentTimeOpen double, amount of time open as a %
      *
-     * @return nothing
      */
     void setPercentTimeOpen(double percentTimeOpen) {
         percentTimeOpen_ = percentTimeOpen;
@@ -340,7 +328,6 @@ public:
      *
      * @param viewFactor double, view factor - unitless
      *
-     * @return nothing
      */
     void setViewFactor(double viewFactor) {
         viewFactor_ = viewFactor;
@@ -360,7 +347,6 @@ public:
      *
      * @param openingShape OpeningShape, classification of shape of opening
      *
-     * @return nothing
      */
     void setOpeningShape(OpeningShape openingShape) {
         openingShape_ = openingShape;

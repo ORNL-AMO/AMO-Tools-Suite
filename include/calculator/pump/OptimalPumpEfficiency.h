@@ -26,7 +26,6 @@ public:
      * @param stageCount double, the number of pump stages
      * @param flowRate double, measured or required flow rate in gpm
      * @param head double, pump head in ft
-     * @return nothing
      */
     OptimalPumpEfficiency(
         Pump::Style style,
@@ -74,7 +73,6 @@ public:
      *
      * @param style Pump::Style, pump style
      *
-     * @return nothing
      */
     void setStyle(Pump::Style style) {
         style_ = style;
@@ -94,7 +92,6 @@ public:
      *
      * @param rpm double, pump RPM
      *
-     * @return nothing
      */
     void setRpm(double rpm) {
         rpm_ = rpm;
@@ -114,7 +111,6 @@ public:
      *
      * @param kinematicViscosity double, kinematic viscosity in centistokes
      *
-     * @return nothing
      */
     void setKinematicViscosity(double kinematicViscosity) {
         kinematicViscosity_ = kinematicViscosity;
@@ -134,7 +130,6 @@ public:
      *
      * @param stageCount double, number of pump stages
      *
-     * @return nothing
      */
     void setStageCount(double stageCount) {
         stageCount_ = stageCount;
@@ -154,7 +149,6 @@ public:
      *
      * @param flowRate double, measured or required flow rate in gpm
      *
-     * @return nothing
      */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
@@ -174,7 +168,6 @@ public:
      *
      * @param head double, measured or required pump head in ft
      *
-     * @return nothing
      */
     void setHead(double head) {
         head_ = head;
@@ -194,7 +187,6 @@ public:
      *
      * @param actualEfficiency double, actual efficiency as %
      *
-     * @return nothing
      */
     void setActualEfficiency(double actualEfficiency) {
         actualEfficiency_ = actualEfficiency;

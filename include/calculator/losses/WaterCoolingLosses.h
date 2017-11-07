@@ -25,7 +25,6 @@ public:
      * @param initialTemperature double, Initial temperature in °F.
      * @param outletTemperature double, Outlet temperature in °F.
      * @param correctionFactor double, Correction factor - unitless
-     * @return nothing
      */
     WaterCoolingLosses(double flowRate,
                        double initialTemperature,
@@ -55,7 +54,6 @@ public:
      *
      * @param flowRate double, cooling water flow rate in GPM
      *
-     * @return nothing
      */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
@@ -75,7 +73,6 @@ public:
     *
     * @param initialTemperature double, initial/inlet temperature in °F
     *
-    * @return nothing
     */
     void setInitialTemperature(double initialTemperature) {
         initialTemperature_ = initialTemperature;
@@ -95,7 +92,6 @@ public:
      *
      * @param outletTemperature double, outlet temperature in °F
     *
-    * @return nothing
     */
     void setOutletTemperature(double outletTemperature) {
         outletTemperature_ = outletTemperature;

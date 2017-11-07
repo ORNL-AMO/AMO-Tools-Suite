@@ -22,7 +22,6 @@ public:
      * @param flowRate double, measured or required flow rate in gpm
      * @param head double, measured or required pump head in feet
      * @param pumpShaftPower double, pump power as defined in hp
-     * @return nothing
      */
     PumpEfficiency(
         double specificGravity,
@@ -58,7 +57,6 @@ public:
      *
      * @param specificGravity double, specific gravity - unitless
      *
-     * @return nothing
      */
     void setSpecificGravity(double specificGravity) {
         specificGravity_ = specificGravity;
@@ -78,7 +76,6 @@ public:
      *
      * @param flowRate double, measrued or required flow rate in gpm
      *
-     * @return nothing
      */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
@@ -98,7 +95,6 @@ public:
      *
      * @param head double, measured or required pump head in ft
      *
-     * @return nothing
      */
     void setHead(double head) {
         head_ = head;
@@ -118,7 +114,6 @@ public:
      *
      * @param pumpShaftPower double, pump shaft power in hp
      *
-     * @return nothing
      */
     void setPumpShaftPower(double pumpShaftPower) {
         pumpShaftPower_ = pumpShaftPower;

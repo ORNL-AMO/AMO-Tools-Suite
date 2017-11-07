@@ -35,7 +35,6 @@ public:
      * @param heatingValue double, heating value in btu/lb
      * @param h2oGenerated double, H2O generated in g/mol
      * @param co2Generated double, CO2 generated in g/mol
-     * @return nothing
      */
 
 	GasProperties( std::function< double ( double t ) > specificHeat,
@@ -168,7 +167,6 @@ public:
      *
      * @param id const int, ID number for gas
      *
-     * @return nothing
      */
 	void setID(const int id) {
 		this->id = id;
@@ -249,7 +247,6 @@ public:
      * @param excessAirPercentage double, Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
      * @param combustionAirTemperature double, Combustion Air Temperature in °F
      * @param compositions - GasComposition, User defined gas compositions
-     * @return nothing
      *
      * */
     GasFlueGasMaterial(const double flueGasTemperature, const double excessAirPercentage,

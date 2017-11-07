@@ -26,7 +26,6 @@ public:
     * @param specifiedEfficiency double, Specified Efficiency of motor, if efficiency class is SPECIFIED.
     * @param loadFactor double, Load factor - unitless
     * @param ratedVoltage double, Rated voltage of the motor in volts
-    * @return nothing
     */
     OptimalMotorCurrent(
         double motorRatedPower,
@@ -71,7 +70,6 @@ public:
      *
      * @param motorPower double, motor power in hp
      *
-     * @return nothing
      */
     void setMotorPower(double motorPower) {
         motorPower_ = motorPower;
@@ -91,7 +89,6 @@ public:
      *
      * @param voltage double, voltage of motor in Volts
      *
-     * @return nothing
      */
     void setVoltage(double voltage) {
         voltage_ = voltage;

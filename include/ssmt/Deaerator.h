@@ -35,7 +35,6 @@ public:
      * @param steamQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param steamQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
 
-     * @return nothing
      *
      * */
     Deaerator(double deaeratorPressure, double ventRate, double feedwaterMassFlow,

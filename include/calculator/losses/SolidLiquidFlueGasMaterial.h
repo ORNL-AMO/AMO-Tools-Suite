@@ -21,7 +21,6 @@ public:
 	 * @param ashDischargeTemperature - double, ash discharge Temperature in °F
 	 * @param unburnedCarbonInAsh - double, unburned carbon in ash expressed as %
 	 * @param carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen content in fuel (as percentage)
-	 * @return nothing
 	 *
 	 * */
 	SolidLiquidFlueGasMaterial(
@@ -170,63 +169,54 @@ public:
 	/**
      * Sets the ID of substance
      * @param id int, ID of substance
-     * @return nothing
      */
 	void setID( int const id ) { this->id = id; }
 
 	/**
      * Sets the name of substance
      * @param substanceName string, name of substance
-     * @return nothing
      */
 	void setSubstance( std::string const & substanceName ) { substance = substanceName; }
 
 	/**
      * Sets the furnace flue gas temperature
      * @param temperature double, flue gas temperature in °F
-     * @return nothing
      */
 	void setFlueGasTemperature( const double temperature ) { flueGasTemperature = temperature; }
 
 	/**
      * Sets the excess air percentage
      * @param excessAir double, % of excess air
-     * @return nothing
      */
 	void setExcessAir( const double excessAir ) { this->excessAir = excessAir; }
 
 	/**
      * Sets the combustion air temperature
      * @param temperature double, combustion air temperature in °F
-     * @return nothing
      */
 	void setCombustionAirTemperature( const double temperature ) { combustionAirTemperature = temperature; }
 
 	/**
      * Sets the fuel temperature
      * @param temperature double, fuel temperature in °F
-     * @return nothing
      */
 	void setFuelTemperature( const double temperature ) { fuelTemperature = temperature; }
 
 	/**
      * Sets the moisture in air combustion
      * @param moisture double, moisture in air combustion as %
-     * @return nothing
      */
 	void setMoistureInAirCombustion( const double moisture ) { moistureInAirCombustion = moisture; }
 
 	/**
      * Sets the ash discharge temperature
      * @param temperature double, ash discharge temperature in °F
-     * @return nothing
      */
 	void setAshDischargeTemperature( const double temperature ) { ashDischargeTemperature = temperature; }
 
 	/**
      * Sets the percentage of unburned carbon in ash
      * @param unburnedCarbon double, % of unburned carbon in ash
-     * @return nothing
      */
 	void setUnburnedCarbonInAsh( const double unburnedCarbon ) { unburnedCarbonInAsh = unburnedCarbon; }
 
