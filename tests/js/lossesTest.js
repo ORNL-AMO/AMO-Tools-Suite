@@ -62,9 +62,9 @@ test('flueGasByVolume', function (t) {
     t.plan(5);
     t.type(bindings.flueGasLossesByVolume, 'function');
     var inp = {
-        flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, substance: 'test substance',
-        CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0,
-        O2: 0
+        flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 125,
+        substance: 'test substance', CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29,
+        H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     };
 
     var res = bindings.flueGasLossesByVolume(inp);
@@ -77,7 +77,7 @@ test('flueGasByVolume', function (t) {
     };
 
     t.type(bindings.flueGasByVolumeCalculateHeatingValue, 'function');
-    res = bindings.flueGasByVolumeCalculateHeatingValue(inp)
+    res = bindings.flueGasByVolumeCalculateHeatingValue(inp);
     t.equal(rnd(res.heatingValue), rnd(22630.355481));
     t.equal(rnd(res.specificGravity), rnd(0.631783));
 });
@@ -111,8 +111,8 @@ test('flueGasLossesByVolumeGivenO2', function (t) {
     t.type(bindings.flueGasLossesByVolumeGivenO2, 'function');
     var inp = {
         flueGasTemperature: 700, flueGasO2: 0.5, combustionAirTemperature: 125, substance: 'test substance',
-        CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0,
-        O2: 0
+        fuelTemperature: 125, CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42,
+        CO2: 0.71, SO2: 0, O2: 0
     };
 
     var res = bindings.flueGasLossesByVolumeGivenO2(inp);

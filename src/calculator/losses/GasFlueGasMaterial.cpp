@@ -44,13 +44,13 @@ void GasCompositions::calculateCompByWeight() {
     }
 }
 
-double GasCompositions::calculateSensibleHeat(const double combustionAirTemp) {
+double GasCompositions::calculateSensibleHeat(const double fuelTemp) {
     double specificHeatFuel = 0;
     for ( auto const & comp : gasses ) {
         specificHeatFuel += comp.second->compByWeight * (comp.second->specificHeat(520) / comp.second->molecularWeight);
     }
 
-    return 1 * specificHeatFuel * (combustionAirTemp - 32);
+    return 1 * specificHeatFuel * (fuelTemp - 32);
 }
 
 double GasCompositions::calculateHeatCombustionAir(const double combustionAirTemp, const double excessAir) {
@@ -153,15 +153,15 @@ double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
 }
 
 double GasFlueGasMaterial::getHeatLoss() {
-	compositions_.calculateCompByWeight();
-    double heatInFlueGasses = compositions_.calculateSensibleHeat(combustionAirTemperature_);
-    double hCombustionAir = compositions_.calculateHeatCombustionAir(combustionAirTemperature_, excessAirPercentage_);
-    double hValueFuel = compositions_.calculateHeatingValueFuel();
-    compositions_.calculateMassFlueGasComponents(excessAirPercentage_);
-    compositions_.calculateEnthalpy();
-    double totalHeatContentFlueGas = compositions_.calculateTotalHeatContentFlueGas(flueGasTemperature_);
+	compositions.calculateCompByWeight();
+    const double heatInFlueGasses = compositions.calculateSensibleHeat(fuelTemperature);
+    const double hCombustionAir = compositions.calculateHeatCombustionAir(combustionAirTemperature, excessAirPercentage);
+    const double hValueFuel = compositions.calculateHeatingValueFuel();
+    compositions.calculateMassFlueGasComponents(excessAirPercentage);
+    compositions.calculateEnthalpy();
+    const double totalHeatContentFlueGas = compositions.calculateTotalHeatContentFlueGas(flueGasTemperature);
 
-    double heatInput = heatInFlueGasses + hCombustionAir + hValueFuel;
+    const double heatInput = heatInFlueGasses + hCombustionAir + hValueFuel;
 
     return (heatInput - totalHeatContentFlueGas) / hValueFuel;
 }

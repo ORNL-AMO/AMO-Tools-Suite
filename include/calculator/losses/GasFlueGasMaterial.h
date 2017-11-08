@@ -249,14 +249,16 @@ public:
      * @param excessAirPercentage double, Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
      * @param combustionAirTemperature double, Combustion Air Temperature in °F
      * @param compositions - GasComposition, User defined gas compositions
+     * @param fuelTemperature double - temperature of fuel
      * @return nothing
      *
      * */
     GasFlueGasMaterial(const double flueGasTemperature, const double excessAirPercentage,
-                       const double combustionAirTemperature,
-                       GasCompositions compositions) :
-		    flueGasTemperature_(flueGasTemperature), excessAirPercentage_(excessAirPercentage / 100.0),
-            combustionAirTemperature_(combustionAirTemperature), compositions_(std::move(compositions))
+                       const double combustionAirTemperature, GasCompositions compositions,
+                       const double fuelTemperature) :
+		    flueGasTemperature(flueGasTemperature), excessAirPercentage(excessAirPercentage / 100.0),
+            combustionAirTemperature(combustionAirTemperature), fuelTemperature(fuelTemperature),
+		    compositions(std::move(compositions))
     {}
 
 	/**
@@ -267,7 +269,7 @@ public:
     double getHeatLoss();
 
 private:
-    const double flueGasTemperature_, excessAirPercentage_, combustionAirTemperature_;
-	GasCompositions compositions_;
+    const double flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature;
+	GasCompositions compositions;
 };
 #endif //AMO_SUITE_GASFLUEGASMATERIAL_H
