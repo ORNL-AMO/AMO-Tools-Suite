@@ -326,10 +326,15 @@ NAN_METHOD(openingLossesQuad) {
     info.GetReturnValue().Set(retval);
 }
 
+OpeningLosses::OpeningShape getOpeningShape() {
+    unsigned val = static_cast<unsigned>(Get("openingShape"));
+    return static_cast<OpeningLosses::OpeningShape>(val);
+}
+
 NAN_METHOD(viewFactorCalculation) {
     inp = info[0]->ToObject();
 	OpeningLosses opening;
-    OpeningLosses::OpeningShape shape = static_cast<OpeningLosses::OpeningShape>(Get("openingShape"));
+    OpeningLosses::OpeningShape shape = getOpeningShape();
 	if (shape == OpeningLosses::OpeningShape::CIRCULAR) {
         Local<Number> rv = Nan::New(opening.calculateViewFactor(Get("thickness"), Get("diameter")));
         info.GetReturnValue().Set(rv);
