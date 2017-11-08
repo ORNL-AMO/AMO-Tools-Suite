@@ -19,7 +19,6 @@ public:
      * Constructor
      * @param style Pump::Style, type of pump speed from either fixed or not fixed.
      * @param specificSpeed double, specific speed in rpm*sqrt(gpm)/((ft/s)^(3/2))
-     * @return nothing
      */
     OptimalSpecificSpeedCorrection(
         Pump::Style style,

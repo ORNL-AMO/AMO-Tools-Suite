@@ -21,7 +21,6 @@ public:
      * @param head double, measured or required pump head in feet
      * @param specificGravity double, specific gravity - unitless
      * @param pumpEfficiency double, pump efficiency at the specified operating conditions as %
-     * @return nothing
      */
     OptimalPumpShaftPower(
         double flowRate,
@@ -56,7 +55,6 @@ public:
      *
      * @param flowRate double, measured or required flow rate in gpm
      *
-     * @return nothing
      */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
@@ -76,7 +74,6 @@ public:
      *
      * @param head double, measured or required pump head in ft
      *
-     * @return nothing
      */
     void setHead(double head) {
         head_ = head;
@@ -96,7 +93,6 @@ public:
      *
      * @param specificGravity double, specific gravity - unitless
      *
-     * @return nothing
      */
     void setSpecificGravity(double specificGravity) {
         specificGravity_ = specificGravity;
@@ -116,7 +112,6 @@ public:
      *
      * @param pumpEfficiency double, pump efficiency as %
      *
-     * @return nothing
      */
     void setPumpEfficiency(double pumpEfficiency) {
         pumpEfficiency_ = pumpEfficiency;

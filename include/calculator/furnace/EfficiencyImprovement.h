@@ -30,7 +30,6 @@ public:
      * @param newCombustionAirTemp double, new temperature of combustion air in °F
      * @param currentEnergyInput double, current energy input in MM Btu/hr
      *
-     * @return nothing
      *
      * */
     EfficiencyImprovement(
@@ -84,7 +83,6 @@ public:
      *
      * @param currentFlueGasOxygen double, current % of dry flue gas oxygen
      *
-     * @return nothing
      */
     void setCurrentFlueGasOxygen(double currentFlueGasOxygen) {
         currentFlueGasOxygen_ = currentFlueGasOxygen;
@@ -104,7 +102,6 @@ public:
      *
      * @param newFlueGasOxygen double, new % of dry flue gas oxygen
      *
-     * @return nothing
      */
     void setNewFlueGasOxygen(double newFlueGasOxygen) {
         newFlueGasOxygen_ = newFlueGasOxygen;
@@ -124,7 +121,6 @@ public:
      *
      * @param currentFlueGasTemp double, current temperature of flue gas in °F
      *
-     * @return nothing
      */
     void setCurrentFlueGasTemp(double currentFlueGasTemp) {
         currentFlueGasTemp_ = currentFlueGasTemp;
@@ -144,7 +140,6 @@ public:
      *
      * @param newFlueGasTemp double, new temperature of flue gas in °F
      *
-     * @return nothing
      */
     void setNewFlueGasTemp(double newFlueGasTemp) {
         newFlueGasTemp_ = newFlueGasTemp;
@@ -164,7 +159,6 @@ public:
      *
      * @param currentCombustionAirTemp double, current temperature of combustion in °F
      *
-     * @return nothing
      */
     void setCurrentCombustionAirTemp(double currentCombustionAirTemp) {
         currentCombustionAirTemp_ = currentCombustionAirTemp;
@@ -184,7 +178,6 @@ public:
      *
      * @param newCombustionAirTemp double, new temperature of combustion in °F
      *
-     * @return nothing
      */
     void setNewCombustionAirTemp(double newCombustionAirTemp) {
         newCombustionAirTemp_ = newCombustionAirTemp;
@@ -204,7 +197,6 @@ public:
      *
      * @param currentEnergyInput double, current, current energy input in MM Btu/hr
      *
-     * @return nothing
      */
     void setCurrentEnergyInput(double currentEnergyInput) {
         currentEnergyInput_ = currentEnergyInput;

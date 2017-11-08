@@ -27,7 +27,6 @@ public:
      * @param outletTemperature double, Outlet temperature in °F.
      * @param specificHeat double, Specific heat in btu/(lb*°F)
      * @param correctionFactor double, Correction factor - unitless
-     * @return nothing
      */
 
     LiquidCoolingLosses(double flowRate,
@@ -62,7 +61,6 @@ public:
      *
      * @param flowRate double, flow rate in gpm
      *
-     * @return nothing
      */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
@@ -82,7 +80,6 @@ public:
      *
      * @param density double, density in lb/cu.ft
      *
-     * @return nothing
      */
     void setDensity(double density) {
         density_ = density;
@@ -102,7 +99,6 @@ public:
      *
      * @param initialTemperature double, initial temperature in °F
      *
-     * @return nothing
      */
     void setInitialTemperature(double initialTemperature) {
         initialTemperature_ = initialTemperature;
@@ -122,7 +118,6 @@ public:
      *
      * @param outletTemperature double, outlet temperature in °F
      *
-     * @return nothing
      */
     void setOutletTemperature(double outletTemperature) {
         outletTemperature_ = outletTemperature;
@@ -142,7 +137,6 @@ public:
      *
      * @param specificHeat double, specific heat in btu/(lb*°F)
      *
-     * @return nothing
      */
     void setSpecificHeat(double specificHeat) {
         specificHeat_ = specificHeat;

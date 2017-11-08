@@ -75,7 +75,6 @@ NAN_METHOD(atmosphere) {
      * @param flowRate double, flow rate of gasses in scfh
      * @param correctionFactor double, correction factor - unitless
      * @param specificHeat double, specific heat of gasses at average air temperature in Btu/(scf - °F)
-     * @return nothing
      *
      * */
 
@@ -94,7 +93,6 @@ NAN_METHOD(auxiliaryPowerLoss) {
  * @param avgCurrent double, average current in Amperes
  * @param powerFactor double, average power factor value - unitless
  * @param operatingTime double, percent operating time
- * @return nothing
  */
     inp = info[0]->ToObject();
     auto const ap = AuxiliaryPower(Get("motorPhase"), Get("supplyVoltage"), Get("avgCurrent"), Get("powerFactor"), Get("operatingTime"));
@@ -222,7 +220,6 @@ NAN_METHOD(leakageLosses) {
      * @param coefficient double, coefficient - unitless
      * @param specificGravity double, specific gravity - unitless
      * @param correctionFactor double, correction factor - unitless
-     * @return nothing
      */
     inp = info[0]->ToObject();
     LeakageLosses ll(Get("draftPressure"), Get("openingArea"), Get("leakageGasTemperature"), Get("ambientTemperature"),
@@ -297,7 +294,6 @@ NAN_METHOD(openingLossesCircular) {
          * @param insideTemperature double, inside temperature in °F
          * @param percentTimeOpen double, amount of time open as %
          * @param viewFactor double, view factor - unitless
-         * @return nothing
          */
     inp = info[0]->ToObject();
     OpeningLosses ol(Get("emissivity"), Get("diameterLength"), Get("thickness"), Get("ratio"), Get("ambientTemperature"),
@@ -412,7 +408,6 @@ NAN_METHOD(waterCoolingLosses) {
      * @param initialTemperature double, initial temperature in °F
      * @param outletTemperature double, outlet temperature in °F
      * @param correctionFactor double, correction factor - unitless
-     * @return nothing
      */
     inp = info[0]->ToObject();
     WaterCoolingLosses wcl(Get("flowRate"), Get("initialTemperature"), Get("outletTemperature"), Get("correctionFactor"));
@@ -563,7 +558,6 @@ NAN_METHOD(flueGasLossesByVolumeGivenO2) {
      * @param excessAirPercentage double, excess air as %
      * @param combustionAirTemperature double, temperature of combustion air in °F
      * @param gasComposition double, percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
-     * @return nothing
      *
      * */
 
@@ -596,7 +590,6 @@ NAN_METHOD(flueGasLossesByMassGivenO2) {
      * @param ashDischargeTemperature double, temperature of ash discharge in °F
      * @param unburnedCarbonInAsh double, amount of unburned carbon in ash as %
      * @param fuel double, composition of: carbon, hydrogen, sulphur, inertAsh, o2, moisture and nitrogen (in %)
-     * @return nothing
      *
      * */
 

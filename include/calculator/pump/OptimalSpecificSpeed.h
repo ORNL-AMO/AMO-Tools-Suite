@@ -20,7 +20,6 @@ public:
      * @param flowRate double, measured or required flow rate in gpm
      * @param head double, measured or required pump head in feet
      * @param stageCount double, the number of pump stages
-     * @return nothing
      */
     OptimalSpecificSpeed(
         double rpm,

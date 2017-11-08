@@ -29,7 +29,6 @@ public:
      * @param combustibleGases double, average value of combustible gases % in exhaust gases
      * @param vfr double, (volume flow rate) total volume of exhaust gases measured in cfm
      * @param dustLoading double, dust loading for exhaust gases measured in s/scf (number of dust particles per scf)
-     * @return nothing
      *
      * */
     ExhaustGasEAF(const double offGasTemp, const double CO, const double H2,

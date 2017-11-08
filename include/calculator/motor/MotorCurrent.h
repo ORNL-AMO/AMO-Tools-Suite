@@ -24,7 +24,6 @@ public:
      * @param loadFactor double, load factor - unitless
      * @param ratedVoltage double, Rated voltage of the motor in Volts
      * @param fullLoadAmps double, Current at full load in Amps
-     * @return nothing
      */
     MotorCurrent(double motorRatedPower, double motorRPM, Motor::LineFrequency lineFrequency,
                  Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor,

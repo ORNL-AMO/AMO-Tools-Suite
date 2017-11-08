@@ -30,7 +30,6 @@ public:
      * @param fullLoadAmps double, Current at full load in A
      * @param fieldVoltage double, Field voltage in V
      * @param optimalMotorShaftPower double, Optimal shaft power as defined in hp
-     * @return nothing
      */
     OptimalMotorPower(
         double motorRatedPower,
@@ -83,7 +82,6 @@ public:
      *
      * @param optimalMotorShaftPower double, optimal motor shaft power in hp
      *
-     * @return nothing
      */
     void setMotorShaftPower(double optimalMotorShaftPower) {
         optimalMotorShaftPower_ = optimalMotorShaftPower;
@@ -103,7 +101,6 @@ public:
      *
      * @param motorEfficiency double, efficiency of motor as %
      *
-     * @return nothing
      */
     void setMotorEfficiency(double motorEfficiency) {
         motorEfficiency_ = motorEfficiency;

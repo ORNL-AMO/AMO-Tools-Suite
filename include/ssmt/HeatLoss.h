@@ -30,7 +30,6 @@ public:
      * @param inletMassFlow double, inlet mass flow in kg/hr
      * @param percentHeatLoss double, heat loss as %
      *
-     * @return nothing
      *
      * */
     HeatLoss(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,

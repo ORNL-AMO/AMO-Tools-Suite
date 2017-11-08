@@ -33,7 +33,6 @@ class EnergyInputEAF {
      * @param otherFuels heat supplied from other sources, if any, measured in mm btu/hour
      * @param electricityInput total electric power supplied for the hour measured in kwh/hour
      *
-     * @return nothing
      * **/
 
     EnergyInputEAF(const double naturalGasHeatInput, const double coalCarbonInjection, const double coalHeatingValue,

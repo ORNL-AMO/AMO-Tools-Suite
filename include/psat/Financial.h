@@ -26,7 +26,6 @@ public:
      * Constructor
      * @param operatingFraction double, fraction(%) of calender hours the equipment is operating
      * @param unitCost double, per unit energy cost of electricity in $/kwh
-     * @return nothing
      */
 
     Financial(
@@ -53,7 +52,6 @@ public:
    *
    * @param operatingFraction double, fraction of calendar hours the equipment is operating as %
    *
-   * @return nothing
    */
     void setOperatingFraction(double operatingFraction) {
         operatingFraction_ = operatingFraction;
@@ -73,7 +71,6 @@ public:
    *
    * @param unitCost double, cost of electricity per unit in $/kwh
    *
-   * @return nothing
    */
     void setUnitCost(double unitCost) {
         unitCost_ = unitCost;

@@ -22,7 +22,6 @@ public:
      * @param motorRatedPower double, Rated power of motor in hp
      * @param motorRpm double, Rpm of motor
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
-     * @return nothing
      */
     MotorEfficiency25(
         Motor::EfficiencyClass efficiencyClass,

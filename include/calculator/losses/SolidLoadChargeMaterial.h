@@ -208,7 +208,6 @@ public:
     /**
      * Sets the water content as charged (%)
      * @param waterContentCharged double, % of water content charged
-     * @return nothing
      */
     void setWaterContentCharged(const double waterContentCharged) {
         this->waterContentCharged = waterContentCharged / 100.0;
@@ -257,7 +256,6 @@ public:
     /**
      * Sets the charge material discharge temperature
      * @param dischargeTemperature double, charge material discharge temperature in °F
-     * @return nothing
      */
     void setDischargeTemperature(const double dischargeTemperature) {
         	this->dischargeTemperature = dischargeTemperature;

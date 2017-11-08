@@ -20,7 +20,6 @@ public:
      * @param style Pump::Style, style of pump being used.
      * @param achievableEfficiency douuble, pump efficiency at the specified operating conditions as %
      * @param flowRate double, measured or required flow rate in gpm
-     * @return nothing
      */
     OptimalPrePumpEff(
         Pump::Style style,

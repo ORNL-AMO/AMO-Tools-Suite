@@ -60,7 +60,6 @@ public:
      * @param sg double, specific gravity- unitless
      * @param stageCount int, the number of pump stages
      * @param speed Speed, type of pump speed from either fixed or not fixed.
-     * @return nothing
      */
     Pump(
         Style style,
@@ -98,7 +97,6 @@ public:
      *
      * @param style Style, classification of style of pump
      *
-     * @return nothing
      */
     void setStyle(Style style) {
         style_ = style;
@@ -118,7 +116,6 @@ public:
      *
      * @param achievableEfficiency double, achievable efficiency as %
      *
-     * @return nothing
      */
     void setAchievableEfficiency(double achievableEfficiency){
         achievableEfficiency_ = achievableEfficiency;
@@ -136,7 +133,6 @@ public:
      *
      * @param rpm double, motor RPM
      *
-     * @return nothing
      */
     void setRpm(double rpm) {
         rpm_ = rpm;
@@ -156,7 +152,6 @@ public:
      *
      * @param drive Drive, classification of drive type
      *
-     * @return nothing
      */
     void setDrive(Drive drive) {
         drive_ = drive;
@@ -176,7 +171,6 @@ public:
      *
      * @param kviscosity double, kinematic viscosity in centistokes
      *
-     * @return nothing
      */
     void setKviscosity_(double kviscosity) {
         kviscosity_ = kviscosity;
@@ -196,7 +190,6 @@ public:
      *
      * @param sg double, specific gravity - unitless
      *
-     * @return nothing
      */
     void setSg(double sg) {
         sg_ = sg;
@@ -216,7 +209,6 @@ public:
      *
      * @param stageCount int, number of pump stages
      *
-     * @return nothing
      */
     void setStageCount(int stageCount) {
         stageCount_ = stageCount;
@@ -236,7 +228,6 @@ public:
      *
      * @param speed Speed, classification of pump speed type
      *
-     * @return nothing
      */
     void setFixedSpeed_(Speed speed){
         speed_ = speed;

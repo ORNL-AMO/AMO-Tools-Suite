@@ -21,7 +21,6 @@ public:
      * Constructor
      * @param pumpShaftPower double, Pump shaft power as defined in hp
      * @param drive Pump::Drive, Type of drive the pump uses from either direct or belt drive.
-     * @return nothing
      */
     OptimalMotorShaftPower(
         double pumpShaftPower,
@@ -52,7 +51,6 @@ public:
      *
      * @param pumpShaftPower double, pump shaft power in hp
      *
-     * @return nothing
      */
     void setPumpShaftPower(double pumpShaftPower) {
         pumpShaftPower_ = pumpShaftPower;
@@ -72,7 +70,6 @@ public:
      *
      * @param drive Pump::Drive, type of drive
      *
-     * @return nothing
      */
     void setDrive(Pump::Drive drive) {
         drive_ = drive;

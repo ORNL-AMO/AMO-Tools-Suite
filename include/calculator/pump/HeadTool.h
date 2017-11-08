@@ -77,7 +77,6 @@ protected:
      * @param velocity const double, velocity in ft/s
      * @param gravity const double, gravity in ft/s^2
      *
-     * @return nothing
      */
 	double velocityHead(const double velocity, const double gravity);
 

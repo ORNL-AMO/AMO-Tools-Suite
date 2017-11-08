@@ -23,7 +23,6 @@ public:
      * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor
      * @param specifiedEfficiency double, specified efficiency of motor as defined by %
      * @param ratedVoltage double, rated voltage of motor in volts
-     * @return nothing
      */
     EstimateFLA(
         double motorRatedPower,

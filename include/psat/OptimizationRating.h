@@ -26,7 +26,6 @@ public:
      * Constructor
      * @param existingAnnualCost double, existing annual energy cost based on the product of the existing annual energy consumption in $/year
      * @param optimalAnnualCost double, existing annual energy cost based on the product of the optimal annual energy consumption in $/year
-     * @return nothing
      */
     OptimizationRating(
         double existingAnnualCost,
@@ -57,7 +56,6 @@ public:
      *
      * @param existingAnnualCost double, existing annual cost in $/year
      *
-     * @return nothing
      */
     void setExistingAnnualCost(double existingAnnualCost) {
         existingAnnualCost_ = existingAnnualCost;
@@ -77,7 +75,6 @@ public:
      *
      * @param optimalAnnualCost double, optimal annual cost in $/year
      *
-     * @return nothing
      */
     void setOptimalAnnualCost(double optimalAnnualCost) {
         optimalAnnualCost_ = optimalAnnualCost;

@@ -44,7 +44,6 @@ public:
      * @param motorRatedVoltage double, motor nameplate design voltage in volts
      * @param fullLoadAmps double, current at full load in amps
      * @param sizeMargin double, size margin as defined in %
-     * @return nothing
      */
     Motor(
         LineFrequency lineFrequency,
@@ -82,7 +81,6 @@ public:
      *
      * @param lineFrequency LineFrequency, line frequency of either 50Hz or 60Hz
      *
-     * @return nothing
      */
     void setLineFrequency(LineFrequency lineFrequency) {
         lineFrequency_ = lineFrequency;
@@ -102,7 +100,6 @@ public:
      *
      * @param motorRatedPower double, rated motor power in hp
      *
-     * @return nothing
      */
     void setMotorRatedPower(double motorRatedPower) {
         motorRatedPower_ = motorRatedPower;
@@ -120,7 +117,6 @@ public:
      *
      * @param motorRpm double, RPM of motor
      *
-     * @return nothing
      */
     void setMotorRpm(double motorRpm) {
         motorRpm_ = motorRpm;
@@ -140,7 +136,6 @@ public:
      *
      * @param efficiencyClass EfficiencyClass, efficiency class of motor
      *
-     * @return nothing
      */
     void setEfficiencyClass(EfficiencyClass efficiencyClass) {
         efficiencyClass_ = efficiencyClass;
@@ -160,7 +155,6 @@ public:
      *
      * @param fullLoadEfficiency double, specified efficiency as %
      *
-     * @return nothing
      */
     void setSpecifiedEfficiency(double fullLoadEfficiency) {
         specifiedEfficiency_ = fullLoadEfficiency;
@@ -180,7 +174,6 @@ public:
      *
      * @param motorRatedVoltage double, rated motor voltage in V
      *
-     * @return nothing
      */
     void setMotorRatedVoltage(double motorRatedVoltage) {
         motorRatedVoltage_ = motorRatedVoltage;
@@ -200,7 +193,6 @@ public:
      *
      * @param fullLoadAmps double, current at full load in amps
      *
-     * @return nothing
      */
     void setFullLoadAmps(double fullLoadAmps) {
         fullLoadAmps_ = fullLoadAmps;
@@ -220,7 +212,6 @@ public:
      *
      * @param sizeMargin double, size margin as %
      *
-     * @return nothing
      */
     void setSizeMargin(double sizeMargin) {
         sizeMargin_ = sizeMargin;
