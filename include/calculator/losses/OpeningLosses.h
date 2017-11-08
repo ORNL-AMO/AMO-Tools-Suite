@@ -29,12 +29,19 @@ public:
 
     /**
      * Method to calculate viewFactor for circular openings
+     * @param OpeningLosses::OpeningShape, shape - shape of the opening (must be CIRCULAR for this method)
+     * @param double, thickness - furnace wall thickness in inches
+     * @param double, diameter of opening in inches
      * @return double, viewFactor - unitless
      * */
     double calculateViewFactor(OpeningShape shape, double thickness, double diameter);
 
     /**
      * Method to calculate viewFactor for rectangular openings
+     * @param OpeningLosses::OpeningShape, shape - shape of the opening (must be RECTANGULAR for this method)
+     * @param double, thickness - furnace wall thickness in inches
+     * @param double, length - length of opening in inches
+     * @param double, height - height of opening in inches
      * @return double, viewFactor - unitless
      */
     double calculateViewFactor(OpeningLosses::OpeningShape shape, double thickness, double length, double height);
