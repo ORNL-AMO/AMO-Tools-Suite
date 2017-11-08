@@ -36,7 +36,6 @@ public:
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param financial Financial, contains all financial-related calculations, passed by reference
      * @param fieldData FiledData, contains all field data-related calculations, passed by reference
-     * @return nothing
      */
     PSATResult(
         Pump &pump,
@@ -58,7 +57,6 @@ public:
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param financial Financial, contains all financial-related calculations, passed by reference
      * @param fieldData FiledData, contains all field data-related calculations, passed by reference
-     * @return nothing
      */
     PSATResult(
             Pump &pump,

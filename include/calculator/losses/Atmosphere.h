@@ -40,7 +40,6 @@ public:
      * @param correctionFactor double, correction factor - unitless
      * @param specificHeat double, specific heat of gasses at average air temperature in Btu/(scf*°F)
      *
-     * @return nothing
      *
      * */
     Atmosphere(const double inletTemperature, const double outletTemperature, const double flowRate,

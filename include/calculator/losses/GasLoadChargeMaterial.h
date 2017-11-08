@@ -78,7 +78,6 @@ public:
      *
      * @param thermicReactionType LoadChargeMaterial::ThermicReactionType, type of thermic reaction
      *
-     * @return nothing
      */
     void setThermicReactionType(LoadChargeMaterial::ThermicReactionType thermicReactionType) {
         thermicReactionType_ = thermicReactionType;
@@ -99,7 +98,6 @@ public:
      *
      * @param specificHeatGas double, specific heat of gas in btu/(lb*°F)
      *
-     * @return nothing
      */
     void setSpecificHeatGas(double specificHeatGas) {
         specificHeatGas_ = specificHeatGas;
@@ -119,7 +117,6 @@ public:
      *
      * @param feedRate double, feed rate for gas mixture in lb/hr
      *
-     * @return nothing
      */
     void setFeedRate(double feedRate) {
         feedRate_ = feedRate;
@@ -139,7 +136,6 @@ public:
      *
      * @param initialTemperature double, initial temperature in °F
      *
-     * @return nothing
      */
     void setInitialTemperature(double initialTemperature) {
         initialTemperature_ = initialTemperature;
@@ -159,7 +155,6 @@ public:
      *
      * @param dischargeTemperature double, discharge temperature in °F
      *
-     * @return nothing
      */
     void setDischargeTemperature(double dischargeTemperature) {
         dischargeTemperature_ = dischargeTemperature;
@@ -179,7 +174,6 @@ public:
      *
      * @param specificHeatVapor double, specific heat of vapor in btu/(lb*°F)
      *
-     * @return nothing
      */
     void setSpecificHeatVapor(double specificHeatVapor) {
         specificHeatVapor_ = specificHeatVapor;
@@ -199,7 +193,6 @@ public:
      *
      * @param percentReacted double, charge gas reacted as % of DRY gas feed
      *
-     * @return nothing
      */
     void setPercentReacted(double percentReacted) {
         percentReacted_ = percentReacted / 100.0;
@@ -219,7 +212,6 @@ public:
      *
      * @param reactionHeat double, heat of reaction in btu/lb
      *
-     * @return nothing
      */
     void setReactionHeat(double reactionHeat) {
         reactionHeat_ = reactionHeat;
@@ -239,7 +231,6 @@ public:
      *
      * @param additionalHeat double, additional heat required in btu/hr
      *
-     * @return nothing
      */
     void setAdditionalHeat(double additionalHeat) {
         additionalHeat_ = additionalHeat;
@@ -259,7 +250,6 @@ public:
      *
      * @param percentVapor double, vapor in gas mixture as %
      *
-     * @return nothing
      */
     void setPercentVapor(double percentVapor) {
         percentVapor_ = percentVapor / 100.0;
@@ -279,7 +269,6 @@ public:
      *
      * @param substance string const&, name of substance
      *
-     * @return nothing
      */
     void setSubstance(std::string substance) {
         substance_ = std::move(substance);
@@ -290,7 +279,6 @@ public:
      *
      * @param totalHeat double, total heat required in btu/hr
      *
-     * @return nothing
      */
     void setTotalHeat(double totalHeat) {
         totalHeat_ = totalHeat;
@@ -310,7 +298,6 @@ public:
      *
      * @param id const int, ID of material
      *
-     * @return nothing
      */
     void setID(const std::size_t id) {
         this->id = id;

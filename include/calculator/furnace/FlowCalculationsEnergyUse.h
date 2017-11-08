@@ -59,7 +59,6 @@ public:
      * @param orificePressureDrop double, orifice pressure drop in inch W.C.
      * @param operatingTime double, operating time in hrs
      *
-     * @return nothing
      *
      * */
     FlowCalculationsEnergyUse(
@@ -113,7 +112,6 @@ public:
      *
      * @param gasType Gas, type of gas
      *
-     * @return nothing
      */
     void setGasType(Gas gasType) {
         gasType_ = gasType;
@@ -164,7 +162,6 @@ public:
      *
      * @param specificGravity double, specific gravity - unitless
      *
-     * @return nothing
      */
     void setSpecificGravity(double specificGravity) {
         specificGravity_ = specificGravity;
@@ -184,7 +181,6 @@ public:
      *
      * @param orificeDiameter double, diameter of orifice
      *
-     * @return nothing
      */
     void setOrificeDiameter(double orificeDiameter) {
         orificeDiameter_ = orificeDiameter;
@@ -204,7 +200,6 @@ public:
      *
      * @param insidePipeDiameter double, diameter of inside of pipe
      *
-     * @return nothing
      */
     void setInsidePipeDiameter(double insidePipeDiameter) {
         insidePipeDiameter_ = insidePipeDiameter;
@@ -224,7 +219,6 @@ public:
      *
      * @param sectionType Section, type of section
      *
-     * @return nothing
      */
     void setSectionType(Section sectionType) {
         sectionType_ = sectionType;
@@ -253,7 +247,6 @@ public:
      *
      * @param dischargeCoefficient double coefficient of discharge - unitless
      *
-     * @return nothing
      */
     void setDischargeCoefficient(double dischargeCoefficient) {
         dischargeCoefficient_ = dischargeCoefficient;
@@ -273,7 +266,6 @@ public:
      *
      * @param gasHeatingValue double, gas heating value in Btu/scf
      *
-     * @return nothing
      */
     void setGasHeatingValue(double gasHeatingValue) {
         gasHeatingValue_ = gasHeatingValue;
@@ -293,7 +285,6 @@ public:
      *
      * @param gasTemperature double, temperature of gas in °F
      *
-     * @return nothing
      */
     void setGasTemperature(double gasTemperature) {
         gasTemperature_ = gasTemperature;
@@ -313,7 +304,6 @@ public:
      *
      * @param gasPressure double, pressure of gas in Psig
      *
-     * @return nothing
      */
     void setGasPressure(double gasPressure) {
         gasPressure_ = gasPressure;
@@ -333,7 +323,6 @@ public:
      *
      * @param orificePressureDrop double, pressure drop at orifice in inch W.C.
      *
-     * @return nothing
      */
     void setOrificePressureDrop(double orificePressureDrop) {
         orificePressureDrop_ = orificePressureDrop;
@@ -353,7 +342,6 @@ public:
      *
      * @param operatingTime double, operating time in hrs
      *
-     * @return nothing
      */
     void setOperatingTime(double operatingTime) {
         operatingTime_ = operatingTime;

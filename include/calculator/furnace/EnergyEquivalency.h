@@ -26,7 +26,6 @@ public:
      * @param electricallyHeatedEfficiency double, electrically heated equipment efficiency as %
      * @param fuelFiredHeatInput double, heat input for fuel-fired equipment in MM Btu/hr
      *
-     * @return nothing
      *
      * */
     ElectricalEnergyEquivalency(
@@ -58,7 +57,6 @@ public:
      *
      * @param fuelFiredEfficiency double, fuel-fired equipment efficiency as %
      *
-     * @return nothing
      */
     void setFuelFiredEfficiency(double fuelFiredEfficiency) {
         fuelFiredEfficiency_ = fuelFiredEfficiency;
@@ -78,7 +76,6 @@ public:
      *
      * @param electricallyHeatedEfficiency double, electrically heated equipment efficiency as %
      *
-     * @return nothing
      */
     void setElectricallyHeatedEfficiency(double electricallyHeatedEfficiency) {
         electricallyHeatedEfficiency_ = electricallyHeatedEfficiency;
@@ -98,7 +95,6 @@ public:
      *
      * @param fuelFiredHeatInput double, heat input for fuel-fired equipment in MM Btu/hr
      *
-     * @return nothing
      */
     void setFuelFiredHeatInput(double fuelFiredHeatInput) {
         fuelFiredHeatInput_ = fuelFiredHeatInput;
@@ -136,7 +132,6 @@ public:
      * @param fuelFiredEfficiency double, fuel-fired equipment efficiency as %
      * @param electricalHeatInput double, heat input for electrically heated equipment in kW
      *
-     * @return nothing
      *
      * */
     FuelFiredEnergyEquivalency(
@@ -169,7 +164,6 @@ public:
      *
      * @param electricallyHeatedEfficiency double, electrically heated equipment efficiency as %
      *
-     * @return nothing
      */
     void setElectricallyHeatedEfficiency(double electricallyHeatedEfficiency) {
         electricallyHeatedEfficiency_ = electricallyHeatedEfficiency;
@@ -189,7 +183,6 @@ public:
      *
      * @param fuelFiredEfficiency double, fuel-fired equipment efficiency as %
      *
-     * @return nothing
      */
     void setFuelFiredEfficiency(double fuelFiredEfficiency) {
         fuelFiredEfficiency_ = fuelFiredEfficiency;
@@ -209,7 +202,6 @@ public:
      *
      * @param electricalHeatInput double, heat input for electrically heated equipment in kW
      *
-     * @return nothing
      */
     void setElectricalHeatInput(double electricalHeatInput) {
         electricalHeatInput_ = electricalHeatInput;

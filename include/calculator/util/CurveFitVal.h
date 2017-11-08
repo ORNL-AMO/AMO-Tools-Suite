@@ -21,7 +21,6 @@ public:
      * @param ycoord array of y coordinates as doubles
      * @param pdegree int, degree of polynomial curve
      * @param loadFactor double, load factor - unitless
-     * @return nothing
      */
     CurveFitVal(
         int noIntervalPoints,

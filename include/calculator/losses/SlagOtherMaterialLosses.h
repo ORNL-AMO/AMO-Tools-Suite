@@ -38,7 +38,6 @@ public:
      * @param outletTemperature double, Outlet/final temperature in °F
      * @param specificHeat double, Specific heat of material at average air temperature in Btu/(lb*°F)
      * @param correctionFactor double, Correction factor - unitless
-     * @return nothing
      *
      * */
     SlagOtherMaterialLosses(double weight,
@@ -71,7 +70,6 @@ public:
      *
      * @param weight double, weight discharged in lb/cycle
      *
-     * @return nothing
      */
     void setWeight(double weight) {
         weight_ = weight;
@@ -91,7 +89,6 @@ public:
      *
      * @param inletTemperature double, inlet temperature in °F
      *
-     * @return nothing
      */
     void setInletTemperature(double inletTemperature) {
         inletTemperature_ = inletTemperature;
@@ -111,7 +108,6 @@ public:
      *
      * @param outletTemperature double, outlet temperature in °F
      *
-     * @return nothing
      */
     void setOutletTemperature(double outletTemperature) {
         outletTemperature_ = outletTemperature;
@@ -132,7 +128,6 @@ public:
      *
      * @param correctionFactor double, correction factor - unitless
      *
-     * @return nothing
      */
     void setCorrectionFactor(double correctionFactor) {
         correctionFactor_ = correctionFactor;
@@ -152,7 +147,6 @@ public:
      *
      * @param specificHeat double, specific heat of material in btu/(lb*°F)
      *
-     * @return nothing
      */
     void setSpecificHeat(double specificHeat) {
         specificHeat_ = specificHeat;

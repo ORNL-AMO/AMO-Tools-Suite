@@ -19,7 +19,6 @@ public:
      * Constructor
      * @param motorRpm double, RPM of motor.
      * @param lineFreq Motor::LineFrequency, Line frequency of motor as either 50Hz or 60Hz.
-     * @return nothing
      */
     Poles(
         double motorRpm,

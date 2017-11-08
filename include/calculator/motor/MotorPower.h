@@ -18,7 +18,6 @@ public:
      * @param ratedVoltage double, Rated voltage of motor in volts
      * @param motorCurrent double, Motor current as defined in amps.
      * @param powerFactor double, Power factor - unitless
-     * @return nothing
      */
     MotorPower(
         double ratedVoltage,

@@ -23,7 +23,6 @@ public:
      * @param relativeHumidity double, relative humidity as %
      * @param wetBulbTemp double, wet bulb temperature in °F
      *
-     * @return nothing
      *
      * */
     HumidityRatio(
@@ -59,7 +58,6 @@ public:
      *
      * @param atmosphericPressure double atmospheric pressure in atm
      *
-     * @return nothing
      */
     void setAtmosphericPressure(double atmosphericPressure) {
         atmosphericPressure_ = atmosphericPressure;
@@ -79,7 +77,6 @@ public:
      *
      * @param dryBulbTemp double, dry bulb temperature
      *
-     * @return nothing
      */
     void setDryBulbTemp(double dryBulbTemp) {
         dryBulbTemp_ = dryBulbTemp;
@@ -99,7 +96,6 @@ public:
      *
      * @param relativeHumidity double, relative humidity as %
      *
-     * @return nothing
      */
     void setRelativeHumidity(double relativeHumidity) {
         relativeHumidity_ = relativeHumidity;
@@ -126,7 +122,6 @@ public:
      *
      * @param wetBulbTemp double, wet bulb temperature in °F
      *
-     * @return nothing
      */
     void setWetBulbTemp(double wetBulbTemp) {
         wetBulbTemp_ = wetBulbTemp;

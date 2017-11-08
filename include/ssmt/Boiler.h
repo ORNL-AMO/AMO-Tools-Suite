@@ -33,7 +33,6 @@ public:
      * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param steamMassFlow double, steam mass flow in kg/hr
      *
-     * @return nothing
      *
      * */
     Boiler(double deaeratorPressure, double combustionEfficiency, double blowdownRate, double steamPressure,
@@ -120,7 +119,6 @@ public:
     /**
      * Sets the steam mass flow
      * @param steamMassFlow double, mass flow of steam in kg/hr
-     * @return nothing
      */
     void setSteamMassFlow(double steamMassFlow);
 

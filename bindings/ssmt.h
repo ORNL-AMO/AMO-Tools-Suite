@@ -71,7 +71,6 @@ NAN_METHOD(saturatedPressure) {
     /**
      * Constructor for Saturated Pressure class
      * @param saturatedTemperature double, saturated temperature in K
-     * @return nothing
      */
     SaturatedPressure sp(Get("saturatedTemperature"));
     SetR("saturatedPressure", sp.calculate());
@@ -85,7 +84,6 @@ NAN_METHOD(saturatedTemperature) {
     /**
      * Constructor for the Saturated Temperature class
      * @param saturatedPressure double, saturatedPressure in MPa
-     * @return nothing
      */
     SaturatedTemperature st(Get("saturatedPressure"));
     SetR("saturatedTemperature", st.calculate());
@@ -102,7 +100,6 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
      * Constructor for Saturated Properties class
      * @param pressure double, saturated pressure in MPa
      * @param saturatedTemperature double, saturated temperature in K
-     * @return nothing
      */
     SaturatedProperties sp(pressure, Get("saturatedTemperature"));
     auto const results = sp.calculate();
@@ -132,7 +129,6 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
      * Constructor for Saturated Properties class
      * @param saturatedPressure double, saturated pressure in MPa
      * @param temperature double, saturated temperature in K
-     * @return nothing
      */
     auto const results = SaturatedProperties(Get("saturatedPressure"), temperature).calculate();
     SetR("saturatedPressure", results.at("pressure"));
@@ -161,7 +157,6 @@ NAN_METHOD(steamProperties) {
      * @param pressure double, saturated pressure in MPa
      * @param quantity SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, specific enthalpy in kJ/kg, specific entropy in kJ/kg/K, or saturated quality - unitless)
      * @param quantityValue double, value of either temperature in K, specific enthalpy in kJ/kg, specific entropy in kJ/kg/K, or saturated quality - unitless
-     * @return nothing
      */
     auto const results = SteamProperties(Get("pressure"), quantity, Get("quantityValue")).calculate();
     SetR("pressure", results.at("pressure"));
@@ -229,7 +224,6 @@ NAN_METHOD(heatLoss) {
  * @param inletMassFlow double, inlet mass flow in kg/hr
  * @param percentHeatLoss double, heat loss as %
  *
- * @return nothing
  *
  * */
     auto hl = HeatLoss(Get("inletPressure"), quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("percentHeatLoss"));
@@ -272,7 +266,6 @@ NAN_METHOD(flashTank) {
 	* @param inletWaterMassFlow double, inlet water mass flow in kg/hr
 	* @param tankPressure double, pressure of the tank in MPa
 	*
-	* @return nothing
 	*
 	* */
     auto const ft = FlashTank(Get("inletWaterPressure"), quantityType, Get("quantityValue"), Get("inletWaterMassFlow"), Get("tankPressure"));
@@ -322,7 +315,6 @@ NAN_METHOD(prvWithoutDesuperheating) {
     * @param inletMassFlow double, inlet mass flow in kg/hr
     * @param outletPressure double, houtlet pressure in MPa
     *
-    * @return nothing
     *
     * */
     auto pwod = PrvWithoutDesuperheating(Get("inletPressure"),quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("outletPressure"));
@@ -370,7 +362,6 @@ NAN_METHOD(prvWithDesuperheating) {
      * @param feedwaterQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param desuperheatingTemp double, desuperheating temperature in K
      *
-     * @return nothing
      *
      * */
     auto pwd = PrvWithDesuperheating(Get("inletPressure"), quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("outletPressure"), Get("feedwaterPressure"), feedwaterQuantityType, Get("feedwaterQuantityValue"), Get("desuperheatingTemp"));

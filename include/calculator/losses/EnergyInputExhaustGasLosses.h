@@ -25,7 +25,6 @@ public:
      * @param combustionAirTemp double, temperature of combustion air in °F
      * @param exhaustGasTemp double, temperature of exhaust gas in °F
      *
-     * @return nothing
      *
      * */
     AvailableHeat(double excessAir, double combustionAirTemp, double exhaustGasTemp);
@@ -56,7 +55,6 @@ public:
      * @param userAvailableHeat double, user defined available heat as %
      * @param otherLosses double, other losses in Btu/hr
      *
-     * @return nothing
      *
      * */
     EnergyInputExhaustGasLosses(double totalHeatInput, double electricalPowerInput, double availableHeat,

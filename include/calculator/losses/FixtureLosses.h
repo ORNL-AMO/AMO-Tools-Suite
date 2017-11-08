@@ -28,7 +28,6 @@ public:
      * @param initialTemperature double, Initial temperature in °F.
      * @param finalTemperature double, Final temperature in °F.
      * @param correctionFactor double, correction factor - unitless
-     * @return nothing
      */
     FixtureLosses(const double specificHeat, const double feedRate, const double initialTemperature,
                   const double finalTemperature, const double correctionFactor)
