@@ -27,7 +27,17 @@ public:
         RECTANGULAR
     };
 
-	double calculateViewFactor(OpeningShape shape, double thickness, double diamter);
+    /**
+     * Method to calculate viewFactor for circular openings
+     * @return double, viewFactor - unitless
+     * */
+    double calculateViewFactor(OpeningShape shape, double thickness, double diameter);
+
+    /**
+     * Method to calculate viewFactor for rectangular openings
+     * @return double, viewFactor - unitless
+     */
+    double calculateViewFactor(OpeningLosses::OpeningShape shape, double thickness, double length, double height);
 
     /**
 	 * Constructor for a rectangular opening
@@ -160,7 +170,6 @@ public:
 
     /**
      * Gets the emissivity
-     *
      * @return double, emissivity - unitless
      */
     double getEmissivity() const {
@@ -170,9 +179,7 @@ public:
 
     /**
      * Sets the emissivity
-     *
      * @param emissivity double, emissivity - unitless
-     *
      */
     void setEmissivity(double emissivity) {
         this->emissivity = emissivity;
@@ -181,7 +188,6 @@ public:
 
     /**
      * Gets the diameter of opening
-     *
      * @return double, diameter of opening in inches
      */
     double getDiameter() const {
@@ -191,9 +197,7 @@ public:
 
     /**
      * Sets the diameter of the opening
-     *
      * @param diameter double, diameter of opening in inches
-     *
      */
     void setDiameter(double diameter) {
         this->diameter = diameter;
@@ -201,7 +205,6 @@ public:
 
     /**
      * Gets the width of the opening
-     *
      * @return double, width of opening in inches
      */
     double getWidth() const {
@@ -210,9 +213,7 @@ public:
 
     /**
      * Sets the width of opening
-     *
      * @param width double, width of opening in inches
-     *
      */
     void setWidth(double width) {
         this->width = width;
@@ -220,7 +221,6 @@ public:
 
     /**
      * Gets the furnace wall thickness
-     *
      * @return double, furnace wall thickness in inches
      */
     double getThickness() const {
@@ -229,9 +229,7 @@ public:
 
     /**
      * Sets the furnace wall thickness
-     *
      * @param thickness double, furnace wall thickness in inches
-     *
      */
     void setThickness(double thickness) {
         this->thickness = thickness;
@@ -239,7 +237,6 @@ public:
 
     /**
      * Gets the ratio
-     *
      * @return double, ratio - unitless
      */
     double getRatio() const {
@@ -248,7 +245,6 @@ public:
 
     /**
      * Sets the ratio
-     *
      * @param ratio double, ratio - unitless
      *
      */
@@ -258,7 +254,6 @@ public:
 
     /**
      * Gets the ambient temperature
-     *
      * @return double, ambient temperature in °F
      */
     double getAmbientTemperature() const {
@@ -267,9 +262,7 @@ public:
 
     /**
      * Sets the ambient temperature
-     *
      * @param ambientTemperature double, ambient temperature in °F
-     *
      */
     void setAmbientTemperature(double ambientTemperature) {
         this->ambientTemperature = ambientTemperature;
@@ -277,7 +270,6 @@ public:
 
     /**
      * Gets the inside temperature
-     *
      * @return double, inside temperature in °F
      */
     double getInsideTemperature() const {
@@ -286,9 +278,7 @@ public:
 
     /**
      * Sets the inside temperature
-     *
      * @param insideTemperature double, inside temperature in °F
-     *
      */
     void setInsideTemperature(double insideTemperature) {
         this->insideTemperature = insideTemperature;
@@ -296,7 +286,6 @@ public:
 
     /**
      * Gets the percentage of time open
-     *
      * @return double, amount of time open as %
      */
     double getPercentTimeOpen() const {
@@ -305,9 +294,7 @@ public:
 
     /**
      * Sets the percentage of time open
-     *
      * @param percentTimeOpen double, amount of time open as a %
-     *
      */
     void setPercentTimeOpen(double percentTimeOpen) {
         this->percentTimeOpen = percentTimeOpen;
@@ -315,7 +302,6 @@ public:
 
     /**
      * Gets the view factor
-     *
      * @return double, view factor - unitless
      */
     double getViewFactor() const {
@@ -324,9 +310,7 @@ public:
 
     /**
      * Sets the view factor
-     *
      * @param viewFactor double, view factor - unitless
-     *
      */
     void setViewFactor(double viewFactor) {
         this->viewFactor = viewFactor;
@@ -334,7 +318,6 @@ public:
 
     /**
      * Gets the opening shape
-     *
      * @return OpeningShape, classification of shape of opening
      */
     OpeningShape getOpeningShape() const {
@@ -343,9 +326,7 @@ public:
 
     /**
      * Sets the opening shape
-     *
      * @param openingShape OpeningShape, classification of shape of opening
-     *
      */
     void setOpeningShape(OpeningShape openingShape) {
         this->openingShape = openingShape;
@@ -353,7 +334,6 @@ public:
 
     /**
      * Gets the heat loss
-     *
      * @return double, heat loss in btu/cycle
      */
     double getHeatLoss();
@@ -372,23 +352,15 @@ private:
 
     double heatLoss = 0;
 
-    std::array<std::function< double ( const double thicknessRatio ) >, 8> viewFactorEquations = {
+    const std::array<const std::function< double ( const double thicknessRatio ) >, 8> viewFactorEquations = {
             [](const double tr) { return 1.10000000001829 + 92.8571428570049 * tr - 57.5892857139671 * std::pow(tr, 2) + 15.6249999998005 * std::pow(tr, 3); }, // case 1
             [](const double tr) { return 29.4999999989821 + 26.8416666684161 * tr - 4.35416666785322 * std::pow(tr, 2) - 8.33333330461522E-02 * std::pow(tr, 3) + 0.104166666655532 * std::pow(tr, 4) - 8.33333333686747E-03 * std::pow(tr, 5); }, // case 2
             [](const double tr) { return 3.50000000001719 + 89.5833333332039 * tr - 49.9999999997023 * std::pow(tr, 2) + 10.4166666664804 * std::pow(tr, 3); }, // case 3
             [](const double tr) { return 23.9999999965639 + 39.3916666718743 * tr - 11.6041666697487 * std::pow(tr, 2) + 1.85416666706894 * std::pow(tr, 3) - 0.145833333217932 * std::pow(tr, 4) + 4.16666663902102E-03 * std::pow(tr, 5); }, // case 4
             [](const double tr) { return 2.70000000002409 + 112.678571428391 * tr - 70.9821428567315 * std::pow(tr, 2) + 15.6249999997447 * std::pow(tr, 3); }, // case 5
-
+            [](const double tr) { return 35.4999999992976 + 29.4583333347815 * tr - 4.52083333446976 * std::pow(tr, 2) - 0.687499999606652 * std::pow(tr, 3) + 0.270833333273064 * std::pow(tr, 4) - 2.08333333303721E-02 * std::pow(tr, 5); }, // case 6
+            [](const double tr) { return 13.0000000000278 + 123.74999999979 * tr - 99.9999999995182 * std::pow(tr, 2) + 31.249999999699 * std::pow(tr, 3); }, // case 7
+            [](const double tr) { return 26.9999999903567 + 64.5666666806646 * tr - 29.9166666745008 * std::pow(tr, 2) + 7.14583333396145 * std::pow(tr, 3) - 0.833333332874441 * std::pow(tr, 4) + 3.74999999085373E-02 * std::pow(tr, 5); }, // case 8
     };
-
-    //Public Function ViewFactorEquation(ByRef bytEquationNo As Byte, ByRef dblThicknessRatio As Double) As Double
-//Select Case bytEquationNo
-//Case 6
-//dblReturnValue = 35.4999999992976 + 29.4583333347815 * dblThicknessRatio - 4.52083333446976 * dblThicknessRatio ^ 2 - 0.687499999606652 * dblThicknessRatio ^ 3 + 0.270833333273064 * dblThicknessRatio ^ 4 - 2.08333333303721E-02 * dblThicknessRatio ^ 5
-//Case 7
-//dblReturnValue = 13.0000000000278 + 123.74999999979 * dblThicknessRatio - 99.9999999995182 * dblThicknessRatio ^ 2 + 31.249999999699 * dblThicknessRatio ^ 3
-//Case 8
-//dblReturnValue = 26.9999999903567 + 64.5666666806646 * dblThicknessRatio - 29.9166666745008 * dblThicknessRatio ^ 2 + 7.14583333396145 * dblThicknessRatio ^ 3 - 0.833333332874441 * dblThicknessRatio ^ 4 + 3.74999999085373E-02 * dblThicknessRatio ^ 5
-
 };
 #endif //AMO_SUITE_OPENINGLOSSES_H
