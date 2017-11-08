@@ -22,35 +22,39 @@
  */
 class OpeningLosses {
 public:
+
+    /**
+     * OpeningShape - Enum class consisting of CIRCULAR and RECTANGULAR entries. Set automatically by the constructor
+     * depending on which constructor is chosen, the one with length + width or the one with diameter. The shape of the
+     * opening can later be changed via the setOpeningShape methods.
+     */
     enum class OpeningShape {
         CIRCULAR,
         RECTANGULAR
     };
 
     /**
-     * Method to calculate viewFactor for circular openings
-     * @param OpeningLosses::OpeningShape, shape - shape of the opening (must be CIRCULAR for this method)
+     * Method to calculate viewFactor for circular openings only
      * @param double, thickness - furnace wall thickness in inches
      * @param double, diameter of opening in inches
      * @return double, viewFactor - unitless
      * */
-    double calculateViewFactor(OpeningShape shape, double thickness, double diameter);
+    double calculateViewFactor(double thickness, double diameter);
 
     /**
-     * Method to calculate viewFactor for rectangular openings
-     * @param OpeningLosses::OpeningShape, shape - shape of the opening (must be RECTANGULAR for this method)
+     * Method to calculate viewFactor for rectangular openings only
      * @param double, thickness - furnace wall thickness in inches
      * @param double, length - length of opening in inches
      * @param double, height - height of opening in inches
      * @return double, viewFactor - unitless
      */
-    double calculateViewFactor(OpeningLosses::OpeningShape shape, double thickness, double length, double height);
+    double calculateViewFactor(double thickness, double length, double height);
 
     /**
 	 * Constructor for a rectangular opening
 	 * @param emissivity double, emissivity - unitless
-	 * @param diameterLength double, length of openings in inches
-     * @param widthHeight double, height of openings in inches
+	 * @param length double, length of openings in inches
+     * @param width double, height of openings in inches
 	 * @param thickness double, furnace wall thickness in inches
 	 * @param ratio double, ratio
 	 * @param ambientTemperature double, ambient temperature in °F
@@ -59,8 +63,8 @@ public:
 	 * @param viewFactor double, view factor - unitless
 	 */
     OpeningLosses(double emissivity,
-                  double diameterLength,
-                  double widthHeight,
+                  double length,
+                  double width,
                   double thickness,
                   double ratio,
                   double ambientTemperature,
@@ -68,8 +72,8 @@ public:
                   double percentTimeOpen,
                   double viewFactor)
             : emissivity(emissivity),
-              diameter(diameterLength),
-              width(widthHeight),
+              length(length),
+              width(width),
               thickness(thickness), ratio(ratio),
               ambientTemperature(ambientTemperature),
               insideTemperature(insideTemperature),
@@ -81,7 +85,7 @@ public:
    /**
     * Constructor for a circular opening
     * @param emissivity double, emissivity - unitless
-    * @param diameterLength double, length of opening in inches
+    * @param diameter double, diameter of opening in inches
     * @param thickness double, furnace wall thickness in inches
     * @param ratio double, ratio
     * @param ambientTemperature double, ambient temperature in °F
@@ -90,7 +94,7 @@ public:
     * @param viewFactor double, view factor - unitless
     */
     OpeningLosses(double emissivity,
-                  double diameterLength,
+                  double diameter,
                   double thickness,
                   double ratio,
                   double ambientTemperature,
@@ -98,80 +102,14 @@ public:
                   double percentTimeOpen,
                   double viewFactor)
             : emissivity(emissivity),
-              diameter(diameterLength),
+              diameter(diameter),
               thickness(thickness), ratio(ratio),
               ambientTemperature(ambientTemperature),
               insideTemperature(insideTemperature),
               percentTimeOpen(percentTimeOpen),
               viewFactor(viewFactor),
               openingShape(OpeningShape::CIRCULAR)
-    {   }
-
-    /**
-    * Constructor for a circular opening
-    * @param diameterLength double, length of opening in inches
-    * @param thickness double, furnace wall thickness in inches
-    * @param ratio double, ratio
-    * @param ambientTemperature double, ambient temperature in °F
-    * @param insideTemperature double, inside temperature in °F
-    * @param percentTimeOpen double, amount of time open as %
-    * @param viewFactor double, view factor - unitless
-     * @param openingShape OpeningShape, classification of shape of opening
-    */
-    OpeningLosses(double diameterLength,
-                  double thickness,
-                  double ratio,
-                  double ambientTemperature,
-                  double insideTemperature,
-                  double percentTimeOpen,
-                  double viewFactor,
-                  OpeningShape openingShape)
-            : diameter(diameterLength),
-              thickness(thickness), ratio(ratio),
-              ambientTemperature(ambientTemperature),
-              insideTemperature(insideTemperature),
-              percentTimeOpen(percentTimeOpen),
-              viewFactor(viewFactor),
-              openingShape(openingShape)
-    {
-        if (openingShape == OpeningShape::CIRCULAR) {
-            diameter = diameterLength;
-        } else {
-            width = diameterLength;
-        }
-    }
-
-    /**
-    * Constructor for a circular opening
-    * @param diameterLength double, length of opening in inches
-    * @param thickness double, furnace wall thickness in inches
-    * @param ambientTemperature double, ambient temperature in °F
-    * @param insideTemperature double, inside temperature in °F
-    * @param percentTimeOpen double, amount of time open as %
-     * @param openingShape OpeningShape, classification of shape of opening
-    */
-    OpeningLosses(double diameterLength,
-                  double thickness,
-                  double ambientTemperature,
-                  double insideTemperature,
-                  double percentTimeOpen,
-                  OpeningShape openingShape)
-            : diameter(diameterLength),
-              thickness(thickness),
-              ambientTemperature(ambientTemperature),
-              insideTemperature(insideTemperature),
-              percentTimeOpen(percentTimeOpen),
-              openingShape(openingShape)
-    {
-        if (openingShape == OpeningShape::CIRCULAR) {
-            diameter = diameterLength;
-        } else {
-            width = diameterLength;
-        }
-        ratio = diameterLength / thickness;
-//        ratio = minimumOf(diameterLength, width) / thickness ?
-    }
-
+    {}
 
     OpeningLosses() = default;
 
@@ -203,7 +141,7 @@ public:
 
 
     /**
-     * Sets the diameter of the opening
+     * Sets the diameter of the circular opening
      * @param diameter double, diameter of opening in inches
      */
     void setDiameter(double diameter) {
@@ -316,7 +254,7 @@ public:
     }
 
     /**
-     * Sets the view factor
+     * Sets the view factor manually, can also be calculated via one of the calculateViewFactor methods
      * @param viewFactor double, view factor - unitless
      */
     void setViewFactor(double viewFactor) {
@@ -332,11 +270,34 @@ public:
     }
 
     /**
-     * Sets the opening shape
+     * Sets the opening shape - you better be calling this to set shape to RECTANGULAR
      * @param openingShape OpeningShape, classification of shape of opening
+     * @param double, length - length of opening in inches
+     * @param double, width - width / height of rectangular opening in inches
      */
-    void setOpeningShape(OpeningShape openingShape) {
+    void setOpeningShape(OpeningShape const openingShape, const double length, const double width) {
+        if (openingShape != OpeningShape::RECTANGULAR) {
+            throw std::runtime_error("Call the other set opening shape function to set openingShape to Circular");
+        }
         this->openingShape = openingShape;
+        this->length = length;
+        this->width = width;
+        diameter = 0;
+    }
+
+    /**
+     * Sets the opening shape - you better be calling this to set shape to CIRCULAR
+     * @param openingShape OpeningShape, classification of shape of opening
+     * @param double, diameter - diameter of circular opening in inches
+     */
+    void setOpeningShape(OpeningShape const openingShape, const double diameter) {
+        if (openingShape != OpeningShape::CIRCULAR) {
+            throw std::runtime_error("Call the other set opening shape function to set openingShape to Circular");
+        }
+        this->openingShape = openingShape;
+	    this->diameter = diameter;
+        length = 0;
+        width = 0;
     }
 
     /**
@@ -347,8 +308,8 @@ public:
 
 private:
     double emissivity = 0.95;
-    double diameter;
-    double width;
+    double diameter = 0;
+    double width = 0, length = 0;
     double thickness;
     double ratio;
     double ambientTemperature;

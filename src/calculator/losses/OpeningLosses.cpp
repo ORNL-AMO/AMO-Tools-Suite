@@ -20,7 +20,7 @@ double OpeningLosses::getHeatLoss() {
         const double d = diameter / 12;
         area = pi * (d / 2) * (d / 2);
     } else {
-        area = (diameter * width) / 144;
+        area = (length * width) / 144;
     }
 
     const double hlRad = emissivity * stephenBoltzman * (std::pow(insideTemperature + 460, 4) -
@@ -30,11 +30,8 @@ double OpeningLosses::getHeatLoss() {
     return heatLoss;
 }
 
-double OpeningLosses::calculateViewFactor(OpeningLosses::OpeningShape const shape, const double thickness,
-                                          const double diameter)
+double OpeningLosses::calculateViewFactor(const double thickness, const double diameter)
 {
-    if (shape != OpeningLosses::OpeningShape::CIRCULAR) throw std::runtime_error("OpeningShape must be circular");
-
     if (!diameter) return 0;
     const double thicknessRatio = (!thickness) ? 6 : diameter / thickness;
     if (thicknessRatio >= 6) return viewFactorEquations[1](6);
@@ -43,12 +40,9 @@ double OpeningLosses::calculateViewFactor(OpeningLosses::OpeningShape const shap
     return viewFactorEquations[1](thicknessRatio);
 }
 
-double OpeningLosses::calculateViewFactor(OpeningLosses::OpeningShape const shape, const double thickness,
-                                          const double length, const double height)
+double OpeningLosses::calculateViewFactor(const double thickness, const double length, const double height)
 {
-    if (shape != OpeningLosses::OpeningShape::RECTANGULAR) throw std::runtime_error("OpeningShape must be rectangular");
-
-    double thicknessRatio, lateralDimensionRatio; //= (height > length) ? height / length : length / height;
+    double thicknessRatio, lateralDimensionRatio;
 	if (!length || !height) return 0;
 	if (height > length) {
         lateralDimensionRatio = height / length;
@@ -66,22 +60,15 @@ double OpeningLosses::calculateViewFactor(OpeningLosses::OpeningShape const shap
             return viewFactorEquations[5](6) + (viewFactorEquations[7](6) - viewFactorEquations[5](6)) * (lateralDimensionRatio - 2) / 8;
         }
         return viewFactorEquations[7](6);
-    } else if (thicknessRatio < 0.1) {
+    } else if (thicknessRatio < 1) {
+        auto const tr = (thicknessRatio < 0.1) ? 0.1 : thicknessRatio;
         if (lateralDimensionRatio >= 1 && lateralDimensionRatio < 2) {
-            return viewFactorEquations[2](0.1) + (viewFactorEquations[4](0.1) - viewFactorEquations[2](0.1)) * (lateralDimensionRatio - 1);
+            return viewFactorEquations[2](tr) + (viewFactorEquations[4](tr) - viewFactorEquations[2](tr)) * (lateralDimensionRatio - 1);
         }
         if (lateralDimensionRatio >= 2 && lateralDimensionRatio < 10) {
-            return viewFactorEquations[4](0.1) + (viewFactorEquations[6](0.1) - viewFactorEquations[4](0.1)) * (lateralDimensionRatio - 2) / 8;
+            return viewFactorEquations[4](tr) + (viewFactorEquations[6](tr) - viewFactorEquations[4](tr)) * (lateralDimensionRatio - 2) / 8;
         }
-        return viewFactorEquations[6](0.1) * thicknessRatio / 0.1;
-    } else if (thicknessRatio >= 0.1 && thicknessRatio < 1) {
-        if (lateralDimensionRatio >= 1 && lateralDimensionRatio < 2) {
-            return viewFactorEquations[2](thicknessRatio) + (viewFactorEquations[4](thicknessRatio) - viewFactorEquations[2](thicknessRatio)) * (lateralDimensionRatio - 1);
-        }
-        if (lateralDimensionRatio >= 2 && lateralDimensionRatio < 10) {
-            return viewFactorEquations[4](thicknessRatio) + (viewFactorEquations[6](thicknessRatio) - viewFactorEquations[4](thicknessRatio)) * (lateralDimensionRatio - 2) / 8;
-        }
-        return viewFactorEquations[6](thicknessRatio);
+        return viewFactorEquations[6](tr) * thicknessRatio / tr;
     } else {
         if (lateralDimensionRatio >= 1 && lateralDimensionRatio < 2) {
             return viewFactorEquations[3](thicknessRatio) + (viewFactorEquations[5](thicknessRatio) - viewFactorEquations[3](thicknessRatio)) * (lateralDimensionRatio - 1);
