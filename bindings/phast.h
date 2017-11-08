@@ -326,6 +326,19 @@ NAN_METHOD(openingLossesQuad) {
     info.GetReturnValue().Set(retval);
 }
 
+NAN_METHOD(viewFactorCalculation) {
+    inp = info[0]->ToObject();
+	OpeningLosses opening;
+    OpeningLosses::OpeningShape shape = static_cast<OpeningLosses::OpeningShape>(Get("openingShape"));
+	if (shape == OpeningLosses::OpeningShape::CIRCULAR) {
+        Local<Number> rv = Nan::New(opening.calculateViewFactor(Get("thickness"), Get("diameter")));
+        info.GetReturnValue().Set(rv);
+    } else {
+        Local<Number> rv = Nan::New(opening.calculateViewFactor(Get("thickness"), Get("length"), Get("width")));
+        info.GetReturnValue().Set(rv);
+    }
+}
+
 NAN_METHOD(slagOtherMaterialLosses) {
 
 /**     * Constructor for the slag - other material heat loss with all inputs specified

@@ -250,6 +250,29 @@ test('openingLosses - both circular and quad', function (t) {
     t.equal(rnd(res), rnd(18670.2258869289), res + ' != 18670.2258869289');
 });
 
+test('openingLosses - viewFactorCalculation', function (t) {
+    t.plan(3);
+    t.type(bindings.viewFactorCalculation, 'function');
+
+    var inp = {
+        openingShape: 0, // CIRCULAR
+        thickness: 3,
+        diameter: 5
+    };
+
+    var res = bindings.viewFactorCalculation(inp);
+    t.equal(rnd(res), rnd(62.4519890259));
+
+    inp = {
+        openingShape: 1, // RECTANGULAR
+        thickness: 2,
+        length: 10,
+        width: 5
+    };
+    res = bindings.viewFactorCalculation(inp);
+    t.equal(rnd(res), rnd(78.6933593749));
+});
+
 test('slagOtherMaterialLosses', function (t) {
     t.plan(3);
     t.type(bindings.slagOtherMaterialLosses, 'function');
