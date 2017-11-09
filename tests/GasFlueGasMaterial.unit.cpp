@@ -8,10 +8,10 @@ TEST_CASE( "Calculate Heat Loss for flue gas Losses", "[Heat Loss]" ) {
 	REQUIRE(composition.calculateExcessAir(0.03) == Approx(0.1552234));
 	REQUIRE(composition.calculateExcessAir(0.07) == Approx(0.451975));
 
-	REQUIRE(GasFlueGasMaterial(700, 2.31722095, 125, composition).getHeatLoss() == Approx(0.7758857341));
-	REQUIRE(GasFlueGasMaterial(700, 15.52234415, 125, composition).getHeatLoss() == Approx(0.7622712145));
-	REQUIRE(GasFlueGasMaterial(700, 45.19750365, 125, composition).getHeatLoss() == Approx(0.7316834966));
-	REQUIRE(GasFlueGasMaterial(700, 9.0, 125, composition).getHeatLoss() == Approx(0.76899));
+	REQUIRE(GasFlueGasMaterial(700, 2.31722095, 125, composition, 125).getHeatLoss() == Approx(0.7758857341));
+	REQUIRE(GasFlueGasMaterial(700, 15.52234415, 125, composition, 125).getHeatLoss() == Approx(0.7622712145));
+	REQUIRE(GasFlueGasMaterial(700, 45.19750365, 125, composition, 125).getHeatLoss() == Approx(0.7316834966));
+	REQUIRE(GasFlueGasMaterial(700, 9.0, 125, composition, 125).getHeatLoss() == Approx(0.76899));
 
 
 	composition = GasCompositions("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);

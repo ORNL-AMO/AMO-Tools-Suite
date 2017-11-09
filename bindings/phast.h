@@ -493,7 +493,8 @@ NAN_METHOD(flueGasLossesByVolume) {
 	GasCompositions comps("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
 	                      Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
-	GasFlueGasMaterial fg(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"), comps);
+	GasFlueGasMaterial fg(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"),
+                          comps, Get("fuelTemperature"));
 
 	double heatLoss = fg.getHeatLoss();
 	Local<Number> retval = Nan::New(heatLoss);
@@ -568,7 +569,7 @@ NAN_METHOD(flueGasLossesByVolumeGivenO2) {
     auto const flueGasO2 = Get("flueGasO2") / 100.0;
     auto const excessAir = comp.calculateExcessAir(flueGasO2);
 
-    GasFlueGasMaterial fg(Get("flueGasTemperature"), excessAir * 100.0, Get("combustionAirTemperature"), comp);
+    GasFlueGasMaterial fg(Get("flueGasTemperature"), excessAir * 100.0, Get("combustionAirTemperature"), comp, Get("fuelTemperature"));
     double heatLoss = fg.getHeatLoss();
 
     r = Nan::New<Object>();
