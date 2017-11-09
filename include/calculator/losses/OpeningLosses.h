@@ -292,7 +292,7 @@ public:
      */
     void setOpeningShape(OpeningShape const openingShape, const double diameter) {
         if (openingShape != OpeningShape::CIRCULAR) {
-            throw std::runtime_error("Call the other set opening shape function to set openingShape to Circular");
+            throw std::runtime_error("Call the other set opening shape function to set openingShape to Rectangular");
         }
         this->openingShape = openingShape;
 	    this->diameter = diameter;
@@ -309,7 +309,7 @@ public:
 private:
     double emissivity = 0.95;
     double diameter = 0;
-    double width = 0, length = 0;
+    double length = 0, width = 0;
     double thickness;
     double ratio;
     double ambientTemperature;

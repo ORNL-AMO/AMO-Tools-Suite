@@ -287,7 +287,7 @@ NAN_METHOD(openingLossesCircular) {
         /**
          * Constructor for a circular opening
          * @param emissivity double, emissivity - unitless
-         * @param diameterLength double, length of opening in inches
+         * @param diameter double, length of opening in inches
          * @param thickness double, furnace wall thickness in inches
          * @param ratio double, ratio - unitless
          * @param ambientTemperature double, ambient temperature in °F
@@ -296,7 +296,7 @@ NAN_METHOD(openingLossesCircular) {
          * @param viewFactor double, view factor - unitless
          */
     inp = info[0]->ToObject();
-    OpeningLosses ol(Get("emissivity"), Get("diameterLength"), Get("thickness"), Get("ratio"), Get("ambientTemperature"),
+    OpeningLosses ol(Get("emissivity"), Get("diameter"), Get("thickness"), Get("ratio"), Get("ambientTemperature"),
                      Get("insideTemperature"), Get("percentTimeOpen"), Get("viewFactor"));
     double heatLoss = ol.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
@@ -309,7 +309,7 @@ NAN_METHOD(openingLossesQuad) {
          * Constructor for a rectangular opening
          * @param emissivity double, emissivity - unitless
          * @param length double, length of openings in inches
-         * @param widthHeight double, height of openings in inches
+         * @param width double, height of openings in inches
          * @param thickness double, furnace wall thickness in inches
          * @param ratio double, ratio - unitless
          * @param ambientTemperature double, ambient temperature in °F
@@ -319,7 +319,7 @@ NAN_METHOD(openingLossesQuad) {
          * @return double, heatLoss in btu/cycle
          */
     inp = info[0]->ToObject();
-    OpeningLosses ol(Get("emissivity"), Get("length"), Get("widthHeight"), Get("thickness"), Get("ratio"),
+    OpeningLosses ol(Get("emissivity"), Get("length"), Get("width"), Get("thickness"), Get("ratio"),
                      Get("ambientTemperature"), Get("insideTemperature"), Get("percentTimeOpen"), Get("viewFactor"));
     double heatLoss = ol.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);

@@ -233,7 +233,7 @@ test('openingLosses - both circular and quad', function (t) {
     t.type(bindings.openingLossesCircular, 'function');
 
     var inp = {
-        emissivity: 0.95, diameterLength: 12, thickness: 9, ratio: 1.33, ambientTemperature: 75,
+        emissivity: 0.95, diameter: 12, thickness: 9, ratio: 1.33, ambientTemperature: 75,
         insideTemperature: 1600, percentTimeOpen: 100, viewFactor: 0.70
     };
 
@@ -243,7 +243,7 @@ test('openingLosses - both circular and quad', function (t) {
 
 
     inp = {
-        emissivity: 0.95, length: 48, widthHeight: 15, thickness: 9, ratio: 1.67, ambientTemperature: 75,
+        emissivity: 0.95, length: 48, width: 15, thickness: 9, ratio: 1.67, ambientTemperature: 75,
         insideTemperature: 1600, percentTimeOpen: 20, viewFactor: 0.64
     };
     res = bindings.openingLossesQuad(inp);
