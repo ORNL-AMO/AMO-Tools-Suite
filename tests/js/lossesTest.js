@@ -261,7 +261,7 @@ test('openingLosses - viewFactorCalculation', function (t) {
     };
 
     var res = bindings.viewFactorCalculation(inp);
-    t.equal(rnd(res), rnd(62.4519890259));
+    t.equal(rnd(res), rnd(0.624519890259));
 
     inp = {
         openingShape: 1, // RECTANGULAR
@@ -270,7 +270,7 @@ test('openingLosses - viewFactorCalculation', function (t) {
         width: 5
     };
     res = bindings.viewFactorCalculation(inp);
-    t.equal(rnd(res), rnd(78.6933593749));
+    t.equal(rnd(res), rnd(0.786933593749));
 });
 
 test('slagOtherMaterialLosses', function (t) {
