@@ -233,7 +233,7 @@ test('openingLosses - both circular and quad', function (t) {
     t.type(bindings.openingLossesCircular, 'function');
 
     var inp = {
-        emissivity: 0.95, diameterLength: 12, thickness: 9, ratio: 1.33, ambientTemperature: 75,
+        emissivity: 0.95, diameter: 12, thickness: 9, ratio: 1.33, ambientTemperature: 75,
         insideTemperature: 1600, percentTimeOpen: 100, viewFactor: 0.70
     };
 
@@ -243,11 +243,34 @@ test('openingLosses - both circular and quad', function (t) {
 
 
     inp = {
-        emissivity: 0.95, length: 48, widthHeight: 15, thickness: 9, ratio: 1.67, ambientTemperature: 75,
+        emissivity: 0.95, length: 48, width: 15, thickness: 9, ratio: 1.67, ambientTemperature: 75,
         insideTemperature: 1600, percentTimeOpen: 20, viewFactor: 0.64
     };
     res = bindings.openingLossesQuad(inp);
     t.equal(rnd(res), rnd(18670.2258869289), res + ' != 18670.2258869289');
+});
+
+test('openingLosses - viewFactorCalculation', function (t) {
+    t.plan(3);
+    t.type(bindings.viewFactorCalculation, 'function');
+
+    var inp = {
+        openingShape: 0, // CIRCULAR
+        thickness: 3,
+        diameter: 5
+    };
+
+    var res = bindings.viewFactorCalculation(inp);
+    t.equal(rnd(res), rnd(0.624519890259));
+
+    inp = {
+        openingShape: 1, // RECTANGULAR
+        thickness: 2,
+        length: 10,
+        width: 5
+    };
+    res = bindings.viewFactorCalculation(inp);
+    t.equal(rnd(res), rnd(0.786933593749));
 });
 
 test('slagOtherMaterialLosses', function (t) {
