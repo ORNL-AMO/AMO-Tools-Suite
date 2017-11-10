@@ -13,4 +13,4 @@ To build C++ unit tests directly: `cmake --build . --target amo_tools_suite_test
 
 To create C++ installer package: `ccmake .` then enable build package `cmake ./` from root project directory, then `make package`
 
-To generate documentation: `doxygen Doxygen.in` or see the hosted documentation for the latest Tools-Suite release at `https://ornl-amo.github.io/`
+To generate documentation: `doxygen Doxygen.in` or see the hosted documentation for the latest Tools-Suite release at [ornl-amo.github.io](https://ornl-amo.github.io/)
