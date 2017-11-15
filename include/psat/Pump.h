@@ -41,7 +41,9 @@ public:
     ///enum class for drive types
     enum class Drive {
         DIRECT_DRIVE,
-        BELT_DRIVE
+        V_BELT_DRIVE,
+        N_V_BELT_DRIVE,
+        S_BELT_DRIVE
     };
 
     ///enum class for speed types
