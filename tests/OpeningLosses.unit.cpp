@@ -27,4 +27,5 @@ TEST_CASE( "Calculate viewFactor for Opening Losses", "[Heat Loss][viewFactor]" 
     CHECK(opening.calculateViewFactor(2, 10, 5) == Approx(0.786933593749));
     CHECK(opening.calculateViewFactor(27, 50, 55) == Approx(0.678646418065));
     CHECK(opening.calculateViewFactor(0.5, 3, 4) == Approx(0.876666666245));
+    CHECK(opening.calculateViewFactor(14.05, 3, 3) == Approx(0.2044991347));
 }
