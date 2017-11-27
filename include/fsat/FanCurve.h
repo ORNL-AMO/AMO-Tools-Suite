@@ -33,6 +33,7 @@ class FanCurveData {
 public:
 	class Row {
 	public:
+		// pressure here is pressureBox, determined by Curve Type
 		Row(const double flow, const double pressure, const double power)
 				: flow(flow),
 				  pressure(pressure),
@@ -58,8 +59,8 @@ private:
 class FanCurve {
 public:
 	FanCurve(double density, double efficiency, double densityCorrected, double efficiencyCorrected,
-	                  double pressureBarometric, double pressureBarometricCorrected, double pt1Factor, double gamma,
-	                  double gammaCorrected, double area1, double area2, FanCurveData data)
+	         double pressureBarometric, double pressureBarometricCorrected, double pt1Factor, double gamma,
+	         double gammaCorrected, double area1, double area2, FanCurveData data)
 			: density(density),
 			  efficiency(efficiency),
 			  densityCorrected(densityCorrected),

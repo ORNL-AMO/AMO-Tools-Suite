@@ -76,9 +76,55 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
 	FanCurveType curveType = FanCurveType::FanStaticPressure;
 
-	FanCurve fc(density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, {FanCurveData::Row(q, ps, h)}));
-	auto results = fc.calculate();
-	auto blah = 10;
+	std::vector<FanCurveData::Row> data = {
+			{0, 22.3, 115},
+			{14410, 22.5, 154},
+			{28820, 22.3, 194},
+			{43230, 21.8, 241},
+			{57640, 21.2, 293},
+			{72050, 20.3, 349},
+			{86460, 19.3, 406},
+			{100871, 18, 462},
+			{115281, 16.5, 515},
+			{129691, 14.8, 566},
+			{144101, 12.7, 615},
+			{158511, 10.2, 667},
+			{172921, 7.3, 725},
+			{187331, 3.7, 789},
+			{201741, -0.8, 861}
+	};
+
+	FanCurve fc(density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, data));
+	auto const results = fc.calculate();
+
+	auto const compareRows = [](ResultData const & row, ResultData const & expected) {
+		CHECK(row.flow == Approx(expected.flow));
+		CHECK(row.pressure == Approx(expected.pressure));
+		CHECK(row.power == Approx(expected.power));
+		CHECK(row.efficiency == Approx(expected.efficiency));
+	};
+
+	std::vector<ResultData> expected = {
+			{0, 24.3237008519,  126.1802380783, 0},
+			{14500.8543591511,  24.5509446301, 169.0344096605, 0.3296327776},
+			{29026.8029521096,  24.3537683159, 213.1237007012, 0.5140168074},
+			{43549.7454585634,  23.8129367203, 264.8147787583, 0.6053657684},
+			{58070.0734274583,  23.1590288007, 321.9740080602, 0.6451968788},
+			{72585.9393038736,  22.1753576429, 383.5029716631, 0.6484847133},
+			{87098.9706713126,  21.0819694298, 446.1168381298, 0.6362806595},
+			{101607.8897959761, 19.6602795889, 507.6073147301, 0.6089335382},
+			{116111.3789740286, 18.0200947791, 565.7819229037, 0.5728692768},
+			{130609.5615402702, 16.1615468983, 621.7364859870, 0.5266325641},
+			{145098.2298738518, 13.8661188861, 675.4528304721, 0.4628825027},
+			{159574.7652742440, 11.1342523247, 732.4119689902, 0.3778769228},
+			{174035.6935709888, 7.96653610850, 795.8906212688, 0.2721540841},
+			{188477.2686633575, 4.03652020770, 865.8668678138, 0.1378022756},
+			{202889.8046137204, -0.8723928962, 944.4826765914, -0.029540604}
+	};
+
+	for (std::size_t i = 0; i < results.size(); i++) {
+		compareRows(results[i], expected[i]);
+	}
 
 
 //	fc.calculate(q, ps, h, density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, curveType);

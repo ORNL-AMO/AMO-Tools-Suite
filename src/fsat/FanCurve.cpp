@@ -65,9 +65,13 @@ std::vector<ResultData> FanCurve::calculate()
 			auto const efficiency = (row.flow * row.pressure * kp) / (6362 * row.power);
 
 			// TODO is LHS supposed to be estPtc or ptc? see page 61 eq 38
-			// TODO SERIOUS - if does not converge, a results entry will not exist for that particular row of input data
+			// TODO SERIOUS - if does not converge, a results entry will not exist for that particular row of input data - ask about this
 			if (std::abs(saveKpOverKpc - kp / kpC) < 0.00001) {
 				results.emplace_back(ResultData(qC, pBoxC, hC, efficiency));
+				break;
+			}
+			if (!row.flow) {
+				results.emplace_back(ResultData(0, pBoxC, hC, 0));
 				break;
 			}
 		}
