@@ -171,7 +171,6 @@ std::unordered_map<std::string, double> Fan::calculate() {
 	double isentropicExponent = 0; // TODO what value to use for GasTypes other than Air ?
 	if (baseGasDensity.gasType == BaseGasDensity::GasType::AIR) isentropicExponent = 1.4;
 
-
 	// TODO pbx = barometric pressure, what to do if barometric pressure does vary between planes ? pg 61
 	// TODO the calculation of z returns 0.430 instead of 0.03515
 	auto const z = ((isentropicExponent - 1) / isentropicExponent)

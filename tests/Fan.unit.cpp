@@ -2,7 +2,7 @@
 #include <fsat/Fan.h>
 #include <fsat/FanCurve.h>
 
-TEST_CASE( "Fan", "Fan stuff") {
+TEST_CASE( "Fan", "[Fan]") {
 	FanRatedInfo fanRatedInfo(40, 1191, 1191, 1170, 0.05, 26.28, FanRatedInfo::DriveType::DIRECT);
 
 	std::vector< std::vector< double > > traverseHoleData = {
@@ -16,8 +16,6 @@ TEST_CASE( "Fan", "Fan stuff") {
 					0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569
 			}
 	};
-
-
 
 	FanInletFlange fanInletFlange(143.63, 32.63, 2, 123, 26.57);
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70, 78, 132.7, 26.57);
@@ -72,12 +70,16 @@ TEST_CASE( "Fan", "Fan stuff") {
 }
 
 TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
-	FanCurve fc;
-
 	// using row 2 appendix 1
-	double q = 14410, ps = 22.5, h = 154, density = 0.0308, n = 1180, densityC = 0.0332, nC = 1187, pb = 29.36;
+	double q = 14410, ps = 22.5, h = 154; // will be 10+ of each of these rows in real world examples
+	double density = 0.0308, n = 1180, densityC = 0.0332, nC = 1187, pb = 29.36;
 	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
-	// TODO estPt and estPtc should not be inputs
 	FanCurveType curveType = FanCurveType::FanStaticPressure;
-	fc.calculate(q, ps, h, density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, curveType);
+
+	FanCurve fc(density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, {FanCurveData::Row(q, ps, h)}));
+	auto results = fc.calculate();
+	auto blah = 10;
+
+
+//	fc.calculate(q, ps, h, density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, curveType);
 }
