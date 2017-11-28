@@ -31,39 +31,92 @@ public:
 
 class FanCurveData {
 public:
-	class Row {
+	enum class CalculationType {
+		BaseCurve,
+		RatedPoint,
+		BaseOperatingPoint
+	};
+
+	class BaseCurve {
 	public:
 		// pressure here is pressureBox, determined by Curve Type
-		Row(const double flow, const double pressure, const double power)
+		BaseCurve(const double flow, const double pressure, const double power)
 				: flow(flow),
 				  pressure(pressure),
 				  power(power)
 		{};
 
 		const double flow, pressure, power;
-
 		friend class FanCurveData;
 	};
 
-	FanCurveData(FanCurveType curveType, std::vector<Row> data)
+	class RatedPoint : public BaseCurve {
+	public:
+		// pressure here is pressureBox, determined by Curve Type
+		RatedPoint(const double flow, const double pressure, const double power, const double density,
+		           const double speed, const double speedCorrected)
+				: BaseCurve(flow, pressure, power),
+				  density(density),
+				  speed(speed),
+				  speedCorrected(speedCorrected)
+		{};
+
+		const double density, speed, speedCorrected;
+		friend class FanCurveData;
+	};
+
+	class BaseOperatingPoint : public RatedPoint {
+	public:
+		// pressure here is pressureBox, determined by Curve Type
+		BaseOperatingPoint(const double flow, const double pressure, const double power, const double density,
+		                   const double speed, const double speedCorrected, const double pressureBarometric,
+		                   const bool usePt1Factor)
+				: RatedPoint(flow, pressure, power, density, speed, speedCorrected),
+				  pressureBarometric(pressureBarometric), usePt1Factor(usePt1Factor)
+		{};
+
+		const double pressureBarometric;
+		bool usePt1Factor;
+		friend class FanCurveData;
+	};
+
+	FanCurveData(FanCurveType const curveType, std::vector<BaseCurve> baseCurveData)
 			: curveType(curveType),
-			  data(std::move(data)) {}
+			  baseCurveData(std::move(baseCurveData)),
+			  calcType(CalculationType::BaseCurve)
+	{}
+
+	FanCurveData(FanCurveType const curveType, std::vector<RatedPoint> ratedPointData)
+			: curveType(curveType),
+			  ratedPointData(std::move(ratedPointData)),
+			  calcType(CalculationType::RatedPoint)
+	{}
+
+	FanCurveData(FanCurveType const curveType, std::vector<BaseOperatingPoint> baseOperatingPointData)
+			: curveType(curveType),
+			  baseOperatingPointData(std::move(baseOperatingPointData)),
+			  calcType(CalculationType::BaseOperatingPoint)
+	{}
 
 private:
 	FanCurveType curveType;
-	std::vector<Row> data;
+	std::vector<BaseCurve> baseCurveData;
+	std::vector<RatedPoint> ratedPointData;
+	std::vector<BaseOperatingPoint> baseOperatingPointData;
+
+	CalculationType calcType;
 
 	friend class FanCurve;
 };
 
 class FanCurve {
 public:
-	FanCurve(double density, double speed, double densityCorrected, double speedCorrected,
-	         double pressureBarometric, double pressureBarometricCorrected, double pt1Factor, double gamma,
-	         double gammaCorrected, double area1, double area2, FanCurveData data)
+	FanCurve(const double density, const double densityCorrected, const double speed, const double speedCorrected,
+	         const double pressureBarometric, const double pressureBarometricCorrected, const double pt1Factor,
+	         const double gamma, const double gammaCorrected, const double area1, const double area2, FanCurveData data)
 			: density(density),
-			  speed(speed),
 			  densityCorrected(densityCorrected),
+			  speed(speed),
 			  speedCorrected(speedCorrected),
 			  pressureBarometric(pressureBarometric),
 			  pressureBarometricCorrected(pressureBarometricCorrected),
@@ -77,11 +130,12 @@ public:
 
 	std::vector<ResultData> calculate();
 
-//	void calculate(double flow, double pressure, double power, double density, double n, double densityC, double nC, double pb,
-//	               double pbC, double pt1F, double gamma, double gammaC, double a1, double a2, FanCurveType curveType);
-
 private:
-	double density, speed, densityCorrected, speedCorrected, pressureBarometric, pressureBarometricCorrected;
+	std::vector<ResultData> calculateBaseCurve();
+	std::vector<ResultData> calculateBaseOperatingPoint();
+	std::vector<ResultData> calculateRatedPoint();
+
+	double density, densityCorrected, speed, speedCorrected, pressureBarometric, pressureBarometricCorrected;
 	double pt1Factor, gamma, gammaCorrected, area1, area2;
 
 	FanCurveData curveData;

@@ -76,7 +76,7 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
 	FanCurveType curveType = FanCurveType::FanStaticPressure;
 
-	std::vector<FanCurveData::Row> data = {
+	std::vector<FanCurveData::BaseCurve> data = {
 			{0, 22.3, 115},
 			{14410, 22.5, 154},
 			{28820, 22.3, 194},
@@ -94,7 +94,7 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 			{201741, -0.8, 861}
 	};
 
-	FanCurve fc(density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, data));
+	FanCurve fc(density, densityC, n, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, data));
 	auto const results = fc.calculate();
 
 	auto const compareRows = [](ResultData const & row, ResultData const & expected) {
@@ -126,6 +126,28 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 		compareRows(results[i], expected[i]);
 	}
 
+	// TODO make this better by not using the same density, speed and speedCorrected for each entry?
+	std::vector<FanCurveData::RatedPoint> moreData = {
+			{0, 22.3, 115, density, n, nC},
+			{14410, 22.5, 154, density, n, nC},
+			{28820, 22.3, 194, density, n, nC},
+			{43230, 21.8, 241, density, n, nC},
+			{57640, 21.2, 293, density, n, nC},
+			{72050, 20.3, 349, density, n, nC},
+			{86460, 19.3, 406, density, n, nC},
+			{100871, 18, 462, density, n, nC},
+			{115281, 16.5, 515, density, n, nC},
+			{129691, 14.8, 566, density, n, nC},
+			{144101, 12.7, 615, density, n, nC},
+			{158511, 10.2, 667, density, n, nC},
+			{172921, 7.3, 725, density, n, nC},
+			{187331, 3.7, 789, density, n, nC},
+			{201741, -0.8, 861, density, n, nC}
+	};
 
-//	fc.calculate(q, ps, h, density, n, densityC, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, curveType);
+	FanCurve fc2(density, densityC, n, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, moreData));
+	auto const results2 = fc2.calculate();
+	for (std::size_t i = 0; i < results2.size(); i++) {
+		compareRows(results2[i], expected[i]);
+	}
 }
