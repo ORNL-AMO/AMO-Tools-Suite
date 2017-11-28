@@ -58,13 +58,13 @@ private:
 
 class FanCurve {
 public:
-	FanCurve(double density, double efficiency, double densityCorrected, double efficiencyCorrected,
+	FanCurve(double density, double speed, double densityCorrected, double speedCorrected,
 	         double pressureBarometric, double pressureBarometricCorrected, double pt1Factor, double gamma,
 	         double gammaCorrected, double area1, double area2, FanCurveData data)
 			: density(density),
-			  efficiency(efficiency),
+			  speed(speed),
 			  densityCorrected(densityCorrected),
-			  efficiencyCorrected(efficiencyCorrected),
+			  speedCorrected(speedCorrected),
 			  pressureBarometric(pressureBarometric),
 			  pressureBarometricCorrected(pressureBarometricCorrected),
 			  pt1Factor(pt1Factor),
@@ -81,7 +81,7 @@ public:
 //	               double pbC, double pt1F, double gamma, double gammaC, double a1, double a2, FanCurveType curveType);
 
 private:
-	double density, efficiency, densityCorrected, efficiencyCorrected, pressureBarometric, pressureBarometricCorrected;
+	double density, speed, densityCorrected, speedCorrected, pressureBarometric, pressureBarometricCorrected;
 	double pt1Factor, gamma, gammaCorrected, area1, area2;
 
 	FanCurveData curveData;
