@@ -251,7 +251,7 @@ test('openingLosses - both circular and quad', function (t) {
 });
 
 test('openingLosses - viewFactorCalculation', function (t) {
-    t.plan(3);
+    t.plan(4);
     t.type(bindings.viewFactorCalculation, 'function');
 
     var inp = {
@@ -271,6 +271,11 @@ test('openingLosses - viewFactorCalculation', function (t) {
     };
     res = bindings.viewFactorCalculation(inp);
     t.equal(rnd(res), rnd(0.786933593749));
+
+    inp.thickness = 14.05;
+    inp.length = inp.width = 3;
+    res = bindings.viewFactorCalculation(inp);
+    t.equal(rnd(res), rnd(0.2044991347));
 });
 
 test('slagOtherMaterialLosses', function (t) {
