@@ -507,8 +507,7 @@ NAN_METHOD(flueGasLossesByVolume) {
 	 * */
 
 	inp = info[0]->ToObject();
-	// TODO find a way to get substance name legitimately
-	GasCompositions comps("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+	GasCompositions comps("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
 	                      Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
 	GasFlueGasMaterial fg(Get("flueGasTemperature"), Get("excessAirPercentage"), Get("combustionAirTemperature"),
@@ -571,7 +570,7 @@ NAN_METHOD(flueGasByMassCalculateHeatingValue) {
 NAN_METHOD(flueGasCalculateO2) {
     inp = info[0]->ToObject();
 
-    GasCompositions comp("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+    GasCompositions comp("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
     Local<Number> rv = Nan::New(comp.calculateO2(Get("excessAir") / 100.0) * 100.0);
@@ -581,7 +580,7 @@ NAN_METHOD(flueGasCalculateO2) {
 NAN_METHOD(flueGasCalculateExcessAir) {
     inp = info[0]->ToObject();
 
-    GasCompositions comp("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+    GasCompositions comp("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
     Local<Number> rv = Nan::New(comp.calculateExcessAir(Get("o2InFlueGas") / 100.0) * 100.0);
@@ -601,7 +600,7 @@ NAN_METHOD(flueGasLossesByVolumeGivenO2) {
 
     inp = info[0]->ToObject();
 
-    GasCompositions comp("substance", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
+    GasCompositions comp("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                           Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
     auto const flueGasO2 = Get("flueGasO2") / 100.0;
