@@ -14,6 +14,7 @@ std::string GasCompositions::getSubstance() const {
     return substance;
 }
 
+// used for calculating excess air in flue gas given O2 levels
 double GasCompositions::calculateExcessAir(const double flueGasO2) {
     calculateCompByWeight();
     double excessAir = (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2));
@@ -22,7 +23,7 @@ double GasCompositions::calculateExcessAir(const double flueGasO2) {
     for (auto i = 0; i < 100; i++) {
         calculateMassFlueGasComponents(excessAir);
         auto const O2i = mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
-        auto const error = fabs((flueGasO2 - O2i) / flueGasO2);
+        auto const error = std::fabs((flueGasO2 - O2i) / flueGasO2);
         if (error < 0.02) break;
         if (O2i > flueGasO2) {
             excessAir -= (excessAir * 0.01);
@@ -31,6 +32,13 @@ double GasCompositions::calculateExcessAir(const double flueGasO2) {
         }
     }
 	return excessAir;
+}
+
+// used for calculating O2 in flue gas given excess air as a decimal
+double GasCompositions::calculateO2(const double excessAir) {
+    calculateCompByWeight();
+    calculateMassFlueGasComponents(excessAir);
+    return mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
 }
 
 void GasCompositions::calculateCompByWeight() {

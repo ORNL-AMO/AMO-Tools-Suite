@@ -106,6 +106,44 @@ test('flueGasByMass', function (t) {
 
 });
 
+test('flueGasCalculateExcessAir', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasCalculateExcessAir, 'function');
+    var inp = {
+        o2InFlueGas: 0.5, CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
+    };
+
+    var res = bindings.flueGasCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(2.3172209488353976));
+
+    inp.o2InFlueGas = 3;
+    res = bindings.flueGasCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(15.52234414568954));
+
+    inp.o2InFlueGas = 7;
+    res = bindings.flueGasCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(45.197503654937584));
+});
+
+test('flueGasCalculateO2', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasCalculateO2, 'function');
+    var inp = {
+        excessAir: 2.3172, CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
+    };
+
+    var res = bindings.flueGasCalculateO2(inp);
+    t.equal(rnd(res), rnd(0.49366866893805417));
+
+    inp.excessAir = 15.5223;
+    res = bindings.flueGasCalculateO2(inp);
+    t.equal(rnd(res), rnd(2.947933114396894));
+
+    inp.excessAir = 45.197;
+    res = bindings.flueGasCalculateO2(inp);
+    t.equal(rnd(res), rnd(6.900194873506535));
+});
+
 test('flueGasLossesByVolumeGivenO2', function (t) {
     t.plan(7);
     t.type(bindings.flueGasLossesByVolumeGivenO2, 'function');

@@ -145,6 +145,7 @@ public:
 	double getSpecificGravity() const { return specificGravity; };
 
 	double calculateExcessAir(double flueGasO2);
+	double calculateO2(double excessAir);
 
     /**
      * Gets the name of substance
