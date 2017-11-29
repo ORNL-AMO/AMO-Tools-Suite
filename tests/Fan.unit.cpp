@@ -36,8 +36,7 @@ TEST_CASE( "Fan", "[Fan]") {
 	};
 
 	std::vector<AddlTravPlane> addlTravPlanes({
-			                                          {143.63, 32.63, 123.0, 26.57, -17.0,
-					                                          VelocityPressureTraverseData::TubeType::STYPE, std::sqrt(0.762), traverseHoleData}
+			                                          {143.63, 32.63, 123.0, 26.57, -17.0, VelocityPressureTraverseData::TubeType::STYPE, std::sqrt(0.762), traverseHoleData}
 	                                          });
 
 	InletMstPlane inletMstPlane(143.63, 32.63, 2, 123.0, 26.57, -17.55);
@@ -71,12 +70,12 @@ TEST_CASE( "Fan", "[Fan]") {
 
 TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 	// using row 2 appendix 1
-	double q = 14410, ps = 22.5, h = 154; // will be 10+ of each of these rows in real world examples
 	double density = 0.0308, n = 1180, densityC = 0.0332, nC = 1187, pb = 29.36;
 	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
 	FanCurveType curveType = FanCurveType::FanStaticPressure;
 
-	std::vector<FanCurveData::BaseCurve> data = {
+//	BaseCurve(const double flow, const double pressure, const double power)
+	std::vector<FanCurveData::BaseCurve> baseCurveData = {
 			{0, 22.3, 115},
 			{14410, 22.5, 154},
 			{28820, 22.3, 194},
@@ -94,7 +93,7 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 			{201741, -0.8, 861}
 	};
 
-	FanCurve fc(density, densityC, n, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, data));
+	FanCurve fc(density, densityC, n, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, baseCurveData));
 	auto const results = fc.calculate();
 
 	auto const compareRows = [](ResultData const & row, ResultData const & expected) {
@@ -104,6 +103,7 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 		CHECK(row.efficiency == Approx(expected.efficiency));
 	};
 
+//	ResultData(const double flow, const double pressure, const double power, const double efficiency)
 	std::vector<ResultData> expected = {
 			{0, 24.3237008519,  126.1802380783, 0},
 			{14500.8543591511,  24.5509446301, 169.0344096605, 0.3296327776},
@@ -127,7 +127,9 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 	}
 
 	// TODO make this better by not using the same density, speed and speedCorrected for each entry?
-	std::vector<FanCurveData::RatedPoint> moreData = {
+//	RatedPoint(const double flow, const double pressure, const double power, const double density,
+//				const double speed, const double speedCorrected)
+	std::vector<FanCurveData::RatedPoint> ratedPointData = {
 			{0, 22.3, 115, density, n, nC},
 			{14410, 22.5, 154, density, n, nC},
 			{28820, 22.3, 194, density, n, nC},
@@ -145,7 +147,7 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 			{201741, -0.8, 861, density, n, nC}
 	};
 
-	FanCurve fc2(density, densityC, n, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, moreData));
+	FanCurve fc2(density, densityC, n, nC, pb, pbC, pt1F, gamma, gammaC, a1, a2, FanCurveData(curveType, ratedPointData));
 	auto const results2 = fc2.calculate();
 	for (std::size_t i = 0; i < results2.size(); i++) {
 		compareRows(results2[i], expected[i]);

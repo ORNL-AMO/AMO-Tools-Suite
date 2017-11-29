@@ -70,13 +70,14 @@ public:
 		// pressure here is pressureBox, determined by Curve Type
 		BaseOperatingPoint(const double flow, const double pressure, const double power, const double density,
 		                   const double speed, const double speedCorrected, const double pressureBarometric,
-		                   const bool usePt1Factor)
+		                   const bool usePt1Factor, const double pt1 = 0)
 				: RatedPoint(flow, pressure, power, density, speed, speedCorrected),
-				  pressureBarometric(pressureBarometric), usePt1Factor(usePt1Factor)
+				  pressureBarometric(pressureBarometric), usePt1Factor(usePt1Factor), pt1(pt1)
 		{};
 
 		const double pressureBarometric;
 		bool usePt1Factor;
+		const double pt1;
 		friend class FanCurveData;
 	};
 
