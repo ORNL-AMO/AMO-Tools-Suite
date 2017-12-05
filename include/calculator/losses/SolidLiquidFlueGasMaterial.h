@@ -65,6 +65,13 @@ public:
 	                                              double moistureInAirCombustion);
 
 	/**
+     * Calculates excess air percentage given flue gas O2 levels
+     * @return double, calculated excess air percentage
+     */
+	static double calculateFlueGasO2(const double excessAir, const double carbon, const double hydrogen, const double sulphur, const double inertAsh,
+	                          const double o2, const double moisture, const double nitrogen, const double moistureInAirCombustion);
+
+	/**
      * Gets the total heat loss
      * @return double, total heat loss in btu/hr
      */
