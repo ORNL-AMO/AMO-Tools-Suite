@@ -758,6 +758,60 @@ void SQLite::create_tables()
       );)";
 
     execute_command(wall_losses_surface_table_sql);
+
+    const std::string motor_table_sql =
+            R"(CREATE TABLE IF NOT EXISTS motor (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
+             manufacturer text NOT NULL DEFAULT "" UNIQUE,
+             model text NOT NULL,
+             catalog text NOT NULL,
+             motorType text NOT NULL,
+             hp integer NOT NULL,
+             speed integer NOT NULL,
+             fullLoadSpeed integer NOT NULL,
+             enclosureType text NOT NULL,
+             frameNumber text NOT NULL,
+             voltageRating integer NOT NULL,
+             purpose text NOT NULL,
+             uFrame integer NOT NULL,
+             cFace integer NOT NULL,
+             verticalShaft integer NOT NULL,
+             dFlange integer NOT NULL,
+             serviceFactor real NOT NULL,
+             insulationClass text NOT NULL,
+             weight real NOT NULL, -- lbs,
+             listPrice real NOT NULL, -- US dollars,
+             windingResistance real NOT NULL, -- mOhms at 25C,
+             warranty real NOT NULL, -- years,
+             rotorBars integer NOT NULL,
+             statorSlots integer NOT NULL,
+             efficiency100 real NOT NULL,
+             efficiency75 real NOT NULL,
+             efficiency50 real NOT NULL,
+             efficiency25 real NOT NULL,
+             powerFactor100 real NOT NULL,
+             powerFactor75 real NOT NULL,
+             powerFactor50 real NOT NULL,
+             powerFactor25 real NOT NULL,
+             torqueFullLoad real NOT NULL,
+             torqueBreakDown real NOT NULL,
+             torqueLockedRotor real NOT NULL,
+             ampsFullLoad real NOT NULL,
+             ampsIdle real NOT NULL,
+             ampsLockedRotor real NOT NULL,
+             stalledRotorTimeHot real NOT NULL, -- seconds,
+             stalledRotorTimeCold real NOT NULL, -- seconds,
+             peakVoltage0ms real NOT NULL,
+             peakVoltage5ms real NOT NULL,
+             UNIQUE (manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                    uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                    rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                    powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                    stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms)
+      );)";
+
+    execute_command(motor_table_sql);
 }
 
 void SQLite::insert_default_data()

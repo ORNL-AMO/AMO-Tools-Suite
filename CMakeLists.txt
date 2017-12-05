@@ -200,7 +200,8 @@ set(INCLUDE_FILES
         include/ssmt/Deaerator.h
         include/ssmt/Header.h
         include/ssmt/Turbine.h
-        include/calculator/util/CHP.h)
+        include/calculator/util/CHP.h
+        include/sqlite/MotorData.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

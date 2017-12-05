@@ -15,6 +15,7 @@ class GasCompositions;
 class SolidLiquidFlueGasMaterial;
 class Atmosphere;
 class WallLosses;
+class MotorData;
 
 class SQLiteWrapper
 {
@@ -212,6 +213,8 @@ private:
     std::vector<Atmosphere> get_default_atmosphere_specific_heat();
 
     std::vector<WallLosses> get_default_wall_losses_surface();
+
+    std::vector<MotorData> get_default_motor_data();
 };
 
 
