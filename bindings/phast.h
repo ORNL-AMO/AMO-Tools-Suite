@@ -587,69 +587,28 @@ NAN_METHOD(flueGasCalculateExcessAir) {
     info.GetReturnValue().Set(rv);
 }
 
-NAN_METHOD(flueGasLossesByVolumeGivenO2) {
-    /**
-     * Constructor for the flue gas losses by volume with all inputs specified
-     *
-     * @param flueGasTemperature double, temperature of flue gas in °F
-     * @param excessAirPercentage double, excess air as %
-     * @param combustionAirTemperature double, temperature of combustion air in °F
-     * @param gasComposition double, percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
-     *
-     * */
-
+NAN_METHOD(flueGasByMassCalculateO2) {
     inp = info[0]->ToObject();
+    auto const v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(Get("excessAir") / 100, Get("carbon") / 100,
+                                                                                Get("hydrogen") / 100, Get("sulphur") / 100,
+                                                                                Get("inertAsh") / 100, Get("o2") / 100,
+                                                                                Get("moisture") / 100, Get("nitrogen") / 100,
+                                                                                Get("moistureInAirCombustion"));
 
-    GasCompositions comp("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
-                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
-
-    auto const flueGasO2 = Get("flueGasO2") / 100.0;
-    auto const excessAir = comp.calculateExcessAir(flueGasO2);
-
-    GasFlueGasMaterial fg(Get("flueGasTemperature"), excessAir * 100.0, Get("combustionAirTemperature"), comp, Get("fuelTemperature"));
-    double heatLoss = fg.getHeatLoss();
-
-    r = Nan::New<Object>();
-    SetR("heatLoss", heatLoss);
-    SetR("excessAir", excessAir * 100.0);
-    info.GetReturnValue().Set(r);
+    Local<Number> rv = Nan::New(v * 100.0);
+    info.GetReturnValue().Set(rv);
 }
 
-NAN_METHOD(flueGasLossesByMassGivenO2) {
-    /**
-     * Constructor for the flue gas losses by weight with all inputs specified
-     *
-     * @param flueGasTemperature double, flue gas temperature in °F
-     * @param excessAirPercentage double, excess air as %
-     * @param combustionAirTemperature double, combustion air temperature in °F
-     * @param fuelTemperature double, temperature of fuel in °F
-     * @param moistureInAirComposition double, moisture in air composition as %
-     * @param ashDischargeTemperature double, temperature of ash discharge in °F
-     * @param unburnedCarbonInAsh double, amount of unburned carbon in ash as %
-     * @param fuel double, composition of: carbon, hydrogen, sulphur, inertAsh, o2, moisture and nitrogen (in %)
-     *
-     * */
-
+NAN_METHOD(flueGasByMassCalculateExcessAir) {
     inp = info[0]->ToObject();
-	auto const flueGasO2 = Get("flueGasO2") / 100.0;
+    auto const v = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(Get("o2InFlueGas") / 100, Get("carbon") / 100,
+                                                                                Get("hydrogen") / 100, Get("sulphur") / 100,
+                                                                                Get("inertAsh") / 100, Get("o2") / 100,
+                                                                                Get("moisture") / 100, Get("nitrogen") / 100,
+                                                                                Get("moistureInAirCombustion"));
 
-    auto const excessAir = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(flueGasO2,
-                                                                                       Get("moistureInAirComposition"),
-                                                                                       Get("carbon"), Get("hydrogen"),
-                                                                                       Get("sulphur"), Get("inertAsh"),
-                                                                                       Get("o2"), Get("moisture"),
-                                                                                       Get("nitrogen"));
-
-    SolidLiquidFlueGasMaterial slfgm(Get("flueGasTemperature"), excessAir * 100.0, Get("combustionAirTemperature"),
-                                     Get("fuelTemperature"), Get("moistureInAirComposition"), Get("ashDischargeTemperature"),
-                                     Get("unburnedCarbonInAsh"), Get("carbon"), Get("hydrogen"), Get("sulphur"),
-                                     Get("inertAsh"), Get("o2"), Get("moisture"), Get("nitrogen"));
-
-    double heatLoss = slfgm.getHeatLoss();
-	r = Nan::New<Object>();
-    SetR("heatLoss", heatLoss);
-    SetR("excessAir", excessAir * 100.0);
-    info.GetReturnValue().Set(r);
+    Local<Number> rv = Nan::New(v * 100.0);
+    info.GetReturnValue().Set(rv);
 }
 
 NAN_METHOD(o2Enrichment) {

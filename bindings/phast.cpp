@@ -31,9 +31,6 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("flueGasByVolumeCalculateHeatingValue").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(flueGasByVolumeCalculateHeatingValue)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("flueGasLossesByVolumeGivenO2").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(flueGasLossesByVolumeGivenO2)).ToLocalChecked());
-
     Nan::Set(target, New<String>("flueGasLossesByMass").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(flueGasLossesByMass)).ToLocalChecked());
 
@@ -46,8 +43,11 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("flueGasCalculateO2").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(flueGasCalculateO2)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("flueGasLossesByMassGivenO2").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(flueGasLossesByMassGivenO2)).ToLocalChecked());
+    Nan::Set(target, New<String>("flueGasByMassCalculateO2").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasByMassCalculateO2)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("flueGasByMassCalculateExcessAir").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasByMassCalculateExcessAir)).ToLocalChecked());
 
     Nan::Set(target, New<String>("gasCoolingLosses").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(gasCoolingLosses)).ToLocalChecked());

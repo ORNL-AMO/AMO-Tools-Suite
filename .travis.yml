@@ -20,7 +20,7 @@ before_install:
       sudo apt-get install npm;
     fi
 
-install: npm install
+install: travis_retry npm install
 
 script:
   - cmake ./

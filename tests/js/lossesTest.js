@@ -103,7 +103,6 @@ test('flueGasByMass', function (t) {
 
     res = bindings.flueGasByMassCalculateHeatingValue(inp)
     t.equal(rnd(res), rnd(13877.969543))
-
 });
 
 test('flueGasCalculateExcessAir', function (t) {
@@ -144,53 +143,46 @@ test('flueGasCalculateO2', function (t) {
     t.equal(rnd(res), rnd(6.900194873506535));
 });
 
-test('flueGasLossesByVolumeGivenO2', function (t) {
-    t.plan(7);
-    t.type(bindings.flueGasLossesByVolumeGivenO2, 'function');
+test('flueGasByMassCalculateExcessAir', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasByMassCalculateExcessAir, 'function');
+
     var inp = {
-        flueGasTemperature: 700, flueGasO2: 0.5, combustionAirTemperature: 125, substance: 'test substance',
-        fuelTemperature: 125, CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42,
-        CO2: 0.71, SO2: 0, O2: 0
+        o2InFlueGas: 0.5, carbon: 1.0, hydrogen: 75.0, sulphur: 5.0, inertAsh: 1.0, o2: 9.0, moisture: 7.0,
+        nitrogen: 0.0, moistureInAirCombustion: 1.5
     };
 
-    var res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(rnd(res.heatLoss), rnd(0.7758857340516403), res + ' != 0.7758857340516403');
-    t.equal(rnd(res.excessAir), rnd(2.3172209488353976), res + ' != 2.3172209488353976');
+    var res = bindings.flueGasByMassCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(2.29427816716376));
 
-    inp['flueGasO2'] = 3.0;
-    res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(rnd(res.heatLoss), rnd(0.7622712144825897), res + ' != 0.7622712144825897');
-    t.equal(rnd(res.excessAir), rnd(15.52234414568954), res + ' != 15.52234414568954');
+    inp.o2InFlueGas = 3.0;
+    res = bindings.flueGasByMassCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(15.368657569989644));
 
-    inp['flueGasO2'] = 7.0;
-    res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(rnd(res.heatLoss), rnd(0.731683496609056), res + ' != 0.731683496609056');
-    t.equal(rnd(res.excessAir), rnd(45.197503654937584), res + ' != 45.197503654937584');
+    inp.o2InFlueGas = 7.0;
+    res = bindings.flueGasByMassCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(44.75000361875009));
 });
 
-test('flueGasLossesByMassGivenO2', function (t) {
-    t.plan(7);
-    t.type(bindings.flueGasLossesByMassGivenO2, 'function');
+test('flueGasByMassCalculateO2', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasByMassCalculateO2, 'function');
 
     var inp = {
-        flueGasTemperature: 700, flueGasO2: 0.5, combustionAirTemperature: 125, fuelTemperature: 70,
-        moistureInAirComposition: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
-        carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5
+        excessAir: 2.29427817, carbon: 1.0, hydrogen: 75.0, sulphur: 5.0, inertAsh: 1.0, o2: 9.0, moisture: 7.0,
+        nitrogen: 0.0, moistureInAirCombustion: 1.5
     };
 
-    var res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(rnd(res.heatLoss), rnd(0.8297708723770466), res + ' != 0.8297708723770466');
-    t.equal(rnd(res.excessAir), rnd(2.29427816716376), res + ' != 2.29427816716376');
+    var res = bindings.flueGasByMassCalculateO2(inp);
+    t.equal(rnd(res), rnd(0.49370451442164515));
 
-    inp['flueGasO2'] = 3.0;
-    res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(rnd(res.heatLoss), rnd(0.8151987636583022), res + ' != 0.8151987636583022');
-    t.equal(rnd(res.excessAir), rnd(15.368657569989644), res + ' != 15.368657569989644');
+    inp.excessAir = 15.36865757;
+    res = bindings.flueGasByMassCalculateO2(inp);
+    t.equal(rnd(res), rnd(2.9440141519451095));
 
-    inp['flueGasO2'] = 7.0;
-    res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(rnd(res.heatLoss), rnd(0.7824331921965915), res + ' != 0.7824331921965915');
-    t.equal(rnd(res.excessAir), rnd(44.75000361875009), res + ' != 44.75000361875009');
+    inp.excessAir = 44.75000362;
+    res = bindings.flueGasByMassCalculateO2(inp);
+    t.equal(rnd(res), rnd(6.875606606194022));
 });
 
 

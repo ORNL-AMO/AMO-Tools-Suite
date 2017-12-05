@@ -44,6 +44,34 @@ double SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(
 	return excessAir;
 }
 
+double SolidLiquidFlueGasMaterial::calculateFlueGasO2(const double excessAir, const double carbon,
+                                                      const double hydrogen, const double sulphur,
+                                                      const double inertAsh, const double o2, const double moisture,
+                                                      const double nitrogen, const double moistureInAirCombustion)
+{
+	const double percentTotalFuelComponents = carbon + hydrogen + sulphur + inertAsh + o2 + moisture + nitrogen;
+	const double carbonBar = carbon / percentTotalFuelComponents;
+	const double hydrogenBar = hydrogen / percentTotalFuelComponents;
+	const double sulphurBar = sulphur / percentTotalFuelComponents;
+	const double o2Bar = o2 / percentTotalFuelComponents;
+	const double moistureBar = moisture / percentTotalFuelComponents;
+
+	// steps 2 and 3
+	const double o2sair = carbonBar * (32.0 / 12) + hydrogenBar * 8 + sulphurBar - o2Bar;
+	const double n2sair = o2sair * (76.85 / 23.15);
+	const double msair = o2sair + n2sair;
+	const double mCombustionAir = msair * (1 + excessAir);
+
+	// steps 4 and 5
+	const double mCO2 = carbonBar * (44.0 / 12);
+	const double mH2O = hydrogenBar * 9 + moistureBar + (moistureInAirCombustion / 100.0) * mCombustionAir;
+	const double mSO2 = sulphurBar * 2;
+	const double mO2 = o2sair * excessAir;
+	const double mN2 = n2sair * (1 + excessAir);
+
+	return mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
+}
+
 
 double SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur,
                                                              double inertAsh, double o2, double moisture,
