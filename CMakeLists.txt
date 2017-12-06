@@ -124,9 +124,9 @@ set(SOURCE_FILES
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
         src/calculator/util/CHP.cpp
-        src/fsat/Fan.cpp
-        src/fsat/FanShaftPower.cpp
-        src/fsat/Planar.cpp src/fsat/FanCurve.cpp)
+        src/fans/Fan.cpp
+        src/fans/FanShaftPower.cpp
+        src/fans/Planar.cpp src/fans/FanCurve.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -204,11 +204,11 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
         include/ssmt/Header.h
-        include/fsat/Fan.h
-        include/fsat/FanShaftPower.h
-        include/fsat/Planar.h
+        include/fans/Fan.h
+        include/fans/FanShaftPower.h
+        include/fans/Planar.h
         include/ssmt/Turbine.h
-        include/calculator/util/CHP.h include/fsat/FanCurve.h)
+        include/calculator/util/CHP.h include/fans/FanCurve.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

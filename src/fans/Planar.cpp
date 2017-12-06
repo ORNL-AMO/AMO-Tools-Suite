@@ -1,4 +1,4 @@
-#include "fsat/Planar.h"
+#include "fans/Planar.h"
 
 Planar::Planar(const double circularDuctDiameter, const double tdx, const double pbx, const double psx)
 		: tdx(tdx), pbx(pbx), area(((3.14159265358979 / 4) * (circularDuctDiameter * circularDuctDiameter)) / 144.0),

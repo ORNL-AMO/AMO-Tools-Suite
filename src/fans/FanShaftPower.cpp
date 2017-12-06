@@ -1,4 +1,4 @@
-#include "fsat/FanShaftPower.h"
+#include "fans/FanShaftPower.h"
 #include <cmath>
 
 FanRatedInfo::FanRatedInfo(double const fanDamperPosition, double const fanSpeed, double const motorSpeed,

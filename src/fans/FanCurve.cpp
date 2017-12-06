@@ -1,4 +1,4 @@
-#include <fsat/FanCurve.h>
+#include <fans/FanCurve.h>
 #include <cmath>
 
 //CurveConditions::CurveConditions(double density, double rpm, double barometricPressure, double isentropicExponent)

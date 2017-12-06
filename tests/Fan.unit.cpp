@@ -1,6 +1,6 @@
 #include "catch.hpp"
-#include <fsat/Fan.h>
-#include <fsat/FanCurve.h>
+#include <fans/Fan.h>
+#include <fans/FanCurve.h>
 
 TEST_CASE( "Fan", "[Fan]") {
 	FanRatedInfo fanRatedInfo(40, 1191, 1191, 1170, 0.05, 26.28, FanRatedInfo::DriveType::DIRECT);

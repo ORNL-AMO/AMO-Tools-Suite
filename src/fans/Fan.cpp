@@ -1,4 +1,4 @@
-#include "fsat/Fan.h"
+#include "fans/Fan.h"
 
 // used for method 1
 BaseGasDensity::BaseGasDensity(const double dryBulbTemp, const double staticPressure, const double barometricPressure,
