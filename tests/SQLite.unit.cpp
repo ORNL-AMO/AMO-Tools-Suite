@@ -877,6 +877,9 @@ TEST_CASE( "SQLite - Motor Data", "[sqlite][motor]" ) {
                   10, 11, 12, 13, 400, 300, 200, 225, 75, 99, 15, 30, 200, 175);
 
 	    compare(motors[0], expected);
+
+	    auto const motor = sqlite.getMotorDataById(1);
+        compare(motor, expected);
     }
 }
 

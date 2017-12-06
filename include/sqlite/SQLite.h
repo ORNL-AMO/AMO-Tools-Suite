@@ -143,6 +143,7 @@ public:
     bool deleteWallLossesSurface(std::string const & substance);
 
     std::vector<MotorData> getMotorData() const;
+    MotorData getMotorDataById(int id) const;
 
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
@@ -182,6 +183,7 @@ private:
 
     sqlite3_stmt * m_motor_data_insert_stmt = nullptr;
     sqlite3_stmt * m_motor_data_select_stmt = nullptr;
+	sqlite3_stmt * m_motor_data_select_single_stmt = nullptr;
 
     void create_select_stmt();
 
