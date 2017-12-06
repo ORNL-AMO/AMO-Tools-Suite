@@ -126,7 +126,7 @@ VelocityPressureTraverseData::VelocityPressureTraverseData(const TubeType pitotT
 	// TODO this pv3 value differs slightly from what is in the document
 	pv3 = std::pow(sumPv3r / (this->traverseHoleData.size() * this->traverseHoleData[0].size()), 2);
 
-	size_t count = 0;
+	std::size_t count = 0;
 	for (auto & row : this->traverseHoleData) {
 		for (auto & val : row) {
 			if (val > (0.1 * maxPv3r)) count++;
