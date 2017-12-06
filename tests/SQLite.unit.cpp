@@ -865,6 +865,7 @@ TEST_CASE( "SQLite - Motor Data", "[sqlite][motor]" ) {
 		CHECK(result.getStalledRotorTimeCold() == expected.getStalledRotorTimeCold());
 		CHECK(result.getPeakVoltage0ms() == expected.getPeakVoltage0ms());
 		CHECK(result.getPeakVoltage5ms() == expected.getPeakVoltage5ms());
+        CHECK(result.getId() == expected.getId());
     };
 
     auto sqlite = SQLite(":memory:", true);
@@ -872,23 +873,43 @@ TEST_CASE( "SQLite - Motor Data", "[sqlite][motor]" ) {
     {
         auto const motors = sqlite.getMotorData();
 
-        auto const expected = MotorData(
+        auto expected = MotorData(
                 "GE", "X$D Ultra IEEE 841", "M9455", "NEMA Design B", 50, 1800, 1780, "TEFC", "326T", 460,
                 "IEEE 841 Petroleum/Chemical", 0, 0, 0, 0, 1.15, "F", 511, 4, 615, 99.5, 5, 38, 48, 94.5, 94.7,
                 94.3, 91.6, 78, 73.6, 63.3, 41.5, 147.4, 294.8, 206.4, 63.5, 25.7, 362.5, 92.9, 115.2, 2000
         );
+        expected.setId(1);
 
 	    compare(motors[0], expected);
 
-
-	    auto const expected2 = MotorData(
+	    auto expected2 = MotorData(
 			    "WEG Electric", "W22-NEMA Premium SD", "20018ET3G447", "NEMA Design B", 200, 1800, 0, "TEFC",
 			    "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
 			    95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0
 	    );
+        expected2.setId(2);
 
 	    auto const motor = sqlite.getMotorDataById(2);
         compare(motor, expected2);
+    }
+
+    {
+        auto ktm = MotorData(
+                "KTM", "Freeride-e", "KTM Motors 2018", "electric motor", 24, 4500, 5000, "TEFC",
+                "447/9T", 260, "to provide hours of fun on a single charge", 0, 0, 0, 0, 1.15, "undefined", 60, 5000, 0, 2, 0, 0, 96.2, 96.2,
+                95.4, 0, 85, 82, 73, 0, 42, 42, 42, 230, 0, 1564, 16, 35, 300, 300
+        );
+	    ktm.setId(4);
+
+        sqlite.insertMotorData(ktm);
+        auto const motors = sqlite.getMotorData();
+	    compare(ktm, motors.back());
+
+        auto const customMotors = sqlite.getCustomMotorData();
+        compare(ktm, customMotors[0]);
+
+        sqlite.deleteMotorData(ktm.getId());
+	    CHECK(sqlite.getCustomMotorData().size() == 0);
     }
 }
 

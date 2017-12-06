@@ -175,6 +175,10 @@ public:
 
 	void setPeakVoltage5ms(double peakVoltage5ms);
 
+	int getId() const;
+
+	void setId(int id);
+
 private:
 	std::string manufacturer, model, catalog, motorType, enclosureType, frameNumber, purpose, insulationClass;
 
@@ -183,6 +187,8 @@ private:
 	double serviceFactor, weight, listPrice, windingResistance, warranty, efficiency100, efficiency75, efficiency50, efficiency25;
 	double powerFactor100, powerFactor75, powerFactor50, powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor;
 	double ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot, stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms;
+
+	int id; // used for the database
 
 	friend class SQLite;
 };

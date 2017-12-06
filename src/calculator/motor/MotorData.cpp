@@ -341,3 +341,11 @@ double MotorData::getPeakVoltage5ms() const {
 void MotorData::setPeakVoltage5ms(double peakVoltage5ms) {
 	MotorData::peakVoltage5ms = peakVoltage5ms;
 }
+
+int MotorData::getId() const {
+	return id;
+}
+
+void MotorData::setId(int id) {
+	this->id = id;
+}
