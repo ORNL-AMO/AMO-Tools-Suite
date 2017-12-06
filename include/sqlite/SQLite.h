@@ -142,6 +142,8 @@ public:
     bool insertWallLossesSurface(WallLosses const & material);
     bool deleteWallLossesSurface(std::string const & substance);
 
+    std::vector<MotorData> getMotorData() const;
+
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
@@ -178,6 +180,9 @@ private:
     sqlite3_stmt * m_wall_losses_surface_select_single_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_custom_stmt = nullptr;
 
+    sqlite3_stmt * m_motor_data_insert_stmt = nullptr;
+    sqlite3_stmt * m_motor_data_select_stmt = nullptr;
+
     void create_select_stmt();
 
     void create_insert_stmt();
@@ -197,6 +202,8 @@ private:
     bool insert_atmosphere_specific_heat(Atmosphere const & material);
 
     bool insert_wall_losses_surface(WallLosses const & surface);
+
+    bool insert_motor_data(MotorData const & m);
 
     void insert_default_data();
 

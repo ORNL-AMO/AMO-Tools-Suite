@@ -11,12 +11,14 @@
 #include <sqlite/GasFlueGasMaterialData.h>
 #include <sqlite/AtmosphereSpecificHeatData.h>
 #include <sqlite/WallLossesSurfaceData.h>
+#include <calculator/motor/MotorData.h>
 
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <sqlite/SolidLiquidFlueGasMaterialData.h>
+#include <sqlite/MotorData.h>
 
 SQLite::SQLite(std::string const & db_name, bool init_db)
         :
@@ -76,6 +78,9 @@ SQLite::~SQLite()
     sqlite3_finalize(m_wall_losses_surface_select_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_single_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_custom_stmt);
+
+    sqlite3_finalize(m_motor_data_insert_stmt);
+    sqlite3_finalize(m_motor_data_select_stmt);
 }
 
 std::string SQLiteWrapper::convert_text( const unsigned char * text ) {
@@ -452,6 +457,63 @@ WallLosses SQLite::getWallLossesSurfaceById(int id) const
     return get_object<WallLosses>(m_wall_losses_surface_select_single_stmt, id, cb);
 }
 
+std::vector<MotorData> SQLite::getMotorData() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        auto const manufacturer = convert_text(sqlite3_column_text(stmt, 2));
+        auto const model = convert_text(sqlite3_column_text(stmt, 3));
+        auto const catalog = convert_text(sqlite3_column_text(stmt, 4));
+        auto const motorType = convert_text(sqlite3_column_text(stmt, 5));
+        auto const hp = sqlite3_column_int(stmt, 6);
+        auto const speed = sqlite3_column_int(stmt, 7);
+        auto const fullLoadSpeed = sqlite3_column_int(stmt, 8);
+        auto const enclosureType = convert_text(sqlite3_column_text(stmt, 9));
+        auto const frameNumber = convert_text(sqlite3_column_text(stmt, 10));
+        auto const voltageRating = sqlite3_column_int(stmt, 11);
+        auto const purpose = convert_text(sqlite3_column_text(stmt, 12));
+        auto const uFrame = sqlite3_column_int(stmt, 13);
+        auto const cFace = sqlite3_column_int(stmt, 14);
+        auto const verticalShaft = sqlite3_column_int(stmt, 15);
+        auto const dFlange = sqlite3_column_int(stmt, 16);
+        auto const serviceFactor = sqlite3_column_double(stmt, 17);
+        auto const insulationClass = convert_text(sqlite3_column_text(stmt, 18));
+        auto const weight = sqlite3_column_double(stmt, 19);
+        auto const listPrice = sqlite3_column_double(stmt, 20);
+        auto const windingResistance = sqlite3_column_double(stmt, 21);
+        auto const warranty = sqlite3_column_double(stmt, 22);
+        auto const rotorBars = sqlite3_column_int(stmt, 23);
+        auto const statorSlots = sqlite3_column_int(stmt, 24);
+        auto const efficiency100 = sqlite3_column_double(stmt, 25);
+        auto const efficiency75 = sqlite3_column_double(stmt, 26);
+        auto const efficiency50 = sqlite3_column_double(stmt, 27);
+        auto const efficiency25 = sqlite3_column_double(stmt, 28);
+        auto const powerFactor100 = sqlite3_column_double(stmt, 29);
+        auto const powerFactor75 = sqlite3_column_double(stmt, 30);
+        auto const powerFactor50 = sqlite3_column_double(stmt, 31);
+        auto const powerFactor25 = sqlite3_column_double(stmt, 32);
+        auto const torqueFullLoad = sqlite3_column_double(stmt, 33);
+        auto const torqueBreakDown = sqlite3_column_double(stmt, 34);
+        auto const torqueLockedRotor = sqlite3_column_double(stmt, 35);
+        auto const ampsFullLoad = sqlite3_column_double(stmt, 36);
+        auto const ampsIdle = sqlite3_column_double(stmt, 37);
+        auto const ampsLockedRotor = sqlite3_column_double(stmt, 38);
+        auto const stalledRotorTimeHot = sqlite3_column_double(stmt, 39);
+        auto const stalledRotorTimeCold = sqlite3_column_double(stmt, 40);
+        auto const peakVoltage0ms = sqlite3_column_double(stmt, 41);
+        auto const peakVoltage5ms = sqlite3_column_double(stmt, 42);
+
+        auto m = MotorData(manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                           uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                           rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                           powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                           stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms);
+        return m;
+    };
+    return get_all_objects<MotorData>(m_motor_data_select_stmt, cb);
+}
+
 void SQLite::create_select_stmt()
 {
     std::string const select_solid_load_charge_materials =
@@ -602,6 +664,16 @@ void SQLite::create_select_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_wall_losses_surface_select_custom_stmt, select_custom_wall_losses_surface);
+
+    std::string const select_motor_data =
+            R"(SELECT id, sid, manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                    uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                    rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                    powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                    stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms
+           FROM motor_data)";
+
+    prepare_statement(m_motor_data_select_stmt, select_motor_data);
 }
 
 void SQLite::create_insert_stmt() {
@@ -650,6 +722,18 @@ void SQLite::create_insert_stmt() {
            VALUES (?,?,?))";
 
     prepare_statement(m_wall_losses_surface_insert_stmt, wall_losses_surface_insert_sql);
+
+    const std::string motor_data_insert_sql =
+            R"(INSERT INTO motor_data(sid, manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                    uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                    rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                    powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                    stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
+
+    // 42 entries
+
+    prepare_statement(m_motor_data_insert_stmt, motor_data_insert_sql);
 }
 
 
@@ -760,7 +844,7 @@ void SQLite::create_tables()
     execute_command(wall_losses_surface_table_sql);
 
     const std::string motor_table_sql =
-            R"(CREATE TABLE IF NOT EXISTS motor (
+            R"(CREATE TABLE IF NOT EXISTS motor_data (
              id integer PRIMARY KEY AUTOINCREMENT,
              sid integer NOT NULL,
              manufacturer text NOT NULL DEFAULT "" UNIQUE,
@@ -836,6 +920,9 @@ void SQLite::insert_default_data()
     }
     for( auto const & surface : get_default_wall_losses_surface() ) {
         insert_wall_losses_surface(surface);
+    }
+	for( auto const & motor : get_default_motor_data() ) {
+		insert_motor_data(motor);
     }
 }
 
@@ -1090,6 +1177,57 @@ bool SQLite::insertWallLossesSurface(WallLosses const & material)
 bool SQLite::deleteWallLossesSurface(std::string const & substance){
     int rc = execute_command("DELETE from wall_losses_surface where surface = '" + substance + "' and sid=1");
     return rc == SQLITE_OK; // always returns true even if entry didn't exist
+}
+
+bool SQLite::insert_motor_data(MotorData const & m)
+{
+    bind_value(m_motor_data_insert_stmt, 1, 0);
+    bind_value(m_motor_data_insert_stmt, 2, m.manufacturer);
+    bind_value(m_motor_data_insert_stmt, 3, m.model);
+    bind_value(m_motor_data_insert_stmt, 4, m.catalog);
+    bind_value(m_motor_data_insert_stmt, 5, m.motorType);
+    bind_value(m_motor_data_insert_stmt, 6, m.hp);
+    bind_value(m_motor_data_insert_stmt, 7, m.speed);
+    bind_value(m_motor_data_insert_stmt, 8, m.fullLoadSpeed);
+    bind_value(m_motor_data_insert_stmt, 9, m.enclosureType);
+    bind_value(m_motor_data_insert_stmt, 10, m.frameNumber);
+    bind_value(m_motor_data_insert_stmt, 11, m.voltageRating);
+    bind_value(m_motor_data_insert_stmt, 12, m.purpose);
+    bind_value(m_motor_data_insert_stmt, 13, m.uFrame);
+    bind_value(m_motor_data_insert_stmt, 14, m.cFace);
+    bind_value(m_motor_data_insert_stmt, 15, m.verticalShaft);
+    bind_value(m_motor_data_insert_stmt, 16, m.dFlange);
+    bind_value(m_motor_data_insert_stmt, 17, m.serviceFactor);
+    bind_value(m_motor_data_insert_stmt, 18, m.insulationClass);
+    bind_value(m_motor_data_insert_stmt, 19, m.weight);
+    bind_value(m_motor_data_insert_stmt, 20, m.listPrice);
+    bind_value(m_motor_data_insert_stmt, 21, m.windingResistance);
+    bind_value(m_motor_data_insert_stmt, 22, m.warranty);
+    bind_value(m_motor_data_insert_stmt, 23, m.rotorBars);
+    bind_value(m_motor_data_insert_stmt, 24, m.statorSlots);
+    bind_value(m_motor_data_insert_stmt, 25, m.efficiency100);
+    bind_value(m_motor_data_insert_stmt, 26, m.efficiency75);
+    bind_value(m_motor_data_insert_stmt, 27, m.efficiency50);
+    bind_value(m_motor_data_insert_stmt, 28, m.efficiency25);
+    bind_value(m_motor_data_insert_stmt, 29, m.powerFactor100);
+    bind_value(m_motor_data_insert_stmt, 30, m.powerFactor75);
+    bind_value(m_motor_data_insert_stmt, 31, m.powerFactor50);
+    bind_value(m_motor_data_insert_stmt, 32, m.powerFactor25);
+    bind_value(m_motor_data_insert_stmt, 33, m.torqueFullLoad);
+    bind_value(m_motor_data_insert_stmt, 34, m.torqueBreakDown);
+    bind_value(m_motor_data_insert_stmt, 35, m.torqueLockedRotor);
+    bind_value(m_motor_data_insert_stmt, 36, m.ampsFullLoad);
+    bind_value(m_motor_data_insert_stmt, 37, m.ampsIdle);
+    bind_value(m_motor_data_insert_stmt, 38, m.ampsLockedRotor);
+    bind_value(m_motor_data_insert_stmt, 39, m.stalledRotorTimeHot);
+    bind_value(m_motor_data_insert_stmt, 40, m.stalledRotorTimeCold);
+    bind_value(m_motor_data_insert_stmt, 41, m.peakVoltage0ms);
+    bind_value(m_motor_data_insert_stmt, 42, m.peakVoltage5ms);
+
+    int rc = step_command(m_motor_data_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_motor_data_insert_stmt);
+    return valid_insert;
 }
 
 

@@ -121,7 +121,8 @@ set(SOURCE_FILES
         src/ssmt/Deaerator.cpp
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
-        src/calculator/util/CHP.cpp)
+        src/calculator/util/CHP.cpp
+        src/calculator/motor/MotorData.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -201,6 +202,7 @@ set(INCLUDE_FILES
         include/ssmt/Header.h
         include/ssmt/Turbine.h
         include/calculator/util/CHP.h
+        include/calculator/motor/MotorData.h
         include/sqlite/MotorData.h)
 
 set(TEST_FILES

@@ -7,6 +7,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <calculator/motor/MotorData.h>
 #include <fstream>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
@@ -820,3 +821,38 @@ TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
         CHECK( output[1].getConditionFactor() == expected.getConditionFactor() );
     }
 }
+
+TEST_CASE( "SQLite - Motor Data", "[sqlite][motor]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const motors = sqlite.getMotorData();
+
+        auto const expected = MotorData("KTM", "sickMotor", "Best Motors 2018", "beastMotorType", 900, 3600, 1800, "fullyEnclosed", "frame no. 25",
+                  360, "to be the best motor", 0, 1, 1, 1, 1.5, "fullyInsulated", 845, 136000, 28, 4.5, 1, 2, 85, 87, 89, 83,
+                  10, 11, 12, 13, 400, 300, 200, 225, 75, 99, 15, 30, 200, 175);
+
+
+//        WallLosses expected;
+//        expected.setSurface("customSurface");
+//        expected.setConditionFactor(10);
+//        expected.setID(size);
+//        sqlite.insertWallLossesSurface(expected);
+//        auto const output = sqlite.getWallLossesSurface();
+//        CHECK( output.size() == size + 1 );
+//        CHECK( output[size].getConditionFactor() == expected.getConditionFactor() );
+    }
+
+//    {
+//        auto const size = sqlite.getWallLossesSurface().size();
+//        WallLosses expected;
+//        expected.setSurface("customSurface2");
+//        expected.setConditionFactor(19);
+//        expected.setID(size);
+//        sqlite.insertWallLossesSurface(expected);
+//        auto const output = sqlite.getCustomWallLossesSurface();
+//        CHECK( output.size() == 2 );
+//        CHECK( output[1].getConditionFactor() == expected.getConditionFactor() );
+//    }
+}
+
