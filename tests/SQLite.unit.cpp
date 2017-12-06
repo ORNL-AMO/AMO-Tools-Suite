@@ -823,6 +823,50 @@ TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
 }
 
 TEST_CASE( "SQLite - Motor Data", "[sqlite][motor]" ) {
+    auto const compare = [](MotorData result, MotorData expected) {
+		CHECK(result.getManufacturer() == expected.getManufacturer());
+		CHECK(result.getModel() == expected.getModel());
+		CHECK(result.getCatalog() == expected.getCatalog());
+		CHECK(result.getMotorType() == expected.getMotorType());
+		CHECK(result.getHp() == expected.getHp());
+		CHECK(result.getSpeed() == expected.getSpeed());
+		CHECK(result.getFullLoadSpeed() == expected.getFullLoadSpeed());
+		CHECK(result.getEnclosureType() == expected.getEnclosureType());
+		CHECK(result.getFrameNumber() == expected.getFrameNumber());
+		CHECK(result.getVoltageRating() == expected.getVoltageRating());
+		CHECK(result.getPurpose() == expected.getPurpose());
+		CHECK(result.getUFrame() == expected.getUFrame());
+		CHECK(result.getCFace() == expected.getCFace());
+		CHECK(result.getVerticalShaft() == expected.getVerticalShaft());
+		CHECK(result.getDFlange() == expected.getDFlange());
+		CHECK(result.getServiceFactor() == expected.getServiceFactor());
+		CHECK(result.getInsulationClass() == expected.getInsulationClass());
+		CHECK(result.getWeight() == expected.getWeight());
+		CHECK(result.getListPrice() == expected.getListPrice());
+		CHECK(result.getWindingResistance() == expected.getWindingResistance());
+		CHECK(result.getWarranty() == expected.getWarranty());
+		CHECK(result.getRotorBars() == expected.getRotorBars());
+		CHECK(result.getStatorSlots() == expected.getStatorSlots());
+		CHECK(result.getEfficiency100() == expected.getEfficiency100());
+		CHECK(result.getEfficiency75() == expected.getEfficiency75());
+		CHECK(result.getEfficiency50() == expected.getEfficiency50());
+		CHECK(result.getEfficiency25() == expected.getEfficiency25());
+		CHECK(result.getPowerFactor100() == expected.getPowerFactor100());
+		CHECK(result.getPowerFactor75() == expected.getPowerFactor75());
+		CHECK(result.getPowerFactor50() == expected.getPowerFactor50());
+		CHECK(result.getPowerFactor25() == expected.getPowerFactor25());
+		CHECK(result.getTorqueFullLoad() == expected.getTorqueFullLoad());
+		CHECK(result.getTorqueBreakDown() == expected.getTorqueBreakDown());
+		CHECK(result.getTorqueLockedRotor() == expected.getTorqueLockedRotor());
+		CHECK(result.getAmpsFullLoad() == expected.getAmpsFullLoad());
+		CHECK(result.getAmpsIdle() == expected.getAmpsIdle());
+		CHECK(result.getAmpsLockedRotor() == expected.getAmpsLockedRotor());
+		CHECK(result.getStalledRotorTimeHot() == expected.getStalledRotorTimeHot());
+		CHECK(result.getStalledRotorTimeCold() == expected.getStalledRotorTimeCold());
+		CHECK(result.getPeakVoltage0ms() == expected.getPeakVoltage0ms());
+		CHECK(result.getPeakVoltage5ms() == expected.getPeakVoltage5ms());
+    };
+
     auto sqlite = SQLite(":memory:", true);
 
     {
@@ -832,27 +876,7 @@ TEST_CASE( "SQLite - Motor Data", "[sqlite][motor]" ) {
                   360, "to be the best motor", 0, 1, 1, 1, 1.5, "fullyInsulated", 845, 136000, 28, 4.5, 1, 2, 85, 87, 89, 83,
                   10, 11, 12, 13, 400, 300, 200, 225, 75, 99, 15, 30, 200, 175);
 
-
-//        WallLosses expected;
-//        expected.setSurface("customSurface");
-//        expected.setConditionFactor(10);
-//        expected.setID(size);
-//        sqlite.insertWallLossesSurface(expected);
-//        auto const output = sqlite.getWallLossesSurface();
-//        CHECK( output.size() == size + 1 );
-//        CHECK( output[size].getConditionFactor() == expected.getConditionFactor() );
+	    compare(motors[0], expected);
     }
-
-//    {
-//        auto const size = sqlite.getWallLossesSurface().size();
-//        WallLosses expected;
-//        expected.setSurface("customSurface2");
-//        expected.setConditionFactor(19);
-//        expected.setID(size);
-//        sqlite.insertWallLossesSurface(expected);
-//        auto const output = sqlite.getCustomWallLossesSurface();
-//        CHECK( output.size() == 2 );
-//        CHECK( output[1].getConditionFactor() == expected.getConditionFactor() );
-//    }
 }
 
