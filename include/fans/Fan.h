@@ -6,6 +6,7 @@
 #include <cmath>
 #include <vector>
 #include <stdexcept>
+#include <functional>
 #include "Planar.h"
 #include "FanShaftPower.h"
 
