@@ -52,6 +52,8 @@ else (WIN32)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif (WIN32)
 
+set (CMAKE_CXX_FLAGS "-Wall")
+
 file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
@@ -121,7 +123,10 @@ set(SOURCE_FILES
         src/ssmt/Deaerator.cpp
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
-        src/calculator/util/CHP.cpp)
+        src/calculator/util/CHP.cpp
+        src/fans/Fan.cpp
+        src/fans/FanShaftPower.cpp
+        src/fans/Planar.cpp src/fans/FanCurve.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -199,8 +204,11 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
         include/ssmt/Header.h
+        include/fans/Fan.h
+        include/fans/FanShaftPower.h
+        include/fans/Planar.h
         include/ssmt/Turbine.h
-        include/calculator/util/CHP.h)
+        include/calculator/util/CHP.h include/fans/FanCurve.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -241,6 +249,7 @@ set(TEST_FILES
         tests/Deaerator.unit.cpp
         tests/Header.unit.cpp
         tests/Turbine.unit.cpp
+        tests/Fan.unit.cpp
         tests/CHP.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
