@@ -60,7 +60,6 @@ set(SOURCE_FILES
 #    src/FieldData.cpp
 #    src/Financial.cpp
         src/psat/Motor.cpp
-        src/psat/OptimizationRating.cpp
         src/psat/PSATResult.cpp
         src/psat/Pump.cpp
         src/calculator/util/AnnualCost.cpp
@@ -100,7 +99,6 @@ set(SOURCE_FILES
         src/calculator/losses/OpeningLosses.cpp
         src/sqlite/SQLite.cpp
         src/calculator/losses/GasFlueGasMaterial.cpp
-        src/phast/Furnace.cpp
         src/calculator/pump/HeadTool.cpp
         src/calculator/losses/EnergyInputEAF.cpp
         src/calculator/losses/SlagOtherMaterialLosses.cpp
@@ -132,7 +130,6 @@ set(INCLUDE_FILES
         include/psat/FieldData.h
         include/psat/Financial.h
         include/psat/Motor.h
-        include/psat/OptimizationRating.h
         include/psat/PSATResult.h
         include/psat/Pump.h
         include/calculator/util/AnnualCost.h
@@ -173,7 +170,6 @@ set(INCLUDE_FILES
         include/calculator/losses/OpeningLosses.h
         include/sqlite/SQLite.h
         include/calculator/losses/GasFlueGasMaterial.h
-        include/phast/Furnace.h
         include/calculator/pump/HeadTool.h
         include/calculator/pump/HeadTool.h
         include/sqlite/SolidLoadChargeMaterialData.h

@@ -3,7 +3,6 @@
 #include <psat/FieldData.h>
 #include <psat/Financial.h>
 #include <psat/Motor.h>
-#include <psat/OptimizationRating.h>
 #include <psat/PSATResult.h>
 #include <unordered_map>
 
