@@ -106,7 +106,7 @@ private:
     double loadFactor_ = 0.0;
     double motorCurrent_ = 0.0;
     double ratedVoltage_ = 0.0;
-//    double estimatedFLA_ = 0.0;
+//    double estimatedFLA = 0.0;
 //    double fullLoadAmps = 0.0;
 //    double fieldVoltage_ = 0.0;
 };

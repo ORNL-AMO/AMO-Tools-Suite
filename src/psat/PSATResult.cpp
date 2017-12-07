@@ -40,35 +40,35 @@ double PSATResult::calculateExisting() {
      * 4	Calculate pump efficiency
      * 5	Calculate annual energy and energy cost
      */
-    MotorShaftPower motorShaftPower(motor_.getMotorRatedPower(), fieldData_.getMotorPower(), motor_.getMotorRpm(),
-                                    motor_.getLineFrequency(),
-                                    motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(),
-                                    motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
-                                    fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
-                                    fieldData_.getMotorAmps());
-    existing_.motorShaftPower_ = motorShaftPower.calculate();
-    existing_.motorCurrent_ = motorShaftPower.calculateCurrent();
-    existing_.motorPowerFactor_ = motorShaftPower.calculatePowerFactor();
-    existing_.motorEfficiency_ = motorShaftPower.calculateEfficiency();
-    existing_.motorRatedPower_ = motor_.getMotorRatedPower();
-    existing_.motorPower_ = motorShaftPower.calculatePower();
-    existing_.estimatedFLA_ = motorShaftPower.calculateEstimatedFLA();
+    MotorShaftPower motorShaftPower(motor.getMotorRatedPower(), fieldData.getMotorPower(), motor.getMotorRpm(),
+                                    motor.getLineFrequency(),
+                                    motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
+                                    motor.getMotorRatedVoltage(), motor.getFullLoadAmps(),
+                                    fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
+                                    fieldData.getMotorAmps());
+    existing.motorShaftPower = motorShaftPower.calculate();
+    existing.motorCurrent = motorShaftPower.calculateCurrent();
+    existing.motorPowerFactor = motorShaftPower.calculatePowerFactor();
+    existing.motorEfficiency = motorShaftPower.calculateEfficiency();
+    existing.motorRatedPower = motor.getMotorRatedPower();
+    existing.motorPower = motorShaftPower.calculatePower();
+    existing.estimatedFLA = motorShaftPower.calculateEstimatedFLA();
     // Calculate PumpShaftPower
-    PumpShaftPower pumpShaftPower(existing_.motorShaftPower_, pump_.getDrive());
-    existing_.pumpShaftPower_ = pumpShaftPower.calculate();
+    PumpShaftPower pumpShaftPower(existing.motorShaftPower, pump.getDrive());
+    existing.pumpShaftPower = pumpShaftPower.calculate();
 
     // Calculate Pump Efficiency
-    PumpEfficiency pumpEfficiency(pump_.getSpecificGravity(), fieldData_.getFlowRate(), fieldData_.getHead(),
-                                  existing_.pumpShaftPower_);
-    existing_.pumpEfficiency_ = pumpEfficiency.calculate();
+    PumpEfficiency pumpEfficiency(pump.getSpecificGravity(), fieldData.getFlowRate(), fieldData.getHead(),
+                                  existing.pumpShaftPower);
+    existing.pumpEfficiency = pumpEfficiency.calculate();
 
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(existing_.motorPower_, financial_.getOperatingFraction());
-    existing_.annualEnergy_ = annualEnergy.calculate();
+    AnnualEnergy annualEnergy(existing.motorPower, financial.getOperatingFraction());
+    existing.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost
-    AnnualCost annualCost(existing_.annualEnergy_, financial_.getUnitCost());
-    existing_.annualCost_ = annualCost.calculate();
+    AnnualCost annualCost(existing.annualEnergy, financial.getUnitCost());
+    existing.annualCost = annualCost.calculate();
 
     return 0;
 }
@@ -90,40 +90,40 @@ double PSATResult::calculateOptimal() {
      *  10.Calculate annual savings potential and optimization rating
      */
 
-    OptimalPumpEfficiency optimalPumpEfficiency(pump_.getStyle(), pump_.getAchievableEfficiency(), pump_.getRpm(),
-                                                pump_.getKviscosity(), pump_.getStageCount(), fieldData_.getFlowRate(),
-                                                fieldData_.getHead());
-    optimal_.pumpEfficiency_ = optimalPumpEfficiency.calculate();
-    OptimalPumpShaftPower optimalPumpShaftPower(fieldData_.getFlowRate(), fieldData_.getHead(), pump_.getSpecificGravity(),
-                                                optimal_.pumpEfficiency_);
-    optimal_.pumpShaftPower_ = optimalPumpShaftPower.calculate();
-    OptimalMotorShaftPower optimalMotorShaftPower(optimal_.pumpShaftPower_, pump_.getDrive());
-    optimal_.motorShaftPower_ = optimalMotorShaftPower.calculate();
-    OptimalMotorSize optimalMotorSize(optimal_.motorShaftPower_, motor_.getSizeMargin());
-    optimal_.motorRatedPower_ = optimalMotorSize.calculate();
-    OptimalMotorPower optimalMotorPower(optimal_.motorRatedPower_, fieldData_.getMotorPower(), motor_.getMotorRpm(),
-                                        motor_.getLineFrequency(),
-                                        motor_.getEfficiencyClass(), Motor::EfficiencyClass::ENERGY_EFFICIENT, motor_.getSpecifiedEfficiency(),
-                                        motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
-                                        fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
-                                        fieldData_.getMotorAmps(), optimal_.motorShaftPower_);
+    OptimalPumpEfficiency optimalPumpEfficiency(pump.getStyle(), pump.getAchievableEfficiency(), pump.getRpm(),
+                                                pump.getKviscosity(), pump.getStageCount(), fieldData.getFlowRate(),
+                                                fieldData.getHead());
+    optimal.pumpEfficiency = optimalPumpEfficiency.calculate();
+    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.getFlowRate(), fieldData.getHead(), pump.getSpecificGravity(),
+                                                optimal.pumpEfficiency);
+    optimal.pumpShaftPower = optimalPumpShaftPower.calculate();
+    OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pump.getDrive());
+    optimal.motorShaftPower = optimalMotorShaftPower.calculate();
+    OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.getSizeMargin());
+    optimal.motorRatedPower = optimalMotorSize.calculate();
+    OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, fieldData.getMotorPower(), motor.getMotorRpm(),
+                                        motor.getLineFrequency(),
+                                        motor.getEfficiencyClass(), Motor::EfficiencyClass::ENERGY_EFFICIENT, motor.getSpecifiedEfficiency(),
+                                        motor.getMotorRatedVoltage(), motor.getFullLoadAmps(),
+                                        fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
+                                        fieldData.getMotorAmps(), optimal.motorShaftPower);
     optimalMotorPower.calculate();
-    optimal_.motorCurrent_ = optimalMotorPower.getMotorCurrent();
-    optimal_.motorEfficiency_ = optimalMotorPower.getMotorEff();
-    optimal_.motorPower_ = optimalMotorPower.getMotorPower();
-    optimal_.motorPowerFactor_ = optimalMotorPower.getMotorPf();
+    optimal.motorCurrent = optimalMotorPower.getMotorCurrent();
+    optimal.motorEfficiency = optimalMotorPower.getMotorEff();
+    optimal.motorPower = optimalMotorPower.getMotorPower();
+    optimal.motorPowerFactor = optimalMotorPower.getMotorPf();
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(optimal_.motorPower_, financial_.getOperatingFraction());
-    optimal_.annualEnergy_ = annualEnergy.calculate();
+    AnnualEnergy annualEnergy(optimal.motorPower, financial.getOperatingFraction());
+    optimal.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost
-    AnnualCost annualCost(optimal_.annualEnergy_, financial_.getUnitCost());
-    optimal_.annualCost_ = annualCost.calculate();
+    AnnualCost annualCost(optimal.annualEnergy, financial.getUnitCost());
+    optimal.annualCost = annualCost.calculate();
 
     // Annual Savings potential
-//    annualSavingsPotential_ = existing_.annualCost_ - optimal_.annualCost_;
+//    annualSavingsPotential = existing.annualCost - optimal.annualCost;
     // Optimization Rating
-//    optimizationRating_ = optimal_.motorPower / existing_.motorPower;
+//    optimizationRating = optimal.motorPower / existing.motorPower;
     return 0;
 }
 double PSATResult::calculateModified() {
@@ -143,45 +143,45 @@ double PSATResult::calculateModified() {
 
      */
 
-    if (pump_.getStyle() == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
-        modified_.pumpEfficiency_ = pump_.getAchievableEfficiency();
+    if (pump.getStyle() == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
+        modified.pumpEfficiency = pump.getAchievableEfficiency();
     } else {
-        modified_.pumpEfficiency_ = baselinePumpEfficiency_;
+        modified.pumpEfficiency = baselinePumpEfficiency;
     }
 
-    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData_.getFlowRate(), fieldData_.getHead(), pump_.getSpecificGravity(),
-                                                modified_.pumpEfficiency_);
-    modified_.pumpShaftPower_ = modifiedPumpShaftPower.calculate();
+    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.getFlowRate(), fieldData.getHead(), pump.getSpecificGravity(),
+                                                modified.pumpEfficiency);
+    modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
 
-    OptimalMotorShaftPower modifiedMotorShaftPower(modified_.pumpShaftPower_, pump_.getDrive());
-    modified_.motorShaftPower_ = modifiedMotorShaftPower.calculate();
+    OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pump.getDrive());
+    modified.motorShaftPower = modifiedMotorShaftPower.calculate();
 
-    modified_.motorRatedPower_ = motor_.getMotorRatedPower();
-    OptimalMotorPower modifiedMotorPower(modified_.motorRatedPower_, fieldData_.getMotorPower(), motor_.getMotorRpm(),
-                                        motor_.getLineFrequency(),
-                                        motor_.getEfficiencyClass(), motor_.getEfficiencyClass(), motor_.getSpecifiedEfficiency(),
-                                        motor_.getMotorRatedVoltage(), motor_.getFullLoadAmps(),
-                                        fieldData_.getVoltage(), fieldData_.getLoadEstimationMethod(),
-                                        fieldData_.getMotorAmps(), modified_.motorShaftPower_);
+    modified.motorRatedPower = motor.getMotorRatedPower();
+    OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, fieldData.getMotorPower(), motor.getMotorRpm(),
+                                        motor.getLineFrequency(),
+                                        motor.getEfficiencyClass(), motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
+                                        motor.getMotorRatedVoltage(), motor.getFullLoadAmps(),
+                                        fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
+                                        fieldData.getMotorAmps(), modified.motorShaftPower);
     modifiedMotorPower.calculate();
-    modified_.motorCurrent_ = modifiedMotorPower.getMotorCurrent();
-    modified_.motorEfficiency_ = modifiedMotorPower.getMotorEff();
-    modified_.motorPower_ = modifiedMotorPower.getMotorPower();
-    modified_.motorPowerFactor_ = modifiedMotorPower.getMotorPf();
+    modified.motorCurrent = modifiedMotorPower.getMotorCurrent();
+    modified.motorEfficiency = modifiedMotorPower.getMotorEff();
+    modified.motorPower = modifiedMotorPower.getMotorPower();
+    modified.motorPowerFactor = modifiedMotorPower.getMotorPf();
 
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(modified_.motorPower_, financial_.getOperatingFraction());
-    modified_.annualEnergy_ = annualEnergy.calculate();
+    AnnualEnergy annualEnergy(modified.motorPower, financial.getOperatingFraction());
+    modified.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost
-    AnnualCost annualCost(modified_.annualEnergy_, financial_.getUnitCost());
-    modified_.annualCost_ = annualCost.calculate();
+    AnnualCost annualCost(modified.annualEnergy, financial.getUnitCost());
+    modified.annualCost = annualCost.calculate();
 
     // Annual Savings potential
-    //annualSavingsPotential_ = existing_.annualCost_ - modified_.annualCost_;
-    annualSavingsPotential_ = 0.0;
+    //annualSavingsPotential = existing.annualCost - modified.annualCost;
+    annualSavingsPotential = 0.0;
     // Optimization Rating
-    //optimizationRating_ = modified_.motorPower / existing_.motorPower;
-    optimizationRating_ = 0.0;
+    //optimizationRating = modified.motorPower / existing.motorPower;
+    optimizationRating = 0.0;
     return 0;
 }
