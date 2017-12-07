@@ -64,7 +64,6 @@ public:
      *
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      *
-     * @return nothing
      */
     void setLineFrequency(Motor::LineFrequency lineFrequency) {
         lineFrequency_ = lineFrequency;
@@ -84,7 +83,6 @@ public:
      *
      * @param motorRpm double, RPM of motor
      *
-     * @return nothing
      */
     void setMotorRpm(double motorRpm) {
         motorRpm_ = motorRpm;
@@ -104,7 +102,6 @@ public:
      *
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
      *
-     * @return nothing
      */
     void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) {
         efficiencyClass_ = efficiencyClass;
@@ -124,7 +121,6 @@ public:
      *
      * @param hp double, horsepower of motor
      *
-     * @return nothing
      */
     void setHp(double hp) {
         hp_ = hp;
@@ -144,7 +140,6 @@ public:
      *
      * @param loadEstimationMethod FieldData::LoadEstimationMethod, classification of load estimation method
      *
-     * @return nothing
      */
 //    void setLoadEstimationMethod(FieldData::LoadEstimationMethod loadEstimationMethod) {
 //        loadEstimationMethod_ = loadEstimationMethod;
@@ -164,7 +159,6 @@ public:
      *
      * @param motorKwh double, motor power in kWh
      *
-     * @return nothing
      */
     void setMotorKwh(double motorKwh) {
         motorKwh_ = motorKwh;
@@ -184,7 +178,6 @@ public:
      *
      * @param motorAmps double, motor amps in A
      *
-     * @return nothing
      */
     void setMotorAmps(double motorAmps) {
         motorAmps_ = motorAmps;
@@ -204,7 +197,6 @@ public:
      *
      * @param actualEfficiency double, actual efficiency of motor as %
      *
-     * @return nothing
      */
     void setActualEfficiency(double actualEfficiency) {
         actualEfficiency_ = actualEfficiency;
@@ -233,7 +225,6 @@ public:
      *
      * @param loadFactor double, load factor - unitless
      *
-     * @return nothing
      */
     void setLoadFactor(double loadFactor) {
         loadFactor_ = loadFactor;

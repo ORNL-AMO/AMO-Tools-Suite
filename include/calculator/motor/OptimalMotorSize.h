@@ -18,7 +18,6 @@ public:
      * Constructor
      * @param optimalMotorShaftPower double, optimal motor shaft poer in hp
      * @param sizeMargin double, size margin as %
-     * @return nothing
      */
     OptimalMotorSize(
         double optimalMotorShaftPower,

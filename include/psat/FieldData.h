@@ -35,7 +35,6 @@ public:
      * @param motorPower double, power output of the pump's motor in hp.
      * @param motorAmps double, current measured from the pump's motor in amps
      * @param voltage double, the measured bus voltage in volts
-     * @return nothing
      */
 
     FieldData(
@@ -70,7 +69,6 @@ public:
      *
      * @param loadEstimationMethod LoadEstimationMethod, classification of the load estimation method
      *
-     * @return nothing
      */
     void setLoadEstimationMethod(LoadEstimationMethod loadEstimationMethod) {
         loadEstimationMethod_ = loadEstimationMethod;
@@ -90,7 +88,6 @@ public:
      *
      * @param flowRate double, rate of flow in gpm
      *
-     * @return nothing
      */
     void setFlowRate(double flowRate) {
         flowRate_ = flowRate;
@@ -110,7 +107,6 @@ public:
      *
      * @param head double, pump head in ft
      *
-     * @return nothing
      */
     void setHead(double head) {
         head_ = head;
@@ -130,7 +126,6 @@ public:
      *
      * @param motorPower double, pump motor's output power in hp
      *
-     * @return nothing
      */
     void setMotorPower(double motorPower) {
         motorPower_ = motorPower;
@@ -150,7 +145,6 @@ public:
      *
      * @param motorAmps double, current measured from pump's motor in amps
      *
-     * @return nothing
      */
     void setMotorAmps(double motorAmps) {
         motorAmps_ = motorAmps;
@@ -170,7 +164,6 @@ public:
      *
      * @param voltage double, measured bus voltage in volts
      *
-     * @return nothing
      */
     void setVoltage(double voltage) {
         voltage_ = voltage;

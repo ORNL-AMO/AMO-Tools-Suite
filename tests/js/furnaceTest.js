@@ -70,29 +70,42 @@ test('energyEquivalencyFuel', function (t) {
 });
 
 test('o2Enrichment', function (t) {
-    t.plan(5);
+    t.plan(17);
     t.type(bindings.o2Enrichment, 'function');
-    var inp = {};
-
-    inp.o2CombAir = 21;
-    inp.o2CombAirEnriched = 100;
-    inp.flueGasTemp = 1800;
-    inp.flueGasTempEnriched = 1900;
-    inp.o2FlueGas = 5;
-    inp.o2FlueGasEnriched = 1;
-    inp.combAirTemp = 900;
-    inp.combAirTempEnriched = 80;
-    inp.fuelConsumption = 10;
+    var inp = {
+        o2CombAir: 21, o2CombAirEnriched: 100, flueGasTemp: 1800, flueGasTempEnriched: 1900, o2FlueGas: 5,
+        o2FlueGasEnriched: 1, combAirTemp: 900, combAirTempEnriched: 80, fuelConsumption: 10
+    };
 
     var res = bindings.o2Enrichment(inp);
     t.equal(rnd(res.availableHeatInput), rnd(61.97028577716948), 'res.availableHeatInput is ' + res.availableHeatInput);
-
     t.equal(rnd(res.availableHeatEnriched), rnd(74.2210855230995), 'res.availableHeatEnriched is ' + res.availableHeatEnriched);
-
     t.equal(rnd(res.fuelSavingsEnriched), rnd(16.505821303458657), 'res.fuelSavingsEnriched is ' + res.fuelSavingsEnriched);
-
     t.equal(rnd(res.fuelConsumptionEnriched), rnd(8.349417869654134), 'res.fuelConsumptionEnriched is ' + res.fuelConsumptionEnriched);
 
+    inp.flueGasTemp = 2200;
+    inp.flueGasTempEnriched = 2300;
+    res = bindings.o2Enrichment(inp);
+    t.equal(rnd(res.availableHeatInput), rnd(49.7183629149), 'res.availableHeatInput is ' + res.availableHeatInput);
+    t.equal(rnd(res.availableHeatEnriched), rnd(69.9474376972), 'res.availableHeatEnriched is ' + res.availableHeatEnriched);
+    t.equal(rnd(res.fuelSavingsEnriched), rnd(28.9203942964), 'res.fuelSavingsEnriched is ' + res.fuelSavingsEnriched);
+    t.equal(rnd(res.fuelConsumptionEnriched), rnd(7.1079605704), 'res.fuelConsumptionEnriched is ' + res.fuelConsumptionEnriched);
+
+    inp.o2FlueGas = 8;
+    inp.o2FlueGasEnriched = 3;
+    res = bindings.o2Enrichment(inp);
+    t.equal(rnd(res.availableHeatInput), rnd(42.6248055296), 'res.availableHeatInput is ' + res.availableHeatInput);
+    t.equal(rnd(res.availableHeatEnriched), rnd(65.7672982588), 'res.availableHeatEnriched is ' + res.availableHeatEnriched);
+    t.equal(rnd(res.fuelSavingsEnriched), rnd(35.1884497948), 'res.fuelSavingsEnriched is ' + res.fuelSavingsEnriched);
+    t.equal(rnd(res.fuelConsumptionEnriched), rnd(6.4811550205), 'res.fuelConsumptionEnriched is ' + res.fuelConsumptionEnriched);
+
+    inp.combAirTemp = 1100;
+    inp.combAirTempEnriched = 110;
+    res = bindings.o2Enrichment(inp);
+    t.equal(rnd(res.availableHeatInput), rnd(49.1204784776), 'res.availableHeatInput is ' + res.availableHeatInput);
+    t.equal(rnd(res.availableHeatEnriched), rnd(66.3723712295), 'res.availableHeatEnriched is ' + res.availableHeatEnriched);
+    t.equal(rnd(res.fuelSavingsEnriched), rnd(25.9925816002), 'res.fuelSavingsEnriched is ' + res.fuelSavingsEnriched);
+    t.equal(rnd(res.fuelConsumptionEnriched), rnd(7.40074184), 'res.fuelConsumptionEnriched is ' + res.fuelConsumptionEnriched);
 });
 
 test('flowCalculations', function (t) {

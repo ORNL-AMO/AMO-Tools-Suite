@@ -35,10 +35,9 @@ public:
      * @param heatingValue double, heating value in btu/lb
      * @param h2oGenerated double, H2O generated in g/mol
      * @param co2Generated double, CO2 generated in g/mol
-     * @return nothing
      */
 
-	GasProperties( const std::function< double ( double t ) > specificHeat,
+	GasProperties( std::function< double ( double t ) > specificHeat,
 	               const double molecularWeight,
 	               const double specificWeight,
 	               const double compPercent,
@@ -46,9 +45,8 @@ public:
 	               const int o2Generated,
 	               const int heatingValue,
 	               const double h2oGenerated,
-	               const double co2Generated
-	) :
-			specificHeat(specificHeat), molecularWeight(molecularWeight), specificWeight(specificWeight),
+	               const double co2Generated) :
+			specificHeat(std::move(specificHeat)), molecularWeight(molecularWeight), specificWeight(specificWeight),
 	        compByVol(compPercent), compAdjByVol(compByVol), h2oGenerated(h2oGenerated), co2Generated(co2Generated),
 			o2Generated(o2Generated), heatingValue(heatingValue)
 	{};
@@ -91,10 +89,10 @@ public:
 	 * @param O2 % - double
 	 *
 	 * */
-	GasCompositions(const std::string & substance, const double CH4, const double C2H6, const double N2,
+	GasCompositions(std::string substance, const double CH4, const double C2H6, const double N2,
 	                const double H2, const double C3H8, const double C4H10_CnH2n, const double H2O,
 	                const double CO, const double CO2, const double SO2, const double O2) :
-			substance(substance),
+			substance(std::move(substance)),
 			totalPercent(CH4 + C2H6 + N2 + H2 + C3H8 + C4H10_CnH2n + H2O + CO + CO2 + SO2 + O2),
 			CH4(std::make_shared<GasProperties>([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417, CH4,
 			                  CH4 / totalPercent, 64, 23875, 36.032, 44.01)),
@@ -122,6 +120,10 @@ public:
 		gasses = {{"CH4", this->CH4}, {"C2H6", this->C2H6}, {"N2", this->N2}, {"H2", this->H2},
 		          {"C3H8", this->C3H8}, {"C4H10_CnH2n", this->C4H10_CnH2n}, {"H2O", this->H2O}, {"CO", this->CO},
 		          {"CO2", this->CO2}, {"SO2", this->SO2}, {"O2", this->O2}};
+
+		calculateCompByWeight();
+		heatingValue =  calculateHeatingValueFuel();
+		specificGravity = calculateSpecificGravity();
 	}
 
     /**
@@ -139,32 +141,11 @@ public:
 		return gas->second->compByVol;
 	}
 
-	/**
-	 * Gets existing specific gravity value
-	 *
-	 * @param none
-	 *
-	 * @return double, specificGravity
-	 */
-	double getSpecificGravity() const {
-		return specificGravity;
-	}
+	double getHeatingValue() const { return heatingValue; };
+	double getSpecificGravity() const { return specificGravity; };
 
-
-	/**
-	 * Gets existing heating value of fuel
-	 *
-	 * @param none
-	 *
-	 * @return double, heatingValue
-	 */
-	double getHeatingValue() const {
-		return heatingValue;
-	}
-
-	double calculateExcessAir(const double flueGasO2);
-	double calculateHeatingValue();
-	double calculateSpecificGravity();
+	double calculateExcessAir(double flueGasO2);
+	double calculateO2(double excessAir);
 
     /**
      * Gets the name of substance
@@ -187,7 +168,6 @@ public:
      *
      * @param id const int, ID number for gas
      *
-     * @return nothing
      */
 	void setID(const int id) {
 		this->id = id;
@@ -197,19 +177,21 @@ private:
 	friend class GasFlueGasMaterial;
 	friend class SQLite;
 
+	double calculateSpecificGravity();
+
 	void calculateCompByWeight();
-	double calculateSensibleHeat(const double combustionAirTemp);
-	double calculateHeatCombustionAir(const double combustionAirTemp, const double excessAir);
-	void calculateMassFlueGasComponents(const double excessAir);
+	double calculateSensibleHeat(double combustionAirTemp);
+	double calculateHeatCombustionAir(double combustionAirTemp, double excessAir);
+	void calculateMassFlueGasComponents(double excessAir);
 	double calculateHeatingValueFuel();
 	void calculateEnthalpy();
-	double calculateTotalHeatContentFlueGas(const double flueGasTemperature);
+	double calculateTotalHeatContentFlueGas(double flueGasTemperature);
 
-	GasCompositions(const std::string & substance, const double CH4, const double C2H6, const double N2,
+	GasCompositions(std::string substance, const double CH4, const double C2H6, const double N2,
 	                const double H2, const double C3H8, const double C4H10_CnH2n, const double H2O,
 	                const double CO, const double CO2, const double SO2, const double O2, const double heatingValue,
 	                const double specificGravity) :
-			substance(substance),
+			substance(std::move(substance)),
 			totalPercent(CH4 + C2H6 + N2 + H2 + C3H8 + C4H10_CnH2n + H2O + CO + CO2 + SO2 + O2),
 			CH4(std::make_shared<GasProperties>([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417, CH4,
 			                                    CH4 / totalPercent, 64, 23875, 36.032, 44.01)),
@@ -243,10 +225,10 @@ private:
 
 	// the hash map holds a reference to the GasProperties below for easier iterable summations
 	std::unordered_map <std::string, std::shared_ptr<GasProperties>> gasses;
-	int id;
+	int id = 0;
 	std::string substance;
 	double totalPercent;
-	double hH2Osat, tH2Osat;
+	double hH2Osat = 0, tH2Osat = 0;
 	double mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
 	double heatingValue = 0, specificGravity = 0;
@@ -266,17 +248,14 @@ public:
      * @param excessAirPercentage double, Percent Excess Air, expressed in normal percentage (i.e. 9% as 9 instead of 0.09)
      * @param combustionAirTemperature double, Combustion Air Temperature in °F
      * @param compositions - GasComposition, User defined gas compositions
-     * @return nothing
-     *
+     * @param fuelTemperature double - temperature of fuel
      * */
-    GasFlueGasMaterial(const double flueGasTemperature,
-            const double excessAirPercentage,
-            const double combustionAirTemperature,
-            GasCompositions & compositions) :
-            flueGasTemperature_(flueGasTemperature),
-            excessAirPercentage_(excessAirPercentage / 100.0),
-            combustionAirTemperature_(combustionAirTemperature),
-            compositions_(compositions)
+    GasFlueGasMaterial(const double flueGasTemperature, const double excessAirPercentage,
+                       const double combustionAirTemperature, GasCompositions compositions,
+                       const double fuelTemperature) :
+		    flueGasTemperature(flueGasTemperature), excessAirPercentage(excessAirPercentage / 100.0),
+            combustionAirTemperature(combustionAirTemperature), fuelTemperature(fuelTemperature),
+		    compositions(std::move(compositions))
     {}
 
 	/**
@@ -287,7 +266,7 @@ public:
     double getHeatLoss();
 
 private:
-    const double flueGasTemperature_, excessAirPercentage_, combustionAirTemperature_;
-	GasCompositions compositions_;
+    const double flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature;
+	GasCompositions compositions;
 };
 #endif //AMO_SUITE_GASFLUEGASMATERIAL_H

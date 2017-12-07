@@ -17,7 +17,6 @@ public:
    /**
     * Constructor
     * @param flowRate double, rate of flow in gpm
-    * @return nothing
     */
     OptimalDeviationFactor(
         double flowRate

@@ -14,16 +14,16 @@ std::string GasCompositions::getSubstance() const {
     return substance;
 }
 
+// used for calculating excess air in flue gas given O2 levels
 double GasCompositions::calculateExcessAir(const double flueGasO2) {
     calculateCompByWeight();
     double excessAir = (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2));
 	if (excessAir == 0) return 0;
 
-	// loop a max of 100 times, this loop doesn't take more than roughly 10 iterations right now
     for (auto i = 0; i < 100; i++) {
         calculateMassFlueGasComponents(excessAir);
         auto const O2i = mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
-        auto const error = fabs((flueGasO2 - O2i) / flueGasO2);
+        auto const error = std::fabs((flueGasO2 - O2i) / flueGasO2);
         if (error < 0.02) break;
         if (O2i > flueGasO2) {
             excessAir -= (excessAir * 0.01);
@@ -32,6 +32,13 @@ double GasCompositions::calculateExcessAir(const double flueGasO2) {
         }
     }
 	return excessAir;
+}
+
+// used for calculating O2 in flue gas given excess air as a decimal
+double GasCompositions::calculateO2(const double excessAir) {
+    calculateCompByWeight();
+    calculateMassFlueGasComponents(excessAir);
+    return mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
 }
 
 void GasCompositions::calculateCompByWeight() {
@@ -45,13 +52,13 @@ void GasCompositions::calculateCompByWeight() {
     }
 }
 
-double GasCompositions::calculateSensibleHeat(const double combustionAirTemp) {
+double GasCompositions::calculateSensibleHeat(const double fuelTemp) {
     double specificHeatFuel = 0;
     for ( auto const & comp : gasses ) {
         specificHeatFuel += comp.second->compByWeight * (comp.second->specificHeat(520) / comp.second->molecularWeight);
     }
 
-    return 1 * specificHeatFuel * (combustionAirTemp - 32);
+    return 1 * specificHeatFuel * (fuelTemp - 32);
 }
 
 double GasCompositions::calculateHeatCombustionAir(const double combustionAirTemp, const double excessAir) {
@@ -72,12 +79,6 @@ double GasCompositions::calculateHeatCombustionAir(const double combustionAirTem
     return mCombustionAir * cpCombustionAir * (combustionAirTemp - 32);
 }
 
-// public API component of calculating heating value, needs to calculateCompByWeight before calculating Heating Value
-double GasCompositions::calculateHeatingValue() {
-    calculateCompByWeight();
-    return calculateHeatingValueFuel();
-}
-
 double GasCompositions::calculateSpecificGravity() {
     double summationNumerator = 0;
     for ( auto const & compound : gasses ) {
@@ -86,7 +87,6 @@ double GasCompositions::calculateSpecificGravity() {
     return summationNumerator / (22.4 * 1.205);
 }
 
-// private function used internally
 double GasCompositions::calculateHeatingValueFuel() {
     double heatValueFuel = 0;
 	for ( auto const & comp : gasses ) {
@@ -150,10 +150,10 @@ double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
     };
 
 	double result = 0.0;
-    for ( size_t i = 0; i < gasArray.size(); i++ ) {
-	    auto const & tup = gasArray[i];
-	    auto const & c = std::get<0>(tup);
-        const double mass = std::get<1>(tup);
+    for ( auto const & gas : gasArray ) {
+//	    auto const & tup = gas;
+	    auto const & c = std::get<0>(gas);
+        const double mass = std::get<1>(gas);
         result += mass * (0.5 * ((c->specificHeat(flueGasTemp + 460) / c->molecularWeight) + (c->specificHeat(520) / c->molecularWeight)) * (flueGasTemp - 32));
     }
 
@@ -161,15 +161,15 @@ double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
 }
 
 double GasFlueGasMaterial::getHeatLoss() {
-	compositions_.calculateCompByWeight();
-    double heatInFlueGasses = compositions_.calculateSensibleHeat(combustionAirTemperature_);
-    double hCombustionAir = compositions_.calculateHeatCombustionAir(combustionAirTemperature_, excessAirPercentage_);
-    double hValueFuel = compositions_.calculateHeatingValueFuel();
-    compositions_.calculateMassFlueGasComponents(excessAirPercentage_);
-    compositions_.calculateEnthalpy();
-    double totalHeatContentFlueGas = compositions_.calculateTotalHeatContentFlueGas(flueGasTemperature_);
+	compositions.calculateCompByWeight();
+    const double heatInFlueGasses = compositions.calculateSensibleHeat(fuelTemperature);
+    const double hCombustionAir = compositions.calculateHeatCombustionAir(combustionAirTemperature, excessAirPercentage);
+    const double hValueFuel = compositions.calculateHeatingValueFuel();
+    compositions.calculateMassFlueGasComponents(excessAirPercentage);
+    compositions.calculateEnthalpy();
+    const double totalHeatContentFlueGas = compositions.calculateTotalHeatContentFlueGas(flueGasTemperature);
 
-    double heatInput = heatInFlueGasses + hCombustionAir + hValueFuel;
+    const double heatInput = heatInFlueGasses + hCombustionAir + hValueFuel;
 
     return (heatInput - totalHeatContentFlueGas) / hValueFuel;
 }

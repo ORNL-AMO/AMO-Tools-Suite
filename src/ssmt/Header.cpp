@@ -1,0 +1,65 @@
+#include "ssmt/Header.h"
+
+Inlet::Inlet(const double pressure, const SteamProperties::ThermodynamicQuantity quantityType,
+             const double quantityValue, const double massFlow)
+		: pressure(pressure), quantityValue(quantityValue), massFlow(massFlow),
+		  quantityType(quantityType)
+{
+	calculate();
+}
+
+Header::Header(const double headerPressure, std::vector<Inlet> & inletVec)
+		: headerPressure(headerPressure), inlets(std::move(inletVec))
+{
+	calculate();
+}
+
+void Header::calculate() {
+	inletEnergyFlow = 0.0, inletMassFlow = 0.0;
+
+	for (auto const & inlet: inlets) {
+		inletEnergyFlow += inlet.getInletEnergyFlow();
+		inletMassFlow += inlet.getMassFlow();
+	}
+
+	specificEnthalpy = inletEnergyFlow / inletMassFlow;
+	headerProperties = SteamProperties(headerPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
+	                                   specificEnthalpy).calculate();
+}
+
+void Header::setHeaderPressure(const double headerPressure) {
+	this->headerPressure = headerPressure;
+	headerProperties = SteamProperties(this->headerPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
+	                                   specificEnthalpy).calculate();
+}
+
+void Header::setInlets(std::vector<Inlet> & inlets) {
+	this->inlets = std::move(inlets);
+	calculate();
+}
+
+void Inlet::calculate() {
+	inletProperties = SteamProperties(pressure, quantityType, quantityValue).calculate();
+	inletEnergyFlow = inletProperties.at("specificEnthalpy") * massFlow;
+}
+
+void Inlet::setPressure(const double pressure) {
+	this->pressure = pressure;
+	calculate();
+}
+
+void Inlet::setQuantityValue(const double quantityValue) {
+	this->quantityValue = quantityValue;
+	calculate();
+}
+
+void Inlet::setMassFlow(const double massFlow) {
+	this->massFlow = massFlow;
+	inletEnergyFlow = inletProperties.at("specificEnthalpy") * massFlow;
+}
+
+void Inlet::setQuantityType(const SteamProperties::ThermodynamicQuantity quantityType) {
+	this->quantityType = quantityType;
+	calculate();
+}
+

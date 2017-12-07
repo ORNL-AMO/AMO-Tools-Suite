@@ -19,7 +19,6 @@ public:
      * @param specificGravity double, specified gravity - unitless
      * @param flowRate double, rate of flow in gpm
      * @param head double, pump head measured in feet
-     * @return nothing
      */
     FluidPower(
         double specificGravity,

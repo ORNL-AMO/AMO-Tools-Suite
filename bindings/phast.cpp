@@ -16,26 +16,38 @@ NAN_MODULE_INIT(InitPhast) {
     Nan::Set(target, New<String>("fixtureLosses").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(fixtureLosses)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("energyInput").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(energyInput)).ToLocalChecked());
+    Nan::Set(target, New<String>("energyInputEAF").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(energyInputEAF)).ToLocalChecked());
 
     Nan::Set(target, New<String>("energyInputExhaustGasLosses").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(energyInputExhaustGasLosses)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("exhaustGas").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(exhaustGas)).ToLocalChecked());
+    Nan::Set(target, New<String>("exhaustGasEAF").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(exhaustGasEAF)).ToLocalChecked());
 
     Nan::Set(target, New<String>("flueGasLossesByVolume").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(flueGasLossesByVolume)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("flueGasLossesByVolumeGivenO2").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(flueGasLossesByVolumeGivenO2)).ToLocalChecked());
+    Nan::Set(target, New<String>("flueGasByVolumeCalculateHeatingValue").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasByVolumeCalculateHeatingValue)).ToLocalChecked());
 
     Nan::Set(target, New<String>("flueGasLossesByMass").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(flueGasLossesByMass)).ToLocalChecked());
 
-    Nan::Set(target, New<String>("flueGasLossesByMassGivenO2").ToLocalChecked(),
-             GetFunction(New<FunctionTemplate>(flueGasLossesByMassGivenO2)).ToLocalChecked());
+    Nan::Set(target, New<String>("flueGasByMassCalculateHeatingValue").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasByMassCalculateHeatingValue)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("flueGasCalculateExcessAir").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasCalculateExcessAir)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("flueGasCalculateO2").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasCalculateO2)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("flueGasByMassCalculateO2").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasByMassCalculateO2)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("flueGasByMassCalculateExcessAir").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(flueGasByMassCalculateExcessAir)).ToLocalChecked());
 
     Nan::Set(target, New<String>("gasCoolingLosses").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(gasCoolingLosses)).ToLocalChecked());
@@ -56,10 +68,13 @@ NAN_MODULE_INIT(InitPhast) {
              GetFunction(New<FunctionTemplate>(openingLossesCircular)).ToLocalChecked());
 
     Nan::Set(target, New<String>("openingLossesQuad").ToLocalChecked(),
-    GetFunction(New<FunctionTemplate>(openingLossesQuad)).ToLocalChecked());
+             GetFunction(New<FunctionTemplate>(openingLossesQuad)).ToLocalChecked());
 
-        Nan::Set(target, New<String>("slagOtherMaterialLosses").ToLocalChecked(),
-        GetFunction(New<FunctionTemplate>(slagOtherMaterialLosses)).ToLocalChecked());
+    Nan::Set(target, New<String>("viewFactorCalculation").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(viewFactorCalculation)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("slagOtherMaterialLosses").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(slagOtherMaterialLosses)).ToLocalChecked());
 
     Nan::Set(target, New<String>("solidLoadChargeMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(solidLoadChargeMaterial)).ToLocalChecked());

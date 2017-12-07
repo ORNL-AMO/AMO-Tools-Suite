@@ -19,7 +19,6 @@ public:
      * Constructor
      * @param motorShaftPower double, motor shaft power as defined in hp
      * @param drive Pump::Motor, type of drive the pump uses from either direct or belt drive.
-     * @return nothing
      */
     PumpShaftPower(
         double motorShaftPower,
@@ -33,14 +32,12 @@ public:
 
     /**
      * Calculates the pump shaft power
-     *
      * @return double, pump shaft power in hp
      */
     double calculate();
 
     /**
      * Gets the motor shaft power
-     *
      * @return double, motor shaft power in hp
      */
     double getMotorShaftPower() const {
@@ -49,10 +46,7 @@ public:
 
     /**
      * Sets the motor shaft power
-     *
      * @param motorShaftPower double, in hp
-     *
-     * @return nothing
      */
     void setMotorShaftPower(double motorShaftPower) {
         motorShaftPower_ = motorShaftPower;
@@ -60,7 +54,6 @@ public:
 
     /**
      * Gets the type of drive the pump uses from either direct or belt drive
-     *
      * @return Pump:Drive, type of drive
      */
     Pump::Drive getDrive() const {
@@ -69,10 +62,7 @@ public:
 
     /**
      * Set the type of drive the pump uses from either direct or belt drive
-     *
      * @param drive Pump:Drive, type of drive
-     *
-     * @return nothing
      */
     void setDrive(Pump::Drive drive) {
         drive_ = drive;

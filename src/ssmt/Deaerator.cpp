@@ -2,109 +2,121 @@
  * @file
  * @brief Contains the implementation of the deaerator calculator for steam systems.
  *
- * @author Autumn Ferree (ferreeak)
+ * @author Autumn Ferree (ferreeak) & Preston Shires (pshires)
  * @bug No known bugs.
  *
  */
 
 #include "ssmt/Deaerator.h"
 
-std::unordered_map <std::string, double> Deaerator::getInletWaterProperties() {
-    SteamProperties sp = SteamProperties(this->waterPressure_, this->waterQuantityType_, this->waterQuantityValue_);
-    this->inletWaterProperties_ = sp.calculate();
-    return this->inletWaterProperties_;
+Deaerator::Deaerator(const double deaeratorPressure, const double ventRate, const double feedwaterMassFlow,
+                     const double waterPressure, const SteamProperties::ThermodynamicQuantity waterQuantityType,
+                     const double waterQuantityValue, const double steamPressure,
+                     const SteamProperties::ThermodynamicQuantity steamQuantityType, const double steamQuantityValue)
+        : deaeratorPressure(deaeratorPressure), ventRate(ventRate), feedwaterMassFlow(feedwaterMassFlow),
+          waterPressure(waterPressure), waterQuantityValue(waterQuantityValue), steamPressure(steamPressure),
+          steamQuantityValue(steamQuantityValue), waterQuantityType(waterQuantityType),
+          steamQuantityType(steamQuantityType)
+{
+    calculateProperties();
 }
 
-std::unordered_map <std::string, double> Deaerator::getInletSteamProperties() {
-    SteamProperties sp = SteamProperties(this->steamPressure_, this->steamQuantityType_, this->steamQuantityValue_);
-    this->inletSteamProperties_ = sp.calculate();
-    return this->inletSteamProperties_;
+void Deaerator::calculateProperties() {
+    auto const sp = SaturatedProperties(deaeratorPressure, SaturatedTemperature(deaeratorPressure).calculate()).calculate();
+    feedwaterProperties = {
+            {"temperature", sp.at("temperature")},
+            {"pressure", sp.at("pressure")},
+            {"specificEnthalpy", sp.at("liquidSpecificEnthalpy")},
+            {"specificEntropy", sp.at("liquidSpecificEntropy")},
+            {"quality", 0},
+            {"massFlow", feedwaterMassFlow},
+            {"energyFlow", sp.at("liquidSpecificEnthalpy") * feedwaterMassFlow / 1000}
+    };
+
+    auto const ventedSteamMassFlow = (ventRate / 100) * feedwaterMassFlow;
+    ventedSteamProperties = {
+            {"temperature", sp.at("temperature")},
+            {"pressure", sp.at("pressure")},
+            {"specificEnthalpy", sp.at("gasSpecificEnthalpy")},
+            {"specificEntropy", sp.at("gasSpecificEntropy")},
+            {"quality", 1},
+            {"massFlow", ventedSteamMassFlow},
+            {"energyFlow", sp.at("gasSpecificEnthalpy") * ventedSteamMassFlow / 1000}
+    };
+
+    inletWaterProperties = SteamProperties(waterPressure, waterQuantityType, waterQuantityValue).calculate();
+    inletSteamProperties = SteamProperties(steamPressure, steamQuantityType, steamQuantityValue).calculate();
+
+    auto const totalDAMassFlow = ventedSteamMassFlow + feedwaterMassFlow;
+    auto const totalOutletEnergyFlow = (feedwaterProperties.at("specificEnthalpy") * feedwaterMassFlow
+                                        + ventedSteamProperties.at("specificEnthalpy") * ventedSteamMassFlow) / 1000;
+    auto const minEnergyFlow = inletWaterProperties.at("specificEnthalpy") * totalDAMassFlow / 1000;
+    auto const neededEnergyFlow = totalOutletEnergyFlow - minEnergyFlow;
+    auto const inletSteamMassFlow = 1000 * neededEnergyFlow / (inletSteamProperties.at("specificEnthalpy")
+                                                               - inletWaterProperties.at("specificEnthalpy"));
+
+    auto const inletWaterMassFlow = totalDAMassFlow - inletSteamMassFlow;
+    auto const inletSteamEnergyFlow = inletSteamProperties.at("specificEnthalpy") * inletSteamMassFlow / 1000;
+    auto const inletWaterEnergyFlow = inletWaterProperties.at("specificEnthalpy") * inletWaterMassFlow / 1000;
+
+    inletWaterProperties["massFlow"] = inletWaterMassFlow;
+    inletWaterProperties["energyFlow"] = inletWaterEnergyFlow;
+
+    inletSteamProperties["massFlow"] = inletSteamMassFlow;
+    inletSteamProperties["energyFlow"] = inletSteamEnergyFlow;
 }
 
-std::unordered_map <std::string, double> Deaerator::getFeedwaterProperties() {
-    SaturatedTemperature temp = SaturatedTemperature(this->deaeratorPressure_);
-    SaturatedProperties sp = SaturatedProperties(this->deaeratorPressure_, temp.calculate());
-    std::unordered_map <std::string, double> satProp = sp.calculate();
-    this->feedwaterProperties_["temperature"] = satProp["temperature"];
-    this->feedwaterProperties_["pressure"] = satProp["pressure"];
-    this->feedwaterProperties_["specificEnthalpy"] = satProp["liquidSpecificEnthalpy"];
-    this->feedwaterProperties_["specificEntropy"] = satProp["liquidSpecificEntropy"];
-    this->feedwaterProperties_["quality"] = 0;
-    return this->feedwaterProperties_;
+double Deaerator::getDeaeratorPressure() const { return deaeratorPressure; }
+double Deaerator::getVentRate() const { return ventRate; }
+double Deaerator::getFeedwaterMassFlow() const { return feedwaterMassFlow; }
+double Deaerator::getWaterPressure() const { return waterPressure; }
+double Deaerator::getWaterQuantityValue() const { return waterQuantityValue; }
+double Deaerator::getSteamPressure() const { return steamPressure; }
+double Deaerator::getSteamQuantityValue() const { return steamQuantityValue; }
+SteamProperties::ThermodynamicQuantity Deaerator::getWaterQuantityType() const { return waterQuantityType; }
+SteamProperties::ThermodynamicQuantity Deaerator::getSteamQuantityType() const { return steamQuantityType; }
+
+void Deaerator::setDeaeratorPressure(double deaeratorPressure) {
+	this->deaeratorPressure = deaeratorPressure;
+	calculateProperties();
 }
 
-std::unordered_map <std::string, double> Deaerator::getVentedSteamProperties() {
-    SaturatedTemperature temp = SaturatedTemperature(this->deaeratorPressure_);
-    SaturatedProperties sp = SaturatedProperties(this->deaeratorPressure_, temp.calculate());
-    std::unordered_map <std::string, double> satProp = sp.calculate();
-    ventedSteamProperties_["temperature"] = satProp["temperature"];
-    ventedSteamProperties_["pressure"] = satProp["pressure"];
-    ventedSteamProperties_["specificEnthalpy"] = satProp["gasSpecificEnthalpy"];
-    ventedSteamProperties_["specificEntropy"] = satProp["gasSpecificEntropy"];
-    ventedSteamProperties_["quality"] = 1;
-    return this->ventedSteamProperties_;
+void Deaerator::setVentRate(double ventRate) {
+	this->ventRate = ventRate;
+	calculateProperties();
 }
 
-double Deaerator::getFeedwaterEnergyFlow() {
-    std::unordered_map <std::string, double> feedwaterProps = getFeedwaterProperties();
-    this->feedwaterEnergyFlow_ = feedwaterProps["specificEnthalpy"] * this->feedwaterMassFlow_;
-    return feedwaterEnergyFlow_ / 1000;
+void Deaerator::setFeedwaterMassFlow(double feedwaterMassFlow) {
+	this->feedwaterMassFlow = feedwaterMassFlow;
+	calculateProperties();
 }
 
-double Deaerator::getVentedSteamMassFlow() {
-    this->ventedSteamMassFlow_ = (this->ventRate_ / 100) * this->feedwaterMassFlow_;
-    return ventedSteamMassFlow_;
+void Deaerator::setWaterPressure(double waterPressure) {
+	this->waterPressure = waterPressure;
+	calculateProperties();
 }
 
-double Deaerator::getVentedSteamEnergyFlow() {
-    std::unordered_map <std::string, double> ventedSteamProps = getVentedSteamProperties();
-    this->ventedSteamEnergyFlow_ = ventedSteamProps["specificEnthalpy"] * getVentedSteamMassFlow();
-    return ventedSteamEnergyFlow_ / 1000;
+void Deaerator::setWaterQuantityValue(double waterQuantityValue) {
+	this->waterQuantityValue = waterQuantityValue;
+	calculateProperties();
 }
 
-double Deaerator::getTotalDAMassFlow() {
-    this->totalDAMassFlow_ = getVentedSteamMassFlow() + this->feedwaterMassFlow_;
-    return totalDAMassFlow_;
+void Deaerator::setSteamPressure(double steamPressure) {
+	this->steamPressure = steamPressure;
+	calculateProperties();
 }
 
-double Deaerator::getTotalOutletEnergyFlow() {
-    std::unordered_map <std::string, double> feedwaterProps = getFeedwaterProperties();
-    std::unordered_map <std::string, double> ventedSteamProps = getVentedSteamProperties();
-    this->totalOutletEnergyFlow_ = (feedwaterProps["specificEnthalpy"] * this->feedwaterMassFlow_) + (ventedSteamProps["specificEnthalpy"] * getVentedSteamMassFlow());
-    return totalOutletEnergyFlow_ / 1000;
+void Deaerator::setSteamQuantityValue(double steamQuantityValue) {
+	this->steamQuantityValue = steamQuantityValue;
+	calculateProperties();
 }
 
-double Deaerator::getMinEnergyFlow() {
-    std::unordered_map <std::string, double> inletWaterProps = getInletWaterProperties();
-    this->minEnergyFlow_ = inletWaterProps["specificEnthalpy"]* getTotalDAMassFlow();
-    return minEnergyFlow_ / 1000;
+void Deaerator::setWaterQuantityType(SteamProperties::ThermodynamicQuantity waterQuantityType) {
+	this->waterQuantityType = waterQuantityType;
+	calculateProperties();
 }
 
-double Deaerator::getNeededEnergyFlow() {
-    this->neededEnergyFlow_ = getTotalOutletEnergyFlow() - getMinEnergyFlow();
-    return neededEnergyFlow_;
-}
-
-double Deaerator::getInletSteamMassFlow() {
-    std::unordered_map <std::string, double> inletSteamProps = getInletSteamProperties();
-    std::unordered_map <std::string, double> inletWaterProps = getInletWaterProperties();
-    this->inletSteamMassFlow_ = getNeededEnergyFlow()/(inletSteamProps["specificEnthalpy"] - inletWaterProps["specificEnthalpy"]);
-    return inletSteamMassFlow_ * 1000;
-}
-
-double Deaerator::getInletSteamEnergyFlow() {
-    std::unordered_map <std::string, double> inletSteamProps = getInletSteamProperties();
-    this->inletSteamEnergyFlow_ = inletSteamProps["specificEnthalpy"] * getInletSteamMassFlow();
-    return inletSteamEnergyFlow_ / 1000;
-}
-
-double Deaerator::getInletWaterMassFlow() {
-    this->inletWaterMassFlow_ = getTotalDAMassFlow() - getInletSteamMassFlow();
-    return inletWaterMassFlow_;
-}
-
-double Deaerator::getInletWaterEnergyFlow() {
-    std::unordered_map <std::string, double> inletWaterProps = getInletWaterProperties();
-    this->inletWaterEnergyFlow_ = inletWaterProps["specificEnthalpy"] * getInletWaterMassFlow();
-    return inletWaterEnergyFlow_ / 1000;
+void Deaerator::setSteamQuantityType(SteamProperties::ThermodynamicQuantity steamQuantityType) {
+	this->steamQuantityType = steamQuantityType;
+	calculateProperties();
 }

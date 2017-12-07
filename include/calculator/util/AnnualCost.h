@@ -19,7 +19,6 @@ public:
      * Constructor
      * @param annualEnergy double, annual energy consumption in MWh/year
      * @param kwhRate double, rate in $/kWh
-     * @return nothing
      */
     AnnualCost(
         double annualEnergy,
@@ -46,7 +45,6 @@ public:
     /**
      * Setter for annual energy
      * @param annualEnergy double, annual energy consumption in MWh/year
-     * @return nothing
      */
     void setAnnualEnergy(double annualEnergy) {
         annualEnergy_ = annualEnergy;
@@ -63,7 +61,6 @@ public:
     /**
      * Setter for rate in $/kWh
      * @param kwhRate double, rate in $/kwh
-     * @return nothing
      */
     void setKwhRate(double kwhRate) {
         kwhRate_ = kwhRate;

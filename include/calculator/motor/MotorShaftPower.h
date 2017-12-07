@@ -44,7 +44,6 @@ public:
     * @param loadEstimationMethod FieldData::LoadEstimationMethod, estimated power or current on motor input in hp
     * @param fieldCurrent double, field current as defined in amps.
     *
-    * @return nothing
     */
     MotorShaftPower(
 		double motorRatedPower,

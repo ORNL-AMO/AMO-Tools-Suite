@@ -9,64 +9,76 @@
 
 #include "ssmt/Boiler.h"
 
-std::unordered_map <std::string, double> Boiler::getSteamProperties() {
-    SteamProperties sp = SteamProperties(this->steamPressure_, this->quantityType_, this->quantityValue_);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->steamProperties_ = steamProperties;
-    return this->steamProperties_;
+Boiler::Boiler(const double deaeratorPressure, const double combustionEfficiency, const double blowdownRate,
+               const double steamPressure, const SteamProperties::ThermodynamicQuantity quantityType,
+               const double quantityValue, const double steamMassFlow)
+		: deaeratorPressure(deaeratorPressure), combustionEfficiency(combustionEfficiency),
+		  blowdownRate(blowdownRate), steamPressure(steamPressure), quantityType(quantityType),
+		  quantityValue(quantityValue), steamMassFlow(steamMassFlow)
+{
+	calculateProperties();
 }
 
-std::unordered_map <std::string, double> Boiler::getBlowdownProperties() {
-    SteamProperties sp = SteamProperties(this->steamPressure_, SteamProperties::ThermodynamicQuantity::QUALITY, 0);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->blowdownProperties_ = steamProperties;
-    return this->blowdownProperties_;
+void Boiler::calculateProperties() {
+	steamProperties = SteamProperties(steamPressure, quantityType, quantityValue).calculate();
+	steamProperties["steamEnergyFlow"] = steamProperties.at("specificEnthalpy") * steamMassFlow / 1000;
+	steamProperties["steamMassFlow"] = steamMassFlow;
+	steamProperties["quality"] = 1; // TODO tell UI guys that there needs to be warning
+
+	feedwaterProperties = SteamProperties(deaeratorPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
+	feedwaterProperties["feedwaterMassFlow"] = steamMassFlow / (1 - blowdownRate / 100);
+	feedwaterProperties["feedwaterEnergyFlow"] = feedwaterProperties.at("specificEnthalpy")
+	                                             * feedwaterProperties.at("feedwaterMassFlow") / 1000;
+
+	blowdownProperties = SteamProperties(steamPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
+	blowdownProperties["blowdownMassFlow"] = feedwaterProperties.at("feedwaterMassFlow") * (blowdownRate / 100);
+	blowdownProperties["blowdownEnergyFlow"] = blowdownProperties.at("specificEnthalpy")
+	                                           * blowdownProperties.at("blowdownMassFlow") / 1000;
+
+	boilerEnergy = steamProperties.at("steamEnergyFlow") + blowdownProperties.at("blowdownEnergyFlow")
+	               - feedwaterProperties.at("feedwaterEnergyFlow");
+	fuelEnergy = boilerEnergy / (combustionEfficiency / 100);
 }
 
-std::unordered_map <std::string, double> Boiler::getFeedwaterProperties() {
-    SteamProperties sp = SteamProperties(this->deaeratorPressure_, SteamProperties::ThermodynamicQuantity::QUALITY, 0);
-    std::unordered_map <std::string, double> steamProperties = sp.calculate();
-    this->feedwaterProperties_ = steamProperties;
-    return this->feedwaterProperties_;
+double Boiler::getDeaeratorPressure() const { return deaeratorPressure; }
+double Boiler::getCombustionEfficiency() const { return combustionEfficiency; }
+double Boiler::getBlowdownRate() const { return blowdownRate; }
+double Boiler::getSteamPressure() const { return steamPressure; }
+double Boiler::getQuantityValue() const { return quantityValue; }
+double Boiler::getSteamMassFlow() const { return steamMassFlow; }
+SteamProperties::ThermodynamicQuantity Boiler::getQuantityType() const { return quantityType; }
+
+void Boiler::setDeaeratorPressure(double deaeratorPressure) {
+	this->deaeratorPressure = deaeratorPressure;
+	calculateProperties();
 }
 
-double Boiler::getSteamEnergyFlow() {
-    std::unordered_map <std::string, double> steamProperties = getSteamProperties();
-    this->steamEnergyFlow_ = steamProperties["specificEnthalpy"] * this->steamMassFlow_;
-    return this->steamEnergyFlow_/1000;
+void Boiler::setCombustionEfficiency(double combustionEfficiency) {
+	this->combustionEfficiency = combustionEfficiency;
+	calculateProperties();
 }
 
-double Boiler::getFeedwaterMassFlow() {
-    this->feedwaterMassFlow_ = getSteamMassFlow() / (1 - this->blowdownRate_/100);
-    return this->feedwaterMassFlow_;
+void Boiler::setBlowdownRate(const double blowdownRate) {
+	this->blowdownRate = blowdownRate;
+	calculateProperties();
 }
 
-double Boiler::getFeedwaterEnergyFlow(){
-    std::unordered_map <std::string, double> feedwaterProperties = getFeedwaterProperties();
-    this->feedwaterEnergyFlow_ = feedwaterProperties["specificEnthalpy"] * getFeedwaterMassFlow();
-    return this->feedwaterEnergyFlow_/1000;
+void Boiler::setSteamPressure(const double steamPressure) {
+	this->steamPressure = steamPressure;
+	calculateProperties();
 }
 
-double Boiler::getBlowdownMassFlow() {
-    this->blowdownMassFlow_ = getFeedwaterMassFlow() * (this->blowdownRate_/100);
-    return this->blowdownMassFlow_;
+void Boiler::setQuantityType(SteamProperties::ThermodynamicQuantity quantity) {
+	this->quantityType = quantity;
+	calculateProperties();
 }
 
-double Boiler::getBlowdownEnergyFlow() {
-    std::unordered_map <std::string, double> blowdownProperties = getBlowdownProperties();
-    this->blowdownEnergyFlow_ = blowdownProperties["specificEnthalpy"] * getBlowdownMassFlow();
-    return this->blowdownEnergyFlow_/1000;
+void Boiler::setQuantityValue(const double quantityValue) {
+	this->quantityValue = quantityValue;
+	calculateProperties();
 }
 
-double Boiler::getBoilerEnergy(){
-    double steam = getSteamEnergyFlow();
-    double blowdown = getBlowdownEnergyFlow();
-    double feedwater = getFeedwaterEnergyFlow();
-    this->boilerEnergy_ = steam + blowdown - feedwater;
-    return this->boilerEnergy_;
-}
-
-double Boiler::getFuelEnergy() {
-    this->fuelEnergy_ = getBoilerEnergy()/(this->combustionEfficiency_/100);
-    return this->fuelEnergy_;
+void Boiler::setSteamMassFlow(const double steamMassFlow) {
+	this->steamMassFlow = steamMassFlow;
+	calculateProperties();
 }

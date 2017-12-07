@@ -4,8 +4,8 @@ project(amo_tools_suite)
 set(CMAKE_MACOSX_RPATH 1)
 
 set( CMAKE_VERSION_MAJOR 0 )
-set( CMAKE_VERSION_MINOR 1 )
-set( CMAKE_VERSION_PATCH 38 )
+set( CMAKE_VERSION_MINOR 2 )
+set( CMAKE_VERSION_PATCH 11 )
 
 set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
 INCLUDE_DIRECTORIES (node_modules/nan)
@@ -51,6 +51,8 @@ else (WIN32)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif (WIN32)
+
+set (CMAKE_CXX_FLAGS "-Wall")
 
 file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
@@ -118,7 +120,13 @@ set(SOURCE_FILES
         src/ssmt/HeatLoss.cpp
         src/ssmt/FlashTank.cpp
         src/ssmt/PRV.cpp
-        src/ssmt/Deaerator.cpp)
+        src/ssmt/Deaerator.cpp
+        src/ssmt/Header.cpp
+        src/ssmt/Turbine.cpp
+        src/calculator/util/CHP.cpp
+        src/fans/Fan.cpp
+        src/fans/FanShaftPower.cpp
+        src/fans/Planar.cpp src/fans/FanCurve.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -194,7 +202,13 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/PRV.h
         include/ssmt/FlashTank.h
-        include/ssmt/Deaerator.h)
+        include/ssmt/Deaerator.h
+        include/ssmt/Header.h
+        include/fans/Fan.h
+        include/fans/FanShaftPower.h
+        include/fans/Planar.h
+        include/ssmt/Turbine.h
+        include/calculator/util/CHP.h include/fans/FanCurve.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -232,7 +246,11 @@ set(TEST_FILES
         tests/FlashTank.unit.cpp
         tests/PRV.unit.cpp
         tests/FlashTank.unit.cpp
-        tests/Deaerator.unit.cpp)
+        tests/Deaerator.unit.cpp
+        tests/Header.unit.cpp
+        tests/Turbine.unit.cpp
+        tests/Fan.unit.cpp
+        tests/CHP.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

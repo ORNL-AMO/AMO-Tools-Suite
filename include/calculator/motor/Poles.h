@@ -19,10 +19,9 @@ public:
      * Constructor
      * @param motorRpm double, RPM of motor.
      * @param lineFreq Motor::LineFrequency, Line frequency of motor as either 50Hz or 60Hz.
-     * @return nothing
      */
     Poles(
-        int motorRpm,
+        double motorRpm,
         Motor::LineFrequency lineFreq
     ) :
         motorRpm_(motorRpm),
@@ -38,7 +37,7 @@ public:
     int calculate();
 
 private:
-    int motorRpm_;
+    double motorRpm_;
     Motor::LineFrequency lineFreq_;
     int poles_;
 };

@@ -19,7 +19,6 @@ public:
      * Constructor
      * @param fieldPower double, power from field data in hp
      * @param operatingFraction double, perating fraction(%).
-     * @return nothing
      */
     AnnualEnergy(
         double fieldPower,
@@ -46,7 +45,6 @@ public:
     /**
      * Setter for field power
      * @param fieldPower double, power from field data in hp
-     * @return nothing
      */
     void setFieldPower(double fieldPower) {
         fieldPower_ = fieldPower;
@@ -65,7 +63,6 @@ public:
      *
      * @param operatingFraction double, operating fraction as %
      *
-     * @return nothing
      */
     void setOperatingFraction(double operatingFraction) {
         operatingFraction_ = operatingFraction;

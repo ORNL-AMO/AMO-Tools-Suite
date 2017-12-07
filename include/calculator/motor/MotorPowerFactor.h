@@ -23,7 +23,6 @@ public:
      * @param motorCurrent double, current of motor in A
      * @param motorEfficiency double, motor efficiency as %
      * @param ratedVoltage double, rated voltage as V
-     * @return nothing
      */
     MotorPowerFactor(
         double motorRatedPower,
@@ -51,7 +50,6 @@ public:
      * @param motorCurrent double, motor current in A
      * @param motorEfficiency double, motor efficiency as %
      * @param ratedVoltage double, rated voltage in V
-     * @return nothing
      */
 
     MotorPowerFactor(
@@ -97,7 +95,6 @@ public:
      *
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      *
-     * @return nothing
      */
     void setLineFrequency(Motor::LineFrequency lineFrequency) {
         lineFrequency_ = lineFrequency;
@@ -117,7 +114,6 @@ public:
      *
      * @param motorRpm double, RPM of motor
      *
-     * @return nothing
      */
     void setMotorRpm(double motorRpm) {
         motorRpm_ = motorRpm;
@@ -137,7 +133,6 @@ public:
      *
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
      *
-     * @return nothing
      */
     void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) {
         efficiencyClass_ = efficiencyClass;

@@ -81,7 +81,8 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
     {
         auto const output = sqlite.getGasFlueGasMaterials();
         auto const last = output[output.size() - 1].getSubstance();
-        GasCompositions gc("custom", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+//        GasCompositions gc("custom", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        GasCompositions gc("custom", 12, 13, 14, 15, 16, 14, 12, 12, 12, 12, 11);
         gc.setID(output.size());
 
         sqlite.insertGasFlueGasMaterial(gc);
@@ -359,8 +360,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == outputs[0].getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == outputs[0].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[0].getGasByVol("O2") );
-        CHECK( outputs[0].calculateHeatingValue() == Approx(22030.67089880065) );
-        CHECK( outputs[0].calculateSpecificGravity() == Approx(0.6571206283343215));
+        CHECK( outputs[0].getHeatingValue() == Approx(22030.67089880065) );
+        CHECK( outputs[0].getSpecificGravity() == Approx(0.6571206283343215));
     }
 
     {
@@ -379,8 +380,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-        CHECK( output.calculateHeatingValue() == Approx(22030.67089880065) );
-        CHECK( output.calculateSpecificGravity() == Approx(0.6571206283343215) );
+        CHECK( output.getHeatingValue() == Approx(22030.67089880065) );
+        CHECK( output.getSpecificGravity() == Approx(0.6571206283343215) );
     }
 
     //Coke Oven Gas
@@ -401,8 +402,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == outputs[1].getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == outputs[1].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[1].getGasByVol("O2") );
-        CHECK( outputs[1].calculateHeatingValue() == Approx(19185.932389233436) );
-        CHECK( outputs[1].calculateSpecificGravity() == Approx(0.44638781861292243) );
+        CHECK( outputs[1].getHeatingValue() == Approx(19185.932389233436) );
+        CHECK( outputs[1].getSpecificGravity() == Approx(0.44638781861292243) );
     }
 
     {
@@ -421,8 +422,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-        CHECK( output.calculateHeatingValue() == Approx(19185.932389233436) );
-        CHECK( output.calculateSpecificGravity() == Approx(0.44638781861292243) );
+        CHECK( output.getHeatingValue() == Approx(19185.932389233436) );
+        CHECK( output.getSpecificGravity() == Approx(0.44638781861292243) );
     }
 
 
@@ -444,8 +445,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == outputs[2].getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == outputs[2].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[2].getGasByVol("O2") );
-        CHECK( outputs[2].calculateHeatingValue() == 1080.6848266529887 );
-        CHECK( outputs[2].calculateSpecificGravity() == 1.0870540901007706 );
+        CHECK( outputs[2].getHeatingValue() == 1080.6848266529887 );
+        CHECK( outputs[2].getSpecificGravity() == 1.0870540901007706 );
     }
 
     {
@@ -464,8 +465,8 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
-        CHECK( output.calculateHeatingValue() == 1080.6848266529887 );
-        CHECK( output.calculateSpecificGravity() == 1.0870540901007706 );
+        CHECK( output.getHeatingValue() == 1080.6848266529887 );
+        CHECK( output.getSpecificGravity() == 1.0870540901007706 );
     }
 }
 
