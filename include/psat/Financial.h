@@ -32,55 +32,49 @@ public:
         double operatingFraction,
         double unitCost
     ) :
-        operatingFraction_(operatingFraction),
-        unitCost_(unitCost)
+        operatingFraction(operatingFraction),
+        unitCost(unitCost)
     {}
 
     Financial() = default;
 
     /**
     * Gets the percentage of calendar hours the equipment is operating
-    *
     * @return double, fraction of calendar hours the equipment is operating as %
     */
     double getOperatingFraction() const {
-        return operatingFraction_;
+        return operatingFraction;
     }
 
     /**
    * Sets the percentage of calendar hours the equipment is operating
-   *
    * @param operatingFraction double, fraction of calendar hours the equipment is operating as %
-   *
    */
     void setOperatingFraction(double operatingFraction) {
-        operatingFraction_ = operatingFraction;
+        this->operatingFraction = operatingFraction;
     }
 
     /**
    * Gets the cost of electricity per unit energy
-   *
    * @return double, cost of electricity per unit energy in $/kwh
    */
     double getUnitCost() const {
-        return unitCost_;
+        return unitCost;
     }
 
     /**
    * Sets the cost of electricity per unit energy
-   *
    * @param unitCost double, cost of electricity per unit in $/kwh
-   *
    */
     void setUnitCost(double unitCost) {
-        unitCost_ = unitCost;
+        this->unitCost = unitCost;
     }
 
 private:
     // 1.0 is 100%
-    double operatingFraction_;
+    double operatingFraction;
     // All units kWhr
-    double unitCost_;
+    double unitCost;
 };
 
 

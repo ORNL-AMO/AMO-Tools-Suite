@@ -58,7 +58,7 @@ public:
         optimalEfficiencyClass_(optimalEfficiencyClass),
         specifiedEfficiency_(specifiedEfficiency)
 //        fieldCurrent_(fieldCurrent),
-//        loadEstimationMethod_(loadEstimationMethod)
+//        loadEstimationMethod(loadEstimationMethod)
     {};
 
     /**
@@ -167,7 +167,7 @@ private:
 
     double specifiedEfficiency_;
 //    double fieldCurrent_ = 0.0;
-//    FieldData::LoadEstimationMethod loadEstimationMethod_;
+//    FieldData::LoadEstimationMethod loadEstimationMethod;
 
 };
 

@@ -45,7 +45,7 @@ public:
         specifiedEfficiency_(specifiedEfficiency),
         loadFactor_(loadFactor),
         ratedVoltage_(ratedVoltage)
-//        fullLoadAmps_(fullLoadAmps),
+//        fullLoadAmps(fullLoadAmps),
 //        fieldVoltage_(fieldVoltage)
     {};
 
@@ -107,7 +107,7 @@ private:
     double motorCurrent_ = 0.0;
     double ratedVoltage_ = 0.0;
 //    double estimatedFLA_ = 0.0;
-//    double fullLoadAmps_ = 0.0;
+//    double fullLoadAmps = 0.0;
 //    double fieldVoltage_ = 0.0;
 };
 

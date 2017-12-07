@@ -225,7 +225,7 @@ std::vector<double> EstimateFLA::calculate() {
             for (std::size_t i = 0; i < 6; i++) {
                 plValues[i] = seFLAValue * plMultiplier[i];
 
-                //plValues[i] = seEff * plValues[i] * 100 / specifiedEfficiency_;
+                //plValues[i] = seEff * plValues[i] * 100 / specifiedEfficiency;
             }
         } else {
             /// EE is the nominal efficiency
@@ -234,7 +234,7 @@ std::vector<double> EstimateFLA::calculate() {
             effVal = motorEfficiency.calculate();
             for (std::size_t i = 0; i < 6; i++) {
                 plValues[i] = eeFLAValue * plMultiplier[i];
-                //plValues[i] = eeEff * plValues[i] * 100 / specifiedEfficiency_;
+                //plValues[i] = eeEff * plValues[i] * 100 / specifiedEfficiency;
             }
         }
     }

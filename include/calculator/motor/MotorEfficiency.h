@@ -132,7 +132,7 @@ public:
      * @return FieldData::LoadEstimationMethod, classification of load estimation method
      */
 //    FieldData::LoadEstimationMethod getLoadEstimationMethod() const {
-//        return loadEstimationMethod_;
+//        return loadEstimationMethod;
 //    }
 
     /**
@@ -142,7 +142,7 @@ public:
      *
      */
 //    void setLoadEstimationMethod(FieldData::LoadEstimationMethod loadEstimationMethod) {
-//        loadEstimationMethod_ = loadEstimationMethod;
+//        loadEstimationMethod = loadEstimationMethod;
 //    }
 
     /**
@@ -237,7 +237,7 @@ private:
     Motor::EfficiencyClass efficiencyClass_;
     double specifiedEfficiency_;
     double hp_;
-//    FieldData::LoadEstimationMethod loadEstimationMethod_;
+//    FieldData::LoadEstimationMethod loadEstimationMethod;
     double motorKwh_;
     double motorAmps_;
     double kWloss0 = 0.0;

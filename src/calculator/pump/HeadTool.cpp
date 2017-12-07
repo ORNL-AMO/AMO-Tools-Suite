@@ -20,7 +20,7 @@ double HeadToolBase::velocityHead(const double velocity, const double gravity) {
 std::unordered_map<std::string, double> HeadToolSuctionTank::calculate() {
 	// this flow and pressure head should be used when units are metric, and the number 12 should be replaced with 1000
 	// in the velocityHead Suction and Discharge calculations
-//	const double flow = flowRate_ * 4.402867544 / 15850.32316;
+//	const double flow = flowRate * 4.402867544 / 15850.32316;
 //	const double pressureHead =
 //			(((dischargeGaugePressure_ - suctionTankGasOverPressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
 
@@ -48,7 +48,7 @@ std::unordered_map<std::string, double> HeadToolSuctionTank::calculate() {
 }
 
 std::unordered_map<std::string, double> HeadTool::calculate() {
-//	const double flow = flowRate_ * 4.402867544 / 15850.32316;
+//	const double flow = flowRate * 4.402867544 / 15850.32316;
 //	const double pressureHead =
 //			(((dischargeGaugePressure_ - suctionGaugePressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
 

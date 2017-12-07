@@ -22,7 +22,7 @@ double OptimalSpecificSpeedCorrection::calculate() {
                         {-2.4834106E-16,      -2.5380141E-19},
                         {1.3345507E-20,       4.007753E-24}};
     // Specific Speed comes as input.
-    // double specificSpeed = rpm_ * sqrt(flowRate_) / (pow((head_ / stageCount_), 0.75));
+    // double specificSpeed = rpm * sqrt(flowRate) / (pow((head / stageCount), 0.75));
 
     //double speedCorrection = 0;
     int speedCoeffChooser = 0;

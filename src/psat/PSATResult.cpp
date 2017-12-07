@@ -58,7 +58,7 @@ double PSATResult::calculateExisting() {
     existing_.pumpShaftPower_ = pumpShaftPower.calculate();
 
     // Calculate Pump Efficiency
-    PumpEfficiency pumpEfficiency(pump_.getSg(), fieldData_.getFlowRate(), fieldData_.getHead(),
+    PumpEfficiency pumpEfficiency(pump_.getSpecificGravity(), fieldData_.getFlowRate(), fieldData_.getHead(),
                                   existing_.pumpShaftPower_);
     existing_.pumpEfficiency_ = pumpEfficiency.calculate();
 
@@ -94,7 +94,7 @@ double PSATResult::calculateOptimal() {
                                                 pump_.getKviscosity(), pump_.getStageCount(), fieldData_.getFlowRate(),
                                                 fieldData_.getHead());
     optimal_.pumpEfficiency_ = optimalPumpEfficiency.calculate();
-    OptimalPumpShaftPower optimalPumpShaftPower(fieldData_.getFlowRate(), fieldData_.getHead(), pump_.getSg(),
+    OptimalPumpShaftPower optimalPumpShaftPower(fieldData_.getFlowRate(), fieldData_.getHead(), pump_.getSpecificGravity(),
                                                 optimal_.pumpEfficiency_);
     optimal_.pumpShaftPower_ = optimalPumpShaftPower.calculate();
     OptimalMotorShaftPower optimalMotorShaftPower(optimal_.pumpShaftPower_, pump_.getDrive());
@@ -123,7 +123,7 @@ double PSATResult::calculateOptimal() {
     // Annual Savings potential
 //    annualSavingsPotential_ = existing_.annualCost_ - optimal_.annualCost_;
     // Optimization Rating
-//    optimizationRating_ = optimal_.motorPower_ / existing_.motorPower_;
+//    optimizationRating_ = optimal_.motorPower / existing_.motorPower;
     return 0;
 }
 double PSATResult::calculateModified() {
@@ -149,7 +149,7 @@ double PSATResult::calculateModified() {
         modified_.pumpEfficiency_ = baselinePumpEfficiency_;
     }
 
-    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData_.getFlowRate(), fieldData_.getHead(), pump_.getSg(),
+    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData_.getFlowRate(), fieldData_.getHead(), pump_.getSpecificGravity(),
                                                 modified_.pumpEfficiency_);
     modified_.pumpShaftPower_ = modifiedPumpShaftPower.calculate();
 
@@ -181,7 +181,7 @@ double PSATResult::calculateModified() {
     //annualSavingsPotential_ = existing_.annualCost_ - modified_.annualCost_;
     annualSavingsPotential_ = 0.0;
     // Optimization Rating
-    //optimizationRating_ = modified_.motorPower_ / existing_.motorPower_;
+    //optimizationRating_ = modified_.motorPower / existing_.motorPower;
     optimizationRating_ = 0.0;
     return 0;
 }

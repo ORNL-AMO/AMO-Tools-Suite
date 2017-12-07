@@ -57,11 +57,7 @@ set (CMAKE_CXX_FLAGS "-Wall")
 file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
-#    src/FieldData.cpp
-#    src/Financial.cpp
-        src/psat/Motor.cpp
         src/psat/PSATResult.cpp
-        src/psat/Pump.cpp
         src/calculator/util/AnnualCost.cpp
         src/calculator/util/AnnualEnergy.cpp
         src/calculator/util/CurveFitVal.cpp
