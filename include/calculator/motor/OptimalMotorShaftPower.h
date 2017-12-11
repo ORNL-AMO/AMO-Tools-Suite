@@ -26,59 +26,52 @@ public:
         double pumpShaftPower,
         Pump::Drive drive
     ) :
-        pumpShaftPower_(pumpShaftPower),
-        drive_(drive)
+        pumpShaftPower(pumpShaftPower),
+        drive(drive)
     {}
 
     /**
      * Calculates the optimal motor shaft power
-     *
      * @return double, optimal motor shaft power in hp
      */
     double calculate();
 
     /**
      * Gets the pump shaft power
-     *
      * @return double, pump shaft power in hp
      */
     double getPumpShaftPower() const {
-        return pumpShaftPower_;
+        return pumpShaftPower;
     }
 
     /**
      * Sets the pump shaft power
-     *
      * @param pumpShaftPower double, pump shaft power in hp
-     *
      */
     void setPumpShaftPower(double pumpShaftPower) {
-        pumpShaftPower_ = pumpShaftPower;
+        this->pumpShaftPower = pumpShaftPower;
     }
 
     /**
      * Gets the type of drive the pump uses from either direct or belt drive
-     *
      * @return Pump::Drive, type of drive
      */
     Pump::Drive getDrive() const {
-        return drive_;
+        return drive;
     }
 
     /**
      * Sets the type of drive the pump uses from either direct or belt drive
-     *
      * @param drive Pump::Drive, type of drive
-     *
      */
     void setDrive(Pump::Drive drive) {
-        drive_ = drive;
+        this->drive = drive;
     }
 
 private:
-    double pumpShaftPower_;
-    Pump::Drive drive_;
-    double motorShaftPower_;
+    double pumpShaftPower;
+    Pump::Drive drive;
+    double motorShaftPower;
 };
 
 

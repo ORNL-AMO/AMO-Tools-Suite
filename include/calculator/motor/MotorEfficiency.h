@@ -25,7 +25,6 @@ public:
      * @param specifiedEfficiency double, specified efficiency as %
      * @param motorRatedPower double, rated power of motor in hp
      * @param loadFactor double, load factor - unitless
-     * @return
      */
     MotorEfficiency(
         Motor::LineFrequency lineFrequency,
@@ -35,100 +34,86 @@ public:
         double motorRatedPower,
         double loadFactor
     ) :
-        lineFrequency_(lineFrequency),
-        motorRpm_(motorRpm),
-        efficiencyClass_(efficiencyClass),
-        specifiedEfficiency_(specifiedEfficiency),
-        motorRatedPower_(motorRatedPower),
-        loadFactor_(loadFactor)
+        lineFrequency(lineFrequency),
+        motorRpm(motorRpm),
+        efficiencyClass(efficiencyClass),
+        specifiedEfficiency(specifiedEfficiency),
+        motorRatedPower(motorRatedPower),
+        loadFactor(loadFactor)
     {};
 
     /**
      * Calculates the motor efficiency
-     *
      * @return double, motor efficiency as %
      */
     double calculate();
 
     /**
      * Gets the line frequency
-     *
      * @return Motor::LineFrequency, classifictaion of line frequency in Hz
      */
     Motor::LineFrequency getLineFrequency() const {
-        return lineFrequency_;
+        return lineFrequency;
     }
 
     /**
      * Sets the line frequency
-     *
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
-     *
      */
     void setLineFrequency(Motor::LineFrequency lineFrequency) {
-        lineFrequency_ = lineFrequency;
+        this->lineFrequency = lineFrequency;
     }
 
     /**
      * Gets the RPM of motor
-     *
      * @return double, RPM of motor
      */
     double getMotorRpm() const {
-        return motorRpm_;
+        return motorRpm;
     }
 
     /**
      * Sets the RPM of motor
-     *
      * @param motorRpm double, RPM of motor
-     *
      */
     void setMotorRpm(double motorRpm) {
-        motorRpm_ = motorRpm;
+        this->motorRpm = motorRpm;
     }
 
     /**
      * Gets the efficiency class of motor
-     *
      * @return Motor::EfficiencyClass, efficiency class of motor
      */
     Motor::EfficiencyClass getEfficiencyClass() const {
-        return efficiencyClass_;
+        return efficiencyClass;
     }
 
     /**
      * Sets the efficiency class of motor
-     *
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
-     *
      */
     void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) {
-        efficiencyClass_ = efficiencyClass;
+        this->efficiencyClass = efficiencyClass;
     }
 
     /**
      * Gets the horsepower of motor
-     *
      * @return double, horsepower of motor
      */
     double getHp() const {
-        return hp_;
+        return hp;
     }
 
     /**
      * Sets the horsepower of motor
-     *
      * @param hp double, horsepower of motor
-     *
      */
     void setHp(double hp) {
-        hp_ = hp;
+        this->hp = hp;
     }
 
     /**
      * Gets the load estimation method
-     *
      * @return FieldData::LoadEstimationMethod, classification of load estimation method
      */
 //    FieldData::LoadEstimationMethod getLoadEstimationMethod() const {
@@ -137,74 +122,62 @@ public:
 
     /**
      * Sets the load estimation method
-     *
      * @param loadEstimationMethod FieldData::LoadEstimationMethod, classification of load estimation method
-     *
      */
 //    void setLoadEstimationMethod(FieldData::LoadEstimationMethod loadEstimationMethod) {
-//        loadEstimationMethod = loadEstimationMethod;
+//        this->loadEstimationMethod = loadEstimationMethod;
 //    }
 
     /**
      * Gets the motor power in kWh
-     *
      * @return double, motor power in kWh
      */
     double getMotorKwh() const {
-        return motorKwh_;
+        return motorKwh;
     }
 
     /**
      * Sets the motor power in kWh
-     *
      * @param motorKwh double, motor power in kWh
-     *
      */
     void setMotorKwh(double motorKwh) {
-        motorKwh_ = motorKwh;
+        this->motorKwh = motorKwh;
     }
 
     /**
      * Gets the motor amps
-     *
      * @return double, motor amps in A
      */
     double getMotorAmps() const {
-        return motorAmps_;
+        return motorAmps;
     }
 
     /**
      * Sets the motor amps
-     *
      * @param motorAmps double, motor amps in A
-     *
      */
     void setMotorAmps(double motorAmps) {
-        motorAmps_ = motorAmps;
+        this->motorAmps = motorAmps;
     }
 
     /**
      * Gets the actual efficiency of motor
-     *
      * @return double, actual efficiency of motor as %
      */
     double getActualEfficiency() const {
-        return actualEfficiency_;
+        return actualEfficiency;
     }
 
     /**
      * Sets the actual efficiency of motor
-     *
      * @param actualEfficiency double, actual efficiency of motor as %
-     *
      */
     void setActualEfficiency(double actualEfficiency) {
-        actualEfficiency_ = actualEfficiency;
+        this->actualEfficiency = actualEfficiency;
     }
 
     /**
      * Gets the loss of power in kW
-     *
      * @return double, power loss in kW
      */
     double getKWloss0() const {
@@ -213,39 +186,36 @@ public:
 
     /**
      * Gets the load factor
-     *
      * @return double, load factor - unitless
      */
     double getLoadFactor() const {
-        return loadFactor_;
+        return loadFactor;
     }
 
     /**
      * Sets the load factor
-     *
      * @param loadFactor double, load factor - unitless
-     *
      */
     void setLoadFactor(double loadFactor) {
-        loadFactor_ = loadFactor;
+        this->loadFactor = loadFactor;
     }
 
 private:
-    Motor::LineFrequency lineFrequency_;
-    double motorEff_ = 0.0;
-    double motorRpm_;
-    Motor::EfficiencyClass efficiencyClass_;
-    double specifiedEfficiency_;
-    double hp_;
+    Motor::LineFrequency lineFrequency;
+    double motorEff = 0.0;
+    double motorRpm;
+    Motor::EfficiencyClass efficiencyClass;
+    double specifiedEfficiency;
+    double hp;
 //    FieldData::LoadEstimationMethod loadEstimationMethod;
-    double motorKwh_;
-    double motorAmps_;
+    double motorKwh;
+    double motorAmps;
     double kWloss0 = 0.0;
-    //double ratedVoltage_;
-    double actualEfficiency_;
-    double motorRatedPower_;
-    double loadFactor_ = 0;
-    std::vector<double> motorEfficiency_;
+    //double ratedVoltage;
+    double actualEfficiency;
+    double motorRatedPower;
+    double loadFactor = 0;
+    std::vector<double> motorEfficiency;
 };
 
 

@@ -15,39 +15,39 @@
 
 double MotorEfficiency::calculate() {
 
-    if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
-        MotorEfficiency25 motorEfficiency25(efficiencyClass_, motorRatedPower_, motorRpm_, lineFrequency_);
-        motorEfficiency_ = motorEfficiency25.calculate();
+    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
+        MotorEfficiency25 motorEfficiency25(efficiencyClass, motorRatedPower, motorRpm, lineFrequency);
+        motorEfficiency = motorEfficiency25.calculate();
 
-    } else if (efficiencyClass_ == Motor::EfficiencyClass::STANDARD) {
-        MotorEfficiency25 motorEfficiency25(efficiencyClass_, motorRatedPower_, motorRpm_, lineFrequency_);
-        motorEfficiency_ = motorEfficiency25.calculate();
-    } else if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
+    } else if (efficiencyClass == Motor::EfficiencyClass::STANDARD) {
+        MotorEfficiency25 motorEfficiency25(efficiencyClass, motorRatedPower, motorRpm, lineFrequency);
+        motorEfficiency = motorEfficiency25.calculate();
+    } else if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
         /**
          * For specified efficiency, you have to first choose the nominal efficiency.
          */
-        MotorEfficiency25 eeMotorEfficiency(Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower_, motorRpm_,
-                                            lineFrequency_);
+        MotorEfficiency25 eeMotorEfficiency(Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower, motorRpm,
+                                            lineFrequency);
         std::vector<double> motorEfficiencyE_ = eeMotorEfficiency.calculate();
-        motorEfficiency_ = eeMotorEfficiency.calculate();
-        MotorEfficiency25 seMotorEfficiency(Motor::EfficiencyClass::STANDARD, motorRatedPower_, motorRpm_,
-                                            lineFrequency_);
+        motorEfficiency = eeMotorEfficiency.calculate();
+        MotorEfficiency25 seMotorEfficiency(Motor::EfficiencyClass::STANDARD, motorRatedPower, motorRpm,
+                                            lineFrequency);
         std::vector<double> motorEfficiencyS_ = seMotorEfficiency.calculate();
 
 
-        if (fabs(motorEfficiencyE_[3] - specifiedEfficiency_) > fabs(motorEfficiencyS_[3] - specifiedEfficiency_)) {
+        if (fabs(motorEfficiencyE_[3] - specifiedEfficiency) > fabs(motorEfficiencyS_[3] - specifiedEfficiency)) {
             //SE chosen
-            double C = specifiedEfficiency_ / motorEfficiencyS_[3];
+            double C = specifiedEfficiency / motorEfficiencyS_[3];
             for (std::size_t i = 0; i < 5; ++i) {
-                motorEfficiency_[i] = motorEfficiencyS_[i] * C;
+                motorEfficiency[i] = motorEfficiencyS_[i] * C;
             }
         } else { // EE chosen
-            specifiedEfficiency_ = specifiedEfficiency_ / 100;
-            double C = specifiedEfficiency_ / motorEfficiencyE_[3];
+            specifiedEfficiency = specifiedEfficiency / 100;
+            double C = specifiedEfficiency / motorEfficiencyE_[3];
 
 
             for (std::size_t i = 0; i < 5; ++i) {
-                motorEfficiency_[i] = motorEfficiencyE_[i] * C;
+                motorEfficiency[i] = motorEfficiencyE_[i] * C;
 
             }
         }
@@ -71,16 +71,16 @@ double MotorEfficiency::calculate() {
      * Make sure motoEfficiency is in decimal rather %.
      * E.g.: 0.92 is correct, 92 is wrong.
      */
-    double kWloss25 = ((1 / motorEfficiency_[0]) - 1) * motorRatedPower_ * 0.746 * 0.25;
+    double kWloss25 = ((1 / motorEfficiency[0]) - 1) * motorRatedPower * 0.746 * 0.25;
     kWloss0 = 0.8 * kWloss25;
 
-    if (loadFactor_ > 1.5) loadFactor_ = 1.5;
+    if (loadFactor > 1.5) loadFactor = 1.5;
 
-    if (loadFactor_ < 0.25 || loadFactor_ == 0.25 || std::abs(loadFactor_ - 0.25) < 0.001) {
-        double kWloss_ = kWloss0 + loadFactor_ * 100 * (kWloss25 - kWloss0) / 25;
-        double kWshaft_ = motorRatedPower_ * 0.746 * (loadFactor_); // Make sure motorRatedPower is in hp
+    if (loadFactor < 0.25 || loadFactor == 0.25 || std::abs(loadFactor - 0.25) < 0.001) {
+        double kWloss_ = kWloss0 + loadFactor * 100 * (kWloss25 - kWloss0) / 25;
+        double kWshaft_ = motorRatedPower * 0.746 * (loadFactor); // Make sure motorRatedPower is in hp
         double kWe_ = kWloss_ + kWshaft_; // Input electric power
-        motorEff_ = kWshaft_ / kWe_; //Final efficiency calculation
+        motorEff = kWshaft_ / kWe_; //Final efficiency calculation
     }
         /**
          * 26 - 125
@@ -90,26 +90,26 @@ double MotorEfficiency::calculate() {
          * Use the fit coefficients to popluate, in 1% load intervals, from 26 to 125% load
          */
 
-    else if ((loadFactor_ < 1.25 || loadFactor_ == 1.25 || std::abs(loadFactor_ - 1.25) < 0.001) &&
-             loadFactor_ > 0.25) {
+    else if ((loadFactor < 1.25 || loadFactor == 1.25 || std::abs(loadFactor - 1.25) < 0.001) &&
+             loadFactor > 0.25) {
         double xCoord_[5] = {.25, .50, .75, 1.00, 1.25};
-        double yCoord_[5] = {motorEfficiency_[0], motorEfficiency_[1], motorEfficiency_[2], motorEfficiency_[3],
-                             motorEfficiency_[4]};
-        CurveFitVal cfv(5, xCoord_, yCoord_, 4, loadFactor_);
-        motorEff_ = cfv.calculate();
+        double yCoord_[5] = {motorEfficiency[0], motorEfficiency[1], motorEfficiency[2], motorEfficiency[3],
+                             motorEfficiency[4]};
+        CurveFitVal cfv(5, xCoord_, yCoord_, 4, loadFactor);
+        motorEff = cfv.calculate();
     }
         /**
          * 126 - 150
          * Pick the 75, 100, and 125% motor efficiency values and do a 2nd order polynomial fit
          * Use the fit coefficients to populate, in 1% load intervals, the current range from 126 to 150% load
          */
-    else if ((loadFactor_ < 1.50 || loadFactor_ == 1.50 || std::abs(loadFactor_ - 1.50) < 0.001) &&
-             loadFactor_ > 1.25) {
+    else if ((loadFactor < 1.50 || loadFactor == 1.50 || std::abs(loadFactor - 1.50) < 0.001) &&
+             loadFactor > 1.25) {
         double xCoord_[3] = {.75, 1.00, 1.25};
-        double yCoord_[3] = {motorEfficiency_[2], motorEfficiency_[3], motorEfficiency_[4]};
-        CurveFitVal cfv(3, xCoord_, yCoord_, 2, loadFactor_);
-        motorEff_ = cfv.calculate();
+        double yCoord_[3] = {motorEfficiency[2], motorEfficiency[3], motorEfficiency[4]};
+        CurveFitVal cfv(3, xCoord_, yCoord_, 2, loadFactor);
+        motorEff = cfv.calculate();
     }
 
-    return motorEff_;
+    return motorEff;
 }

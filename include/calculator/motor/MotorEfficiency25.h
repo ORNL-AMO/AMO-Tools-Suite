@@ -29,14 +29,13 @@ public:
         double motorRpm,
         Motor::LineFrequency lineFrequency
     ) :
-        efficiencyClass_(efficiencyClass),
-        motorRatedPower_(motorRatedPower),
-        motorRpm_(motorRpm),
-        lineFrequency_(lineFrequency)
+        efficiencyClass(efficiencyClass),
+        motorRatedPower(motorRatedPower),
+        motorRpm(motorRpm),
+        lineFrequency(lineFrequency)
     {};
 
     /**
-     *
      * @return Vector containing motor efficiency as %
      */
     std::vector<double> calculate();
@@ -45,19 +44,16 @@ private:
     /**
      * Efficiency class of motor
      */
-    Motor::EfficiencyClass efficiencyClass_;
+    Motor::EfficiencyClass efficiencyClass;
     /**
      * Rated power of motor in hp
      */
-    double motorRatedPower_;
-    /**
-     * Rpm of motor
-     */
-    double motorRpm_;
+    double motorRatedPower;
+    double motorRpm;
     /**
      * Line Frequency of motor
      */
-    Motor::LineFrequency lineFrequency_;
+    Motor::LineFrequency lineFrequency;
 };
 
 

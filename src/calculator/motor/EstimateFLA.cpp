@@ -129,7 +129,7 @@ std::vector<double> EstimateFLA::calculate() {
     /**
      * Calculate the number of poles based on the RPM
      */
-    Poles polesobj(motorRPM_, lineFrequency_);
+    Poles polesobj(motorRPM, lineFrequency);
     int poles = polesobj.calculate();
 
     /**
@@ -141,27 +141,27 @@ std::vector<double> EstimateFLA::calculate() {
      * Calculate basic FLA value. There is better way to do this.
      * =$B13*(C$4+(C$5*EXP(-C$6*$B13))+(C$7*EXP(-C$8*$B13)))
      */
-    double basicFLAValue_ = motorRatedPower_ * (flaBasic_[0][poleChooser_] +
+    double basicFLAValue_ = motorRatedPower * (flaBasic_[0][poleChooser_] +
                                                 (flaBasic_[1][poleChooser_] *
-                                                 exp(-1 * flaBasic_[2][poleChooser_] * motorRatedPower_)) +
+                                                 exp(-1 * flaBasic_[2][poleChooser_] * motorRatedPower)) +
                                                 (flaBasic_[3][poleChooser_] *
-                                                 exp(-1 * flaBasic_[4][poleChooser_] * motorRatedPower_)));
+                                                 exp(-1 * flaBasic_[4][poleChooser_] * motorRatedPower)));
     /**
      * Calculate EE multiplier
      */
     double eeMultiplier = (eeFlamultipliers_[0][poleChooser_] +
                            (eeFlamultipliers_[1][poleChooser_] *
-                            exp(-1 * eeFlamultipliers_[2][poleChooser_] * motorRatedPower_)) +
+                            exp(-1 * eeFlamultipliers_[2][poleChooser_] * motorRatedPower)) +
                            (eeFlamultipliers_[3][poleChooser_] *
-                            exp(-1 * eeFlamultipliers_[4][poleChooser_] * motorRatedPower_)));
+                            exp(-1 * eeFlamultipliers_[4][poleChooser_] * motorRatedPower)));
     /**
      * Calculate SE multiplier
      */
     double seMultiplier = (seFlamultipliers_[0][poleChooser_] +
                            (seFlamultipliers_[1][poleChooser_] *
-                            exp(-1 * seFlamultipliers_[2][poleChooser_] * motorRatedPower_)) +
+                            exp(-1 * seFlamultipliers_[2][poleChooser_] * motorRatedPower)) +
                            (seFlamultipliers_[3][poleChooser_] *
-                            exp(-1 * seFlamultipliers_[4][poleChooser_] * motorRatedPower_)));
+                            exp(-1 * seFlamultipliers_[4][poleChooser_] * motorRatedPower)));
 
     /**
      * Calculate EE or SE values
@@ -188,9 +188,9 @@ std::vector<double> EstimateFLA::calculate() {
     for (std::size_t i = 0; i < 6; i++) {
         plMultiplier[i] = (tempCoeff[0][i] +
                            (tempCoeff[1][i] *
-                            exp(-1 * tempCoeff[2][i] * motorRatedPower_)) +
+                            exp(-1 * tempCoeff[2][i] * motorRatedPower)) +
                            (tempCoeff[3][i] *
-                            exp(-1 * tempCoeff[4][i] * motorRatedPower_)));
+                            exp(-1 * tempCoeff[4][i] * motorRatedPower)));
     }
 
     /**
@@ -199,27 +199,27 @@ std::vector<double> EstimateFLA::calculate() {
 
     double effVal = 0.0;
 
-    if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
+    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (std::size_t i = 0; i < 6; i++) {
             plValues[i] = eeFLAValue * plMultiplier[i];
         }
 
-    } else if (efficiencyClass_ == Motor::EfficiencyClass::STANDARD) {
+    } else if (efficiencyClass == Motor::EfficiencyClass::STANDARD) {
         for (std::size_t i = 0; i < 6; i++) {
             plValues[i] = seFLAValue * plMultiplier[i];
         }
-    } else if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
+    } else if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
         /**
          * For a case where the efficiency has been specified, there is a multiple step process:
          * 1. The absolute value of the differences between the specified efficiency and the efficiency values for EE and SE motors are calculated
          * 2. Pick the smaller of the two absolute values, and use the nominal efficiency of that selection going forward
          * 3. Divide the selected (EE or SE) efficiency by the specified efficiency and then multiply that by the FLA for the corresponding selection.
          */
-        specifiedEfficiency_ = 95;
-        if (fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency_) >
-            fabs(seFLAValue * plMultiplier[4] - specifiedEfficiency_)) {
-            MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, Motor::EfficiencyClass::STANDARD, specifiedEfficiency_,
-                                            motorRatedPower_, 1);
+        specifiedEfficiency = 95;
+        if (fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency) >
+            fabs(seFLAValue * plMultiplier[4] - specifiedEfficiency)) {
+            MotorEfficiency motorEfficiency(lineFrequency,motorRPM, Motor::EfficiencyClass::STANDARD, specifiedEfficiency,
+                                            motorRatedPower, 1);
             effVal = motorEfficiency.calculate();
             /// SE is the nominal efficiency
             for (std::size_t i = 0; i < 6; i++) {
@@ -229,8 +229,8 @@ std::vector<double> EstimateFLA::calculate() {
             }
         } else {
             /// EE is the nominal efficiency
-            MotorEfficiency motorEfficiency(lineFrequency_,motorRPM_, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency_,
-                                            motorRatedPower_, 1);
+            MotorEfficiency motorEfficiency(lineFrequency,motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency,
+                                            motorRatedPower, 1);
             effVal = motorEfficiency.calculate();
             for (std::size_t i = 0; i < 6; i++) {
                 plValues[i] = eeFLAValue * plMultiplier[i];
@@ -242,11 +242,11 @@ std::vector<double> EstimateFLA::calculate() {
 
     /// Estimated FLA refers to the 100% value.
     double tempAmp100 = plValues[4];
-    plValues[4] = plValues[4] * 460 / ratedVoltage_;
-    if (efficiencyClass_ == Motor::EfficiencyClass::SPECIFIED) {
-        estimatedFLA_ = effVal * plValues[4] * 100 / specifiedEfficiency_;
+    plValues[4] = plValues[4] * 460 / ratedVoltage;
+    if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
+        estimatedFLA = effVal * plValues[4] * 100 / specifiedEfficiency;
     } else
-        estimatedFLA_ = plValues[4];
+        estimatedFLA = plValues[4];
     plValues[4] = tempAmp100;
     return plValues;
 }

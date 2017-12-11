@@ -38,7 +38,7 @@ double OptimalMotorPower::calculate() {
         power = motorPower.calculate();
         tempMsp = power * eff;
         // Converting to KW for matching purpose.
-        //cout << tempLoadFraction_ << ":" << current << ":" << eff <<":" << pf << ":" << power << ":" << endl;
+        //cout << tempLoadFraction << ":" << current << ":" << eff <<":" << pf << ":" << power << ":" << endl;
         mspkW = optimalMotorShaftPower_ * 0.746;
 
         if (tempMsp > mspkW || tempLoadFraction_ > 1.5) {
@@ -69,8 +69,8 @@ double OptimalMotorPower::calculate() {
     /*
      * Linear Interpolation of values
      */
-    //double adjCurrent1 = (((fieldVoltage_ / ratedVoltage_) - 1) * (1 - (2 * lf1)) + 1) * current1;
-    //double adjCurrent2 = (((fieldVoltage_ / ratedVoltage_) - 1) * (1 - (2 * lf2)) + 1) * current2;
+    //double adjCurrent1 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf1)) + 1) * current1;
+    //double adjCurrent2 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf2)) + 1) * current2;
     //current = adjCurrent1 + 100 * (fractionalIndex_ - lf1) * (adjCurrent2 - adjCurrent1);
     current = current1 + 100 * (fractionalIndex_ - lf1) * (current2 - current1);
     eff = eff1 + 100 * (fractionalIndex_ - lf1) * (eff2 - eff1);

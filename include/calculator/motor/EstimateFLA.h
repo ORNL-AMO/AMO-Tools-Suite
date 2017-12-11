@@ -32,12 +32,12 @@ public:
         double specifiedEfficiency,
         double ratedVoltage
     ) :
-        motorRatedPower_(motorRatedPower),
-        motorRPM_(motorRPM),
-        lineFrequency_(lineFrequency),
-        efficiencyClass_(efficiencyClass),
-        specifiedEfficiency_(specifiedEfficiency),
-        ratedVoltage_(ratedVoltage)
+        motorRatedPower(motorRatedPower),
+        motorRPM(motorRPM),
+        lineFrequency(lineFrequency),
+        efficiencyClass(efficiencyClass),
+        specifiedEfficiency(specifiedEfficiency),
+        ratedVoltage(ratedVoltage)
     {};
 
     /**
@@ -50,25 +50,25 @@ public:
      * Getter for estimated Full load amps
      * @return double, Estimated full load amp
      */
-    double getEstimatedFLA() {
-        return estimatedFLA_;
+    double getEstimatedFLA() const {
+        return estimatedFLA;
     }
 
 private:
     /// Estimated full load amp
-    double estimatedFLA_;
+    double estimatedFLA;
     /// Rated Power of motor
-    double motorRatedPower_ = 0.0;
+    double motorRatedPower = 0.0;
     /// Motor RPM
-    double motorRPM_ = 0;
+    double motorRPM;
     /// Line Frequency of Motor
-    Motor::LineFrequency lineFrequency_;
+    Motor::LineFrequency lineFrequency;
     /// Efficiency class of Motor
-    Motor::EfficiencyClass efficiencyClass_;
+    Motor::EfficiencyClass efficiencyClass;
     /// Specified Efficiency of motor, if efficiency class is SPECIFIED
-    double specifiedEfficiency_ =0.0;
+    double specifiedEfficiency;
     /// Rated voltage of motor
-    double ratedVoltage_ =0.0;
+    double ratedVoltage;
 };
 
 

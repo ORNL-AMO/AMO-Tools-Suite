@@ -201,7 +201,7 @@ std::vector<double> MotorEfficiency25::calculate() {
      * Find the poles
      */
 
-    Poles poles(static_cast<int>(motorRpm_), lineFrequency_);
+    Poles poles(static_cast<int>(motorRpm), lineFrequency);
     int noPoles = poles.calculate();
 
     int polechooser = noPoles / 2 - 1;
@@ -214,36 +214,36 @@ std::vector<double> MotorEfficiency25::calculate() {
      */
     std::vector<double> motorEfficiency_(5);
 
-    if (efficiencyClass_ == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
+    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (std::size_t i = 0; i < 4; ++i) { //cols
-            if (motorRatedPower_ <= 125) {
+            if (motorRatedPower <= 125) {
                 motorEfficiency_[i] = (eeLt125hp[polechooser][0][i] + (eeLt125hp[polechooser][1][i] *
                                                                        exp(-1 * eeLt125hp[polechooser][2][i] *
-                                                                           motorRatedPower_)) +
+                                                                           motorRatedPower)) +
                                        (eeLt125hp[polechooser][3][i] *
-                                        exp(-1 * eeLt125hp[polechooser][4][i] * motorRatedPower_))) / 100;
+                                        exp(-1 * eeLt125hp[polechooser][4][i] * motorRatedPower))) / 100;
             } else {
                 motorEfficiency_[i] = (eeGt125hp[polechooser][0][i] + (eeGt125hp[polechooser][1][i] *
                                                                        exp(-1 * eeGt125hp[polechooser][2][i] *
-                                                                           motorRatedPower_)) +
+                                                                           motorRatedPower)) +
                                        (eeGt125hp[polechooser][3][i] *
-                                        exp(-1 * eeGt125hp[polechooser][4][i] * motorRatedPower_))) / 100;
+                                        exp(-1 * eeGt125hp[polechooser][4][i] * motorRatedPower))) / 100;
             }
         }
-    } else if (efficiencyClass_ == Motor::EfficiencyClass::STANDARD) {
+    } else if (efficiencyClass == Motor::EfficiencyClass::STANDARD) {
         for (std::size_t i = 0; i < 4; ++i) { //cols
-            if (motorRatedPower_ <= 125) {
+            if (motorRatedPower <= 125) {
                 motorEfficiency_[i] = (seLt125hp[polechooser][0][i] + (seLt125hp[polechooser][1][i] *
                                                                        exp(-1 * seLt125hp[polechooser][2][i] *
-                                                                           motorRatedPower_)) +
+                                                                           motorRatedPower)) +
                                        (seLt125hp[polechooser][3][i] *
-                                        exp(-1 * seLt125hp[polechooser][4][i] * motorRatedPower_))) / 100;
+                                        exp(-1 * seLt125hp[polechooser][4][i] * motorRatedPower))) / 100;
             } else {
                 motorEfficiency_[i] = (seGt125hp[polechooser][0][i] + (seGt125hp[polechooser][1][i] *
                                                                        exp(-1 * seGt125hp[polechooser][2][i] *
-                                                                           motorRatedPower_)) +
+                                                                           motorRatedPower)) +
                                        (seGt125hp[polechooser][3][i] *
-                                        exp(-1 * seGt125hp[polechooser][4][i] * motorRatedPower_))) / 100;
+                                        exp(-1 * seGt125hp[polechooser][4][i] * motorRatedPower))) / 100;
             }
         }
     }

@@ -21,7 +21,7 @@ double OptimalMotorCurrent::calculate() {
     /* Adjustment based on the measured Voltage/ Field Voltage
     double temp_fullLoadAmps = plValues[4];
     for (int i = 0; i < 6; i++) {
-        plValues[i] = plValues[i]*((((fieldVoltage_/ratedVoltage_)-1)*(1+(-2*(0.25*i))))+1);
+        plValues[i] = plValues[i]*((((fieldVoltage/ratedVoltage)-1)*(1+(-2*(0.25*i))))+1);
     }*/
     if (loadFactor_ < 0.25) {
         double xCoord_[3] = {0, .25, .50};

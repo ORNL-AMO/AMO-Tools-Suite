@@ -50,7 +50,7 @@ public:
 //                                                                        kinematicViscosity_(kinematicViscosity),
 //                                                                        stageCount(stageCount), flowRate(flowRate),
 //                                                                        head(head), speed(speed),
-//                                                                        actualEfficiency_(actualEfficiency) {}
+//                                                                        actualEfficiency(actualEfficiency) {}
 
 /**
      * Calculates the optimal pump efficiency

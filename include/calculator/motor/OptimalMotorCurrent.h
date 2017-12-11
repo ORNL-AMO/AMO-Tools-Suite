@@ -46,7 +46,7 @@ public:
         loadFactor_(loadFactor),
         ratedVoltage_(ratedVoltage)
 //        fullLoadAmps(fullLoadAmps),
-//        fieldVoltage_(fieldVoltage)
+//        fieldVoltage(fieldVoltage)
     {};
 
     /**
@@ -108,7 +108,7 @@ private:
     double ratedVoltage_ = 0.0;
 //    double estimatedFLA = 0.0;
 //    double fullLoadAmps = 0.0;
-//    double fieldVoltage_ = 0.0;
+//    double fieldVoltage = 0.0;
 };
 
 
