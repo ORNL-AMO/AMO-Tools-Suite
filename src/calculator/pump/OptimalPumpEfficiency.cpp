@@ -17,7 +17,7 @@
 
 double OptimalPumpEfficiency::calculate() {
 
-    OptimalPrePumpEff optimalPrePumpEff(style_, achievableEfficiency_, flowRate_);
+    OptimalPrePumpEff optimalPrePumpEff(style, achievableEfficiency, flowRate);
     pumpEfficiency = optimalPrePumpEff.calculate();
     /*
      * You may have individual functions for each also.
@@ -25,28 +25,28 @@ double OptimalPumpEfficiency::calculate() {
     /*
      * Viscosity Correction Factor
      */
-    double parameterB =
-            26.6 * (pow(kinematicViscosity_, 0.5) * pow(head_, 0.0625)) / (pow(flowRate_, 0.375) * pow(rpm_, 0.25));
-    double viscosityCorrectionFactor = std::fmin(1, (pow(parameterB, -(0.0547 * pow(parameterB, 0.69)))));
+    double parameterB = 26.6 * (std::pow(kinematicViscosity, 0.5) * std::pow(head, 0.0625))
+                        / (std::pow(flowRate, 0.375) * std::pow(rpm, 0.25));
+    double viscosityCorrectionFactor = std::fmin(1, (std::pow(parameterB, -(0.0547 * std::pow(parameterB, 0.69)))));
     /*
      * Speed Correction
      */
-    OptimalSpecificSpeed optimalSpecificSpeed(rpm_,flowRate_, head_, stageCount_);
+    OptimalSpecificSpeed optimalSpecificSpeed(rpm,flowRate, head, stageCount);
     double specificSpeed = optimalSpecificSpeed.calculate();
-    OptimalSpecificSpeedCorrection optimalSpecificSpeedCorrection(style_,specificSpeed);
+    OptimalSpecificSpeedCorrection optimalSpecificSpeedCorrection(style, specificSpeed);
     double speedCorrection = optimalSpecificSpeedCorrection.calculate();
     /*
      * positiveDeviationFactor
      */
-    OptimalDeviationFactor optimalDeviationFactor(flowRate_);
+    OptimalDeviationFactor optimalDeviationFactor(flowRate);
     double positiveDeviationFactor = optimalDeviationFactor.calculate();
     /*
      * Optimal Efficiency
      */
-    pumpEfficiency = pumpEfficiency/100;
-    optimalEfficiency_ = (pumpEfficiency * viscosityCorrectionFactor - speedCorrection) * positiveDeviationFactor;
-    if(style_ == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY){
-        optimalEfficiency_ = achievableEfficiency_;
+    pumpEfficiency = pumpEfficiency / 100;
+    optimalEfficiency = (pumpEfficiency * viscosityCorrectionFactor - speedCorrection) * positiveDeviationFactor;
+    if (style == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
+        optimalEfficiency = achievableEfficiency;
     }
-    return optimalEfficiency_;
+    return optimalEfficiency;
 }

@@ -2,7 +2,7 @@
 #include "calculator/pump/OptimalSpecificSpeedCorrection.h"
 
 double OptimalSpecificSpeedCorrection::calculate() {
-    double notVTP[7][2] = {{14.884085,           6.5703317},
+    const double notVTP[7][2] = {{14.884085,           6.5703317},
                            {-0.021342141,        -0.010048327},
                            {0.0000121172,        0.0000061475098},
                            {-0.0000000031885957, -0.0000000019659725},
@@ -10,7 +10,7 @@ double OptimalSpecificSpeedCorrection::calculate() {
                            {1.2855352E-16,       -3.2272033E-17},
                            {-2.3798184E-20,      1.1881188E-21}};
 
-    double VTP[7][2] = {{14.788539,           4.0559384},
+    const double VTP[7][2] = {{14.788539,           4.0559384},
                         {-0.022490348,        -0.0026632249},
                         {0.000017226359,      0.0000006761157},
                         {-0.0000000075690542, -0.000000000087766773},
@@ -21,29 +21,21 @@ double OptimalSpecificSpeedCorrection::calculate() {
     // double specificSpeed = rpm * sqrt(flowRate) / (pow((head / stageCount), 0.75));
 
     //double speedCorrection = 0;
-    int speedCoeffChooser = 0;
-    if (style_ == Pump::Style::VERTICAL_TURBINE) {
-        if (specificSpeed_ < 4550)
-            speedCoeffChooser = 0;
-        else
-            speedCoeffChooser = 1;
-        specificSpeedCorrection_ = std::fmax((VTP[0][speedCoeffChooser] + (VTP[1][speedCoeffChooser] * specificSpeed_) +
-                                     (VTP[2][speedCoeffChooser] * pow(specificSpeed_, 2)) +
-                                     (VTP[3][speedCoeffChooser] * pow(specificSpeed_, 3)) +
-                                     (VTP[4][speedCoeffChooser] * pow(specificSpeed_, 4)) +
-                                     (VTP[5][speedCoeffChooser] * pow(specificSpeed_, 5)) +
-                                     (VTP[6][speedCoeffChooser] * pow(specificSpeed_, 6))), 0) / 100;
-    } else {
-        if (specificSpeed_ < 2530)
-            speedCoeffChooser = 0;
-        else
-            speedCoeffChooser = 1;
-        specificSpeedCorrection_ = std::fmax((notVTP[0][speedCoeffChooser] + (notVTP[1][speedCoeffChooser] * specificSpeed_) +
-                                     (notVTP[2][speedCoeffChooser] * pow(specificSpeed_, 2)) +
-                                     (notVTP[3][speedCoeffChooser] * pow(specificSpeed_, 3)) +
-                                     (notVTP[4][speedCoeffChooser] * pow(specificSpeed_, 4)) +
-                                     (notVTP[5][speedCoeffChooser] * pow(specificSpeed_, 5)) +
-                                     (notVTP[6][speedCoeffChooser] * pow(specificSpeed_, 6))), 0) / 100;
+    if (style == Pump::Style::VERTICAL_TURBINE) {
+        std::size_t index = (specificSpeed < 4550) ? 0 : 1;
+        return std::fmax((VTP[0][index] + (VTP[1][index] * specificSpeed) +
+                          (VTP[2][index] * pow(specificSpeed, 2)) +
+                          (VTP[3][index] * pow(specificSpeed, 3)) +
+                          (VTP[4][index] * pow(specificSpeed, 4)) +
+                          (VTP[5][index] * pow(specificSpeed, 5)) +
+                          (VTP[6][index] * pow(specificSpeed, 6))), 0) / 100;
     }
-    return specificSpeedCorrection_;
+
+    std::size_t index = (specificSpeed < 2530) ? 0 : 1;
+    return std::fmax((notVTP[0][index] + (notVTP[1][index] * specificSpeed) +
+                      (notVTP[2][index] * pow(specificSpeed, 2)) +
+                      (notVTP[3][index] * pow(specificSpeed, 3)) +
+                      (notVTP[4][index] * pow(specificSpeed, 4)) +
+                      (notVTP[5][index] * pow(specificSpeed, 5)) +
+                      (notVTP[6][index] * pow(specificSpeed, 6))), 0) / 100;
 }

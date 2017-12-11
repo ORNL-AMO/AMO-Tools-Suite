@@ -22,13 +22,13 @@ public:
      * @param flowRate double, measured or required flow rate in gpm
      */
     OptimalPrePumpEff(
-        Pump::Style style,
-        double achievableEfficiency,
-        double flowRate
+        const Pump::Style style,
+        const double achievableEfficiency,
+        const double flowRate
     ) :
-        achievableEfficiency_(achievableEfficiency),
-        style_(style),
-        flowRate_(flowRate)
+        achievableEfficiency(achievableEfficiency),
+        style(style),
+        flowRate(flowRate)
     {};
 
     /**
@@ -38,10 +38,9 @@ public:
     double calculate();
 
 private:
-    double achievableEfficiency_;
-    Pump::Style style_;
-    double flowRate_;
-    double pumpEfficiency = 0.0;
+    const double achievableEfficiency;
+    const Pump::Style style;
+    const double flowRate;
 };
 
 

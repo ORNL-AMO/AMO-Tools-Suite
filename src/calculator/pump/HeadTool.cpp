@@ -10,7 +10,7 @@
 #include "calculator/pump/HeadTool.h"
 
 double HeadToolBase::velocity(const double diameter, const double flow) {
-	return flow / ( PI_ * diameter / 2.0 * diameter / 2.0 );
+	return flow / ( PI * diameter / 2.0 * diameter / 2.0 );
 }
 
 double HeadToolBase::velocityHead(const double velocity, const double gravity) {
@@ -22,18 +22,18 @@ std::unordered_map<std::string, double> HeadToolSuctionTank::calculate() {
 	// in the velocityHead Suction and Discharge calculations
 //	const double flow = flowRate * 4.402867544 / 15850.32316;
 //	const double pressureHead =
-//			(((dischargeGaugePressure_ - suctionTankGasOverPressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
+//			(((dischargeGaugePressure - suctionTankGasOverPressure) * 0.145037738007) / 1.42197020632) / specificGravity;
 
-	const double flow = flowRate_ / 448.8311693;
-	const double elevationHead = dischargeGaugeElevation_ - suctionTankFluidSurfaceElevation_;
+	const double flow = flowRate / 448.8311693;
+	const double elevationHead = dischargeGaugeElevation - suctionTankFluidSurfaceElevation;
 	const double pressureHead =
-			((dischargeGaugePressure_ - suctionTankGasOverPressure_) / 0.432750001) / specificGravity_;
-	const double velocityHeadSuction = velocityHead( velocity( suctionPipeDiameter_ / 12, flow ), gravity_ );
-	const double velocityHeadDischarge = velocityHead( velocity( dischargePipeDiameter_ / 12, flow ), gravity_ );
+			((dischargeGaugePressure - suctionTankGasOverPressure) / 0.432750001) / specificGravity;
+	const double velocityHeadSuction = velocityHead( velocity( suctionPipeDiameter / 12, flow ), gravity );
+	const double velocityHeadDischarge = velocityHead( velocity( dischargePipeDiameter / 12, flow ), gravity );
 
 	const double velocityHeadDifferential = velocityHeadDischarge;
-	const double suctionHead = suctionLineLossCoefficients_ * velocityHeadSuction;
-	const double dischargeHead = dischargeLineLossCoefficients_ * velocityHeadDischarge;
+	const double suctionHead = suctionLineLossCoefficients * velocityHeadSuction;
+	const double dischargeHead = dischargeLineLossCoefficients * velocityHeadDischarge;
 
 	const double pumpHead = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
 
@@ -50,18 +50,18 @@ std::unordered_map<std::string, double> HeadToolSuctionTank::calculate() {
 std::unordered_map<std::string, double> HeadTool::calculate() {
 //	const double flow = flowRate * 4.402867544 / 15850.32316;
 //	const double pressureHead =
-//			(((dischargeGaugePressure_ - suctionGaugePressure_) * 0.145037738007) / 1.42197020632) / specificGravity_;
+//			(((dischargeGaugePressure - suctionGaugePressure) * 0.145037738007) / 1.42197020632) / specificGravity;
 
-	const double flow = flowRate_ / 448.8311693;
-	const double elevationHead = dischargeGaugeElevation_ - suctionGaugeElevation_;
+	const double flow = flowRate / 448.8311693;
+	const double elevationHead = dischargeGaugeElevation - suctionGaugeElevation;
 	const double pressureHead =
-			((dischargeGaugePressure_ - suctionGaugePressure_) / 0.432750001) / specificGravity_;
-	const double velocityHeadSuction = velocityHead( velocity( suctionPipeDiameter_ / 12, flow ), gravity_ );
-	const double velocityHeadDischarge = velocityHead( velocity( dischargePipeDiameter_ / 12, flow ), gravity_ );
+			((dischargeGaugePressure - suctionGaugePressure) / 0.432750001) / specificGravity;
+	const double velocityHeadSuction = velocityHead( velocity( suctionPipeDiameter / 12, flow ), gravity );
+	const double velocityHeadDischarge = velocityHead( velocity( dischargePipeDiameter / 12, flow ), gravity );
 
 	const double velocityHeadDifferential = velocityHeadDischarge - velocityHeadSuction;
-	const double suctionHead = suctionLineLossCoefficients_ * velocityHeadSuction;
-	const double dischargeHead = dischargeLineLossCoefficients_ * velocityHeadDischarge;
+	const double suctionHead = suctionLineLossCoefficients * velocityHeadSuction;
+	const double dischargeHead = dischargeLineLossCoefficients * velocityHeadDischarge;
 
 	const double pumpHead = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
 

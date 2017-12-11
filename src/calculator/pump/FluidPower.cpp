@@ -12,9 +12,8 @@
 
 /**
  * Calculates the fluid power
- * @return Fluid power
+ * @return Fluid power in kw
  */
 double FluidPower::calculate() {
-    fluidPower_ = 0.746 * flowRate_ * head_ * specificGravity_ / 3961.38;
-    return fluidPower_;
+    return 0.746 * flowRate * head * specificGravity / 3961.38;
 }

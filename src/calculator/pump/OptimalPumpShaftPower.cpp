@@ -11,9 +11,9 @@
 #include "calculator/pump/OptimalPumpShaftPower.h"
 
 double OptimalPumpShaftPower::calculate() {
-    FluidPower fluidPower(specificGravity_,flowRate_,head_);
+    FluidPower fluidPower(specificGravity,flowRate,head);
     double fluidPower_ = fluidPower.calculate();
-    double requiredShaftPowerkW = fluidPower_ / pumpEfficiency_;
+    double requiredShaftPowerkW = fluidPower_ / pumpEfficiency;
     double requiredShaftPowerhP = requiredShaftPowerkW / 0.746;
     return requiredShaftPowerhP;
 }

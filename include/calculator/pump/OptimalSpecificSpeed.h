@@ -27,10 +27,10 @@ public:
         double head,
         double stageCount
     ):
-        stageCount_(stageCount),
-        flowRate_(flowRate),
-        head_(head),
-        rpm_(rpm)
+        stageCount(stageCount),
+        flowRate(flowRate),
+        head(head),
+        rpm(rpm)
     {};
 
     /**
@@ -38,11 +38,12 @@ public:
      * @return double, optimal specific speed in rpm*sqrt(gpm)/((ft/s)^(3/2))
      */
     double calculate();
+
 private:
-    double stageCount_;
-    double flowRate_;
-    double head_;
-    double rpm_;
+    double stageCount;
+    double flowRate;
+    double head;
+    double rpm;
 };
 
 
