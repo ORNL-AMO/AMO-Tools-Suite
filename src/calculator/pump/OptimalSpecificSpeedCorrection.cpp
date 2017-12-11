@@ -1,7 +1,3 @@
-//
-// Created by Mishra, Subhankar on 10/21/16.
-//
-
 #include <cmath>
 #include "calculator/pump/OptimalSpecificSpeedCorrection.h"
 

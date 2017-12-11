@@ -1,7 +1,3 @@
-//
-// Created by Mishra, Subhankar on 10/3/16.
-//
-
 #include <cmath>
 #include "calculator/motor/Poles.h"
 

@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 4/20/17.
-//
-
 #include "calculator/losses/SlagOtherMaterialLosses.h"
 
 double SlagOtherMaterialLosses::getHeatLoss() {

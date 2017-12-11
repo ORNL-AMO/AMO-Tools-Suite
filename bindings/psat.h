@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 3/7/17.
-//
-
 #ifndef AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 #define AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 

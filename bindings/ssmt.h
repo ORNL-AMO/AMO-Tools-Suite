@@ -1,7 +1,3 @@
-//
-// Created by qkf on 7/28/2017.
-//
-
 #ifndef AMO_TOOLS_SUITE_SSMT_H
 #define AMO_TOOLS_SUITE_SSMT_H
 

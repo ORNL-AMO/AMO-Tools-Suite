@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 6/17/16.
-//
-
 #include <cmath>
 #include "calculator/motor/MotorShaftPower.h"
 #include "calculator/motor/MotorEfficiency.h"
