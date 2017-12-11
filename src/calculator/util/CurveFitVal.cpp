@@ -28,43 +28,43 @@ double CurveFitVal::calculate() {
     /**
      * Array to store Sigma X values
      */
-    std::vector<double> sigmaX_(2 * pdegree_ + 1);
-    for (i = 0; i < 2 * pdegree_ + 1; i++) {
+    std::vector<double> sigmaX_(2 * pdegree + 1);
+    for (i = 0; i < 2 * pdegree + 1; i++) {
         sigmaX_[i] = 0;
-        for (j = 0; j < noIntervalPoints_; j++)
-            sigmaX_[i] = sigmaX_[i] + pow(xcoord_[j], i);
+        for (j = 0; j < noIntervalPoints; j++)
+            sigmaX_[i] = sigmaX_[i] + pow(xcoord[j], i);
     }
 
     /**
      * Array to store Sigma Y values
      */
-    std::vector<double> sigmaY_(2 * pdegree_ + 1);
-    for (i = 0; i < pdegree_ + 1; i++) {
+    std::vector<double> sigmaY_(2 * pdegree + 1);
+    for (i = 0; i < pdegree + 1; i++) {
         sigmaY_[i] = 0;
-        for (j = 0; j < noIntervalPoints_; j++)
-            sigmaY_[i] = sigmaY_[i] + pow(xcoord_[j], i) * ycoord_[j];
+        for (j = 0; j < noIntervalPoints; j++)
+            sigmaY_[i] = sigmaY_[i] + pow(xcoord[j], i) * ycoord[j];
     }
     /**
      * Array to store matrix which in turn store the equations
      */
-    std::vector<std::vector<double>> augMatrix(pdegree_ + 1, std::vector<double>(pdegree_ + 2, 0));
+    std::vector<std::vector<double>> augMatrix(pdegree + 1, std::vector<double>(pdegree + 2, 0));
 
-    for (i = 0; i <= pdegree_; i++)
-        for (j = 0; j <= pdegree_; j++)
+    for (i = 0; i <= pdegree; i++)
+        for (j = 0; j <= pdegree; j++)
             augMatrix[i][j] = sigmaX_[i + j];
 
-    for (i = 0; i <= pdegree_; i++)
-        augMatrix[i][pdegree_ + 1] = sigmaY_[i];
+    for (i = 0; i <= pdegree; i++)
+        augMatrix[i][pdegree + 1] = sigmaY_[i];
     /**
      * Array to store the coefficients of the curve.
      */
 
-    std::vector<double> coeff_(pdegree_ + 1);
-    for (int m = 0; m < pdegree_ + 1; ++m) {
+    std::vector<double> coeff_(pdegree + 1);
+    for (int m = 0; m < pdegree + 1; ++m) {
         coeff_[m] = 0;
     }
 
-    int pdegreeplus = pdegree_ + 1;
+    int pdegreeplus = pdegree + 1;
     /**
      * Using Gaussian Elimination method to solve the matrix [As suggested by online resources]
      * Look to citations for reference
@@ -98,7 +98,7 @@ double CurveFitVal::calculate() {
      */
     double curveFitVal_ = 0;
     for (int l = 0; l < pdegreeplus; ++l) {
-        curveFitVal_ += coeff_[l] * pow(loadFactor_, l);
+        curveFitVal_ += coeff_[l] * pow(loadFactor, l);
     }
     return curveFitVal_;
 }

@@ -29,11 +29,11 @@ public:
         int pdegree,
         double loadFactor
     ) :
-        noIntervalPoints_(noIntervalPoints),
-        pdegree_(pdegree),
-        xcoord_(xcoord),
-        ycoord_(ycoord),
-        loadFactor_(loadFactor)
+        noIntervalPoints(noIntervalPoints),
+        pdegree(pdegree),
+        xcoord(xcoord),
+        ycoord(ycoord),
+        loadFactor(loadFactor)
     {}
 
     /**
@@ -46,23 +46,23 @@ private:
     /**
      * Number of interval points
      */
-    int noIntervalPoints_;
+    int noIntervalPoints;
     /**
      * Degree of polynomial curve
      */
-    int pdegree_;
+    int pdegree;
     /**
      * x coordinates
      */
-    double *xcoord_;
+    double *xcoord;
     /**
      * y coordinates
      */
-    double *ycoord_;
+    double *ycoord;
     /**
      * load factor (here is the x coordinate, whose corresponding y coordinate is returned.
      */
-    double loadFactor_;
+    double loadFactor;
 };
 
 

@@ -68,8 +68,8 @@ public:
      * Calculates excess air percentage given flue gas O2 levels
      * @return double, calculated excess air percentage
      */
-	static double calculateFlueGasO2(const double excessAir, const double carbon, const double hydrogen, const double sulphur, const double inertAsh,
-	                          const double o2, const double moisture, const double nitrogen, const double moistureInAirCombustion);
+	static double calculateFlueGasO2(double excessAir, double carbon, double hydrogen, double sulphur, double inertAsh,
+	                                 double o2, double moisture, double nitrogen, double moistureInAirCombustion);
 
 	/**
      * Gets the total heat loss
