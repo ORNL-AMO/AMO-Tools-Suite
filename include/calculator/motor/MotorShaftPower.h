@@ -81,31 +81,41 @@ public:
      * Calculates the motor shaft current
      * @return double, motor shaft current in A
      */
-    double calculateCurrent();
+    double getCurrent() {
+		return current;
+	};
 
 	/**
      * Calculates the motor shaft efficiency
      * @return double, motor shaft efficiency as %
      */
-    double calculateEfficiency();
+    double getEfficiency() {
+		return eff;
+	};
 
 	/**
      * Calculate the power
      * @return double, power in hp
      */
-    double calculatePower();
+    double getPower() {
+		return power;
+	};
 
 	/**
      * Calculates the power factor
      * @return double, power factor - unitless
      */
-    double calculatePowerFactor();
+    double getPowerFactor() {
+		return pf;
+	};
 
 	/**
      * Calculates estimated full load amps
      * @return double, estimated full load amps in A
      */
-    double calculateEstimatedFLA();
+    double getEstimatedFLA() {
+		return estimatedFLA;
+	};
 
     ///double, temp load fraction
     double tempLoadFraction = 0.01;

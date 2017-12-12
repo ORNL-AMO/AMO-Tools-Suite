@@ -134,28 +134,3 @@ double MotorShaftPower::calculate() {
         return motorShaftPower;
     }
 }
-
-double MotorShaftPower::calculateCurrent() {
-    return current;
-}
-
-double MotorShaftPower::calculateEfficiency() {
-    return eff;
-}
-
-double MotorShaftPower::calculatePowerFactor() {
-    /// Adjusted Pf
-    return pf;
-}
-
-/**
- * Returns the motor shaft power in kWe
- * @return motor shaft power in Kwe
- */
-double MotorShaftPower::calculatePower() {
-    return power;
-}
-
-double MotorShaftPower::calculateEstimatedFLA() {
-    return estimatedFLA;
-}

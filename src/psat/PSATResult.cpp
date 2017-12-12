@@ -47,12 +47,12 @@ double PSATResult::calculateExisting() {
                                     fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
                                     fieldData.getMotorAmps());
     existing.motorShaftPower = motorShaftPower.calculate();
-    existing.motorCurrent = motorShaftPower.calculateCurrent();
-    existing.motorPowerFactor = motorShaftPower.calculatePowerFactor();
-    existing.motorEfficiency = motorShaftPower.calculateEfficiency();
+    existing.motorCurrent = motorShaftPower.getCurrent();
+    existing.motorPowerFactor = motorShaftPower.getPowerFactor();
+    existing.motorEfficiency = motorShaftPower.getEfficiency();
     existing.motorRatedPower = motor.getMotorRatedPower();
-    existing.motorPower = motorShaftPower.calculatePower();
-    existing.estimatedFLA = motorShaftPower.calculateEstimatedFLA();
+    existing.motorPower = motorShaftPower.getPower();
+    existing.estimatedFLA = motorShaftPower.getEstimatedFLA();
     // Calculate PumpShaftPower
     PumpShaftPower pumpShaftPower(existing.motorShaftPower, pump.getDrive());
     existing.pumpShaftPower = pumpShaftPower.calculate();

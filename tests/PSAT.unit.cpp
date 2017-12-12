@@ -5,6 +5,9 @@
 #include <psat/Motor.h>
 #include <psat/PSATResult.h>
 #include <unordered_map>
+#include <calculator/pump/PumpShaftPower.h>
+#include <calculator/pump/PumpEfficiency.h>
+#include <array>
 
 TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	double pump_specified = 90, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
@@ -230,4 +233,53 @@ TEST_CASE( "PSATResults sync belt", "[PSAT results]" ) {
 	CHECK(mod.pumpShaftPower == Approx(192.468232632));
 	CHECK(mod.motorPower == Approx(151.8722277599));
 }
+
+TEST_CASE( "PSAT pump shaft power", "[PSAT][pump shaft power][drive]" ) {
+	CHECK(PumpShaftPower(50, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(48.4814329723));
+	CHECK(PumpShaftPower(100, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(97.0776282082));
+	CHECK(PumpShaftPower(150, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(145.6804036099));
+	CHECK(PumpShaftPower(200, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(194.2722411119));
+	CHECK(PumpShaftPower(250, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(242.8550331213));
+
+	CHECK(PumpShaftPower(50, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(47.8740061612));
+	CHECK(PumpShaftPower(100, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(95.9086794914));
+	CHECK(PumpShaftPower(150, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(143.9525650539));
+	CHECK(PumpShaftPower(200, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(191.981137556));
+	CHECK(PumpShaftPower(250, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(239.9970463698));
+
+	CHECK(PumpShaftPower(50, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(49.3925731889));
+	CHECK(PumpShaftPower(100, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(98.8310512833));
+	CHECK(PumpShaftPower(150, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(148.272161444));
+	CHECK(PumpShaftPower(200, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(197.7088964447));
+	CHECK(PumpShaftPower(250, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(247.1420132485));
+}
+
+TEST_CASE( "PSAT pump efficiency", "[PSAT][pump efficiency]" ) {
+	CHECK(PumpEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
+	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(PumpEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
+	CHECK(PumpEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
+	CHECK(PumpEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
+	CHECK(PumpEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
+
+	CHECK(PumpEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
+	CHECK(PumpEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
+	CHECK(PumpEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
+	CHECK(PumpEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
+	CHECK(PumpEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
+
+	CHECK(PumpEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
+	CHECK(PumpEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
+	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(PumpEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
+	CHECK(PumpEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
+	CHECK(PumpEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
+
+	CHECK(PumpEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
+	CHECK(PumpEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
+	CHECK(PumpEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
+	CHECK(PumpEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
+	CHECK(PumpEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
+}
+
 
