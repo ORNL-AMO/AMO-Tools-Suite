@@ -215,7 +215,7 @@ std::vector<double> EstimateFLA::calculate() {
          * 2. Pick the smaller of the two absolute values, and use the nominal efficiency of that selection going forward
          * 3. Divide the selected (EE or SE) efficiency by the specified efficiency and then multiply that by the FLA for the corresponding selection.
          */
-        specifiedEfficiency = 95;
+//        specifiedEfficiency = 95;
         if (fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency) >
             fabs(seFLAValue * plMultiplier[4] - specifiedEfficiency)) {
             MotorEfficiency motorEfficiency(lineFrequency,motorRPM, Motor::EfficiencyClass::STANDARD, specifiedEfficiency,

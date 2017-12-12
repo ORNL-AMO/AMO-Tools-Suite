@@ -323,16 +323,20 @@ TEST_CASE( "PSAT motor efficiency", "[PSAT][pump efficiency]" ) {
 
 TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	auto unitTestNumber = 0; // unit test number 0 indexed
-	std::vector<std::vector<double>> expected = {
+	const std::vector<std::vector<double>> expected = {
 			{18.8775576, 23.6212730421, 34.0613092325, 46.5048449789, 60.381474681, 75.5372248259},
 			{48.6495840124, 63.249248253, 96.1954123714, 132.4400532659, 172.6294043084, 215.9593847898},
-			{49.55811480809, 56.11300070569, 78.49438625307, 102.84658002297, 129.16907799852, 159.7821494841}
+			{49.55811480809, 56.11300070569, 78.49438625307, 102.84658002297, 129.16907799852, 159.7821494841},
+			{28.6566235624, 39.6191308792, 61.8010643593, 86.8044256422, 113.8781958, 142.6893793376},
+			{53.3464740091, 75.2070177891, 119.291789, 167.65708225, 219.981424828, 275.6367253},
+			{0, 0, 0, 0, 0, 0}
+
 	};
 
 	auto const compare = [&unitTestNumber, &expected](const std::vector<double> & results) {
 		for (auto i = 0; i < results.size(); i++) {
 			INFO("index is " + std::to_string(i) + " and the unit test number is " + std::to_string(unitTestNumber));
-			CHECK(expected[unitTestNumber][i] == Approx(results[i]));
+			CHECK(expected.at(unitTestNumber).at(i) == Approx(results[i]));
 		}
 		unitTestNumber++;
 	};
@@ -340,6 +344,16 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	compare(EstimateFLA(50, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
 	compare(EstimateFLA(150, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
 	compare(EstimateFLA(100, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
+	compare(EstimateFLA(100, 2900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
+
+	compare(EstimateFLA(200, 2200, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 96.5, 100).calculate());
+//	compare(EstimateFLA(200, 2200, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 96.5, 150).calculate());
+
+//	auto rv = EstimateFLA(200, 2200, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 56.5, 150).calculate();
+
+
+
+	auto blah = 0;
 
 //	CHECK(EstimateFLA(50, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 100).calculate() == Approx(0));
 //	CHECK(EstimateFLA(125, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 100).calculate() == Approx(0));
