@@ -38,7 +38,11 @@ public:
         efficiencyClass(efficiencyClass),
         specifiedEfficiency(specifiedEfficiency),
         ratedVoltage(ratedVoltage)
-    {};
+    {
+        if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED && specifiedEfficiency <= 0) {
+            throw std::runtime_error("When using EfficiencyClass::SPECIFIED, you must provide a specified efficiency");
+        }
+    };
 
     /**
      * Calculates the 25% interval
