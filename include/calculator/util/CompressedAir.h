@@ -11,40 +11,55 @@
 
 class PneumaticAirRequirement {
 public:
+	enum class PistonType {
+		SingleActing,
+		DoubleActing
+	};
+
 	/**
-	* Constructor for PneumaticAirRequirement
- 	* @param cylinderDiameter double, inches
- 	* @param cylinderStroke double, inches
- 	* @param pistonRodDiameter double, inches
- 	* @param airPressure double, psi
- 	* @param cyclesPerMin double, strokes per minute
- 	*/
-	PneumaticAirRequirement(double cylinderDiameter, double cylinderStroke, double pistonRodDiameter,
+	 * Constructor for PneumaticAirRequirement
+	 * This calculator helps in computing the quantity of air required by a specific single acting or a double acting piston cylinder compressor.
+	 * The design specs of the compressor are entered in the calculator and the quantity of air needed is generated.
+ 	 * @param pistonType PistonType, type of Piston, single or double acting - in this case, must be double
+ 	 * @param cylinderDiameter double, Inner diameter of cylinder - inches
+ 	 * @param cylinderStroke double, Distance that the piston can travel inside a cylinder - inches
+ 	 * @param pistonRodDiameter double, Diameter of the piston rod (required only in case of a double acting cylinder) - inches
+ 	 * @param airPressure double, Pressure of the air coming out of the cylinder - psi
+ 	 * @param cyclesPerMin double, Number of cycles (1 cycle is a combination of 2 strokes of a piston) by the crankshaft in a minute - strokes
+ 	 */
+	PneumaticAirRequirement(PistonType pistonType, double cylinderDiameter, double cylinderStroke, double pistonRodDiameter,
 	                        double airPressure, double cyclesPerMin);
+
+	/**
+	 * Constructor for PneumaticAirRequirement
+	 * This calculator helps in computing the quantity of air required by a specific single acting or a double acting piston cylinder compressor.
+	 * The design specs of the compressor are entered in the calculator and the quantity of air needed is generated.
+ 	 * @param pistonType PistonType, type of Piston, single or double acting - in this case, must be single
+ 	 * @param cylinderDiameter double, Inner diameter of cylinder - inches
+ 	 * @param cylinderStroke double, Distance that the piston can travel inside a cylinder - inches
+ 	 * @param airPressure double, Pressure of the air coming out of the cylinder - psi
+ 	 * @param cyclesPerMin double, Number of cycles (1 cycle is a combination of 2 strokes of a piston) by the crankshaft in a minute - strokes
+ 	 */
+	PneumaticAirRequirement(PistonType pistonType, double cylinderDiameter, double cylinderStroke, double airPressure,
+	                        double cyclesPerMin);
 
 	class Output {
 	public:
 		/**
 		* Constructor for PneumaticAirRequirement::Output
 		* Used to hold return values
-		* @param volumeAirIntakeSingleActingPiston const double, cubic feet
-		* @param volumeAirIntakeDoubleActingPiston const double, cubic feet
-	 	* @param compressionRatio const double
-		* @param airRequirementSingleActingPneumaticCylinder const double, scfm
-		* @param airRequirementDoubleActingPneumaticCylinder const double, scfm
+		* @param volumeAirIntakePiston const double, Volume of air intake in a piston - cubic feet
+	 	* @param compressionRatio const double, The ratio of pressures - Air pressure with atmospheric pressure.
+		* @param airRequirementPneumaticCylinder const double, Total cubic feet/min of air requirement for a Pneumatic cylinder - scfm
 		*/
-		Output(const double volumeAirIntakeSingleActingPiston, const double volumeAirIntakeDoubleActingPiston,
-		       const double compressionRatio, const double airRequirementSingleActingPneumaticCylinder,
-		       const double airRequirementDoubleActingPneumaticCylinder)
-				: volumeAirIntakeSingleActingPiston(volumeAirIntakeSingleActingPiston),
-				  volumeAirIntakeDoubleActingPiston(volumeAirIntakeDoubleActingPiston),
+		Output(const double volumeAirIntakePiston, const double compressionRatio,
+		       const double airRequirementPneumaticCylinder)
+				: volumeAirIntakePiston(volumeAirIntakePiston),
 				  compressionRatio(compressionRatio),
-				  airRequirementSingleActingPneumaticCylinder(airRequirementSingleActingPneumaticCylinder),
-				  airRequirementDoubleActingPneumaticCylinder(airRequirementDoubleActingPneumaticCylinder)
+				  airRequirementPneumaticCylinder(airRequirementPneumaticCylinder)
 		{}
 
-		const double volumeAirIntakeSingleActingPiston, volumeAirIntakeDoubleActingPiston, compressionRatio;
-		const double airRequirementSingleActingPneumaticCylinder, airRequirementDoubleActingPneumaticCylinder;
+		const double volumeAirIntakePiston, compressionRatio, airRequirementPneumaticCylinder;
 	};
 
 	/**
@@ -54,8 +69,14 @@ public:
 	Output calculate();
 
 private:
-	double cylinderDiameter, cylinderStroke, pistonRodDiameter, airPressure, cyclesPerMin;
+	PistonType pistonType;
+	double cylinderDiameter, cylinderStroke, pistonRodDiameter = 0, airPressure, cyclesPerMin;
 };
+
+//class ReceiverTank {
+//public:
+//
+//};
 
 //class CompressedAir {
 //public:
