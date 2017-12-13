@@ -26,3 +26,39 @@ TEST_CASE( "PneumaticAirRequirement", "[CompressedAir][PneumaticAirRequirement]"
 	compare(PneumaticAirRequirement(PneumaticAirRequirement::PistonType::SingleActing, 1.5, 6, 140, 90).calculate(), {0.551953125, 10.5238095238, 5.8086495536});
 	compare(PneumaticAirRequirement(PneumaticAirRequirement::PistonType::DoubleActing, 1.5, 6, 0.575, 140, 90).calculate(), {1.0227998047, 10.5238095238, 10.7637503255});
 }
+
+TEST_CASE( "ReceiverTank - Useable Air Capacity", "[CompressedAir][ReceiverTank][UseableAirCapacity]") {
+	CHECK(ReceiverTank::calculateUsableCapacity(660, 110, 100) == Approx(60.0240096038));
+	CHECK(ReceiverTank::calculateUsableCapacity(760, 110, 100) == Approx(69.1185565135));
+	CHECK(ReceiverTank::calculateUsableCapacity(760, 150, 100) == Approx(345.5927825676));
+	CHECK(ReceiverTank::calculateUsableCapacity(760, 150, 130) == Approx(138.237113027));
+}
+
+TEST_CASE( "ReceiverTank - Size Calculation", "[CompressedAir][ReceiverTank][SizeCalculation]") {
+	CHECK(ReceiverTank(ReceiverTank::Method::General, 150, 3, 14.7).calculateSize() == Approx(5497.8));
+	CHECK(ReceiverTank(ReceiverTank::Method::General, 190, 3, 14.7).calculateSize() == Approx(6963.88));
+	CHECK(ReceiverTank(ReceiverTank::Method::General, 190, 8, 14.7).calculateSize() == Approx(2611.455));
+	CHECK(ReceiverTank(ReceiverTank::Method::General, 190, 8, 12.7).calculateSize() == Approx(2256.155));
+
+	CHECK(ReceiverTank(ReceiverTank::Method::DedicatedStorage, 0.5, 100, 14.7, 110, 100).calculateSize() == Approx(549.78));
+	CHECK(ReceiverTank(ReceiverTank::Method::DedicatedStorage, 1.5, 100, 14.7, 110, 100).calculateSize() == Approx(1649.34));
+	CHECK(ReceiverTank(ReceiverTank::Method::DedicatedStorage, 1.5, 120, 14.7, 110, 100).calculateSize() == Approx(1979.208));
+	CHECK(ReceiverTank(ReceiverTank::Method::DedicatedStorage, 1.5, 120, 11.7, 110, 100).calculateSize() == Approx(1575.288));
+	CHECK(ReceiverTank(ReceiverTank::Method::DedicatedStorage, 1.5, 120, 11.7, 150, 100).calculateSize() == Approx(315.0576));
+	CHECK(ReceiverTank(ReceiverTank::Method::DedicatedStorage, 1.5, 120, 11.7, 150, 120).calculateSize() == Approx(525.096));
+
+	CHECK(ReceiverTank(ReceiverTank::Method::MeteredStorage, 0.5, 900, 14.7, 100, 70, 45).calculateSize() == Approx(1566.873));
+	CHECK(ReceiverTank(ReceiverTank::Method::MeteredStorage, 1.5, 900, 14.7, 100, 70, 45).calculateSize() == Approx(4700.619));
+	CHECK(ReceiverTank(ReceiverTank::Method::MeteredStorage, 1.5, 800, 14.7, 100, 70, 45).calculateSize() == Approx(4150.839));
+	CHECK(ReceiverTank(ReceiverTank::Method::MeteredStorage, 1.5, 800, 11.7, 100, 70, 45).calculateSize() == Approx(3303.729));
+	CHECK(ReceiverTank(ReceiverTank::Method::MeteredStorage, 1.5, 800, 11.7, 120, 70, 45).calculateSize() == Approx(1982.2374));
+	CHECK(ReceiverTank(ReceiverTank::Method::MeteredStorage, 1.5, 800, 11.7, 120, 90, 45).calculateSize() == Approx(3303.729));
+	CHECK(ReceiverTank(ReceiverTank::Method::MeteredStorage, 1.5, 800, 11.7, 120, 90, 75).calculateSize() == Approx(3172.455));
+
+	CHECK(ReceiverTank(ReceiverTank::Method::BridgingCompressorReactionDelay, 1000, 250, 14.7, 600, 2).calculateSize() == Approx(2199.12));
+	CHECK(ReceiverTank(ReceiverTank::Method::BridgingCompressorReactionDelay, 1200, 250, 14.7, 600, 2).calculateSize() == Approx(2638.944));
+	CHECK(ReceiverTank(ReceiverTank::Method::BridgingCompressorReactionDelay, 1200, 350, 14.7, 600, 2).calculateSize() == Approx(1884.96));
+	CHECK(ReceiverTank(ReceiverTank::Method::BridgingCompressorReactionDelay, 1200, 350, 11.7, 600, 2).calculateSize() == Approx(1500.2742857143));
+	CHECK(ReceiverTank(ReceiverTank::Method::BridgingCompressorReactionDelay, 1200, 350, 11.7, 800, 2).calculateSize() == Approx(2000.3657142857));
+	CHECK(ReceiverTank(ReceiverTank::Method::BridgingCompressorReactionDelay, 1200, 350, 11.7, 800, 19).calculateSize() == Approx(210.56481203));
+}

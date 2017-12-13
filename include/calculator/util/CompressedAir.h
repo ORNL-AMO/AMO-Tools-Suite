@@ -73,10 +73,81 @@ private:
 	double cylinderDiameter, cylinderStroke, pistonRodDiameter = 0, airPressure, cyclesPerMin;
 };
 
-//class ReceiverTank {
-//public:
-//
-//};
+class ReceiverTank {
+public:
+	enum class Method {
+		General,
+		DedicatedStorage,
+		MeteredStorage,
+		BridgingCompressorReactionDelay
+	};
+
+	/**
+	 * Constructor for ReceiverTank - This is required when we need to order a receiver tank to meet our compressed air requirements.
+	 * This calculator computes the quantity of compressed air that is actually available for use. When air receivers
+	 * are installed, the system’s pressure profile and lack of storage limit the effectiveness of compressed air energy
+	 * storage. Hence this calculator proves useful in such a context.
+	 * @param method ReceiverTank::Method, Calculation Method, in this case it must be General
+	 * @param airDemand const double, Amount of air needed, which comes out of the receiver tank - cubic ft
+	 * @param allowablePressureDrop const double, This decides the pressure drop inside the receiver tank that we can tolerate - psi
+	 * @param atmosphericPressure const double, This is generally 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure at that location can be given - psi
+	 */
+	ReceiverTank(Method method, double airDemand, double allowablePressureDrop, double atmosphericPressure);
+
+	/**
+	 * Constructor for ReceiverTank - This is required when we need to order a receiver tank to meet our compressed air requirements.
+	 * This calculator computes the quantity of compressed air that is actually available for use. When air receivers
+	 * are installed, the system’s pressure profile and lack of storage limit the effectiveness of compressed air energy
+	 * storage. Hence this calculator proves useful in such a context.
+	 * @param method ReceiverTank::Method, Calculation Method, in this case it must be DedicatedStorageMethod OR BridgingCompressorReactionDelay due to a C++ overloading limitation
+	 * @param lengthOfDemandOrDistanceToCompressorRoom const double, Time duration for which the compressed air is needed OR Distance of the event, that is removing the air, from the compressor room - minutes OR feet
+	 * @param airFlowRequirementOrSpeedOfAir const double, The quantity of air needed OR Flow rate of air from the tank - cfm OR ft/sec
+	 * @param atmosphericPressure const double, This is generally 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure at that location can be given - psi
+	 * @param initialTankPressureOrAirDemand const double, Tank pressure before release of air OR Amount of air needed, which comes out of the receiver tank - psi OR cubic ft
+	 * @param finalTankPressureOrAllowablePressureDrop const double, Tank pressure after release of air OR This decides the pressure drop inside the receiver tank that we can tolerate - psi
+	 */
+	ReceiverTank(Method method, double lengthOfDemandOrDistanceToCompressorRoom, double airFlowRequirementOrSpeedOfAir,
+	             double atmosphericPressure, double initialTankPressureOrAirDemand, double finalTankPressureOrAllowablePressureDrop);
+
+	/**
+	 * Constructor for ReceiverTank - This is required when we need to order a receiver tank to meet our compressed air requirements.
+	 * This calculator computes the quantity of compressed air that is actually available for use. When air receivers
+	 * are installed, the system’s pressure profile and lack of storage limit the effectiveness of compressed air energy
+	 * storage. Hence this calculator proves useful in such a context.
+	 * @param method ReceiverTank::Method, Calculation Method, in this case it must be MeteredStorage
+	 * @param lengthOfDemand const double, Time duration for which the compressed air is needed - minutes
+	 * @param airFlowRequirement const double, The quantity of air needed - cfm
+	 * @param atmosphericPressure const double, This is generally 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure at that location can be given - psi
+	 * @param initialTankPressure const double, Tank pressure before release of air - psi
+	 * @param finalTankPressure const double, Tank pressure after release of air - psi
+	 * @param meteredFlowControl const double, Rate of flow through the metering valve (needle valve) - cfm
+	 */
+	ReceiverTank(Method method, double lengthOfDemand, double airFlowRequirement, double atmosphericPressure,
+	             double initialTankPressure, double finalTankPressure, double meteredFlowControl);
+
+	/**
+	 * Calculates and returns receiver tank useable air capacity
+	 * @param tankSize double, Quantity of air it can hold - gallons
+	 * @param airPressureIn double, Pressure of air entering the Tank - psi
+	 * @param airPressureOut double, a.	Pressure of air leaving the Tank - psi
+	 * @return double, Useable air storage capacity - scf
+	 */
+	static double calculateUsableCapacity(double tankSize, double airPressureIn, double airPressureOut);
+
+	/**
+	 * Calculates and returns receiver tank useable air capacity
+	 * @return double, receiver size - gallons
+	 */
+	double calculateSize();
+
+private:
+	Method method;
+	double airDemand, allowablePressureDrop, atmosphericPressure;
+
+	double lengthOfDemandOrDistanceToCompressorRoom, airFlowRequirementOrSpeedOfAir, initialTankPressureOrAirDemand, finalTankPressureOrAllowablePressureDrop;
+
+	double meteredFlowControl;
+};
 
 //class CompressedAir {
 //public:
