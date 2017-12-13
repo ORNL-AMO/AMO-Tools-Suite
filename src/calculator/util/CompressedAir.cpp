@@ -76,9 +76,6 @@ ReceiverTank::ReceiverTank(Method method, double lengthOfDemand, double airFlowR
 	}
 }
 
-
-
-
 double ReceiverTank::calculateSize() {
 	if (method == ReceiverTank::Method::General) {
 		return airDemand * (atmosphericPressure / allowablePressureDrop) * 7.48;
@@ -92,4 +89,21 @@ double ReceiverTank::calculateSize() {
 	// method must be BridgingCompressorReactionDelay
 	return (lengthOfDemandOrDistanceToCompressorRoom / airFlowRequirementOrSpeedOfAir) * (initialTankPressureOrAirDemand / 60)
 	       * (atmosphericPressure / finalTankPressureOrAllowablePressureDrop) * 7.48;
+}
+
+Compressor::OperatingCost::OperatingCost(double motorBhp, double bhpUnloaded, double annualOperatingHours,
+                                         double runTimeLoaded, double efficiencyLoaded, double efficiencyUnloaded,
+                                         double costOfElectricity)
+		: motorBhp(motorBhp), bhpUnloaded(bhpUnloaded), annualOperatingHours(annualOperatingHours),
+		  runTimeLoaded(runTimeLoaded), efficiencyLoaded(efficiencyLoaded), efficiencyUnloaded(efficiencyUnloaded),
+		  costOfElectricity(costOfElectricity)
+{}
+
+Compressor::OperatingCost::Output Compressor::OperatingCost::calculate() {
+	auto const runTimeUnloaded = 100 - runTimeLoaded;
+	auto const costForLoaded = (motorBhp * 0.746 * annualOperatingHours * costOfElectricity * (runTimeLoaded / 100))
+	                           / (efficiencyLoaded / 100);
+	auto const costForUnloaded = (motorBhp * 0.746 * annualOperatingHours * costOfElectricity * (bhpUnloaded / 100) * (runTimeUnloaded / 100))
+	                           / (efficiencyUnloaded / 100);
+	return {runTimeUnloaded, costForLoaded, costForUnloaded, costForLoaded + costForUnloaded};
 }

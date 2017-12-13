@@ -62,3 +62,31 @@ TEST_CASE( "ReceiverTank - Size Calculation", "[CompressedAir][ReceiverTank][Siz
 	CHECK(ReceiverTank(ReceiverTank::Method::BridgingCompressorReactionDelay, 1200, 350, 11.7, 800, 2).calculateSize() == Approx(2000.3657142857));
 	CHECK(ReceiverTank(ReceiverTank::Method::BridgingCompressorReactionDelay, 1200, 350, 11.7, 800, 19).calculateSize() == Approx(210.56481203));
 }
+
+TEST_CASE( "Compressor Operating Cost", "[CompressedAir][OperatingCost]") {
+	std::size_t unitTestNumber = 1;
+	auto const compare = [&unitTestNumber](Compressor::OperatingCost::Output actual, Compressor::OperatingCost::Output expected) {
+		INFO("Unit test number " + std::to_string(unitTestNumber));
+		CHECK(expected.runTimeUnloaded == Approx(actual.runTimeUnloaded));
+		CHECK(expected.costForLoaded == Approx(actual.costForLoaded));
+		CHECK(expected.costForUnloaded == Approx(actual.costForUnloaded));
+		CHECK(expected.totalAnnualCost == Approx(actual.totalAnnualCost));
+		unitTestNumber++;
+	};
+
+	compare(Compressor::OperatingCost(215, 25, 6800, 85, 95, 90, 0.05).calculate(), {15, 48792.3263157895, 2272.1916666667, 51064.5179824561});
+	compare(Compressor::OperatingCost(255, 25, 6800, 85, 95, 90, 0.05).calculate(), {15, 57869.9684210526, 2694.925, 60564.893421});
+	compare(Compressor::OperatingCost(255, 35, 6800, 85, 95, 90, 0.05).calculate(), {15, 57869.9684210526, 3772.895, 61642.8634210526});
+	compare(Compressor::OperatingCost(255, 35, 6000, 85, 95, 90, 0.05).calculate(), {15, 51061.7368421053, 3329.025, 54390.7618421053});
+	compare(Compressor::OperatingCost(255, 35, 6000, 89, 93, 90, 0.05).calculate(), {11, 54614.419354838, 2441.285, 57055.704354838});
+	compare(Compressor::OperatingCost(255, 35, 6000, 89, 93, 90, 0.09).calculate(), {11, 98305.9548387097, 4394.313, 102700.2678387097});
+}
+
+
+
+
+
+
+
+
+
