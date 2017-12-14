@@ -1,5 +1,3 @@
-#include <cmath>
-#include <stdexcept>
 #include "calculator/util/CompressedAir.h"
 
 PneumaticAirRequirement::PneumaticAirRequirement(const PistonType pistonType, const double cylinderDiameter,
@@ -106,4 +104,21 @@ Compressor::OperatingCost::Output Compressor::OperatingCost::calculate() {
 	auto const costForUnloaded = (motorBhp * 0.746 * annualOperatingHours * costOfElectricity * (bhpUnloaded / 100) * (runTimeUnloaded / 100))
 	                           / (efficiencyUnloaded / 100);
 	return {runTimeUnloaded, costForLoaded, costForUnloaded, costForLoaded + costForUnloaded};
+}
+
+Compressor::AirSystemCapacity::AirSystemCapacity(Compressor::AirSystemCapacity::PipeLengths pipeLengths,
+                                                 std::vector<double> receivers)
+		: pipeLengths(pipeLengths), receivers(std::move(receivers))
+{}
+
+Compressor::AirSystemCapacity::Output Compressor::AirSystemCapacity::calculate() {
+
+	auto totalReceiverVol = 0.0;
+	for (auto & gallons : receivers) {
+		gallons /= 7.48;
+		totalReceiverVol += gallons;
+	}
+
+	return {pipeLengths.totalPipeVolume, receivers, totalReceiverVol,
+	        pipeLengths.totalPipeVolume + totalReceiverVol, pipeLengths};
 }

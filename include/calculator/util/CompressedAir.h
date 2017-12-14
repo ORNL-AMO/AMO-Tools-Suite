@@ -8,6 +8,9 @@
 #ifndef AMO_TOOLS_SUITE_COMPRESSEDAIR_H
 #define AMO_TOOLS_SUITE_COMPRESSEDAIR_H
 
+#include <vector>
+#include <cmath>
+#include <stdexcept>
 
 class PneumaticAirRequirement {
 public:
@@ -185,6 +188,62 @@ namespace Compressor {
 	private:
 		double motorBhp, bhpUnloaded, annualOperatingHours, runTimeLoaded, efficiencyLoaded;
 		double efficiencyUnloaded, costOfElectricity;
+	};
+
+
+	class AirSystemCapacity {
+	public:
+		struct PipeLengths {
+			/**
+			 * Constructor for Compressor::AirSystemCapacity::PipeLengths - This is used to hold all the pipe lengths in the system
+			 * All params are the english spelling of their numeric equivalents, i.e. one half == 0.5, twoAndOneHalf == 2.5, etc.
+			 */
+			PipeLengths(const double oneHalf, const double threeFourths, const double one, const double oneAndOneFourth,
+			            const double oneAndOneHalf, const double two, const double twoAndOneHalf, const double three,
+			            const double threeAndOneHalf, const double four, const double five, const double six)
+					: oneHalf(oneHalf * 0.0021), threeFourths(threeFourths * 0.0037), one(one * 0.006),
+					  oneAndOneFourth(oneAndOneFourth * 0.0104), oneAndOneHalf(oneAndOneHalf * 0.0141),
+					  two(two * 0.0233), twoAndOneHalf(twoAndOneHalf * 0.0333), three(three * 0.0513),
+					  threeAndOneHalf(threeAndOneHalf * 0.0687), four(four * 0.0884), five(five * 0.1389),
+					  six(six * 0.2006),
+					  totalPipeVolume(this->oneHalf + this->threeFourths + this->one + this->oneAndOneFourth
+					                  + this->oneAndOneHalf + this->two + this->twoAndOneHalf + this->three
+					                  + this->threeAndOneHalf + this->four + this->five + this->six)
+			{}
+
+			const double oneHalf, threeFourths, one, oneAndOneFourth, oneAndOneHalf, two;
+			const double twoAndOneHalf, three, threeAndOneHalf, four, five, six;
+			const double totalPipeVolume;
+		};
+
+		class Output {
+		public:
+			Output(const double totalPipeVolume, std::vector<double> receiverCapacities,
+			       const double totalReceiverVol, const double totalCapacityOfCompressedAirSystem,
+			       PipeLengths pipeLengths)
+					: totalPipeVolume(totalPipeVolume), totalReceiverVol(totalReceiverVol),
+					  totalCapacityOfCompressedAirSystem(totalCapacityOfCompressedAirSystem),
+					  receiverCapacities(std::move(receiverCapacities)), pipeLengths(pipeLengths)
+			{}
+
+			const double totalPipeVolume, totalReceiverVol, totalCapacityOfCompressedAirSystem;
+			const std::vector<double> receiverCapacities;
+			const PipeLengths pipeLengths;
+		};
+
+		/**
+		 * Constructor for Compressor::AirSystemCapacity - This is used to find the total air quantity that the
+		 * compressed air system can contain at any instant of time, including the air in the pipes and receivers.
+		 * @param pipeLengths Compressor::AirSystemCapacity::PipeLengths, Object containing the lengths of the various pipe sizes in your system - ft
+		 * @param gallons std::vector<double>, a vector containing the number of gallons in each receiver
+		 */
+		AirSystemCapacity(PipeLengths pipeLengths, std::vector<double> gallons);
+
+		Output calculate();
+
+	private:
+		PipeLengths pipeLengths;
+		std::vector<double> receivers;
 	};
 
 };
