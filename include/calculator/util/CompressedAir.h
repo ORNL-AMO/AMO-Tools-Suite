@@ -334,9 +334,38 @@ namespace Compressor {
 		double inletPressure, outletPressure, flowRate;
 		bool flowRateKnown;
 	};
-
-
 };
+
+class BagMethod {
+public:
+	struct Output {
+		Output(const double flowRate, const double annualConsumption)
+				: flowRate(flowRate), annualConsumption(annualConsumption)
+		{}
+
+		const double flowRate, annualConsumption;
+	};
+
+	/**
+	 * Constructor for BagMethod - The bag method estimates the air flow using a trash bag by counting the time it
+	 * takes to fill it. This is the second most accurate means of measuring compressed air consumption.
+	 * @param operatingTime double, operating time of the system per year - hours
+	 * @param bagFillTime double, time that it takes for the bag to fill with air - seconds
+	 * @param heightOfBag double, height of the bag - inches
+	 * @param diameterOfBag double, diameter of the bag - inches
+	 * @param numberOfUnits int, number of trash bags
+	 */
+	BagMethod(double operatingTime, double bagFillTime, double heightOfBag, double diameterOfBag, int numberOfUnits);
+
+	/**
+	 * @return BagMethod::Output, flowRate and annual consumption
+	 */
+	Output calculate();
+
+private:
+	double operatingTime, bagFillTime, heightOfBag, diameterOfBag, numberOfUnits;
+};
+
 
 
 #endif //AMO_TOOLS_SUITE_COMPRESSEDAIR_H

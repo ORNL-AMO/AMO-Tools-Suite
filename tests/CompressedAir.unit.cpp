@@ -156,3 +156,14 @@ TEST_CASE( "Compressor Pneumatic Valve", "[CompressedAir][PneumaticValve][FlowFa
 	CHECK(Compressor::PneumaticValve(90, 85, 55).calculate() == Approx(2.7044936151));
 	CHECK(Compressor::PneumaticValve(90, 85, 95).calculate() == Approx(4.671398062));
 }
+
+TEST_CASE( "Bag Method", "[CompressedAir][BagMethod]") {
+	auto const compare = [](BagMethod::Output const & results, BagMethod::Output const & expected) {
+		CHECK(expected.flowRate == Approx(results.flowRate));
+		CHECK(expected.annualConsumption == Approx(results.annualConsumption));
+	};
+
+	compare(BagMethod(115200 / 60.0, 25, 10, 10, 1).calculate(), BagMethod::Output(1.092, 125.7984));
+	compare(BagMethod(115200 / 60.0, 20, 10, 10, 1).calculate(), BagMethod::Output(1.365, 157.248));
+	compare(BagMethod(100000 / 60.0, 20, 10, 10, 1).calculate(), BagMethod::Output(1.365, 136.5));
+}

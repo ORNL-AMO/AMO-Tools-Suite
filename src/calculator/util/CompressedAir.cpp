@@ -162,3 +162,14 @@ double Compressor::PneumaticValve::calculate() {
 	}
 	return flowRate / (0.6875 * std::sqrt(inletPressure - outletPressure) * std::sqrt(inletPressure + outletPressure));
 }
+
+BagMethod::BagMethod(const double operatingTime, const double bagFillTime, const double heightOfBag,
+                     const double diameterOfBag, const int numberOfUnits)
+		: operatingTime(operatingTime), bagFillTime(bagFillTime),
+		  heightOfBag(heightOfBag), diameterOfBag(diameterOfBag), numberOfUnits(numberOfUnits)
+{}
+
+BagMethod::Output BagMethod::calculate() {
+	auto const flowRate = (0.0273 * std::pow(diameterOfBag, 2) * heightOfBag) / bagFillTime;
+	return {flowRate, (flowRate * operatingTime * numberOfUnits * 60) / 1000 };
+}
