@@ -111,8 +111,7 @@ TEST_CASE( "Compressor Air System Capacity", "[CompressedAir][AirSystemCapacity]
 }
 
 TEST_CASE( "Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
-	std::size_t unitTestNumber = 1;
-	auto const compare = [&unitTestNumber](Compressor::PipeData const & results, std::vector<double> const & expected)
+	auto const compare = [](Compressor::PipeData const & results, std::vector<double> const & expected)
 	{
 		CHECK(expected.at(0) == Approx(results.oneHalf));
 		CHECK(expected.at(1) == Approx(results.threeFourths));
@@ -126,7 +125,6 @@ TEST_CASE( "Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
 		CHECK(expected.at(9) == Approx(results.four));
 //		CHECK(expected.at(10) == Approx(results.five));
 		CHECK(expected.at(11) == Approx(results.six));
-		unitTestNumber++;
 	};
 
 	auto const threeAndOneHalf = 0, five = 0;
@@ -134,8 +132,27 @@ TEST_CASE( "Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
 	compare(Compressor::AirVelocity(1300, 80, 14.7).calculate(), {1614.361140443, 913.789324779, 563.149235038, 322.872228, 237.406050, 144.139387539, 101.108213388, 65.53563493, threeAndOneHalf, 38.044645886, five, 16.763874771});
 }
 
+TEST_CASE( "Compressor Pipe Sizing", "[CompressedAir][PipeSizing]") {
+	auto const compare = [](Compressor::PipeSizing::Output const & results, Compressor::PipeSizing::Output const & expected)
+	{
+		CHECK(expected.crossSectionalArea == Approx(results.crossSectionalArea));
+		CHECK(expected.pipeDiameter == Approx(results.pipeDiameter));
+	};
 
+	compare(Compressor::PipeSizing(1000, 90, 25, 14.5).calculate(), Compressor::PipeSizing::Output(13.3205741627, 4.132512454));
+	compare(Compressor::PipeSizing(1400, 90, 25, 14.5).calculate(), Compressor::PipeSizing::Output(18.648803827, 4.8896546766));
+	compare(Compressor::PipeSizing(1400, 110, 25, 14.5).calculate(), Compressor::PipeSizing::Output(15.6530120482, 4.4797281351));
+	compare(Compressor::PipeSizing(1400, 110, 30, 14.5).calculate(), Compressor::PipeSizing::Output(13.0441767068, 4.0894135851));
+	compare(Compressor::PipeSizing(1400, 110, 30, 11.5).calculate(), Compressor::PipeSizing::Output(10.6008230453, 3.6865700558));
+}
 
+TEST_CASE( "Compressor Pneumatic Valve", "[CompressedAir][PneumaticValve][FlowFactor]") {
+	CHECK(Compressor::PneumaticValve(100, 70).calculate() == Approx(49.097320446));
+	CHECK(Compressor::PneumaticValve(120, 70).calculate() == Approx(67.00921112));
+	CHECK(Compressor::PneumaticValve(120, 90).calculate() == Approx(54.56862079));
 
-
-
+	CHECK(Compressor::PneumaticValve(80, 75, 55).calculate() == Approx(2.873684832));
+	CHECK(Compressor::PneumaticValve(90, 75, 55).calculate() == Approx(1.608060504));
+	CHECK(Compressor::PneumaticValve(90, 85, 55).calculate() == Approx(2.7044936151));
+	CHECK(Compressor::PneumaticValve(90, 85, 95).calculate() == Approx(4.671398062));
+}

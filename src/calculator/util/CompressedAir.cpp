@@ -134,3 +134,31 @@ Compressor::PipeData Compressor::AirVelocity::calculate() {
 
 	return Compressor::PipeData(compressedAirVelocity);
 }
+
+Compressor::PipeSizing::PipeSizing(double airflow, double airlinePressure, double designVelocity,
+                                   double atmosphericPressure)
+		: airflow(airflow),  airlinePressure(airlinePressure),  designVelocity(designVelocity),
+		  atmosphericPressure(atmosphericPressure)
+{}
+
+Compressor::PipeSizing::Output Compressor::PipeSizing::calculate() {
+	auto const crossSectionalArea = (144 * airflow * atmosphericPressure) / (designVelocity * 60 * (airlinePressure + atmosphericPressure));
+	return {crossSectionalArea, std::sqrt(crossSectionalArea / 0.78)};
+}
+
+Compressor::PneumaticValve::PneumaticValve(const double inletPressure, const double outletPressure)
+		: inletPressure(inletPressure), outletPressure(outletPressure),
+		  flowRate(0.6875 * std::sqrt(inletPressure - outletPressure) * std::sqrt(inletPressure + outletPressure)),
+		  flowRateKnown(false)
+{}
+
+Compressor::PneumaticValve::PneumaticValve(const double inletPressure, const double outletPressure, const double flowRate)
+		: inletPressure(inletPressure), outletPressure(outletPressure), flowRate(flowRate), flowRateKnown(true)
+{}
+
+double Compressor::PneumaticValve::calculate() {
+	if (!flowRateKnown) {
+		return flowRate;
+	}
+	return flowRate / (0.6875 * std::sqrt(inletPressure - outletPressure) * std::sqrt(inletPressure + outletPressure));
+}

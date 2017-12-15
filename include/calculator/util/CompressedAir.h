@@ -210,8 +210,7 @@ namespace Compressor {
 		OperatingCost(double motorBhp, double bhpUnloaded, double annualOperatingHours, double runTimeLoaded,
 		              double efficiencyLoaded, double efficiencyUnloaded, double costOfElectricity);
 
-		class Output {
-		public:
+		struct Output {
 			Output(const double runTimeUnloaded, const double costForLoaded, const double costForUnloaded,
 			       const double totalAnnualCost)
 					: runTimeUnloaded(runTimeUnloaded), costForLoaded(costForLoaded),
@@ -231,8 +230,7 @@ namespace Compressor {
 
 	class AirSystemCapacity {
 	public:
-		class Output {
-		public:
+		struct Output {
 			Output(const double totalPipeVolume, std::vector<double> receiverCapacities,
 			       const double totalReceiverVol, const double totalCapacityOfCompressedAirSystem,
 			       PipeData pipeLengths)
@@ -280,6 +278,63 @@ namespace Compressor {
 	private:
 		double airFlow, pipePressure, atmosphericPressure;
 	};
+
+	class PipeSizing {
+	public:
+		struct Output {
+			Output(const double crossSectionalArea, const double pipeDiameter)
+					: crossSectionalArea(crossSectionalArea), pipeDiameter(pipeDiameter)
+			{}
+			const double crossSectionalArea, pipeDiameter;
+		};
+
+		/**
+		 * Constructor for Compressor::PipeSizing - This calculator finds the velocity of compressed air
+		 * through all the different piping involved in the system.
+		 * @param airflow double, volumetric flow velocity - cfm
+		 * @param airlinePressure double, Pressure through the pipe  - psi
+		 * @param designVelocity double, The air flow velocity that is meant to flow through the pipe.
+		 * @attention Constraints: 20 fps is recommended for a header, but it should never exceed 30 fps - ft/sc
+		 * @param atmosphericPressure double, generally it will be 14.7 - psia
+		 */
+		PipeSizing(double airflow, double airlinePressure, double designVelocity, double atmosphericPressure);
+
+		/**
+		 * calculate() will calculate and return the cross sectional area and the pipe diameter.
+		 * @return PipeSizing::Output
+		 */
+		Output calculate();
+
+	private:
+		double airflow, airlinePressure, designVelocity, atmosphericPressure;
+	};
+
+	class PneumaticValve {
+	public:
+		/**
+		 * Constructor for Compressor::PneumaticValve - Can be used for finding flow rate for a pipe with flow coefficient Cv = 1
+		 * @param inletPressure double, psi
+		 * @param outletPressure double, psi
+		 */
+		PneumaticValve(double inletPressure, double outletPressure);
+		/**
+		 * Constructor for Compressor::PneumaticValve - used for finding the flow coefficient (Cv) when the flow rate is known
+		 * @param inletPressure double,
+		 * @param outletPressure double,
+		 * @param flowRate double,
+		 */
+		PneumaticValve(double inletPressure, double outletPressure, double flowRate);
+
+		/**
+		 * @return flowRate or flow coefficient depending on which constructor was used
+		 */
+		double calculate();
+
+	private:
+		double inletPressure, outletPressure, flowRate;
+		bool flowRateKnown;
+	};
+
 
 };
 
