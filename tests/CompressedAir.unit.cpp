@@ -3,7 +3,9 @@
 
 TEST_CASE( "PneumaticAirRequirement", "[CompressedAir][PneumaticAirRequirement]") {
 	std::size_t unitTestNumber = 1;
-	auto const compare = [&unitTestNumber](PneumaticAirRequirement::Output actual, PneumaticAirRequirement::Output expected) {
+	auto const compare = [&unitTestNumber](PneumaticAirRequirement::Output const & actual,
+	                                       PneumaticAirRequirement::Output const & expected)
+	{
 		INFO("Unit test number " + std::to_string(unitTestNumber));
 		CHECK(expected.volumeAirIntakePiston == Approx(actual.volumeAirIntakePiston));
 		CHECK(expected.compressionRatio == Approx(actual.compressionRatio));
@@ -65,7 +67,9 @@ TEST_CASE( "ReceiverTank - Size Calculation", "[CompressedAir][ReceiverTank][Siz
 
 TEST_CASE( "Compressor Operating Cost", "[CompressedAir][OperatingCost]") {
 	std::size_t unitTestNumber = 1;
-	auto const compare = [&unitTestNumber](Compressor::OperatingCost::Output actual, Compressor::OperatingCost::Output expected) {
+	auto const compare = [&unitTestNumber](Compressor::OperatingCost::Output const & actual,
+	                                       Compressor::OperatingCost::Output const & expected)
+	{
 		INFO("Unit test number " + std::to_string(unitTestNumber));
 		CHECK(expected.runTimeUnloaded == Approx(actual.runTimeUnloaded));
 		CHECK(expected.costForLoaded == Approx(actual.costForLoaded));
@@ -106,6 +110,29 @@ TEST_CASE( "Compressor Air System Capacity", "[CompressedAir][AirSystemCapacity]
 	CHECK(output3.receiverCapacities.at(3) == Approx(141.7112299465));
 }
 
+TEST_CASE( "Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
+	std::size_t unitTestNumber = 1;
+	auto const compare = [&unitTestNumber](Compressor::PipeData const & results, std::vector<double> const & expected)
+	{
+		CHECK(expected.at(0) == Approx(results.oneHalf));
+		CHECK(expected.at(1) == Approx(results.threeFourths));
+		CHECK(expected.at(2) == Approx(results.one));
+		CHECK(expected.at(3) == Approx(results.oneAndOneFourth));
+		CHECK(expected.at(4) == Approx(results.oneAndOneHalf));
+		CHECK(expected.at(5) == Approx(results.two));
+		CHECK(expected.at(6) == Approx(results.twoAndOneHalf));
+		CHECK(expected.at(7) == Approx(results.three));
+//		CHECK(expected.at(8) == Approx(results.threeAndOneHalf));
+		CHECK(expected.at(9) == Approx(results.four));
+//		CHECK(expected.at(10) == Approx(results.five));
+		CHECK(expected.at(11) == Approx(results.six));
+		unitTestNumber++;
+	};
+
+	auto const threeAndOneHalf = 0, five = 0;
+	compare(Compressor::AirVelocity(1800, 100, 14.7).calculate(), {1845.5100261552, 1044.628316691, 643.7825672634, 369.102005231, 271.3985332581, 164.7776809, 115.585179, 74.9192162174, threeAndOneHalf, 43.4919880476, five, 19.164174726});
+	compare(Compressor::AirVelocity(1300, 80, 14.7).calculate(), {1614.361140443, 913.789324779, 563.149235038, 322.872228, 237.406050, 144.139387539, 101.108213388, 65.53563493, threeAndOneHalf, 38.044645886, five, 16.763874771});
+}
 
 
 

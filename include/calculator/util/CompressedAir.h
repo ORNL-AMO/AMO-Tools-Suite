@@ -11,6 +11,7 @@
 #include <vector>
 #include <cmath>
 #include <stdexcept>
+#include <functional>
 
 class PneumaticAirRequirement {
 public:
@@ -21,7 +22,7 @@ public:
 
 	/**
 	 * Constructor for PneumaticAirRequirement
-	 * This calculator helps in computing the quantity of air required by a specific single acting or a double acting piston cylinder compressor.
+	 * This calculator computes the quantity of air required by a specific single acting or a double acting piston cylinder compressor.
 	 * The design specs of the compressor are entered in the calculator and the quantity of air needed is generated.
  	 * @param pistonType PistonType, type of Piston, single or double acting - in this case, must be double
  	 * @param cylinderDiameter double, Inner diameter of cylinder - inches
@@ -35,7 +36,7 @@ public:
 
 	/**
 	 * Constructor for PneumaticAirRequirement
-	 * This calculator helps in computing the quantity of air required by a specific single acting or a double acting piston cylinder compressor.
+	 * This calculator computes the quantity of air required by a specific single acting or a double acting piston cylinder compressor.
 	 * The design specs of the compressor are entered in the calculator and the quantity of air needed is generated.
  	 * @param pistonType PistonType, type of Piston, single or double acting - in this case, must be single
  	 * @param cylinderDiameter double, Inner diameter of cylinder - inches
@@ -154,11 +155,48 @@ private:
 };
 
 namespace Compressor {
+	struct PipeData {
+		/**
+		 * Constructor for Compressor::PipeData - This is used to hold all the pipe lengths in the system
+		 * All params are the english spelling of their numeric equivalents, i.e. one half == 0.5, twoAndOneHalf == 2.5, etc.
+		 * Used in AirSystemCapacity input and output.
+		 */
+		PipeData(const double oneHalf, const double threeFourths, const double one, const double oneAndOneFourth,
+		         const double oneAndOneHalf, const double two, const double twoAndOneHalf, const double three,
+		         const double threeAndOneHalf, const double four, const double five, const double six)
+				: oneHalf(oneHalf * 0.0021), threeFourths(threeFourths * 0.0037), one(one * 0.006),
+				  oneAndOneFourth(oneAndOneFourth * 0.0104), oneAndOneHalf(oneAndOneHalf * 0.0141),
+				  two(two * 0.0233), twoAndOneHalf(twoAndOneHalf * 0.0333), three(three * 0.0513),
+				  threeAndOneHalf(threeAndOneHalf * 0.0687), four(four * 0.0884), five(five * 0.1389),
+				  six(six * 0.2006),
+				  totalPipeVolume(this->oneHalf + this->threeFourths + this->one + this->oneAndOneFourth
+				                  + this->oneAndOneHalf + this->two + this->twoAndOneHalf + this->three
+				                  + this->threeAndOneHalf + this->four + this->five + this->six)
+		{}
+
+		/**
+		 * Constructor for Compressor::PipeData - This is used to hold return values for air velocity estimations
+		 * @param compVel std::function<double (const double)>, compVel is the compressed air velocity function, it
+		 * calculates pipeline velocity given internal area of the pipe in square feet. An example of usage can be found
+		 * in AirVelocity::calculate()
+		 */
+		explicit PipeData(std::function<double (const double)> const & compVel)
+				: oneHalf(compVel(0.3)), threeFourths(compVel(0.53)), one(compVel(0.86)),
+				  oneAndOneFourth(compVel(1.5)), oneAndOneHalf(compVel(2.04)),
+				  two(compVel(3.36)), twoAndOneHalf(compVel(4.79)), three(compVel(7.39)),
+				  threeAndOneHalf(compVel(9.89)), four(compVel(12.73)), five(compVel(20)),
+				  six(compVel(28.89))
+		{}
+
+		const double oneHalf, threeFourths, one, oneAndOneFourth, oneAndOneHalf, two;
+		const double twoAndOneHalf, three, threeAndOneHalf, four, five, six;
+		const double totalPipeVolume = 0;
+	};
 
 	class OperatingCost {
 	public:
 		/**
-		 * * Constructor for Compressor::OperatingCost - This helps in finding the cost of operation of the compressor
+		 * Constructor for Compressor::OperatingCost - This finds the cost of operation of the compressor
 		 * in both fully and partially loaded instances.
 		 * @param motorBhp double, Brake Horse Power is the input power required at the compressor input shaft for a specific speed,
 		 * capacity and pressure condition. It is generally shown on the compressor panel. - bhp
@@ -193,34 +231,11 @@ namespace Compressor {
 
 	class AirSystemCapacity {
 	public:
-		struct PipeLengths {
-			/**
-			 * Constructor for Compressor::AirSystemCapacity::PipeLengths - This is used to hold all the pipe lengths in the system
-			 * All params are the english spelling of their numeric equivalents, i.e. one half == 0.5, twoAndOneHalf == 2.5, etc.
-			 */
-			PipeLengths(const double oneHalf, const double threeFourths, const double one, const double oneAndOneFourth,
-			            const double oneAndOneHalf, const double two, const double twoAndOneHalf, const double three,
-			            const double threeAndOneHalf, const double four, const double five, const double six)
-					: oneHalf(oneHalf * 0.0021), threeFourths(threeFourths * 0.0037), one(one * 0.006),
-					  oneAndOneFourth(oneAndOneFourth * 0.0104), oneAndOneHalf(oneAndOneHalf * 0.0141),
-					  two(two * 0.0233), twoAndOneHalf(twoAndOneHalf * 0.0333), three(three * 0.0513),
-					  threeAndOneHalf(threeAndOneHalf * 0.0687), four(four * 0.0884), five(five * 0.1389),
-					  six(six * 0.2006),
-					  totalPipeVolume(this->oneHalf + this->threeFourths + this->one + this->oneAndOneFourth
-					                  + this->oneAndOneHalf + this->two + this->twoAndOneHalf + this->three
-					                  + this->threeAndOneHalf + this->four + this->five + this->six)
-			{}
-
-			const double oneHalf, threeFourths, one, oneAndOneFourth, oneAndOneHalf, two;
-			const double twoAndOneHalf, three, threeAndOneHalf, four, five, six;
-			const double totalPipeVolume;
-		};
-
 		class Output {
 		public:
 			Output(const double totalPipeVolume, std::vector<double> receiverCapacities,
 			       const double totalReceiverVol, const double totalCapacityOfCompressedAirSystem,
-			       PipeLengths pipeLengths)
+			       PipeData pipeLengths)
 					: totalPipeVolume(totalPipeVolume), totalReceiverVol(totalReceiverVol),
 					  totalCapacityOfCompressedAirSystem(totalCapacityOfCompressedAirSystem),
 					  receiverCapacities(std::move(receiverCapacities)), pipeLengths(pipeLengths)
@@ -228,7 +243,7 @@ namespace Compressor {
 
 			const double totalPipeVolume, totalReceiverVol, totalCapacityOfCompressedAirSystem;
 			const std::vector<double> receiverCapacities;
-			const PipeLengths pipeLengths;
+			const PipeData pipeLengths;
 		};
 
 		/**
@@ -237,13 +252,33 @@ namespace Compressor {
 		 * @param pipeLengths Compressor::AirSystemCapacity::PipeLengths, Object containing the lengths of the various pipe sizes in your system - ft
 		 * @param gallons std::vector<double>, a vector containing the number of gallons in each receiver
 		 */
-		AirSystemCapacity(PipeLengths pipeLengths, std::vector<double> gallons);
+		AirSystemCapacity(PipeData pipeLengths, std::vector<double> gallons);
 
 		Output calculate();
 
 	private:
-		PipeLengths pipeLengths;
+		PipeData pipeLengths;
 		std::vector<double> receivers;
+	};
+
+	class AirVelocity {
+	public:
+		/**
+		 * Constructor for Compressor::AirVelocity - This calculator finds the velocity of compressed air
+		 * through all the different piping involved in the system.
+		 * @attention Constraints - For main and branch lines, recommended maximum velocity is 20 fps,
+		 * and it should not exceed 30fps. For line drops, feed lines or branch lines, the recommended velocity is
+		 * 30 fps with an upper limit of 50 fps.
+		 * @param airFlow double, Volumetric flow rate of air in the compressor system, referenced to the compressor inlet conditions - scfm
+		 * @param pipePressure double, Pressure of air flowing through the pipe - psig
+		 * @param atmosphericPressure double, Generally it will be 14.7 - psia
+		 */
+		AirVelocity(double airFlow, double pipePressure, double atmosphericPressure);
+
+		Compressor::PipeData calculate();
+
+	private:
+		double airFlow, pipePressure, atmosphericPressure;
 	};
 
 };

@@ -106,7 +106,7 @@ Compressor::OperatingCost::Output Compressor::OperatingCost::calculate() {
 	return {runTimeUnloaded, costForLoaded, costForUnloaded, costForLoaded + costForUnloaded};
 }
 
-Compressor::AirSystemCapacity::AirSystemCapacity(Compressor::AirSystemCapacity::PipeLengths pipeLengths,
+Compressor::AirSystemCapacity::AirSystemCapacity(Compressor::PipeData pipeLengths,
                                                  std::vector<double> receivers)
 		: pipeLengths(pipeLengths), receivers(std::move(receivers))
 {}
@@ -121,4 +121,16 @@ Compressor::AirSystemCapacity::Output Compressor::AirSystemCapacity::calculate()
 
 	return {pipeLengths.totalPipeVolume, receivers, totalReceiverVol,
 	        pipeLengths.totalPipeVolume + totalReceiverVol, pipeLengths};
+}
+
+Compressor::AirVelocity::AirVelocity(const double airFlow, const double pipePressure, const double atmosphericPressure)
+		: airFlow(airFlow), pipePressure(pipePressure), atmosphericPressure(atmosphericPressure)
+{}
+
+Compressor::PipeData Compressor::AirVelocity::calculate() {
+	auto const compressedAirVelocity = [this](const double traverseArea) {
+		return (airFlow * atmosphericPressure / (pipePressure + atmosphericPressure)) * (144 / traverseArea) * (1.0 / 60);
+	};
+
+	return Compressor::PipeData(compressedAirVelocity);
 }
