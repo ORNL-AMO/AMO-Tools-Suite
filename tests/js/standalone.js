@@ -41,3 +41,28 @@ test('CHP', function (t) {
     t.equal(rnd(res.annualOperationSavings), rnd(3066325.0889664106));
     t.equal(rnd(res.simplePayback), rnd(3.8126922817));
 });
+
+test('PneumaticAirRequirement', function (t) {
+    t.plan(7);
+    t.type(bindings.pneumaticAirRequirement, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.volumeAirIntakePiston), expected[0]);
+        t.equal(rnd(results.compressionRatio), expected[1]);
+        t.equal(rnd(results.airRequirementPneumaticCylinder), expected[2]);
+    };
+
+    var input = {
+        pistonType: 0,
+        cylinderDiameter: 1.5,
+        cylinderStroke: 6,
+        airPressure: 100,
+        cyclesPerMinute: 60
+    };
+
+    compare(bindings.pneumaticAirRequirement(input), [0.367969, 7.802721, 2.871158]);
+
+    input.pistonType = 1;
+    input.pistonRodDiameter = 0.375;
+    compare(bindings.pneumaticAirRequirement(input), [0.712939, 7.802721, 5.562868]);
+});

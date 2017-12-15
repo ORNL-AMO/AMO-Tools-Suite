@@ -10,7 +10,8 @@
             ],
             'sources' : [
                 'bindings/standalone.cpp',
-                'src/calculator/util/CHP.cpp'
+                'src/calculator/util/CHP.cpp',
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")"
             ],
             "conditions": [
                 [ 'OS=="mac"', {

@@ -47,6 +47,8 @@ public:
 	PneumaticAirRequirement(PistonType pistonType, double cylinderDiameter, double cylinderStroke, double airPressure,
 	                        double cyclesPerMin);
 
+	PneumaticAirRequirement() = default;
+
 	class Output {
 	public:
 		/**

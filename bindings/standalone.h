@@ -4,6 +4,7 @@
 #include <nan.h>
 #include <node.h>
 #include "calculator/util/CHP.h"
+#include "calculator/util/CompressedAir.h"
 #include <string>
 
 
@@ -50,6 +51,30 @@ NAN_METHOD(CHPcalculator) {
 	SetR("thermalCredit", costInfo.at("thermalCredit"));
 	SetR("incrementalOandM", costInfo.at("incrementalOandM"));
 	SetR("totalOperatingCosts", costInfo.at("totalOperatingCosts"));
+	info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(pneumaticAirRequirement) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+//	unsigned val = static_cast<unsigned>(Get("pistonType"));
+//	PneumaticAirRequirement::PistonType pistonType = static_cast<PneumaticAirRequirement::PistonType>(val);
+
+	int val = Get("pistonType");
+	auto const pistonType = (!val) ? PneumaticAirRequirement::PistonType::SingleActing : PneumaticAirRequirement::PistonType::DoubleActing;
+
+	PneumaticAirRequirement airRequirement;
+	if (pistonType == PneumaticAirRequirement::PistonType::SingleActing) {
+		airRequirement = PneumaticAirRequirement(pistonType, Get("cylinderDiameter"), Get("cylinderStroke"), Get("airPressure"), Get("cyclesPerMinute"));
+	} else {
+		airRequirement = PneumaticAirRequirement(pistonType, Get("cylinderDiameter"), Get("cylinderStroke"), Get("pistonRodDiameter"), Get("airPressure"), Get("cyclesPerMinute"));
+	}
+
+	auto const output = airRequirement.calculate();
+	SetR("airRequirementPneumaticCylinder", output.airRequirementPneumaticCylinder);
+	SetR("volumeAirIntakePiston", output.volumeAirIntakePiston);
+	SetR("compressionRatio", output.compressionRatio);
 	info.GetReturnValue().Set(r);
 }
 
