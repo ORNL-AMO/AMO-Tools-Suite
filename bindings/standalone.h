@@ -78,4 +78,24 @@ NAN_METHOD(pneumaticAirRequirement) {
 	info.GetReturnValue().Set(r);
 }
 
+NAN_METHOD(receiverTank) {
+	inp = info[0]->ToObject();
+
+	ReceiverTank tank;
+	ReceiverTank::Method method = static_cast<ReceiverTank::Method>(static_cast<unsigned>(Get("method")));
+
+	if (method == ReceiverTank::Method::General) {
+		tank = {ReceiverTank::Method::General, Get("airDemand"), Get("allowablePressureDrop"), Get("atmosphericPressure")};
+	} else if (method == ReceiverTank::Method::DedicatedStorage) {
+		tank = {ReceiverTank::Method::DedicatedStorage, Get("lengthOfDemand"), Get("airFlowRequirement"), Get("atmosphericPressure"), Get("initialTankPressure"), Get("finalTankPressure")};
+	} else if (method == ReceiverTank::Method::BridgingCompressorReactionDelay) {
+		tank = {ReceiverTank::Method::BridgingCompressorReactionDelay, Get("distanceToCompressorRoom"), Get("speedOfAir"), Get("atmosphericPressure"), Get("airDemand"), Get("allowablePressureDrop")};
+	} else {
+		tank = {ReceiverTank::Method::MeteredStorage, Get("lengthOfDemand"), Get("airFlowRequirement"), Get("atmosphericPressure"), Get("initialTankPressure"), Get("finalTankPressure"), Get("meteredControl")};
+	}
+
+	Local<Number> size = Nan::New(tank.calculateSize());
+	info.GetReturnValue().Set(size);
+}
+
 #endif //AMO_TOOLS_SUITE_STANDALONE_H

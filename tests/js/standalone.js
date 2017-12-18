@@ -66,3 +66,43 @@ test('PneumaticAirRequirement', function (t) {
     input.pistonRodDiameter = 0.375;
     compare(bindings.pneumaticAirRequirement(input), [0.712939, 7.802721, 5.562868]);
 });
+
+test('Receiver Tank Size', function (t) {
+    t.plan(9);
+    t.type(bindings.receiverTank, 'function');
+
+    t.equal(rnd(bindings.receiverTank({
+        method: 0, airDemand: 150, allowablePressureDrop: 3, atmosphericPressure: 14.7
+    })), 5497.8);
+
+    t.equal(rnd(bindings.receiverTank({
+        method: 0, airDemand: 190, allowablePressureDrop: 8, atmosphericPressure: 12.7
+    })), 2256.155);
+
+
+    t.equal(rnd(bindings.receiverTank({
+        method: 1, lengthOfDemand: 0.5, airFlowRequirement: 100, atmosphericPressure: 14.7, initialTankPressure: 110, finalTankPressure: 100
+    })), 549.78);
+
+    t.equal(rnd(bindings.receiverTank({
+        method: 1, lengthOfDemand: 1.5, airFlowRequirement: 120, atmosphericPressure: 11.7, initialTankPressure: 150, finalTankPressure: 100
+    })), 315.0576);
+
+
+    t.equal(rnd(bindings.receiverTank({
+        method: 2, lengthOfDemand: 0.5, airFlowRequirement: 900, atmosphericPressure: 14.7, initialTankPressure: 100, finalTankPressure: 70, meteredControl: 45
+    })), 1566.873);
+
+    t.equal(rnd(bindings.receiverTank({
+        method: 2, lengthOfDemand: 1.5, airFlowRequirement: 800, atmosphericPressure: 11.7, initialTankPressure: 120, finalTankPressure: 90, meteredControl: 75
+    })), 3172.455);
+
+
+    t.equal(rnd(bindings.receiverTank({
+        method: 3, distanceToCompressorRoom: 1000, speedOfAir: 250, atmosphericPressure: 14.7, airDemand: 600, allowablePressureDrop: 2
+    })), 2199.12);
+
+    t.equal(rnd(bindings.receiverTank({
+        method: 3, distanceToCompressorRoom: 1200, speedOfAir: 350, atmosphericPressure: 11.7, airDemand: 800, allowablePressureDrop: 19
+    })), 210.564812);
+});

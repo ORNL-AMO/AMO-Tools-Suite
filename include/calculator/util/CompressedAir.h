@@ -88,6 +88,8 @@ public:
 		BridgingCompressorReactionDelay
 	};
 
+	ReceiverTank() = default;
+
 	/**
 	 * Constructor for ReceiverTank - This is required when we need to order a receiver tank to meet our compressed air requirements.
 	 * This calculator computes the quantity of compressed air that is actually available for use. When air receivers
