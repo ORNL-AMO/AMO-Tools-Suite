@@ -24,6 +24,12 @@ NAN_MODULE_INIT(InitStandalone) {
 
 	Nan::Set(target, New<String>("pipeSizing").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(pipeSizing)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("pneumaticValve").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(pneumaticValve)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("bagMethod").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(bagMethod)).ToLocalChecked());
 }
 
 NODE_MODULE(standalone, InitStandalone)

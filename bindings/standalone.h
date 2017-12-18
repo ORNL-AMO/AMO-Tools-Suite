@@ -187,5 +187,34 @@ NAN_METHOD(pipeSizing) {
 	info.GetReturnValue().Set(r);
 }
 
+NAN_METHOD(pneumaticValve) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	Local<String> flowRateStr = Nan::New<String>("flowRate").ToLocalChecked();
+
+	auto flowRate = inp->ToObject()->Get(flowRateStr);
+	if (flowRate->IsUndefined()) {
+		auto output = Compressor::PneumaticValve(Get("inletPressure"), Get("outletPressure")).calculate();
+		SetR("flowRate", output);
+	} else {
+		auto output = Compressor::PneumaticValve(Get("inletPressure"), Get("outletPressure"), Get("flowRate")).calculate();
+		SetR("flowCoefficient", output);
+	}
+
+	info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(bagMethod) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	auto output = BagMethod(Get("operatingTime"), Get("bagFillTime"), Get("heightOfBag"), Get("diameterOfBag"), Get("numberOfUnits")).calculate();
+	SetR("flowRate", output.flowRate);
+	SetR("annualConsumption", output.annualConsumption);
+
+	info.GetReturnValue().Set(r);
+}
+
 
 #endif //AMO_TOOLS_SUITE_STANDALONE_H

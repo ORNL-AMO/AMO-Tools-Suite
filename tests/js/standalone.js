@@ -215,3 +215,33 @@ test('Pipe Sizing', function (t) {
     t.equal(rnd(results.crossSectionalArea), 10.600823);
     t.equal(rnd(results.pipeDiameter), 3.68657);
 });
+
+test('Pneumatic Valve', function (t) {
+    t.plan(5);
+    t.type(bindings.pneumaticValve, 'function');
+
+    var results = bindings.pneumaticValve({ inletPressure: 100, outletPressure: 70 });
+    t.equal(rnd(results.flowRate), 49.09732);
+
+    results = bindings.pneumaticValve({ inletPressure: 120, outletPressure: 90 });
+    t.equal(rnd(results.flowRate), 54.568621);
+
+    results = bindings.pneumaticValve({ inletPressure: 80, outletPressure: 75, flowRate: 55 });
+    t.equal(rnd(results.flowCoefficient), 2.873685);
+
+    results = bindings.pneumaticValve({ inletPressure: 90, outletPressure: 85, flowRate: 95 });
+    t.equal(rnd(results.flowCoefficient), 4.671398);
+});
+
+test('Bag Method', function (t) {
+    t.plan(5);
+    t.type(bindings.bagMethod, 'function');
+
+    var results = bindings.bagMethod({ operatingTime: 115200 / 60.0, bagFillTime: 25, heightOfBag: 10, diameterOfBag: 10, numberOfUnits: 1 });
+    t.equal(rnd(results.flowRate), 1.092);
+    t.equal(rnd(results.annualConsumption), 125.7984);
+
+    results = bindings.bagMethod({ operatingTime: 100000 / 60.0, bagFillTime: 20, heightOfBag: 10, diameterOfBag: 10, numberOfUnits: 1 });
+    t.equal(rnd(results.flowRate), 1.365);
+    t.equal(rnd(results.annualConsumption), 136.5);
+});
