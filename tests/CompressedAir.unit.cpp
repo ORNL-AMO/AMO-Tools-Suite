@@ -128,9 +128,8 @@ TEST_CASE( "Compressor Air Velocity", "[CompressedAir][AirVelocity]") {
 		CHECK(expected.at(11) == Approx(results.six));
 	};
 
-	auto const threeAndOneHalf = 0, five = 0;
-	compare(Compressor::AirVelocity(1800, 100, 14.7).calculate(), {1845.5100261552, 1044.628316691, 643.7825672634, 369.102005231, 271.3985332581, 164.7776809, 115.585179, 74.9192162174, threeAndOneHalf, 43.4919880476, five, 19.164174726});
-	compare(Compressor::AirVelocity(1300, 80, 14.7).calculate(), {1614.361140443, 913.789324779, 563.149235038, 322.872228, 237.406050, 144.139387539, 101.108213388, 65.53563493, threeAndOneHalf, 38.044645886, five, 16.763874771});
+	compare(Compressor::AirVelocity(1800, 100, 14.7).calculate(), {1845.5100261552, 1044.628316691, 643.7825672634, 369.102005231, 271.3985332581, 164.7776809, 115.585179, 74.9192162174, 0, 43.4919880476, 0, 19.164174726});
+	compare(Compressor::AirVelocity(1300, 80, 14.7).calculate(), {1614.361140443, 913.789324779, 563.149235038, 322.872228, 237.406050, 144.139387539, 101.108213388, 65.53563493, 0, 38.044645886, 0, 16.763874771});
 }
 
 TEST_CASE( "Compressor Pipe Sizing", "[CompressedAir][PipeSizing]") {
