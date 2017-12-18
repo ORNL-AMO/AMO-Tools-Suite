@@ -102,6 +102,7 @@ TEST_CASE( "Compressor Air System Capacity", "[CompressedAir][AirSystemCapacity]
 	CHECK(output3.totalPipeVolume == Approx(155.28));
 	CHECK(output3.totalReceiverVol == Approx(510.6951871658));
 	CHECK(output3.totalCapacityOfCompressedAirSystem == Approx(665.9751871658));
+	CHECK(output3.pipeLengths.oneHalf == Approx(6.3));
 	CHECK(output3.pipeLengths.threeFourths == Approx(7.4));
 	CHECK(output3.pipeLengths.two == Approx(11.65));
 	CHECK(output3.pipeLengths.four == Approx(88.4));

@@ -12,6 +12,12 @@ NAN_MODULE_INIT(InitStandalone) {
 
 	Nan::Set(target, New<String>("receiverTank").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(receiverTank)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("operatingCost").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(operatingCost)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("airSystemCapacity").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(airSystemCapacity)).ToLocalChecked());
 }
 
 NODE_MODULE(standalone, InitStandalone)

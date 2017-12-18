@@ -98,4 +98,75 @@ NAN_METHOD(receiverTank) {
 	info.GetReturnValue().Set(size);
 }
 
+NAN_METHOD(operatingCost) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	auto output = Compressor::OperatingCost(Get("motorBhp"), Get("bhpUnloaded"), Get("annualOperatingHours"),
+	                                        Get("runTimeLoaded"), Get("efficiencyLoaded"), Get("efficiencyUnloaded"),
+	                                        Get("costOfElectricity")).calculate();
+
+	SetR("runTimeUnloaded", output.runTimeUnloaded);
+	SetR("costForLoaded", output.costForLoaded);
+	SetR("costForUnloaded", output.costForUnloaded);
+	SetR("totalAnnualCost", output.totalAnnualCost);
+	info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(airSystemCapacity) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	Local<String> gallonsStr = Nan::New<String>("gallons").ToLocalChecked();
+	auto array = inp->ToObject()->Get(gallonsStr);
+	v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
+	std::vector<double> gallons(arr->Length());
+	for (std::size_t i = 0; i < arr->Length(); i++) {
+		gallons[i] = arr->Get(i)->NumberValue();
+	}
+
+	auto output = Compressor::AirSystemCapacity({Get("oneHalf"), Get("threeFourths"), Get("one"), Get("oneAndOneFourth"),
+	                                             Get("oneAndOneHalf"), Get("two"), Get("twoAndOneHalf"), Get("three"),
+	                                             Get("threeAndOneHalf"), Get("four"), Get("five"), Get("six")}, gallons).calculate();
+
+//	struct Output {
+//		Output(const double totalPipeVolume, std::vector<double> receiverCapacities,
+//		       const double totalReceiverVol, const double totalCapacityOfCompressedAirSystem,
+//		       PipeData pipeLengths)
+//				: totalPipeVolume(totalPipeVolume), totalReceiverVol(totalReceiverVol),
+//				  totalCapacityOfCompressedAirSystem(totalCapacityOfCompressedAirSystem),
+//				  receiverCapacities(std::move(receiverCapacities)), pipeLengths(pipeLengths)
+//		{}
+//
+//		const double totalPipeVolume, totalReceiverVol, totalCapacityOfCompressedAirSystem;
+//		const std::vector<double> receiverCapacities;
+//		const PipeData pipeLengths;
+//	};
+
+
+
+	SetR("totalPipeVolume", output.totalPipeVolume);
+	SetR("totalReceiverVolume", output.totalReceiverVol);
+	SetR("totalCapacityOfCompressedAirSystem", output.totalCapacityOfCompressedAirSystem);
+
+	for (std::size_t i = 0; i < output.receiverCapacities.size(); i++) {
+		SetR("receiver" + std::to_string(i + 1), output.receiverCapacities[i]);
+	}
+
+	SetR("oneHalf", output.pipeLengths.oneHalf);
+	SetR("threeFourths", output.pipeLengths.threeFourths);
+	SetR("one", output.pipeLengths.one);
+	SetR("oneAndOneFourth", output.pipeLengths.oneAndOneFourth);
+	SetR("oneAndOneHalf", output.pipeLengths.oneAndOneHalf);
+	SetR("two", output.pipeLengths.two);
+	SetR("twoAndOneHalf", output.pipeLengths.twoAndOneHalf);
+	SetR("three", output.pipeLengths.three);
+	SetR("threeAndOneHalf", output.pipeLengths.threeAndOneHalf);
+	SetR("four", output.pipeLengths.four);
+	SetR("five", output.pipeLengths.five);
+	SetR("six", output.pipeLengths.six);
+
+	info.GetReturnValue().Set(r);
+}
+
 #endif //AMO_TOOLS_SUITE_STANDALONE_H

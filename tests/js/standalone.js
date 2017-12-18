@@ -106,3 +106,65 @@ test('Receiver Tank Size', function (t) {
         method: 3, distanceToCompressorRoom: 1200, speedOfAir: 350, atmosphericPressure: 11.7, airDemand: 800, allowablePressureDrop: 19
     })), 210.564812);
 });
+
+test('Operating Cost', function (t) {
+    t.plan(9);
+    t.type(bindings.operatingCost, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.runTimeUnloaded), expected[0]);
+        t.equal(rnd(results.costForLoaded), expected[1]);
+        t.equal(rnd(results.costForUnloaded), expected[2]);
+        t.equal(rnd(results.totalAnnualCost), expected[3]);
+    };
+
+    var input = {
+        motorBhp: 215, bhpUnloaded: 25, annualOperatingHours: 6800, runTimeLoaded: 85, efficiencyLoaded: 95,
+        efficiencyUnloaded: 90, costOfElectricity: 0.05
+    };
+    compare(bindings.operatingCost(input), [15, 48792.326316, 2272.191667, 51064.517982]);
+
+    input = {
+        motorBhp: 255, bhpUnloaded: 35, annualOperatingHours: 6000, runTimeLoaded: 89, efficiencyLoaded: 93,
+        efficiencyUnloaded: 90, costOfElectricity: 0.09
+    };
+    compare(bindings.operatingCost(input), [11, 98305.954839, 4394.313, 102700.267839]);
+});
+
+test('Air System Capacity', function (t) {
+    t.plan(20);
+    t.type(bindings.airSystemCapacity, 'function');
+
+    var compare = function(results, expected, gallons) {
+        t.equal(rnd(results.oneHalf), expected[0]);
+        t.equal(rnd(results.threeFourths), expected[1]);
+        t.equal(rnd(results.one), expected[2]);
+        t.equal(rnd(results.oneAndOneFourth), expected[3]);
+        t.equal(rnd(results.oneAndOneHalf), expected[4]);
+        t.equal(rnd(results.two), expected[5]);
+        t.equal(rnd(results.twoAndOneHalf), expected[6]);
+        t.equal(rnd(results.three), expected[7]);
+        t.equal(rnd(results.threeAndOneHalf), expected[8]);
+        t.equal(rnd(results.four), expected[9]);
+        t.equal(rnd(results.five), expected[10]);
+        t.equal(rnd(results.six), expected[11]);
+
+        for (var i = 0; i < gallons.length; i++) {
+            t.equal(rnd(results['receiver' + (i + 1)]), gallons[i]);
+        }
+    };
+
+    var inp = {
+        oneHalf: 3000, threeFourths: 2000, one: 1000, oneAndOneFourth: 200, oneAndOneHalf: 100, two: 500, twoAndOneHalf: 500, three: 300,
+        threeAndOneHalf: 0, four: 1000, five: 0, six: 0,
+        gallons: [
+            400, 500, 660, 1060
+        ]
+    };
+
+    var results = bindings.airSystemCapacity(inp);
+    t.equal(rnd(results.totalPipeVolume), 155.28);
+    t.equal(rnd(results.totalReceiverVolume), 350.26738);
+    t.equal(rnd(results.totalCapacityOfCompressedAirSystem), 505.54738);
+    compare(results, [6.3, 7.4, 6, 2.08, 1.41, 11.65, 16.65, 15.39, 0, 88.4, 0, 0], [53.475936, 66.84492, 88.235294, 141.71123]);
+});
