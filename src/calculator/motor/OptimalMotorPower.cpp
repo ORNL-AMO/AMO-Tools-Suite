@@ -20,26 +20,26 @@ double OptimalMotorPower::calculate() {
     double tempLoadFraction_ = 0.00;
     double mspkW = 0.0;
     while (true) {
-        OptimalMotorCurrent optimalMotorCurrent(motorRatedPower_, motorRPM_, lineFrequency_, optimalEfficiencyClass_,
-                                                specifiedEfficiency_, tempLoadFraction_, ratedVoltage_, fieldVoltage_,
-                                                fullLoadAmps_);
+        OptimalMotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, optimalEfficiencyClass,
+                                                specifiedEfficiency, tempLoadFraction_, ratedVoltage, fieldVoltage,
+                                                fullLoadAmps);
         current = optimalMotorCurrent.calculate();
         //Adjustment to current based on measured Voltage
-        current = current * ((((fieldVoltage_ / ratedVoltage_) - 1) * (1 + (-2 * tempLoadFraction_))) + 1);
-        MotorEfficiency motorEfficiency(lineFrequency_, motorRPM_, optimalEfficiencyClass_, specifiedEfficiency_,
-                                        motorRatedPower_,
+        current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction_))) + 1);
+        MotorEfficiency motorEfficiency(lineFrequency, motorRPM, optimalEfficiencyClass, specifiedEfficiency,
+                                        motorRatedPower,
                                         tempLoadFraction_);
         eff = motorEfficiency.calculate();
         //Similar to motorpowerfactor in existing case instead of ratedVoltage
-        MotorPowerFactor motorPowerFactor(lineFrequency_,motorRPM_, efficiencyClass_, specifiedEfficiency_,  motorRatedPower_, tempLoadFraction_, current, eff, fieldVoltage_);
+        MotorPowerFactor motorPowerFactor(lineFrequency,motorRPM, efficiencyClass, specifiedEfficiency,  motorRatedPower, tempLoadFraction_, current, eff, fieldVoltage);
         pf = motorPowerFactor.calculate();
 
-        MotorPower motorPower(fieldVoltage_, current, pf);
+        MotorPower motorPower(fieldVoltage, current, pf);
         power = motorPower.calculate();
         tempMsp = power * eff;
         // Converting to KW for matching purpose.
         //cout << tempLoadFraction << ":" << current << ":" << eff <<":" << pf << ":" << power << ":" << endl;
-        mspkW = optimalMotorShaftPower_ * 0.746;
+        mspkW = optimalMotorShaftPower * 0.746;
 
         if (tempMsp > mspkW || tempLoadFraction_ > 1.5) {
             powerE2 = power;
@@ -75,6 +75,6 @@ double OptimalMotorPower::calculate() {
     current = current1 + 100 * (fractionalIndex_ - lf1) * (current2 - current1);
     eff = eff1 + 100 * (fractionalIndex_ - lf1) * (eff2 - eff1);
     power = powerE1 + 100 * (fractionalIndex_ - lf1) * (powerE2 - powerE1);
-    pf = power / (current * fieldVoltage_ * sqrt(3) / 1000);
+    pf = power / (current * fieldVoltage * sqrt(3) / 1000);
     return 0;
 }
