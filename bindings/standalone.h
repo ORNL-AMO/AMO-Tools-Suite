@@ -129,22 +129,6 @@ NAN_METHOD(airSystemCapacity) {
 	                                             Get("oneAndOneHalf"), Get("two"), Get("twoAndOneHalf"), Get("three"),
 	                                             Get("threeAndOneHalf"), Get("four"), Get("five"), Get("six")}, gallons).calculate();
 
-//	struct Output {
-//		Output(const double totalPipeVolume, std::vector<double> receiverCapacities,
-//		       const double totalReceiverVol, const double totalCapacityOfCompressedAirSystem,
-//		       PipeData pipeLengths)
-//				: totalPipeVolume(totalPipeVolume), totalReceiverVol(totalReceiverVol),
-//				  totalCapacityOfCompressedAirSystem(totalCapacityOfCompressedAirSystem),
-//				  receiverCapacities(std::move(receiverCapacities)), pipeLengths(pipeLengths)
-//		{}
-//
-//		const double totalPipeVolume, totalReceiverVol, totalCapacityOfCompressedAirSystem;
-//		const std::vector<double> receiverCapacities;
-//		const PipeData pipeLengths;
-//	};
-
-
-
 	SetR("totalPipeVolume", output.totalPipeVolume);
 	SetR("totalReceiverVolume", output.totalReceiverVol);
 	SetR("totalCapacityOfCompressedAirSystem", output.totalCapacityOfCompressedAirSystem);
@@ -168,5 +152,40 @@ NAN_METHOD(airSystemCapacity) {
 
 	info.GetReturnValue().Set(r);
 }
+
+NAN_METHOD(airVelocity) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	auto output = Compressor::AirVelocity(Get("airFlow"), Get("pipePressure"), Get("atmosphericPressure")).calculate();
+
+	SetR("oneHalf", output.oneHalf);
+	SetR("threeFourths", output.threeFourths);
+	SetR("one", output.one);
+	SetR("oneAndOneFourth", output.oneAndOneFourth);
+	SetR("oneAndOneHalf", output.oneAndOneHalf);
+	SetR("two", output.two);
+	SetR("twoAndOneHalf", output.twoAndOneHalf);
+	SetR("three", output.three);
+	SetR("threeAndOneHalf", output.threeAndOneHalf);
+	SetR("four", output.four);
+	SetR("five", output.five);
+	SetR("six", output.six);
+
+	info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(pipeSizing) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	auto output = Compressor::PipeSizing(Get("airFlow"), Get("airlinePressure"), Get("designVelocity"), Get("atmosphericPressure")).calculate();
+
+	SetR("crossSectionalArea", output.crossSectionalArea);
+	SetR("pipeDiameter", output.pipeDiameter);
+
+	info.GetReturnValue().Set(r);
+}
+
 
 #endif //AMO_TOOLS_SUITE_STANDALONE_H

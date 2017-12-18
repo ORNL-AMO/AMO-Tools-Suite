@@ -18,6 +18,12 @@ NAN_MODULE_INIT(InitStandalone) {
 
 	Nan::Set(target, New<String>("airSystemCapacity").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(airSystemCapacity)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("airVelocity").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(airVelocity)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("pipeSizing").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(pipeSizing)).ToLocalChecked());
 }
 
 NODE_MODULE(standalone, InitStandalone)

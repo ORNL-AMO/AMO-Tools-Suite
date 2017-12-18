@@ -168,3 +168,50 @@ test('Air System Capacity', function (t) {
     t.equal(rnd(results.totalCapacityOfCompressedAirSystem), 505.54738);
     compare(results, [6.3, 7.4, 6, 2.08, 1.41, 11.65, 16.65, 15.39, 0, 88.4, 0, 0], [53.475936, 66.84492, 88.235294, 141.71123]);
 });
+
+test('Air Velocity', function (t) {
+    t.plan(13);
+    t.type(bindings.airVelocity, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.oneHalf), expected[0]);
+        t.equal(rnd(results.threeFourths), expected[1]);
+        t.equal(rnd(results.one), expected[2]);
+        t.equal(rnd(results.oneAndOneFourth), expected[3]);
+        t.equal(rnd(results.oneAndOneHalf), expected[4]);
+        t.equal(rnd(results.two), expected[5]);
+        t.equal(rnd(results.twoAndOneHalf), expected[6]);
+        t.equal(rnd(results.three), expected[7]);
+        t.equal(rnd(results.threeAndOneHalf), expected[8]);
+        t.equal(rnd(results.four), expected[9]);
+        t.equal(rnd(results.five), expected[10]);
+        t.equal(rnd(results.six), expected[11]);
+    };
+
+    var inp = {
+        airFlow: 1800, pipePressure: 100, atmosphericPressure: 14.7
+    };
+
+    compare(bindings.airVelocity(inp), [1845.510026, 1044.628317, 643.782567, 369.102005, 271.398533, 164.777681, 115.585179, 74.919216, 55.981093, 43.491988, 27.68265, 19.164175]);
+});
+
+test('Pipe Sizing', function (t) {
+    t.plan(5);
+    t.type(bindings.pipeSizing, 'function');
+
+    var inp = {
+        airFlow: 1000, airlinePressure: 90, designVelocity: 25, atmosphericPressure: 14.5
+    };
+
+    var results = bindings.pipeSizing(inp);
+    t.equal(rnd(results.crossSectionalArea), 13.320574);
+    t.equal(rnd(results.pipeDiameter), 4.132512);
+
+    inp = {
+        airFlow: 1400, airlinePressure: 110, designVelocity: 30, atmosphericPressure: 11.5
+    };
+
+    results = bindings.pipeSizing(inp);
+    t.equal(rnd(results.crossSectionalArea), 10.600823);
+    t.equal(rnd(results.pipeDiameter), 3.68657);
+});
