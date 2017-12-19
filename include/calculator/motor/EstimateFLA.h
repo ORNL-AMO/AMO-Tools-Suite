@@ -39,16 +39,16 @@ public:
         specifiedEfficiency(specifiedEfficiency),
         ratedVoltage(ratedVoltage)
     {
-        if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED && specifiedEfficiency <= 0) {
-            throw std::runtime_error("When using EfficiencyClass::SPECIFIED, you must provide a specified efficiency");
-        }
+//        if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED && specifiedEfficiency <= 0) {
+//            throw std::runtime_error("When using EfficiencyClass::SPECIFIED, you must provide a specified efficiency");
+//        }
     };
 
     /**
      * Calculates the 25% interval
      * @return 25% interval values of current.
      */
-    std::vector<double> calculate();
+    std::array<double, 6> calculate();
 
     /**
      * Getter for estimated Full load amps

@@ -323,17 +323,25 @@ TEST_CASE( "PSAT motor efficiency", "[PSAT][pump efficiency]" ) {
 
 TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	auto unitTestNumber = 0; // unit test number 0 indexed
-	const std::vector<std::vector<double>> expected = {
-			{18.8775576, 23.6212730421, 34.0613092325, 46.5048449789, 60.381474681, 75.5372248259},
-			{48.6495840124, 63.249248253, 96.1954123714, 132.4400532659, 172.6294043084, 215.9593847898},
-			{49.55811480809, 56.11300070569, 78.49438625307, 102.84658002297, 129.16907799852, 159.7821494841},
-			{28.6566235624, 39.6191308792, 61.8010643593, 86.8044256422, 113.8781958, 142.6893793376},
-			{53.3464740091, 75.2070177891, 119.291789, 167.65708225, 219.981424828, 275.6367253},
-			{0, 0, 0, 0, 0, 0}
-
+	const std::array<std::array<double, 6>, 16> expected = {
+			{
+					{{18.8775576, 23.6212730421, 34.0613092325, 46.5048449789, 60.381474681, 75.5372248259}},
+					{{48.6495840124, 63.249248253, 96.1954123714, 132.4400532659, 172.6294043084, 215.9593847898}},
+					{{49.55811480809, 56.11300070569, 78.49438625307, 102.84658002297, 129.16907799852, 159.7821494841}},
+					{{28.6566235624, 39.6191308792, 61.8010643593, 86.8044256422, 113.8781958, 142.6893793376}},
+					{{53.3464740091, 75.2070177891, 119.291789, 167.65708225, 219.981424828, 275.6367253}},
+					{{66.1147879039, 93.2122073949, 148.887425814, 209.314953096, 274.6608259936, 344.15001497}},
+					{{66.1147879039, 93.2122073949, 148.887425814, 209.314953096, 274.6608259936, 344.15001497}},
+					{{88.3024614572, 116.2594022102, 179.8542042707, 249.6685871227, 326.1945449939, 408.0693757874}},
+					{{494.2117767987, 618.953071161, 849.5097896611, 1130.1225205859, 1439.4257134111, 1780.5696074895}},
+					{{0, 0, 0, 0, 0, 0}},
+					{{0, 0, 0, 0, 0, 0}},
+					{{0, 0, 0, 0, 0, 0}},
+					{{0, 0, 0, 0, 0, 0}},
+			}
 	};
 
-	auto const compare = [&unitTestNumber, &expected](const std::vector<double> & results) {
+	auto const compare = [&unitTestNumber, &expected](const std::array<double, 6> & results) {
 		for (auto i = 0; i < results.size(); i++) {
 			INFO("index is " + std::to_string(i) + " and the unit test number is " + std::to_string(unitTestNumber));
 			CHECK(expected.at(unitTestNumber).at(i) == Approx(results[i]));
@@ -347,20 +355,41 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	compare(EstimateFLA(100, 2900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
 
 	compare(EstimateFLA(200, 2200, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 96.5, 100).calculate());
-//	compare(EstimateFLA(200, 2200, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 96.5, 150).calculate());
+	compare(EstimateFLA(250, 2800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 98.5, 110).calculate());
 
-//	auto rv = EstimateFLA(200, 2200, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 56.5, 150).calculate();
+	compare(EstimateFLA(250, 2800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 98.5, 110).calculate());
+	compare(EstimateFLA(290, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 93.5, 110).calculate());
+	compare(EstimateFLA(1200, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 65.5, 210).calculate());
 
+	auto t = EstimateFLA(50, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() ==  Approx(277.7547835326));
 
+	t = EstimateFLA(150, 2400, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 110);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() ==  Approx(707.6948056564));
 
-	auto blah = 0;
+	t = EstimateFLA(75, 2000, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 0, 110);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() ==  Approx(348.9439377969));
 
-//	CHECK(EstimateFLA(50, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 100).calculate() == Approx(0));
-//	CHECK(EstimateFLA(125, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 100).calculate() == Approx(0));
-//	CHECK(EstimateFLA(225, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 100).calculate() == Approx(0));
-//	CHECK(EstimateFLA(325, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 100).calculate() == Approx(0));
-//	CHECK(EstimateFLA(425, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 100).calculate() == Approx(0));
-//	CHECK(EstimateFLA(525, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 100).calculate() == Approx(0));
+	t = EstimateFLA(175, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 0, 220);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() ==  Approx(460.3700518143));
 
+	t = EstimateFLA(100, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 80, 220);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() ==  Approx(311.3720600292));
 
+	t = EstimateFLA(120, 1900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 90, 220);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() ==  Approx(301.1782164872));
+
+	t = EstimateFLA(90, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 95, 120);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() ==  Approx(432.5925070407));
+
+	t = EstimateFLA(150, 2900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 55, 90);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() ==  Approx(1457.2693184418));
 }

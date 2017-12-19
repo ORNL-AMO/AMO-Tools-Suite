@@ -9,6 +9,7 @@
  */
 
 #include <cmath>
+#include <array>
 #include "calculator/motor/EstimateFLA.h"
 #include "calculator/motor/MotorEfficiency.h"
 #include "calculator/motor/Poles.h"
@@ -45,8 +46,9 @@
  *
  * @return 25% interval values of current.
  */
-std::vector<double> EstimateFLA::calculate() {
-    std::vector<double> plValues(6);
+std::array<double, 6> EstimateFLA::calculate() {
+//    std::vector<double> plValues(6);
+
     /*
      * FLA Basic coefficients
      */
@@ -79,89 +81,42 @@ std::vector<double> EstimateFLA::calculate() {
             {0.03430828, 0.01757208, 0.72734421, 1.14514899,  1.14514899,  1.14514899}
     };
 
-    /*
-     * Part load coefficients, 2004
-     */
-    double p2Coeff_[5][6] = {
-            {0.2385152,  0.31999999, 0.51999998, 0.75400001, 1, 1.253},
-            {0.04319932, 0.03559835, 0.02311537, 0.00837315, 0, 0},
-            {0.01191111, 0.00243387, 0.00018377, 0.00013998, 0, 0},
-            {0.176818,   0.1282783,  0.08376596, 0.03318606, 0, 0},
-            {0.1847319,  0.1831789,  0.16219489, 0.1855139,  0, 0}
-    };
-    double p4Coeff_[5][6] = {
-            {0.26803651, 0.3535319,  0.54000002, 0.76428652, 1, 1.251},
-            {0.08,       0.06387088, 0.02691548, 0.0081415,  0, 0},
-            {0.01172604, 0.01068725, 0.00297117, 0.00686711, 0, 0},
-            {0.2029126,  0.1705882,  0.09793611, 0.0471422,  0, 0},
-            {0.15413959, 0.1315202,  0.09374535, 0.1191377,  0, 0}
-    };
-    double p6Coeff_[5][6] = {
-            {0.28999999, 0.39519981, 0.55500001, 0.76973772, 1, 1.254},
-            {0.07532283, 0.06387088, 0.03,       0.02362101, 0, 0},
-            {0.00291026, 0.01068725, 0.00380051, 0.08841167, 0, 0},
-            {0.2405144,  0.1705882,  0.13686571, 0.02321446, 0, 0},
-            {0.09842682, 0.1315202,  0.15484551, 0.08854395, 0, 0}
-    };
-    double p8Coeff_[5][6] = {
-            {0.33000001, 0.43000001, 0.56062472, 0.78429687, 1, 1.237},
-            {0.06,       0.1060414,  0.04872012, 0.00763685, 0, 0},
-            {0.00125301, 0.031788,   0.00041673, 0.0023581,  0, 0},
-            {0.1939563,  0.115,      0.0841061,  0.00756603, 0, 0},
-            {0.05575958, 0.15824869, 0.05538078, 0.00250876, 0, 0}
-    };
-    double p10Coeff_[5][6] = {
-            {0.37,       0.44,       0.57857579, 0.78581947, 1, 1.233},
-            {0.04507853, 0.04205693, 0.06270286, 0.01749944, 0, 0},
-            {0.00098519, 0.00121622, 0.0005819,  0.00068763, 0, 0},
-            {0.20683549, 0.1764105,  0.08895831, 0.01809594, 0, 0},
-            {0.0551472,  0.05516704, 0.05197735, 0.03981217, 0, 0}
-    };
-    double p12Coeff_[5][6] = {
-            {0.41999999, 0.5,        0.61000001, 0.80000001, 1, 1.215},
-            {0.04507853, 0.04205693, 0.06270286, 0.01749944, 0, 0},
-            {0.00098519, 0.00121622, 0.0005819,  0.00068763, 0, 0},
-            {0.20683549, 0.1764105,  0.08895831, 0.01809594, 0, 0},
-            {0.0551472,  0.05516704, 0.05197735, 0.03981217, 0, 0}
-    };
-
 
     /**
      * Calculate the number of poles based on the RPM
      */
-    Poles polesobj(motorRPM, lineFrequency);
-    int poles = polesobj.calculate();
+    int poles = Poles(motorRPM, lineFrequency).calculate();
 
     /**
      * Index for the arrays based on the pole
      */
-    int poleChooser_ = poles / 2 - 1;
+    int poleChooser = poles / 2 - 1;
 
     /**
      * Calculate basic FLA value. There is better way to do this.
      * =$B13*(C$4+(C$5*EXP(-C$6*$B13))+(C$7*EXP(-C$8*$B13)))
      */
-    double basicFLAValue_ = motorRatedPower * (flaBasic_[0][poleChooser_] +
-                                                (flaBasic_[1][poleChooser_] *
-                                                 exp(-1 * flaBasic_[2][poleChooser_] * motorRatedPower)) +
-                                                (flaBasic_[3][poleChooser_] *
-                                                 exp(-1 * flaBasic_[4][poleChooser_] * motorRatedPower)));
+    double basicFLAValue_ = motorRatedPower * (flaBasic_[0][poleChooser] +
+                                                (flaBasic_[1][poleChooser] *
+                                                 exp(-1 * flaBasic_[2][poleChooser] * motorRatedPower)) +
+                                                (flaBasic_[3][poleChooser] *
+                                                 exp(-1 * flaBasic_[4][poleChooser] * motorRatedPower)));
     /**
      * Calculate EE multiplier
      */
-    double eeMultiplier = (eeFlamultipliers_[0][poleChooser_] +
-                           (eeFlamultipliers_[1][poleChooser_] *
-                            exp(-1 * eeFlamultipliers_[2][poleChooser_] * motorRatedPower)) +
-                           (eeFlamultipliers_[3][poleChooser_] *
-                            exp(-1 * eeFlamultipliers_[4][poleChooser_] * motorRatedPower)));
+    double eeMultiplier = (eeFlamultipliers_[0][poleChooser] +
+                           (eeFlamultipliers_[1][poleChooser] *
+                            exp(-1 * eeFlamultipliers_[2][poleChooser] * motorRatedPower)) +
+                           (eeFlamultipliers_[3][poleChooser] *
+                            exp(-1 * eeFlamultipliers_[4][poleChooser] * motorRatedPower)));
     /**
      * Calculate SE multiplier
      */
-    double seMultiplier = (seFlamultipliers_[0][poleChooser_] +
-                           (seFlamultipliers_[1][poleChooser_] *
-                            exp(-1 * seFlamultipliers_[2][poleChooser_] * motorRatedPower)) +
-                           (seFlamultipliers_[3][poleChooser_] *
-                            exp(-1 * seFlamultipliers_[4][poleChooser_] * motorRatedPower)));
+    double seMultiplier = (seFlamultipliers_[0][poleChooser] +
+                           (seFlamultipliers_[1][poleChooser] *
+                            exp(-1 * seFlamultipliers_[2][poleChooser] * motorRatedPower)) +
+                           (seFlamultipliers_[3][poleChooser] *
+                            exp(-1 * seFlamultipliers_[4][poleChooser] * motorRatedPower)));
 
     /**
      * Calculate EE or SE values
@@ -170,28 +125,88 @@ std::vector<double> EstimateFLA::calculate() {
     double seFLAValue = seMultiplier * basicFLAValue_;
 
     /**
-     * Select partial load multipliers based on pole. There is better way to do this.
      */
-    double tempCoeff[5][6];
-    if (poleChooser_ == 0) std::copy(&p2Coeff_[0][0], &p2Coeff_[0][0] + 5 * 6, &tempCoeff[0][0]);
-    if (poleChooser_ == 1) std::copy(&p4Coeff_[0][0], &p4Coeff_[0][0] + 5 * 6, &tempCoeff[0][0]);
-    if (poleChooser_ == 2) std::copy(&p6Coeff_[0][0], &p6Coeff_[0][0] + 5 * 6, &tempCoeff[0][0]);
-    if (poleChooser_ == 3) std::copy(&p8Coeff_[0][0], &p8Coeff_[0][0] + 5 * 6, &tempCoeff[0][0]);
-    if (poleChooser_ == 4) std::copy(&p10Coeff_[0][0], &p10Coeff_[0][0] + 5 * 6, &tempCoeff[0][0]);
-    if (poleChooser_ == 5) std::copy(&p12Coeff_[0][0], &p12Coeff_[0][0] + 5 * 6, &tempCoeff[0][0]);
 
-    /**
-     * Calculating Multiplier for partial loads in 25% intervals
-     */
-    double plMultiplier[6] = {};
-
-    for (std::size_t i = 0; i < 6; i++) {
-        plMultiplier[i] = (tempCoeff[0][i] +
-                           (tempCoeff[1][i] *
-                            exp(-1 * tempCoeff[2][i] * motorRatedPower)) +
-                           (tempCoeff[3][i] *
-                            exp(-1 * tempCoeff[4][i] * motorRatedPower)));
+	/*
+	 * Part load coefficients, 2004
+     * Select partial load multipliers based on pole.
+	 */
+    std::array<std::array<double, 6>, 5> partialLoadCoefficients;
+    if (poleChooser == 0) {
+        partialLoadCoefficients = {
+                {
+                        {0.2385152,  0.31999999, 0.51999998, 0.75400001, 1, 1.253},
+                        {0.04319932, 0.03559835, 0.02311537, 0.00837315, 0, 0},
+                        {0.01191111, 0.00243387, 0.00018377, 0.00013998, 0, 0},
+                        {0.176818,   0.1282783,  0.08376596, 0.03318606, 0, 0},
+                        {0.1847319,  0.1831789,  0.16219489, 0.1855139,  0, 0}
+                }
+        };
+    } else if (poleChooser == 1) {
+        partialLoadCoefficients = {
+                {
+                        {0.26803651, 0.3535319,  0.54000002, 0.76428652, 1, 1.251},
+                        {0.08,       0.06387088, 0.02691548, 0.0081415,  0, 0},
+                        {0.01172604, 0.01068725, 0.00297117, 0.00686711, 0, 0},
+                        {0.2029126,  0.1705882,  0.09793611, 0.0471422,  0, 0},
+                        {0.15413959, 0.1315202,  0.09374535, 0.1191377,  0, 0}
+                }
+        };
+    } else if (poleChooser == 2) {
+        partialLoadCoefficients = {
+                {
+                        {0.28999999, 0.39519981, 0.55500001, 0.76973772, 1, 1.254},
+                        {0.07532283, 0.06387088, 0.03,       0.02362101, 0, 0},
+                        {0.00291026, 0.01068725, 0.00380051, 0.08841167, 0, 0},
+                        {0.2405144,  0.1705882,  0.13686571, 0.02321446, 0, 0},
+                        {0.09842682, 0.1315202,  0.15484551, 0.08854395, 0, 0}
+                }
+        };
+    } else if (poleChooser == 3) {
+        partialLoadCoefficients = {
+                {
+                        {0.33000001, 0.43000001, 0.56062472, 0.78429687, 1, 1.237},
+                        {0.06,       0.1060414,  0.04872012, 0.00763685, 0, 0},
+                        {0.00125301, 0.031788,   0.00041673, 0.0023581,  0, 0},
+                        {0.1939563,  0.115,      0.0841061,  0.00756603, 0, 0},
+                        {0.05575958, 0.15824869, 0.05538078, 0.00250876, 0, 0}
+                }
+        };
+    } else if (poleChooser == 4) {
+        partialLoadCoefficients = {
+                {
+                        {0.37,       0.44,       0.57857579, 0.78581947, 1, 1.233},
+                        {0.04507853, 0.04205693, 0.06270286, 0.01749944, 0, 0},
+                        {0.00098519, 0.00121622, 0.0005819,  0.00068763, 0, 0},
+                        {0.20683549, 0.1764105,  0.08895831, 0.01809594, 0, 0},
+                        {0.0551472,  0.05516704, 0.05197735, 0.03981217, 0, 0}
+                }
+        };
+    } else {
+        partialLoadCoefficients = {
+                {
+                        {0.41999999, 0.5,        0.61000001, 0.80000001, 1, 1.215},
+                        {0.04507853, 0.04205693, 0.06270286, 0.01749944, 0, 0},
+                        {0.00098519, 0.00121622, 0.0005819,  0.00068763, 0, 0},
+                        {0.20683549, 0.1764105,  0.08895831, 0.01809594, 0, 0},
+                        {0.0551472,  0.05516704, 0.05197735, 0.03981217, 0, 0}
+                }
+        };
     }
+
+	/**
+	 * Calculating Multiplier for partial loads in 25% intervals via lambda function
+	 */
+    auto const plMult = [&partialLoadCoefficients, this] (std::size_t i) {
+        return partialLoadCoefficients[0][i] + (partialLoadCoefficients[1][i] * std::exp(-1 * partialLoadCoefficients[2][i] * motorRatedPower))
+               + (partialLoadCoefficients[3][i] * std::exp(-1 * partialLoadCoefficients[4][i] * motorRatedPower));
+    };
+
+    const std::array<double, 6> plMultiplier = {
+            {
+                    plMult(0), plMult(1), plMult(2), plMult(3), plMult(4), plMult(5)
+            }
+    };
 
     /**
      * Calculating the 25% interval Amps
@@ -199,6 +214,35 @@ std::vector<double> EstimateFLA::calculate() {
 
     double effVal = 0.0;
 
+//	std::array<double, 6> plValues;
+
+    auto const estimateFLA = [this] (double plVal, double effVal = 0) {
+        auto const one = plVal * 460 / ratedVoltage;
+        if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
+            return effVal * one * 100 / specifiedEfficiency;
+        }
+        return one;
+    };
+
+    /// Estimated FLA refers to the 100% value.
+//    double tempAmp100 = plValues[4];
+//    plValues[4] = plValues[4] * 460 / ratedVoltage;
+//    if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
+//        estimatedFLA = effVal * plValues[4] * 100 / specifiedEfficiency;
+//    } else {
+//        estimatedFLA = plValues[4];
+//    }
+
+//        estimatedFLA = estimateFLA(eeFLAValue * plMultiplier[4], 0);
+//        return {
+//                {
+//                        eeFLAValue * plMultiplier[0], eeFLAValue * plMultiplier[1], eeFLAValue * plMultiplier[2],
+//                        eeFLAValue * plMultiplier[3], eeFLAValue * plMultiplier[4], eeFLAValue * plMultiplier[5]
+//                }
+//        };
+
+
+    std::array<double, 6> plValues;
     if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         for (std::size_t i = 0; i < 6; i++) {
             plValues[i] = eeFLAValue * plMultiplier[i];
@@ -240,13 +284,15 @@ std::vector<double> EstimateFLA::calculate() {
     }
 
 
-    /// Estimated FLA refers to the 100% value.
+//    /// Estimated FLA refers to the 100% value.
     double tempAmp100 = plValues[4];
     plValues[4] = plValues[4] * 460 / ratedVoltage;
     if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
         estimatedFLA = effVal * plValues[4] * 100 / specifiedEfficiency;
-    } else
+    } else {
         estimatedFLA = plValues[4];
+    }
     plValues[4] = tempAmp100;
+
     return plValues;
 }

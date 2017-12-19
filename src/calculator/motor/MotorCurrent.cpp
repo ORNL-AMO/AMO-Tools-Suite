@@ -9,6 +9,7 @@
  */
 
 #include <cmath>
+#include <array>
 #include "calculator/motor/MotorCurrent.h"
 #include "calculator/util/CurveFitVal.h"
 #include "calculator/motor/EstimateFLA.h"
@@ -31,7 +32,7 @@ double MotorCurrent::calculate() {
 
     EstimateFLA estimateFLA(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
                             ratedVoltage);
-    std::vector<double> plValues = estimateFLA.calculate();
+    std::array<double, 6> plValues = estimateFLA.calculate();
     estimatedFLA = estimateFLA.getEstimatedFLA();
 
     /// Adjustment based on the rated voltage.

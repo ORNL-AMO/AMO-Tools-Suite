@@ -8,6 +8,7 @@
  *
  */
 
+#include <array>
 #include "calculator/motor/OptimalMotorCurrent.h"
 #include "calculator/util/CurveFitVal.h"
 #include "calculator/motor/EstimateFLA.h"
@@ -16,7 +17,7 @@ double OptimalMotorCurrent::calculate() {
     if (loadFactor_ > 1.5) loadFactor_ = 1.5;
 
     EstimateFLA estimateFLA(motorRatedPower_, motorRPM_, lineFrequency_, efficiencyClass_,specifiedEfficiency_, ratedVoltage_ );
-    std::vector<double> plValues = estimateFLA.calculate();
+    const std::array<double, 6> plValues = estimateFLA.calculate();
 
     /* Adjustment based on the measured Voltage/ Field Voltage
     double temp_fullLoadAmps = plValues[4];
