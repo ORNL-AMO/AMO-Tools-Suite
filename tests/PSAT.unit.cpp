@@ -323,7 +323,7 @@ TEST_CASE( "PSAT motor efficiency", "[PSAT][pump efficiency]" ) {
 
 TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	auto unitTestNumber = 0; // unit test number 0 indexed
-	const std::array<std::array<double, 6>, 16> expected = {
+	const std::array<std::array<double, 6>, 9> expected = {
 			{
 					{{18.8775576, 23.6212730421, 34.0613092325, 46.5048449789, 60.381474681, 75.5372248259}},
 					{{48.6495840124, 63.249248253, 96.1954123714, 132.4400532659, 172.6294043084, 215.9593847898}},
@@ -333,11 +333,7 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 					{{66.1147879039, 93.2122073949, 148.887425814, 209.314953096, 274.6608259936, 344.15001497}},
 					{{66.1147879039, 93.2122073949, 148.887425814, 209.314953096, 274.6608259936, 344.15001497}},
 					{{88.3024614572, 116.2594022102, 179.8542042707, 249.6685871227, 326.1945449939, 408.0693757874}},
-					{{494.2117767987, 618.953071161, 849.5097896611, 1130.1225205859, 1439.4257134111, 1780.5696074895}},
-					{{0, 0, 0, 0, 0, 0}},
-					{{0, 0, 0, 0, 0, 0}},
-					{{0, 0, 0, 0, 0, 0}},
-					{{0, 0, 0, 0, 0, 0}},
+					{{494.2117767987, 618.953071161, 849.5097896611, 1130.1225205859, 1439.4257134111, 1780.5696074895}}
 			}
 	};
 
@@ -349,6 +345,7 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 		unitTestNumber++;
 	};
 
+	// test voltages
 	compare(EstimateFLA(50, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
 	compare(EstimateFLA(150, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
 	compare(EstimateFLA(100, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
@@ -361,6 +358,7 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	compare(EstimateFLA(290, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 93.5, 110).calculate());
 	compare(EstimateFLA(1200, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 65.5, 210).calculate());
 
+	// test FLA
 	auto t = EstimateFLA(50, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100);
 	t.calculate();
 	CHECK(t.getEstimatedFLA() ==  Approx(277.7547835326));
