@@ -6,6 +6,7 @@
 #include <nan.h>
 #include <node.h>
 #include <vector>
+#include <array>
 #include "psat/PSATResult.h"
 #include "psat/Motor.h"
 #include "psat/Pump.h"
@@ -445,7 +446,6 @@ NAN_METHOD(resultsOptimal) {
  * @param efficiency_class EfficiencyClass, efficiency class of motor
  * @param efficiency double, specified efficiency of motor as defined by %
  * @param motor_rated_voltage double, rated voltage of motor in volts
-
  */
 NAN_METHOD(estFLA) {
     inp = info[0]->ToObject();
@@ -469,7 +469,6 @@ NAN_METHOD(estFLA) {
  * @param load_factor double, load factor between 0.0001 and 1.25 - unitless
  * @param motor_rated_voltage double, rated voltage of motor in volts
  * @param motor_rated_fla double, motor rated full load amps
-
  */
 NAN_METHOD(motorPerformance) {
     inp = info[0]->ToObject();
