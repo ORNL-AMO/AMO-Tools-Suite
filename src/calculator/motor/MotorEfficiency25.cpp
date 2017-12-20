@@ -210,7 +210,7 @@ std::vector<double> MotorEfficiency25::calculate() {
      * Calculating Motor Efficiency
      * On the EE and SE tabs are all the coefficient arrays. At the bottom of the sheets are calculated tables of efficiency vs load for each speed class.
      * The 25%,50%,75%, and 100% load efficiencies are calculated using the above double-exponential calculation
-     * At 0% load, the motor efficiency is, by definition,tion, 0%
+     * At 0% load, the motor efficiency is, by definition, 0%
      */
     std::vector<double> motorEfficiency_(5);
 

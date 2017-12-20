@@ -33,7 +33,11 @@ public:
         motorRatedPower(motorRatedPower),
         motorRpm(motorRpm),
         lineFrequency(lineFrequency)
-    {};
+    {
+        if (this->efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
+            throw std::runtime_error("You cannot use SPECIFIED motor efficiency with MotorEfficiency25");
+        }
+    };
 
     /**
      * @return Vector containing motor efficiency as %
