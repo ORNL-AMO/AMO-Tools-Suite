@@ -50,7 +50,7 @@ public:
 
     /**
      * Gets the line frequency
-     * @return Motor::LineFrequency, classifictaion of line frequency in Hz
+     * @return Motor::LineFrequency, classification of line frequency in Hz
      */
     Motor::LineFrequency getLineFrequency() const {
         return lineFrequency;

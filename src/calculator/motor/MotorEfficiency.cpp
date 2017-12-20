@@ -20,23 +20,17 @@ double MotorEfficiency::calculate() {
     } else if (efficiencyClass == Motor::EfficiencyClass::STANDARD) {
         motorEfficiency = MotorEfficiency25(efficiencyClass, motorRatedPower, motorRpm, lineFrequency).calculate();
     } else if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
-        /**
-         * For specified efficiency, you have to first choose the nominal efficiency.
-         */
+        // For specified efficiency, you have to first choose the nominal efficiency.
         motorEfficiency = MotorEfficiency25(Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower, motorRpm,
                                             lineFrequency).calculate();
-//        const std::array<double, 5> motorEfficiencyE_ = eeMotorEfficiency.calculate();
-//        motorEfficiency = eeMotorEfficiency.calculate();
-        auto const motorEfficiencyS_ = MotorEfficiency25(Motor::EfficiencyClass::STANDARD, motorRatedPower, motorRpm,
+        auto const stdMotorEffs = MotorEfficiency25(Motor::EfficiencyClass::STANDARD, motorRatedPower, motorRpm,
                                                          lineFrequency).calculate();
-//        std::vector<double> motorEfficiencyS_ = seMotorEfficiency.calculate();
-
-
-        if (std::fabs(motorEfficiency[3] - specifiedEfficiency) > std::fabs(motorEfficiencyS_[3] - specifiedEfficiency)) {
+	    
+        if (std::fabs(motorEfficiency[3] - specifiedEfficiency) > std::fabs(stdMotorEffs[3] - specifiedEfficiency)) {
             //SE chosen
-            double C = specifiedEfficiency / motorEfficiencyS_[3];
+            double C = specifiedEfficiency / stdMotorEffs[3];
             for (std::size_t i = 0; i < 5; ++i) {
-                motorEfficiency[i] = motorEfficiencyS_[i] * C;
+                motorEfficiency[i] = stdMotorEffs[i] * C;
             }
         } else { // EE chosen
             specifiedEfficiency = specifiedEfficiency / 100;
@@ -63,39 +57,37 @@ double MotorEfficiency::calculate() {
 
     /**
      * Setting up kWloss0 and kWloss25
-     * Make sure motoEfficiency is in decimal rather %.
+     * Make sure motorEfficiency is in decimal rather %.
      * E.g.: 0.92 is correct, 92 is wrong.
      */
     const double kWloss25 = ((1 / motorEfficiency[0]) - 1) * motorRatedPower * 0.746 * 0.25;
     kWloss0 = 0.8 * kWloss25;
 
-    if (loadFactor > 1.5) loadFactor = 1.5;
-
-    if (loadFactor <= 0.25 || std::abs(loadFactor - 0.25) < 0.001) {
+    if (loadFactor <= 0.25001) {
+        // loadFactor <= 0.25
         const double kWloss = kWloss0 + loadFactor * 100 * (kWloss25 - kWloss0) / 25;
         const double kWshaft = motorRatedPower * 0.746 * (loadFactor); // Make sure motorRatedPower is in hp
         const double kWe = kWloss + kWshaft; // Input electric power
         motorEff = kWshaft / kWe; //Final efficiency calculation
-    }
+    } else if (loadFactor <= 1.25001) {
         /**
-         * 26 - 125
+         * 26 - 125 load factor (0.25 - 1.25 non-inclusive)
          * Fitting tabular, 25% interval, motor efficiency data to assemble an overall curve with 1% interval data from 26 to 150%
          * 25% load interval efficiency values come from "Adjusting 25 percent arrays for specified efficiency"
          * Pick the 25,50,75,100,and 125% motor efficiency values and do a 4th order polynomial fit.
-         * Use the fit coefficients to popluate, in 1% load intervals, from 26 to 125% load
+         * Use the fit coefficients to populate, in 1% load intervals, from 26 to 125% load
          */
-
-    else if ((loadFactor <= 1.25 || std::abs(loadFactor - 1.25) < 0.001) &&
-             loadFactor > 0.25) {
         CurveFitVal cfv({.25, .50, .75, 1.00, 1.25}, {motorEfficiency[0], motorEfficiency[1], motorEfficiency[2], motorEfficiency[3], motorEfficiency[4]}, 4, loadFactor);
         motorEff = cfv.calculate();
-    }
+    } else {
         /**
-         * 126 - 150
+         * 126 - 150 load factor (1.25 (non-inclusive) - 1.50 (inclusive))
          * Pick the 75, 100, and 125% motor efficiency values and do a 2nd order polynomial fit
          * Use the fit coefficients to populate, in 1% load intervals, the current range from 126 to 150% load
          */
-    else if ((loadFactor <= 1.50 || std::abs(loadFactor - 1.50) < 0.001) && loadFactor > 1.25) {
+        if (loadFactor > 1.5) {
+            loadFactor = 1.5;
+        }
         CurveFitVal cfv({.75, 1.00, 1.25}, {motorEfficiency[2], motorEfficiency[3], motorEfficiency[4]}, 2, loadFactor);
         motorEff = cfv.calculate();
     }
