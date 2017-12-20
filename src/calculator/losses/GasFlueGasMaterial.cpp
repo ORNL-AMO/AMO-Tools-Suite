@@ -98,7 +98,7 @@ double GasCompositions::calculateHeatingValueFuel() {
 double GasCompositions::calculateHeatingValueFuelVolume() {
     double heatValueFuel = 0;
     for ( auto const & comp : gasses ) {
-        heatValueFuel += comp.second->compByWeight * comp.second->heatingValueVolume;
+        heatValueFuel += comp.second->compAdjByVol * comp.second->heatingValueVolume;
     }
     return heatValueFuel;
 }

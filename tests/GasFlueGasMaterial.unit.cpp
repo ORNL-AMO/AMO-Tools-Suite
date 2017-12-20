@@ -20,13 +20,16 @@ TEST_CASE( "Calculate Heat Loss for flue gas Losses", "[Heat Loss]" ) {
 
 	composition = GasCompositions("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
 	CHECK(composition.getHeatingValue() == Approx(22030.67089880065));
+	CHECK(composition.getHeatingValueVolume() == Approx(1032.445));
 	CHECK(composition.getSpecificGravity() == Approx(0.6571206283343215));
 
 	composition = GasCompositions("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
 	CHECK(composition.getHeatingValue() == Approx(19185.932389233436));
+	CHECK(composition.getHeatingValueVolume() == Approx(610.52));
 	CHECK(composition.getSpecificGravity() == Approx(0.44638781861292243));
 
 	composition = GasCompositions("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
 	CHECK(composition.getHeatingValue() == Approx(1080.6848266529887));
+	CHECK(composition.getHeatingValueVolume() == Approx(83.605));
 	CHECK(composition.getSpecificGravity() == Approx(1.0870540901007706));
 }

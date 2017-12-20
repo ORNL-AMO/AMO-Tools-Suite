@@ -361,7 +361,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == outputs[0].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[0].getGasByVol("O2") );
         CHECK( outputs[0].getHeatingValue() == Approx(22030.67089880065) );
-        CHECK( outputs[0].getHeatingValueVolume() == Approx(1032.45) );
+        CHECK( outputs[0].getHeatingValueVolume() == Approx(1032.445) );
         CHECK( outputs[0].getSpecificGravity() == Approx(0.6571206283343215));
     }
 
@@ -382,7 +382,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
         CHECK( output.getHeatingValue() == Approx(22030.67089880065) );
-        CHECK( output.getHeatingValueVolume() == Approx(1032.45) );
+        CHECK( output.getHeatingValueVolume() == Approx(1032.445) );
         CHECK( output.getSpecificGravity() == Approx(0.6571206283343215) );
     }
 
@@ -450,7 +450,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == outputs[2].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[2].getGasByVol("O2") );
         CHECK( outputs[2].getHeatingValue() == 1080.6848266529887 );
-        CHECK( outputs[2].getHeatingValueVolume() == 83.61 );
+        CHECK( outputs[2].getHeatingValueVolume() == 83.605 );
         CHECK( outputs[2].getSpecificGravity() == 1.0870540901007706 );
     }
 
@@ -471,7 +471,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
         CHECK( output.getHeatingValue() == 1080.6848266529887 );
-        CHECK( output.getHeatingValueVolume() == 83.61 );
+        CHECK( output.getHeatingValueVolume() == 83.605 );
         CHECK( output.getSpecificGravity() == 1.0870540901007706 );
     }
 }
