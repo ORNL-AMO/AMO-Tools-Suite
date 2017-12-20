@@ -32,7 +32,8 @@ public:
      * @param compPercent double, composition percent as %
      * @param compByVol double, composition by volume as %
      * @param o2Generated double, O2 generated in g/mol
-     * @param heatingValue double, heating value in btu/lb
+     * @param heatingValue int, heating value in btu/lb
+     * @param heatingValueVolume int, heating value in Btu/scf
      * @param h2oGenerated double, H2O generated in g/mol
      * @param co2Generated double, CO2 generated in g/mol
      */
@@ -44,22 +45,23 @@ public:
 	               const double compByVol,
 	               const int o2Generated,
 	               const int heatingValue,
+	               const int heatingValueVolume,
 	               const double h2oGenerated,
 	               const double co2Generated) :
 			specificHeat(std::move(specificHeat)), molecularWeight(molecularWeight), specificWeight(specificWeight),
 	        compByVol(compPercent), compAdjByVol(compByVol), h2oGenerated(h2oGenerated), co2Generated(co2Generated),
-			o2Generated(o2Generated), heatingValue(heatingValue)
+			o2Generated(o2Generated), heatingValue(heatingValue), heatingValueVolume(heatingValueVolume)
 	{};
 
 private:
 	friend class GasCompositions;
 	const std::function< double ( double t ) > specificHeat;
 	// compByWeight == X double bar, compAdjByVol == X bar in document
-	double compByWeight;
+	double compByWeight = 0;
 	const double molecularWeight, specificWeight, compByVol, compAdjByVol, h2oGenerated, co2Generated;
 
 	// TODO so2Generated is always 0 according to the one table, are these all the gas types we deal with or not?
-	const int so2Generated = 0, o2Generated, heatingValue;
+	const int so2Generated = 0, o2Generated, heatingValue, heatingValueVolume;
 };
 
 
@@ -95,42 +97,41 @@ public:
 			substance(std::move(substance)),
 			totalPercent(CH4 + C2H6 + N2 + H2 + C3H8 + C4H10_CnH2n + H2O + CO + CO2 + SO2 + O2),
 			CH4(std::make_shared<GasProperties>([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417, CH4,
-			                  CH4 / totalPercent, 64, 23875, 36.032, 44.01)),
+			                  CH4 / totalPercent, 64, 23875, 1012, 36.032, 44.01)),
 			C2H6(std::make_shared<GasProperties>([] (double t) { return 4.04 + 0.01636 * t; }, 30.068, 0.079503, C2H6,
-			                   C2H6 / totalPercent, 112, 22323, 54.048, 88.02)),
+			                   C2H6 / totalPercent, 112, 22323, 1773, 54.048, 88.02)),
 			N2(std::make_shared<GasProperties>([] (double t) { return 9.47 - 3.47 * 1000 / t + 1.07 * 1000000 / (t * t); },
-			                 28.016, 0.074077, N2, N2 / totalPercent, 0, 0, 0, 0)),
+			                 28.016, 0.074077, N2, N2 / totalPercent, 0, 0, 0, 0, 0)),
 			H2(std::make_shared<GasProperties>([] (double t) { return 5.76 + 0.578 * t / 1000 + 20 / pow(t, 0.5); }, 2.016, 0.005331,
-			                 H2, H2 / totalPercent, 16, 61095, 18.016, 0)),
+			                 H2, H2 / totalPercent, 16, 61095, 325, 18.016, 0)),
 			C3H8(std::make_shared<GasProperties>([] (double t) { (void)t; return 17.108; }, 44.094, 0.116589, C3H8,
-			                   C3H8 / totalPercent, 160, 21669, 72.064, 132.03)),
+			                   C3H8 / totalPercent, 160, 21669, 2523, 72.064, 132.03)),
 			C4H10_CnH2n(std::make_shared<GasProperties>([] (double t) { (void)t; return 22.202; }, 58.12, 0.153675, C4H10_CnH2n,
-			                          C4H10_CnH2n / totalPercent, 208, 21321, 90.08, 176.04)),
+			                          C4H10_CnH2n / totalPercent, 208, 21321, 3270, 90.08, 176.04)),
 			H2O(std::make_shared<GasProperties>([] (double t) { return 19.86 - 597 / pow(t, 0.5) + 7500 / t; }, 18.016, 0.047636, H2O,
-			                  H2O / totalPercent, 0, 0, 18.016, 0)),
+			                  H2O / totalPercent, 0, 0, 0, 18.016, 0)),
 			CO(std::make_shared<GasProperties>([] (double t) { return 9.46 - 3.29 * 1000 / t + 1.07 * 1000000 / (t * t); },
-			                 28.01, 0.074061, CO, CO / totalPercent, 16, 4347, 0, 44.01)),
+			                 28.01, 0.074061, CO, CO / totalPercent, 16, 4347, 321, 0, 44.01)),
 			CO2(std::make_shared<GasProperties>([] (double t) { return 16.2 - 6.53 * 1000 / t + 1.41 * 1000000 / (t * t); },
-			                  44.01, 0.116367, CO2, CO2 / totalPercent, 0, 0, 0, 44.01)),
+			                  44.01, 0.116367, CO2, CO2 / totalPercent, 0, 0, 0, 0, 44.01)),
 			SO2(std::make_shared<GasProperties>([] (double t) { (void)t; return 17.472; }, 64.06, 0.169381, SO2, SO2 * 100 / totalPercent,
-			                  0, 0, 0, 0)),
+			                  0, 0, 0, 0, 0)),
 			O2(std::make_shared<GasProperties>([] (double t) { return 11.515 - 172 / pow(t, 0.5) + 1530 / t; }, 32.00, 0.084611, O2,
-			                 O2 / totalPercent, -32, 0, 0, 0))
+			                 O2 / totalPercent, -32, 0, 0, 0, 0))
 	{
 		gasses = {{"CH4", this->CH4}, {"C2H6", this->C2H6}, {"N2", this->N2}, {"H2", this->H2},
 		          {"C3H8", this->C3H8}, {"C4H10_CnH2n", this->C4H10_CnH2n}, {"H2O", this->H2O}, {"CO", this->CO},
 		          {"CO2", this->CO2}, {"SO2", this->SO2}, {"O2", this->O2}};
 
 		calculateCompByWeight();
-		heatingValue =  calculateHeatingValueFuel();
+		heatingValue = calculateHeatingValueFuel();
+		heatingValueVolume = calculateHeatingValueFuelVolume();
 		specificGravity = calculateSpecificGravity();
 	}
 
     /**
      * Gets the gas by its name
-     *
      * @param gasName const string, name of gas
-     *
      * @return double, composition by volume as %
      */
 	double getGasByVol(const std::string & gasName) const {
@@ -142,6 +143,7 @@ public:
 	}
 
 	double getHeatingValue() const { return heatingValue; };
+	double getHeatingValueVolume() const { return heatingValueVolume; };
 	double getSpecificGravity() const { return specificGravity; };
 
 	double calculateExcessAir(double flueGasO2);
@@ -149,14 +151,12 @@ public:
 
     /**
      * Gets the name of substance
-     *
      * @return string, name of substance
      */
 	std::string getSubstance() const;
 
     /**
      * Gets the ID of gas
-     *
      * @return int, ID of gas
      */
 	int getID() const {
@@ -165,9 +165,7 @@ public:
 
     /**
      * Sets the ID of gas
-     *
      * @param id const int, ID number for gas
-     *
      */
 	void setID(const int id) {
 		this->id = id;
@@ -184,39 +182,64 @@ private:
 	double calculateHeatCombustionAir(double combustionAirTemp, double excessAir);
 	void calculateMassFlueGasComponents(double excessAir);
 	double calculateHeatingValueFuel();
+	double calculateHeatingValueFuelVolume();
 	void calculateEnthalpy();
 	double calculateTotalHeatContentFlueGas(double flueGasTemperature);
 
 	GasCompositions(std::string substance, const double CH4, const double C2H6, const double N2,
 	                const double H2, const double C3H8, const double C4H10_CnH2n, const double H2O,
 	                const double CO, const double CO2, const double SO2, const double O2, const double heatingValue,
-	                const double specificGravity) :
+	                const double heatingValueVolume, const double specificGravity) :
 			substance(std::move(substance)),
 			totalPercent(CH4 + C2H6 + N2 + H2 + C3H8 + C4H10_CnH2n + H2O + CO + CO2 + SO2 + O2),
 			CH4(std::make_shared<GasProperties>([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417, CH4,
-			                                    CH4 / totalPercent, 64, 23875, 36.032, 44.01)),
+			                                    CH4 / totalPercent, 64, 23875, 1012, 36.032, 44.01)),
 			C2H6(std::make_shared<GasProperties>([] (double t) { return 4.04 + 0.01636 * t; }, 30.068, 0.079503, C2H6,
-			                                     C2H6 / totalPercent, 112, 22323, 54.048, 88.02)),
+			                                     C2H6 / totalPercent, 112, 22323, 1773, 54.048, 88.02)),
 			N2(std::make_shared<GasProperties>([] (double t) { return 9.47 - 3.47 * 1000 / t + 1.07 * 1000000 / (t * t); },
-			                                   28.016, 0.074077, N2, N2 / totalPercent, 0, 0, 0, 0)),
+			                                   28.016, 0.074077, N2, N2 / totalPercent, 0, 0, 0, 0, 0)),
 			H2(std::make_shared<GasProperties>([] (double t) { return 5.76 + 0.578 * t / 1000 + 20 / pow(t, 0.5); }, 2.016, 0.005331,
-			                                   H2, H2 / totalPercent, 16, 61095, 18.016, 0)),
+			                                   H2, H2 / totalPercent, 16, 61095, 325, 18.016, 0)),
 			C3H8(std::make_shared<GasProperties>([] (double t) { (void)t; return 17.108; }, 44.094, 0.116589, C3H8,
-			                                     C3H8 / totalPercent, 160, 21669, 72.064, 132.03)),
+			                                     C3H8 / totalPercent, 160, 21669, 2523, 72.064, 132.03)),
 			C4H10_CnH2n(std::make_shared<GasProperties>([] (double t) { (void)t; return 22.202; }, 58.12, 0.153675, C4H10_CnH2n,
-			                                            C4H10_CnH2n / totalPercent, 208, 21321, 90.08, 176.04)),
+			                                            C4H10_CnH2n / totalPercent, 208, 21321, 3270, 90.08, 176.04)),
 			H2O(std::make_shared<GasProperties>([] (double t) { return 19.86 - 597 / pow(t, 0.5) + 7500 / t; }, 18.016, 0.047636, H2O,
-			                                    H2O / totalPercent, 0, 0, 18.016, 0)),
+			                                    H2O / totalPercent, 0, 0, 0, 18.016, 0)),
 			CO(std::make_shared<GasProperties>([] (double t) { return 9.46 - 3.29 * 1000 / t + 1.07 * 1000000 / (t * t); },
-			                                   28.01, 0.074061, CO, CO / totalPercent, 16, 4347, 0, 44.01)),
+			                                   28.01, 0.074061, CO, CO / totalPercent, 16, 4347, 321, 0, 44.01)),
 			CO2(std::make_shared<GasProperties>([] (double t) { return 16.2 - 6.53 * 1000 / t + 1.41 * 1000000 / (t * t); },
-			                                    44.01, 0.116367, CO2, CO2 / totalPercent, 0, 0, 0, 44.01)),
+			                                    44.01, 0.116367, CO2, CO2 / totalPercent, 0, 0, 0, 0, 44.01)),
 			SO2(std::make_shared<GasProperties>([] (double t) { (void)t; return 17.472; }, 64.06, 0.169381, SO2, SO2 * 100 / totalPercent,
-			                                    0, 0, 0, 0)),
+			                                    0, 0, 0, 0, 0)),
 			O2(std::make_shared<GasProperties>([] (double t) { return 11.515 - 172 / pow(t, 0.5) + 1530 / t; }, 32.00, 0.084611, O2,
-			                                   O2 / totalPercent, -32, 0, 0, 0)),
-	        heatingValue(heatingValue),
-	        specificGravity(specificGravity)
+			                                   O2 / totalPercent, -32, 0, 0, 0, 0)),
+//
+//			CH4(std::make_shared<GasProperties>([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417, CH4,
+//			                                    CH4 / totalPercent, 64, 23875, 36.032, 44.01)),
+//			C2H6(std::make_shared<GasProperties>([] (double t) { return 4.04 + 0.01636 * t; }, 30.068, 0.079503, C2H6,
+//			                                     C2H6 / totalPercent, 112, 22323, 54.048, 88.02)),
+//			N2(std::make_shared<GasProperties>([] (double t) { return 9.47 - 3.47 * 1000 / t + 1.07 * 1000000 / (t * t); },
+//			                                   28.016, 0.074077, N2, N2 / totalPercent, 0, 0, 0, 0)),
+//			H2(std::make_shared<GasProperties>([] (double t) { return 5.76 + 0.578 * t / 1000 + 20 / pow(t, 0.5); }, 2.016, 0.005331,
+//			                                   H2, H2 / totalPercent, 16, 61095, 18.016, 0)),
+//			C3H8(std::make_shared<GasProperties>([] (double t) { (void)t; return 17.108; }, 44.094, 0.116589, C3H8,
+//			                                     C3H8 / totalPercent, 160, 21669, 72.064, 132.03)),
+//			C4H10_CnH2n(std::make_shared<GasProperties>([] (double t) { (void)t; return 22.202; }, 58.12, 0.153675, C4H10_CnH2n,
+//			                                            C4H10_CnH2n / totalPercent, 208, 21321, 90.08, 176.04)),
+//			H2O(std::make_shared<GasProperties>([] (double t) { return 19.86 - 597 / pow(t, 0.5) + 7500 / t; }, 18.016, 0.047636, H2O,
+//			                                    H2O / totalPercent, 0, 0, 18.016, 0)),
+//			CO(std::make_shared<GasProperties>([] (double t) { return 9.46 - 3.29 * 1000 / t + 1.07 * 1000000 / (t * t); },
+//			                                   28.01, 0.074061, CO, CO / totalPercent, 16, 4347, 0, 44.01)),
+//			CO2(std::make_shared<GasProperties>([] (double t) { return 16.2 - 6.53 * 1000 / t + 1.41 * 1000000 / (t * t); },
+//			                                    44.01, 0.116367, CO2, CO2 / totalPercent, 0, 0, 0, 44.01)),
+//			SO2(std::make_shared<GasProperties>([] (double t) { (void)t; return 17.472; }, 64.06, 0.169381, SO2, SO2 * 100 / totalPercent,
+//			                                    0, 0, 0, 0)),
+//			O2(std::make_shared<GasProperties>([] (double t) { return 11.515 - 172 / pow(t, 0.5) + 1530 / t; }, 32.00, 0.084611, O2,
+//			                                   O2 / totalPercent, -32, 0, 0, 0)),
+			heatingValue(heatingValue),
+			specificGravity(specificGravity),
+			heatingValueVolume(heatingValueVolume)
 	{
 		gasses = {{"CH4", this->CH4}, {"C2H6", this->C2H6}, {"N2", this->N2}, {"H2", this->H2},
 		          {"C3H8", this->C3H8}, {"C4H10_CnH2n", this->C4H10_CnH2n}, {"H2O", this->H2O}, {"CO", this->CO},
@@ -231,7 +254,7 @@ private:
 	double hH2Osat = 0, tH2Osat = 0;
 	double mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
-	double heatingValue = 0, specificGravity = 0;
+	double heatingValue = 0, specificGravity = 0, heatingValueVolume = 0;
 };
 
 /**

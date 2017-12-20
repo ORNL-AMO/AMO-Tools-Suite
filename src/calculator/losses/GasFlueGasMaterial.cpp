@@ -95,6 +95,14 @@ double GasCompositions::calculateHeatingValueFuel() {
     return heatValueFuel;
 }
 
+double GasCompositions::calculateHeatingValueFuelVolume() {
+    double heatValueFuel = 0;
+    for ( auto const & comp : gasses ) {
+        heatValueFuel += comp.second->compByWeight * comp.second->heatingValueVolume;
+    }
+    return heatValueFuel;
+}
+
 void GasCompositions::calculateMassFlueGasComponents(const double excessAir) {
 	mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
     for ( auto const & comp : gasses ) {
