@@ -13,6 +13,7 @@
 #define AMO_LIBRARY_CURVEFITVAL_H
 
 #include <vector>
+#include <exception>
 
 class CurveFitVal {
 public:
@@ -71,7 +72,7 @@ private:
     /**
      * Degree of polynomial curve
      */
-    const size_t pdegree;
+    const std::size_t pdegree;
     /**
      * x and y coordinates
      */
