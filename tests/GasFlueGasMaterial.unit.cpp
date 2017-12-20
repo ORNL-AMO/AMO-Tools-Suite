@@ -32,4 +32,29 @@ TEST_CASE( "Calculate Heat Loss for flue gas Losses", "[Heat Loss]" ) {
 	CHECK(composition.getHeatingValue() == Approx(1080.6848266529887));
 	CHECK(composition.getHeatingValueVolume() == Approx(83.605));
 	CHECK(composition.getSpecificGravity() == Approx(1.0870540901007706));
+
+	composition = GasCompositions("", 94.1, 2.4, 1.41, 0.03, 0.49, 0.29, 0, 0.42, 0.71, 0, 0);
+	CHECK(composition.getHeatingValue() == Approx(22630.345));
+	CHECK(composition.getSpecificGravity() == Approx(0.631782959));
+	CHECK(composition.getHeatingValueVolume() == Approx(1019.6648));
+
+	composition = GasCompositions("", 93.9, 4.2, 1.0, 0, 0.3, 0.06, 0, 0, 0.5, 0, 0.01);
+	CHECK(composition.getHeatingValue() == Approx(23030.1592092352));
+	CHECK(composition.getSpecificGravity() == Approx(0.6298888036));
+	CHECK(composition.getHeatingValueVolume() == Approx(1034.57));
+
+	composition = GasCompositions("", 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	CHECK(composition.getHeatingValue() == Approx(23875));
+	CHECK(composition.getSpecificGravity() == Approx(0.5943242442));
+	CHECK(composition.getHeatingValueVolume() == Approx(1012));
+
+	composition = GasCompositions("", 45, 45, 1, 1, 3, 2, 0, 1, 0, 0, 2);
+	CHECK(composition.getHeatingValue() == Approx(21684.26));
+	CHECK(composition.getSpecificGravity() == Approx(0.9060143746));
+	CHECK(composition.getHeatingValueVolume() == Approx(1400.8));
+
+	composition = GasCompositions("", 10, 55, 1, 10, 16, 2, 0, 1, 3, 0, 2);
+	CHECK(composition.getHeatingValue() == Approx(20585.7766384286));
+	CHECK(composition.getSpecificGravity() == Approx(1.0774007113));
+	CHECK(composition.getHeatingValueVolume() == Approx(1581.14));
 }
