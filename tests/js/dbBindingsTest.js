@@ -2,6 +2,10 @@ const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../')
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'db'});
 
+function rnd(value) {
+    return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
+}
+
 test('dbSelectSolidMaterial', function (t) {
     t.plan(15);
     bindings.unitTestStartup();
@@ -161,8 +165,8 @@ test('dbInsertGasLoadChargeMaterial', function (t) {
     t.equal(res[size].specificHeatVapor, obj2.specificHeatVapor, res[size].specificHeatVapor + " != " + obj2.specificHeatVapor);
 });
 
-test('dbGasFlueGasMaterial', function (t) {
-    t.plan(28);
+test('dbGasFlueGasMaterial select', function (t) {
+    t.plan(29);
     bindings.unitTestStartup();
 
     t.type(bindings.selectGasFlueGasMaterialById, 'function');
@@ -238,8 +242,8 @@ test('dbGasFlueGasMaterial', function (t) {
     t.equal(res[2].specificGravity, obj2.specificGravity, res[2].specificGravity + " != " + obj2.specificGravity);
 });
 
-test('dbGasFlueGasMaterial', function (t) {
-    t.plan(14);
+test('dbGasFlueGasMaterial insert', function (t) {
+    t.plan(18);
     bindings.unitTestStartup();
 
     t.type(bindings.selectGasFlueGasMaterials, 'function');
@@ -276,6 +280,29 @@ test('dbGasFlueGasMaterial', function (t) {
     t.equal(res[size].CO2, obj2.CO2, res[size].CO2 + " != " + obj2.CO2);
     t.equal(res[size].SO2, obj2.SO2, res[size].SO2 + " != " + obj2.SO2);
     t.equal(res[size].O2, obj2.O2, res[size].O2 + " != " + obj2.O2);
+    t.equal(res[size].heatingValueVolume, 83.605);
+
+    obj2 = {
+        substance: 'anotherCustomGasFlueGas',
+        CH4: 45,
+        C2H6: 45,
+        N2: 1,
+        H2: 1,
+        C3H8: 3,
+        C4H10_CnH2n: 2,
+        H2O: 0,
+        CO: 1,
+        CO2: 0,
+        SO2: 0,
+        O2: 2
+    };
+
+    bindings.insertGasFlueGasMaterial(obj2);
+    res = bindings.selectGasFlueGasMaterials();
+    t.equal(rnd(res[size + 1].heatingValue), 21684.279498);
+    t.equal(rnd(res[size + 1].specificGravity), 0.906014);
+    t.equal(rnd(res[size + 1].heatingValueVolume), 1400.8);
+
 });
 
 test('dbSolidLiquidFlueGasMaterial', function (t) {

@@ -497,6 +497,17 @@ TEST_CASE( "SQLite - CustomGasFlueGasMaterials", "[sqlite]" ) {
         CHECK(output.size() == 2);
         CHECK(output[1].getSubstance() == expected.getSubstance());
     }
+    {
+        auto comp = GasCompositions("customGasFlueGas3", 45, 45, 1, 1, 3, 2, 0, 1, 0, 0, 2);
+        comp.setID(sqlite.getGasFlueGasMaterials().size());
+        sqlite.insertGasFlueGasMaterial(comp);
+        auto const output = sqlite.getCustomGasFlueGasMaterials();
+        CHECK(output.size() == 3);
+        CHECK(output[2].getSubstance() == comp.getSubstance());
+        CHECK(output[2].getHeatingValue() == Approx(21684.26));
+        CHECK(output[2].getSpecificGravity() == Approx(0.9060143746));
+        CHECK(output[2].getHeatingValueVolume() == Approx(1400.8));
+    }
 
 }
 TEST_CASE( "SQLite - getSolidLiquidFlueGasMaterials", "[sqlite]" ) {

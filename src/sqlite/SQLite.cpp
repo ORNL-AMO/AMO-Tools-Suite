@@ -560,7 +560,7 @@ void SQLite::create_select_stmt()
 
     std::string const select_custom_gas_flue_gas_materials =
             R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
-                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, heatingValueVolume, specificGravity
            FROM gas_flue_gas_materials
            WHERE sid = 1)";
 
