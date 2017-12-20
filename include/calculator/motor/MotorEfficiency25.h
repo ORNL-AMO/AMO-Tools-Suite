@@ -12,6 +12,7 @@
 #define UNTITLED_MOTOREFFICIENCY25_H
 
 #include <vector>
+#include <array>
 #include "psat/Motor.h"
 
 class MotorEfficiency25 {
@@ -40,11 +41,13 @@ public:
     };
 
     /**
-     * @return Vector containing motor efficiency as %
+     * @return std::array<double, 5> containing motor efficiency as %
      */
-    std::vector<double> calculate();
+    std::array<double, 5> calculate();
 
 private:
+    std::array< std::array<double, 4>, 30> determinePartialLoadCoefficients() const;
+
     /**
      * Efficiency class of motor
      */

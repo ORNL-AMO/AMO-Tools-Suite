@@ -133,7 +133,7 @@ TEST_CASE( "Calculate Motor25 Efficiencies", "[MotorEfficiency25]" ) {
     };
 
     std::size_t unitTestNumber = 0;
-	auto const compare = [&unitTestNumber, &expected](const std::vector<double> & results) {
+	auto const compare = [&unitTestNumber, &expected](const std::array<double, 5> & results) {
         INFO("Unit test Number " + std::to_string(unitTestNumber));
         CHECK(expected.at(unitTestNumber).at(0) == Approx(results.at(0)));
         CHECK(expected.at(unitTestNumber).at(1) == Approx(results.at(1)));

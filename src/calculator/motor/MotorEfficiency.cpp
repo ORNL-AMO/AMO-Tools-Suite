@@ -17,24 +17,22 @@ double MotorEfficiency::calculate() {
 
     if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
         motorEfficiency = MotorEfficiency25(efficiencyClass, motorRatedPower, motorRpm, lineFrequency).calculate();
-
     } else if (efficiencyClass == Motor::EfficiencyClass::STANDARD) {
-        MotorEfficiency25 motorEfficiency25(efficiencyClass, motorRatedPower, motorRpm, lineFrequency);
-        motorEfficiency = motorEfficiency25.calculate();
+        motorEfficiency = MotorEfficiency25(efficiencyClass, motorRatedPower, motorRpm, lineFrequency).calculate();
     } else if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
         /**
          * For specified efficiency, you have to first choose the nominal efficiency.
          */
-        MotorEfficiency25 eeMotorEfficiency(Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower, motorRpm,
-                                            lineFrequency);
-        std::vector<double> motorEfficiencyE_ = eeMotorEfficiency.calculate();
-        motorEfficiency = eeMotorEfficiency.calculate();
-        MotorEfficiency25 seMotorEfficiency(Motor::EfficiencyClass::STANDARD, motorRatedPower, motorRpm,
-                                            lineFrequency);
-        std::vector<double> motorEfficiencyS_ = seMotorEfficiency.calculate();
+        motorEfficiency = MotorEfficiency25(Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower, motorRpm,
+                                            lineFrequency).calculate();
+//        const std::array<double, 5> motorEfficiencyE_ = eeMotorEfficiency.calculate();
+//        motorEfficiency = eeMotorEfficiency.calculate();
+        auto const motorEfficiencyS_ = MotorEfficiency25(Motor::EfficiencyClass::STANDARD, motorRatedPower, motorRpm,
+                                                         lineFrequency).calculate();
+//        std::vector<double> motorEfficiencyS_ = seMotorEfficiency.calculate();
 
 
-        if (fabs(motorEfficiencyE_[3] - specifiedEfficiency) > fabs(motorEfficiencyS_[3] - specifiedEfficiency)) {
+        if (std::fabs(motorEfficiency[3] - specifiedEfficiency) > std::fabs(motorEfficiencyS_[3] - specifiedEfficiency)) {
             //SE chosen
             double C = specifiedEfficiency / motorEfficiencyS_[3];
             for (std::size_t i = 0; i < 5; ++i) {
@@ -42,12 +40,10 @@ double MotorEfficiency::calculate() {
             }
         } else { // EE chosen
             specifiedEfficiency = specifiedEfficiency / 100;
-            double C = specifiedEfficiency / motorEfficiencyE_[3];
-
+            double C = specifiedEfficiency / motorEfficiency[3];
 
             for (std::size_t i = 0; i < 5; ++i) {
-                motorEfficiency[i] = motorEfficiencyE_[i] * C;
-
+                motorEfficiency[i] = motorEfficiency[i] * C;
             }
         }
     }

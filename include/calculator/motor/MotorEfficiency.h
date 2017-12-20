@@ -11,7 +11,7 @@
 #ifndef AMO_LIBRARY_MOTOREFFICIENCY_H
 #define AMO_LIBRARY_MOTOREFFICIENCY_H
 
-#include <vector>
+#include <array>
 #include "psat/Motor.h"
 #include "psat/FieldData.h"
 
@@ -215,7 +215,7 @@ private:
     double actualEfficiency;
     double motorRatedPower;
     double loadFactor = 0;
-    std::vector<double> motorEfficiency;
+    std::array<double, 5> motorEfficiency;
 };
 
 
