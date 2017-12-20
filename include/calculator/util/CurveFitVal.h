@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <exception>
+#include <stdexcept>
 
 class CurveFitVal {
 public:
@@ -27,7 +28,7 @@ public:
     CurveFitVal(
         std::vector<double> xcoord,
         std::vector<double> ycoord,
-        const int pdegree,
+        const std::size_t pdegree,
         const double loadFactor
     ) :
         pdegree(pdegree),
@@ -39,28 +40,6 @@ public:
             throw std::runtime_error("X and Y coordinate vectors must be the same size");
         }
     }
-
-//    /**
-//     * Constructor
-//     * @param noIntervalPoints int, number of interval points
-//     * @param xcoord array of x coordinates as doubles
-//     * @param ycoord array of y coordinates as doubles
-//     * @param pdegree int, degree of polynomial curve
-//     * @param loadFactor double, load factor - unitless
-//     */
-//    CurveFitVal(
-//        int noIntervalPoints,
-//        double xcoord[],
-//        double ycoord[],
-//        int pdegree,
-//        double loadFactor
-//    ) :
-//        noIntervalPoints(noIntervalPoints),
-//        pdegree(pdegree),
-//        xcoord(xcoord),
-//        ycoord(ycoord),
-//        loadFactor(loadFactor)
-//    {}
 
     /**
      * Calculates the curve fit value at required load factor

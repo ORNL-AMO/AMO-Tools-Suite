@@ -84,9 +84,11 @@ double CurveFitVal::calculate() const {
         }
     for (int i = pdegreeplus - 1; i >= 0; i--) {
         coeff[i] = augMatrix[i][pdegreeplus];
-        for (std::size_t j = 0; j < pdegreeplus; j++)
-            if (j != i)
+        for (std::size_t j = 0; j < pdegreeplus; j++) {
+            if (j != i) {
                 coeff[i] = coeff[i] - augMatrix[i][j] * coeff[j];
+            }
+        }
         coeff[i] = coeff[i] / augMatrix[i][i];
     }
 
