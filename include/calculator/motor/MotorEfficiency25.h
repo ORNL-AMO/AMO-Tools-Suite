@@ -24,10 +24,10 @@ public:
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      */
     MotorEfficiency25(
-        Motor::EfficiencyClass efficiencyClass,
-        double motorRatedPower,
-        double motorRpm,
-        Motor::LineFrequency lineFrequency
+        const Motor::EfficiencyClass efficiencyClass,
+        const double motorRatedPower,
+        const double motorRpm,
+        const Motor::LineFrequency lineFrequency
     ) :
         efficiencyClass(efficiencyClass),
         motorRatedPower(motorRatedPower),
@@ -44,16 +44,16 @@ private:
     /**
      * Efficiency class of motor
      */
-    Motor::EfficiencyClass efficiencyClass;
+    const Motor::EfficiencyClass efficiencyClass;
     /**
      * Rated power of motor in hp
      */
-    double motorRatedPower;
-    double motorRpm;
+    const double motorRatedPower;
+    const double motorRpm;
     /**
      * Line Frequency of motor
      */
-    Motor::LineFrequency lineFrequency;
+    const Motor::LineFrequency lineFrequency;
 };
 
 
