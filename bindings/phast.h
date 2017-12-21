@@ -525,6 +525,7 @@ NAN_METHOD(flueGasByVolumeCalculateHeatingValue) {
 
     r = Nan::New<Object>();
     SetR("heatingValue", comps.getHeatingValue());
+    SetR("heatingValueVolume", comps.getHeatingValueVolume());
     SetR("specificGravity", comps.getSpecificGravity());
     info.GetReturnValue().Set(r);
 }
