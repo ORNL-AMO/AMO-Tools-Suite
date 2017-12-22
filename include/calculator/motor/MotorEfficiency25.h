@@ -46,7 +46,7 @@ public:
     std::array<double, 5> calculate();
 
 private:
-    std::array< std::array<double, 4>, 30> determinePartialLoadCoefficients() const;
+	const std::array< std::array<double, 4>, 5> determinePartialLoadCoefficients(std::size_t pole) const;
 
     /**
      * Efficiency class of motor
