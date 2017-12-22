@@ -59,7 +59,7 @@ test('fixtureLosses', function (t) {
 });
 
 test('flueGasByVolume', function (t) {
-    t.plan(5);
+    t.plan(6);
     t.type(bindings.flueGasLossesByVolume, 'function');
     var inp = {
         flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 125,
@@ -79,6 +79,7 @@ test('flueGasByVolume', function (t) {
     t.type(bindings.flueGasByVolumeCalculateHeatingValue, 'function');
     res = bindings.flueGasByVolumeCalculateHeatingValue(inp);
     t.equal(rnd(res.heatingValue), rnd(22630.355481));
+    t.equal(rnd(res.heatingValueVolume), rnd(1019.664897));
     t.equal(rnd(res.specificGravity), rnd(0.631783));
 });
 
