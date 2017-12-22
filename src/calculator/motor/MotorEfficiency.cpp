@@ -15,9 +15,10 @@
 
 double MotorEfficiency::calculate() {
 
-    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
-        motorEfficiency = MotorEfficiency25(efficiencyClass, motorRatedPower, motorRpm, lineFrequency).calculate();
-    } else if (efficiencyClass == Motor::EfficiencyClass::STANDARD) {
+    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT
+        || efficiencyClass == Motor::EfficiencyClass::STANDARD
+        || efficiencyClass == Motor::EfficiencyClass::PREMIUM)
+    {
         motorEfficiency = MotorEfficiency25(efficiencyClass, motorRatedPower, motorRpm, lineFrequency).calculate();
     } else if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
         // For specified efficiency, you have to first choose the nominal efficiency.

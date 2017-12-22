@@ -159,7 +159,7 @@ double PSATResult::calculateModified() {
     modified.motorRatedPower = motor.getMotorRatedPower();
     OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, fieldData.getMotorPower(), motor.getMotorRpm(),
                                         motor.getLineFrequency(),
-                                        motor.getEfficiencyClass(), motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
+                                        motor.getEfficiencyClass(), Motor::EfficiencyClass::PREMIUM, motor.getSpecifiedEfficiency(),
                                         motor.getMotorRatedVoltage(), motor.getFullLoadAmps(),
                                         fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
                                         fieldData.getMotorAmps(), modified.motorShaftPower);

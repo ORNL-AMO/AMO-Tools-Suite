@@ -27,7 +27,8 @@ public:
     enum class EfficiencyClass {
         STANDARD,
         ENERGY_EFFICIENT,
-        SPECIFIED
+        SPECIFIED,
+        PREMIUM
     };
 
     ///Classifications of line frequency

@@ -8,6 +8,7 @@
  */
 
 #include <cmath>
+#include <unordered_map>
 #include "calculator/motor/MotorEfficiency25.h"
 #include "calculator/motor/Poles.h"
 
@@ -17,7 +18,7 @@
  * @return std::array< std::array<double, 4>, 30> two dimensional array containing partial load efficients for a particular case
  */
 std::array< std::array<double, 4>, 30> MotorEfficiency25::determinePartialLoadCoefficients() const {
-    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
+    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT || efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
         if (motorRatedPower <= 125) {
             return {
                     {
@@ -182,10 +183,10 @@ std::array< std::array<double, 4>, 30> MotorEfficiency25::determinePartialLoadCo
 
 std::array<double, 5> MotorEfficiency25::calculate() {
     // Find the poles and use it as an index
-    int const pole = Poles(motorRpm, lineFrequency).calculate() / 2 - 1;
+    auto const pole = Poles(motorRpm, lineFrequency).calculate() / 2 - 1;
 	auto const plCoeffs = determinePartialLoadCoefficients();
 
-	auto const effCalc = [this, pole, &plCoeffs] (std::size_t const i) {
+    auto const effCalc = [this, pole, &plCoeffs] (std::size_t const i) {
         return (plCoeffs[pole * 5][i] + (plCoeffs[pole * 5 + 1][i] * std::exp(-plCoeffs[pole * 5 + 2][i] * motorRatedPower)) +
                               (plCoeffs[pole * 5 + 3][i] * std::exp(-plCoeffs[pole * 5 + 4][i] * motorRatedPower))) / 100;
     };
@@ -197,5 +198,47 @@ std::array<double, 5> MotorEfficiency25::calculate() {
      * At 0% load, the motor efficiency is, by definition, 0%
      */
 
+	if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
+		if (motorRatedPower > 500) {
+//            motorRatedPower = 500; don't like this so temporarily throwing an exception
+            throw std::runtime_error("Motor Rated Power must not be greater than 500 if Premium Efficiency is used");
+        }
+		if (pole > 2) {
+//            pole = 2; same as above
+            throw std::runtime_error("The amount of poles in the motor must actually make sense for premium - TODO");
+        }
+        const std::unordered_map<double, std::array<double, 3>> fullLoadPremiumEfficiencies = {
+                {5, {88.5, 89.5, 89.5}},
+                {7.5, {89.5, 91.7, 91}},
+                {10, {90.2, 91.7, 91}},
+                {15, {91, 92.4, 91.7}},
+                {20, {91, 93, 91.7}},
+                {25, {91.7, 93.6, 93}},
+                {30, {91.7, 93.6, 93}},
+                {40, {92.4, 94.1, 94.1}},
+                {50, {93, 94.5, 94.1}},
+                {60, {93.6, 95, 94.5}},
+                {75, {93.6, 95.4, 94.5}},
+                {100, {94.1, 95.4, 95}},
+                {125, {95, 95.4, 95}},
+                {150, {95, 95.8, 95.8}},
+                {200, {95.4, 96.2, 95.8}},
+                {250, {95.8, 96.2, 95.8}},
+                {300, {95.8, 96.2, 95.8}},
+                {350, {95.8, 96.2, 95.8}},
+                {400, {95.8, 96.2, 95.8}},
+                {450, {95.8, 96.2, 95.8}},
+                {500, {95.8, 96.2, 95.8}}
+        };
+
+        // full load premium efficiency
+        auto const flPremiumEff = (fullLoadPremiumEfficiencies.at(motorRatedPower).at(pole) / 100) / effCalc(3);
+        return {
+                {
+                        effCalc(0) * flPremiumEff, effCalc(1) * flPremiumEff, effCalc(2) * flPremiumEff,
+                        effCalc(3) * flPremiumEff, 0.99 * effCalc(3)
+                }
+        };
+    }
     return {{effCalc(0), effCalc(1), effCalc(2), effCalc(3), 0.99 * effCalc(3)}};
 }

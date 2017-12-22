@@ -163,6 +163,22 @@ std::array<double, 6> EstimateFLA::calculate() {
             }
     };
 
+    if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
+        auto motorEfficiency = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency,
+                                               motorRatedPower, 1);
+        const double effValEE = motorEfficiency.calculate();
+        motorEfficiency.setEfficiencyClass(Motor::EfficiencyClass::PREMIUM);
+        const double effValPE = motorEfficiency.calculate();
+        const double val = eeFLAValue * effValEE / effValPE;
+	    estimatedFLA = plMultiplier[4];
+        return {
+                {
+                        val * plMultiplier[0], val * plMultiplier[1], val * plMultiplier[2],
+                        val * plMultiplier[3], val * plMultiplier[4], val * plMultiplier[5]
+                }
+        };
+    }
+
 	// used to calculate FLA
     auto const estimateFLA = [this] (double plVal, double effVal = 0) {
         auto const estimate = plVal * 460 / ratedVoltage;
