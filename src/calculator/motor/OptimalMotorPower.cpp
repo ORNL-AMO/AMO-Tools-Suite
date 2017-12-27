@@ -26,10 +26,8 @@ double OptimalMotorPower::calculate() {
         current = optimalMotorCurrent.calculate();
         //Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction_))) + 1);
-        MotorEfficiency motorEfficiency(lineFrequency, motorRPM, optimalEfficiencyClass, specifiedEfficiency,
-                                        motorRatedPower,
-                                        tempLoadFraction_);
-        eff = motorEfficiency.calculate();
+        MotorEfficiency motorEfficiency(lineFrequency, motorRPM, optimalEfficiencyClass, motorRatedPower);
+        eff = motorEfficiency.calculate(tempLoadFraction_, specifiedEfficiency);
         //Similar to motorpowerfactor in existing case instead of ratedVoltage
         MotorPowerFactor motorPowerFactor(lineFrequency,motorRPM, efficiencyClass, specifiedEfficiency,  motorRatedPower, tempLoadFraction_, current, eff, fieldVoltage);
         pf = motorPowerFactor.calculate();

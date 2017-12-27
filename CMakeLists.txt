@@ -65,7 +65,6 @@ set(SOURCE_FILES
         src/calculator/pump/FluidPower.cpp
         src/calculator/motor/MotorCurrent.cpp
         src/calculator/motor/MotorEfficiency.cpp
-        src/calculator/motor/MotorEfficiency25.cpp
         src/calculator/motor/MotorPower.cpp
         src/calculator/motor/MotorPowerFactor.cpp
         src/calculator/motor/MotorShaftPower.cpp
@@ -135,7 +134,6 @@ set(INCLUDE_FILES
         include/calculator/pump/FluidPower.h
         include/calculator/motor/MotorCurrent.h
         include/calculator/motor/MotorEfficiency.h
-        include/calculator/motor/MotorEfficiency25.h
         include/calculator/motor/MotorPower.h
         include/calculator/motor/MotorPowerFactor.h
         include/calculator/motor/MotorShaftPower.h
