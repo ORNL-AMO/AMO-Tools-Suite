@@ -485,8 +485,8 @@ NAN_METHOD(motorPerformance) {
 
     double motor_rated_voltage = Get("motor_rated_voltage");
     double fla = Get("motor_rated_fla");
-    MotorCurrent mc(motor_rated_power, motor_rated_speed, l, efficiencyClass, efficiency, load_factor, motor_rated_voltage, fla);
-    double mcVal = mc.calculate();
+    MotorCurrent mc(motor_rated_power, motor_rated_speed, l, efficiencyClass, efficiency, load_factor, motor_rated_voltage);
+    double mcVal = mc.calculateCurrent(fla);
     SetR("motor_current", mcVal/fla * 100);
 
     MotorPowerFactor motorPowerFactor(motor_rated_power, load_factor, mcVal, mefVal, motor_rated_voltage);

@@ -13,8 +13,8 @@ double MotorShaftPower::calculate() {
         tempLoadFraction = 0.01;
         while (true) {
             MotorCurrent motorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass,
-                                      specifiedEfficiency, tempLoadFraction, ratedVoltage, fullLoadAmps);
-            current = motorCurrent.calculate();
+                                      specifiedEfficiency, tempLoadFraction, ratedVoltage);
+            current = motorCurrent.calculateCurrent(fullLoadAmps);
             MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
             eff = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
             MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
@@ -68,8 +68,8 @@ double MotorShaftPower::calculate() {
         tempLoadFraction = 0.00;
         while (true) {
             MotorCurrent motorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass,
-                                      specifiedEfficiency, tempLoadFraction, ratedVoltage, fullLoadAmps);
-            current = motorCurrent.calculate();
+                                      specifiedEfficiency, tempLoadFraction, ratedVoltage);
+            current = motorCurrent.calculateCurrent(fullLoadAmps);
             if (current > fieldCurrent || tempLoadFraction > 1.5) {
                 MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
                 eff = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
@@ -92,8 +92,8 @@ double MotorShaftPower::calculate() {
         /// Dropping load fraction by 0.01
         tempLoadFraction -= 0.01;
         MotorCurrent motorCurrent1(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
-                                   tempLoadFraction, ratedVoltage, fullLoadAmps);
-        current = motorCurrent1.calculate();
+                                   tempLoadFraction, ratedVoltage);
+        current = motorCurrent1.calculateCurrent(fullLoadAmps);
         MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
         eff = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
         MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,

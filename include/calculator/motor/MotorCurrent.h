@@ -23,23 +23,25 @@ public:
      * @param specifiedEfficiency double, Specified efficiency of motor when the efficiency class = SPECIFIED as %
      * @param loadFactor double, load factor - unitless
      * @param ratedVoltage double, Rated voltage of the motor in Volts
-     * @param fullLoadAmps double, Current at full load in Amps
      */
     MotorCurrent(double motorRatedPower, double motorRPM, Motor::LineFrequency lineFrequency,
                  Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor,
-                 double ratedVoltage, double fullLoadAmps) :
+                 double ratedVoltage) :
             motorRatedPower(motorRatedPower), motorRPM(motorRPM),
             lineFrequency(lineFrequency),
             efficiencyClass(efficiencyClass),
             specifiedEfficiency(specifiedEfficiency),
-            loadFactor(loadFactor), ratedVoltage(ratedVoltage),
-            fullLoadAmps(fullLoadAmps) {};
+            loadFactor(loadFactor), ratedVoltage(ratedVoltage)
+    {};
 
     /**
      * calculates the motor current at a given load factor.
+     * @param fullLoadAmps double, Current at full load in Amps
      * @return double, motor current in amps
      */
-    double calculate();
+    double calculateCurrent(double fullLoadAmps);
+
+    double calculateOptimalCurrent();
 
     /**
      * Gets the estimated full load amp
@@ -51,7 +53,7 @@ public:
 
 private:
     double motorRatedPower;
-    double motorRPM = 0;
+    double motorRPM;
     Motor::LineFrequency lineFrequency;
     Motor::EfficiencyClass efficiencyClass;
     double specifiedEfficiency;
@@ -59,7 +61,6 @@ private:
     double motorCurrent = 0.0;
     double ratedVoltage;
     double estimatedFLA = 0.0;
-    double fullLoadAmps;
 };
 
 #endif //AMO_LIBRARY_MOTORCURRENT_H
