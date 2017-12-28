@@ -41,6 +41,10 @@ public:
      */
     double calculateCurrent(double fullLoadAmps);
 
+	/**
+	 * calculates the optimal motor current
+	 * @return double, optimal motor current in amps
+	 */
     double calculateOptimalCurrent();
 
     /**
@@ -58,7 +62,6 @@ private:
     Motor::EfficiencyClass efficiencyClass;
     double specifiedEfficiency;
     double loadFactor;
-    double motorCurrent = 0.0;
     double ratedVoltage;
     double estimatedFLA = 0.0;
 };

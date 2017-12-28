@@ -41,16 +41,15 @@ double MotorCurrent::calculateCurrent(const double fullLoadAmps) {
     }
 
     if (loadFactor < 0.251) {
-        motorCurrent = CurveFitVal({0, 0.25, 0.5}, {plValues[0], plValues[1], plValues[2]}, 2, loadFactor).calculate();
+        return CurveFitVal({0, 0.25, 0.5}, {plValues[0], plValues[1], plValues[2]}, 2, loadFactor).calculate();
     } else if (loadFactor < 1.251) {
         CurveFitVal cfv({0.25, 0.5, 0.75, 1, 1.25}, {plValues[1], plValues[2], plValues[3], plValues[4], plValues[5]}, 4, loadFactor);
-        motorCurrent = cfv.calculate();
-    } else {
-	    if (loadFactor > 1.5) loadFactor = 1.5;
-        CurveFitVal cfv({.75, 1.00, 1.25}, {plValues[3], plValues[4], plValues[5]}, 2, loadFactor);
-        motorCurrent = cfv.calculate();
+        return cfv.calculate();
     }
-    return motorCurrent;
+    if (loadFactor > 1.5) {
+        loadFactor = 1.5;
+    }
+    return CurveFitVal({.75, 1.00, 1.25}, {plValues[3], plValues[4], plValues[5]}, 2, loadFactor).calculate();
 }
 
 double MotorCurrent::calculateOptimalCurrent() {
