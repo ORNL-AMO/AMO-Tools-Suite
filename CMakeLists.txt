@@ -240,7 +240,7 @@ set(TEST_FILES
         tests/Header.unit.cpp
         tests/Turbine.unit.cpp
         tests/Fan.unit.cpp
-        tests/CHP.unit.cpp)
+        tests/CHP.unit.cpp tests/CurveFitVal.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

@@ -51,15 +51,15 @@ private:
     /**
      * Degree of polynomial curve
      */
-    const std::size_t pdegree;
+    std::size_t pdegree;
     /**
      * x and y coordinates
      */
-    const std::vector<double> xcoord, ycoord;
+    std::vector<double> xcoord, ycoord;
     /**
      * load factor (here is the x coordinate, whose corresponding y coordinate is returned.
      */
-    const double loadFactor;
+    double loadFactor;
 };
 
 
