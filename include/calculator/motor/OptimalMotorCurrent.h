@@ -28,87 +28,34 @@ public:
     * @param ratedVoltage double, Rated voltage of the motor in volts
     */
     OptimalMotorCurrent(
-        double motorRatedPower,
-        int motorRPM,
-        Motor::LineFrequency lineFrequency,
-        Motor::EfficiencyClass efficiencyClass,
-        double specifiedEfficiency,
-        double loadFactor ,
-        double ratedVoltage,
-        double /*fieldVoltage*/,
-        double /*fullLoadAmps*/
+        const double motorRatedPower,
+        const double motorRPM,
+        const Motor::LineFrequency lineFrequency,
+        const Motor::EfficiencyClass efficiencyClass,
+        const double specifiedEfficiency,
+        const double loadFactor,
+        const double ratedVoltage
     ) :
-        motorRatedPower_(motorRatedPower),
-        motorRPM_(motorRPM),
-        lineFrequency_(lineFrequency),
-        efficiencyClass_(efficiencyClass),
-        specifiedEfficiency_(specifiedEfficiency),
-        loadFactor_(loadFactor),
-        ratedVoltage_(ratedVoltage)
-//        fullLoadAmps(fullLoadAmps),
-//        fieldVoltage(fieldVoltage)
+        motorRatedPower(motorRatedPower),
+        motorRPM(motorRPM),
+        lineFrequency(lineFrequency),
+        efficiencyClass(efficiencyClass),
+        specifiedEfficiency(specifiedEfficiency),
+        loadFactor(loadFactor),
+        ratedVoltage(ratedVoltage)
     {};
 
     /**
      * Calculates the optimal motor current
-     *
      * @return double, optimal motor current in Amps
      */
     double calculate();
 
-    /**
-     * Gets the motor power
-     *
-     * @return double, motor power in hp
-     */
-    double getMotorPower() const {
-        return motorPower_;
-    }
-
-    /**
-     * Sets the motor power
-     *
-     * @param motorPower double, motor power in hp
-     *
-     */
-    void setMotorPower(double motorPower) {
-        motorPower_ = motorPower;
-    }
-
-    /**
-     * Gets the voltage of the motor
-     *
-     * @return double, voltage in Volts
-     */
-    double getVoltage() const {
-        return voltage_;
-    }
-
-    /**
-     * Sets the voltage of the motor
-     *
-     * @param voltage double, voltage of motor in Volts
-     *
-     */
-    void setVoltage(double voltage) {
-        voltage_ = voltage;
-    }
-
 private:
-    double motorPower_;
-    double voltage_;
-    double motorRatedPower_ = 0.0;
-
-    int motorRPM_ = 0;
-    Motor::LineFrequency lineFrequency_;
-    Motor::EfficiencyClass efficiencyClass_;
-    double specifiedEfficiency_ = 0.0;
-    double loadFactor_ = 0.0;
-    double motorCurrent_ = 0.0;
-    double ratedVoltage_ = 0.0;
-//    double estimatedFLA = 0.0;
-//    double fullLoadAmps = 0.0;
-//    double fieldVoltage = 0.0;
+    double motorRatedPower, motorRPM;
+    Motor::LineFrequency lineFrequency;
+    Motor::EfficiencyClass efficiencyClass;
+    double specifiedEfficiency, loadFactor, ratedVoltage;
 };
 
 

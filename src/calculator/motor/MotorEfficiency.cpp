@@ -73,13 +73,13 @@ double MotorEfficiency::calculate(double loadFactor, double specifiedEfficiency)
     const double kWloss25 = ((1 / motorEfficiency[0]) - 1) * motorRatedPower * 0.746 * 0.25;
     kWloss0 = 0.8 * kWloss25;
 
-    if (loadFactor <= 0.25001) {
+    if (loadFactor < 0.251) {
         // loadFactor <= 0.25
         const double kWloss = kWloss0 + loadFactor * 100 * (kWloss25 - kWloss0) / 25;
         const double kWshaft = motorRatedPower * 0.746 * (loadFactor); // Make sure motorRatedPower is in hp
         const double kWe = kWloss + kWshaft; // Input electric power
         motorEff = kWshaft / kWe; //Final efficiency calculation
-    } else if (loadFactor <= 1.25001) {
+    } else if (loadFactor < 1.251) {
         /**
          * 26 - 125 load factor (0.25 - 1.25 non-inclusive)
          * Fitting tabular, 25% interval, motor efficiency data to assemble an overall curve with 1% interval data from 26 to 150%

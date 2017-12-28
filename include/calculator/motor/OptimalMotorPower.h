@@ -33,8 +33,7 @@ public:
      */
     OptimalMotorPower(
         double motorRatedPower,
-        double /*motorMeasuredPower*/,
-        int motorRPM,
+        double motorRPM,
         Motor::LineFrequency lineFrequency,
         Motor::EfficiencyClass efficiencyClass,
         Motor::EfficiencyClass optimalEfficiencyClass,
@@ -42,13 +41,10 @@ public:
         double ratedVoltage,
         double fullLoadAmps,
         double fieldVoltage,
-        FieldData::LoadEstimationMethod /*loadEstimationMethod*/,
-        double /*fieldCurrent*/,
         double optimalMotorShaftPower
     ) :
         optimalMotorShaftPower(optimalMotorShaftPower),
         motorRatedPower(motorRatedPower),
-//        fieldPower(motorMeasuredPower),
         motorRPM(motorRPM),
         lineFrequency(lineFrequency),
         ratedVoltage(ratedVoltage),
@@ -57,8 +53,6 @@ public:
         efficiencyClass(efficiencyClass),
         optimalEfficiencyClass(optimalEfficiencyClass),
         specifiedEfficiency(specifiedEfficiency)
-//        fieldCurrent(fieldCurrent),
-//        loadEstimationMethod(loadEstimationMethod)
     {};
 
     /**
@@ -136,18 +130,14 @@ private:
     double optimalMotorShaftPower;
     double motorEfficiency;
     double tempMsp = 0.0, tempMsp1 =0.0, tempMsp2 =0.0;
-//    double tempLoadFraction = 0.01;
     double power = 0.0, powerE1 = 0.0, powerE2 = 0.0;
     double lf1 = 0.0, lf2 = 0.0;
     double eff = 0.0, eff1 = 0.0, eff2 = 0.0;
     double current = 0.0, current1 = 0.0, current2 = 0.0;
     double pf = 0.0, pf1 = 0.0, pf2 = 0.0;
-//    double estimatedFLA;
-
 
     double motorRatedPower = 0.0;
-//    double fieldPower = 0.0;
-    int motorRPM = 0;
+    double motorRPM = 0;
     Motor::LineFrequency lineFrequency;
     double ratedVoltage = 0.0;
     double fullLoadAmps = 0.0;
@@ -156,8 +146,6 @@ private:
     Motor::EfficiencyClass optimalEfficiencyClass;
 
     double specifiedEfficiency;
-//    double fieldCurrent = 0.0;
-//    FieldData::LoadEstimationMethod loadEstimationMethod;
 
 };
 

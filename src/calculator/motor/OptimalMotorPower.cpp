@@ -21,8 +21,7 @@ double OptimalMotorPower::calculate() {
     double mspkW = 0.0;
     while (true) {
         OptimalMotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, optimalEfficiencyClass,
-                                                specifiedEfficiency, tempLoadFraction_, ratedVoltage, fieldVoltage,
-                                                fullLoadAmps);
+                                                specifiedEfficiency, tempLoadFraction_, ratedVoltage);
         current = optimalMotorCurrent.calculate();
         //Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction_))) + 1);

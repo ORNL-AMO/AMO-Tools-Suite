@@ -28,8 +28,6 @@
  * @return motor current
  */
 double MotorCurrent::calculate() {
-    if (loadFactor > 1.5) loadFactor = 1.5;
-
     EstimateFLA estimateFLA(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency,
                             ratedVoltage);
     std::array<double, 6> plValues = estimateFLA.calculate();
@@ -42,15 +40,15 @@ double MotorCurrent::calculate() {
         val *= fullLoadAmps / tempFLA;
     }
 
-    if (loadFactor <= 0.25 || std::abs(loadFactor - 0.25) < 0.001) {
+    if (loadFactor < 0.251) {
         motorCurrent = CurveFitVal({0, 0.25, 0.5}, {plValues[0], plValues[1], plValues[2]}, 2, loadFactor).calculate();
-    } else if (loadFactor > 0.25 && (loadFactor <= 1.25 || std::abs(loadFactor - 1.25) < 0.001)) {
+    } else if (loadFactor < 1.251) {
         CurveFitVal cfv({0.25, 0.5, 0.75, 1, 1.25}, {plValues[1], plValues[2], plValues[3], plValues[4], plValues[5]}, 4, loadFactor);
         motorCurrent = cfv.calculate();
-    } else if (loadFactor > 1.25 && (loadFactor <= 1.50 || std::abs(loadFactor - 1.50) < 0.001)) {
+    } else {
+	    if (loadFactor > 1.5) loadFactor = 1.5;
         CurveFitVal cfv({.75, 1.00, 1.25}, {plValues[3], plValues[4], plValues[5]}, 2, loadFactor);
         motorCurrent = cfv.calculate();
     }
     return motorCurrent;
-
 }
