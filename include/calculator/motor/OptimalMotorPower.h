@@ -39,7 +39,6 @@ public:
         Motor::EfficiencyClass optimalEfficiencyClass,
         double specifiedEfficiency,
         double ratedVoltage,
-        double fullLoadAmps,
         double fieldVoltage,
         double optimalMotorShaftPower
     ) :
@@ -48,7 +47,6 @@ public:
         motorRPM(motorRPM),
         lineFrequency(lineFrequency),
         ratedVoltage(ratedVoltage),
-        fullLoadAmps(fullLoadAmps),
         fieldVoltage(fieldVoltage),
         efficiencyClass(efficiencyClass),
         optimalEfficiencyClass(optimalEfficiencyClass),
@@ -57,15 +55,14 @@ public:
 
     /**
      * Calculates the optimal motor power
-     * @return double, optimal motor power in hp
      */
-    double calculate();
+    void calculate();
 
     /**
      * Gets the optimal motor shaft power
      * @return double, optimal motor shaft power in hp
      */
-    double getOptimalMotorShaftPower_() const {
+    double getOptimalMotorShaftPower() const {
         return optimalMotorShaftPower;
     }
 
@@ -78,27 +75,10 @@ public:
     }
 
     /**
-     * Gets the motor efficiency if efficiency class is SPECIFIED
-     * @return double, mototr efficiency as %
-     */
-    double getMotorEfficiency() const {
-        return motorEfficiency;
-    }
-
-    /**
-     * Sets the motor efficiency if efficiency class is SPECIFIED
-     * @param motorEfficiency double, efficiency of motor as %
-     *
-     */
-    void setMotorEfficiency(double motorEfficiency) {
-        this->motorEfficiency = motorEfficiency;
-    }
-
-    /**
      * Gets the motor current
      * @return double, motor current in A
      */
-    double getMotorCurrent(){
+    double getMotorCurrent() {
         return current;
     }
 
@@ -106,7 +86,7 @@ public:
      * Gets motor power factor
      * @return double, power factor of motor - unitless
      */
-    double getMotorPf(){
+    double getMotorPf() {
         return pf;
     }
 
@@ -114,7 +94,7 @@ public:
      * Get motor efficiency if efficiency class is not SPECIFIED
      * @return double, motor efficiency as %
      */
-    double getMotorEff(){
+    double getMotorEff() {
         return eff;
     }
 
@@ -122,31 +102,19 @@ public:
      * Gets motor power
      * @return double, motor power in hp
      */
-    double getMotorPower(){
+    double getMotorPower() {
         return power;
     }
 
 private:
-    double optimalMotorShaftPower;
-    double motorEfficiency;
-    double tempMsp = 0.0, tempMsp1 =0.0, tempMsp2 =0.0;
-    double power = 0.0, powerE1 = 0.0, powerE2 = 0.0;
-    double lf1 = 0.0, lf2 = 0.0;
-    double eff = 0.0, eff1 = 0.0, eff2 = 0.0;
-    double current = 0.0, current1 = 0.0, current2 = 0.0;
-    double pf = 0.0, pf1 = 0.0, pf2 = 0.0;
-
-    double motorRatedPower = 0.0;
-    double motorRPM = 0;
+    double optimalMotorShaftPower, motorRatedPower, motorRPM;
     Motor::LineFrequency lineFrequency;
-    double ratedVoltage = 0.0;
-    double fullLoadAmps = 0.0;
-    double fieldVoltage = 0.0;
-    Motor::EfficiencyClass efficiencyClass;
-    Motor::EfficiencyClass optimalEfficiencyClass;
-
+    double ratedVoltage, fieldVoltage;
+    Motor::EfficiencyClass efficiencyClass, optimalEfficiencyClass;
     double specifiedEfficiency;
 
+    // values set in calculate()
+    double power = 0, eff = 0, current = 0, pf = 0;
 };
 
 

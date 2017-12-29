@@ -8,20 +8,20 @@
  *
  */
 
-#include <cmath>
 #include <calculator/motor/MotorCurrent.h>
 #include "calculator/motor/OptimalMotorPower.h"
-#include "calculator/motor/MotorShaftPower.h"
 #include "calculator/motor/MotorEfficiency.h"
 #include "calculator/motor/MotorPowerFactor.h"
 #include "calculator/motor/MotorPower.h"
 
-double OptimalMotorPower::calculate() {
+void OptimalMotorPower::calculate() {
     double tempLoadFraction = 0.00;
-    double mspkW = 0.0;
+    double mspkW;
+    double tempMsp = 0, tempMsp1 = 0, tempMsp2 = 0, powerE1 = 0, powerE2 = 0;
+    double eff1 = 0, eff2 = 0, lf = 0, current1 = 0, current2 = 0;
     while (true) {
         MotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, optimalEfficiencyClass,
-                                                specifiedEfficiency, tempLoadFraction, ratedVoltage);
+                                         specifiedEfficiency, tempLoadFraction, ratedVoltage);
         current = optimalMotorCurrent.calculateOptimalCurrent();
         //Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction))) + 1);
@@ -35,43 +35,34 @@ double OptimalMotorPower::calculate() {
         power = motorPower.calculate();
         tempMsp = power * eff;
         // Converting to KW for matching purpose.
-        //cout << tempLoadFraction << ":" << current << ":" << eff <<":" << pf << ":" << power << ":" << endl;
         mspkW = optimalMotorShaftPower * 0.746;
 
         if (tempMsp > mspkW || tempLoadFraction > 1.5) {
             powerE2 = power;
-            lf2 = tempLoadFraction;
             eff2 = eff;
-            pf2 = pf;
             current2 = current;
             tempMsp2 = tempMsp;
             break;
         } else {
             powerE1 = power;
-            lf1 = tempLoadFraction;
+            lf = tempLoadFraction;
             eff1 = eff;
-            pf1 = pf;
             current1 = current;
             tempMsp1 = tempMsp;
             tempLoadFraction += 0.01;
         }
     }
-    /*
-     * Calculate Fractional Index
-     */
-
+    // Calculate Fractional Index
     const double motorMspdiff = tempMsp2 - tempMsp1;
     const double measuredMspdiff = mspkW - tempMsp1;
-    const double fractionalIndex = lf1 + ((measuredMspdiff / motorMspdiff) / 100);
-    /*
-     * Linear Interpolation of values
-     */
-    //double adjCurrent1 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf1)) + 1) * current1;
+    const double fractionalIndex = lf + ((measuredMspdiff / motorMspdiff) / 100);
+
+    // Linear Interpolation of values
+    //double adjCurrent1 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf)) + 1) * current1;
     //double adjCurrent2 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf2)) + 1) * current2;
-    //current = adjCurrent1 + 100 * (fractionalIndex - lf1) * (adjCurrent2 - adjCurrent1);
-    current = current1 + 100 * (fractionalIndex - lf1) * (current2 - current1);
-    eff = eff1 + 100 * (fractionalIndex - lf1) * (eff2 - eff1);
-    power = powerE1 + 100 * (fractionalIndex - lf1) * (powerE2 - powerE1);
-    pf = power / (current * fieldVoltage * sqrt(3) / 1000);
-    return 0;
+    //current = adjCurrent1 + 100 * (fractionalIndex - lf) * (adjCurrent2 - adjCurrent1);
+    current = current1 + 100 * (fractionalIndex - lf) * (current2 - current1);
+    eff = eff1 + 100 * (fractionalIndex - lf) * (eff2 - eff1);
+    power = powerE1 + 100 * (fractionalIndex - lf) * (powerE2 - powerE1);
+    pf = power / (current * fieldVoltage * std::sqrt(3) / 1000);
 }

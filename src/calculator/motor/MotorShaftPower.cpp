@@ -11,6 +11,7 @@ double MotorShaftPower::calculate() {
      */
     if (loadEstimationMethod == FieldData::LoadEstimationMethod::POWER) {
         tempLoadFraction = 0.01;
+	    double powerE1 = 0, powerE2 = 0, lf1 = 0, lf2 = 0, eff1 = 0, eff2 = 0, pf1 = 0, pf2 = 0;
         while (true) {
             MotorCurrent motorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass,
                                       specifiedEfficiency, tempLoadFraction, ratedVoltage);
@@ -27,7 +28,6 @@ double MotorShaftPower::calculate() {
                 lf2 = tempLoadFraction;
                 eff2 = eff;
                 pf2 = pf;
-                current2 = current;
                 estimatedFLA = motorCurrent.getEstimatedFLA();
                 break;
             } else {
@@ -35,20 +35,19 @@ double MotorShaftPower::calculate() {
                 lf1 = tempLoadFraction;
                 eff1 = eff;
                 pf1 = pf;
-                current1 = current;
                 tempLoadFraction += 0.01;
             }
         }
 
-        double motorPowerdiff_ = powerE2 - powerE1;
-        double measuredMotorPowerdiff_ = fieldPower - powerE1;
-        double fractionalIndex_ = lf1 + ((measuredMotorPowerdiff_ / motorPowerdiff_) / 100);
-        eff = eff1 + 100 * (fractionalIndex_ - lf1) * (eff2 - eff1);
-        double adjpf1 = pf1 / (((((fieldVoltage / ratedVoltage) - 1) * (((-2) * lf1) + 1)) + 1) *
-                               (fieldVoltage / ratedVoltage));
-        double adjpf2 = pf2 / (((((fieldVoltage / ratedVoltage) - 1) * (((-2) * lf2) + 1)) + 1) *
-                               (fieldVoltage / ratedVoltage));
-        pf = adjpf1 + 100 * (fractionalIndex_ - lf1) * (adjpf2 - adjpf1);\
+        const double motorPowerdiff = powerE2 - powerE1;
+        const double measuredMotorPowerdiff = fieldPower - powerE1;
+        const double fractionalIndex = lf1 + ((measuredMotorPowerdiff / motorPowerdiff) / 100);
+        eff = eff1 + 100 * (fractionalIndex - lf1) * (eff2 - eff1);
+        const double adjpf1 = pf1 / ((((fieldVoltage / ratedVoltage - 1) * (-2 * lf1 + 1)) + 1) *
+                                     (fieldVoltage / ratedVoltage));
+        const double adjpf2 = pf2 / ((((fieldVoltage / ratedVoltage - 1) * (-2 * lf2 + 1)) + 1) *
+                                     (fieldVoltage / ratedVoltage));
+        pf = adjpf1 + 100 * (fractionalIndex - lf1) * (adjpf2 - adjpf1);
 
         /**
          * Adjust pf based on specified FLA
@@ -56,7 +55,7 @@ double MotorShaftPower::calculate() {
          * pf = pf / (fullLoadAmps_/estimatedFLA);
         */
         /// Output current
-        current = fieldPower / (fieldVoltage * sqrt(3) * pf / 1000);
+        current = fieldPower / (fieldVoltage * std::sqrt(3) * pf / 1000);
         /// Output in kW
         motorShaftPower = fieldPower * eff;
         /// Output in hP
@@ -66,6 +65,7 @@ double MotorShaftPower::calculate() {
         return motorShaftPower;
     } else { /// When the load estimation method is Current.
         tempLoadFraction = 0.00;
+        double powerE1, powerE2, lf1, lf2, eff1, eff2, current1, current2;
         while (true) {
             MotorCurrent motorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass,
                                       specifiedEfficiency, tempLoadFraction, ratedVoltage);
@@ -82,12 +82,10 @@ double MotorShaftPower::calculate() {
                 powerE2 = power;
                 lf2 = tempLoadFraction;
                 eff2 = eff;
-                pf2 = pf;
                 estimatedFLA = motorCurrent.getEstimatedFLA();
                 break;
-            } else {
-                tempLoadFraction += 0.01;
             }
+            tempLoadFraction += 0.01;
         }
         /// Dropping load fraction by 0.01
         tempLoadFraction -= 0.01;
@@ -105,29 +103,27 @@ double MotorShaftPower::calculate() {
         powerE1 = power;
         lf1 = tempLoadFraction;
         eff1 = eff;
-        pf1 = pf;
 
         /// Adjust pf based on specified FLA
         pf = pf / (fullLoadAmps / estimatedFLA);
 
         /// Adjust current
-        double adjCurrent1 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf1)) + 1) * current1;
-        double adjCurrent2 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf2)) + 1) * current2;
-        double currentDiff = adjCurrent2 - adjCurrent1;
-        double measuredCurrentDiff = fieldCurrent - adjCurrent1;
-        double fractionalIndex_ = lf1 + ((measuredCurrentDiff / currentDiff) / 100);
+        const double adjCurrent1 = ((fieldVoltage / ratedVoltage - 1) * (1 - 2 * lf1) + 1) * current1;
+        const double adjCurrent2 = ((fieldVoltage / ratedVoltage - 1) * (1 - 2 * lf2) + 1) * current2;
+        const double currentDiff = adjCurrent2 - adjCurrent1;
+        const double measuredCurrentDiff = fieldCurrent - adjCurrent1;
+        const double fractionalIndex = lf1 + (measuredCurrentDiff / currentDiff) / 100;
 
         current = fieldCurrent;
-        eff = eff1 + 100 * (fractionalIndex_ - lf1) * (eff2 - eff1);
-        power = powerE1 + 100 * (fractionalIndex_ - lf1) * (powerE2 - powerE1);
+        eff = eff1 + 100 * (fractionalIndex - lf1) * (eff2 - eff1);
+        power = powerE1 + 100 * (fractionalIndex - lf1) * (powerE2 - powerE1);
 
         /// Power Factor
-        pf = power / (current * fieldVoltage * sqrt(3) / 1000);
+        pf = power / (current * fieldVoltage * std::sqrt(3) / 1000);
         /// Output in kW
         motorShaftPower = power * eff;
         /// Output in hP
         motorShaftPower = motorShaftPower / 0.746;
-        /// Return motor Shaft power
         return motorShaftPower;
     }
 }
