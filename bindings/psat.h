@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 3/7/17.
-//
-
 #ifndef AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 #define AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 
@@ -10,6 +6,7 @@
 #include <nan.h>
 #include <node.h>
 #include <vector>
+#include <array>
 #include "psat/PSATResult.h"
 #include "psat/Motor.h"
 #include "psat/Pump.h"
@@ -262,16 +259,16 @@ NAN_METHOD(resultsExistingAndOptimal) {
     auto ex = psat.getExisting();
     auto opt = psat.getOptimal();
     std::map<const char *,std::vector<double>> out = {
-            {"pump_efficiency",{ex.pumpEfficiency_ * 100, opt.pumpEfficiency_ * 100}},
-            {"motor_rated_power",{ex.motorRatedPower_,  opt.motorRatedPower_}},
-            {"motor_shaft_power",{ex.motorShaftPower_,opt.motorShaftPower_}},
-            {"pump_shaft_power",{ex.pumpShaftPower_, opt.pumpShaftPower_}},
-            {"motor_efficiency",{ex.motorEfficiency_* 100, opt.motorEfficiency_ * 100}},
-            {"motor_power_factor",{ex.motorPowerFactor_ * 100, opt.motorPowerFactor_ * 100}},
-            {"motor_current",{ex.motorCurrent_, opt.motorCurrent_}},
-            {"motor_power", {ex.motorPower_, opt.motorPower_}},
-            {"annual_energy", {ex.annualEnergy_  ,opt.annualEnergy_}},
-            {"annual_cost", {ex.annualCost_*1000,opt.annualCost_ * 1000}},
+            {"pump_efficiency",{ex.pumpEfficiency * 100, opt.pumpEfficiency * 100}},
+            {"motor_rated_power",{ex.motorRatedPower,  opt.motorRatedPower}},
+            {"motor_shaft_power",{ex.motorShaftPower,opt.motorShaftPower}},
+            {"pump_shaft_power",{ex.pumpShaftPower, opt.pumpShaftPower}},
+            {"motor_efficiency",{ex.motorEfficiency* 100, opt.motorEfficiency * 100}},
+            {"motor_power_factor",{ex.motorPowerFactor * 100, opt.motorPowerFactor * 100}},
+            {"motor_current",{ex.motorCurrent, opt.motorCurrent}},
+            {"motor_power", {ex.motorPower, opt.motorPower}},
+            {"annual_energy", {ex.annualEnergy  ,opt.annualEnergy}},
+            {"annual_cost", {ex.annualCost*1000,opt.annualCost * 1000}},
             {"annual_savings_potential", {psat.getAnnualSavingsPotential()  * 1000, -1}},
             {"optimization_rating", {psat.getOptimizationRating(), -1}}
     };
@@ -315,16 +312,16 @@ NAN_METHOD(resultsExisting) {
     auto const & ex = psat.getExisting();
 
     std::unordered_map<std::string, double> out = {
-            {"pump_efficiency", ex.pumpEfficiency_ * 100},
-            {"motor_rated_power", ex.motorRatedPower_},
-            {"motor_shaft_power", ex.motorShaftPower_},
-            {"pump_shaft_power", ex.pumpShaftPower_},
-            {"motor_efficiency", ex.motorEfficiency_* 100},
-            {"motor_power_factor", ex.motorPowerFactor_ * 100},
-            {"motor_current", ex.motorCurrent_},
-            {"motor_power", ex.motorPower_},
-            {"annual_energy", ex.annualEnergy_},
-            {"annual_cost", ex.annualCost_ * 1000},
+            {"pump_efficiency", ex.pumpEfficiency * 100},
+            {"motor_rated_power", ex.motorRatedPower},
+            {"motor_shaft_power", ex.motorShaftPower},
+            {"pump_shaft_power", ex.pumpShaftPower},
+            {"motor_efficiency", ex.motorEfficiency* 100},
+            {"motor_power_factor", ex.motorPowerFactor * 100},
+            {"motor_current", ex.motorCurrent},
+            {"motor_power", ex.motorPower},
+            {"annual_energy", ex.annualEnergy},
+            {"annual_cost", ex.annualCost * 1000},
             {"annual_savings_potential", psat.getAnnualSavingsPotential()  * 1000},
             {"optimization_rating", psat.getOptimizationRating()}
     };
@@ -368,16 +365,16 @@ NAN_METHOD(resultsModified) {
     auto const & mod = psat.getModified();
 
     std::unordered_map<std::string, double> out = {
-            {"pump_efficiency", mod.pumpEfficiency_ * 100},
-            {"motor_rated_power", mod.motorRatedPower_},
-            {"motor_shaft_power", mod.motorShaftPower_},
-            {"pump_shaft_power", mod.pumpShaftPower_},
-            {"motor_efficiency", mod.motorEfficiency_* 100},
-            {"motor_power_factor", mod.motorPowerFactor_ * 100},
-            {"motor_current", mod.motorCurrent_},
-            {"motor_power", mod.motorPower_},
-            {"annual_energy", mod.annualEnergy_},
-            {"annual_cost", mod.annualCost_ * 1000},
+            {"pump_efficiency", mod.pumpEfficiency * 100},
+            {"motor_rated_power", mod.motorRatedPower},
+            {"motor_shaft_power", mod.motorShaftPower},
+            {"pump_shaft_power", mod.pumpShaftPower},
+            {"motor_efficiency", mod.motorEfficiency* 100},
+            {"motor_power_factor", mod.motorPowerFactor * 100},
+            {"motor_current", mod.motorCurrent},
+            {"motor_power", mod.motorPower},
+            {"annual_energy", mod.annualEnergy},
+            {"annual_cost", mod.annualCost * 1000},
             {"annual_savings_potential", psat.getAnnualSavingsPotential()  * 1000},
             {"optimization_rating", psat.getOptimizationRating()}
     };
@@ -419,16 +416,16 @@ NAN_METHOD(resultsOptimal) {
     auto const & opt = psat.getOptimal();
 
     std::unordered_map<std::string, double> out = {
-            {"pump_efficiency", opt.pumpEfficiency_ * 100},
-            {"motor_rated_power", opt.motorRatedPower_},
-            {"motor_shaft_power", opt.motorShaftPower_},
-            {"pump_shaft_power", opt.pumpShaftPower_},
-            {"motor_efficiency", opt.motorEfficiency_* 100},
-            {"motor_power_factor", opt.motorPowerFactor_ * 100},
-            {"motor_current", opt.motorCurrent_},
-            {"motor_power", opt.motorPower_},
-            {"annual_energy", opt.annualEnergy_},
-            {"annual_cost", opt.annualCost_ * 1000},
+            {"pump_efficiency", opt.pumpEfficiency * 100},
+            {"motor_rated_power", opt.motorRatedPower},
+            {"motor_shaft_power", opt.motorShaftPower},
+            {"pump_shaft_power", opt.pumpShaftPower},
+            {"motor_efficiency", opt.motorEfficiency* 100},
+            {"motor_power_factor", opt.motorPowerFactor * 100},
+            {"motor_current", opt.motorCurrent},
+            {"motor_power", opt.motorPower},
+            {"annual_energy", opt.annualEnergy},
+            {"annual_cost", opt.annualCost * 1000},
             {"annual_savings_potential", psat.getAnnualSavingsPotential()  * 1000},
             {"optimization_rating", psat.getOptimizationRating()}
     };
@@ -449,7 +446,6 @@ NAN_METHOD(resultsOptimal) {
  * @param efficiency_class EfficiencyClass, efficiency class of motor
  * @param efficiency double, specified efficiency of motor as defined by %
  * @param motor_rated_voltage double, rated voltage of motor in volts
-
  */
 NAN_METHOD(estFLA) {
     inp = info[0]->ToObject();
@@ -473,7 +469,6 @@ NAN_METHOD(estFLA) {
  * @param load_factor double, load factor between 0.0001 and 1.25 - unitless
  * @param motor_rated_voltage double, rated voltage of motor in volts
  * @param motor_rated_fla double, motor rated full load amps
-
  */
 NAN_METHOD(motorPerformance) {
     inp = info[0]->ToObject();

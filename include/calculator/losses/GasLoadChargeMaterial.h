@@ -26,7 +26,6 @@ public:
 
     /**
      * Constructor for the gas load/charge material with all inputs specified
-     *
      * @param thermicReactionType Enumerated value for either endothermic or exothermic reactions
      * @param specificHeatGas Specific Heat of Gas in Btu/(lb*°F)
      * @param feedRate Feed Rate for Gas Mixture in lb/hr
@@ -37,256 +36,218 @@ public:
      * @param percentReacted Feed Gas Reacted (% of Total)
      * @param reactionHeat Heat of Reaction in Btu/lb
      * @param additionalHeat Additional Heat Required in Btu/hr
-     *
      * */
     GasLoadChargeMaterial(
-            LoadChargeMaterial::ThermicReactionType thermicReactionType,
-            double specificHeatGas,
-            double feedRate,
-            double percentVapor,
-            double initialTemperature,
-            double dischargeTemperature,
-            double specificHeatVapor,
-            double percentReacted,
-            double reactionHeat,
-            double additionalHeat)
-            : thermicReactionType_(thermicReactionType),
-              specificHeatGas_(specificHeatGas),
-              feedRate_(feedRate),
-              percentVapor_(percentVapor / 100.0),
-              initialTemperature_(initialTemperature),
-              dischargeTemperature_(dischargeTemperature),
-              specificHeatVapor_(specificHeatVapor),
-              percentReacted_(percentReacted / 100.0),
-              reactionHeat_(reactionHeat),
-              additionalHeat_(additionalHeat)
+            const LoadChargeMaterial::ThermicReactionType thermicReactionType,
+            const double specificHeatGas,
+            const double feedRate,
+            const double percentVapor,
+            const double initialTemperature,
+            const double dischargeTemperature,
+            const double specificHeatVapor,
+            const double percentReacted,
+            const double reactionHeat,
+            const double additionalHeat)
+            : thermicReactionType(thermicReactionType),
+              specificHeatGas(specificHeatGas),
+              feedRate(feedRate),
+              percentVapor(percentVapor / 100.0),
+              initialTemperature(initialTemperature),
+              dischargeTemperature(dischargeTemperature),
+              specificHeatVapor(specificHeatVapor),
+              percentReacted(percentReacted / 100.0),
+              reactionHeat(reactionHeat),
+              additionalHeat(additionalHeat)
     {}
 
     GasLoadChargeMaterial() = default;
 
     /**
      * Gets the classification of thermic reaction type
-     *
      * @return LoadChargeMaterial::ThermicReactionType, type of thermic reaction
      */
     LoadChargeMaterial::ThermicReactionType getThermicReactionType() const {
-        return thermicReactionType_;
+        return thermicReactionType;
     }
 
     /**
      * Sets the classification of thermic reaction type
-     *
      * @param thermicReactionType LoadChargeMaterial::ThermicReactionType, type of thermic reaction
-     *
      */
     void setThermicReactionType(LoadChargeMaterial::ThermicReactionType thermicReactionType) {
-        thermicReactionType_ = thermicReactionType;
+        this->thermicReactionType = thermicReactionType;
     }
 
     /**
      * Gets the specific heat of gas
-     *
-     *
      * @return double, specific heat of gas in btu/(lb*°F)
      */
     double getSpecificHeatGas() const {
-        return specificHeatGas_;
+        return specificHeatGas;
     }
 
     /**
      * Sets the specific heat of gas
-     *
      * @param specificHeatGas double, specific heat of gas in btu/(lb*°F)
-     *
      */
     void setSpecificHeatGas(double specificHeatGas) {
-        specificHeatGas_ = specificHeatGas;
+        this->specificHeatGas = specificHeatGas;
     }
 
     /**
      * Gets the feed rate for gas mixture
-     *
      * @return double, feed rate for gas mixture in lb/hr
      */
     double getFeedRate() const {
-        return feedRate_;
+        return feedRate;
     }
 
     /**
      * Sets the feed rate for gas mixture
-     *
      * @param feedRate double, feed rate for gas mixture in lb/hr
-     *
      */
     void setFeedRate(double feedRate) {
-        feedRate_ = feedRate;
+        this->feedRate = feedRate;
     }
 
     /**
      * Gets the initial temperature
-     *
      * @return double, initial temperature in °F
      */
     double getInitialTemperature() const {
-        return initialTemperature_;
+        return initialTemperature;
     }
 
     /**
      * Sets the initial temperature
-     *
      * @param initialTemperature double, initial temperature in °F
-     *
      */
     void setInitialTemperature(double initialTemperature) {
-        initialTemperature_ = initialTemperature;
+        this->initialTemperature = initialTemperature;
     }
 
     /**
      * Gets the discharge temperature
-     *
      * @return double, discharge temperature in °F
      */
     double getDischargeTemperature() const {
-        return dischargeTemperature_;
+        return dischargeTemperature;
     }
 
     /**
      * Sets the discharge temperature
-     *
      * @param dischargeTemperature double, discharge temperature in °F
-     *
      */
     void setDischargeTemperature(double dischargeTemperature) {
-        dischargeTemperature_ = dischargeTemperature;
+        this->dischargeTemperature = dischargeTemperature;
     }
 
     /**
      * Gets the specific heat of vapor
-     *
      * @return double, specific heat of vapor in btu/(lb*°F)
      */
     double getSpecificHeatVapor() const {
-        return specificHeatVapor_;
+        return specificHeatVapor;
     }
 
     /**
      * Sets the specific heat of vapor
-     *
      * @param specificHeatVapor double, specific heat of vapor in btu/(lb*°F)
-     *
      */
     void setSpecificHeatVapor(double specificHeatVapor) {
-        specificHeatVapor_ = specificHeatVapor;
+        this->specificHeatVapor = specificHeatVapor;
     }
 
     /**
      * Gets the percentage of feed gas reacted
-     *
      * @return double, charge gas reacted as % of DRY gas feed
      */
     double getPercentReacted() const {
-        return percentReacted_ * 100.0;
+        return percentReacted * 100.0;
     }
 
     /**
      * Sets the percentage of feed gas reacted
-     *
      * @param percentReacted double, charge gas reacted as % of DRY gas feed
-     *
      */
     void setPercentReacted(double percentReacted) {
-        percentReacted_ = percentReacted / 100.0;
+        percentReacted = percentReacted / 100.0;
     }
 
     /**
      * Gets the heat of reaction
-     *
      * @return double, heat of reaction in btu/lb
      */
     double getReactionHeat() const {
-        return reactionHeat_;
+        return reactionHeat;
     }
 
     /**
      * Sets the heat of reaction
-     *
      * @param reactionHeat double, heat of reaction in btu/lb
-     *
      */
     void setReactionHeat(double reactionHeat) {
-        reactionHeat_ = reactionHeat;
+        this->reactionHeat = reactionHeat;
     }
 
     /**
      * Gets the additional heat required
-     *
      * @return double, additional heat required in btu/hr
      */
     double getAdditionalHeat() const {
-        return additionalHeat_;
+        return additionalHeat;
     }
 
     /**
      * Sets the additional heat required
-     *
      * @param additionalHeat double, additional heat required in btu/hr
-     *
      */
     void setAdditionalHeat(double additionalHeat) {
-        additionalHeat_ = additionalHeat;
+        this->additionalHeat = additionalHeat;
     }
 
     /**
      * Gets the percentage of vapor in gas mixture
-     *
      * @return double, vapor in gas mixture as %
      */
     double getPercentVapor() const {
-        return percentVapor_ * 100.0;
+        return percentVapor * 100.0;
     }
 
     /**
      * Sets the percentage of vapor in gas mixture
-     *
      * @param percentVapor double, vapor in gas mixture as %
-     *
      */
     void setPercentVapor(double percentVapor) {
-        percentVapor_ = percentVapor / 100.0;
+        percentVapor = percentVapor / 100.0;
     }
 
     /**
      * Gets the name of substance
-     *
      * @return string, name of substance
      */
     std::string getSubstance() const {
-        return substance_;
+        return substance;
     }
 
     /**
      * Sets the name of substance
-     *
-     * @param substance string const&, name of substance
-     *
+     * @param substance string , name of substance
      */
     void setSubstance(std::string substance) {
-        substance_ = std::move(substance);
+        this->substance = std::move(substance);
     }
 
     /**
      * Sets the total heat required
-     *
      * @param totalHeat double, total heat required in btu/hr
-     *
      */
     void setTotalHeat(double totalHeat) {
-        totalHeat_ = totalHeat;
+        this->totalHeat = totalHeat;
     }
 
     /**
      * Gets the ID of material
-     *
      * @return std::size_t, ID of material
      */
     std::size_t getID() const {
@@ -295,9 +256,7 @@ public:
 
     /**
      * Sets the ID of material
-     *
      * @param id const int, ID of material
-     *
      */
     void setID(const std::size_t id) {
         this->id = id;
@@ -305,7 +264,6 @@ public:
 
     /**
      * Gets the total heat required
-     *
      * @return double, total heat required in btu/hr
      */
     double getTotalHeat();
@@ -313,8 +271,8 @@ public:
     ///bool operator
     bool operator == (const GasLoadChargeMaterial& rhs) const
     {
-        return specificHeatVapor_ == rhs.specificHeatVapor_ &&
-               substance_ == rhs.substance_ && id == rhs.id;
+        return specificHeatVapor == rhs.specificHeatVapor &&
+               substance == rhs.substance && id == rhs.id;
     }
 
     ///bool operator
@@ -324,35 +282,33 @@ public:
     }
 
 private:
-    LoadChargeMaterial::ThermicReactionType thermicReactionType_ = LoadChargeMaterial::ThermicReactionType::NONE;
-    double specificHeatGas_ = 0.0;
-    double feedRate_ = 0.0;
-    double percentVapor_ = 0.0;
-    double initialTemperature_ = 0.0;
-    double dischargeTemperature_ = 0.0;
-    double specificHeatVapor_ = 0.0;
-    double percentReacted_ = 0.0;
-    double reactionHeat_ = 0.0;
-    double additionalHeat_ = 0.0;
-    std::string substance_ = "Unknown";
+    LoadChargeMaterial::ThermicReactionType thermicReactionType = LoadChargeMaterial::ThermicReactionType::NONE;
+    double specificHeatGas = 0.0;
+    double feedRate = 0.0;
+    double percentVapor = 0.0;
+    double initialTemperature = 0.0;
+    double dischargeTemperature = 0.0;
+    double specificHeatVapor = 0.0;
+    double percentReacted = 0.0;
+    double reactionHeat = 0.0;
+    double additionalHeat = 0.0;
+    std::string substance = "Unknown";
     std::size_t id = 0;
     // Out value
-    double totalHeat_ = 0.0;
+    double totalHeat = 0.0;
 
     friend class SQLite;
 
     /**
      * Constructor for the gas load/charge material with subset of inputs specified.
-     *
      * @param substance Name of substance
      * @param specificHeatVapor Specific Heat of Vapor in Btu/(lb*°F)
-     *
      * */
     GasLoadChargeMaterial(
             std::string substance,
             double specificHeatVapor)
-            : specificHeatVapor_(specificHeatVapor),
-              substance_(std::move(substance))
+            : specificHeatVapor(specificHeatVapor),
+              substance(std::move(substance))
     {}
 };
 

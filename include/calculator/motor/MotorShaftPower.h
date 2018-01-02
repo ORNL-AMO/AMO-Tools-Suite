@@ -58,63 +58,67 @@ public:
 		FieldData::LoadEstimationMethod loadEstimationMethod,
 		double fieldCurrent
 	) :
-		motorRatedPower_(motorRatedPower),
-		fieldPower_(motorMeasuredPower),
-		motorRPM_(motorRPM),
-		lineFrequency_(lineFrequency),
-		ratedVoltage_(ratedVoltage),
-		fullLoadAmps_(fullLoadAmps),
-		fieldVoltage_(fieldVoltage),
-		efficiencyClass_(efficiencyClass),
-		specifiedEfficiency_(specifiedEfficiency),
-		fieldCurrent_(fieldCurrent),
-		loadEstimationMethod_(loadEstimationMethod)
+		motorRatedPower(motorRatedPower),
+		fieldPower(motorMeasuredPower),
+		motorRPM(motorRPM),
+		lineFrequency(lineFrequency),
+		ratedVoltage(ratedVoltage),
+		fullLoadAmps(fullLoadAmps),
+		fieldVoltage(fieldVoltage),
+		efficiencyClass(efficiencyClass),
+		specifiedEfficiency(specifiedEfficiency),
+		fieldCurrent(fieldCurrent),
+		loadEstimationMethod(loadEstimationMethod)
 	{};
 
 	/**
      * Calculate motor shaft power
-     *
      * @return double, motor shaft power in hp
      */
     double calculate();
 
 	/**
      * Calculates the motor shaft current
-     *
      * @return double, motor shaft current in A
      */
-    double calculateCurrent();
+    double getCurrent() {
+		return current;
+	};
 
 	/**
      * Calculates the motor shaft efficiency
-     *
      * @return double, motor shaft efficiency as %
      */
-    double calculateEfficiency();
+    double getEfficiency() {
+		return eff;
+	};
 
 	/**
      * Calculate the power
-     *
      * @return double, power in hp
      */
-    double calculatePower();
+    double getPower() {
+		return power;
+	};
 
 	/**
      * Calculates the power factor
-     *
      * @return double, power factor - unitless
      */
-    double calculatePowerFactor();
+    double getPowerFactor() {
+		return pf;
+	};
 
 	/**
      * Calculates estimated full load amps
-     *
      * @return double, estimated full load amps in A
      */
-    double calculateEstimatedFLA();
+    double getEstimatedFLA() {
+		return estimatedFLA;
+	};
 
     ///double, temp load fraction
-    double tempLoadFraction_ = 0.01;
+    double tempLoadFraction = 0.01;
 	///double, power in hp
     double power = 0.0;
 	///double, power in hp
@@ -147,19 +151,19 @@ public:
     double estimatedFLA;
 
 private:
-    double motorRatedPower_ = 0.0;
-    double fieldPower_ = 0.0;
-    int motorRPM_ = 0;
-    Motor::LineFrequency lineFrequency_;
-    double ratedVoltage_ = 0.0;
-    double fullLoadAmps_ = 0.0;
-    double fieldVoltage_ = 0.0;
-    Motor::EfficiencyClass efficiencyClass_;
+    double motorRatedPower = 0.0;
+    double fieldPower = 0.0;
+    int motorRPM = 0;
+    Motor::LineFrequency lineFrequency;
+    double ratedVoltage = 0.0;
+    double fullLoadAmps = 0.0;
+    double fieldVoltage = 0.0;
+    Motor::EfficiencyClass efficiencyClass;
 
-    double specifiedEfficiency_;
-    double motorShaftPower_ = 0.0;
-    double fieldCurrent_ = 0.0;
-    FieldData::LoadEstimationMethod loadEstimationMethod_;
+    double specifiedEfficiency;
+    double motorShaftPower = 0.0;
+    double fieldCurrent = 0.0;
+    FieldData::LoadEstimationMethod loadEstimationMethod;
 };
 
 #endif //AMO_LIBRARY_MOTORSHAFTPOWER_H

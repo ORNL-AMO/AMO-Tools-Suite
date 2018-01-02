@@ -57,12 +57,7 @@ set (CMAKE_CXX_FLAGS "-Wall")
 file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
-#    src/FieldData.cpp
-#    src/Financial.cpp
-        src/psat/Motor.cpp
-        src/psat/OptimizationRating.cpp
         src/psat/PSATResult.cpp
-        src/psat/Pump.cpp
         src/calculator/util/AnnualCost.cpp
         src/calculator/util/AnnualEnergy.cpp
         src/calculator/util/CurveFitVal.cpp
@@ -100,7 +95,6 @@ set(SOURCE_FILES
         src/calculator/losses/OpeningLosses.cpp
         src/sqlite/SQLite.cpp
         src/calculator/losses/GasFlueGasMaterial.cpp
-        src/phast/Furnace.cpp
         src/calculator/pump/HeadTool.cpp
         src/calculator/losses/EnergyInputEAF.cpp
         src/calculator/losses/SlagOtherMaterialLosses.cpp
@@ -134,7 +128,6 @@ set(INCLUDE_FILES
         include/psat/FieldData.h
         include/psat/Financial.h
         include/psat/Motor.h
-        include/psat/OptimizationRating.h
         include/psat/PSATResult.h
         include/psat/Pump.h
         include/calculator/util/AnnualCost.h
@@ -175,7 +168,6 @@ set(INCLUDE_FILES
         include/calculator/losses/OpeningLosses.h
         include/sqlite/SQLite.h
         include/calculator/losses/GasFlueGasMaterial.h
-        include/phast/Furnace.h
         include/calculator/pump/HeadTool.h
         include/calculator/pump/HeadTool.h
         include/sqlite/SolidLoadChargeMaterialData.h
@@ -217,7 +209,7 @@ set(INCLUDE_FILES
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
         tests/MotorEfficiency.unit.cpp
-        tests/PSATResult.unit.cpp
+        tests/PSAT.unit.cpp
         tests/SolidLoadChargeMaterial.unit.cpp
         tests/LiquidLoadChargeMaterial.unit.cpp
         tests/Atmosphere.unit.cpp

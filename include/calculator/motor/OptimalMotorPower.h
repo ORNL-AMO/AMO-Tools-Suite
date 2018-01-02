@@ -46,69 +46,62 @@ public:
         double /*fieldCurrent*/,
         double optimalMotorShaftPower
     ) :
-        optimalMotorShaftPower_(optimalMotorShaftPower),
-        motorRatedPower_(motorRatedPower),
-//        fieldPower_(motorMeasuredPower),
-        motorRPM_(motorRPM),
-        lineFrequency_(lineFrequency),
-        ratedVoltage_(ratedVoltage),
-        fullLoadAmps_(fullLoadAmps),
-        fieldVoltage_(fieldVoltage),
-        efficiencyClass_(efficiencyClass),
-        optimalEfficiencyClass_(optimalEfficiencyClass),
-        specifiedEfficiency_(specifiedEfficiency)
-//        fieldCurrent_(fieldCurrent),
-//        loadEstimationMethod_(loadEstimationMethod)
+        optimalMotorShaftPower(optimalMotorShaftPower),
+        motorRatedPower(motorRatedPower),
+//        fieldPower(motorMeasuredPower),
+        motorRPM(motorRPM),
+        lineFrequency(lineFrequency),
+        ratedVoltage(ratedVoltage),
+        fullLoadAmps(fullLoadAmps),
+        fieldVoltage(fieldVoltage),
+        efficiencyClass(efficiencyClass),
+        optimalEfficiencyClass(optimalEfficiencyClass),
+        specifiedEfficiency(specifiedEfficiency)
+//        fieldCurrent(fieldCurrent),
+//        loadEstimationMethod(loadEstimationMethod)
     {};
 
     /**
      * Calculates the optimal motor power
-     *
      * @return double, optimal motor power in hp
      */
     double calculate();
 
     /**
      * Gets the optimal motor shaft power
-     *
      * @return double, optimal motor shaft power in hp
      */
     double getOptimalMotorShaftPower_() const {
-        return optimalMotorShaftPower_;
+        return optimalMotorShaftPower;
     }
 
     /**
      * Sets the optimal motor shaft power
-     *
      * @param optimalMotorShaftPower double, optimal motor shaft power in hp
-     *
      */
     void setMotorShaftPower(double optimalMotorShaftPower) {
-        optimalMotorShaftPower_ = optimalMotorShaftPower;
+        this->optimalMotorShaftPower = optimalMotorShaftPower;
     }
 
     /**
      * Gets the motor efficiency if efficiency class is SPECIFIED
-     *
      * @return double, mototr efficiency as %
      */
     double getMotorEfficiency() const {
-        return motorEfficiency_;
+        return motorEfficiency;
     }
 
     /**
      * Sets the motor efficiency if efficiency class is SPECIFIED
-     *
      * @param motorEfficiency double, efficiency of motor as %
      *
      */
     void setMotorEfficiency(double motorEfficiency) {
-        motorEfficiency_ = motorEfficiency;
+        this->motorEfficiency = motorEfficiency;
     }
 
     /**
      * Gets the motor current
-     *
      * @return double, motor current in A
      */
     double getMotorCurrent(){
@@ -117,7 +110,6 @@ public:
 
     /**
      * Gets motor power factor
-     *
      * @return double, power factor of motor - unitless
      */
     double getMotorPf(){
@@ -126,7 +118,6 @@ public:
 
     /**
      * Get motor efficiency if efficiency class is not SPECIFIED
-     *
      * @return double, motor efficiency as %
      */
     double getMotorEff(){
@@ -135,7 +126,6 @@ public:
 
     /**
      * Gets motor power
-     *
      * @return double, motor power in hp
      */
     double getMotorPower(){
@@ -143,10 +133,10 @@ public:
     }
 
 private:
-    double optimalMotorShaftPower_;
-    double motorEfficiency_;
+    double optimalMotorShaftPower;
+    double motorEfficiency;
     double tempMsp = 0.0, tempMsp1 =0.0, tempMsp2 =0.0;
-//    double tempLoadFraction_ = 0.01;
+//    double tempLoadFraction = 0.01;
     double power = 0.0, powerE1 = 0.0, powerE2 = 0.0;
     double lf1 = 0.0, lf2 = 0.0;
     double eff = 0.0, eff1 = 0.0, eff2 = 0.0;
@@ -155,19 +145,19 @@ private:
 //    double estimatedFLA;
 
 
-    double motorRatedPower_ = 0.0;
-//    double fieldPower_ = 0.0;
-    int motorRPM_ = 0;
-    Motor::LineFrequency lineFrequency_;
-    double ratedVoltage_ = 0.0;
-    double fullLoadAmps_ = 0.0;
-    double fieldVoltage_ = 0.0;
-    Motor::EfficiencyClass efficiencyClass_;
-    Motor::EfficiencyClass optimalEfficiencyClass_;
+    double motorRatedPower = 0.0;
+//    double fieldPower = 0.0;
+    int motorRPM = 0;
+    Motor::LineFrequency lineFrequency;
+    double ratedVoltage = 0.0;
+    double fullLoadAmps = 0.0;
+    double fieldVoltage = 0.0;
+    Motor::EfficiencyClass efficiencyClass;
+    Motor::EfficiencyClass optimalEfficiencyClass;
 
-    double specifiedEfficiency_;
-//    double fieldCurrent_ = 0.0;
-//    FieldData::LoadEstimationMethod loadEstimationMethod_;
+    double specifiedEfficiency;
+//    double fieldCurrent = 0.0;
+//    FieldData::LoadEstimationMethod loadEstimationMethod;
 
 };
 

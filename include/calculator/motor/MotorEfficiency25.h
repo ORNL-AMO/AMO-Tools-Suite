@@ -12,6 +12,7 @@
 #define UNTITLED_MOTOREFFICIENCY25_H
 
 #include <vector>
+#include <array>
 #include "psat/Motor.h"
 
 class MotorEfficiency25 {
@@ -24,40 +25,42 @@ public:
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      */
     MotorEfficiency25(
-        Motor::EfficiencyClass efficiencyClass,
-        double motorRatedPower,
-        double motorRpm,
-        Motor::LineFrequency lineFrequency
+        const Motor::EfficiencyClass efficiencyClass,
+        const double motorRatedPower,
+        const double motorRpm,
+        const Motor::LineFrequency lineFrequency
     ) :
-        efficiencyClass_(efficiencyClass),
-        motorRatedPower_(motorRatedPower),
-        motorRpm_(motorRpm),
-        lineFrequency_(lineFrequency)
-    {};
+        efficiencyClass(efficiencyClass),
+        motorRatedPower(motorRatedPower),
+        motorRpm(motorRpm),
+        lineFrequency(lineFrequency)
+    {
+        if (this->efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
+            throw std::runtime_error("You cannot use SPECIFIED motor efficiency with MotorEfficiency25");
+        }
+    };
 
     /**
-     *
-     * @return Vector containing motor efficiency as %
+     * @return std::array<double, 5> containing motor efficiency as %
      */
-    std::vector<double> calculate();
+    std::array<double, 5> calculate();
 
 private:
+	const std::array< std::array<double, 4>, 5> determinePartialLoadCoefficients(std::size_t pole) const;
+
     /**
      * Efficiency class of motor
      */
-    Motor::EfficiencyClass efficiencyClass_;
+    const Motor::EfficiencyClass efficiencyClass;
     /**
      * Rated power of motor in hp
      */
-    double motorRatedPower_;
-    /**
-     * Rpm of motor
-     */
-    double motorRpm_;
+    const double motorRatedPower;
+    const double motorRpm;
     /**
      * Line Frequency of motor
      */
-    Motor::LineFrequency lineFrequency_;
+    const Motor::LineFrequency lineFrequency;
 };
 
 

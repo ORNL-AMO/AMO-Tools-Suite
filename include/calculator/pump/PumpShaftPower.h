@@ -24,11 +24,9 @@ public:
         double motorShaftPower,
         Pump::Drive drive
     ) :
-        motorShaftPower_(motorShaftPower),
-        drive_(drive)
+        motorShaftPower(motorShaftPower),
+        drive(drive)
     {}
-
-    PumpShaftPower() = default;
 
     /**
      * Calculates the pump shaft power
@@ -41,7 +39,7 @@ public:
      * @return double, motor shaft power in hp
      */
     double getMotorShaftPower() const {
-        return motorShaftPower_;
+        return motorShaftPower;
     }
 
     /**
@@ -49,7 +47,7 @@ public:
      * @param motorShaftPower double, in hp
      */
     void setMotorShaftPower(double motorShaftPower) {
-        motorShaftPower_ = motorShaftPower;
+        this->motorShaftPower = motorShaftPower;
     }
 
     /**
@@ -57,7 +55,7 @@ public:
      * @return Pump:Drive, type of drive
      */
     Pump::Drive getDrive() const {
-        return drive_;
+        return drive;
     }
 
     /**
@@ -65,13 +63,12 @@ public:
      * @param drive Pump:Drive, type of drive
      */
     void setDrive(Pump::Drive drive) {
-        drive_ = drive;
+        this->drive = drive;
     }
 
 private:
-    double motorShaftPower_ = 0.0;
-    Pump::Drive drive_ = Pump::Drive::DIRECT_DRIVE;
-    double pumpShaftPower_ = 0.0;
+    double motorShaftPower;
+    Pump::Drive drive;
 };
 
 #endif //AMO_LIBRARY_PUMPSHAFTPOWER_H

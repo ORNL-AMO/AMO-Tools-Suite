@@ -40,169 +40,147 @@ public:
             double coefficient,
             double specificGravity,
             double correctionFactor)
-            : draftPressure_(draftPressure),
-              openingArea_(openingArea),
-              leakageGasTemperature_(leakageGasTemperature),
-              ambientTemperature_(ambientTemperature),
-              coefficient_(coefficient),
-              specificGravity_(specificGravity),
-              correctionFactor_(correctionFactor)
+            : draftPressure(draftPressure),
+              openingArea(openingArea),
+              leakageGasTemperature(leakageGasTemperature),
+              ambientTemperature(ambientTemperature),
+              coefficient(coefficient),
+              specificGravity(specificGravity),
+              correctionFactor(correctionFactor)
     {
-        exfiltratedGasesHeatContent_ = 0.0;
+        exfiltratedGasesHeatContent = 0.0;
     }
 
     LeakageLosses() = default;
 
     /**
      * Gets the furnace draft pressure
-     *
      * @return double, draft pressure in inch W.C.
      */
     double getDraftPressure() const {
-        return draftPressure_;
+        return draftPressure;
     }
 
     /**
      * Sets the furnace draft pressure
-     *
      * @param draftPressure double, draft pressure in inch W.C.
-     *
      */
     void setDraftPressure(double draftPressure) {
-        draftPressure_ = draftPressure;
+        this->draftPressure = draftPressure;
     }
 
     /**
      * Gets the opening area
-     *
      * @return double, opening area in ft^2
      */
     double getOpeningArea() const {
-        return openingArea_;
+        return openingArea;
     }
 
     /**
      * Sets the opening area
-     *
      * @param openingArea double, opening area in ft^2
-     *
      */
     void setOpeningArea(double openingArea) {
-        openingArea_ = openingArea;
+        this->openingArea = openingArea;
     }
 
     /**
      * Gets the temperature of gases leaking from furnace
-     *
      * @return double, leakeage gas temperature in °F
      */
     double getLeakageGasTemperature() const {
-        return leakageGasTemperature_;
+        return leakageGasTemperature;
     }
 
     /**
      * Sets the temperature of gases leaking from furnace
-     *
      * @param leakageGasTemperature double, leakage gas temperature in °F
-     *
      */
     void setLeakageGasTemperature(double leakageGasTemperature) {
-        leakageGasTemperature_ = leakageGasTemperature;
+        this->leakageGasTemperature = leakageGasTemperature;
     }
 
     /**
      * Gets the ambient temperature
-     *
      * @return double, ambient temperature in °F
      */
     double getAmbientTemperature() const {
-        return ambientTemperature_;
+        return ambientTemperature;
     }
 
     /**
      * Sets the ambient temperature
-     *
      * @param ambientTemperature double, ambient temperature in °F
-     *
      */
     void setAmbientTemperature(double ambientTemperature) {
-        ambientTemperature_ = ambientTemperature;
+        this->ambientTemperature = ambientTemperature;
     }
 
     /**
      * Gets the coefficient
-     *
      * @return double, coefficient - unitless
      */
     double getCoefficient() const {
-        return coefficient_;
+        return coefficient;
     }
 
     /**
      * Sets the coefficient
-     *
      * @param coefficient double, coefficient - unitless
-     *
      */
     void setCoefficient(double coefficient) {
-        coefficient_ = coefficient;
+        this->coefficient = coefficient;
     }
 
     /**
-     * Gets teh specific gravity
-     *
+     * Gets the specific gravity
      * @return double, specific gravity - unitless
      */
     double getSpecificGravity() const {
-        return specificGravity_;
+        return specificGravity;
     }
 
     /**
      * Sets the specific gravity
-     *
      * @param specificGravity double, specific gravity - unitless
-     *
      */
     void setSpecificGravity(double specificGravity) {
-        specificGravity_ = specificGravity;
+        this->specificGravity = specificGravity;
     }
 
     /**
      * Gets the correction factor
-     *
      * @return double, correction factor - unitless
      */
     double getCorrectionFactor() const {
-        return correctionFactor_;
+        return correctionFactor;
     }
 
     /**
      * Sets the correction factor
-     *
      * @param correctionFactor double, correction factor - unitless
-     *
      */
     void setCorrectionFactor(double correctionFactor) {
-        correctionFactor_ = correctionFactor;
+        this->correctionFactor = correctionFactor;
     }
 
     /**
      * Gets the exfiltrated gases heat content
-     *
      * @return double, exfiltrated gases heat content in btu/hr
      */
     double getExfiltratedGasesHeatContent();
 
 private:
     // In values
-    double draftPressure_;
-    double openingArea_;
-    double leakageGasTemperature_;
-    double ambientTemperature_;
-    double coefficient_;
-    double specificGravity_;
-    double correctionFactor_;
+    double draftPressure;
+    double openingArea;
+    double leakageGasTemperature;
+    double ambientTemperature;
+    double coefficient;
+    double specificGravity;
+    double correctionFactor;
     // Out value
-    double exfiltratedGasesHeatContent_;
+    double exfiltratedGasesHeatContent;
 };
 #endif //AMO_SUITE_LEAKAGELOSSES_H

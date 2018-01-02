@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 3/13/17.
-//
-
 #ifndef AMO_TOOLS_SUITE_DB_H
 #define AMO_TOOLS_SUITE_DB_H
 #include <nan.h>
