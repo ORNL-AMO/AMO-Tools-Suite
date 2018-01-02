@@ -358,6 +358,7 @@ NAN_METHOD(deleteSolidLiquidFlueGasMaterial) {
         Local<String> SO2 = Nan::New<String>("SO2").ToLocalChecked();
         Local<String> O2 = Nan::New<String>("O2").ToLocalChecked();
         Local<String> heatingValue = Nan::New<String>("heatingValue").ToLocalChecked();
+	    Local<String> heatingValueVolume = Nan::New<String>("heatingValueVolume").ToLocalChecked();
         Local<String> specificGravity = Nan::New<String>("specificGravity").ToLocalChecked();
 
         auto const fgMaterials = sql->getGasFlueGasMaterials();
@@ -380,6 +381,7 @@ NAN_METHOD(deleteSolidLiquidFlueGasMaterial) {
             Nan::Set(obj, SO2, Nan::New<Number>(fgm.getGasByVol("SO2")));
             Nan::Set(obj, O2, Nan::New<Number>(fgm.getGasByVol("O2")));
             Nan::Set(obj, heatingValue, Nan::New<Number>(fgm.getHeatingValue()));
+            Nan::Set(obj, heatingValueVolume, Nan::New<Number>(fgm.getHeatingValueVolume()));
             Nan::Set(obj, specificGravity, Nan::New<Number>(fgm.getSpecificGravity()));
             Nan::Set(objs, i, obj);
         }
@@ -416,6 +418,7 @@ NAN_METHOD(deleteGasFlueGasMaterial) {
         Local<String> SO2 = Nan::New<String>("SO2").ToLocalChecked();
         Local<String> O2 = Nan::New<String>("O2").ToLocalChecked();
         Local<String> heatingValue = Nan::New<String>("heatingValue").ToLocalChecked();
+        Local<String> heatingValueVolume = Nan::New<String>("heatingValueVolume").ToLocalChecked();
         Local<String> specificGravity = Nan::New<String>("specificGravity").ToLocalChecked();
 
         auto const fgm = sql->getGasFlueGasMaterialById(static_cast<int>(info[0]->NumberValue()));
@@ -435,6 +438,7 @@ NAN_METHOD(deleteGasFlueGasMaterial) {
         Nan::Set(obj, SO2, Nan::New<Number>(fgm.getGasByVol("SO2")));
         Nan::Set(obj, O2, Nan::New<Number>(fgm.getGasByVol("O2")));
         Nan::Set(obj, heatingValue, Nan::New<Number>(fgm.getHeatingValue()));
+        Nan::Set(obj, heatingValueVolume, Nan::New<Number>(fgm.getHeatingValueVolume()));
         Nan::Set(obj, specificGravity, Nan::New<Number>(fgm.getSpecificGravity()));
 
         info.GetReturnValue().Set(obj);

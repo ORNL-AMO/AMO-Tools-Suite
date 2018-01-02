@@ -118,7 +118,9 @@ set(SOURCE_FILES
         src/calculator/util/CHP.cpp
         src/fans/Fan.cpp
         src/fans/FanShaftPower.cpp
-        src/fans/Planar.cpp src/fans/FanCurve.cpp)
+        src/fans/Planar.cpp
+        src/fans/FanCurve.cpp
+        src/calculator/util/CompressedAir.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -196,7 +198,9 @@ set(INCLUDE_FILES
         include/fans/FanShaftPower.h
         include/fans/Planar.h
         include/ssmt/Turbine.h
-        include/calculator/util/CHP.h include/fans/FanCurve.h)
+        include/calculator/util/CHP.h
+        include/fans/FanCurve.h
+        include/calculator/util/CompressedAir.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -240,7 +244,8 @@ set(TEST_FILES
         tests/Fan.unit.cpp
         tests/CHP.unit.cpp
         tests/CurveFitVal.unit.cpp
-        tests/MotorCurrent.unit.cpp)
+        tests/MotorCurrent.unit.cpp
+        tests/CompressedAir.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
