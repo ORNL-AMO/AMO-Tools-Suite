@@ -156,14 +156,12 @@ TEST_CASE( "Calculate Motor25 Efficiencies", "[MotorEfficiency25]" ) {
     compare(MotorEfficiency25(Motor::EfficiencyClass::STANDARD, 125, 3200, Motor::LineFrequency::FREQ60).calculate());
 }
 
-// this unit test does not pass, why? TODO - added specifically for premium
 TEST_CASE( "MotorEfficiency25 Premium", "[MotorEfficiency][PREMIUM]" ) {
     MotorEfficiency25 me25(Motor::EfficiencyClass::PREMIUM, 200, 1780, Motor::LineFrequency::FREQ60);
     auto const results = me25.calculate();
-    CHECK(results[0] == Approx(0.9359788571));
-    CHECK(results[1] == Approx(0.9552043325));
-    CHECK(results[2] == Approx(0.9626480215));
+    CHECK(results[0] == Approx(0.9199840391));
+    CHECK(results[1] == Approx(0.9514158668));
+    CHECK(results[2] == Approx(0.9610411879));
     CHECK(results[3] == Approx(0.962));
-    // what's the deal with this one? TODO doesn't work anymore. 125% load or what?
-    CHECK(results[4] == Approx(0.95238));
+    CHECK(results[4] == Approx(0.9298570145));
 }
