@@ -94,8 +94,7 @@ TEST_CASE( "Calculate Motor25 Efficiencies", "[MotorEfficiency25]" ) {
 }
 
 TEST_CASE( "MotorEfficiency25 Premium", "[MotorEfficiency][PREMIUM]" ) {
-    MotorEfficiency25 me25(Motor::EfficiencyClass::PREMIUM, 200, 1780, Motor::LineFrequency::FREQ60);
-    auto const results = me25.calculate();
+    auto results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 200).calculate25intervals();
     CHECK(results[0] == Approx(0.9199840391));
     CHECK(results[1] == Approx(0.9514158668));
     CHECK(results[2] == Approx(0.9610411879));

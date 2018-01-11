@@ -164,11 +164,10 @@ std::array<double, 6> EstimateFLA::calculate() {
     };
 
     if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
-        auto motorEfficiency = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT, specifiedEfficiency,
-                                               motorRatedPower, 1);
-        const double effValEE = motorEfficiency.calculate();
+        auto motorEfficiency = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower);
+        const double effValEE = motorEfficiency.calculate(1);
         motorEfficiency.setEfficiencyClass(Motor::EfficiencyClass::PREMIUM);
-        const double effValPE = motorEfficiency.calculate();
+        const double effValPE = motorEfficiency.calculate(1);
         const double val = eeFLAValue * effValEE / effValPE;
 	    estimatedFLA = plMultiplier[4];
         return {
