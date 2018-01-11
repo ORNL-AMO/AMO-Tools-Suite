@@ -101,12 +101,10 @@ double PSATResult::calculateOptimal() {
     optimal.motorShaftPower = optimalMotorShaftPower.calculate();
     OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.getSizeMargin());
     optimal.motorRatedPower = optimalMotorSize.calculate();
-    OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, fieldData.getMotorPower(), motor.getMotorRpm(),
-                                        motor.getLineFrequency(),
-                                        motor.getEfficiencyClass(), Motor::EfficiencyClass::ENERGY_EFFICIENT, motor.getSpecifiedEfficiency(),
-                                        motor.getMotorRatedVoltage(), motor.getFullLoadAmps(),
-                                        fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
-                                        fieldData.getMotorAmps(), optimal.motorShaftPower);
+    OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, motor.getMotorRpm(), motor.getLineFrequency(),
+                                        motor.getEfficiencyClass(), Motor::EfficiencyClass::ENERGY_EFFICIENT,
+                                        motor.getSpecifiedEfficiency(), motor.getMotorRatedVoltage(),
+                                        fieldData.getVoltage(), optimal.motorShaftPower);
     optimalMotorPower.calculate();
     optimal.motorCurrent = optimalMotorPower.getMotorCurrent();
     optimal.motorEfficiency = optimalMotorPower.getMotorEff();
@@ -157,12 +155,10 @@ double PSATResult::calculateModified() {
     modified.motorShaftPower = modifiedMotorShaftPower.calculate();
 
     modified.motorRatedPower = motor.getMotorRatedPower();
-    OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, fieldData.getMotorPower(), motor.getMotorRpm(),
-                                        motor.getLineFrequency(),
-                                        motor.getEfficiencyClass(), Motor::EfficiencyClass::PREMIUM, motor.getSpecifiedEfficiency(),
-                                        motor.getMotorRatedVoltage(), motor.getFullLoadAmps(),
-                                        fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
-                                        fieldData.getMotorAmps(), modified.motorShaftPower);
+    OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.getMotorRpm(), motor.getLineFrequency(),
+                                         motor.getEfficiencyClass(), Motor::EfficiencyClass::PREMIUM,
+                                         motor.getSpecifiedEfficiency(), motor.getMotorRatedVoltage(),
+                                         fieldData.getVoltage(), modified.motorShaftPower);
     modifiedMotorPower.calculate();
     modified.motorCurrent = modifiedMotorPower.getMotorCurrent();
     modified.motorEfficiency = modifiedMotorPower.getMotorEff();

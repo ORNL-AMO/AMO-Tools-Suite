@@ -217,7 +217,7 @@ std::array<double, 6> EstimateFLA::calculate() {
         {
             // SE is the nominal efficiency
             auto const effVal = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::STANDARD,
-                                                specifiedEfficiency, motorRatedPower, 1).calculate();
+                                                motorRatedPower).calculate(1, specifiedEfficiency);
 	        estimatedFLA = estimateFLA(seFLAValue * plMultiplier[4], effVal);
             return {
                     {
@@ -228,7 +228,7 @@ std::array<double, 6> EstimateFLA::calculate() {
         } else {
             /// EE is the nominal efficiency
             auto const effVal = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT,
-                                                specifiedEfficiency, motorRatedPower, 1).calculate();
+                                                motorRatedPower).calculate(1, specifiedEfficiency);
 	        estimatedFLA = estimateFLA(eeFLAValue * plMultiplier[4], effVal);
             return {
                     {
