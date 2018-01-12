@@ -20,8 +20,7 @@ TEST_CASE( "Fan", "[Fan]") {
 	FanInletFlange fanInletFlange(143.63, 32.63, 2, 123, 26.57);
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70, 78, 132.7, 26.57);
 
-	FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1, VelocityPressureTraverseData::TubeType::STYPE,
-	                          std::sqrt(0.762), traverseHoleData);
+	FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
 
 	traverseHoleData = {
 			{
@@ -36,14 +35,14 @@ TEST_CASE( "Fan", "[Fan]") {
 	};
 
 	std::vector<AddlTravPlane> addlTravPlanes({
-			                                          {143.63, 32.63, 123.0, 26.57, -17.0, VelocityPressureTraverseData::TubeType::STYPE, std::sqrt(0.762), traverseHoleData}
+			                                          {143.63, 32.63, 123.0, 26.57, -17.0, std::sqrt(0.762), traverseHoleData}
 	                                          });
 
 	InletMstPlane inletMstPlane(143.63, 32.63, 2, 123.0, 26.57, -17.55);
 	OutletMstPlane outletMstPlane(55.42, 60.49, 132.7, 26.57, 1.8);
 
 	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
-	                           outletMstPlane, false, false, 0, 0.627, true);
+	                           outletMstPlane, false, 0, 0.627, true);
 
 	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547, BaseGasDensity::GasType::AIR);
 

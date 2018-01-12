@@ -6,19 +6,11 @@
 
 // to be inherited by planes 3 and 3a, 3b
 class VelocityPressureTraverseData {
-public:
-	enum class TubeType {
-		STANDARD,
-		STYPE
-	};
-
 protected:
 
 	// protected constructor to be used only during the construction of its derived classes
-	VelocityPressureTraverseData(TubeType pitotTubeType, double pitotTubeCoefficient,
-	                             std::vector< std::vector< double > > & traverseHoleData);
+	VelocityPressureTraverseData(double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
 
-	const TubeType pitotTubeType;
 	const double pitotTubeCoefficient;
 	double pv3 = 0, percent75Rule = 0;
 
@@ -70,31 +62,28 @@ public:
 class FlowTraverse : public Planar, public VelocityPressureTraverseData {
 public:
 	FlowTraverse(double circularDuctDiameter, double tdx, double pbx,
-	             double psx, TubeType tubeType, double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > & traverseHoleData);
+	             double psx, double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
 
 	FlowTraverse(double rectLength, double rectWidth, double tdx,
-	             double pbx, double psx, TubeType tubeType, double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > & traverseHoleData);
+	             double pbx, double psx, double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
 
 	FlowTraverse(double rectLength, double rectWidth, unsigned noInletBoxes,
-	             double tdx, double pbx, double psx, TubeType tubeType,
-	             double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
+	             double tdx, double pbx, double psx, double pitotTubeCoefficient,
+	             std::vector< std::vector< double > > & traverseHoleData);
 };
 
 class AddlTravPlane : public Planar, public VelocityPressureTraverseData {
 public:
 	AddlTravPlane(double circularDuctDiameter, double tdx, double pbx,
-	              double psx, TubeType tubeType, double pitotTubeCoefficient,
-	              std::vector< std::vector< double > > & traverseHoleData);
+	              double psx, double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
 
 	AddlTravPlane(double rectLength, double rectWidth, double tdx,
-	              double pbx, double psx, TubeType tubeType, double pitotTubeCoefficient,
+	              double pbx, double psx, double pitotTubeCoefficient,
 	              std::vector< std::vector< double > > & traverseHoleData);
 
 	AddlTravPlane(double rectLength, double rectWidth, unsigned noInletBoxes,
-	              double tdx, double pbx, double psx, TubeType tubeType,
-	              double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
+	              double tdx, double pbx, double psx, double pitotTubeCoefficient,
+	              std::vector< std::vector< double > > & traverseHoleData);
 };
 
 class InletMstPlane : public Planar {
