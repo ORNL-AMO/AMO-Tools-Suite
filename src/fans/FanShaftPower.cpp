@@ -29,7 +29,7 @@ FanShaftPower::FanShaftPower(const bool fanEquippedWithVFD, const bool mainsVolt
 		  ratedHp(ratedHp), synchronousSpeed(synchronousSpeed), npv(npv), fla(fla), voltage(voltage),
 		  amps(amps), powerFactorAtLoad(powerFactorAtLoad), efficiencyMotor(efficiencyMotor / 100),
 		  efficiencyVFD(efficiencyVFD / 100), efficiencyBelt(efficiencyBelt / 100),
-		  powerFactor((voltage / npv) * (amps / fla)), driveType(driveType), sumSEF(sumSEF)
+		  loadFactor((voltage / npv) * (amps / fla)), driveType(driveType), sumSEF(sumSEF)
 {
 	hMo = (voltage * amps * std::sqrt(3) * powerFactorAtLoad * this->efficiencyMotor * this->efficiencyVFD) / 746.0;
 	hFi = hMo * this->efficiencyBelt;

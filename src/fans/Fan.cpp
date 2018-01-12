@@ -109,7 +109,7 @@ void PlaneData::establishFanInletOrOutletDensity(Planar & plane,
 			return;
 		}
 	}
-	throw std::runtime_error("density iteration did not converge");
+	throw std::runtime_error("In PlaneData::establishFanInletOrOutletDensity - density iteration did not converge");
 }
 
 void PlaneData::calculate(BaseGasDensity const & bgd) {
@@ -170,7 +170,6 @@ std::unordered_map<std::string, double> Fan::calculate() {
 	if (baseGasDensity.gasType == BaseGasDensity::GasType::AIR) isentropicExponent = 1.4;
 
 	// TODO pbx = barometric pressure, what to do if barometric pressure does vary between planes ? pg 61
-	// TODO the calculation of z returns 0.430 instead of 0.03515
 	auto const z = ((isentropicExponent - 1) / isentropicExponent)
 	         * ((6362 * fanShaftPower.getFanShaftPower() / planeData.fanInletFlange.gasVolumeFlowRate)
 	            / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.pbx));
@@ -253,58 +252,6 @@ double Fan::calculateCompressibilityFactor(const double x, const double z, const
 	}
 	throw std::runtime_error("compressibility factor ratio iteration did not converge");
 }
-
-// hard coded numbers for the sake of testing the convergence algorithm
-//	void PlaneData::calculate(BaseGasDensity const & bgd) {
-//		auto const calcDensity = [&bgd] (Planar const & plane, const double psx) {
-//			return bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx) / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
-//		};
-//
-//		flowTraverse.gasDensity = 0.0546;
-//		for (auto & p : addlTravPlanes) {
-//			p.gasDensity = 0.0548;
-//		}
-//		inletMstPlane.gasDensity = 0.0547;
-//		outletMstPlane.gasDensity = 0.0568;
-//
-//		flowTraverse.gasVelocity = 4063.5;
-//		flowTraverse.gasVolumeFlowRate = 132226;
-//
-//		auto mTotal = 13692;
-//		for (auto & plane : addlTravPlanes) {
-//			plane.gasVelocity = 3628.5;
-//			plane.gasVolumeFlowRate = 118073;
-////			mTotal += plane.gasDensity * plane.gasVolumeFlowRate;
-//		}
-//
-//		inletMstPlane.gasVolumeFlowRate = 250276;
-//		inletMstPlane.gasVelocity = 3846;
-//		inletMstPlane.gasVelocityPressure = 0.674;
-//		inletMstPlane.gasTotalPressure = -16.88;
-//
-//		// step 7
-//		fanInletFlange.gasTotalPressure = -16.88;
-//
-//		// steps 8 - 13
-//		establishFanInletOrOutletDensity(fanInletFlange, calcDensity, mTotal, inletMstPlane.gasDensity);
-//
-//
-//		// calculating plane 2 inlet density and pressure
-//		outletMstPlane.gasVolumeFlowRate = 240912;
-//		outletMstPlane.gasVelocity = 10348;
-//		outletMstPlane.gasVelocityPressure = 5.067;
-//		outletMstPlane.gasTotalPressure = 6.867;
-//
-//		// step 7
-//		fanOrEvaseOutletFlange.gasTotalPressure = outletMstPlane.gasTotalPressure;
-//		fanOrEvaseOutletFlange.gasTotalPressure +=
-//				(plane5upstreamOfPlane2) ? -totalPressureLossBtwnPlanes2and5 : totalPressureLossBtwnPlanes2and5;
-//
-//		// step 8 - iteration
-//		establishFanInletOrOutletDensity(fanOrEvaseOutletFlange, calcDensity, mTotal, outletMstPlane.gasDensity);
-//
-//		auto blah = "blah";
-//	}
 
 Fan::Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity,
          FanShaftPower & fanShaftPower)
