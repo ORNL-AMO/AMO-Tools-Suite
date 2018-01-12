@@ -46,17 +46,17 @@ public:
     *
     */
     MotorShaftPower(
-		double motorRatedPower,
-		double motorMeasuredPower,
-		int motorRPM,
-		Motor::LineFrequency lineFrequency,
-		Motor::EfficiencyClass efficiencyClass,
-		double specifiedEfficiency,
-		double ratedVoltage,
-		double fullLoadAmps,
-		double fieldVoltage,
-		FieldData::LoadEstimationMethod loadEstimationMethod,
-		double fieldCurrent
+		const double motorRatedPower,
+		const double motorMeasuredPower,
+		const double motorRPM,
+		const Motor::LineFrequency lineFrequency,
+		const Motor::EfficiencyClass efficiencyClass,
+		const double specifiedEfficiency,
+		const double ratedVoltage,
+		const double fullLoadAmps,
+		const double fieldVoltage,
+		const FieldData::LoadEstimationMethod loadEstimationMethod,
+		const double fieldCurrent
 	) :
 		motorRatedPower(motorRatedPower),
 		fieldPower(motorMeasuredPower),
@@ -121,48 +121,22 @@ public:
     double tempLoadFraction = 0.01;
 	///double, power in hp
     double power = 0.0;
-	///double, power in hp
-	double powerE1 = 0.0;
-	///double, power in hp
-	double powerE2 = 0.0;
-	///double, line frequency in Hz
-    double lf1 = 0.0;
-	///double, line frequency in Hz
-	double lf2 = 0.0;
 	///double efficiency in %
     double eff = 0.0;
-	///double efficiency in %
-	double eff1 = 0.0;
-	///double efficiency in %
-	double eff2 = 0.0;
 	///double, current in A
     double current = 0.0;
-	///double, current in A
-	double current1 = 0.0;
-	///double, current in A
-	double current2 = 0.0;
 	///double, power factor - unitless
     double pf = 0.0;
-	///double, power factor - unitless
-	double pf1 = 0.0;
-	///double, power factor - unitless
-	double pf2 = 0.0;
 	///double, estimated full load amps in A
-    double estimatedFLA;
+    double estimatedFLA = 0;
 
 private:
-    double motorRatedPower = 0.0;
-    double fieldPower = 0.0;
-    int motorRPM = 0;
+    double motorRatedPower, fieldPower, motorRPM;
     Motor::LineFrequency lineFrequency;
-    double ratedVoltage = 0.0;
-    double fullLoadAmps = 0.0;
-    double fieldVoltage = 0.0;
+    double ratedVoltage, fullLoadAmps, fieldVoltage;
     Motor::EfficiencyClass efficiencyClass;
 
-    double specifiedEfficiency;
-    double motorShaftPower = 0.0;
-    double fieldCurrent = 0.0;
+    double specifiedEfficiency, motorShaftPower = 0.0, fieldCurrent;
     FieldData::LoadEstimationMethod loadEstimationMethod;
 };
 

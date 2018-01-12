@@ -65,12 +65,10 @@ set(SOURCE_FILES
         src/calculator/pump/FluidPower.cpp
         src/calculator/motor/MotorCurrent.cpp
         src/calculator/motor/MotorEfficiency.cpp
-        src/calculator/motor/MotorEfficiency25.cpp
         src/calculator/motor/MotorPower.cpp
         src/calculator/motor/MotorPowerFactor.cpp
         src/calculator/motor/MotorShaftPower.cpp
         src/calculator/pump/OptimalDeviationFactor.cpp
-        src/calculator/motor/OptimalMotorCurrent.cpp
         src/calculator/motor/OptimalMotorPower.cpp
         src/calculator/motor/OptimalMotorShaftPower.cpp
         src/calculator/motor/OptimalMotorSize.cpp
@@ -137,12 +135,10 @@ set(INCLUDE_FILES
         include/calculator/pump/FluidPower.h
         include/calculator/motor/MotorCurrent.h
         include/calculator/motor/MotorEfficiency.h
-        include/calculator/motor/MotorEfficiency25.h
         include/calculator/motor/MotorPower.h
         include/calculator/motor/MotorPowerFactor.h
         include/calculator/motor/MotorShaftPower.h
         include/calculator/pump/OptimalDeviationFactor.h
-        include/calculator/motor/OptimalMotorCurrent.h
         include/calculator/motor/OptimalMotorPower.h
         include/calculator/motor/OptimalMotorShaftPower.h
         include/calculator/motor/OptimalMotorSize.h
@@ -247,7 +243,10 @@ set(TEST_FILES
         tests/Turbine.unit.cpp
         tests/Fan.unit.cpp
         tests/CHP.unit.cpp
-        tests/CompressedAir.unit.cpp)
+        tests/CurveFitVal.unit.cpp
+        tests/MotorCurrent.unit.cpp
+        tests/CompressedAir.unit.cpp
+        )
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

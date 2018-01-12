@@ -479,21 +479,20 @@ NAN_METHOD(motorPerformance) {
     double efficiency = Get("efficiency");
     double motor_rated_power = Get("motor_rated_power");
     double load_factor = Get("load_factor");
-    MotorEfficiency mef(l, motor_rated_speed, efficiencyClass, efficiency, motor_rated_power, load_factor);
-    double mefVal = mef.calculate();
+    MotorEfficiency mef(l, motor_rated_speed, efficiencyClass, motor_rated_power);
+    double mefVal = mef.calculate(load_factor, efficiency);
     SetR("efficiency", mefVal * 100);
 
     double motor_rated_voltage = Get("motor_rated_voltage");
     double fla = Get("motor_rated_fla");
-    MotorCurrent mc(motor_rated_power, motor_rated_speed, l, efficiencyClass, efficiency, load_factor, motor_rated_voltage, fla);
-    double mcVal = mc.calculate();
+    MotorCurrent mc(motor_rated_power, motor_rated_speed, l, efficiencyClass, efficiency, load_factor, motor_rated_voltage);
+    double mcVal = mc.calculateCurrent(fla);
     SetR("motor_current", mcVal/fla * 100);
 
     MotorPowerFactor motorPowerFactor(motor_rated_power, load_factor, mcVal, mefVal, motor_rated_voltage);
     SetR("motor_power_factor", motorPowerFactor.calculate() * 100);
 
     info.GetReturnValue().Set(r);
-
 }
 /**
  * Constructor
@@ -541,7 +540,7 @@ NAN_METHOD(nema) {
     double efficiency = Get("efficiency");
     double motor_rated_power = Get("motor_rated_power");
     double load_factor = Get("load_factor");
-    info.GetReturnValue().Set(MotorEfficiency(l, motor_rated_speed, efficiencyClass, efficiency, motor_rated_power,load_factor).calculate()*100);
+    info.GetReturnValue().Set(MotorEfficiency(l, motor_rated_speed, efficiencyClass, motor_rated_power).calculate(load_factor, efficiency)*100);
 }
 
 

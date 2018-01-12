@@ -14,6 +14,8 @@
 #include <array>
 #include "psat/Motor.h"
 #include "psat/FieldData.h"
+#include <exception>
+#include <stdexcept>
 
 class MotorEfficiency {
 public:
@@ -22,31 +24,33 @@ public:
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      * @param motorRpm double, RPM of motor
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
-     * @param specifiedEfficiency double, specified efficiency as %
      * @param motorRatedPower double, rated power of motor in hp
-     * @param loadFactor double, load factor - unitless
      */
     MotorEfficiency(
         Motor::LineFrequency lineFrequency,
         double motorRpm,
         Motor::EfficiencyClass efficiencyClass,
-        double specifiedEfficiency,
-        double motorRatedPower,
-        double loadFactor
+        double motorRatedPower
     ) :
         lineFrequency(lineFrequency),
         motorRpm(motorRpm),
         efficiencyClass(efficiencyClass),
-        specifiedEfficiency(specifiedEfficiency),
-        motorRatedPower(motorRatedPower),
-        loadFactor(loadFactor)
+        motorRatedPower(motorRatedPower)
     {};
 
     /**
      * Calculates the motor efficiency
+     * @param loadFactor double, load factor - unitless ratio
+     * @param specifiedEfficiency, efficiency of SPECIFIED efficiency class motor (optional)
      * @return double, motor efficiency as %
      */
-    double calculate();
+    double calculate(double loadFactor, double specifiedEfficiency = 0);
+
+    /**
+     * calculate25intervals(): Calculates the motor efficiency given at 25% intervals of load factor.
+     * @return std::array<double, 5> containing motor efficiency at 25% intervals of load factor
+     */
+	std::array<double, 5> calculate25intervals();
 
     /**
      * Gets the line frequency
@@ -188,24 +192,26 @@ public:
      * Gets the load factor
      * @return double, load factor - unitless
      */
-    double getLoadFactor() const {
-        return loadFactor;
-    }
+//    double getLoadFactor() const {
+//        return loadFactor;
+//    }
 
     /**
      * Sets the load factor
      * @param loadFactor double, load factor - unitless
      */
-    void setLoadFactor(double loadFactor) {
-        this->loadFactor = loadFactor;
-    }
+//    void setLoadFactor(double loadFactor) {
+//        this->loadFactor = loadFactor;
+//    }
 
 private:
+    const std::array< std::array<double, 4>, 5> determinePartialLoadCoefficients(std::size_t pole) const;
+
     Motor::LineFrequency lineFrequency;
     double motorEff = 0.0;
     double motorRpm;
     Motor::EfficiencyClass efficiencyClass;
-    double specifiedEfficiency;
+//    double specifiedEfficiency;
     double hp;
 //    FieldData::LoadEstimationMethod loadEstimationMethod;
     double motorKwh;
@@ -214,8 +220,7 @@ private:
     //double ratedVoltage;
     double actualEfficiency;
     double motorRatedPower;
-    double loadFactor = 0;
-    std::array<double, 5> motorEfficiency;
+//    double loadFactor = 0;
 };
 
 
