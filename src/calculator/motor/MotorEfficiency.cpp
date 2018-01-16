@@ -10,7 +10,7 @@
 
 #include <cmath>
 #include <calculator/motor/Poles.h>
-#include <unordered_map>
+#include <map>
 #include "calculator/motor/MotorEfficiency.h"
 #include "calculator/util/CurveFitVal.h"
 
@@ -386,42 +386,44 @@ std::array<double, 5> MotorEfficiency::calculate25intervals() {
 	};
 
 	if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
-		if (motorRatedPower > 500) {
-//            motorRatedPower = 500; don't like this so temporarily throwing an exception
-			throw std::runtime_error("Motor Rated Power must not be greater than 500 if Premium Efficiency is used");
+		if (motorRatedPower > 500.09 || motorRatedPower < 4.9) {
+			throw std::runtime_error("Premium Efficiency only supports motorRatedPower values between 5 and 500");
 		}
 		if (pole > 2) {
-//            pole = 2; same as above
-			throw std::runtime_error("The amount of poles in the motor must actually make sense for premium - TODO");
+			throw std::runtime_error("The amount of poles in the motor must actually make sense for premium");
 		}
-		static const std::unordered_map<double, std::array<double, 3>> fullLoadPremiumEfficiencies = {
+
+		static const std::map<double, const std::array<double, 3>> fullLoadPremiumEfficiencies = {
 				{
-						{5, {88.5, 89.5, 89.5}},
-						{7.5, {89.5, 91.7, 91}},
-						{10, {90.2, 91.7, 91}},
-						{15, {91, 92.4, 91.7}},
-						{20, {91, 93, 91.7}},
-						{25, {91.7, 93.6, 93}},
-						{30, {91.7, 93.6, 93}},
-						{40, {92.4, 94.1, 94.1}},
-						{50, {93, 94.5, 94.1}},
-						{60, {93.6, 95, 94.5}},
-						{75, {93.6, 95.4, 94.5}},
-						{100, {94.1, 95.4, 95}},
-						{125, {95, 95.4, 95}},
-						{150, {95, 95.8, 95.8}},
-						{200, {95.4, 96.2, 95.8}},
-						{250, {95.8, 96.2, 95.8}},
-						{300, {95.8, 96.2, 95.8}},
-						{350, {95.8, 96.2, 95.8}},
-						{400, {95.8, 96.2, 95.8}},
-						{450, {95.8, 96.2, 95.8}},
-						{500, {95.8, 96.2, 95.8}}
+						{5, {{88.5, 89.5, 89.5}}},
+						{7.5, {{89.5, 91.7, 91}}},
+						{10, {{90.2, 91.7, 91}}},
+						{15, {{91, 92.4, 91.7}}},
+						{20, {{91, 93, 91.7}}},
+						{25, {{91.7, 93.6, 93}}},
+						{30, {{91.7, 93.6, 93}}},
+						{40, {{92.4, 94.1, 94.1}}},
+						{50, {{93, 94.5, 94.1}}},
+						{60, {{93.6, 95, 94.5}}},
+						{75, {{93.6, 95.4, 94.5}}},
+						{100, {{94.1, 95.4, 95}}},
+						{125, {{95, 95.4, 95}}},
+						{150, {{95, 95.8, 95.8}}},
+						{200, {{95.4, 96.2, 95.8}}},
+						{250, {{95.8, 96.2, 95.8}}},
+						{300, {{95.8, 96.2, 95.8}}},
+						{350, {{95.8, 96.2, 95.8}}},
+						{400, {{95.8, 96.2, 95.8}}},
+						{450, {{95.8, 96.2, 95.8}}},
+						{500, {{95.8, 96.2, 95.8}}}
 				}
 		};
 
+		// we're allowing for a (huge) 0.1 margin of error here for doubles, because extreme precision isn't required
+		auto const it = fullLoadPremiumEfficiencies.upper_bound(motorRatedPower - 0.1);
+
 		// full load premium efficiency
-		auto const flPremiumEff = (fullLoadPremiumEfficiencies.at(motorRatedPower).at(pole) / 100) / effCalc(3);
+		auto const flPremiumEff = (it->second.at(pole) / 100) / effCalc(3);
 		return {
 				{
 						effCalc(0) * flPremiumEff, effCalc(1) * flPremiumEff, effCalc(2) * flPremiumEff,

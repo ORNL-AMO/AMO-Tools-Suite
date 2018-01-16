@@ -100,4 +100,7 @@ TEST_CASE( "MotorEfficiency25 Premium", "[MotorEfficiency][PREMIUM]" ) {
     CHECK(results[2] == Approx(0.9610411879));
     CHECK(results[3] == Approx(0.962));
     CHECK(results[4] == Approx(0.9298570145));
+
+	// simulating double precision issues
+    MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 5.000001).calculate25intervals();
 }
