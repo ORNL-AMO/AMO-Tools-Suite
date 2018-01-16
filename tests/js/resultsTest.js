@@ -13,7 +13,7 @@ test('psatExistingAndOptimal', function (t) {
     var inp = {
         'pump_style': 6, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
         'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 200,
-        'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
+        'motor_rated_speed': 1780, 'efficiency_class': 3, 'efficiency': 95, 'motor_rated_voltage': 460,
         'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
         'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
         'motor_field_voltage': 480
@@ -61,7 +61,7 @@ test('psatExisting', function (t) {
     var inp = {
         'pump_style': 6, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
         'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 200,
-        'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
+        'motor_rated_speed': 1780, 'efficiency_class': 3, 'efficiency': 95, 'motor_rated_voltage': 460,
         'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
         'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
         'motor_field_voltage': 480
@@ -87,7 +87,7 @@ test('psatOptimal', function (t) {
     var inp = {
         'pump_style': 6, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
         'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 200,
-        'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
+        'motor_rated_speed': 1780, 'efficiency_class': 3, 'efficiency': 95, 'motor_rated_voltage': 460,
         'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
         'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
         'motor_field_voltage': 480
@@ -113,7 +113,7 @@ test('psatModified', function (t) {
     var inp = {
         'pump_style': 6, 'pump_specified': null, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
         'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 100,
-        'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
+        'motor_rated_speed': 1780, 'efficiency_class': 3, 'efficiency': 95, 'motor_rated_voltage': 460,
         'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
         'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
         'motor_field_voltage': 480, 'baseline_pump_efficiency':80
@@ -139,7 +139,7 @@ test('psatModified2', function (t) {
     var inp = {
         'pump_style': 11, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
         'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 100,
-        'motor_rated_speed': 1780, 'efficiency_class': 2, 'efficiency': 95, 'motor_rated_voltage': 460,
+        'motor_rated_speed': 1780, 'efficiency_class': 3, 'efficiency': 95, 'motor_rated_voltage': 460,
         'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
         'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
         'motor_field_voltage': 480, 'baseline_pump_efficiency': 80

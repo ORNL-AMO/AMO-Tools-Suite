@@ -386,17 +386,17 @@ std::array<double, 5> MotorEfficiency::calculate25intervals() {
 	};
 
 	if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
-		if (motorRatedPower > 500.09 || motorRatedPower < 4.9) {
+		if (motorRatedPower > 500 || motorRatedPower < 5) {
 			throw std::runtime_error("Premium Efficiency only supports motorRatedPower values between 5 and 500");
 		}
 		if (pole > 2) {
 			throw std::runtime_error("The amount of poles in the motor must actually make sense for premium");
 		}
 
-		static const std::map<double, const std::array<double, 3>> fullLoadPremiumEfficiencies = {
+		static const std::map<int, const std::array<double, 3>> fullLoadPremiumEfficiencies = {
 				{
 						{5, {{88.5, 89.5, 89.5}}},
-						{7.5, {{89.5, 91.7, 91}}},
+						{7, {{89.5, 91.7, 91}}},
 						{10, {{90.2, 91.7, 91}}},
 						{15, {{91, 92.4, 91.7}}},
 						{20, {{91, 93, 91.7}}},
@@ -419,11 +419,24 @@ std::array<double, 5> MotorEfficiency::calculate25intervals() {
 				}
 		};
 
-		// we're allowing for a (huge) 0.1 margin of error here for doubles, because extreme precision isn't required
-		auto const it = fullLoadPremiumEfficiencies.upper_bound(motorRatedPower - 0.1);
+		auto const power = static_cast<int>(motorRatedPower + 0.00001);
+		auto const it = fullLoadPremiumEfficiencies.find(power);
 
-		// full load premium efficiency
-		auto const flPremiumEff = (it->second.at(pole) / 100) / effCalc(3);
+		double flPremiumEff = 0;
+
+		// do linear interpolation if the exact number isn't found
+		if (it == fullLoadPremiumEfficiencies.end()) {
+			auto const upper = fullLoadPremiumEfficiencies.upper_bound(power);
+			auto const lower = std::prev(upper);
+
+			auto const effUpper = (upper->second.at(pole) / 100) / effCalc(3);
+			auto const effLower = (lower->second.at(pole) / 100) / effCalc(3);
+
+			flPremiumEff = ((motorRatedPower - upper->first) / (upper->first - lower->first)) * (effUpper - effLower) + effLower;
+		} else {
+			flPremiumEff = (it->second.at(pole) / 100) / effCalc(3); // use exact number for efficiency calc
+		}
+
 		return {
 				{
 						effCalc(0) * flPremiumEff, effCalc(1) * flPremiumEff, effCalc(2) * flPremiumEff,
