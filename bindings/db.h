@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 3/13/17.
-//
-
 #ifndef AMO_TOOLS_SUITE_DB_H
 #define AMO_TOOLS_SUITE_DB_H
 #include <nan.h>
@@ -107,7 +103,7 @@ std::string GetStr(std::string const & nm) {
         auto const slcms = sql->getSolidLoadChargeMaterials();
 
         auto objs = Nan::New<v8::Array>();
-        for ( size_t i = 0; i < slcms.size(); i++ ) {
+        for ( std::size_t i = 0; i < slcms.size(); i++ ) {
             auto const & slcm = slcms[i];
             Local<Object> obj = Nan::New<Object>();
             Nan::Set(obj, id, Nan::New<Number>(slcm.getID()));
@@ -171,7 +167,7 @@ NAN_METHOD(deleteSolidLoadChargeMaterial) {
         auto const llcms = sql->getLiquidLoadChargeMaterials();
 
         auto objs = Nan::New<v8::Array>();
-        for ( size_t i = 0; i < llcms.size(); i++ ) {
+        for ( std::size_t i = 0; i < llcms.size(); i++ ) {
 	        auto const & llcm = llcms[i];
             Local<Object> obj = Nan::New<Object>();
             Nan::Set(obj, id, Nan::New<Number>(llcm.getID()));
@@ -232,7 +228,7 @@ NAN_METHOD(deleteLiquidLoadChargeMaterial) {
         auto const glcms = sql->getGasLoadChargeMaterials();
 
         auto objs = Nan::New<v8::Array>();
-        for ( size_t i = 0; i < glcms.size(); i++ ) {
+        for ( std::size_t i = 0; i < glcms.size(); i++ ) {
             auto const & glcm = glcms[i];
             Local<Object> obj = Nan::New<Object>();
             Nan::Set(obj, id, Nan::New<Number>(glcm.getID()));
@@ -287,7 +283,7 @@ NAN_METHOD(deleteGasLoadChargeMaterial) {
         auto const fgMaterials = sql->getSolidLiquidFlueGasMaterials();
 
         auto objs = Nan::New<v8::Array>();
-        for ( size_t i = 0; i < fgMaterials.size(); i++ ) {
+        for ( std::size_t i = 0; i < fgMaterials.size(); i++ ) {
             auto const & fgm = fgMaterials[i];
             Local<Object> obj = Nan::New<Object>();
             Nan::Set(obj, id, Nan::New<Number>(fgm.getID()));
@@ -362,12 +358,13 @@ NAN_METHOD(deleteSolidLiquidFlueGasMaterial) {
         Local<String> SO2 = Nan::New<String>("SO2").ToLocalChecked();
         Local<String> O2 = Nan::New<String>("O2").ToLocalChecked();
         Local<String> heatingValue = Nan::New<String>("heatingValue").ToLocalChecked();
+	    Local<String> heatingValueVolume = Nan::New<String>("heatingValueVolume").ToLocalChecked();
         Local<String> specificGravity = Nan::New<String>("specificGravity").ToLocalChecked();
 
         auto const fgMaterials = sql->getGasFlueGasMaterials();
 
         auto objs = Nan::New<v8::Array>();
-        for ( size_t i = 0; i < fgMaterials.size(); i++ ) {
+        for ( std::size_t i = 0; i < fgMaterials.size(); i++ ) {
             auto const & fgm = fgMaterials[i];
             Local<Object> obj = Nan::New<Object>();
             Nan::Set(obj, id, Nan::New<Number>(fgm.getID()));
@@ -384,6 +381,7 @@ NAN_METHOD(deleteSolidLiquidFlueGasMaterial) {
             Nan::Set(obj, SO2, Nan::New<Number>(fgm.getGasByVol("SO2")));
             Nan::Set(obj, O2, Nan::New<Number>(fgm.getGasByVol("O2")));
             Nan::Set(obj, heatingValue, Nan::New<Number>(fgm.getHeatingValue()));
+            Nan::Set(obj, heatingValueVolume, Nan::New<Number>(fgm.getHeatingValueVolume()));
             Nan::Set(obj, specificGravity, Nan::New<Number>(fgm.getSpecificGravity()));
             Nan::Set(objs, i, obj);
         }
@@ -420,6 +418,7 @@ NAN_METHOD(deleteGasFlueGasMaterial) {
         Local<String> SO2 = Nan::New<String>("SO2").ToLocalChecked();
         Local<String> O2 = Nan::New<String>("O2").ToLocalChecked();
         Local<String> heatingValue = Nan::New<String>("heatingValue").ToLocalChecked();
+        Local<String> heatingValueVolume = Nan::New<String>("heatingValueVolume").ToLocalChecked();
         Local<String> specificGravity = Nan::New<String>("specificGravity").ToLocalChecked();
 
         auto const fgm = sql->getGasFlueGasMaterialById(static_cast<int>(info[0]->NumberValue()));
@@ -439,6 +438,7 @@ NAN_METHOD(deleteGasFlueGasMaterial) {
         Nan::Set(obj, SO2, Nan::New<Number>(fgm.getGasByVol("SO2")));
         Nan::Set(obj, O2, Nan::New<Number>(fgm.getGasByVol("O2")));
         Nan::Set(obj, heatingValue, Nan::New<Number>(fgm.getHeatingValue()));
+        Nan::Set(obj, heatingValueVolume, Nan::New<Number>(fgm.getHeatingValueVolume()));
         Nan::Set(obj, specificGravity, Nan::New<Number>(fgm.getSpecificGravity()));
 
         info.GetReturnValue().Set(obj);
@@ -452,7 +452,7 @@ NAN_METHOD(selectAtmosphereSpecificHeat) {
     auto const aMaterials = sql->getAtmosphereSpecificHeat();
 
     auto objs = Nan::New<v8::Array>();
-    for ( size_t i = 0; i < aMaterials.size(); i++ ) {
+    for ( std::size_t i = 0; i < aMaterials.size(); i++ ) {
         auto const ash = aMaterials[i];
         Local<Object> obj = Nan::New<Object>();
         Nan::Set(obj, id, Nan::New<Number>(ash.getID()));
@@ -499,7 +499,7 @@ NAN_METHOD(selectWallLossesSurface) {
     auto const wlSurfaces = sql->getWallLossesSurface();
 
     auto objs = Nan::New<v8::Array>();
-    for ( size_t i = 0; i < wlSurfaces.size(); i++ ) {
+    for ( std::size_t i = 0; i < wlSurfaces.size(); i++ ) {
         auto const & wls = wlSurfaces[i];
         Local<Object> obj = Nan::New<Object>();
         Nan::Set(obj, id, Nan::New<Number>(wls.getID()));

@@ -23,52 +23,47 @@ public:
      * @param specifiedEfficiency double, Specified efficiency of motor when the efficiency class = SPECIFIED as %
      * @param loadFactor double, load factor - unitless
      * @param ratedVoltage double, Rated voltage of the motor in Volts
-     * @param fullLoadAmps double, Current at full load in Amps
-     * @return nothing
      */
     MotorCurrent(double motorRatedPower, double motorRPM, Motor::LineFrequency lineFrequency,
                  Motor::EfficiencyClass efficiencyClass, double specifiedEfficiency, double loadFactor,
-                 double ratedVoltage, double fullLoadAmps) :
-            motorRatedPower_(motorRatedPower), motorRPM_(motorRPM),
-            lineFrequency_(lineFrequency),
-            efficiencyClass_(efficiencyClass),
-            specifiedEfficiency_(specifiedEfficiency),
-            loadFactor_(loadFactor), ratedVoltage_(ratedVoltage),
-            fullLoadAmps_(fullLoadAmps) {};
+                 double ratedVoltage) :
+            motorRatedPower(motorRatedPower), motorRPM(motorRPM),
+            lineFrequency(lineFrequency),
+            efficiencyClass(efficiencyClass),
+            specifiedEfficiency(specifiedEfficiency),
+            loadFactor(loadFactor), ratedVoltage(ratedVoltage)
+    {};
 
     /**
      * calculates the motor current at a given load factor.
+     * @param fullLoadAmps double, Current at full load in Amps
      * @return double, motor current in amps
      */
-    double calculate();
+    double calculateCurrent(double fullLoadAmps);
+
+	/**
+	 * calculates the optimal motor current
+	 * @return double, optimal motor current in amps
+	 */
+    double calculateOptimalCurrent();
 
     /**
      * Gets the estimated full load amp
-     *
      * @return double, estimated current at full load in Amps
      */
     double getEstimatedFLA() {
-        return estimatedFLA_;
+        return estimatedFLA;
     }
 
-
 private:
-    /**
-     * Rated power of motor
-     */
-    double motorRatedPower_ = 0.0;
-    /**
-     * RPM of motor
-     */
-    double motorRPM_ = 0;
-    Motor::LineFrequency lineFrequency_;
-    Motor::EfficiencyClass efficiencyClass_;
-    double specifiedEfficiency_ = 0.0;
-    double loadFactor_ = 0.0;
-    double motorCurrent_ = 0.0;
-    double ratedVoltage_ = 0.0;
-    double estimatedFLA_ = 0.0;
-    double fullLoadAmps_ = 0.0;
+    double motorRatedPower;
+    double motorRPM;
+    Motor::LineFrequency lineFrequency;
+    Motor::EfficiencyClass efficiencyClass;
+    double specifiedEfficiency;
+    double loadFactor;
+    double ratedVoltage;
+    double estimatedFLA = 0.0;
 };
 
 #endif //AMO_LIBRARY_MOTORCURRENT_H

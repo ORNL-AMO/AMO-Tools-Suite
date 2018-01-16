@@ -19,14 +19,13 @@ public:
      * Constructor
      * @param fieldPower double, power from field data in hp
      * @param operatingFraction double, perating fraction(%).
-     * @return nothing
      */
     AnnualEnergy(
         double fieldPower,
         double operatingFraction
     ) :
-        fieldPower_(fieldPower),
-        operatingFraction_(operatingFraction)
+        fieldPower(fieldPower),
+        operatingFraction(operatingFraction)
     {}
 
     /**
@@ -40,16 +39,15 @@ public:
      * @return double, power from field data in hp
      */
     double getFieldPower() const {
-        return fieldPower_;
+        return fieldPower;
     }
 
     /**
      * Setter for field power
      * @param fieldPower double, power from field data in hp
-     * @return nothing
      */
     void setFieldPower(double fieldPower) {
-        fieldPower_ = fieldPower;
+        this->fieldPower = fieldPower;
     }
 
     /**
@@ -57,7 +55,7 @@ public:
      * @return double, operating fraction as %
      */
     double getOperatingFraction() const {
-        return operatingFraction_;
+        return operatingFraction;
     }
 
     /**
@@ -65,25 +63,24 @@ public:
      *
      * @param operatingFraction double, operating fraction as %
      *
-     * @return nothing
      */
     void setOperatingFraction(double operatingFraction) {
-        operatingFraction_ = operatingFraction;
+        this->operatingFraction = operatingFraction;
     }
 
 private:
     /**
      * Power from field data in kWe: kilo Watts electrical
      */
-    double fieldPower_;
+    double fieldPower;
     /**
      * Operating fraction
      */
-    double operatingFraction_;
+    double operatingFraction;
     /**
      * Annual energy in MWh/year
      */
-    double annualEnergy_;
+    double annualEnergy;
 };
 
 

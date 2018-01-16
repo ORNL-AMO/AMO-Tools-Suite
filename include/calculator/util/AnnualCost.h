@@ -19,14 +19,13 @@ public:
      * Constructor
      * @param annualEnergy double, annual energy consumption in MWh/year
      * @param kwhRate double, rate in $/kWh
-     * @return nothing
      */
     AnnualCost(
         double annualEnergy,
         double kwhRate
     ) :
-        annualEnergy_(annualEnergy),
-        kwhRate_(kwhRate)
+        annualEnergy(annualEnergy),
+        kwhRate(kwhRate)
     {}
 
     /**
@@ -40,16 +39,15 @@ public:
      * @return double, annual energy in MWh/year
      */
     double getAnnualEnergy() const {
-        return annualEnergy_;
+        return annualEnergy;
     }
 
     /**
      * Setter for annual energy
      * @param annualEnergy double, annual energy consumption in MWh/year
-     * @return nothing
      */
     void setAnnualEnergy(double annualEnergy) {
-        annualEnergy_ = annualEnergy;
+        this->annualEnergy = annualEnergy;
     }
 
     /**
@@ -57,31 +55,30 @@ public:
      * @return double, rate in $/kWh
      */
     double getKwhRate() const {
-        return kwhRate_;
+        return kwhRate;
     }
 
     /**
      * Setter for rate in $/kWh
      * @param kwhRate double, rate in $/kwh
-     * @return nothing
      */
     void setKwhRate(double kwhRate) {
-        kwhRate_ = kwhRate;
+        this->kwhRate = kwhRate;
     }
 
 private:
     /**
      * Annual Energy in MWh/year
      */
-    double annualEnergy_;
+    double annualEnergy;
     /**
      * Rate in $/kWh
      */
-    double kwhRate_;
+    double kwhRate;
     /**
      * Annual Energy Cost
      */
-    double annualEnergyCost_; // in $
+    double annualEnergyCost; // in $
 };
 
 #endif //AMO_LIBRARY_ANNUALCOST_H

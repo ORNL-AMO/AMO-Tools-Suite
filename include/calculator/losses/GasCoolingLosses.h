@@ -34,21 +34,20 @@ public:
 
     GasCoolingLosses(const double flowRate, const double initialTemperature, const double finalTemperature,
                      const double specificHeat, const double correctionFactor, const double gasDensity)
-            : flowRate_(flowRate),
-              initialTemperature_(initialTemperature),
-              finalTemperature_(finalTemperature),
-              specificHeat_(specificHeat),
-              correctionFactor_(correctionFactor),
-              gasDensity_(gasDensity) {}
+            : flowRate(flowRate),
+              initialTemperature(initialTemperature),
+              finalTemperature(finalTemperature),
+              specificHeat(specificHeat),
+              correctionFactor(correctionFactor),
+              gasDensity(gasDensity) {}
 
     /**
      * Gets the total heat loss
-     *
      * @return double, heat loss in btu/hr
      */
     double getHeatLoss() const;
 
 private:
-    const double flowRate_, initialTemperature_, finalTemperature_, specificHeat_, correctionFactor_, gasDensity_;
+    const double flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor, gasDensity;
 };
 #endif //AMO_SUITE_GASCOOLINGLOSSES_H

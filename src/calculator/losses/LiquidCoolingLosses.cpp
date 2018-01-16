@@ -9,6 +9,6 @@
 #include "calculator/losses/LiquidCoolingLosses.h"
 
 double LiquidCoolingLosses::getHeatLoss() {
-    heatLoss_ = (this->flowRate_ * 60.0 * this->density_) * this->specificHeat_ * (this->outletTemperature_ - this->initialTemperature_) * this->correctionFactor_;
-    return heatLoss_;
+    heatLoss = (this->flowRate * 60.0 * this->density) * this->specificHeat * (this->outletTemperature - this->initialTemperature) * this->correctionFactor;
+    return heatLoss;
 }

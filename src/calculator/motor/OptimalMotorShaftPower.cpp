@@ -12,14 +12,26 @@
 #include "calculator/motor/OptimalMotorShaftPower.h"
 
 double OptimalMotorShaftPower::calculate() {
-    if(drive_ == Pump::Drive::DIRECT_DRIVE){
-        motorShaftPower_ = pumpShaftPower_;
+    if(drive == Pump::Drive::DIRECT_DRIVE) {
+        motorShaftPower = pumpShaftPower;
+    } else if (drive == Pump::Drive::N_V_BELT_DRIVE) {
+        //Case of notched Belt Drive - see pumpshaftpower.cpp for more info
+        double BLPinPercentage = (0.7489574 * exp((pumpShaftPower) * -0.02067997) +
+                                  4.136368 * exp((pumpShaftPower) * -0.226025) + 4.162707) / 100;
+        double BLPinhp = BLPinPercentage * pumpShaftPower;
+        motorShaftPower = pumpShaftPower + (BLPinhp * 0.05 / 0.07);
+    } else if (drive == Pump::Drive::S_BELT_DRIVE) {
+        //Case of Synchronous Belt Drive - see pumpshaftpower.cpp for more info
+        double BLPinPercentage = (0.7489574 * exp((pumpShaftPower) * -0.02067997) +
+                                  4.136368 * exp((pumpShaftPower) * -0.226025) + 4.162707) / 100;
+        double BLPinhp = BLPinPercentage * pumpShaftPower;
+        motorShaftPower = pumpShaftPower + (BLPinhp * 0.02 / 0.07);
     } else {
-        //Case of Belt Drive
-        double BLPinPercentage = (0.7489574 * exp((pumpShaftPower_) * (-0.02067997)) +
-            4.136368 * exp((pumpShaftPower_) * (-0.226025)) + 4.162707) / 100;
-        double BLPinhp = BLPinPercentage * pumpShaftPower_;
-        motorShaftPower_ = pumpShaftPower_ + BLPinhp;
+        //Case of v- Belt Drive
+        double BLPinPercentage = (0.7489574 * exp((pumpShaftPower) * -0.02067997) +
+                                  4.136368 * exp((pumpShaftPower) * -0.226025) + 4.162707) / 100;
+        double BLPinhp = BLPinPercentage * pumpShaftPower;
+        motorShaftPower = pumpShaftPower + BLPinhp;
     }
-    return motorShaftPower_;
+    return motorShaftPower;
 }

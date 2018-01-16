@@ -15,6 +15,8 @@
 #ifndef AMO_LIBRARY_PUMP_H
 #define AMO_LIBRARY_PUMP_H
 
+#include <cmath>
+
 /**
  * Pump class
  * Contains all of the properties of a pump.
@@ -41,7 +43,9 @@ public:
     ///enum class for drive types
     enum class Drive {
         DIRECT_DRIVE,
-        BELT_DRIVE
+        V_BELT_DRIVE,
+        N_V_BELT_DRIVE,
+        S_BELT_DRIVE
     };
 
     ///enum class for speed types
@@ -60,7 +64,6 @@ public:
      * @param sg double, specific gravity- unitless
      * @param stageCount int, the number of pump stages
      * @param speed Speed, type of pump speed from either fixed or not fixed.
-     * @return nothing
      */
     Pump(
         Style style,
@@ -72,186 +75,156 @@ public:
         int stageCount,
         Speed speed
     ) :
-        style_(style),
-        achievableEfficiency_(achievableEfficiency),
-        rpm_(rpm),
-        drive_(drive),
-        kviscosity_(kviscosity),
-        sg_(sg),
-        stageCount_(stageCount),
-        speed_(speed)
+        style(style),
+        achievableEfficiency(achievableEfficiency),
+        rpm(rpm),
+        drive(drive),
+        kviscosity(kviscosity),
+        specificGravity(sg),
+        stageCount(stageCount),
+        speed(speed)
     {};
 
     Pump() = default;
 
     /**
      * Get the style of the pump being used
-     *
      * @return Style, classification of style of pump
      */
     Style getStyle() {
-        return style_;
+        return style;
     }
 
     /**
      * Set the style of pump being used
-     *
      * @param style Style, classification of style of pump
-     *
-     * @return nothing
      */
     void setStyle(Style style) {
-        style_ = style;
+        this->style = style;
     }
 
     /**
      * Get the achievable efficiency of the pump at specified operating conditions
-     *
      * @return double, achievable efficiency as %
      */
     double getAchievableEfficiency(){
-        return achievableEfficiency_;
+        return achievableEfficiency;
     }
 
     /**
      * Set the achievable efficiency of the pump at specified operating conditions
-     *
      * @param achievableEfficiency double, achievable efficiency as %
-     *
-     * @return nothing
      */
     void setAchievableEfficiency(double achievableEfficiency){
-        achievableEfficiency_ = achievableEfficiency;
+        this->achievableEfficiency = achievableEfficiency;
     }
 
     /**
      * Get RPM of pump to define operation speed
-     *
      * @return int, motor RPM
      */
-    int getRpm();
+    int getRpm() {
+	    return static_cast<int>(std::round(rpm));
+    };
 
     /**
      * Set the RPM of pump to define operation speed
-     *
      * @param rpm double, motor RPM
-     *
-     * @return nothing
      */
     void setRpm(double rpm) {
-        rpm_ = rpm;
+        this->rpm = rpm;
     }
 
     /**
      * Get the type of drive the pump uses from either direct or belt drive
-     *
      * @return Drive, classification of drive type
      */
     Drive getDrive() {
-        return drive_;
+        return drive;
     }
 
     /**
      * Set the type of drive the pump uses from either direct or belt drive
-     *
      * @param drive Drive, classification of drive type
-     *
-     * @return nothing
      */
     void setDrive(Drive drive) {
-        drive_ = drive;
+        this->drive = drive;
     }
 
     /**
      * Get the kinematic viscosity of the fluid being pumped
-     *
      * @return double, kinematic viscosity in centistokes
      */
     double getKviscosity() {
-        return kviscosity_;
+        return kviscosity;
     }
 
     /**
      * Set the kinematic viscosity of the fluid being pumped
-     *
      * @param kviscosity double, kinematic viscosity in centistokes
-     *
-     * @return nothing
      */
     void setKviscosity_(double kviscosity) {
-        kviscosity_ = kviscosity;
+        this->kviscosity = kviscosity;
     }
 
     /**
      * Get the specific gravity
-     *
      * @return double, specific gravity - unitless
      */
-    double getSg() {
-        return sg_;
+    double getSpecificGravity() {
+        return specificGravity;
     }
 
     /**
      * Set the specific gravity
-     *
      * @param sg double, specific gravity - unitless
-     *
-     * @return nothing
      */
-    void setSg(double sg) {
-        sg_ = sg;
+    void setSpecificGravity(double sg) {
+        this->specificGravity = sg;
     }
 
     /**
      * Get number of pump stages
-     *
      * @return int, number of pump stages
      */
     int getStageCount() {
-        return stageCount_;
+        return stageCount;
     }
 
     /**
      * Set number of pump stages
-     *
      * @param stageCount int, number of pump stages
-     *
-     * @return nothing
      */
     void setStageCount(int stageCount) {
-        stageCount_ = stageCount;
+        this->stageCount = stageCount;
     }
 
     /**
      * Get the type of pump speed from either fixed or not fixed
-     *
      * @return Speed, classification of pump speed type
      */
     Speed getFixedSpeed(){
-        return speed_;
+        return speed;
     }
 
     /**
      * Set the type of pump speed from either fixed or not fixed
-     *
      * @param speed Speed, classification of pump speed type
-     *
-     * @return nothing
      */
     void setFixedSpeed_(Speed speed){
-        speed_ = speed;
+        this->speed = speed;
     };
 
 private:
 // Input values
-    Pump::Style style_;
-    double achievableEfficiency_;
-    double rpm_;
-    Pump::Drive drive_;
-    double kviscosity_;
-    double sg_;
-    int stageCount_;
-    Speed speed_;
+    Pump::Style style;
+    double achievableEfficiency;
+    double rpm;
+    Pump::Drive drive;
+    double kviscosity;
+    double specificGravity;
+    int stageCount;
+    Speed speed;
 };
 
 

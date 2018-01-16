@@ -23,7 +23,6 @@ public:
      * @param motorCurrent double, current of motor in A
      * @param motorEfficiency double, motor efficiency as %
      * @param ratedVoltage double, rated voltage as V
-     * @return nothing
      */
     MotorPowerFactor(
         double motorRatedPower,
@@ -32,11 +31,11 @@ public:
         double motorEfficiency,
         double ratedVoltage
     ) :
-        motorRatedPower_(motorRatedPower),
-        loadFactor_(loadFactor),
-        motorCurrent_(motorCurrent),
-        motorEfficiency_(motorEfficiency),
-        ratedVoltage_(ratedVoltage)
+        motorRatedPower(motorRatedPower),
+        loadFactor(loadFactor),
+        motorCurrent(motorCurrent),
+        motorEfficiency(motorEfficiency),
+        ratedVoltage(ratedVoltage)
     {}
 
     /**
@@ -51,7 +50,6 @@ public:
      * @param motorCurrent double, motor current in A
      * @param motorEfficiency double, motor efficiency as %
      * @param ratedVoltage double, rated voltage in V
-     * @return nothing
      */
 
     MotorPowerFactor(
@@ -65,99 +63,84 @@ public:
         double motorEfficiency,
         double ratedVoltage
     ) :
-        lineFrequency_(lineFrequency),
-        motorRpm_(motorRpm),
-        efficiencyClass_(efficiencyClass),
-        specifiedEfficiency_(specifiedEfficiency),
-        motorRatedPower_(motorRatedPower),
-        loadFactor_(loadFactor),
-        motorCurrent_(motorCurrent),
-        motorEfficiency_(motorEfficiency),
-        ratedVoltage_(ratedVoltage)
+        lineFrequency(lineFrequency),
+        motorRpm(motorRpm),
+        efficiencyClass(efficiencyClass),
+        specifiedEfficiency(specifiedEfficiency),
+        motorRatedPower(motorRatedPower),
+        loadFactor(loadFactor),
+        motorCurrent(motorCurrent),
+        motorEfficiency(motorEfficiency),
+        ratedVoltage(ratedVoltage)
     {};
 
     /**
      * Calculates the motor power factor
-     *
      * @return double, power factor - unitless
      */
     double calculate();
 
     /**
      * Gets the line frequency
-     *
      * @return Motor::LineFrequency, classification of line frequency in Hz
      */
     Motor::LineFrequency getLineFrequency() const {
-        return lineFrequency_;
+        return lineFrequency;
     }
 
     /**
      * Sets the line frequency
-     *
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
-     *
-     * @return nothing
      */
     void setLineFrequency(Motor::LineFrequency lineFrequency) {
-        lineFrequency_ = lineFrequency;
+        this->lineFrequency = lineFrequency;
     }
 
     /**
      * Gets the motor RPM
-     *
      * @return double, motor RPM
      */
     double getMotorRpm() const {
-        return motorRpm_;
+        return motorRpm;
     }
 
     /**
      * Sets the motor RPM
-     *
      * @param motorRpm double, RPM of motor
-     *
-     * @return nothing
      */
     void setMotorRpm(double motorRpm) {
-        motorRpm_ = motorRpm;
+        this->motorRpm = motorRpm;
     }
 
     /**
      * Gets the efficiency class
-     *
      * @return Motor::EfficiencyClass, efficiency class of motor
      */
     Motor::EfficiencyClass getEfficiencyClass() const {
-        return efficiencyClass_;
+        return efficiencyClass;
     }
 
     /**
      * Sets the efficiency class of motor
-     *
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
-     *
-     * @return nothing
      */
     void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) {
-        efficiencyClass_ = efficiencyClass;
+        this->efficiencyClass = efficiencyClass;
     }
 
-
 private:
-    Motor::LineFrequency lineFrequency_;
-    double motorRpm_;
-    Motor::EfficiencyClass efficiencyClass_;
-    double specifiedEfficiency_;
+    Motor::LineFrequency lineFrequency;
+    double motorRpm;
+    Motor::EfficiencyClass efficiencyClass;
+    double specifiedEfficiency;
     double motorKwInput =0.0;
     double motorkVA = 0.0;
 
-    double motorRatedPower_;
-    double loadFactor_;
-    double motorCurrent_;
-    double motorEfficiency_;
-    double ratedVoltage_;
-
+    double motorRatedPower;
+    double loadFactor;
+    double motorCurrent;
+    double motorEfficiency;
+    double ratedVoltage;
 };
 
 

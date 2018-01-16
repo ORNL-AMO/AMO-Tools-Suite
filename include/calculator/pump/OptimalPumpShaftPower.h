@@ -21,7 +21,6 @@ public:
      * @param head double, measured or required pump head in feet
      * @param specificGravity double, specific gravity - unitless
      * @param pumpEfficiency double, pump efficiency at the specified operating conditions as %
-     * @return nothing
      */
     OptimalPumpShaftPower(
         double flowRate,
@@ -29,10 +28,10 @@ public:
         double specificGravity,
         double pumpEfficiency
     ) :
-        flowRate_(flowRate),
-        head_(head),
-        specificGravity_(specificGravity),
-        pumpEfficiency_(pumpEfficiency)
+        flowRate(flowRate),
+        head(head),
+        specificGravity(specificGravity),
+        pumpEfficiency(pumpEfficiency)
     {}
 
     /**
@@ -48,7 +47,7 @@ public:
      * @return double, measured or required flow rate in gpm
      */
     double getFlowRate() const {
-        return flowRate_;
+        return flowRate;
     }
 
     /**
@@ -56,10 +55,9 @@ public:
      *
      * @param flowRate double, measured or required flow rate in gpm
      *
-     * @return nothing
      */
     void setFlowRate(double flowRate) {
-        flowRate_ = flowRate;
+        this->flowRate = flowRate;
     }
 
     /**
@@ -68,7 +66,7 @@ public:
      * @return double, mesured or required pump head in ft
      */
     double getHead() const {
-        return head_;
+        return head;
     }
 
     /**
@@ -76,10 +74,9 @@ public:
      *
      * @param head double, measured or required pump head in ft
      *
-     * @return nothing
      */
     void setHead(double head) {
-        head_ = head;
+        this->head = head;
     }
 
     /**
@@ -88,7 +85,7 @@ public:
      * @return double, specific gravity - unitless
      */
     double getSpecificGravity() const {
-        return specificGravity_;
+        return specificGravity;
     }
 
     /**
@@ -96,10 +93,9 @@ public:
      *
      * @param specificGravity double, specific gravity - unitless
      *
-     * @return nothing
      */
     void setSpecificGravity(double specificGravity) {
-        specificGravity_ = specificGravity;
+        this->specificGravity = specificGravity;
     }
 
     /**
@@ -108,7 +104,7 @@ public:
      * @return double, pump efficiency as %
      */
     double getPumpEfficiency() const {
-        return pumpEfficiency_;
+        return pumpEfficiency;
     }
 
     /**
@@ -116,17 +112,16 @@ public:
      *
      * @param pumpEfficiency double, pump efficiency as %
      *
-     * @return nothing
      */
     void setPumpEfficiency(double pumpEfficiency) {
-        pumpEfficiency_ = pumpEfficiency;
+        this->pumpEfficiency = pumpEfficiency;
     }
 
 private:
-    double flowRate_;
-    double head_;
-    double specificGravity_;
-    double pumpEfficiency_;
+    double flowRate;
+    double head;
+    double specificGravity;
+    double pumpEfficiency;
 };
 
 

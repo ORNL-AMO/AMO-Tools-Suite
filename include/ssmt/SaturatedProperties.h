@@ -22,19 +22,13 @@
 class SaturatedTemperature {
 public:
     /**
-     *
      * Constructor for the saturated temperature calculator
-     *
      * @param saturatedPressure double, saturated pressure in MPa
-     *
-     * @return nothing
-     *
      * */
     explicit SaturatedTemperature(double saturatedPressure)
             : saturatedPressure_(saturatedPressure) {}
     /**
      * Calculates the saturated temperature
-     *
      * @return double, saturated temperature in Kelvin
      */
     double calculate() const;
@@ -52,17 +46,12 @@ class SaturatedPressure {
 public:
     /**
      * Constructor for the saturated pressure calculator
-     *
      * @param saturatedTemperature double, saturated temperature in Kelvin
-     *
-     * @return nothing
-     *
      * */
     explicit SaturatedPressure(double saturatedTemperature) : saturatedTemperature_(saturatedTemperature) {}
 
     /**
      * Calculates the saturated pressure
-     *
      * @return double, saturated pressure in MPa
      */
     double calculate() const;
@@ -80,14 +69,9 @@ private:
 class SaturatedProperties {
 public:
     /**
-     *
      * Constructor for the saturated properties calculator
-     *
      * @param saturatedPressure double, saturated pressure in MPa
      * @param saturatedTemperature double, saturated temperature in Kelvin
-     *
-     * @return nothing
-     *
      * */
     SaturatedProperties(double saturatedPressure, double saturatedTemperature)
             : saturatedPressure_(saturatedPressure),

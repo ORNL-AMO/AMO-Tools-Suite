@@ -29,7 +29,6 @@ public:
 	 * @param powerFactor double, average power factor value - unitless
 	 * @param operatingTime double, percent operating time
 	 *
-	 * @return nothing
 	 */
 	AuxiliaryPower(const double motorPhase, const double supplyVoltage, const double avgCurrent,
 	               const double powerFactor, const double operatingTime) :
@@ -43,7 +42,7 @@ public:
 	/**
      * Calculates the auxiliary power used
      *
-     * @return double, auxiliary power used in kwh/cycle
+     * @return double, auxiliary power used in btu/hr
      */
 	double getPowerUsed() const;
 

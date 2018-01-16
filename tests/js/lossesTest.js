@@ -15,7 +15,7 @@ test('atmosphere', function (t) {
     };
 
     var res = bindings.atmosphere(inp);
-    t.equal(res, 31200.0, res + " != 31200.0");
+    t.equal(res, rnd(31200.0), res + " != 31200.0");
 });
 
 test('auxiliaryPower', function (t) {
@@ -27,23 +27,23 @@ test('auxiliaryPower', function (t) {
     };
 
     var res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(12.867405449429189), res + " != 12.867405449429189");
+    t.equal(rnd(res), rnd(43905.3405494047));
 
     inp.supplyVoltage = 510;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(14.266036476541055), res + " != 14.266036476541055");
+    t.equal(rnd(res), rnd(48677.66017434));
 
     inp.avgCurrent = 25;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(18.771100627027707), res + " != 18.771100627027707");
+    t.equal(rnd(res), rnd(64049.5528609737));
 
     inp.powerFactor = 0.55;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(12.146006288076753), res + " != 12.146006288076753");
+    t.equal(rnd(res), rnd(41443.8283218065));
 
     inp.operatingTime = 75;
     res = bindings.auxiliaryPowerLoss(inp);
-    t.equal(rnd(res), rnd(9.109504716057565), res + " != 9.109504716057565");
+    t.equal(rnd(res), rnd(31082.8712413549));
 });
 
 test('fixtureLosses', function (t) {
@@ -55,16 +55,16 @@ test('fixtureLosses', function (t) {
     };
 
     var res = bindings.fixtureLosses(inp);
-    t.equal(res, 228750.0, res + " != 228750.0");
+    t.equal(res, rnd(228750.0), res + " != 228750.0");
 });
 
 test('flueGasByVolume', function (t) {
-    t.plan(5);
+    t.plan(6);
     t.type(bindings.flueGasLossesByVolume, 'function');
     var inp = {
-        flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, substance: 'test substance',
-        CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0,
-        O2: 0
+        flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 125,
+        substance: 'test substance', CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29,
+        H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     };
 
     var res = bindings.flueGasLossesByVolume(inp);
@@ -77,8 +77,9 @@ test('flueGasByVolume', function (t) {
     };
 
     t.type(bindings.flueGasByVolumeCalculateHeatingValue, 'function');
-    res = bindings.flueGasByVolumeCalculateHeatingValue(inp)
+    res = bindings.flueGasByVolumeCalculateHeatingValue(inp);
     t.equal(rnd(res.heatingValue), rnd(22630.355481));
+    t.equal(rnd(res.heatingValueVolume), rnd(1019.664897));
     t.equal(rnd(res.specificGravity), rnd(0.631783));
 });
 
@@ -103,56 +104,86 @@ test('flueGasByMass', function (t) {
 
     res = bindings.flueGasByMassCalculateHeatingValue(inp)
     t.equal(rnd(res), rnd(13877.969543))
-
 });
 
-test('flueGasLossesByVolumeGivenO2', function (t) {
-    t.plan(7);
-    t.type(bindings.flueGasLossesByVolumeGivenO2, 'function');
+test('flueGasCalculateExcessAir', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasCalculateExcessAir, 'function');
     var inp = {
-        flueGasTemperature: 700, flueGasO2: 0.5, combustionAirTemperature: 125, substance: 'test substance',
-        CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0,
-        O2: 0
+        o2InFlueGas: 0.5, CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     };
 
-    var res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res['heatLoss'], 0.7758857340516403, res + ' != 0.7758857340516403');
-    t.equal(res['excessAir'], 2.3172209488353976, res + ' != 2.3172209488353976');
+    var res = bindings.flueGasCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(2.3172209488353976));
 
-    inp['flueGasO2'] = 3.0;
-    res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res['heatLoss'], 0.7622712144825897, res + ' != 0.7622712144825897');
-    t.equal(res['excessAir'], 15.52234414568954, res + ' != 15.52234414568954');
+    inp.o2InFlueGas = 3;
+    res = bindings.flueGasCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(15.52234414568954));
 
-    inp['flueGasO2'] = 7.0;
-    res = bindings.flueGasLossesByVolumeGivenO2(inp);
-    t.equal(res['heatLoss'], 0.731683496609056, res + ' != 0.731683496609056');
-    t.equal(res['excessAir'], 45.197503654937584, res + ' != 45.197503654937584');
+    inp.o2InFlueGas = 7;
+    res = bindings.flueGasCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(45.197503654937584));
 });
 
-test('flueGasLossesByMassGivenO2', function (t) {
-    t.plan(7);
-    t.type(bindings.flueGasLossesByMassGivenO2, 'function');
-
+test('flueGasCalculateO2', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasCalculateO2, 'function');
     var inp = {
-        flueGasTemperature: 700, flueGasO2: 0.5, combustionAirTemperature: 125, fuelTemperature: 70,
-        moistureInAirComposition: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
-        carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5
+        excessAir: 2.3172, CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     };
 
-    var res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res['heatLoss'], 0.8297708723770466, res + ' != 0.8297708723770466');
-    t.equal(res['excessAir'], 2.29427816716376, res + ' != 2.29427816716376');
+    var res = bindings.flueGasCalculateO2(inp);
+    t.equal(rnd(res), rnd(0.49366866893805417));
 
-    inp['flueGasO2'] = 3.0;
-    res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res['heatLoss'], 0.8151987636583022, res + ' != 0.8151987636583022');
-    t.equal(res['excessAir'], 15.368657569989644, res + ' != 15.368657569989644');
+    inp.excessAir = 15.5223;
+    res = bindings.flueGasCalculateO2(inp);
+    t.equal(rnd(res), rnd(2.947933114396894));
 
-    inp['flueGasO2'] = 7.0;
-    res = bindings.flueGasLossesByMassGivenO2(inp);
-    t.equal(res['heatLoss'], 0.7824331921965915, res + ' != 0.7824331921965915');
-    t.equal(res['excessAir'], 44.75000361875009, res + ' != 44.75000361875009');
+    inp.excessAir = 45.197;
+    res = bindings.flueGasCalculateO2(inp);
+    t.equal(rnd(res), rnd(6.900194873506535));
+});
+
+test('flueGasByMassCalculateExcessAir', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasByMassCalculateExcessAir, 'function');
+
+    var inp = {
+        o2InFlueGas: 0.5, carbon: 1.0, hydrogen: 75.0, sulphur: 5.0, inertAsh: 1.0, o2: 9.0, moisture: 7.0,
+        nitrogen: 0.0, moistureInAirCombustion: 1.5
+    };
+
+    var res = bindings.flueGasByMassCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(2.29427816716376));
+
+    inp.o2InFlueGas = 3.0;
+    res = bindings.flueGasByMassCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(15.368657569989644));
+
+    inp.o2InFlueGas = 7.0;
+    res = bindings.flueGasByMassCalculateExcessAir(inp);
+    t.equal(rnd(res), rnd(44.75000361875009));
+});
+
+test('flueGasByMassCalculateO2', function (t) {
+    t.plan(4);
+    t.type(bindings.flueGasByMassCalculateO2, 'function');
+
+    var inp = {
+        excessAir: 2.29427817, carbon: 1.0, hydrogen: 75.0, sulphur: 5.0, inertAsh: 1.0, o2: 9.0, moisture: 7.0,
+        nitrogen: 0.0, moistureInAirCombustion: 1.5
+    };
+
+    var res = bindings.flueGasByMassCalculateO2(inp);
+    t.equal(rnd(res), rnd(0.49370451442164515));
+
+    inp.excessAir = 15.36865757;
+    res = bindings.flueGasByMassCalculateO2(inp);
+    t.equal(rnd(res), rnd(2.9440141519451095));
+
+    inp.excessAir = 44.75000362;
+    res = bindings.flueGasByMassCalculateO2(inp);
+    t.equal(rnd(res), rnd(6.875606606194022));
 });
 
 
@@ -166,12 +197,12 @@ test('gasCoolingLosses', function (t) {
     };
 
     var res = bindings.gasCoolingLosses(inp);
-    t.equal(res, 600000.0, res + ' != 600000.0');
+    t.equal(res, rnd(600000.0), res + ' != 600000.0');
 
     inp.flowRate = 600;
     inp.finalTemperature = 350;
     res = bindings.gasCoolingLosses(inp);
-    t.equal(res, 194400.0, res + ' != 194400.0');
+    t.equal(res, rnd(194400.0), res + ' != 194400.0');
 });
 
 test('gasLoadChargeMaterial', function (t) {
@@ -184,7 +215,7 @@ test('gasLoadChargeMaterial', function (t) {
     };
 
     var res = bindings.gasLoadChargeMaterial(inp);
-    t.equal(res, 383530.0, res + ' != 383530.0');
+    t.equal(res, rnd(383530.0), res + ' != 383530.0');
 });
 
 test('leakageLosses', function (t) {
@@ -210,7 +241,7 @@ test('liquidCoolingLosses', function (t) {
     };
 
     var res = bindings.liquidCoolingLosses(inp);
-    t.equal(res, 3792360.0, res + ' != 3792360.0');
+    t.equal(res, rnd(3792360.0), res + ' != 3792360.0');
 });
 
 test('liquidLoadChargeMaterial', function (t) {
@@ -225,7 +256,7 @@ test('liquidLoadChargeMaterial', function (t) {
 
 
     var res = bindings.liquidLoadChargeMaterial(inp);
-    t.equal(res, 364100.0, res + ' != 364100.0');
+    t.equal(res, rnd(364100.0), res + ' != 364100.0');
 });
 
 test('openingLosses - both circular and quad', function (t) {
@@ -233,7 +264,7 @@ test('openingLosses - both circular and quad', function (t) {
     t.type(bindings.openingLossesCircular, 'function');
 
     var inp = {
-        emissivity: 0.95, diameterLength: 12, thickness: 9, ratio: 1.33, ambientTemperature: 75,
+        emissivity: 0.95, diameter: 12, thickness: 9, ratio: 1.33, ambientTemperature: 75,
         insideTemperature: 1600, percentTimeOpen: 100, viewFactor: 0.70
     };
 
@@ -243,11 +274,39 @@ test('openingLosses - both circular and quad', function (t) {
 
 
     inp = {
-        emissivity: 0.95, length: 48, widthHeight: 15, thickness: 9, ratio: 1.67, ambientTemperature: 75,
+        emissivity: 0.95, length: 48, width: 15, thickness: 9, ratio: 1.67, ambientTemperature: 75,
         insideTemperature: 1600, percentTimeOpen: 20, viewFactor: 0.64
     };
     res = bindings.openingLossesQuad(inp);
     t.equal(rnd(res), rnd(18670.2258869289), res + ' != 18670.2258869289');
+});
+
+test('openingLosses - viewFactorCalculation', function (t) {
+    t.plan(4);
+    t.type(bindings.viewFactorCalculation, 'function');
+
+    var inp = {
+        openingShape: 0, // CIRCULAR
+        thickness: 3,
+        diameter: 5
+    };
+
+    var res = bindings.viewFactorCalculation(inp);
+    t.equal(rnd(res), rnd(0.624519890259));
+
+    inp = {
+        openingShape: 1, // RECTANGULAR
+        thickness: 2,
+        length: 10,
+        width: 5
+    };
+    res = bindings.viewFactorCalculation(inp);
+    t.equal(rnd(res), rnd(0.786933593749));
+
+    inp.thickness = 14.05;
+    inp.length = inp.width = 3;
+    res = bindings.viewFactorCalculation(inp);
+    t.equal(rnd(res), rnd(0.2044991347));
 });
 
 test('slagOtherMaterialLosses', function (t) {
@@ -259,13 +318,13 @@ test('slagOtherMaterialLosses', function (t) {
     };
 
     var res = bindings.slagOtherMaterialLosses(inp);
-    t.equal(res, 37.185, res + ' != 37.185');
+    t.equal(res, rnd(37.185), res + ' != 37.185');
 
     inp = {
         weight: 10, inletTemperature: 725, outletTemperature: 850, specificHeat: 0.033, correctionFactor: 0.8
     };
     res = bindings.slagOtherMaterialLosses(inp);
-    t.equal(res, 33.0, res + ' != 33.0');
+    t.equal(res, rnd(33.0), res + ' != 33.0');
 });
 
 test('solidLoadChargeMaterial', function (t) {
@@ -280,7 +339,7 @@ test('solidLoadChargeMaterial', function (t) {
     };
 
     var res = bindings.solidLoadChargeMaterial(inp);
-    t.equal(res, 3204310.28, res + ' != 3204310.28');
+    t.equal(res, rnd(3204310.28), res + ' != 3204310.28');
 });
 
 test('wallLosses', function (t) {
@@ -293,10 +352,10 @@ test('wallLosses', function (t) {
     };
 
     var res = bindings.wallLosses(inp);
-    t.equal(rnd(res), rnd(399122.25367509428), res + ' != 399122.25367509428');
+    t.equal(rnd(res), rnd(404627.551342992), res + ' != 404627.551342992');
 });
 
-test('wallLosses', function (t) {
+test('waterCoolingLosses', function (t) {
     t.plan(2);
     t.type(bindings.waterCoolingLosses, 'function');
 

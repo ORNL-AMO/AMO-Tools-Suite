@@ -4,7 +4,6 @@
  *
  * @author Preston Shires (pshires)
  * @bug No known bugs.
- *
  */
 
 #ifndef AMO_TOOLS_SUITE_HEADTOOL_H
@@ -44,14 +43,14 @@ protected:
 			const double dischargeGaugeElevation,
 			const double dischargeLineLossCoefficients
 	) :
-			specificGravity_(specificGravity),
-			flowRate_(flowRate),
-			suctionPipeDiameter_(suctionPipeDiameter),
-			suctionLineLossCoefficients_(suctionLineLossCoefficients),
-			dischargePipeDiameter_(dischargePipeDiameter),
-			dischargeGaugePressure_(dischargeGaugePressure),
-			dischargeGaugeElevation_(dischargeGaugeElevation),
-			dischargeLineLossCoefficients_(dischargeLineLossCoefficients)
+			specificGravity(specificGravity),
+			flowRate(flowRate),
+			suctionPipeDiameter(suctionPipeDiameter),
+			suctionLineLossCoefficients(suctionLineLossCoefficients),
+			dischargePipeDiameter(dischargePipeDiameter),
+			dischargeGaugePressure(dischargeGaugePressure),
+			dischargeGaugeElevation(dischargeGaugeElevation),
+			dischargeLineLossCoefficients(dischargeLineLossCoefficients)
 	{}
 
 	/**
@@ -69,38 +68,35 @@ protected:
      *
      * @return double, velocity in ft/s
      */
-	double velocity(const double diameter, const double flow);
+	double velocity(double diameter, double flow);
 
 	/**
      * Calculates the velocity head
-     *
      * @param velocity const double, velocity in ft/s
      * @param gravity const double, gravity in ft/s^2
-     *
-     * @return nothing
      */
-	double velocityHead(const double velocity, const double gravity);
+	double velocityHead(double velocity, double gravity);
 
 	/// specific gravity - unitless
-	const double specificGravity_;
+	const double specificGravity;
 	/// flow rate in gpm
-	const double flowRate_;
-	/// suction pipe diamter in inches
-	const double suctionPipeDiameter_;
+	const double flowRate;
+	/// suction pipe diameter in inches
+	const double suctionPipeDiameter;
 	/// suction line loss coefficient - unitless
-	const double suctionLineLossCoefficients_;
+	const double suctionLineLossCoefficients;
 	/// discharge  pipe diameter in inches
-	const double dischargePipeDiameter_;
+	const double dischargePipeDiameter;
 	/// discharge gauge pressure in psi
-	const double dischargeGaugePressure_;
+	const double dischargeGaugePressure;
 	/// discharge gauge elevation in ft
-	const double dischargeGaugeElevation_;
+	const double dischargeGaugeElevation;
 	/// discharge line loss coefficients - unitless
-	const double dischargeLineLossCoefficients_;
+	const double dischargeLineLossCoefficients;
 	/// gravity constant
-	const double gravity_ = 32.1740;
+	const double gravity = 32.1740;
 	/// value of Pi
-	const double PI_ = 3.141592653589793238463;
+	const double PI = 3.141592653589793238463;
 };
 
 /**
@@ -147,19 +143,18 @@ public:
 			              dischargeGaugePressure,
 			              dischargeGaugeElevation,
 			              dischargeLineLossCoefficients),
-			suctionTankGasOverPressure_(suctionTankGasOverPressure),
-			suctionTankFluidSurfaceElevation_(suctionTankFluidSurfaceElevation)
+			suctionTankGasOverPressure(suctionTankGasOverPressure),
+			suctionTankFluidSurfaceElevation(suctionTankFluidSurfaceElevation)
 	{}
 
 	/**
      * Calculates the operating pump head
-     *
      * @return unordered map with all the values calculated for operating pump head
      */
 	std::unordered_map<std::string, double> calculate() override;
 
 private:
-	const double suctionTankGasOverPressure_, suctionTankFluidSurfaceElevation_;
+	const double suctionTankGasOverPressure, suctionTankFluidSurfaceElevation;
 };
 
 /**
@@ -206,18 +201,17 @@ public:
 			              dischargeGaugePressure,
 			              dischargeGaugeElevation,
 			              dischargeLineLossCoefficients),
-			suctionGaugePressure_(suctionGaugePressure),
-			suctionGaugeElevation_(suctionGaugeElevation)
+			suctionGaugePressure(suctionGaugePressure),
+			suctionGaugeElevation(suctionGaugeElevation)
 	{}
-/**
+	/**
      * Calculates the operating pump head
-     *
      * @return unordered_map with internal values calculated
      */
 	std::unordered_map<std::string, double> calculate() override;
 
 private:
-	const double suctionGaugePressure_, suctionGaugeElevation_;
+	const double suctionGaugePressure, suctionGaugeElevation;
 };
 
 #endif //AMO_TOOLS_SUITE_HEADTOOL_H

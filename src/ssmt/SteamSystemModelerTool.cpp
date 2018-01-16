@@ -5,7 +5,7 @@
 // where t is temperature and p is pressure
 std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const double t, const double p) {
 
-	const std::array<double, 34> n = {
+	static const std::array<double, 34> n = {
 			{
 					0.14632971213167, -0.84548187169114, -0.37563603672040e1, 0.33855169168385e1, -0.95791963387872,
 					0.15772038513228, -0.16616417199501e-1, 0.81214629983568e-3, 0.28319080123804e-3, -0.60706301565874e-3,
@@ -18,14 +18,14 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
 			}
 	};
 
-	const std::array<int, 34> j = {
+	static const std::array<int, 34> j = {
 			{
 					-2, -1, 0, 1, 2, 3, 4, 5, -9, -7, -1, 0, 1, 3, -3, 0, 1, 3, 17, -4, 0, 6, -5, -2,
 					10, -8, -11, -6, -29, -31, -38, -39, -40, -41
 			}
 	};
 
-	const std::array<int, 34> i = {
+	static const std::array<int, 34> i = {
 			{
 					0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2,
 					3, 3, 3, 4, 4, 4, 5, 8, 8, 21, 23, 29, 30, 31, 32
@@ -39,7 +39,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
     double gibbsPi = 0;
     double gibbsT = 0;
 
-	for (size_t k = 0; k < n.size(); k++ ) {
+	for (std::size_t k = 0; k < n.size(); k++ ) {
 		gibbs += n[k] * pow((7.1 - reducedPressure), i[k]) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsPi += -n[k] * i[k] * pow((7.1 - reducedPressure), i[k] - 1) * pow((inversedReducedTemp - 1.222), j[k]);
 		gibbsT += n[k] * pow((7.1 - reducedPressure), i[k]) * j[k] * pow((inversedReducedTemp - 1.222), j[k] - 1);
@@ -61,16 +61,16 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
 // where t is temperature in K and p is pressure in MPa
 std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const double t, const double p) {
 
-	const std::array<double, 9> n0 = {
+	static const std::array<double, 9> n0 = {
 			{
 					-0.96927686500217E+01, 0.10086655968018E+02, -0.56087911283020E-02, 0.71452738081455E-01,
 					-0.40710498223928E+00,  0.14240819171444E+01, -0.43839511319450E+01, -0.28408632460772E+00, 0.21268463753307E-01
 			}
 	};
-	const std::array<double, 9> j0 = {{
+	static const std::array<double, 9> j0 = {{
 			0, 1, -5, -4, -3, -2, -1, 2, 3
 	}};
-	const std::array<double, 43> n1 = {
+	static const std::array<double, 43> n1 = {
 			{
 					-0.17731742473213E-02, -0.17834862292358E-01, -0.45996013696365E-01, -0.57581259083432E-01,
 					-0.50325278727930E-01, -0.33032641670203E-04, -0.18948987516315E-03, -0.39392777243355E-02,
@@ -85,13 +85,13 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
 					0.73087610595061E-28, 0.55414715350778E-16, -0.94369707241210E-06
 			}
 	};
-	const std::array<double, 43> j1 = {
+	static const std::array<double, 43> j1 = {
 			{
 					0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11,
 					25, 8, 36, 13, 4, 10, 14, 29, 50, 57, 20, 35, 48, 21, 53, 39, 26, 40, 58
 			}
 	};
-	const std::array<double, 43> i1 = {
+	static const std::array<double, 43> i1 = {
 			{
 					1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7,
 					8, 8, 9, 10, 10, 10, 16, 16, 18, 20, 20, 20, 21, 22, 23, 24, 24, 24
@@ -105,7 +105,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
 	double gibbsPi0 = 1 / reducedPressure;
 	double gibbsT0 = 0, gibbsTT0 = 0;
 
-	for (size_t k = 0; k < n0.size(); k++) {
+	for (std::size_t k = 0; k < n0.size(); k++) {
 		gibbs0 += n0[k] * std::pow(inverseReducedTemp, j0[k]);
 		gibbsT0 += n0[k] * j0[k] * std::pow(inverseReducedTemp, j0[k] - 1);
 		gibbsTT0 += n0[k] * j0[k] * (j0[k] - 1) * std::pow(inverseReducedTemp, j0[k] - 2);
@@ -115,7 +115,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
     double gibbsPi1 = 0;
     double gibbsT1 = 0;
 
-	for (size_t k = 0; k < n1.size(); k++) {
+	for (std::size_t k = 0; k < n1.size(); k++) {
 		gibbs1 += n1[k] * std::pow(reducedPressure, i1[k]) * std::pow((inverseReducedTemp - 0.5), j1[k]);
 		gibbsPi1 += n1[k] * i1[k] * std::pow(reducedPressure, i1[k] - 1) * std::pow((inverseReducedTemp - 0.5), j1[k]);
 		gibbsT1 += n1[k] * std::pow(reducedPressure, i1[k]) * j1[k] * std::pow((inverseReducedTemp - 0.5), j1[k] - 1);
@@ -149,7 +149,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 	auto testPressureB = region3propNew["pressure"];
 
 	double pressureNew = 0;
-	for (size_t i = 0; i < 4; i++) {
+	for (std::size_t i = 0; i < 4; i++) {
 		auto const densityNew = (densityA + densityB) / 2.0;
 		region3propNew = region3Density(densityNew, t);
 		pressureNew = region3propNew["pressure"];
@@ -164,7 +164,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 
 
 	// Uses Linear Interpolation
-	size_t counter = 0;
+	std::size_t counter = 0;
 	while ((std::abs(pressureNew - p) > 1e-10) && (counter++ < 50) && (testPressureA != testPressureB)) {
 		auto const densityNew = p * (densityA - densityB) / (testPressureA - testPressureB) + densityA - testPressureA * (densityA - densityB) / (testPressureA - testPressureB);
 		region3propNew = region3Density(densityNew, t);
@@ -181,7 +181,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 
 std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(const double d, const double t) {
 
-	const std::array<double, 40> n = {
+	static const std::array<double, 40> n = {
 			{
 					0.10658070028513E+01, -0.15732845290239E+02, 0.20944396974307E+02, -0.76867707878716E+01,
 					0.26185947787954E+01, -0.28080781148620E+01, 0.12053369696517E+01, -0.84566812812502E-02,
@@ -195,13 +195,13 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 					0.32308904703711E-02, 0.80964802996215E-04, -0.16557679795037E-03, -0.44923899061815E-04
 			}
 	};
-	const std::array<int, 40> j = {
+	static const std::array<int, 40> j = {
 			{
 					0, 0, 1, 2, 7, 10, 12, 23, 2, 6, 15, 17, 0, 2, 6, 7, 22, 26, 0, 2,
 					4, 16, 26, 0, 2, 4, 26, 1, 3, 26, 0, 2, 26, 2, 26, 2, 26, 0, 1, 26
 			}
 	};
-	const std::array<int, 40> i = {
+	static const std::array<int, 40> i = {
 			{
 					0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3,
 					3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 8, 9, 9, 10, 10, 11
@@ -214,7 +214,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 	auto helmholtzS = n[0] / reducedDensity;
 	double helmholtzT = 0;
 
-	for (size_t k = 1; k < n.size(); k++) {
+	for (std::size_t k = 1; k < n.size(); k++) {
 		helmholtz += n[k] * std::pow(reducedDensity, i[k]) * std::pow(inverseReducedTemp, j[k]);
 		helmholtzS += n[k] * i[k] * std::pow(reducedDensity, i[k] - 1.0) * std::pow(inverseReducedTemp, j[k]);
 		helmholtzT += n[k] * std::pow(reducedDensity, i[k]) * j[k] * std::pow(inverseReducedTemp, j[k] - 1);
@@ -279,11 +279,11 @@ int SteamSystemModelerTool::regionSelect(const double p, const double t) {
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pressure, const double enthalpy) {
-	const std::array<int, 20> I = {{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 4, 5, 6}};
+	static const std::array<int, 20> I = {{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 4, 5, 6}};
 
-	const std::array<int, 20> J = {{0, 1, 2, 6, 22, 32, 0, 1, 2, 3, 4, 10, 32, 10, 32, 10, 32, 32, 32, 32}};
+	static const std::array<int, 20> J = {{0, 1, 2, 6, 22, 32, 0, 1, 2, 3, 4, 10, 32, 10, 32, 10, 32, 32, 32, 32}};
 
-	const std::array<double, 20> n = {
+	static const std::array<double, 20> n = {
 			{
 					-0.23872489924521E+3, 0.40421188637945E+3, 0.11349746881718E+3, -0.58457616048039E+1, -0.15285482413140E-3,
 					-0.10866707695377E-5, -0.13391744872602E+2, 0.43211039183559E+2, -0.54010067170506E+2, 0.30535892203916E+2,
@@ -295,20 +295,20 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pres
 	auto const nu = enthalpy / 2500.0;
 	double temp = 0.0;
 
-	for (size_t i = 0; i < n.size(); i++) {
+	for (std::size_t i = 0; i < n.size(); i++) {
 		temp += n[i] * std::pow(pressure, I[i]) * std::pow((nu + 1), J[i]);
 	}
 	return temp;
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion2A(const double pressure, const double enthalpy) {
-    const std::array<int, 34> array0 = {
+	static const std::array<int, 34> array0 = {
 		    {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7}
     };
-    const std::array<int, 34> array1 = {
+	static const std::array<int, 34> array1 = {
 		    {0, 1, 2, 3, 7, 20, 0, 1, 2, 3, 7, 9, 11, 18, 44, 0, 2, 7, 36, 38, 40, 42, 44, 24, 44, 12, 32, 44, 32, 36, 42, 34, 44, 28}
     };
-    const std::array<double, 34> array2 = {
+	static const std::array<double, 34> array2 = {
 		    {
 				    0.10898952318288E+4, 0.84951654495535E+3, -0.10781748091826E+3, 0.33153654801263E+2, -0.74232016790248E+1,
 				    0.11765048724356E+2, 0.18445749355790E+1, -0.41792700549624E+1, 0.62478196935812E+1, -0.17344563108114E+2,
@@ -323,22 +323,22 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2A(const double pre
     double temperature = 0.0;
     auto const nu = enthalpy / 2000.0;
 
-    for(size_t i = 0; i < array0.size(); i++) {
+    for(std::size_t i = 0; i < array0.size(); i++) {
         temperature += array2[i] * std::pow(pressure, array0[i]) * std::pow((nu - 2.1), array1[i]);
     }
     return temperature;
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion2B(const double pressure, const double enthalpy) {
-    const std::array<int, 38> I = {
+    static const std::array<int, 38> I = {
 		    {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 6, 7, 7, 9, 9}
     };
 
-    const std::array<int, 38> J = {
+    static const std::array<int, 38> J = {
 		    {0, 1, 2, 12, 18, 24, 28, 40, 0, 2, 6, 12, 18, 24, 28, 40, 2, 8, 18, 40, 1, 2, 12, 24, 2, 12, 18, 24, 28, 40, 18, 24, 40, 28, 2, 28, 1, 40}
     };
 
-    const std::array<double, 38> n = {
+    static const std::array<double, 38> n = {
 		    {
 				    0.14895041079516E+4, 0.74307798314034E+3, -0.97708318797837E+2, 0.24742464705674E+1, -0.63281320016026,
 				    0.11385952129658E+1, -0.47811863648625, 0.85208123431544E-2, 0.93747147377932, 0.33593118604916E+1,
@@ -354,18 +354,18 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2B(const double pre
     double temperature = 0.0;
     auto const nu = enthalpy / 2000.0;
 
-    for (size_t i = 0; i < n.size(); i++) {
+    for (std::size_t i = 0; i < n.size(); i++) {
         temperature += n[i] * std::pow((pressure - 2), I[i]) * std::pow((nu - 2.6), J[i]);
     }
     return temperature;
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion2C(const double pressure, const double enthalpy) {
-    const std::array<int, 23> I = {{-7, -7, -6, -6, -5, -5, -2, -2, -1, -1, 0, 0, 1, 1, 2, 6, 6, 6, 6, 6, 6, 6, 6}};
+    static const std::array<int, 23> I = {{-7, -7, -6, -6, -5, -5, -2, -2, -1, -1, 0, 0, 1, 1, 2, 6, 6, 6, 6, 6, 6, 6, 6}};
 
-    const std::array<int, 23> J = {{0, 4, 0, 2, 0, 2, 0, 1, 0, 2, 0, 1, 4, 8, 4, 0, 1, 4, 10, 12, 16, 20, 22}};
+    static const std::array<int, 23> J = {{0, 4, 0, 2, 0, 2, 0, 1, 0, 2, 0, 1, 4, 8, 4, 0, 1, 4, 10, 12, 16, 20, 22}};
 
-    const std::array<double, 23> n = {
+    static const std::array<double, 23> n = {
 		    {
 				    -0.32368398555242E+13, 0.73263350902181E+13, 0.35825089945447E+12, -0.58340131851590E+12, -0.10783068217470E+11,
 				    0.20825544563171E+11, 0.61074783564516E+6, 0.85977722535580E+6, -0.25745723604170E+5, 0.31081088422714E+5, 0.12082315865936E+4,
@@ -377,14 +377,14 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2C(const double pre
     double temperature = 0.0;
     auto const nu = enthalpy / 2000.0;
 
-    for (size_t i = 0; i < n.size(); i++) {
+    for (std::size_t i = 0; i < n.size(); i++) {
         temperature += n[i] * std::pow((pressure + 25), I[i]) * std::pow((nu - 1.8), J[i]);
     }
     return temperature;
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2A(const double pressure, const double entropy) {
-    const std::array<double, 46> array0 = {
+    static const std::array<double, 46> array0 = {
 		    {
 				    -1.5, -1.5, -1.5, -1.5, -1.5, -1.5,-1.25, -1.25, -1.25, -1, -1, -1, -1, -1, -1, -0.75, -0.75,
 				    -0.5, -0.5, -0.5, -0.5, -0.25, -0.25, -0.25, -0.25, 0.25, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5,
@@ -392,7 +392,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2A(const double pres
 		    }
     };
 
-    const std::array<int, 46> array1 = {
+    static const std::array<int, 46> array1 = {
 		    {
 				    -24, -23, -19, -13, -11, -10, -19, -15, -6, -26, -21, -17, -16, -9, -8, -15, -14, -26,
 				    -13, -9, -7, -27, -25, -11, -6, 1, 4, 8, 11, 0, 1, 5, 6, 10, 14, 16, 0, 4, 9, 17, 7, 18,
@@ -400,7 +400,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2A(const double pres
 		    }
     };
 
-    const std::array<double, 46> array2 = {
+    static const std::array<double, 46> array2 = {
 		    {
 				    -0.39235983861984E+6, 0.51526573827270E+6, 0.40482443161048E+5, -0.32193790923902E+3, 0.96961424218694E+2,
 				    -0.22867846371773E+2, -0.44942914124357E+6, -0.50118336020166E+4, 0.35684463560015, 0.44235335848190E+5,
@@ -417,28 +417,28 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2A(const double pres
 
     double temperature = 0.0;
 
-    for (size_t i = 0; i < array2.size(); i++) {
+    for (std::size_t i = 0; i < array2.size(); i++) {
         temperature += array2[i] * std::pow(pressure, array0[i]) * std::pow((entropy/2 - 2), array1[i]);
     }
     return temperature;
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2B(const double pressure, const double entropy) {
-    const std::array<int, 44> array0 = {
+    static const std::array<int, 44> array0 = {
 		    {
 				    -6, -6, -5, -5, -4, -4, -4, -3, -3, -3, -3, -2, -2, -2, -2, -1, -1, -1, -1, -1, 0, 0, 0, 0,
 				    0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 5
 		    }
     };
 
-    const std::array<int, 44> array1 = {
+    static const std::array<int, 44> array1 = {
 		    {
 				    0, 11, 0, 11, 0, 1, 11, 0, 1, 11, 12, 0, 1, 6, 10, 0, 1, 5, 8, 9, 0, 1, 2, 4, 5, 6, 9, 0, 1, 2, 3,
 				    7, 8, 0, 1, 5, 0, 1, 3, 0, 1, 0, 1, 2
 		    }
     };
 
-    const std::array<double, 44> array2 = {
+    static const std::array<double, 44> array2 = {
 		    {
 				    0.31687665083497E+6, 0.20864175881858E+2, -0.39859399803599E+6, -0.21816058518877E+2, 0.22369785194242E+6, -0.27841703445817E+4,
 				    0.99207436071480E+1, -0.75197512299157E+5, 0.29708605951158E+4, -0.34406878548526E+1, 0.38815564249115, 0.17511295085750E+5,
@@ -453,22 +453,22 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2B(const double pres
 
     double temperature = 0.0;
 
-    for (size_t i = 0; i < array2.size(); i++) {
+    for (std::size_t i = 0; i < array2.size(); i++) {
         temperature += array2[i] * std::pow(pressure, array0[i]) * std::pow((10 - entropy/0.7853), array1[i]);
     }
     return temperature;
 }
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pressure, const double entropy) {
-    const std::array<int, 30> array0 = {
+    static const std::array<int, 30> array0 = {
 		    {-2, -2, -1, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 7, 7, 7, 7}
     };
 
-    const std::array<int, 30> array1 = {
+    static const std::array<int, 30> array1 = {
 		    {0, 1, 0, 0, 1, 2, 3, 0, 1, 3, 4, 0, 1, 2, 0, 1, 5, 0, 1, 4, 0, 1, 2, 0, 1, 0, 1, 3, 4, 5}
     };
 
-    const std::array<double, 30> array2 = {
+    static const std::array<double, 30> array2 = {
 		    {
 				    0.90968501005365E+3, 0.24045667088420E+4, -0.59162326387130E+3, 0.54145404128074E+3, -0.27098308411192E+3, 0.97976525097926E+3,
 				    -0.46966772959435E+3, 0.14399274604723E+2, -0.19104204230429E+2, 0.53299167111971E+1, -0.21252975375934E+2, -0.31147334413760,
@@ -480,16 +480,16 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 
     double temperature = 0.0;
 
-    for (size_t i = 0; i < array2.size(); i++) {
+    for (std::size_t i = 0; i < array2.size(); i++) {
         temperature += array2[i] * std::pow(pressure, array0[i]) * std::pow((2 - entropy / 2.9251), array1[i]);
     }
     return temperature;
 }
 
  double SteamSystemModelerTool::backwardPressureEntropyRegion1(const double pressure, const double entropy) {
-    const std::array<int, 20> array0 = {{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 4}};
-    const std::array<int, 20> array1 = {{0, 1, 2, 3, 11, 31, 0, 1, 2, 3, 12, 31, 0, 1, 2, 9, 31, 10, 32, 32}};
-    const std::array<double, 20> array2 = {
+    static const std::array<int, 20> array0 = {{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 4}};
+    static const std::array<int, 20> array1 = {{0, 1, 2, 3, 11, 31, 0, 1, 2, 3, 12, 31, 0, 1, 2, 9, 31, 10, 32, 32}};
+    static const std::array<double, 20> array2 = {
 		    {
 				    0.17478268058307E+3, 0.34806930892873E+2, 0.65292584978455E+1, 0.33039981775489, -0.19281382923196E-6,
 				    -0.24909197244573E-22, -0.26107636489332, 0.22592965981586, -0.64256463395226E-1, 0.78876289270526E-2,
@@ -500,7 +500,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 
     double temp = 0.0;
 
-    for (size_t i = 0; i < array2.size(); i++) {
+    for (std::size_t i = 0; i < array2.size(); i++) {
         temp += array2[i] * std::pow(pressure, array0[i]) * std::pow((entropy + 2), array1[i]);
     }
     return temp;

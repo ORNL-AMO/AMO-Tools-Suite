@@ -15,20 +15,18 @@ class FluidPower {
 public:
     /**
      * Constructor
-     * Below parameters have self explanatory nomenclature.
      * @param specificGravity double, specified gravity - unitless
      * @param flowRate double, rate of flow in gpm
      * @param head double, pump head measured in feet
-     * @return nothing
      */
     FluidPower(
         double specificGravity,
         double flowRate,
         double head
     ) :
-        specificGravity_(specificGravity),
-        flowRate_(flowRate),
-        head_(head)
+        specificGravity(specificGravity),
+        flowRate(flowRate),
+        head(head)
     {};
 
     /**
@@ -41,19 +39,15 @@ private:
     /**
      * Specific Gravity
      */
-    double specificGravity_;
+    double specificGravity;
     /**
      * Flow rate in GPM
      */
-    double flowRate_;
+    double flowRate;
     /**
      * Length of head in ft
      */
-    double head_;
-    /**
-     * Returning fluid power in kw
-     */
-    double fluidPower_;
+    double head;
 };
 
 #endif //AMO_LIBRARY_FLUIDPOWER_H

@@ -12,6 +12,6 @@
 #include "calculator/pump/OptimalSpecificSpeed.h"
 
 double OptimalSpecificSpeed::calculate() {
-    double specificSpeed = rpm_ * sqrt(flowRate_) / (pow((head_ / stageCount_), 0.75));
+    double specificSpeed = rpm * sqrt(flowRate) / (pow((head / stageCount), 0.75));
     return specificSpeed;
 }

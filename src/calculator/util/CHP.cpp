@@ -17,7 +17,7 @@ CHP::CHP(double annualOperatingHours, double annualElectricityConsumption, doubl
 	calculate();
 }
 
-std::map<double, size_t>::const_iterator CHP::findNearest(const double val, const size_t index) const {
+std::map<double, std::size_t>::const_iterator CHP::findNearest(const double val, const std::size_t index) const {
 	auto nearest = chpSystemByKey[index].upper_bound(val);
 	if (nearest != chpSystemByKey[index].begin()) return std::prev(nearest);
 	return nearest;

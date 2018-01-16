@@ -28,142 +28,112 @@ public:
      * @param initialTemperature double, Initial temperature in °F.
      * @param finalTemperature double, Final temperature in °F.
      * @param correctionFactor double, correction factor - unitless
-     * @return nothing
      */
-    FixtureLosses(
-            double specificHeat,
-            double feedRate,
-            double initialTemperature,
-            double finalTemperature,
-            double correctionFactor)
-            : specificHeat_(specificHeat),
-              feedRate_(feedRate),
-              initialTemperature_(initialTemperature),
-              finalTemperature_(finalTemperature),
-              correctionFactor_(correctionFactor)
+    FixtureLosses(const double specificHeat, const double feedRate, const double initialTemperature,
+                  const double finalTemperature, const double correctionFactor)
+            : specificHeat(specificHeat),
+              feedRate(feedRate),
+              initialTemperature(initialTemperature),
+              finalTemperature(finalTemperature),
+              correctionFactor(correctionFactor)
     {
-        heatLoss_ = 0.0;
+        heatLoss = 0.0;
     }
 
     FixtureLosses() = default;
 
     /**
     * Gets the specific heat
-    *
     * @return double, specific heat in btu/(lb*°F)
     */
     double getSpecificHeat() const {
-        return specificHeat_;
+        return specificHeat;
     }
 
     /**
     * Sets the specific heat
-    *
     * @param specificHeat double, specific heat in btu/(lb*°F)
-    *
-    * @return nothing
     */
-    void setSpecificHeat(double specificHeat) {
-        specificHeat_ = specificHeat;
+    void setSpecificHeat(const double specificHeat) {
+		this->specificHeat = specificHeat;
     }
 
     /**
     * Gets the feed rate for gas mixture
-     *
     * @return double, feed rate for gas mixture in lb/hr
     */
     double getFeedRate() const {
-        return feedRate_;
+        return feedRate;
     }
 
     /**
     * Sets the feed rate for gas mixture
-    *
     * @param feedRate double, feed rate for gas mixture in lb/hr
-    *
-    * @return nothing
     */
-    void setFeedRate(double feedRate) {
-        feedRate_ = feedRate;
+    void setFeedRate(const double feedRate) {
+		this->feedRate = feedRate;
     }
 
     /**
     * Gets the initial temperature
-    *
     * @return double, initial temperature in °F
     */
     double getInitialTemperature() const {
-        return initialTemperature_;
+        return initialTemperature;
     }
 
     /**
     * Sets the initial temperature
-    *
     * @param initialTemperature double, initial temperature in °F
-    *
-    * @return nothing
     */
-    void setInitialTemperature(double initialTemperature) {
-        initialTemperature_ = initialTemperature;
+    void setInitialTemperature(const double initialTemperature) {
+		this->initialTemperature = initialTemperature;
     }
 
     /**
     * Gets the final temperature
-    *
     * @return double, final temperature in °F
     */
     double getFinalTemperature() const {
-        return finalTemperature_;
+        return finalTemperature;
     }
 
     /**
     * Sets the final temperature
-    *
     * @param finalTemperature double, final temperature in °F
-    *
-    * @return nothing
     */
-    void setFinalTemperature(double finalTemperature) {
-        finalTemperature_ = finalTemperature;
+    void setFinalTemperature(const double finalTemperature) {
+		this->finalTemperature = finalTemperature;
     }
 
     /**
     * Gets the correction factor
-    *
     * @return double, correction factor - unitless
     */
     double getCorrectionFactor() const {
-        return correctionFactor_;
+        return correctionFactor;
     }
 
     /**
     * Sets the correction factor
-    *
     * @param correctionFactor double, correction factor - unitless
-    *
-    * @return nothing
     */
-    void setCorrectionFactor(double correctionFactor) {
-        correctionFactor_ = correctionFactor;
+    void setCorrectionFactor(const double correctionFactor) {
+		this->correctionFactor = correctionFactor;
     }
 
     /**
     * Gets the total heat loss
-    *
     * @return double, total heat loss in btu/hr
     */
     double getHeatLoss();
 
 private:
     // In values
-    double specificHeat_;
-    double feedRate_;
-    double initialTemperature_;
-    double finalTemperature_;
-    double correctionFactor_;
+    double specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor;
 
     // Out values
-    double heatLoss_;
+    double heatLoss;
 };
 
 #endif //AMO_SUITE_FIXTURELOSSES_H

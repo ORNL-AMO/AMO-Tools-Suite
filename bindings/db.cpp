@@ -1,6 +1,3 @@
-//
-// Created by Accawi, Gina K. on 3/13/17.
-//
 #include <nan.h>
 #include "db.h"
 

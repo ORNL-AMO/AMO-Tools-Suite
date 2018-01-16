@@ -1,7 +1,3 @@
-//
-// Created by Preston Shires on 7/19/17.
-//
-
 #include <unordered_map>
 #include <string>
 

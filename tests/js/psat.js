@@ -105,3 +105,93 @@ test('headToolSuctionTank', function (t) {
     t.equal(rnd(res.estimatedDischargeFrictionHead), rnd(0.20489865388514306), res.estimatedDischargeFrictionHead + ' != ' + 0.20489865388514306);
     t.equal(rnd(res.estimatedSuctionFrictionHead), rnd(0.10103969289791588), res.estimatedSuctionFrictionHead + ' != ' + 0.10103969289791588);
 });
+
+test('pump efficiency', function (t) {
+    t.plan(3);
+    t.type(bindings.pumpEfficiency, 'function');
+    var inp = {};
+    // Pump Style End suction ansi API
+    inp.pump_style = 6;
+    inp.flow_rate = 2000;
+    var res = bindings.pumpEfficiency(inp);
+    t.equal(rnd(res.average), rnd(83.97084437955112), 'res average is ' + res.average);
+    t.equal(rnd(res.max), rnd(86.99584193768345), 'res max is ' + res.max);
+});
+
+test('nema', function (t) {
+    t.plan(2);
+    t.type(bindings.nema, 'function');
+    var inp = {};
+    // Line frequency 60
+    inp.line_frequency = 0;
+    inp.motor_rated_speed = 1200;
+    // Efficiency class = Energy efficient
+    inp.efficiency_class = 1;
+    inp.efficiency = 0;
+    inp.motor_rated_power = 200;
+    inp.load_factor = 1;
+    var res = bindings.nema(inp);
+    t.equal(rnd(res), rnd(95.33208465291122), 'res is ' + res);
+});
+
+test('motorPerformance', function (t) {
+    t.plan(4);
+    t.type(bindings.motorPerformance, 'function');
+
+//    {
+//        MotorEfficiency mef(Motor::LineFrequency::FREQ60,1780,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,200,.75);
+//        auto mefVal = mef.calculate();
+//        Check100(95.69,mefVal);
+//
+//        MotorCurrent mc(200,1780,Motor::LineFrequency::FREQ60,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,.75,460,225.8);
+//        auto mcVal = mc.calculate();
+//        Check100(76.63,mcVal/225.8);
+//
+//        MotorPowerFactor pf(200,.75,mcVal,mefVal,460);
+//        Check100(84.82,pf.calculate());
+//    }
+
+    var inp = {};
+    // Line frequency 60
+    inp.line_frequency = 0;
+    // Energy efficient
+    inp.efficiency_class = 1;
+    inp.motor_rated_power = 200;
+    inp.motor_rated_speed = 1780;
+    inp.efficiency = 0;
+    inp.load_factor = .25;
+    inp.motor_rated_voltage = 460;
+    inp.motor_rated_fla = 225.8;
+
+    var res = bindings.motorPerformance(inp);
+    t.equal(rnd(res.motor_current), rnd(36.1065805345533), 'res.motor_current is ' + res.motor_current);
+    t.equal(rnd(res.efficiency), rnd(93.03933838910918), 'res.efficiency is ' + res.efficiency);
+    t.equal(rnd(res.motor_power_factor), rnd(61.718229798145316), 'res.motor_power_factor is ' + res.motor_power_factor);
+});
+
+test('achievableEfficiency achievable efficiency', function (t) {
+    t.plan(2);
+    t.type(bindings.achievableEfficiency, 'function');
+    var inp = {};
+    inp.pump_style = 0;
+    inp.specific_speed = 1170;
+    var res = bindings.achievableEfficiency(inp);
+    t.equal(rnd(res), rnd(1.8942771852074485), 'res is ' + res);
+
+});
+
+test('estimateFLA estimate full load amps', function (t) {
+    t.plan(2);
+    t.type(bindings.estFLA, 'function');
+    var inp = {};
+    inp.motor_rated_power = 200;
+    inp.motor_rated_speed = 1780;
+    inp.line_frequency = 1;
+    // Either specify an efficiency class OR provide efficiency percentage
+    inp.efficiency_class = 1;
+    inp.efficiency = 0;
+    inp.motor_rated_voltage = 460;
+    var res = bindings.estFLA(inp);
+    t.equal(rnd(res), rnd(225.800612262395), 'res is ' + res);
+
+});

@@ -31,7 +31,6 @@ public:
      * @param inletWaterMassFlow double, inlet water mass flow in kg/hr
      * @param tankPressure double, pressure of the tank in MPa
      *
-     * @return nothing
      *
      * */
     FlashTank(double inletWaterPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,

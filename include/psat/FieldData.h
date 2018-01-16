@@ -35,155 +35,125 @@ public:
      * @param motorPower double, power output of the pump's motor in hp.
      * @param motorAmps double, current measured from the pump's motor in amps
      * @param voltage double, the measured bus voltage in volts
-     * @return nothing
      */
 
     FieldData(
-        double flowRate,
-        double head,
-        LoadEstimationMethod loadEstimationMethod,
-        double motorPower,
-        double motorAmps,
-        double voltage
+        const double flowRate,
+        const double head,
+        const LoadEstimationMethod loadEstimationMethod,
+        const double motorPower,
+        const double motorAmps,
+        const double voltage
     ) :
-        loadEstimationMethod_(loadEstimationMethod),
-        flowRate_(flowRate),
-        head_(head),
-        motorPower_(motorPower),
-        motorAmps_(motorAmps),
-        voltage_(voltage)
+        loadEstimationMethod(loadEstimationMethod),
+        flowRate(flowRate),
+        head(head),
+        motorPower(motorPower),
+        motorAmps(motorAmps),
+        voltage(voltage)
     {}
 
     FieldData() = default;
 
     /**
      * Gets the classification of the load estimation method
-     *
      * @return LoadEstimationMethod, classification of the load estimation method
      */
     LoadEstimationMethod getLoadEstimationMethod() const {
-        return loadEstimationMethod_;
+        return loadEstimationMethod;
     }
 
     /**
      * Sets the classification of the load estimation method
-     *
      * @param loadEstimationMethod LoadEstimationMethod, classification of the load estimation method
-     *
-     * @return nothing
      */
-    void setLoadEstimationMethod(LoadEstimationMethod loadEstimationMethod) {
-        loadEstimationMethod_ = loadEstimationMethod;
+    void setLoadEstimationMethod(const LoadEstimationMethod loadEstimationMethod) {
+        this->loadEstimationMethod = loadEstimationMethod;
     }
 
     /**
      * Gets the rate of flow
-     *
      * @return double, rate of flow in gpm
      */
     double getFlowRate() const {
-        return flowRate_;
+        return flowRate;
     }
 
     /**
      * Sets the rate of flow
-     *
      * @param flowRate double, rate of flow in gpm
-     *
-     * @return nothing
      */
-    void setFlowRate(double flowRate) {
-        flowRate_ = flowRate;
+    void setFlowRate(const double flowRate) {
+        this->flowRate = flowRate;
     }
 
     /**
      * Gets the pump head
-     *
      * @return double, pump head in ft
      */
     double getHead() const {
-        return head_;
+        return head;
     }
 
     /**
      * Sets the pump head
-     *
      * @param head double, pump head in ft
-     *
-     * @return nothing
      */
-    void setHead(double head) {
-        head_ = head;
+    void setHead(const double head) {
+        this->head = head;
     }
 
     /**
      * Gets the power output of the pump's motor
-     *
      * @return double, pump motor's output power in hp
      */
     double getMotorPower() const {
-        return motorPower_;
+        return motorPower;
     }
 
     /**
      * Sets the power output of the pump's motor
-     *
      * @param motorPower double, pump motor's output power in hp
-     *
-     * @return nothing
      */
-    void setMotorPower(double motorPower) {
-        motorPower_ = motorPower;
+    void setMotorPower(const double motorPower) {
+        this->motorPower = motorPower;
     }
 
     /**
      * Gets the current measured from the pump's motor
-     *
      * @return double, current measured from pump's motor in amps
      */
     double getMotorAmps() const {
-        return motorAmps_;
+        return motorAmps;
     }
 
     /**
      * Sets the current measured from the pump's motor
-     *
      * @param motorAmps double, current measured from pump's motor in amps
-     *
-     * @return nothing
      */
-    void setMotorAmps(double motorAmps) {
-        motorAmps_ = motorAmps;
+    void setMotorAmps(const double motorAmps) {
+        this->motorAmps = motorAmps;
     }
 
     /**
      * Gets the measured bus voltage
-     *
      * @return double, measured bus voltage in volts
      */
     double getVoltage() const {
-        return voltage_;
+        return voltage;
     }
 
     /**
      * Sets the measured bus voltage
-     *
      * @param voltage double, measured bus voltage in volts
-     *
-     * @return nothing
      */
-    void setVoltage(double voltage) {
-        voltage_ = voltage;
+    void setVoltage(const double voltage) {
+        this->voltage = voltage;
     }
 
 private:
-// Input values
-    FieldData::LoadEstimationMethod loadEstimationMethod_;
-    double flowRate_;
-    double head_;
-    double motorPower_;
-    double motorAmps_;
-    double voltage_;
+    FieldData::LoadEstimationMethod loadEstimationMethod;
+    double flowRate, head, motorPower, motorAmps, voltage;
 };
 
 

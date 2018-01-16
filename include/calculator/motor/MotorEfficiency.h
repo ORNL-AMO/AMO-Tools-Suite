@@ -11,9 +11,11 @@
 #ifndef AMO_LIBRARY_MOTOREFFICIENCY_H
 #define AMO_LIBRARY_MOTOREFFICIENCY_H
 
-#include <vector>
+#include <array>
 #include "psat/Motor.h"
 #include "psat/FieldData.h"
+#include <exception>
+#include <stdexcept>
 
 class MotorEfficiency {
 public:
@@ -22,197 +24,164 @@ public:
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      * @param motorRpm double, RPM of motor
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
-     * @param specifiedEfficiency double, specified efficiency as %
      * @param motorRatedPower double, rated power of motor in hp
-     * @param loadFactor double, load factor - unitless
-     * @return
      */
     MotorEfficiency(
         Motor::LineFrequency lineFrequency,
         double motorRpm,
         Motor::EfficiencyClass efficiencyClass,
-        double specifiedEfficiency,
-        double motorRatedPower,
-        double loadFactor
+        double motorRatedPower
     ) :
-        lineFrequency_(lineFrequency),
-        motorRpm_(motorRpm),
-        efficiencyClass_(efficiencyClass),
-        specifiedEfficiency_(specifiedEfficiency),
-        motorRatedPower_(motorRatedPower),
-        loadFactor_(loadFactor)
+        lineFrequency(lineFrequency),
+        motorRpm(motorRpm),
+        efficiencyClass(efficiencyClass),
+        motorRatedPower(motorRatedPower)
     {};
 
     /**
      * Calculates the motor efficiency
-     *
+     * @param loadFactor double, load factor - unitless ratio
+     * @param specifiedEfficiency, efficiency of SPECIFIED efficiency class motor (optional)
      * @return double, motor efficiency as %
      */
-    double calculate();
+    double calculate(double loadFactor, double specifiedEfficiency = 0);
+
+    /**
+     * calculate25intervals(): Calculates the motor efficiency given at 25% intervals of load factor.
+     * @return std::array<double, 5> containing motor efficiency at 25% intervals of load factor
+     */
+	std::array<double, 5> calculate25intervals();
 
     /**
      * Gets the line frequency
-     *
-     * @return Motor::LineFrequency, classifictaion of line frequency in Hz
+     * @return Motor::LineFrequency, classification of line frequency in Hz
      */
     Motor::LineFrequency getLineFrequency() const {
-        return lineFrequency_;
+        return lineFrequency;
     }
 
     /**
      * Sets the line frequency
-     *
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
-     *
-     * @return nothing
      */
     void setLineFrequency(Motor::LineFrequency lineFrequency) {
-        lineFrequency_ = lineFrequency;
+        this->lineFrequency = lineFrequency;
     }
 
     /**
      * Gets the RPM of motor
-     *
      * @return double, RPM of motor
      */
     double getMotorRpm() const {
-        return motorRpm_;
+        return motorRpm;
     }
 
     /**
      * Sets the RPM of motor
-     *
      * @param motorRpm double, RPM of motor
-     *
-     * @return nothing
      */
     void setMotorRpm(double motorRpm) {
-        motorRpm_ = motorRpm;
+        this->motorRpm = motorRpm;
     }
 
     /**
      * Gets the efficiency class of motor
-     *
      * @return Motor::EfficiencyClass, efficiency class of motor
      */
     Motor::EfficiencyClass getEfficiencyClass() const {
-        return efficiencyClass_;
+        return efficiencyClass;
     }
 
     /**
      * Sets the efficiency class of motor
-     *
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
-     *
-     * @return nothing
      */
     void setEfficiencyClass(Motor::EfficiencyClass efficiencyClass) {
-        efficiencyClass_ = efficiencyClass;
+        this->efficiencyClass = efficiencyClass;
     }
 
     /**
      * Gets the horsepower of motor
-     *
      * @return double, horsepower of motor
      */
     double getHp() const {
-        return hp_;
+        return hp;
     }
 
     /**
      * Sets the horsepower of motor
-     *
      * @param hp double, horsepower of motor
-     *
-     * @return nothing
      */
     void setHp(double hp) {
-        hp_ = hp;
+        this->hp = hp;
     }
 
     /**
      * Gets the load estimation method
-     *
      * @return FieldData::LoadEstimationMethod, classification of load estimation method
      */
 //    FieldData::LoadEstimationMethod getLoadEstimationMethod() const {
-//        return loadEstimationMethod_;
+//        return loadEstimationMethod;
 //    }
 
     /**
      * Sets the load estimation method
-     *
      * @param loadEstimationMethod FieldData::LoadEstimationMethod, classification of load estimation method
-     *
-     * @return nothing
      */
 //    void setLoadEstimationMethod(FieldData::LoadEstimationMethod loadEstimationMethod) {
-//        loadEstimationMethod_ = loadEstimationMethod;
+//        this->loadEstimationMethod = loadEstimationMethod;
 //    }
 
     /**
      * Gets the motor power in kWh
-     *
      * @return double, motor power in kWh
      */
     double getMotorKwh() const {
-        return motorKwh_;
+        return motorKwh;
     }
 
     /**
      * Sets the motor power in kWh
-     *
      * @param motorKwh double, motor power in kWh
-     *
-     * @return nothing
      */
     void setMotorKwh(double motorKwh) {
-        motorKwh_ = motorKwh;
+        this->motorKwh = motorKwh;
     }
 
     /**
      * Gets the motor amps
-     *
      * @return double, motor amps in A
      */
     double getMotorAmps() const {
-        return motorAmps_;
+        return motorAmps;
     }
 
     /**
      * Sets the motor amps
-     *
      * @param motorAmps double, motor amps in A
-     *
-     * @return nothing
      */
     void setMotorAmps(double motorAmps) {
-        motorAmps_ = motorAmps;
+        this->motorAmps = motorAmps;
     }
 
     /**
      * Gets the actual efficiency of motor
-     *
      * @return double, actual efficiency of motor as %
      */
     double getActualEfficiency() const {
-        return actualEfficiency_;
+        return actualEfficiency;
     }
 
     /**
      * Sets the actual efficiency of motor
-     *
      * @param actualEfficiency double, actual efficiency of motor as %
-     *
-     * @return nothing
      */
     void setActualEfficiency(double actualEfficiency) {
-        actualEfficiency_ = actualEfficiency;
+        this->actualEfficiency = actualEfficiency;
     }
 
     /**
      * Gets the loss of power in kW
-     *
      * @return double, power loss in kW
      */
     double getKWloss0() const {
@@ -221,40 +190,37 @@ public:
 
     /**
      * Gets the load factor
-     *
      * @return double, load factor - unitless
      */
-    double getLoadFactor() const {
-        return loadFactor_;
-    }
+//    double getLoadFactor() const {
+//        return loadFactor;
+//    }
 
     /**
      * Sets the load factor
-     *
      * @param loadFactor double, load factor - unitless
-     *
-     * @return nothing
      */
-    void setLoadFactor(double loadFactor) {
-        loadFactor_ = loadFactor;
-    }
+//    void setLoadFactor(double loadFactor) {
+//        this->loadFactor = loadFactor;
+//    }
 
 private:
-    Motor::LineFrequency lineFrequency_;
-    double motorEff_ = 0.0;
-    double motorRpm_;
-    Motor::EfficiencyClass efficiencyClass_;
-    double specifiedEfficiency_;
-    double hp_;
-//    FieldData::LoadEstimationMethod loadEstimationMethod_;
-    double motorKwh_;
-    double motorAmps_;
+    const std::array< std::array<double, 4>, 5> determinePartialLoadCoefficients(std::size_t pole) const;
+
+    Motor::LineFrequency lineFrequency;
+    double motorEff = 0.0;
+    double motorRpm;
+    Motor::EfficiencyClass efficiencyClass;
+//    double specifiedEfficiency;
+    double hp;
+//    FieldData::LoadEstimationMethod loadEstimationMethod;
+    double motorKwh;
+    double motorAmps;
     double kWloss0 = 0.0;
-    //double ratedVoltage_;
-    double actualEfficiency_;
-    double motorRatedPower_;
-    double loadFactor_ = 0;
-    std::vector<double> motorEfficiency_;
+    //double ratedVoltage;
+    double actualEfficiency;
+    double motorRatedPower;
+//    double loadFactor = 0;
 };
 
 

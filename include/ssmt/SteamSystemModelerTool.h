@@ -1,7 +1,3 @@
-//
-// Created by Preston Shires on 7/19/17.
-//
-
 #ifndef AMO_TOOLS_SUITE_STEAMSYSTEMMODELERTOOL_H
 #define AMO_TOOLS_SUITE_STEAMSYSTEMMODELERTOOL_H
 

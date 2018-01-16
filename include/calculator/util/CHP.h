@@ -62,7 +62,7 @@ public:
 private:
 	void calculate();
 
-	std::map<double, size_t>::const_iterator findNearest(double val, size_t index) const;
+	std::map<double, std::size_t>::const_iterator findNearest(double val, std::size_t index) const;
 
 	double annualOperatingHours, annualElectricityConsumption, annualThermalDemand;
 	double boilerThermalFuelCosts, chpFuelCosts, avgElectricityCosts;
@@ -85,7 +85,7 @@ private:
 			}
 	};
 
-	const std::array<std::map<double, size_t>, 6> chpSystemByKey = {
+	const std::array<std::map<double, std::size_t>, 6> chpSystemByKey = {
 			{
 					{{50, 0}, {600, 1}, {1000, 2}, {3300, 3}, {5000, 4}, {10000, 5}, {20000, 6}, {45000, 7}}, // row 2 - index 0
 					{{27.0, 0}, {34.5, 1}, {36.8, 2}, {40.4, 3}, {28.9, 4}, {27.3, 5}, {33.2, 6}, {36.0, 7}}, // row 5 - index 1

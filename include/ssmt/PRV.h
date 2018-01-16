@@ -21,17 +21,12 @@
 class PrvWithoutDesuperheating {
 public:
     /**
-     *
      * Constructor for the PRV without desuperheating calculator
-     *
      * @param inletPressure double, inlet pressure in MPa
      * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param inletMassFlow double, inlet mass flow in kg/hr
      * @param outletPressure double, houtlet pressure in MPa
-     *
-     * @return nothing
-     *
      * */
     PrvWithoutDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
                              double quantityValue, double inletMassFlow, double outletPressure);
@@ -116,7 +111,6 @@ public:
      *
      * @param inletPressure double, pressure of the inlet steam in MPa
      *
-     * @return nothing
      */
     void setInletPressure(double inletPressure) {
         this->inletPressure = inletPressure;
@@ -128,7 +122,6 @@ public:
      *
      * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      *
-     * @return nothing
      */
     void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType) {
         this->quantityType = quantityType;
@@ -139,7 +132,6 @@ public:
      *
      * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      *
-     * @return nothing
      */
     void setQuantityValue(double quantityValue) {
         this->quantityValue = quantityValue;
@@ -151,7 +143,6 @@ public:
      *
      * @param inletMassFlow double, mass flow of the inlet steam in kg/hr
      *
-     * @return nothing
      */
     void setInletMassFlow(double inletMassFlow) {
         this->inletMassFlow = inletMassFlow;
@@ -163,7 +154,6 @@ public:
      *
      * @param outletPressure double, outlet pressure in MPa
      *
-     * @return nothing
      */
     void setOutletPressure(double outletPressure) {
         this->outletPressure = outletPressure;
@@ -201,7 +191,6 @@ public:
      * @param feedwaterQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param desuperheatingTemp double, desuperheating temperature in K
      *
-     * @return nothing
      *
      * */
     PrvWithDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
@@ -214,7 +203,6 @@ public:
      *
      * @param inletPressure double, pressure of the inlet steam in MPa
      *
-     * @return nothing
      */
     void setInletPressure(double inletPressure) {
         this->inletPressure = inletPressure;
@@ -235,7 +223,6 @@ public:
      *
      * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      *
-     * @return nothing
      */
     void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType) {
         this->quantityType = quantityType;
@@ -256,7 +243,6 @@ public:
      *
      * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      *
-     * @return nothing
      */
     void setQuantityValue(double quantityValue) {
         this->quantityValue = quantityValue;
@@ -277,7 +263,6 @@ public:
      *
      * @param inletMassFlow double, mass flow of the inlet steam in kg/hr
      *
-     * @return nothing
      */
     void setInletMassFlow(double inletMassFlow) {
         this->inletMassFlow = inletMassFlow;
@@ -296,7 +281,6 @@ public:
      *
      * @param outletPressure double, outlet pressure in MPa
      *
-     * @return nothing
      */
     void setOutletPressure(double outletPressure) {
         this->outletPressure = outletPressure;
@@ -315,7 +299,6 @@ public:
      *
      * @param feedwaterPressure double, feedwater pressure in MPa
      *
-     * @return nothing
      */
     void setFeedwaterPressure(double feedwaterPressure) {
         this->feedwaterPressure = feedwaterPressure;
@@ -334,7 +317,6 @@ public:
      *
      * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      *
-     * @return nothing
      */
     void setFeedwaterQuantityType(SteamProperties::ThermodynamicQuantity feedwaterQuantityType) {
         this->feedwaterQuantityType = feedwaterQuantityType;
@@ -353,7 +335,6 @@ public:
      *
      * @param quantityValue double, value of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      *
-     * @return nothing
      */
     void setFeedwaterQuantityValue(double feedwaterQuantityValue) {
         this->feedwaterQuantityValue = feedwaterQuantityValue;
@@ -372,7 +353,6 @@ public:
      *
      * @param desuperheatingTemp double, desuperheating temperature in K
      *
-     * @return nothing
      */
     void setDesuperheatingTemp(double desuperheatingTemp) {
         this->desuperheatingTemp = desuperheatingTemp;

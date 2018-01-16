@@ -10,7 +10,8 @@
             ],
             'sources' : [
                 'bindings/standalone.cpp',
-                'src/calculator/util/CHP.cpp'
+                'src/calculator/util/CHP.cpp',
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")"
             ],
             "conditions": [
                 [ 'OS=="mac"', {
@@ -36,8 +37,7 @@
             'sources' : [
                 'bindings/phast.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
-                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/furnace/').map(f=>'src/calculator/furnace/'+f).join(' '))\")",
-                "<!@(node -e \"console.log(require('fs').readdirSync('src/phast/').map(f=>'src/phast/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/furnace/').map(f=>'src/calculator/furnace/'+f).join(' '))\")"
             ],
             "conditions": [
                 [ 'OS=="mac"', {

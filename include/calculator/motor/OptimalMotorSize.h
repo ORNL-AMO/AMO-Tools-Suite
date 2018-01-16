@@ -16,16 +16,15 @@ class OptimalMotorSize {
 public:
     /**
      * Constructor
-     * @param optimalMotorShaftPower double, optimal motor shaft poer in hp
+     * @param optimalMotorShaftPower double, optimal motor shaft power in hp
      * @param sizeMargin double, size margin as %
-     * @return nothing
      */
     OptimalMotorSize(
         double optimalMotorShaftPower,
         double sizeMargin
     ) :
-        optimalMotorShaftPower_(optimalMotorShaftPower),
-        sizeMargin_(sizeMargin/100.0)
+        optimalMotorShaftPower(optimalMotorShaftPower),
+        sizeMargin(sizeMargin/100.0)
     {};
 
     /**
@@ -35,9 +34,9 @@ public:
     double calculate();
 
 private:
-    double optimalMotorShaftPower_;
-    double sizeMargin_;
-    double optimalMotorRatedPower_;
+    double optimalMotorShaftPower;
+    double sizeMargin;
+    double optimalMotorRatedPower;
 };
 
 

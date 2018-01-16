@@ -18,16 +18,15 @@ public:
      * @param ratedVoltage double, Rated voltage of motor in volts
      * @param motorCurrent double, Motor current as defined in amps.
      * @param powerFactor double, Power factor - unitless
-     * @return nothing
      */
     MotorPower(
         double ratedVoltage,
         double motorCurrent,
         double powerFactor
     ) :
-        ratedVoltage_(ratedVoltage),
-        motorCurrent_(motorCurrent),
-        powerFactor_(powerFactor)
+        ratedVoltage(ratedVoltage),
+        motorCurrent(motorCurrent),
+        powerFactor(powerFactor)
     {};
 
     /**
@@ -40,15 +39,15 @@ private:
     /**
      * Rated voltage of motor in volts
      */
-    double ratedVoltage_;
+    double ratedVoltage;
     /**
      * Motor current in amps
      */
-    double motorCurrent_;
+    double motorCurrent;
     /**
      * Power factor of motor
      */
-    double powerFactor_;
+    double powerFactor;
 };
 
 

@@ -25,96 +25,83 @@ public:
      * @param initialTemperature double, Initial temperature in °F.
      * @param outletTemperature double, Outlet temperature in °F.
      * @param correctionFactor double, Correction factor - unitless
-     * @return nothing
      */
     WaterCoolingLosses(double flowRate,
                        double initialTemperature,
                        double outletTemperature,
                        double correctionFactor)
-            : flowRate_(flowRate),
-              initialTemperature_(initialTemperature),
-              outletTemperature_( outletTemperature),
-              correctionFactor_(correctionFactor)
+            : flowRate(flowRate),
+              initialTemperature(initialTemperature),
+              outletTemperature( outletTemperature),
+              correctionFactor(correctionFactor)
     {
-        heatLoss_ = 0.0;
+        heatLoss = 0.0;
     }
 
     WaterCoolingLosses() = default;
 
     /**
      * Getter for the cooling water flow rate
-     *
      * @return double, cooling water flow rate in GPM
      */
     double getFlowRate() const {
-        return flowRate_;
+        return flowRate;
     }
 
     /**
      * Sets the cooling water flow rate
-     *
      * @param flowRate double, cooling water flow rate in GPM
-     *
-     * @return nothing
      */
     void setFlowRate(double flowRate) {
-        flowRate_ = flowRate;
+        this->flowRate = flowRate;
     }
 
     /**
     * Getter for the initial/inlet temperature
-    *
     * @return double, initial/inlet temperature in °F
     */
     double getInitialTemperature() const {
-        return initialTemperature_;
+        return initialTemperature;
     }
 
     /**
     * Sets the initial/inlet temperature
-    *
     * @param initialTemperature double, initial/inlet temperature in °F
-    *
-    * @return nothing
     */
     void setInitialTemperature(double initialTemperature) {
-        initialTemperature_ = initialTemperature;
+        this->initialTemperature = initialTemperature;
     }
 
     /**
     * Getter for the outlet temperature
-    *
     * @return double, outlet temperature in °F
     */
     double getOutletTemperature() const {
-        return outletTemperature_;
+        return outletTemperature;
     }
 
     /**
     * Sets the outlet temperature
-     *
      * @param outletTemperature double, outlet temperature in °F
     *
-    * @return nothing
     */
     void setOutletTemperature(double outletTemperature) {
-        outletTemperature_ = outletTemperature;
+        this->outletTemperature = outletTemperature;
     }
 
     /**
     * Getter for the heat loss
-    *
     * @return double, heat loss in btu/cycle
     */
     double getHeatLoss();
 
 private:
     // In values
-    double flowRate_;
-    double initialTemperature_;
-    double outletTemperature_;
-    double correctionFactor_;
+    double flowRate;
+    double initialTemperature;
+    double outletTemperature;
+    double correctionFactor;
     // Out value
-    double heatLoss_;
+    double heatLoss;
 };
 #endif //AMO_SUITE_WATERCOOLINGLOSSES_H
