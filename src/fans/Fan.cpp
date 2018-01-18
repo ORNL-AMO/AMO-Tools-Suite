@@ -145,7 +145,6 @@ void PlaneData::calculate(BaseGasDensity const & bgd) {
 	// steps 8 - 13
 	establishFanInletOrOutletDensity(fanInletFlange, calcDensity, mTotal, inletMstPlane.gasDensity);
 
-
 	// calculating plane 2 inlet density and pressure
 	outletMstPlane.gasVolumeFlowRate = mTotal / outletMstPlane.gasDensity;
 	outletMstPlane.gasVelocity = outletMstPlane.gasVolumeFlowRate / outletMstPlane.area;
@@ -192,21 +191,21 @@ std::unordered_map<std::string, double> Fan::calculate() {
 	auto const kpFactorRatio = calculateCompressibilityFactor(x, z, isentropicExponent);
 
 	// corrected variables
-	auto const qc = planeData.fanInletFlange.gasVolumeFlowRate * (fanRatedInfo.nc / fanRatedInfo.fanSpeed)
+	auto const qc = planeData.fanInletFlange.gasVolumeFlowRate * (fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed)
 	                * kpFactorRatio;
 
-	auto const ptc = fanTotalPressure * kpFactorRatio * std::pow(fanRatedInfo.nc / fanRatedInfo.fanSpeed, 2)
-	                 * (fanRatedInfo.pc / planeData.fanInletFlange.gasDensity);
+	auto const ptc = fanTotalPressure * kpFactorRatio * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
+	                 * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
-	auto const psc = fanStaticPressure * kpFactorRatio * std::pow(fanRatedInfo.nc / fanRatedInfo.fanSpeed, 2)
-	                 * (fanRatedInfo.pc / planeData.fanInletFlange.gasDensity);
+	auto const psc = fanStaticPressure * kpFactorRatio * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
+	                 * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
-	auto const sprc = staticPressureRise * kpFactorRatio * std::pow(fanRatedInfo.nc / fanRatedInfo.fanSpeed, 2)
-	                  * (fanRatedInfo.pc / planeData.fanInletFlange.gasDensity);
+	auto const sprc = staticPressureRise * kpFactorRatio * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
+	                  * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
 	auto const hc = fanShaftPower.getFanShaftPower() * kpFactorRatio
-	                * std::pow(fanRatedInfo.nc / fanRatedInfo.fanSpeed, 3)
-	                * (fanRatedInfo.pc / planeData.fanInletFlange.gasDensity);
+	                * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 3)
+	                * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
 	auto const kpc = kp / kpFactorRatio;
 
@@ -229,12 +228,12 @@ double Fan::calculateCompressibilityFactor(const double x, const double z, const
 	double assumedKpOverKpc = 1.0;
 	auto const & p1 = planeData.fanInletFlange;
 	for (auto i = 0; i < 50; i++) {
-		auto const pt1c = p1.gasTotalPressure * std::pow(fanRatedInfo.nc / fanRatedInfo.fanSpeed, 2)
-		                  * (fanRatedInfo.pc / p1.gasDensity) * assumedKpOverKpc;
+		auto const pt1c = p1.gasTotalPressure * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
+		                  * (fanRatedInfo.densityCorrected / p1.gasDensity) * assumedKpOverKpc;
 
 		// TODO how to get isentropic exponent for gas at converted conditions? section 9.4.1 step 2
-		auto const zOverZc = ((pt1c + 13.63 * fanRatedInfo.pbc) / (p1.gasTotalPressure + 13.63 * p1.pbx))
-		                     * (p1.gasDensity /  fanRatedInfo.pc) * std::pow(fanRatedInfo.fanSpeed / fanRatedInfo.nc, 2)
+		auto const zOverZc = ((pt1c + 13.63 * fanRatedInfo.pressureBarometricCorrected) / (p1.gasTotalPressure + 13.63 * p1.pbx))
+		                     * (p1.gasDensity /  fanRatedInfo.densityCorrected) * std::pow(fanRatedInfo.fanSpeed / fanRatedInfo.fanSpeedCorrected, 2)
 		                     * ((isentropic - 1) / isentropic) * (isentropic / (isentropic - 1));
 
 		auto const zc = z  / zOverZc;

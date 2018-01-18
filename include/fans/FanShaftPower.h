@@ -3,19 +3,11 @@
 
 class FanRatedInfo {
 public:
-	enum class DriveType {
-		DIRECT,
-		BELT
-	};
-
-	// this currently does not take the field SystemDamperPosition, as it is used "only for reference purposes" as per
-	// page 8 in the algorithm document
-	FanRatedInfo(double fanDamperPosition, double fanSpeed, double motorSpeed, double nc,
-	             double pc, double pbc, DriveType driveType);
+	FanRatedInfo(double fanSpeed, double motorSpeed, double nc, double densityCorrected,
+	             double pressureBarometricCorrected);
 
 private:
-	double const fanDamperPosition, fanSpeed, motorSpeed, nc, pc, pbc;
-	DriveType const driveType;
+	double const fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected;
 	friend class Fan;
 };
 
@@ -24,8 +16,7 @@ public:
 	// method 1
 	FanShaftPower(bool fanEquippedWithVFD, bool mainsVoltageDataAvailable, double ratedHp,
 	              double synchronousSpeed, double npv, double fla, double hi,
-	              double efficiencyMotor, double efficiencyVFD, double efficiencyBelt,
-	              FanRatedInfo::DriveType driveType, double sumSEF);
+	              double efficiencyMotor, double efficiencyVFD, double efficiencyBelt, double sumSEF);
 
 	// method 2
 	// integrate this into method 1 by also calculating method 2 hi - just have one constructor where we have hi being a parameter, the UI
@@ -34,7 +25,7 @@ public:
 	FanShaftPower(bool fanEquippedWithVFD, bool mainsVoltageDataAvailable, double ratedHp,
 	              double synchronousSpeed, double npv, double fla, double voltage,
 	              double amps, double powerFactorAtLoad, double efficiencyMotor,
-	              double efficiencyVFD, double efficiencyBelt, FanRatedInfo::DriveType driveType, double sumSEF);
+	              double efficiencyVFD, double efficiencyBelt, double sumSEF);
 
 	double getFanShaftPower() const { return hFi; }
 
@@ -46,7 +37,6 @@ private:
 	const double voltage = 0, amps = 0, powerFactorAtLoad = 0;
 	const double hi = 0;
 	const double efficiencyMotor, efficiencyVFD, efficiencyBelt, loadFactor = 0;
-	const FanRatedInfo::DriveType driveType;
 	const double sumSEF;
 
 	double hMo, hFi;
