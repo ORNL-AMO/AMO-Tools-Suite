@@ -7,7 +7,7 @@ function rnd(value) {
 }
 
 test('fan test', function (t) {
-    t.plan(1);
+    t.plan(2);
     t.type(bindings.fanPlaceholder, 'function');
     var inp = {
         fanSpeed: 1191,
@@ -56,14 +56,28 @@ test('fan test', function (t) {
                     [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
                 ]
             }
-        ]
+        ],
+        InletMstPlane: {
+            width: 143.63,
+            length: 32.63,
+            tdx: 123,
+            pbx: 26.57,
+            psx: -17.55,
+            noInletBoxes: 2
+        },
+        OutletMstPlane: {
+            width: 143.63,
+            length: 32.63,
+            tdx: 123,
+            pbx: 26.57,
+            psx: 1.8
+            // noInletBoxes not provided here.. defaults to 1
+        }
     };
 
-    // FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
-
-    // FlowTraverse(double length, double width, double tdx, double pbx, double psx, double pitotTubeCoefficient,
-    // std::vector< std::vector< double > > & traverseHoleData, unsigned noInletBoxes = 1);
-
     var res = bindings.fanPlaceholder(inp);
+
+    var whatHappened = 0;
     // t.equal(rnd(res.totalChemicalEnergyInput), rnd(0));
+    t.equal(res.addlTravPlanesSize, 1);
 });

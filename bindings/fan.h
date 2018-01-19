@@ -94,9 +94,20 @@ template <class Plane> Plane construct(std::string const & planeType) {
 	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
 
 	if (isUndefined(planeType, "circularDuctDiameter")) {
-		return {Get("length", innerObj), Get("width", innerObj), Get("tdx", innerObj), Get("pbx", innerObj)};
+		auto const noInletBoxes = (isUndefined(planeType, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", innerObj));
+		return {Get("length", innerObj), Get("width", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), noInletBoxes};
 	}
 	return {Get("circularDuctDiameter", innerObj), Get("tdx", innerObj), Get("pbx", innerObj)};
+}
+
+template <class Plane> Plane constructMst(std::string const & planeType) {
+	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
+
+	if (isUndefined(planeType, "circularDuctDiameter")) {
+		auto const noInletBoxes = (isUndefined(planeType, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", innerObj));
+		return {Get("length", innerObj), Get("width", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj), noInletBoxes};
+	}
+	return {Get("circularDuctDiameter", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj)};
 }
 
 //template <class Plane> Plane constructTraverse(std::string const & planeType) {
@@ -109,10 +120,9 @@ template <class Plane> Plane construct(std::string const & planeType) {
 //}
 
 template <class Plane> Plane constructTraverse(Local<Object> obj) {
-//	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
-
 	if (isUndefined(obj, "circularDuctDiameter")) {
-		return {Get("length", obj), Get("width", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
+		unsigned const noInletBoxes = (isUndefined(obj, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", obj));
+		return {Get("length", obj), Get("width", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj), noInletBoxes};
 	}
 	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
 }
@@ -127,23 +137,30 @@ NAN_METHOD(fanPlaceholder) {
 
 	auto fanInletFlange = construct<FanInletFlange>("FanInletFlange");
 	auto fanOrEvaseOutletFlange = construct<FanOrEvaseOutletFlange>("FanEvaseOrOutletFlange");
-//	auto flowTraverse = constructTraverse<FlowTraverse>("FlowTraverse");
 	auto flowTraverse = constructTraverse<FlowTraverse>(inp->ToObject()->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject());
 
 	// now extract and create the vector of AddlTravPlanes
-//	std::vector<AddlTravPlane> addlTravPlanes;
-//	auto const addlTravTmp = inp->ToObject()->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
-//	auto const & addlTravArray = v8::Local<v8::Array>::Cast(addlTravTmp);
-//	for (std::size_t i = 0; i < addlTravArray->Length(); i++) {
-//		addlTravPlanes.emplace_back(constructTraverse<AddlTravPlane>())
-//	}
+	std::vector<AddlTravPlane> addlTravPlanes;
+	auto const addlTravTmp = inp->ToObject()->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
+	auto const & addlTravArray = v8::Local<v8::Array>::Cast(addlTravTmp);
+	for (std::size_t i = 0; i < addlTravArray->Length(); i++) {
+		addlTravPlanes.emplace_back(constructTraverse<AddlTravPlane>(addlTravArray->Get(i)->ToObject()));
+	}
+
+	auto inletMstPlane = constructMst<InletMstPlane>("InletMstPlane");
+	auto outletMstPlane = constructMst<OutletMstPlane>("OutletMstPlane");
 
 
-//	auto addlTraverse = constructTraverse<AddlTravPlane>("AddlTraverse");
 
-	Local<Object> obj = Nan::New<Object>();
+
+
+//	Local<Object> obj = Nan::New<Object>();
 //	Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
 //	Nan::Set(obj, pumpHead, Nan::New<Number>(rv["pumpHead"]));
 
-	info.GetReturnValue().Set(obj);
+//	info.GetReturnValue().Set(addlTravPlanes.size());
+
+	r = Nan::New<Object>();
+	SetR("addlTravPlanesSize", addlTravPlanes.size());
+	info.GetReturnValue().Set(r);
 }
