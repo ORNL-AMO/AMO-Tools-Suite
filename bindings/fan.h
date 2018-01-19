@@ -73,9 +73,8 @@ std::vector <std::vector<double>> getTraverseInputData(std::string const & inner
 	return traverseData;
 }
 
-std::vector <std::vector<double>> getTraverseInputData(Local<Object> innerObj) {
-//	auto const & plane = inp->ToObject()->Get(Nan::New<String>(innerObj).ToLocalChecked());
-	auto const & arrayTmp = innerObj->Get(Nan::New<String>("traverseData").ToLocalChecked());
+std::vector <std::vector<double>> getTraverseInputData(Local<Object> obj) {
+	auto const & arrayTmp = obj->Get(Nan::New<String>("traverseData").ToLocalChecked());
 	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
 
 	std::vector<std::vector <double> > traverseData(array->Length());
@@ -90,24 +89,20 @@ std::vector <std::vector<double>> getTraverseInputData(Local<Object> innerObj) {
 	return traverseData;
 }
 
-template <class Plane> Plane construct(std::string const & planeType) {
-	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
-
-	if (isUndefined(planeType, "circularDuctDiameter")) {
-		auto const noInletBoxes = (isUndefined(planeType, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", innerObj));
-		return {Get("length", innerObj), Get("width", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), noInletBoxes};
+template <class Plane> Plane construct(Local<Object> obj) {
+	if (isUndefined(obj, "circularDuctDiameter")) {
+		auto const noInletBoxes = (isUndefined(obj, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", obj));
+		return {Get("length", obj), Get("width", obj), Get("tdx", obj), Get("pbx", obj), noInletBoxes};
 	}
-	return {Get("circularDuctDiameter", innerObj), Get("tdx", innerObj), Get("pbx", innerObj)};
+	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj)};
 }
 
-template <class Plane> Plane constructMst(std::string const & planeType) {
-	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
-
-	if (isUndefined(planeType, "circularDuctDiameter")) {
-		auto const noInletBoxes = (isUndefined(planeType, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", innerObj));
-		return {Get("length", innerObj), Get("width", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj), noInletBoxes};
+template <class Plane> Plane constructMst(Local<Object> obj) {
+	if (isUndefined(obj, "circularDuctDiameter")) {
+		auto const noInletBoxes = (isUndefined(obj, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", obj));
+		return {Get("length", obj), Get("width", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), noInletBoxes};
 	}
-	return {Get("circularDuctDiameter", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj)};
+	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj)};
 }
 
 template <class Plane> Plane constructTraverse(Local<Object> obj) {
@@ -119,22 +114,23 @@ template <class Plane> Plane constructTraverse(Local<Object> obj) {
 }
 
 PlaneData getPlaneData() {
-	std::vector<AddlTravPlane> addlTravPlanes;
-	auto const addlTravTmp = inp->ToObject()->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
+	auto planeDataV8 = inp->ToObject()->Get(Nan::New<String>("PlaneData").ToLocalChecked())->ToObject();
+
+	auto const addlTravTmp = planeDataV8->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
 	auto const & addlTravArray = v8::Local<v8::Array>::Cast(addlTravTmp);
+	std::vector<AddlTravPlane> addlTravPlanes;
+
 	for (std::size_t i = 0; i < addlTravArray->Length(); i++) {
 		addlTravPlanes.emplace_back(constructTraverse<AddlTravPlane>(addlTravArray->Get(i)->ToObject()));
 	}
 
-	auto planeDataV8 = inp->ToObject()->Get(Nan::New<String>("PlaneData").ToLocalChecked())->ToObject();
-
 	return {
-			construct<FanInletFlange>("FanInletFlange"),
-			construct<FanOrEvaseOutletFlange>("FanEvaseOrOutletFlange"),
-			constructTraverse<FlowTraverse>(inp->ToObject()->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject()),
+			construct<FanInletFlange>(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())->ToObject()),
+			construct<FanOrEvaseOutletFlange>(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())->ToObject()),
+			constructTraverse<FlowTraverse>(planeDataV8->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject()),
 			std::move(addlTravPlanes),
-			constructMst<InletMstPlane>("InletMstPlane"),
-			constructMst<OutletMstPlane>("OutletMstPlane"),
+			constructMst<InletMstPlane>(planeDataV8->Get(Nan::New<String>("InletMstPlane").ToLocalChecked())->ToObject()),
+			constructMst<OutletMstPlane>(planeDataV8->Get(Nan::New<String>("OutletMstPlane").ToLocalChecked())->ToObject()),
 			Get("totalPressureLossBtwnPlanes1and4", planeDataV8),
 			Get("totalPressureLossBtwnPlanes2and5", planeDataV8),
 			GetBool("plane5upstreamOfPlane2", planeDataV8)
