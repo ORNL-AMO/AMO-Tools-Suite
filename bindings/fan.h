@@ -12,20 +12,20 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const & key) {
-	auto const & rObj = inp->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
-	if (rObj->IsUndefined()) {
-		ThrowTypeError(std::string("Get method in fan.h: " + key + " not present in object").c_str());
-	}
-	return rObj->NumberValue();
-}
-
 double Get(std::string const & key, Local<Object> obj) {
 	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (rObj->IsUndefined()) {
 		ThrowTypeError(std::string("Get method in fan.h: " + key + " not present in object").c_str());
 	}
 	return rObj->NumberValue();
+}
+
+bool GetBool(std::string const & key, Local<Object> obj) {
+	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	if (rObj->IsUndefined()) {
+		ThrowTypeError(std::string("Get method in fan.h: Boolean value " + key + " not present in object").c_str());
+	}
+	return rObj->BooleanValue();
 }
 
 std::string GetStr(std::string const & key) {
@@ -110,15 +110,6 @@ template <class Plane> Plane constructMst(std::string const & planeType) {
 	return {Get("circularDuctDiameter", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj)};
 }
 
-//template <class Plane> Plane constructTraverse(std::string const & planeType) {
-//	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
-//
-//	if (isUndefined(planeType, "circularDuctDiameter")) {
-//		return {Get("length", innerObj), Get("width", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj), Get("pitotTubeCoefficient", innerObj), getTraverseInputData(planeType)};
-//	}
-//	return {Get("circularDuctDiameter", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj), Get("pitotTubeCoefficient", innerObj), getTraverseInputData(planeType)};
-//}
-
 template <class Plane> Plane constructTraverse(Local<Object> obj) {
 	if (isUndefined(obj, "circularDuctDiameter")) {
 		unsigned const noInletBoxes = (isUndefined(obj, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", obj));
@@ -127,19 +118,7 @@ template <class Plane> Plane constructTraverse(Local<Object> obj) {
 	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
 }
 
-NAN_METHOD(fanPlaceholder) {
-	inp = info[0]->ToObject();
-
-	double const fanSpeed = Get("fanSpeed"), motorSpeed = Get("motorSpeed"), fanSpeedCorrected = Get("fanSpeedCorrected");
-	double const densityCorrected = Get("densityCorrected"), pressureBarometricCorrected = Get("pressureBarometricCorrected");
-
-	auto fanRatedInfo = FanRatedInfo(fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected);
-
-	auto fanInletFlange = construct<FanInletFlange>("FanInletFlange");
-	auto fanOrEvaseOutletFlange = construct<FanOrEvaseOutletFlange>("FanEvaseOrOutletFlange");
-	auto flowTraverse = constructTraverse<FlowTraverse>(inp->ToObject()->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject());
-
-	// now extract and create the vector of AddlTravPlanes
+PlaneData getPlaneData() {
 	std::vector<AddlTravPlane> addlTravPlanes;
 	auto const addlTravTmp = inp->ToObject()->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
 	auto const & addlTravArray = v8::Local<v8::Array>::Cast(addlTravTmp);
@@ -147,10 +126,32 @@ NAN_METHOD(fanPlaceholder) {
 		addlTravPlanes.emplace_back(constructTraverse<AddlTravPlane>(addlTravArray->Get(i)->ToObject()));
 	}
 
-	auto inletMstPlane = constructMst<InletMstPlane>("InletMstPlane");
-	auto outletMstPlane = constructMst<OutletMstPlane>("OutletMstPlane");
+	auto planeDataV8 = inp->ToObject()->Get(Nan::New<String>("PlaneData").ToLocalChecked())->ToObject();
 
+	return {
+			construct<FanInletFlange>("FanInletFlange"),
+			construct<FanOrEvaseOutletFlange>("FanEvaseOrOutletFlange"),
+			constructTraverse<FlowTraverse>(inp->ToObject()->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject()),
+			std::move(addlTravPlanes),
+			constructMst<InletMstPlane>("InletMstPlane"),
+			constructMst<OutletMstPlane>("OutletMstPlane"),
+			Get("totalPressureLossBtwnPlanes1and4", planeDataV8),
+			Get("totalPressureLossBtwnPlanes2and5", planeDataV8),
+			GetBool("plane5upstreamOfPlane2", planeDataV8)
+	};
+}
 
+NAN_METHOD(fanPlaceholder) {
+	inp = info[0]->ToObject();
+
+	auto fanRatedInfoV8 = inp->ToObject()->Get(Nan::New<String>("FanRatedInfo").ToLocalChecked())->ToObject();
+	auto const fanSpeed = Get("fanSpeed", fanRatedInfoV8), motorSpeed = Get("motorSpeed", fanRatedInfoV8);
+	auto const fanSpeedCorrected = Get("fanSpeedCorrected", fanRatedInfoV8);
+	auto const densityCorrected = Get("densityCorrected", fanRatedInfoV8);
+	auto const pressureBarometricCorrected = Get("pressureBarometricCorrected", fanRatedInfoV8);
+
+	auto fanRatedInfo = FanRatedInfo(fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected);
+	auto planeData = getPlaneData();
 
 
 
@@ -161,6 +162,6 @@ NAN_METHOD(fanPlaceholder) {
 //	info.GetReturnValue().Set(addlTravPlanes.size());
 
 	r = Nan::New<Object>();
-	SetR("addlTravPlanesSize", addlTravPlanes.size());
+//	SetR("addlTravPlanesSize", addlTravPlanes.size());
 	info.GetReturnValue().Set(r);
 }

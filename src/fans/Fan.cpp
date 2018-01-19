@@ -77,13 +77,13 @@ double BaseGasDensity::calculateRelativeHumidityFromWetBulb(const double dryBulb
 	return pV / psatDb;
 }
 
-PlaneData::PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange,
-                     FlowTraverse & flowTraverse, std::vector<AddlTravPlane> & addlTravPlanes,
-                     InletMstPlane & inletMstPlane, OutletMstPlane & outletMstPlane,
+PlaneData::PlaneData(FanInletFlange fanInletFlange, FanOrEvaseOutletFlange fanOrEvaseOutletFlange,
+                     FlowTraverse flowTraverse, std::vector<AddlTravPlane> addlTravPlanes,
+                     InletMstPlane inletMstPlane, OutletMstPlane outletMstPlane,
                      const double totalPressureLossBtwnPlanes1and4, const double totalPressureLossBtwnPlanes2and5,
                      bool const plane5upstreamOfPlane2)
-		: fanInletFlange(fanInletFlange), fanOrEvaseOutletFlange(fanOrEvaseOutletFlange), flowTraverse(flowTraverse),
-		  addlTravPlanes(addlTravPlanes), inletMstPlane(inletMstPlane), outletMstPlane(outletMstPlane),
+		: fanInletFlange(std::move(fanInletFlange)), fanOrEvaseOutletFlange(std::move(fanOrEvaseOutletFlange)), flowTraverse(std::move(flowTraverse)),
+		  addlTravPlanes(std::move(addlTravPlanes)), inletMstPlane(std::move(inletMstPlane)), outletMstPlane(std::move(outletMstPlane)),
 		  plane5upstreamOfPlane2(plane5upstreamOfPlane2),
 		  totalPressureLossBtwnPlanes1and4(totalPressureLossBtwnPlanes1and4),
 		  totalPressureLossBtwnPlanes2and5(totalPressureLossBtwnPlanes2and5)
