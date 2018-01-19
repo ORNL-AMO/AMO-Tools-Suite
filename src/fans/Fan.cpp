@@ -79,12 +79,12 @@ double BaseGasDensity::calculateRelativeHumidityFromWetBulb(const double dryBulb
 
 PlaneData::PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange,
                      FlowTraverse & flowTraverse, std::vector<AddlTravPlane> & addlTravPlanes,
-                     InletMstPlane & inletMstPlane, OutletMstPlane & outletMstPlane, bool const estimatePlaneTemp,
+                     InletMstPlane & inletMstPlane, OutletMstPlane & outletMstPlane,
                      const double totalPressureLossBtwnPlanes1and4, const double totalPressureLossBtwnPlanes2and5,
                      bool const plane5upstreamOfPlane2)
 		: fanInletFlange(fanInletFlange), fanOrEvaseOutletFlange(fanOrEvaseOutletFlange), flowTraverse(flowTraverse),
 		  addlTravPlanes(addlTravPlanes), inletMstPlane(inletMstPlane), outletMstPlane(outletMstPlane),
-		  estimatePlaneTemp(estimatePlaneTemp), plane5upstreamOfPlane2(plane5upstreamOfPlane2),
+		  plane5upstreamOfPlane2(plane5upstreamOfPlane2),
 		  totalPressureLossBtwnPlanes1and4(totalPressureLossBtwnPlanes1and4),
 		  totalPressureLossBtwnPlanes2and5(totalPressureLossBtwnPlanes2and5)
 {}

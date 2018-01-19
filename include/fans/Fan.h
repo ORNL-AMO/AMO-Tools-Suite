@@ -69,7 +69,7 @@ class PlaneData {
 public:
 	PlaneData(FanInletFlange & fanInletFlange, FanOrEvaseOutletFlange & fanOrEvaseOutletFlange,
 	          FlowTraverse & flowTraverse, std::vector<AddlTravPlane> & addlTravPlanes, InletMstPlane & inletMstPlane,
-	          OutletMstPlane & outletMstPlane, bool estimatePlaneTemp, double totalPressureLossBtwnPlanes1and4,
+	          OutletMstPlane & outletMstPlane, double totalPressureLossBtwnPlanes1and4,
 	          double totalPressureLossBtwnPlanes2and5, bool plane5upstreamOfPlane2);
 
 private:
@@ -87,7 +87,7 @@ private:
 	InletMstPlane inletMstPlane;
 	OutletMstPlane outletMstPlane;
 
-	bool const estimatePlaneTemp, plane5upstreamOfPlane2;
+	bool const plane5upstreamOfPlane2;
 	const double totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5;
 
 	friend class Fan;
