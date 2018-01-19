@@ -37,15 +37,6 @@ std::string GetStr(std::string const & key, Local<Object> obj) {
 	return std::string(*s);
 }
 
-bool isUndefined(std::string const & objName, std::string const & key) {
-	auto const & obj = inp->ToObject()->Get(Nan::New<String>(objName).ToLocalChecked());
-	if (obj->IsUndefined()) {
-		ThrowTypeError(std::string("isUndefined method in fan.h: " + objName + " is undefined").c_str());
-	}
-	auto const & innerObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
-	return innerObj->IsUndefined();
-}
-
 bool isUndefined(Local<Object> obj, std::string const & key) {
 	return obj->Get(Nan::New<String>(key).ToLocalChecked())->IsUndefined();
 }
