@@ -252,11 +252,10 @@ double Fan::calculateCompressibilityFactor(const double x, const double z, const
 	throw std::runtime_error("compressibility factor ratio iteration did not converge");
 }
 
-Fan::Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity,
-         FanShaftPower & fanShaftPower)
-		: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)), baseGasDensity(baseGasDensity),
-		  fanShaftPower(fanShaftPower)
+Fan::Fan(FanRatedInfo fanRatedInfo, PlaneData planeData, BaseGasDensity baseGasDensity, FanShaftPower fanShaftPower)
+		: fanRatedInfo(fanRatedInfo), planeData(std::move(planeData)),
+		  baseGasDensity(baseGasDensity), fanShaftPower(fanShaftPower)
 {
 	this->planeData.calculate(this->baseGasDensity);
-	this->calculate();
+//	this->calculate();
 };

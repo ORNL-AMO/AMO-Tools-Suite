@@ -96,8 +96,7 @@ private:
 
 class Fan {
 public:
-	Fan(FanRatedInfo & fanRatedInfo, PlaneData & planeData, BaseGasDensity & baseGasDensity,
-	    FanShaftPower & fanShaftPower);
+	Fan(FanRatedInfo fanRatedInfo, PlaneData planeData, BaseGasDensity baseGasDensity, FanShaftPower fanShaftPower);
 
 	std::unordered_map<std::string, double> calculate();
 

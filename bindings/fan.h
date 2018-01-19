@@ -50,10 +50,8 @@ bool isUndefined(Local<Object> obj, std::string const & key) {
 	return obj->Get(Nan::New<String>(key).ToLocalChecked())->IsUndefined();
 }
 
-void SetR(const char *nm, double n) {
-	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-	Local<Number> getNum = Nan::New<Number>(n);
-	Nan::Set(r, getName, getNum);
+inline void SetR(const char *key, double val) {
+	Nan::Set(r, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
 }
 
 std::vector <std::vector<double>> getTraverseInputData(std::string const & innerObj) {
@@ -198,18 +196,17 @@ FanShaftPower getFanShaftPower() {
 NAN_METHOD(fanPlaceholder) {
 	inp = info[0]->ToObject();
 
-	auto fanRatedInfo = getFanRatedInfo();
-	auto planeData = getPlaneData();
-	auto baseGasDensity = getBaseGasDensity();
-	auto fanShaftPower = getFanShaftPower();
-
-//	Local<Object> obj = Nan::New<Object>();
-//	Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
-//	Nan::Set(obj, pumpHead, Nan::New<Number>(rv["pumpHead"]));
-
-//	info.GetReturnValue().Set(addlTravPlanes.size());
+	auto const rv = Fan(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();
 
 	r = Nan::New<Object>();
-//	SetR("addlTravPlanesSize", addlTravPlanes.size());
+	SetR("fanEfficiencyTp", rv.at("fanEfficiencyTp"));
+	SetR("fanEfficiencySp", rv.at("fanEfficiencySp"));
+	SetR("fanEfficiencySpr", rv.at("fanEfficiencySpr"));
+	SetR("Qc", rv.at("Qc"));
+	SetR("Ptc", rv.at("Ptc"));
+	SetR("Psc", rv.at("Psc"));
+	SetR("SPRc", rv.at("SPRc"));
+	SetR("Hc", rv.at("Hc"));
+	SetR("Kpc", rv.at("Kpc"));
 	info.GetReturnValue().Set(r);
 }

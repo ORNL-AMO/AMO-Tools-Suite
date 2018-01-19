@@ -7,7 +7,7 @@ function rnd(value) {
 }
 
 test('fan test', function (t) {
-    t.plan(2);
+    t.plan(4);
     t.type(bindings.fanPlaceholder, 'function');
     var inp = {
         FanRatedInfo: {
@@ -18,7 +18,7 @@ test('fan test', function (t) {
             pressureBarometricCorrected: 26.28
         },
         PlaneData: {
-            plane5upstreamOfPlane2: false,
+            plane5upstreamOfPlane2: true,
             totalPressureLossBtwnPlanes1and4: 0,
             totalPressureLossBtwnPlanes2and5: 0.627,
             FanInletFlange: {
@@ -72,9 +72,9 @@ test('fan test', function (t) {
                 noInletBoxes: 2
             },
             OutletMstPlane: {
-                width: 143.63,
-                length: 32.63,
-                tdx: 123,
+                width: 55.42,
+                length: 60.49,
+                tdx: 132.7,
                 pbx: 26.57,
                 psx: 1.8
                 // noInletBoxes not provided here.. defaults to 1
@@ -101,7 +101,7 @@ test('fan test', function (t) {
 
     var res = bindings.fanPlaceholder(inp);
 
-    var whatHappened = 0;
-    // t.equal(rnd(res.totalChemicalEnergyInput), rnd(0));
-    t.equal(1, 1);
+    t.equal(rnd(res.fanEfficiencyTp), rnd(53.60738684355601));
+    t.equal(rnd(res.fanEfficiencySp), rnd(49.20691409764023));
+    t.equal(rnd(res.fanEfficiencySpr), rnd(50.768875240824116));
 });
