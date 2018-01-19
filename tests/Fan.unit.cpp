@@ -46,7 +46,9 @@ TEST_CASE( "Fan", "[Fan]") {
 
 	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547, BaseGasDensity::GasType::AIR);
 
-	auto fanShaftPower = FanShaftPower(true, false, 1750, 1200, 4160, 210, 4200, 205, 0.88, 95.0, 100, 100, 0);
+	// method 2 original constructor
+//	auto fanShaftPower = FanShaftPower(true, false, 1750, 1200, 4160, 210, 4200, 205, 0.88, 95.0, 100, 100, 0);
+	auto fanShaftPower = FanShaftPower(4200, 205, 0.88, 95.0, 100, 100, 0);
 
 	auto fan = Fan(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
 	auto results = fan.calculate();

@@ -79,6 +79,23 @@ test('fan test', function (t) {
                 psx: 1.8
                 // noInletBoxes not provided here.. defaults to 1
             }
+        },
+        BaseGasDensity: {
+            dryBulbTemp: 123,
+            staticPressure: -17.6,
+            barometricPressure: 26.57,
+            gasDensity: 0.0547,
+            gasType: 'AIR'
+        },
+        FanShaftPower: {
+            isMethodOne: false,
+            voltage: 4200,
+            amps: 205,
+            powerFactorAtLoad: 0.88,
+            efficiencyMotor: 95,
+            efficiencyVFD: 100,
+            efficiencyBelt: 100,
+            sumSEF: 0
         }
     };
 

@@ -28,12 +28,12 @@ bool GetBool(std::string const & key, Local<Object> obj) {
 	return rObj->BooleanValue();
 }
 
-std::string GetStr(std::string const & key) {
-	auto const & obj = inp->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
-	if (obj->IsUndefined()) {
-		ThrowTypeError(std::string("GetStr method in fan.h: " + key + " not present in object").c_str());
+std::string GetStr(std::string const & key, Local<Object> obj) {
+	auto const & rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	if (rObj->IsUndefined()) {
+		ThrowTypeError(std::string("GetStr method in fan.h: String " + key + " not present in object").c_str());
 	}
-	v8::String::Utf8Value s(obj);
+	v8::String::Utf8Value s(rObj);
 	return std::string(*s);
 }
 
@@ -113,6 +113,17 @@ template <class Plane> Plane constructTraverse(Local<Object> obj) {
 	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
 }
 
+FanRatedInfo getFanRatedInfo() {
+	auto fanRatedInfoV8 = inp->ToObject()->Get(Nan::New<String>("FanRatedInfo").ToLocalChecked())->ToObject();
+	return {
+			Get("fanSpeed", fanRatedInfoV8),
+			Get("motorSpeed", fanRatedInfoV8),
+			Get("fanSpeedCorrected", fanRatedInfoV8),
+			Get("densityCorrected", fanRatedInfoV8),
+			Get("pressureBarometricCorrected", fanRatedInfoV8)
+	};
+}
+
 PlaneData getPlaneData() {
 	auto planeDataV8 = inp->ToObject()->Get(Nan::New<String>("PlaneData").ToLocalChecked())->ToObject();
 
@@ -137,19 +148,60 @@ PlaneData getPlaneData() {
 	};
 }
 
+BaseGasDensity getBaseGasDensity() {
+	auto baseGasDensityV8 = inp->ToObject()->Get(Nan::New<String>("BaseGasDensity").ToLocalChecked())->ToObject();
+	auto gasTypeStr = GetStr("gasType", baseGasDensityV8);
+	BaseGasDensity::GasType gasType;
+
+	if (gasTypeStr == "AIR") {
+		gasType = BaseGasDensity::GasType::AIR;
+	} else if (gasTypeStr == "STANDARDAIR") {
+		gasType = BaseGasDensity::GasType::STANDARDAIR;
+	} else {
+		gasType = BaseGasDensity::GasType::OTHERGAS;
+	}
+
+	return {
+			Get("dryBulbTemp", baseGasDensityV8),
+			Get("staticPressure", baseGasDensityV8),
+			Get("barometricPressure", baseGasDensityV8),
+			Get("gasDensity", baseGasDensityV8),
+			gasType
+	};
+}
+
+FanShaftPower getFanShaftPower() {
+	auto fanShaftPowerV8 = inp->ToObject()->Get(Nan::New<String>("FanShaftPower").ToLocalChecked())->ToObject();
+	auto const isMethodOne = GetBool("isMethodOne", fanShaftPowerV8);
+
+	if (isMethodOne) {
+		return {
+				Get("hi", fanShaftPowerV8),
+				Get("efficiencyMotor", fanShaftPowerV8),
+				Get("efficiencyVFD", fanShaftPowerV8),
+				Get("efficiencyBelt", fanShaftPowerV8),
+				Get("sumSEF", fanShaftPowerV8)
+		};
+	}
+
+	return {
+			Get("voltage", fanShaftPowerV8),
+			Get("amps", fanShaftPowerV8),
+			Get("powerFactorAtLoad", fanShaftPowerV8),
+			Get("efficiencyMotor", fanShaftPowerV8),
+			Get("efficiencyVFD", fanShaftPowerV8),
+			Get("efficiencyBelt", fanShaftPowerV8),
+			Get("sumSEF", fanShaftPowerV8)
+	};
+}
+
 NAN_METHOD(fanPlaceholder) {
 	inp = info[0]->ToObject();
 
-	auto fanRatedInfoV8 = inp->ToObject()->Get(Nan::New<String>("FanRatedInfo").ToLocalChecked())->ToObject();
-	auto const fanSpeed = Get("fanSpeed", fanRatedInfoV8), motorSpeed = Get("motorSpeed", fanRatedInfoV8);
-	auto const fanSpeedCorrected = Get("fanSpeedCorrected", fanRatedInfoV8);
-	auto const densityCorrected = Get("densityCorrected", fanRatedInfoV8);
-	auto const pressureBarometricCorrected = Get("pressureBarometricCorrected", fanRatedInfoV8);
-
-	auto fanRatedInfo = FanRatedInfo(fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected);
+	auto fanRatedInfo = getFanRatedInfo();
 	auto planeData = getPlaneData();
-
-
+	auto baseGasDensity = getBaseGasDensity();
+	auto fanShaftPower = getFanShaftPower();
 
 //	Local<Object> obj = Nan::New<Object>();
 //	Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
