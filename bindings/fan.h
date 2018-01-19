@@ -12,36 +12,42 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const & key, std::string const & innerObj = "") {
-	Local<String> getName = Nan::New<String>(key).ToLocalChecked();
-	Local<String> innerObjName = Nan::New<String>(innerObj).ToLocalChecked();
-
-	auto rObj = (innerObj.empty()) ? inp->ToObject()->Get(getName) : inp->ToObject()->Get(innerObjName)->ToObject()->Get(getName);
+double Get(std::string const & key) {
+	auto const & rObj = inp->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (rObj->IsUndefined()) {
 		ThrowTypeError(std::string("Get method in fan.h: " + key + " not present in object").c_str());
 	}
 	return rObj->NumberValue();
 }
 
-std::string GetStr(std::string const & nm) {
-	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-	auto obj = inp->ToObject()->Get(getName);
+double Get(std::string const & key, Local<Object> obj) {
+	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	if (rObj->IsUndefined()) {
+		ThrowTypeError(std::string("Get method in fan.h: " + key + " not present in object").c_str());
+	}
+	return rObj->NumberValue();
+}
+
+std::string GetStr(std::string const & key) {
+	auto const & obj = inp->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (obj->IsUndefined()) {
-		ThrowTypeError(std::string("GetStr method in fan.h: " + nm + " not present in object").c_str());
+		ThrowTypeError(std::string("GetStr method in fan.h: " + key + " not present in object").c_str());
 	}
 	v8::String::Utf8Value s(obj);
 	return std::string(*s);
 }
 
 bool isUndefined(std::string const & objName, std::string const & key) {
-	Local<String> objName_ = Nan::New<String>(objName).ToLocalChecked();
-	Local<String> key_ = Nan::New<String>(key).ToLocalChecked();
-	auto obj = inp->ToObject()->Get(objName_);
+	auto const & obj = inp->ToObject()->Get(Nan::New<String>(objName).ToLocalChecked());
 	if (obj->IsUndefined()) {
 		ThrowTypeError(std::string("isUndefined method in fan.h: " + objName + " is undefined").c_str());
 	}
-	auto innerObj = obj->ToObject()->Get(key_);
+	auto const & innerObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
 	return innerObj->IsUndefined();
+}
+
+bool isUndefined(Local<Object> obj, std::string const & key) {
+	return obj->Get(Nan::New<String>(key).ToLocalChecked())->IsUndefined();
 }
 
 void SetR(const char *nm, double n) {
@@ -51,8 +57,8 @@ void SetR(const char *nm, double n) {
 }
 
 std::vector <std::vector<double>> getTraverseInputData(std::string const & innerObj) {
-	auto const plane = inp->ToObject()->Get(Nan::New<String>(innerObj).ToLocalChecked());
-	auto const arrayTmp = plane->ToObject()->Get(Nan::New<String>("traverseData").ToLocalChecked());
+	auto const & plane = inp->ToObject()->Get(Nan::New<String>(innerObj).ToLocalChecked());
+	auto const & arrayTmp = plane->ToObject()->Get(Nan::New<String>("traverseData").ToLocalChecked());
 	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
 
 	std::vector<std::vector <double> > traverseData(array->Length());
@@ -67,19 +73,48 @@ std::vector <std::vector<double>> getTraverseInputData(std::string const & inner
 	return traverseData;
 }
 
+std::vector <std::vector<double>> getTraverseInputData(Local<Object> innerObj) {
+//	auto const & plane = inp->ToObject()->Get(Nan::New<String>(innerObj).ToLocalChecked());
+	auto const & arrayTmp = innerObj->Get(Nan::New<String>("traverseData").ToLocalChecked());
+	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
 
-template <class Plane> Plane construct(std::string const & planeType) {
-	if (isUndefined(planeType, "circularDuctDiameter")) {
-		return {Get("length", planeType), Get("width", planeType), Get("tdx", planeType), Get("pbx", planeType)};
+	std::vector<std::vector <double> > traverseData(array->Length());
+	for (std::size_t i = 0; i < array->Length(); i++) {
+		auto const & innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
+		traverseData.at(i).resize(innerArray->Length());
+		for (std::size_t j = 0; j < innerArray->Length(); j++) {
+			traverseData.at(i).at(j) = innerArray->Get(j)->NumberValue();
+		}
 	}
-	return {Get("circularDuctDiameter", planeType), Get("tdx", planeType), Get("pbx", planeType)};
+
+	return traverseData;
 }
 
-template <class Plane> Plane constructTraverse(std::string const & planeType) {
+template <class Plane> Plane construct(std::string const & planeType) {
+	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
+
 	if (isUndefined(planeType, "circularDuctDiameter")) {
-		return {Get("length", planeType), Get("width", planeType), Get("tdx", planeType), Get("pbx", planeType), Get("psx", planeType), Get("pitotTubeCoefficient", planeType), getTraverseInputData(planeType)};
+		return {Get("length", innerObj), Get("width", innerObj), Get("tdx", innerObj), Get("pbx", innerObj)};
 	}
-	return {Get("circularDuctDiameter", planeType), Get("tdx", planeType), Get("pbx", planeType), Get("psx", planeType), Get("pitotTubeCoefficient", planeType), getTraverseInputData(planeType)};
+	return {Get("circularDuctDiameter", innerObj), Get("tdx", innerObj), Get("pbx", innerObj)};
+}
+
+//template <class Plane> Plane constructTraverse(std::string const & planeType) {
+//	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
+//
+//	if (isUndefined(planeType, "circularDuctDiameter")) {
+//		return {Get("length", innerObj), Get("width", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj), Get("pitotTubeCoefficient", innerObj), getTraverseInputData(planeType)};
+//	}
+//	return {Get("circularDuctDiameter", innerObj), Get("tdx", innerObj), Get("pbx", innerObj), Get("psx", innerObj), Get("pitotTubeCoefficient", innerObj), getTraverseInputData(planeType)};
+//}
+
+template <class Plane> Plane constructTraverse(Local<Object> obj) {
+//	auto innerObj = inp->ToObject()->Get(Nan::New<String>(planeType).ToLocalChecked())->ToObject();
+
+	if (isUndefined(obj, "circularDuctDiameter")) {
+		return {Get("length", obj), Get("width", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
+	}
+	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
 }
 
 NAN_METHOD(fanPlaceholder) {
@@ -92,7 +127,19 @@ NAN_METHOD(fanPlaceholder) {
 
 	auto fanInletFlange = construct<FanInletFlange>("FanInletFlange");
 	auto fanOrEvaseOutletFlange = construct<FanOrEvaseOutletFlange>("FanEvaseOrOutletFlange");
-	auto flowTraverse = constructTraverse<FlowTraverse>("FlowTraverse");
+//	auto flowTraverse = constructTraverse<FlowTraverse>("FlowTraverse");
+	auto flowTraverse = constructTraverse<FlowTraverse>(inp->ToObject()->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject());
+
+	// now extract and create the vector of AddlTravPlanes
+//	std::vector<AddlTravPlane> addlTravPlanes;
+//	auto const addlTravTmp = inp->ToObject()->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
+//	auto const & addlTravArray = v8::Local<v8::Array>::Cast(addlTravTmp);
+//	for (std::size_t i = 0; i < addlTravArray->Length(); i++) {
+//		addlTravPlanes.emplace_back(constructTraverse<AddlTravPlane>())
+//	}
+
+
+//	auto addlTraverse = constructTraverse<AddlTravPlane>("AddlTraverse");
 
 	Local<Object> obj = Nan::New<Object>();
 //	Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
