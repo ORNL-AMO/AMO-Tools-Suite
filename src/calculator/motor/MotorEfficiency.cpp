@@ -15,7 +15,7 @@
 #include "calculator/util/CurveFitVal.h"
 
 double MotorEfficiency::calculate(double loadFactor, double specifiedEfficiency) {
-	if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED && specifiedEfficiency <= 0) {
+	if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED && specifiedEfficiency < 0) {
 		throw std::runtime_error("An efficiency must be specified if EfficiencyClass::SPECIFIED is used");
 	}
 
