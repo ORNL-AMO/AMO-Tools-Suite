@@ -113,7 +113,7 @@ test('fan curve test', function (t) {
         density: 0.0308, densityCorrected: 0.0332, speed: 1180, speedCorrected: 1187,
         pressureBarometric: 29.36, pressureBarometricCorrected: 29.36, pt1Factor: -0.93736,
         gamma: 1.4, gammaCorrected: 1.4, area1: 34, area2: 12.7, curveType: 'FanStaticPressure',
-        BaseCurveData: [
+        CurveData: [
             [0, 22.3, 115],
             [14410, 22.5, 154],
             [28820, 22.3, 194],

@@ -42,7 +42,7 @@ bool isUndefined(Local<Object> obj, std::string const & key) {
 	return obj->Get(Nan::New<String>(key).ToLocalChecked())->IsUndefined();
 }
 
-inline void SetR(const char *key, double val) {
+inline void SetR(const std::string & key, double val) {
 	Nan::Set(r, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
 }
 
@@ -186,16 +186,36 @@ NAN_METHOD(fanPlaceholder) {
 	info.GetReturnValue().Set(r);
 }
 
-FanCurveData getFanBaseCurveData() {
-	auto const & arrayTmp = inp->ToObject()->Get(Nan::New<String>("BaseCurveData").ToLocalChecked());
+template <typename T>
+FanCurveData getFanCurveData() {
+	auto const & arrayTmp = inp->ToObject()->Get(Nan::New<String>("CurveData").ToLocalChecked());
 	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
 
 	std::vector<FanCurveData::BaseCurve> curveData;
 	for (std::size_t i = 0; i < array->Length(); i++) {
 		auto const & innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
-		curveData.emplace_back(FanCurveData::BaseCurve(innerArray->Get(0)->NumberValue(),
-		                                               innerArray->Get(1)->NumberValue(),
-		                                               innerArray->Get(2)->NumberValue()));
+		if (sizeof(T) == sizeof(FanCurveData::BaseCurve)) {
+			curveData.emplace_back(FanCurveData::BaseCurve(innerArray->Get(0)->NumberValue(),
+			                                               innerArray->Get(1)->NumberValue(),
+			                                               innerArray->Get(2)->NumberValue()));
+		} else if (sizeof(T) == sizeof(FanCurveData::RatedPoint)) {
+			curveData.emplace_back(FanCurveData::RatedPoint(innerArray->Get(0)->NumberValue(),
+			                                                innerArray->Get(1)->NumberValue(),
+			                                                innerArray->Get(2)->NumberValue(),
+			                                                innerArray->Get(3)->NumberValue(),
+			                                                innerArray->Get(4)->NumberValue(),
+			                                                innerArray->Get(5)->NumberValue()));
+		} else if (sizeof(T) == sizeof(FanCurveData::BaseOperatingPoint)) {
+			curveData.emplace_back(FanCurveData::BaseOperatingPoint(innerArray->Get(0)->NumberValue(),
+			                                                        innerArray->Get(1)->NumberValue(),
+			                                                        innerArray->Get(2)->NumberValue(),
+			                                                        innerArray->Get(3)->NumberValue(),
+			                                                        innerArray->Get(4)->NumberValue(),
+			                                                        innerArray->Get(5)->NumberValue(),
+			                                                        innerArray->Get(6)->NumberValue(),
+			                                                        innerArray->Get(7)->NumberValue(),
+			                                                        innerArray->Get(8)->NumberValue()));
+		}
 	}
 
 	FanCurveType curveType = FanCurveType::FanStaticPressure;
@@ -208,6 +228,31 @@ FanCurveData getFanBaseCurveData() {
 	return {curveType, std::move(curveData)};
 }
 
+void returnResultData(std::vector<ResultData> const & results) {
+	int terrible = 0;
+	for (auto const & row : results) {
+//		auto array = v8::Local<v8::Array>::New;
+//		Nan::New(v8::Local<v8::Array>);
+
+//		auto array = v8::Local<v8::Array>();
+
+//		auto array = v8::Local<v8::Array>::New(Nan::New(4));
+
+
+
+
+		std::string bad = "flow" + std::to_string(terrible);
+		std::string bad1 = "pressure" + std::to_string(terrible);
+		std::string bad2 = "power" + std::to_string(terrible);
+		std::string bad3 = "efficiency" + std::to_string(terrible);
+		SetR(bad, row.flow);
+		SetR(bad1, row.pressure);
+		SetR(bad2, row.power);
+		SetR(bad3, row.efficiency);
+		terrible++;
+	}
+}
+
 // fan performance curves
 NAN_METHOD(fanCurve) {
 	inp = info[0]->ToObject();
@@ -215,9 +260,14 @@ NAN_METHOD(fanCurve) {
 	auto const rv = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
 	                         Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
 	                         Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
-	                         getFanBaseCurveData()).calculate();
+	                         getFanCurveData<FanCurveData::BaseCurve>()).calculate();
 
+	auto const rv2 = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
+	                          Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
+	                          Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
+	                          getFanCurveData<FanCurveData::RatedPoint>()).calculate();
 
 	r = Nan::New<Object>();
+	returnResultData(rv2);
 	info.GetReturnValue().Set(r);
 }
