@@ -5,6 +5,7 @@
 #include "fans/Planar.h"
 #include "fans/Fan.h"
 #include "fans/FanShaftPower.h"
+#include "fans/FanCurve.h"
 
 using namespace Nan;
 using namespace v8;
@@ -43,23 +44,6 @@ bool isUndefined(Local<Object> obj, std::string const & key) {
 
 inline void SetR(const char *key, double val) {
 	Nan::Set(r, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
-}
-
-std::vector <std::vector<double>> getTraverseInputData(std::string const & innerObj) {
-	auto const & plane = inp->ToObject()->Get(Nan::New<String>(innerObj).ToLocalChecked());
-	auto const & arrayTmp = plane->ToObject()->Get(Nan::New<String>("traverseData").ToLocalChecked());
-	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
-
-	std::vector<std::vector <double> > traverseData(array->Length());
-	for (std::size_t i = 0; i < array->Length(); i++) {
-		auto const & innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
-		traverseData.at(i).resize(innerArray->Length());
-		for (std::size_t j = 0; j < innerArray->Length(); j++) {
-			traverseData.at(i).at(j) = innerArray->Get(j)->NumberValue();
-		}
-	}
-
-	return traverseData;
 }
 
 std::vector <std::vector<double>> getTraverseInputData(Local<Object> obj) {
@@ -202,6 +186,38 @@ NAN_METHOD(fanPlaceholder) {
 	info.GetReturnValue().Set(r);
 }
 
+FanCurveData getFanBaseCurveData() {
+	auto const & arrayTmp = inp->ToObject()->Get(Nan::New<String>("BaseCurveData").ToLocalChecked());
+	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
+
+	std::vector<FanCurveData::BaseCurve> curveData;
+	for (std::size_t i = 0; i < array->Length(); i++) {
+		auto const & innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
+		curveData.emplace_back(FanCurveData::BaseCurve(innerArray->Get(0)->NumberValue(),
+		                                               innerArray->Get(1)->NumberValue(),
+		                                               innerArray->Get(2)->NumberValue()));
+	}
+
+	FanCurveType curveType = FanCurveType::FanStaticPressure;
+	auto curveTypeStr = GetStr("curveType", inp);
+	if (curveTypeStr == "StaticPressureRise") {
+		curveType = FanCurveType::StaticPressureRise;
+	} else if (curveTypeStr == "FanTotalPressure") {
+		curveType = FanCurveType::FanTotalPressure;
+	}
+	return {curveType, std::move(curveData)};
+}
 
 // fan performance curves
+NAN_METHOD(fanCurve) {
+	inp = info[0]->ToObject();
 
+	auto const rv = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
+	                         Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
+	                         Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
+	                         getFanBaseCurveData()).calculate();
+
+
+	r = Nan::New<Object>();
+	info.GetReturnValue().Set(r);
+}

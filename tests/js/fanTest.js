@@ -105,3 +105,36 @@ test('fan test', function (t) {
     t.equal(rnd(res.fanEfficiencySp), rnd(49.20691409764023));
     t.equal(rnd(res.fanEfficiencySpr), rnd(50.768875240824116));
 });
+
+test('fan curve test', function (t) {
+    t.plan(4);
+    t.type(bindings.fanCurve, 'function');
+    var inp = {
+        density: 0.0308, densityCorrected: 0.0332, speed: 1180, speedCorrected: 1187,
+        pressureBarometric: 29.36, pressureBarometricCorrected: 29.36, pt1Factor: -0.93736,
+        gamma: 1.4, gammaCorrected: 1.4, area1: 34, area2: 12.7, curveType: 'FanStaticPressure',
+        BaseCurveData: [
+            [0, 22.3, 115],
+            [14410, 22.5, 154],
+            [28820, 22.3, 194],
+            [43230, 21.8, 241],
+            [57640, 21.2, 293],
+            [72050, 20.3, 349],
+            [86460, 19.3, 406],
+            [100871, 18, 462],
+            [115281, 16.5, 515],
+            [129691, 14.8, 566],
+            [144101, 12.7, 615],
+            [158511, 10.2, 667],
+            [172921, 7.3, 725],
+            [187331, 3.7, 789],
+            [201741, -0.8, 861]
+        ]
+    };
+
+    var res = bindings.fanCurve(inp);
+
+    t.equal(rnd(1), rnd(1));
+    t.equal(rnd(1), rnd(1));
+    t.equal(rnd(1), rnd(1));
+});
