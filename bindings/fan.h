@@ -201,3 +201,7 @@ NAN_METHOD(fanPlaceholder) {
 	SetR("Kpc", rv.at("Kpc"));
 	info.GetReturnValue().Set(r);
 }
+
+
+// fan performance curves
+
