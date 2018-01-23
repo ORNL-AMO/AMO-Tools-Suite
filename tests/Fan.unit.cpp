@@ -75,7 +75,6 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
 	FanCurveType curveType = FanCurveType::FanStaticPressure;
 
-//	BaseCurve(const double flow, const double pressure, const double power)
 	std::vector<FanCurveData::BaseCurve> baseCurveData = {
 			{0, 22.3, 115},
 			{14410, 22.5, 154},

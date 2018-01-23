@@ -186,71 +186,81 @@ NAN_METHOD(fanPlaceholder) {
 	info.GetReturnValue().Set(r);
 }
 
-template <typename T>
-FanCurveData getFanCurveData() {
-	auto const & arrayTmp = inp->ToObject()->Get(Nan::New<String>("CurveData").ToLocalChecked());
+FanCurveType getFanCurveType() {
+	auto const curveTypeStr = GetStr("curveType", inp);
+	if (curveTypeStr == "StaticPressureRise") {
+		return FanCurveType::StaticPressureRise;
+	} else if (curveTypeStr == "FanTotalPressure") {
+		return FanCurveType::FanTotalPressure;
+	}
+	return FanCurveType::FanStaticPressure;
+}
+
+FanCurveData getFanBaseCurveData() {
+
+	auto const & arrayTmp = inp->ToObject()->Get(Nan::New<String>("BaseCurveData").ToLocalChecked());
 	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
 
 	std::vector<FanCurveData::BaseCurve> curveData;
 	for (std::size_t i = 0; i < array->Length(); i++) {
 		auto const & innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
-		if (sizeof(T) == sizeof(FanCurveData::BaseCurve)) {
-			curveData.emplace_back(FanCurveData::BaseCurve(innerArray->Get(0)->NumberValue(),
-			                                               innerArray->Get(1)->NumberValue(),
-			                                               innerArray->Get(2)->NumberValue()));
-		} else if (sizeof(T) == sizeof(FanCurveData::RatedPoint)) {
-			curveData.emplace_back(FanCurveData::RatedPoint(innerArray->Get(0)->NumberValue(),
-			                                                innerArray->Get(1)->NumberValue(),
-			                                                innerArray->Get(2)->NumberValue(),
-			                                                innerArray->Get(3)->NumberValue(),
-			                                                innerArray->Get(4)->NumberValue(),
-			                                                innerArray->Get(5)->NumberValue()));
-		} else if (sizeof(T) == sizeof(FanCurveData::BaseOperatingPoint)) {
-			curveData.emplace_back(FanCurveData::BaseOperatingPoint(innerArray->Get(0)->NumberValue(),
-			                                                        innerArray->Get(1)->NumberValue(),
-			                                                        innerArray->Get(2)->NumberValue(),
-			                                                        innerArray->Get(3)->NumberValue(),
-			                                                        innerArray->Get(4)->NumberValue(),
-			                                                        innerArray->Get(5)->NumberValue(),
-			                                                        innerArray->Get(6)->NumberValue(),
-			                                                        innerArray->Get(7)->NumberValue(),
-			                                                        innerArray->Get(8)->NumberValue()));
-		}
+		curveData.emplace_back(FanCurveData::BaseCurve(innerArray->Get(0)->NumberValue(),
+		                                               innerArray->Get(1)->NumberValue(),
+		                                               innerArray->Get(2)->NumberValue()));
 	}
 
-	FanCurveType curveType = FanCurveType::FanStaticPressure;
-	auto curveTypeStr = GetStr("curveType", inp);
-	if (curveTypeStr == "StaticPressureRise") {
-		curveType = FanCurveType::StaticPressureRise;
-	} else if (curveTypeStr == "FanTotalPressure") {
-		curveType = FanCurveType::FanTotalPressure;
+	return {getFanCurveType(), std::move(curveData)};
+}
+FanCurveData getFanRatedPointCurveData() {
+	auto const & arrayTmp = inp->ToObject()->Get(Nan::New<String>("RatedPointCurveData").ToLocalChecked());
+	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
+
+	std::vector<FanCurveData::RatedPoint> curveData;
+	for (std::size_t i = 0; i < array->Length(); i++) {
+		auto const & innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
+		curveData.emplace_back(FanCurveData::RatedPoint(innerArray->Get(0)->NumberValue(),
+		                                                innerArray->Get(1)->NumberValue(),
+		                                                innerArray->Get(2)->NumberValue(),
+		                                                innerArray->Get(3)->NumberValue(),
+		                                                innerArray->Get(4)->NumberValue(),
+		                                                innerArray->Get(5)->NumberValue()));
 	}
-	return {curveType, std::move(curveData)};
+	return {getFanCurveType(), std::move(curveData)};
+}
+FanCurveData getFanBaseOperatingPointCurveData() {
+	auto const & arrayTmp = inp->ToObject()->Get(Nan::New<String>("BaseOperatingPointCurveData").ToLocalChecked());
+	auto const & array = v8::Local<v8::Array>::Cast(arrayTmp);
+
+	std::vector<FanCurveData::BaseOperatingPoint> curveData;
+	for (std::size_t i = 0; i < array->Length(); i++) {
+		auto const & innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
+		curveData.emplace_back(FanCurveData::BaseOperatingPoint(innerArray->Get(0)->NumberValue(),
+		                                                        innerArray->Get(1)->NumberValue(),
+		                                                        innerArray->Get(2)->NumberValue(),
+		                                                        innerArray->Get(3)->NumberValue(),
+		                                                        innerArray->Get(4)->NumberValue(),
+		                                                        innerArray->Get(5)->NumberValue(),
+		                                                        innerArray->Get(6)->NumberValue(),
+		                                                        innerArray->Get(7)->NumberValue(),
+		                                                        innerArray->Get(8)->NumberValue()));
+	}
+
+	return {getFanCurveType(), std::move(curveData)};
 }
 
 void returnResultData(std::vector<ResultData> const & results) {
-	int terrible = 0;
+	std::size_t index = 0;
+	Handle<Array> outerArray = Array::New(v8::Isolate::GetCurrent(), results.size());
 	for (auto const & row : results) {
-//		auto array = v8::Local<v8::Array>::New;
-//		Nan::New(v8::Local<v8::Array>);
-
-//		auto array = v8::Local<v8::Array>();
-
-//		auto array = v8::Local<v8::Array>::New(Nan::New(4));
-
-
-
-
-		std::string bad = "flow" + std::to_string(terrible);
-		std::string bad1 = "pressure" + std::to_string(terrible);
-		std::string bad2 = "power" + std::to_string(terrible);
-		std::string bad3 = "efficiency" + std::to_string(terrible);
-		SetR(bad, row.flow);
-		SetR(bad1, row.pressure);
-		SetR(bad2, row.power);
-		SetR(bad3, row.efficiency);
-		terrible++;
+		Handle<Array> array = Array::New(v8::Isolate::GetCurrent(), 4);
+		array->Set(0, Nan::New<Number>(row.flow));
+		array->Set(1, Nan::New<Number>(row.pressure));
+		array->Set(2, Nan::New<Number>(row.power));
+		array->Set(3, Nan::New<Number>(row.efficiency));
+		outerArray->Set(index, array);
+		index++;
 	}
+	Nan::Set(r, Nan::New<String>("ResultData").ToLocalChecked(), outerArray);
 }
 
 // fan performance curves
@@ -260,14 +270,14 @@ NAN_METHOD(fanCurve) {
 	auto const rv = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
 	                         Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
 	                         Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
-	                         getFanCurveData<FanCurveData::BaseCurve>()).calculate();
+	                         getFanBaseCurveData()).calculate();
 
 	auto const rv2 = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
 	                          Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
 	                          Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
-	                          getFanCurveData<FanCurveData::RatedPoint>()).calculate();
+	                          getFanRatedPointCurveData()).calculate();
 
 	r = Nan::New<Object>();
-	returnResultData(rv2);
+	returnResultData(rv);
 	info.GetReturnValue().Set(r);
 }
