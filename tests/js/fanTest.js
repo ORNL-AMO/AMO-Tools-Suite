@@ -107,7 +107,7 @@ test('fan test', function (t) {
 });
 
 test('fan curve test', function (t) {
-    t.plan(61);
+    t.plan(121);
     t.type(bindings.fanCurve, 'function');
     var inp = {
         density: 0.0308, densityCorrected: 0.0332, speed: 1180, speedCorrected: 1187,
@@ -162,5 +162,30 @@ test('fan curve test', function (t) {
 
     testEq(res.ResultData, expected);
 
+    var density = 0.0308, speed = 1180, speedCorrected = 1187;
+    inp = {
+        density: density, densityCorrected: 0.0332, speed: speed, speedCorrected: speedCorrected,
+        pressureBarometric: 29.36, pressureBarometricCorrected: 29.36, pt1Factor: -0.93736,
+        gamma: 1.4, gammaCorrected: 1.4, area1: 34, area2: 12.7, curveType: 'FanStaticPressure',
+        RatedPointCurveData: [
+            [0, 22.3, 115, density, speed, speedCorrected],
+            [14410, 22.5, 154, density, speed, speedCorrected],
+            [28820, 22.3, 194, density, speed, speedCorrected],
+            [43230, 21.8, 241, density, speed, speedCorrected],
+            [57640, 21.2, 293, density, speed, speedCorrected],
+            [72050, 20.3, 349, density, speed, speedCorrected],
+            [86460, 19.3, 406, density, speed, speedCorrected],
+            [100871, 18, 462, density, speed, speedCorrected],
+            [115281, 16.5, 515, density, speed, speedCorrected],
+            [129691, 14.8, 566, density, speed, speedCorrected],
+            [144101, 12.7, 615, density, speed, speedCorrected],
+            [158511, 10.2, 667, density, speed, speedCorrected],
+            [172921, 7.3, 725, density, speed, speedCorrected],
+            [187331, 3.7, 789, density, speed, speedCorrected],
+            [201741, -0.8, 861, density, speed, speedCorrected]
+        ]
+    };
 
+    res = bindings.fanCurve(inp);
+    testEq(res.ResultData, expected);
 });

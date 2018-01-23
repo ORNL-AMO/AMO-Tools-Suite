@@ -42,6 +42,10 @@ bool isUndefined(Local<Object> obj, std::string const & key) {
 	return obj->Get(Nan::New<String>(key).ToLocalChecked())->IsUndefined();
 }
 
+bool isDefined(Local<Object> obj, std::string const & key) {
+	return !obj->Get(Nan::New<String>(key).ToLocalChecked())->IsUndefined();
+}
+
 inline void SetR(const std::string & key, double val) {
 	Nan::Set(r, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
 }
@@ -267,17 +271,26 @@ void returnResultData(std::vector<ResultData> const & results) {
 NAN_METHOD(fanCurve) {
 	inp = info[0]->ToObject();
 
-	auto const rv = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
-	                         Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
-	                         Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
-	                         getFanBaseCurveData()).calculate();
-
-	auto const rv2 = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
-	                          Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
-	                          Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
-	                          getFanRatedPointCurveData()).calculate();
-
 	r = Nan::New<Object>();
-	returnResultData(rv);
+	if (isDefined(inp->ToObject(), "BaseCurveData")) {
+		auto const rv = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
+		                         Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
+		                         Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
+		                         getFanBaseCurveData()).calculate();
+		returnResultData(rv);
+	} else if (isDefined(inp->ToObject(), "RatedPointCurveData")) {
+		auto const rv = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
+		                         Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
+		                         Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
+		                         getFanRatedPointCurveData()).calculate();
+		returnResultData(rv);
+	} else {
+		auto const rv = FanCurve(Get("density", inp), Get("densityCorrected", inp), Get("speed", inp),
+		                         Get("speedCorrected", inp), Get("pressureBarometric", inp), Get("pressureBarometricCorrected", inp), Get("pt1Factor", inp),
+		                         Get("gamma", inp), Get("gammaCorrected", inp), Get("area1", inp), Get("area2", inp),
+		                         getFanBaseOperatingPointCurveData()).calculate();
+		returnResultData(rv);
+	}
+
 	info.GetReturnValue().Set(r);
 }
