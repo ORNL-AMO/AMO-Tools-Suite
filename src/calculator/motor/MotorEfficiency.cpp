@@ -10,18 +10,20 @@
 
 #include <cmath>
 #include <calculator/motor/Poles.h>
+#include <map>
 #include "calculator/motor/MotorEfficiency.h"
 #include "calculator/util/CurveFitVal.h"
 
 double MotorEfficiency::calculate(double loadFactor, double specifiedEfficiency) {
-	if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED && specifiedEfficiency <= 0) {
+	if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED && specifiedEfficiency < 0) {
 		throw std::runtime_error("An efficiency must be specified if EfficiencyClass::SPECIFIED is used");
 	}
 
 	std::array<double, 5> motorEfficiency = {};
-    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
-	    motorEfficiency = MotorEfficiency(lineFrequency, motorRpm, efficiencyClass, motorRatedPower).calculate25intervals();
-    } else if (efficiencyClass == Motor::EfficiencyClass::STANDARD) {
+    if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT
+        || efficiencyClass == Motor::EfficiencyClass::STANDARD
+        || efficiencyClass == Motor::EfficiencyClass::PREMIUM)
+    {
 	    motorEfficiency = MotorEfficiency(lineFrequency, motorRpm, efficiencyClass, motorRatedPower).calculate25intervals();
     } else if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
         // For specified efficiency, you have to first choose the nominal efficiency.
@@ -39,9 +41,6 @@ double MotorEfficiency::calculate(double loadFactor, double specifiedEfficiency)
 					        stdMotorEffs[4] * C, stdMotorEffs[4] * C
 			        }
 	        };
-//            for (std::size_t i = 0; i < 5; ++i) {
-//                motorEfficiency[i] = stdMotorEffs[i] * C;
-//            }
         } else { // EE chosen
             specifiedEfficiency = specifiedEfficiency / 100;
             const double C = specifiedEfficiency / motorEfficiency[3];
@@ -385,6 +384,66 @@ std::array<double, 5> MotorEfficiency::calculate25intervals() {
 		return (plCoeffs[0][i] + (plCoeffs[1][i] * std::exp(-plCoeffs[2][i] * motorRatedPower)) +
 		        (plCoeffs[3][i] * std::exp(-plCoeffs[4][i] * motorRatedPower))) / 100;
 	};
+
+	if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
+		if (motorRatedPower > 500 || motorRatedPower < 5) {
+			throw std::runtime_error("Premium Efficiency only supports motorRatedPower values between 5 and 500");
+		}
+		if (pole > 2) {
+			throw std::runtime_error("The amount of poles in the motor must actually make sense for premium");
+		}
+
+		static const std::map<int, const std::array<double, 3>> fullLoadPremiumEfficiencies = {
+				{
+						{5, {{88.5, 89.5, 89.5}}},
+						{7, {{89.5, 91.7, 91}}},
+						{10, {{90.2, 91.7, 91}}},
+						{15, {{91, 92.4, 91.7}}},
+						{20, {{91, 93, 91.7}}},
+						{25, {{91.7, 93.6, 93}}},
+						{30, {{91.7, 93.6, 93}}},
+						{40, {{92.4, 94.1, 94.1}}},
+						{50, {{93, 94.5, 94.1}}},
+						{60, {{93.6, 95, 94.5}}},
+						{75, {{93.6, 95.4, 94.5}}},
+						{100, {{94.1, 95.4, 95}}},
+						{125, {{95, 95.4, 95}}},
+						{150, {{95, 95.8, 95.8}}},
+						{200, {{95.4, 96.2, 95.8}}},
+						{250, {{95.8, 96.2, 95.8}}},
+						{300, {{95.8, 96.2, 95.8}}},
+						{350, {{95.8, 96.2, 95.8}}},
+						{400, {{95.8, 96.2, 95.8}}},
+						{450, {{95.8, 96.2, 95.8}}},
+						{500, {{95.8, 96.2, 95.8}}}
+				}
+		};
+
+		auto const power = static_cast<int>(motorRatedPower + 0.00001);
+		auto const it = fullLoadPremiumEfficiencies.find(power);
+
+		double flPremiumEff = 0;
+
+		// do linear interpolation if the exact number isn't found
+		if (it == fullLoadPremiumEfficiencies.end()) {
+			auto const upper = fullLoadPremiumEfficiencies.upper_bound(power);
+			auto const lower = std::prev(upper);
+
+			auto const effUpper = (upper->second.at(pole) / 100) / effCalc(3);
+			auto const effLower = (lower->second.at(pole) / 100) / effCalc(3);
+
+			flPremiumEff = ((motorRatedPower - upper->first) / (upper->first - lower->first)) * (effUpper - effLower) + effLower;
+		} else {
+			flPremiumEff = (it->second.at(pole) / 100) / effCalc(3); // use exact number for efficiency calc
+		}
+
+		return {
+				{
+						effCalc(0) * flPremiumEff, effCalc(1) * flPremiumEff, effCalc(2) * flPremiumEff,
+						effCalc(3) * flPremiumEff, 0.99 * effCalc(3)
+				}
+		};
+	}
 
 	/**
 	 * Calculating Motor Efficiency

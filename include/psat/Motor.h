@@ -23,14 +23,15 @@
 class Motor {
 public:
 
-    ///Classifications of efficiency classes
+    // Classifications of efficiency classes
     enum class EfficiencyClass {
         STANDARD,
         ENERGY_EFFICIENT,
-        SPECIFIED
+        PREMIUM,
+        SPECIFIED,
     };
 
-    ///Classifications of line frequency
+    // Classifications of line frequency
     enum class LineFrequency{
         FREQ60,
         FREQ50

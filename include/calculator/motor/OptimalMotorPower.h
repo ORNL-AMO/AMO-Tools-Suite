@@ -49,7 +49,6 @@ public:
         ratedVoltage(ratedVoltage),
         fieldVoltage(fieldVoltage),
         efficiencyClass(efficiencyClass),
-        optimalEfficiencyClass(optimalEfficiencyClass),
         specifiedEfficiency(specifiedEfficiency)
     {};
 
@@ -110,7 +109,7 @@ private:
     double optimalMotorShaftPower, motorRatedPower, motorRPM;
     Motor::LineFrequency lineFrequency;
     double ratedVoltage, fieldVoltage;
-    Motor::EfficiencyClass efficiencyClass, optimalEfficiencyClass;
+    Motor::EfficiencyClass efficiencyClass;
     double specifiedEfficiency;
 
     // values set in calculate()

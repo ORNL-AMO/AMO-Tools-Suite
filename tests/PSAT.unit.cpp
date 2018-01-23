@@ -13,6 +13,60 @@
 #include <calculator/motor/MotorCurrent.h>
 #include <calculator/motor/EstimateFLA.h>
 
+TEST_CASE( "PSATResultsPremium", "[PSAT results]" ) {
+	double pump_specified = 90, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
+	double stages = 2.0, motor_rated_power = 200, motor_rated_speed = 1780, efficiency = 95, motor_rated_voltage = 460;
+	double motor_rated_fla = 225.0, margin = 0, operating_fraction = 1.00, cost_kw_hour = 0.05, flow_rate = 1840;
+	double head = 174.85, motor_field_power = 80, motor_field_current = 125.857, motor_field_voltage = 480;
+	double baseline_pump_efficiency = 0.80;
+
+	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
+	Pump::Drive drive1(Pump::Drive::DIRECT_DRIVE);
+	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
+	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::PREMIUM);
+	FieldData::LoadEstimationMethod loadEstimationMethod1(FieldData::LoadEstimationMethod::POWER);
+
+	Pump pump(style1, pump_specified, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
+	Financial fin(operating_fraction, cost_kw_hour);
+	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+
+	psat.calculateExisting();
+//	psat.calculateModified();
+	psat.calculateOptimal();
+	auto const & ex = psat.getExisting();
+//	auto const & mod = psat.getModified();
+	auto const & opt = psat.getOptimal();
+
+	CHECK(ex.pumpEfficiency * 100 == Approx(79.5485400165));
+	CHECK(ex.motorRatedPower == Approx(200));
+	CHECK(ex.motorShaftPower == Approx(102.0950630692));
+	CHECK(ex.pumpShaftPower == Approx(102.0950630692));
+	CHECK(ex.motorEfficiency * 100 == Approx(95.20364631));
+	CHECK(ex.motorPowerFactor * 100 == Approx(75.9904854629));
+	CHECK(ex.motorCurrent == Approx(126.6277538284));
+	CHECK(ex.motorPower == Approx(80));
+	CHECK(ex.annualEnergy == Approx(700.8));
+	CHECK(ex.annualCost * 1000.0 == Approx(35040));
+
+	CHECK(opt.pumpEfficiency * 100 == Approx(86.75480583084276));
+	CHECK(opt.motorRatedPower == Approx(100));
+	CHECK(opt.motorShaftPower == Approx(93.6145627007516));
+	CHECK(opt.pumpShaftPower == Approx(93.614562700751));
+	CHECK(opt.motorEfficiency * 100 == Approx(95.5007668323));
+	CHECK(opt.motorPowerFactor * 100 == Approx(85.9639397889));
+	CHECK(opt.motorCurrent == Approx(102.3192275057));
+	CHECK(opt.motorPower == Approx(73.126607942));
+	CHECK(opt.annualEnergy == Approx(640.5890855721));
+	CHECK(opt.annualCost * 1000.0 == Approx(32029.4542786053));
+
+	CHECK(psat.getAnnualSavingsPotential() * 1000 == Approx(0));
+	CHECK(psat.getOptimizationRating() == Approx(0));
+
+}
+
 TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	double pump_specified = 90, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
 	double stages = 2.0, motor_rated_power = 200, motor_rated_speed = 1780, efficiency = 95, motor_rated_voltage = 460;
@@ -55,24 +109,31 @@ TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	CHECK(mod.motorRatedPower == Approx(200));
 	CHECK(mod.motorShaftPower == Approx(101.5189151255));
 	CHECK(mod.pumpShaftPower == Approx(101.5189151255));
-	CHECK(mod.motorEfficiency * 100 == Approx(94.3652462131));
-	CHECK(mod.motorPowerFactor * 100 == Approx(76.2584456388));
-	CHECK(mod.motorCurrent == Approx(126.5852583329));
-	CHECK(mod.motorPower == Approx(80.2551564807));
-	CHECK(mod.annualEnergy == Approx(703.0351707712));
-	CHECK(mod.annualCost * 1000.0 == Approx(35151.7585385623));
+	CHECK(mod.motorEfficiency * 100 == Approx(95.1866747985));
+	CHECK(mod.motorPowerFactor * 100 == Approx(76.0541862094));
+	CHECK(mod.motorCurrent == Approx(125.8298581831));
+	CHECK(mod.motorPower == Approx(79.5625502978));
+	CHECK(mod.annualEnergy == Approx(696.9679406087));
+	CHECK(mod.annualCost * 1000.0 == Approx(34848.3970304333));
 
 
+	// these values were modified to pass for the changes we made for optimal (premium)
+//	CHECK(opt.motorEfficiency * 100 == Approx(95.4868858345));
+//	CHECK(opt.motorPowerFactor * 100 == Approx(83.9640402732));
+//	CHECK(opt.motorCurrent == Approx(104.7715676829));
+//	CHECK(opt.motorPower == Approx(73.1372514568));
+//	CHECK(opt.annualEnergy == Approx(640.6823227615));
+//	CHECK(opt.annualCost * 1000.0 == Approx(32034.1161380738));
 	CHECK(opt.pumpEfficiency * 100 == Approx(86.75480583084276));
 	CHECK(opt.motorRatedPower == Approx(100));
 	CHECK(opt.motorShaftPower == Approx(93.6145627007516));
 	CHECK(opt.pumpShaftPower == Approx(93.614562700751));
-	CHECK(opt.motorEfficiency * 100 == Approx(95.02783605700556));
-	CHECK(opt.motorPowerFactor * 100 == Approx(85.97645176630047));
-	CHECK(opt.motorCurrent == Approx(102.81349971661015));
-	CHECK(opt.motorPower == Approx(73.49055466145589));
-	CHECK(opt.annualEnergy == Approx(643.777258834353));
-	CHECK(opt.annualCost * 1000.0 == Approx(32188.86294171768));
+	CHECK(opt.motorEfficiency * 100 == Approx(95.5007668323));
+	CHECK(opt.motorPowerFactor * 100 == Approx(85.9639397889));
+	CHECK(opt.motorCurrent == Approx(102.3192275057));
+	CHECK(opt.motorPower == Approx(73.126607942));
+	CHECK(opt.annualEnergy == Approx(640.5890855721));
+	CHECK(opt.annualCost * 1000.0 == Approx(32029.4542786053));
 
 	CHECK(psat.getAnnualSavingsPotential() * 1000 == Approx(0));
 	CHECK(psat.getOptimizationRating() == Approx(0));
@@ -114,12 +175,12 @@ TEST_CASE( "PSATResults - new test", "[PSAT results]" ) {
 	CHECK(mod.motorRatedPower == Approx(200));
 	CHECK(mod.motorShaftPower == Approx(190.7010275392));
 	CHECK(mod.pumpShaftPower == Approx(183.0500709481));
-	CHECK(mod.motorEfficiency * 100 == Approx(95.0700964487));
-	CHECK(mod.motorPowerFactor * 100 == Approx(86.8975146434));
-	CHECK(mod.motorCurrent == Approx(207.128014213));
-	CHECK(mod.motorPower == Approx(149.6401247588));
-	CHECK(mod.annualEnergy == Approx(1310.8474928874));
-	CHECK(mod.annualCost * 1000.0 == Approx(78650.8495732458));
+	CHECK(mod.motorEfficiency * 100 == Approx(96.3082057178));
+	CHECK(mod.motorPowerFactor * 100 == Approx(86.295360550));
+	CHECK(mod.motorCurrent == Approx(205.8919735001));
+	CHECK(mod.motorPower == Approx(147.7164047056));
+	CHECK(mod.annualEnergy == Approx(1293.9957052213));
+	CHECK(mod.annualCost * 1000.0 == Approx(77639.7423132804));
 }
 
 TEST_CASE( "PSATResults2 v-belt type", "[PSAT results]" ) {
@@ -153,12 +214,12 @@ TEST_CASE( "PSATResults2 v-belt type", "[PSAT results]" ) {
 	CHECK(mod.motorRatedPower == Approx(200));
 	CHECK(mod.motorShaftPower == Approx(200.507050278));
 	CHECK(mod.pumpShaftPower == Approx(192.468232632));
-	CHECK(mod.motorEfficiency * 100 == Approx(95.6211069257));
-	CHECK(mod.motorPowerFactor * 100 == Approx(86.7354953183));
-	CHECK(mod.motorCurrent == Approx(226.3599309627));
-	CHECK(mod.motorPower == Approx(156.4281376282));
-	CHECK(mod.annualEnergy == Approx(1370.3104856228));
-	CHECK(mod.annualCost * 1000.0 == Approx(82218.6291373691));
+	CHECK(mod.motorEfficiency * 100 == Approx(96.1908738033));
+	CHECK(mod.motorPowerFactor * 100 == Approx(86.739384720));
+	CHECK(mod.motorCurrent == Approx(225.0091233884));
+	CHECK(mod.motorPower == Approx(155.5016221862));
+	CHECK(mod.annualEnergy == Approx(1362.1942103508));
+	CHECK(mod.annualCost * 1000.0 == Approx(81731.6526210474));
 
 	CHECK(psat.getAnnualSavingsPotential() * 1000 == Approx(0));
 	CHECK(psat.getOptimizationRating() == Approx(0));
@@ -195,12 +256,12 @@ TEST_CASE( "PSATResults notched v belt", "[PSAT results]" ) {
 	CHECK(mod.motorRatedPower == Approx(200));
 	CHECK(mod.motorShaftPower == Approx(198.2102452363));
 	CHECK(mod.pumpShaftPower == Approx(192.468232632));
-	CHECK(mod.motorEfficiency * 100 == Approx(95.6417064886));
-	CHECK(mod.motorPowerFactor * 100 == Approx(86.6915209945));
-	CHECK(mod.motorCurrent == Approx(223.8322217984));
-	CHECK(mod.motorPower == Approx(154.6029182589));
-	CHECK(mod.annualEnergy == Approx(1354.3215639476));
-	CHECK(mod.annualCost * 1000.0 == Approx(81259.2938368578));
+	CHECK(mod.motorEfficiency * 100 == Approx(96.2279211774));
+	CHECK(mod.motorPowerFactor * 100 == Approx(86.680682265));
+	CHECK(mod.motorCurrent == Approx(222.4964983808));
+	CHECK(mod.motorPower == Approx(153.6611080449));
+	CHECK(mod.annualEnergy == Approx(1346.0713064729));
+	CHECK(mod.annualCost * 1000.0 == Approx(80764.278388376));
 
 	CHECK(psat.getAnnualSavingsPotential() * 1000 == Approx(0));
 	CHECK(psat.getOptimizationRating() == Approx(0));
@@ -235,7 +296,7 @@ TEST_CASE( "PSATResults sync belt", "[PSAT results]" ) {
 
 	CHECK(mod.motorShaftPower == Approx(194.767));
 	CHECK(mod.pumpShaftPower == Approx(192.468232632));
-	CHECK(mod.motorPower == Approx(151.8722277599));
+	CHECK(mod.motorPower == Approx(150.9215832159));
 }
 
 TEST_CASE( "PSAT pump shaft power", "[PSAT][pump shaft power][drive]" ) {

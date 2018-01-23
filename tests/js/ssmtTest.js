@@ -1,7 +1,3 @@
-/**
- * Created by qkf on 7/28/2017.
- */
-
 const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../')
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'ssmt'});

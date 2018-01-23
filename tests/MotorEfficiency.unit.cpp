@@ -92,3 +92,33 @@ TEST_CASE( "Calculate Motor25 Efficiencies", "[MotorEfficiency25]" ) {
     compare(MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::STANDARD, 250).calculate25intervals());
     compare(MotorEfficiency(Motor::LineFrequency::FREQ60, 3200, Motor::EfficiencyClass::STANDARD, 125).calculate25intervals());
 }
+
+TEST_CASE( "MotorEfficiency25 Premium", "[MotorEfficiency][PREMIUM]" ) {
+    auto results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 200).calculate25intervals();
+    CHECK(results[0] == Approx(0.9199840391));
+    CHECK(results[1] == Approx(0.9514158668));
+    CHECK(results[2] == Approx(0.9610411879));
+    CHECK(results[3] == Approx(0.962));
+    CHECK(results[4] == Approx(0.9298570145));
+
+    results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 7.5).calculate25intervals();
+	CHECK(results[0] == Approx(0.8117812241));
+	CHECK(results[1] == Approx(0.901053769));
+	CHECK(results[2] == Approx(0.9211496507));
+	CHECK(results[3] == Approx(0.917));
+	CHECK(results[4] == Approx(0.8506174007));
+
+    results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 10).calculate25intervals();
+    CHECK(results[0] == Approx(0.8233684237));
+    CHECK(results[1] == Approx(0.9063152482));
+    CHECK(results[2] == Approx(0.9235856227));
+    CHECK(results[3] == Approx(0.917));
+    CHECK(results[4] == Approx(0.8594576811));
+
+    results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 8.75).calculate25intervals();
+    CHECK(results[0] == Approx(0.8180317983));
+    CHECK(results[1] == Approx(0.9040703806));
+    CHECK(results[2] == Approx(0.9226980538));
+    CHECK(results[3] == Approx(0.917));
+    CHECK(results[4] == Approx(0.8553943447));
+}
