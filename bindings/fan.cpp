@@ -6,8 +6,8 @@ using namespace Nan;
 
 NAN_MODULE_INIT(InitFans) {
 
-	Nan::Set(target, New<String>("fanPlaceholder").ToLocalChecked(),
-	         GetFunction(New<FunctionTemplate>(fanPlaceholder)).ToLocalChecked());
+	Nan::Set(target, New<String>("fan203").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(fan203)).ToLocalChecked());
 
 	Nan::Set(target, New<String>("fanCurve").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(fanCurve)).ToLocalChecked());

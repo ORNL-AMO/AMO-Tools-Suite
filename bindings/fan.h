@@ -172,7 +172,7 @@ FanShaftPower getFanShaftPower() {
 	};
 }
 
-NAN_METHOD(fanPlaceholder) {
+NAN_METHOD(fan203) {
 	inp = info[0]->ToObject();
 
 	auto const rv = Fan(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();

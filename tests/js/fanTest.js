@@ -8,7 +8,7 @@ function rnd(value) {
 
 test('fan test', function (t) {
     t.plan(4);
-    t.type(bindings.fanPlaceholder, 'function');
+    t.type(bindings.fan203, 'function');
     var inp = {
         FanRatedInfo: {
             fanSpeed: 1191,
@@ -99,7 +99,7 @@ test('fan test', function (t) {
         }
     };
 
-    var res = bindings.fanPlaceholder(inp);
+    var res = bindings.fan203(inp);
 
     t.equal(rnd(res.fanEfficiencyTp), rnd(53.60738684355601));
     t.equal(rnd(res.fanEfficiencySp), rnd(49.20691409764023));
