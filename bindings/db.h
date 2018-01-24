@@ -411,8 +411,14 @@ NAN_METHOD(insertGasFlueGasMaterial) {
 	GasCompositions comp(GetStr("substance"), Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
 	                     Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
-	bool success = sql->insertGasFlueGasMaterial(comp);
-	info.GetReturnValue().Set(success);
+    try {
+        bool success = sql->insertGasFlueGasMaterial(comp);
+        info.GetReturnValue().Set(success);
+    } catch (std::runtime_error const & e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in insertGasFlueGasMaterial - db.h: " + what).c_str());
+        info.GetReturnValue().Set(false);
+    }
 }
 
 NAN_METHOD(deleteGasFlueGasMaterial) {
