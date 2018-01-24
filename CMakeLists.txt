@@ -116,7 +116,6 @@ set(SOURCE_FILES
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
         src/calculator/util/CHP.cpp
-        src/fans/Fan.cpp
         src/fans/FanShaftPower.cpp
         src/fans/Planar.cpp
         src/fans/FanCurve.cpp

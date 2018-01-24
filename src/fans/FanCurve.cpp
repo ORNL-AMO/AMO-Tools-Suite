@@ -1,12 +1,6 @@
 #include <fans/FanCurve.h>
 #include <cmath>
 
-//CurveConditions::CurveConditions(double density, double rpm, double barometricPressure, double isentropicExponent)
-//		: density(density), rpm(rpm), barometricPressure(barometricPressure), isentropicExponent(isentropicExponent)
-//{
-//
-//}
-
 std::vector<ResultData> FanCurve::calculate() {
 	if (curveData.calcType == FanCurveData::CalculationType::BaseCurve) {
 		return calculateBaseCurve();
@@ -129,14 +123,8 @@ std::vector<ResultData> FanCurve::calculateRatedPoint() {
 	return results;
 }
 
-// TODO implement this
 std::vector<ResultData> FanCurve::calculateBaseOperatingPoint() {
 	std::vector<ResultData> results;
-
-//	BaseOperatingPoint(const double flow, const double pressure, const double power, const double density,
-//	const double speed, const double speedCorrected, const double pressureBarometric,
-//	const bool usePt1Factor)
-
 
 	for (auto const & row : this->curveData.baseOperatingPointData) {
 		double kp = 1, kpC = 1;
@@ -190,5 +178,4 @@ std::vector<ResultData> FanCurve::calculateBaseOperatingPoint() {
 		}
 	}
 	return results;
-
 }
