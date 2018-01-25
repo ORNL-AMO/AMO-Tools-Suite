@@ -377,8 +377,8 @@ const std::array< std::array<double, 4>, 5> MotorEfficiency::determinePartialLoa
 
 std::array<double, 5> MotorEfficiency::calculate25intervals() {
 	// Find the poles and use it as an index
-	int const pole = Poles(motorRpm, lineFrequency).calculate() / 2 - 1;
-	auto const plCoeffs = determinePartialLoadCoefficients(static_cast<std::size_t>(pole));
+	int const poleCase = Poles(motorRpm, lineFrequency).calculate() / 2 - 1;
+	auto const plCoeffs = determinePartialLoadCoefficients(static_cast<std::size_t>(poleCase));
 
 	auto const effCalc = [this, &plCoeffs] (std::size_t const i) {
 		return (plCoeffs[0][i] + (plCoeffs[1][i] * std::exp(-plCoeffs[2][i] * motorRatedPower)) +
@@ -389,8 +389,8 @@ std::array<double, 5> MotorEfficiency::calculate25intervals() {
 		if (motorRatedPower > 500 || motorRatedPower < 5) {
 			throw std::runtime_error("Premium Efficiency only supports motorRatedPower values between 5 and 500");
 		}
-		if (pole > 2) {
-			throw std::runtime_error("The amount of poles in the motor must actually make sense for premium");
+		if (poleCase > 2) {
+			throw std::runtime_error("Currently only premium efficiency motors of 6 poles or less are supported by this calculation");
 		}
 
 		static const std::map<int, const std::array<double, 3>> fullLoadPremiumEfficiencies = {
@@ -429,12 +429,12 @@ std::array<double, 5> MotorEfficiency::calculate25intervals() {
 			auto const upper = fullLoadPremiumEfficiencies.upper_bound(power);
 			auto const lower = std::prev(upper);
 
-			auto const effUpper = (upper->second.at(pole) / 100) / effCalc(3);
-			auto const effLower = (lower->second.at(pole) / 100) / effCalc(3);
+			auto const effUpper = (upper->second.at(poleCase) / 100) / effCalc(3);
+			auto const effLower = (lower->second.at(poleCase) / 100) / effCalc(3);
 
 			flPremiumEff = ((motorRatedPower - upper->first) / (upper->first - lower->first)) * (effUpper - effLower) + effLower;
 		} else {
-			flPremiumEff = (it->second.at(pole) / 100) / effCalc(3); // use exact number for efficiency calc
+			flPremiumEff = (it->second.at(poleCase) / 100) / effCalc(3); // use exact number for efficiency calc
 		}
 
 		return {
