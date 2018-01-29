@@ -379,17 +379,6 @@ test('exhaustGasEAF', function (t) {
     t.equal(rnd(res), rnd(12553119.018404908), res + ' != 12553119.018405');
 });
 
-// test('availableHeat', function (t) {
-//     t.plan(2);
-//     t.type(bindings.availableHeat, 'function');
-//
-//     var inp = {
-//     };
-//
-//     var res = bindings.availableHeat(inp);
-//     t.equal(rnd(res), rnd(82.72794239800001), res + ' != 82.72794239800001');
-// });
-
 test('energyInputExhaustGasLosses', function (t) {
     t.plan(4);
     t.type(bindings.energyInputExhaustGasLosses, 'function');
