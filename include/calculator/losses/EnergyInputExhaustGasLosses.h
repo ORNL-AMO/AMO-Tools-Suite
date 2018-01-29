@@ -12,60 +12,40 @@
 #define AMO_TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H
 
 /**
- * Available Heat class
- * Used to calculate the available heat
- */
-class AvailableHeat {
-public:
-    /**
-     *
-     * Constructor for the available heat with all inputs specified
-     *
-     * @param excessAir double, excess air as %
-     * @param combustionAirTemp double, temperature of combustion air in °F
-     * @param exhaustGasTemp double, temperature of exhaust gas in °F
-     *
-     *
-     * */
-    AvailableHeat(double excessAir, double combustionAirTemp, double exhaustGasTemp);
-
-    double getAvailableHeat() const { return availableHeat; };
-
-private:
-    const double excessAir;
-
-    const double heat, specificHeatAir, airCorrection, combustionAirCorrection;
-
-    // Out values
-    const double availableHeat;
-};
-
-/**
  * Energy Input Exhaust Gas Losses
  * Used to calculate the fuel heat that is delivered to the oven/furnace
  */
 class EnergyInputExhaustGasLosses {
 public:
     /**
-     *
-     * Constructor for the energy input - exhaust gas losses with all inputs specified
-     *
+     * Constructor for the energy input - exhaust gas losses - Will calculate availableHeat given input parameters
+     * and calculate heatDelivered and exhaustGasLosses
      * @param totalHeatInput double, total heat input from all sources of heat supplied in Btu/hr
-     * @param electricalPowerInput double, electrical power input in kW
-     * @param userAvailableHeat double, user defined available heat as %
-     * @param otherLosses double, other losses in Btu/hr
-     *
-     *
+     * @param excessAir double, excess air as %
+     * @param combustionAirTemp double, temperature of combustion air in °F
+     * @param exhaustGasTemp double, temperature of exhaust gas in °F
      * */
-    EnergyInputExhaustGasLosses(double totalHeatInput, double electricalPowerInput, double availableHeat,
-                                double otherLosses);
+    EnergyInputExhaustGasLosses(const double totalHeatInput, const double excessAir,
+                                const double combustionAirTemp, const double exhaustGasTemp)
+		    :
+		      excessAir(excessAir / 100), heat(95 - 0.025 * exhaustGasTemp),
+		      specificHeatAir(0.017828518 + 0.000002556 * combustionAirTemp),
+		      airCorrection(-((-1.078913827 + specificHeatAir * exhaustGasTemp) * this->excessAir)),
+		      combustionAirCorrection((-1.078913827 + specificHeatAir * combustionAirTemp) * (1 + this->excessAir)),
+		      availableHeat(heat + airCorrection + combustionAirCorrection),
+		      heatDelivered(totalHeatInput * availableHeat / 100),
+		      exhaustGasLosses(heatDelivered * (100 - availableHeat) / availableHeat)
+    {}
 
     double getHeatDelivered() const { return heatDelivered; };
 
     double getExhaustGasLosses() const { return exhaustGasLosses; };
 
+	double getAvailableHeat() const { return availableHeat; };
+
 private:
-    const double heatDelivered, exhaustGasLosses;
+    const double excessAir, heat, specificHeatAir, airCorrection;
+	const double combustionAirCorrection, availableHeat, heatDelivered, exhaustGasLosses;
 };
 
 #endif //AMO_TOOLS_SUITE_ENERGYINPUTEXHAUSTGASLOSSES_H

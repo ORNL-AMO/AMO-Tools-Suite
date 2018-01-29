@@ -379,27 +379,27 @@ test('exhaustGasEAF', function (t) {
     t.equal(rnd(res), rnd(12553119.018404908), res + ' != 12553119.018405');
 });
 
-test('availableHeat', function (t) {
-    t.plan(2);
-    t.type(bindings.availableHeat, 'function');
-
-    var inp = {
-        excessAir: 65, combustionAirTemp: 300, exhaustGasTemp: 550
-    };
-
-    var res = bindings.availableHeat(inp);
-    t.equal(rnd(res), rnd(82.72794239800001), res + ' != 82.72794239800001');
-});
+// test('availableHeat', function (t) {
+//     t.plan(2);
+//     t.type(bindings.availableHeat, 'function');
+//
+//     var inp = {
+//     };
+//
+//     var res = bindings.availableHeat(inp);
+//     t.equal(rnd(res), rnd(82.72794239800001), res + ' != 82.72794239800001');
+// });
 
 test('energyInputExhaustGasLosses', function (t) {
-    t.plan(3);
+    t.plan(4);
     t.type(bindings.energyInputExhaustGasLosses, 'function');
 
     var inp = {
-        totalHeatInput: 5000000, electricalPowerInput: 0, availableHeat: 82.73, otherLosses: 500
+        totalHeatInput: 5000000, excessAir: 65, combustionAirTemp: 300, exhaustGasTemp: 550
     };
 
     var res = bindings.energyInputExhaustGasLosses(inp);
-    t.equal(rnd(res["heatDelivered"]), rnd(1212.3388042203985 * 3412), res["heatDelivered"] + ' != 1212.339 * 3412');
-    t.equal(rnd(res["exhaustGasLosses"]), rnd(863499.9999999998), res["exhaustGasLosses"] + ' != 863500');
+    t.equal(rnd(res.heatDelivered), rnd(4136397.1199000007));
+    t.equal(rnd(res.exhaustGasLosses), rnd(863602.8800999995));
+    t.equal(rnd(res.availableHeat), rnd(82.727942));
 });

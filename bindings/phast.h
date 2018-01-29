@@ -624,23 +624,13 @@ NAN_METHOD(o2Enrichment) {
         info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(availableHeat) {
-
-    inp = info[0]->ToObject();
-    r = Nan::New<Object>();
-    AvailableHeat av(Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"));
-    double availableHeat = av.getAvailableHeat();
-    Local<Number> retval = Nan::New(availableHeat);
-    info.GetReturnValue().Set(retval);
-}
-
 NAN_METHOD(energyInputExhaustGasLosses) {
-
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    EnergyInputExhaustGasLosses e(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
+    EnergyInputExhaustGasLosses e(Get("totalHeatInput"), Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"));
 	SetR("heatDelivered", e.getHeatDelivered());
     SetR("exhaustGasLosses", e.getExhaustGasLosses());
+    SetR("availableHeat", e.getAvailableHeat());
 	info.GetReturnValue().Set(r);
 }
 
