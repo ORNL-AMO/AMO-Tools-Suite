@@ -3,7 +3,7 @@
 #include <fans/FanCurve.h>
 
 TEST_CASE( "Fan", "[Fan]") {
-	FanRatedInfo fanRatedInfo(40, 1191, 1191, 1170, 0.05, 26.28, FanRatedInfo::DriveType::DIRECT);
+	FanRatedInfo fanRatedInfo(1191, 1191, 1170, 0.05, 26.28);
 
 	std::vector< std::vector< double > > traverseHoleData = {
 			{
@@ -17,11 +17,10 @@ TEST_CASE( "Fan", "[Fan]") {
 			}
 	};
 
-	FanInletFlange fanInletFlange(143.63, 32.63, 2, 123, 26.57);
+	FanInletFlange fanInletFlange(143.63, 32.63, 123, 26.57, 2);
 	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70, 78, 132.7, 26.57);
 
-	FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1, VelocityPressureTraverseData::TubeType::STYPE,
-	                          std::sqrt(0.762), traverseHoleData);
+	FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
 
 	traverseHoleData = {
 			{
@@ -36,18 +35,20 @@ TEST_CASE( "Fan", "[Fan]") {
 	};
 
 	std::vector<AddlTravPlane> addlTravPlanes({
-			                                          {143.63, 32.63, 123.0, 26.57, -17.0, VelocityPressureTraverseData::TubeType::STYPE, std::sqrt(0.762), traverseHoleData}
+			                                          {143.63, 32.63, 123.0, 26.57, -17.0, std::sqrt(0.762), traverseHoleData}
 	                                          });
 
-	InletMstPlane inletMstPlane(143.63, 32.63, 2, 123.0, 26.57, -17.55);
+	InletMstPlane inletMstPlane(143.63, 32.63, 123.0, 26.57, -17.55, 2);
 	OutletMstPlane outletMstPlane(55.42, 60.49, 132.7, 26.57, 1.8);
 
 	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
-	                           outletMstPlane, false, false, 0, 0.627, true);
+	                           outletMstPlane, 0, 0.627, true);
 
 	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547, BaseGasDensity::GasType::AIR);
 
-	auto fanShaftPower = FanShaftPower(true, false, 1750, 1200, 4160, 210, 4200, 205, 0.88, 95.0, 100, 100, FanRatedInfo::DriveType::DIRECT, 0);
+	// method 2 original constructor
+//	auto fanShaftPower = FanShaftPower(true, false, 1750, 1200, 4160, 210, 4200, 205, 0.88, 95.0, 100, 100, 0);
+	auto fanShaftPower = FanShaftPower(4200, 205, 0.88, 95.0, 100, 100, 0);
 
 	auto fan = Fan(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
 	auto results = fan.calculate();
@@ -74,7 +75,6 @@ TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
 	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
 	FanCurveType curveType = FanCurveType::FanStaticPressure;
 
-//	BaseCurve(const double flow, const double pressure, const double power)
 	std::vector<FanCurveData::BaseCurve> baseCurveData = {
 			{0, 22.3, 115},
 			{14410, 22.5, 154},

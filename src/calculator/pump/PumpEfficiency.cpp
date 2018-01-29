@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 6/17/16.
-//
-
 #include "calculator/pump/PumpEfficiency.h"
 
 double PumpEfficiency::calculate() {
@@ -9,19 +5,14 @@ double PumpEfficiency::calculate() {
      * Calculate fluid power in kW
      * Fluid power, kW = 0.746 * gpm * ft * specific gravity / 3961.38
      */
-    FluidPower fluidPower(specificGravity_,flowRate_,head_);
-    fluidPower_ = fluidPower.calculate();
+    auto const fluidPower = FluidPower(specificGravity, flowRate, head).calculate();
     /**
      * Calculate fluid power in hp
      */
-    fluidPowerHp_ = fluidPower_ / 0.746;
+    auto const fluidPowerHp = fluidPower / 0.746;
 
     /**
      * Calculate pump efficiency
      */
-    pumpEfficiency_ = fluidPowerHp_ / pumpShaftPower_;
-    /**
-     * Return pump efficiency
-     */
-    return pumpEfficiency_;
+    return fluidPowerHp / pumpShaftPower;
 }

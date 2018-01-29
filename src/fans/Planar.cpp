@@ -5,109 +5,75 @@ Planar::Planar(const double circularDuctDiameter, const double tdx, const double
 		  psx(psx)
 {}
 
-Planar::Planar(const double rectLength, const double rectWidth, const double tdx, const double pbx, const double psx)
-		: tdx(tdx), pbx(pbx), area((rectLength * rectWidth) / 144.0), psx(psx)
-{}
-
-Planar::Planar(const double rectLength, const double rectWidth, unsigned const noInletBoxes, const double tdx,
-               const double pbx, const double psx)
-		: tdx(tdx), pbx(pbx), area((rectLength * rectWidth * noInletBoxes) / 144.0), psx(psx)
+Planar::Planar(const double length, const double width, const double tdx, const double pbx, const double psx,
+               const unsigned noInletBoxes)
+		: tdx(tdx), pbx(pbx), area((length * width * noInletBoxes) / 144.0), psx(psx)
 {}
 
 FanInletFlange::FanInletFlange(const double circularDuctDiameter, const double tdx, const double pbx)
 		: Planar(circularDuctDiameter, tdx, pbx, 0) {}
 
-FanInletFlange::FanInletFlange(const double rectLength, const double rectWidth, const double tdx, const double pbx)
-		: Planar(rectLength, rectWidth, tdx, pbx, 0) {}
-
-FanInletFlange::FanInletFlange(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-                               const double tdx, const double pbx)
-		: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx, 0)
+FanInletFlange::FanInletFlange(const double length, const double width, const double tdx, const double pbx,
+                               const unsigned noInletBoxes)
+		: Planar(length, width, tdx, pbx, 0, noInletBoxes)
 {}
 
 FanOrEvaseOutletFlange::FanOrEvaseOutletFlange(const double circularDuctDiameter, const double tdx, const double pbx)
 		: Planar(circularDuctDiameter, tdx, pbx, 0) {}
 
-FanOrEvaseOutletFlange::FanOrEvaseOutletFlange(const double rectLength, const double rectWidth, const double tdx,
-                                               const double pbx)
-		: Planar(rectLength, rectWidth, tdx, pbx, 0) {}
-
-FanOrEvaseOutletFlange::FanOrEvaseOutletFlange(const double rectLength, const double rectWidth,
-                                               const unsigned noInletBoxes, const double tdx, const double pbx)
-		: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx, 0)
+FanOrEvaseOutletFlange::FanOrEvaseOutletFlange(const double length, const double width,
+                                               const double tdx, const double pbx, const unsigned noInletBoxes)
+		: Planar(length, width, tdx, pbx, 0, noInletBoxes)
 {}
 
 FlowTraverse::FlowTraverse(const double circularDuctDiameter, const double tdx, const double pbx,
-                           const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
-                           std::vector< std::vector< double > > & traverseHoleData)
+                           const double psx, const double pitotTubeCoefficient,
+                           std::vector< std::vector< double > > traverseHoleData)
 		: Planar(circularDuctDiameter, tdx, pbx, psx),
-		  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData)
+		  VelocityPressureTraverseData(pitotTubeCoefficient, std::move(traverseHoleData))
 {}
 
-FlowTraverse::FlowTraverse(const double rectLength, const double rectWidth, const double tdx,
-                           const double pbx, const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
-                           std::vector< std::vector< double > > & traverseHoleData)
-		: Planar(rectLength, rectWidth, tdx, pbx, psx),
-		  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData)
-{}
-
-FlowTraverse::FlowTraverse(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-                           const double tdx, const double pbx, const double psx, const TubeType tubeType,
-                           const double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData)
-		: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx, psx),
-		  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData)
+FlowTraverse::FlowTraverse(const double length, const double width, const double tdx, const double pbx,
+                           const double psx, const double pitotTubeCoefficient,
+                           std::vector< std::vector< double > > traverseHoleData, const unsigned noInletBoxes)
+		: Planar(length, width, tdx, pbx, psx, noInletBoxes),
+		  VelocityPressureTraverseData(pitotTubeCoefficient, std::move(traverseHoleData))
 {}
 
 AddlTravPlane::AddlTravPlane(const double circularDuctDiameter, const double tdx, const double pbx,
-                             const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
-                             std::vector< std::vector< double > > & traverseHoleData)
+                             const double psx, const double pitotTubeCoefficient,
+                             std::vector< std::vector< double > > traverseHoleData)
 		: Planar(circularDuctDiameter, tdx, pbx, psx),
-		  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData)
+		  VelocityPressureTraverseData(pitotTubeCoefficient, std::move(traverseHoleData))
 {}
 
-AddlTravPlane::AddlTravPlane(const double rectLength, const double rectWidth, const double tdx,
-                             const double pbx, const double psx, const TubeType tubeType, const double pitotTubeCoefficient,
-                             std::vector< std::vector< double > > & traverseHoleData)
-		: Planar(rectLength, rectWidth, tdx, pbx, psx),
-		  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData)
-{}
-
-AddlTravPlane::AddlTravPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-                             const double tdx, const double pbx, const double psx, const TubeType tubeType,
-                             const double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData)
-		: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx, psx),
-		  VelocityPressureTraverseData(tubeType, pitotTubeCoefficient, traverseHoleData)
+AddlTravPlane::AddlTravPlane(const double length, const double width, const double tdx, const double pbx,
+                             const double psx, const double pitotTubeCoefficient,
+                             std::vector< std::vector< double > > traverseHoleData, const unsigned noInletBoxes)
+		: Planar(length, width, tdx, pbx, psx, noInletBoxes),
+		  VelocityPressureTraverseData(pitotTubeCoefficient, std::move(traverseHoleData))
 {}
 
 InletMstPlane::InletMstPlane(const double circularDuctDiameter, const double tdx, const double pbx, const double psx)
 		: Planar(circularDuctDiameter, tdx, pbx, psx) {}
 
-InletMstPlane::InletMstPlane(const double rectLength, const double rectWidth, const double tdx, const double pbx,
-                             const double psx)
-		: Planar(rectLength, rectWidth, tdx, pbx, psx) {}
-
-InletMstPlane::InletMstPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-                             const double tdx, const double pbx, const double psx)
-		: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx, psx)
+InletMstPlane::InletMstPlane(const double length, const double width, const double tdx, const double pbx,
+                             const double psx, const unsigned noInletBoxes)
+		: Planar(length, width, tdx, pbx, psx, noInletBoxes)
 {}
 
 OutletMstPlane::OutletMstPlane(const double circularDuctDiameter, const double tdx, const double pbx,
                                const double psx)
 		: Planar(circularDuctDiameter, tdx, pbx, psx) {}
 
-OutletMstPlane::OutletMstPlane(const double rectLength, const double rectWidth, const double tdx,
-                               const double pbx, const double psx)
-		: Planar(rectLength, rectWidth, tdx, pbx, psx) {}
-
-OutletMstPlane::OutletMstPlane(const double rectLength, const double rectWidth, const unsigned noInletBoxes,
-                               const double tdx, const double pbx, const double psx)
-		: Planar(rectLength, rectWidth, noInletBoxes, tdx, pbx, psx)
+OutletMstPlane::OutletMstPlane(const double length, const double width, const double tdx, const double pbx,
+                               const double psx, const unsigned noInletBoxes)
+		: Planar(length, width, tdx, pbx, psx, noInletBoxes)
 {}
 
-VelocityPressureTraverseData::VelocityPressureTraverseData(const TubeType pitotTubeType, const double pitotTubeCoefficient,
-                                                           std::vector< std::vector< double > > & traverseHoleData)
-		: pitotTubeType(pitotTubeType), pitotTubeCoefficient(pitotTubeCoefficient),
-		  traverseHoleData(std::move(traverseHoleData))
+VelocityPressureTraverseData::VelocityPressureTraverseData(const double pitotTubeCoefficient,
+                                                           std::vector< std::vector< double > > traverseHoleData)
+		: pitotTubeCoefficient(pitotTubeCoefficient), traverseHoleData(std::move(traverseHoleData))
 {
 	auto maxPv3r = 0.0;
 	auto sumPv3r = 0.0;

@@ -1,7 +1,3 @@
-//
-// Created by qkf on 7/28/2017.
-//
-
 #include <nan.h>
 #include "ssmt.h"
 

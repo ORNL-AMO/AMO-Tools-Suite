@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 3/7/17.
-//
-
 #ifndef AMO_TOOLS_SUITE_LOSSES_H
 #define AMO_TOOLS_SUITE_LOSSES_H
 
@@ -525,6 +521,7 @@ NAN_METHOD(flueGasByVolumeCalculateHeatingValue) {
 
     r = Nan::New<Object>();
     SetR("heatingValue", comps.getHeatingValue());
+    SetR("heatingValueVolume", comps.getHeatingValueVolume());
     SetR("specificGravity", comps.getSpecificGravity());
     info.GetReturnValue().Set(r);
 }

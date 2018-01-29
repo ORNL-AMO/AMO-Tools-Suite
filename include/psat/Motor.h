@@ -14,6 +14,8 @@
 #ifndef AMO_LIBRARY_MOTOR_H
 #define AMO_LIBRARY_MOTOR_H
 
+#include <cmath>
+
 /**
  * Motor class
  * Contains all of the properties of a motor.
@@ -21,14 +23,15 @@
 class Motor {
 public:
 
-    ///Classifications of efficiency classes
+    // Classifications of efficiency classes
     enum class EfficiencyClass {
         STANDARD,
         ENERGY_EFFICIENT,
-        SPECIFIED
+        PREMIUM,
+        SPECIFIED,
     };
 
-    ///Classifications of line frequency
+    // Classifications of line frequency
     enum class LineFrequency{
         FREQ60,
         FREQ50
@@ -55,177 +58,155 @@ public:
         double fullLoadAmps,
         double sizeMargin = 1
     ) :
-        lineFrequency_(lineFrequency),
-        motorRatedPower_(motorRatedPower),
-        motorRpm_(motorRpm),
-        efficiencyClass_(efficiencyClass),
-        specifiedEfficiency_(specifiedEfficiency),
-        motorRatedVoltage_(motorRatedVoltage),
-        fullLoadAmps_(fullLoadAmps),
-        sizeMargin_(sizeMargin)
+        lineFrequency(lineFrequency),
+        motorRatedPower(motorRatedPower),
+        motorRpm(motorRpm),
+        efficiencyClass(efficiencyClass),
+        specifiedEfficiency(specifiedEfficiency),
+        motorRatedVoltage(motorRatedVoltage),
+        fullLoadAmps(fullLoadAmps),
+        sizeMargin(sizeMargin)
     {};
 
     Motor() = default;
 
     /**
      * Gets the line frequency at either 50 Hz or 60 Hz
-     *
      * @return LineFrequency, classification of line frequency in Hz (either 50Hz or 60Hz)
      */
     LineFrequency getLineFrequency() const {
-        return lineFrequency_;
+        return lineFrequency;
     }
 
     /**
      * Sets the line frequency
-     *
      * @param lineFrequency LineFrequency, line frequency of either 50Hz or 60Hz
-     *
      */
     void setLineFrequency(LineFrequency lineFrequency) {
-        lineFrequency_ = lineFrequency;
+        this->lineFrequency = lineFrequency;
     }
 
     /**
      * Gets the rated motor power
-     *
      * @return double, rated motor power in hp
      */
     double getMotorRatedPower() const {
-        return motorRatedPower_;
+        return motorRatedPower;
     }
 
     /**
      * Sets the rated motor power
-     *
      * @param motorRatedPower double, rated motor power in hp
-     *
      */
     void setMotorRatedPower(double motorRatedPower) {
-        motorRatedPower_ = motorRatedPower;
+        this->motorRatedPower = motorRatedPower;
     }
 
     /**
      * Gets the RPM of motor
-     *
      * @return int, RPM of motor
      */
-    int getMotorRpm();
+    int getMotorRpm() {
+        return static_cast<int>(std::round(motorRpm));
+    };
 
     /**
      * Sets the RPM of motor
-     *
      * @param motorRpm double, RPM of motor
-     *
      */
     void setMotorRpm(double motorRpm) {
-        motorRpm_ = motorRpm;
+        this->motorRpm = motorRpm;
     }
 
     /**
      * Gets the classification of motor efficiency
-     *
      * @return EfficiencyClass, efficiency class of motor
      */
     EfficiencyClass getEfficiencyClass() const {
-        return efficiencyClass_;
+        return efficiencyClass;
     }
 
     /**
      * Sets the classification of motor efficiency
-     *
      * @param efficiencyClass EfficiencyClass, efficiency class of motor
-     *
      */
     void setEfficiencyClass(EfficiencyClass efficiencyClass) {
-        efficiencyClass_ = efficiencyClass;
+        this->efficiencyClass = efficiencyClass;
     }
 
     /**
      * Gets the specified efficiency
-     *
      * @return double, specified efficiency as %
      */
     double getSpecifiedEfficiency() const {
-        return specifiedEfficiency_;
+        return specifiedEfficiency;
     }
 
     /**
      * Sets the specified efficiency
-     *
      * @param fullLoadEfficiency double, specified efficiency as %
-     *
      */
     void setSpecifiedEfficiency(double fullLoadEfficiency) {
-        specifiedEfficiency_ = fullLoadEfficiency;
+        this->specifiedEfficiency = fullLoadEfficiency;
     }
 
     /**
      * Gets the rated motor voltage
-     *
      * @return double, rated motor voltage in V
      */
     double getMotorRatedVoltage() const {
-        return motorRatedVoltage_;
+        return motorRatedVoltage;
     }
 
     /**
      * Sets the rated motor voltage
-     *
      * @param motorRatedVoltage double, rated motor voltage in V
-     *
      */
     void setMotorRatedVoltage(double motorRatedVoltage) {
-        motorRatedVoltage_ = motorRatedVoltage;
+        this->motorRatedVoltage = motorRatedVoltage;
     }
 
     /**
      * Gets the current at full load in amps
-     *
      * @return double, current at full load in amps
      */
     double getFullLoadAmps() {
-        return fullLoadAmps_;
+        return fullLoadAmps;
     }
 
     /**
      * Sets the current at full load
-     *
      * @param fullLoadAmps double, current at full load in amps
-     *
      */
     void setFullLoadAmps(double fullLoadAmps) {
-        fullLoadAmps_ = fullLoadAmps;
+        this->fullLoadAmps = fullLoadAmps;
     }
 
     /**
      * Gets the size margin
-     *
      * @return double, size margin as %
      */
     double getSizeMargin() {
-        return sizeMargin_;
+        return sizeMargin;
     }
 
     /**
      * Sets the size margin
-     *
      * @param sizeMargin double, size margin as %
-     *
      */
     void setSizeMargin(double sizeMargin) {
-        sizeMargin_ = sizeMargin;
+        this->sizeMargin = sizeMargin;
     }
 
 private:
-    LineFrequency lineFrequency_;
-    double motorRatedPower_;
-    double motorRpm_;
-    Motor::EfficiencyClass efficiencyClass_;
-    double specifiedEfficiency_;
-    double motorRatedVoltage_;
-    double fullLoadAmps_;
-    double sizeMargin_;
+    LineFrequency lineFrequency;
+    double motorRatedPower;
+    double motorRpm;
+    Motor::EfficiencyClass efficiencyClass;
+    double specifiedEfficiency;
+    double motorRatedVoltage;
+    double fullLoadAmps;
+    double sizeMargin;
 
 };
 

@@ -38,27 +38,25 @@ class EnergyInputEAF {
     EnergyInputEAF(const double naturalGasHeatInput, const double coalCarbonInjection, const double coalHeatingValue,
                    const double electrodeUse, const double electrodeHeatingValue, const double otherFuels,
                    const double electricityInput)
-            : naturalGasHeatInput_(naturalGasHeatInput), coalCarbonInjection_(coalCarbonInjection),
-              coalHeatingValue_(coalHeatingValue), electrodeUse_(electrodeUse),
-              electrodeHeatingValue_(electrodeHeatingValue), otherFuels_(otherFuels), electricityInput_(electricityInput)
+            : naturalGasHeatInput(naturalGasHeatInput), coalCarbonInjection(coalCarbonInjection),
+              coalHeatingValue(coalHeatingValue), electrodeUse(electrodeUse),
+              electrodeHeatingValue(electrodeHeatingValue), otherFuels(otherFuels), electricityInput(electricityInput)
     {}
 
     /**
      * Calculates the total chemical energy input
-     *
      * @return double, total chemical energy input in btu/hour
      */
     double getTotalChemicalEnergyInput();
 
     /**
      * Calculates the heat delivered to the EAF
-     *
      * @return double, heat delivered to the EAF in btu/hour
      */
     double getHeatDelivered();
 
 private:
-    const double naturalGasHeatInput_, coalCarbonInjection_, coalHeatingValue_, electrodeUse_;
-    const double electrodeHeatingValue_, otherFuels_, electricityInput_;
+    const double naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse;
+    const double electrodeHeatingValue, otherFuels, electricityInput;
 };
 #endif //AMO_TOOLS_SUITE_ENERGYINPUTEAF_H

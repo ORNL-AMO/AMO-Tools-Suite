@@ -35,129 +35,114 @@ public:
                         double outletTemperature,
                         double specificHeat,
                         double correctionFactor)
-            : flowRate_(flowRate),
-              density_(density),
-              initialTemperature_(initialTemperature),
-              outletTemperature_(outletTemperature),
-              specificHeat_(specificHeat),
-              correctionFactor_(correctionFactor)
+            : flowRate(flowRate),
+              density(density),
+              initialTemperature(initialTemperature),
+              outletTemperature(outletTemperature),
+              specificHeat(specificHeat),
+              correctionFactor(correctionFactor)
     {
-        heatLoss_ = 0.0;
+        heatLoss = 0.0;
     }
 
     LiquidCoolingLosses() = default;
 
     /**
      * Gets the flow rate
-     *
      * @return double, flow rate in gpm
      */
     double getFlowRate() const {
-        return flowRate_;
+        return flowRate;
     }
 
     /**
      * Sets the flow rate
-     *
      * @param flowRate double, flow rate in gpm
-     *
      */
     void setFlowRate(double flowRate) {
-        flowRate_ = flowRate;
+        this->flowRate = flowRate;
     }
 
     /**
      * Gets the density
-     *
      * @return double, denisty in lb/cu.ft
      */
     double getDensity() const {
-        return density_;
+        return density;
     }
 
     /**
      * Sets the density
-     *
      * @param density double, density in lb/cu.ft
-     *
      */
     void setDensity(double density) {
-        density_ = density;
+        this->density = density;
     }
 
     /**
      * Gets the initial temperature
-     *
      * @return double, initial temperature in °F
      */
     double getInitialTemperature() const {
-        return initialTemperature_;
+        return initialTemperature;
     }
 
     /**
      * Sets the initial temperature
-     *
      * @param initialTemperature double, initial temperature in °F
-     *
      */
     void setInitialTemperature(double initialTemperature) {
-        initialTemperature_ = initialTemperature;
+        this->initialTemperature = initialTemperature;
     }
 
     /**
      * Gets the outlet temperature
-     *
      * @return double, outlet temperature in °F
      */
     double getOutletTemperature() const {
-        return outletTemperature_;
+        return outletTemperature;
     }
 
     /**
      * Sets the outlet temperature
-     *
      * @param outletTemperature double, outlet temperature in °F
-     *
      */
     void setOutletTemperature(double outletTemperature) {
-        outletTemperature_ = outletTemperature;
+        this->outletTemperature = outletTemperature;
     }
 
     /**
      * Gets the specific heat
-     *
      * @return double, specific heat in btu/(lb*°F)
      */
     double getSpecificHeat() const {
-        return specificHeat_;
+        return specificHeat;
     }
 
     /**
      * Sets the specific heat
-     *
      * @param specificHeat double, specific heat in btu/(lb*°F)
      *
      */
     void setSpecificHeat(double specificHeat) {
-        specificHeat_ = specificHeat;
+        this->specificHeat = specificHeat;
     }
 
     /**
      * Gets the total heat loss for cooling
-     *
      * @return double, heat loss for cooling in btu/hr
      */
     double getHeatLoss();
 
 private:
     // In values
-    double flowRate_;
-    double density_;
-    double initialTemperature_;
-    double outletTemperature_;
-    double specificHeat_;
-    double correctionFactor_;
+    double flowRate;
+    double density;
+    double initialTemperature;
+    double outletTemperature;
+    double specificHeat;
+    double correctionFactor;
     // Out value
-    double heatLoss_;
+    double heatLoss;
 };
 #endif //AMO_SUITE_LIQUIDCOOLINGLOSSES_H
