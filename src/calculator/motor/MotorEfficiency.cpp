@@ -377,7 +377,7 @@ const std::array< std::array<double, 4>, 5> MotorEfficiency::determinePartialLoa
 
 std::array<double, 5> MotorEfficiency::calculate25intervals() {
 	// Find the poles and use it as an index
-	int const poleCase = Poles(motorRpm, lineFrequency).calculate() / 2 - 1;
+	int poleCase = Poles(motorRpm, lineFrequency).calculate() / 2 - 1;
 	auto const plCoeffs = determinePartialLoadCoefficients(static_cast<std::size_t>(poleCase));
 
 	auto const effCalc = [this, &plCoeffs] (std::size_t const i) {
@@ -387,10 +387,12 @@ std::array<double, 5> MotorEfficiency::calculate25intervals() {
 
 	if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
 		if (motorRatedPower > 500 || motorRatedPower < 5) {
-			throw std::runtime_error("Premium Efficiency only supports motorRatedPower values between 5 and 500");
+			motorRatedPower = 500;
+//			throw std::runtime_error("Premium Efficiency only supports motorRatedPower values between 5 and 500");
 		}
 		if (poleCase > 2) {
-			throw std::runtime_error("Currently only premium efficiency motors of 6 poles or less are supported by this calculation");
+			poleCase = 2;
+//			throw std::runtime_error("Currently only premium efficiency motors of 6 poles or less are supported by this calculation");
 		}
 
 		static const std::map<int, const std::array<double, 3>> fullLoadPremiumEfficiencies = {
