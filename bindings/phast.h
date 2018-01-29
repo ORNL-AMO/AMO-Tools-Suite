@@ -627,7 +627,7 @@ NAN_METHOD(o2Enrichment) {
 NAN_METHOD(energyInputExhaustGasLosses) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    EnergyInputExhaustGasLosses e(Get("totalHeatInput"), Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"));
+    EnergyInputExhaustGasLosses e(Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"), Get("totalHeatInput"));
 	SetR("heatDelivered", e.getHeatDelivered());
     SetR("exhaustGasLosses", e.getExhaustGasLosses());
     SetR("availableHeat", e.getAvailableHeat());
