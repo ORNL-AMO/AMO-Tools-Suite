@@ -16,6 +16,7 @@
 #include "ssmt/Header.h"
 #include "ssmt/Turbine.h"
 #include <string>
+#include <stdexcept>
 
 
 using namespace Nan;
@@ -516,16 +517,24 @@ NAN_METHOD(turbine) {
     SteamProperties::ThermodynamicQuantity inletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
 	std::unique_ptr<Turbine> t;
 
-    if (solveFor == Turbine::Solve::OutletProperties) {
-        t = std::unique_ptr<Turbine>(new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
-                    turbineProperty, Get("isentropicEfficiency"), Get("generatorEfficiency"),
-                    Get("massFlowOrPowerOut"), Get("outletSteamPressure")));
-    } else {
-	    unsigned val = static_cast<unsigned>(inp->ToObject()->Get(Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue());
-        auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
-        t = std::unique_ptr<Turbine>(new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
-                    turbineProperty, Get("generatorEfficiency"), Get("massFlowOrPowerOut"),
-                    Get("outletSteamPressure"), outletQuantity, Get("outletQuantityValue")));
+    try {
+        if (solveFor == Turbine::Solve::OutletProperties) {
+            t = std::unique_ptr<Turbine>(
+                    new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
+                                turbineProperty, Get("isentropicEfficiency"), Get("generatorEfficiency"),
+                                Get("massFlowOrPowerOut"), Get("outletSteamPressure")));
+        } else {
+            unsigned val = static_cast<unsigned>(inp->ToObject()->Get(
+                    Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue());
+            auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
+            t = std::unique_ptr<Turbine>(
+                    new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
+                                turbineProperty, Get("generatorEfficiency"), Get("massFlowOrPowerOut"),
+                                Get("outletSteamPressure"), outletQuantity, Get("outletQuantityValue")));
+        }
+    } catch (std::runtime_error const & e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in turbine - ssmt.h: " + what).c_str());
     }
 
     SetR("inletPressure", t->getInletProperties().at("pressure"));

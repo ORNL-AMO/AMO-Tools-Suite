@@ -175,18 +175,23 @@ FanShaftPower getFanShaftPower() {
 NAN_METHOD(fan203) {
 	inp = info[0]->ToObject();
 
-	auto const rv = Fan(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();
-
 	r = Nan::New<Object>();
-	SetR("fanEfficiencyTp", rv.at("fanEfficiencyTp"));
-	SetR("fanEfficiencySp", rv.at("fanEfficiencySp"));
-	SetR("fanEfficiencySpr", rv.at("fanEfficiencySpr"));
-	SetR("Qc", rv.at("Qc"));
-	SetR("Ptc", rv.at("Ptc"));
-	SetR("Psc", rv.at("Psc"));
-	SetR("SPRc", rv.at("SPRc"));
-	SetR("Hc", rv.at("Hc"));
-	SetR("Kpc", rv.at("Kpc"));
+	try {
+		auto const rv = Fan(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();
+		SetR("fanEfficiencyTp", rv.at("fanEfficiencyTp"));
+		SetR("fanEfficiencySp", rv.at("fanEfficiencySp"));
+		SetR("fanEfficiencySpr", rv.at("fanEfficiencySpr"));
+		SetR("Qc", rv.at("Qc"));
+		SetR("Ptc", rv.at("Ptc"));
+		SetR("Psc", rv.at("Psc"));
+		SetR("SPRc", rv.at("SPRc"));
+		SetR("Hc", rv.at("Hc"));
+		SetR("Kpc", rv.at("Kpc"));
+	} catch (std::runtime_error const & e) {
+		std::string const what = e.what();
+		ThrowError(std::string("std::runtime_error thrown in fan203 - fan.h: " + what).c_str());
+	}
+
 	info.GetReturnValue().Set(r);
 }
 
