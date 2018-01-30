@@ -103,7 +103,6 @@ set(SOURCE_FILES
         src/calculator/furnace/EfficiencyImprovement.cpp
         src/calculator/furnace/O2Enrichment.cpp
         src/calculator/furnace/FlowCalculationsEnergyUse.cpp
-        src/calculator/losses/EnergyInputExhaustGasLosses.cpp
         src/calculator/furnace/HumidityRatio.cpp
         src/ssmt/SaturatedProperties.cpp
         src/ssmt/SteamProperties.cpp
