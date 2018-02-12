@@ -150,14 +150,14 @@ test('Air System Capacity', function (t) {
         t.equal(rnd(results.six), expected[11]);
 
         for (var i = 0; i < gallons.length; i++) {
-            t.equal(rnd(results['receiver' + (i + 1)]), gallons[i]);
+            t.equal(rnd(results.receiverCapacities[i]), gallons[i]);
         }
     };
 
     var inp = {
         oneHalf: 3000, threeFourths: 2000, one: 1000, oneAndOneFourth: 200, oneAndOneHalf: 100, two: 500, twoAndOneHalf: 500, three: 300,
         threeAndOneHalf: 0, four: 1000, five: 0, six: 0,
-        gallons: [
+        receiverCapacities: [
             400, 500, 660, 1060
         ]
     };
