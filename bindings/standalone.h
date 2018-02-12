@@ -117,25 +117,33 @@ NAN_METHOD(airSystemCapacity) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	Local<String> gallonsStr = Nan::New<String>("gallons").ToLocalChecked();
+	Local<String> gallonsStr = Nan::New<String>("receiverCapacities").ToLocalChecked();
 	auto array = inp->ToObject()->Get(gallonsStr);
 	v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
-	std::vector<double> gallons(arr->Length());
+	std::vector<double> receiverCapacitiesGallons(arr->Length());
 	for (std::size_t i = 0; i < arr->Length(); i++) {
-		gallons[i] = arr->Get(i)->NumberValue();
+		receiverCapacitiesGallons[i] = arr->Get(i)->NumberValue();
 	}
 
-	auto output = Compressor::AirSystemCapacity({Get("oneHalf"), Get("threeFourths"), Get("one"), Get("oneAndOneFourth"),
-	                                             Get("oneAndOneHalf"), Get("two"), Get("twoAndOneHalf"), Get("three"),
-	                                             Get("threeAndOneHalf"), Get("four"), Get("five"), Get("six")}, gallons).calculate();
+	auto output = Compressor::AirSystemCapacity
+			(
+					{
+							Get("oneHalf"), Get("threeFourths"), Get("one"), Get("oneAndOneFourth"),
+							Get("oneAndOneHalf"), Get("two"), Get("twoAndOneHalf"), Get("three"),
+							Get("threeAndOneHalf"), Get("four"), Get("five"), Get("six")
+					},
+					std::move(receiverCapacitiesGallons)
+			).calculate();
 
 	SetR("totalPipeVolume", output.totalPipeVolume);
 	SetR("totalReceiverVolume", output.totalReceiverVol);
 	SetR("totalCapacityOfCompressedAirSystem", output.totalCapacityOfCompressedAirSystem);
 
+	Handle<Array> receiverCapacities = Array::New(v8::Isolate::GetCurrent(), output.receiverCapacities.size());
 	for (std::size_t i = 0; i < output.receiverCapacities.size(); i++) {
-		SetR("receiver" + std::to_string(i + 1), output.receiverCapacities[i]);
+		receiverCapacities->Set(i, Nan::New<Number>(output.receiverCapacities[i]));
 	}
+	Nan::Set(r, Nan::New<String>("receiverCapacities").ToLocalChecked(), receiverCapacities);
 
 	SetR("oneHalf", output.pipeLengths.oneHalf);
 	SetR("threeFourths", output.pipeLengths.threeFourths);
