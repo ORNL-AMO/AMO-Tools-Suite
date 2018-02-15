@@ -24,9 +24,9 @@ public:
         double motorCurrent,
         double powerFactor
     ) :
-        ratedVoltage_(ratedVoltage),
-        motorCurrent_(motorCurrent),
-        powerFactor_(powerFactor)
+        ratedVoltage(ratedVoltage),
+        motorCurrent(motorCurrent),
+        powerFactor(powerFactor)
     {};
 
     /**
@@ -39,15 +39,15 @@ private:
     /**
      * Rated voltage of motor in volts
      */
-    double ratedVoltage_;
+    double ratedVoltage;
     /**
      * Motor current in amps
      */
-    double motorCurrent_;
+    double motorCurrent;
     /**
      * Power factor of motor
      */
-    double powerFactor_;
+    double powerFactor;
 };
 
 

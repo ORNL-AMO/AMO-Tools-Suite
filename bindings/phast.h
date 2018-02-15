@@ -1,7 +1,3 @@
-//
-// Created by Accawi, Gina K. on 3/7/17.
-//
-
 #ifndef AMO_TOOLS_SUITE_LOSSES_H
 #define AMO_TOOLS_SUITE_LOSSES_H
 
@@ -525,6 +521,7 @@ NAN_METHOD(flueGasByVolumeCalculateHeatingValue) {
 
     r = Nan::New<Object>();
     SetR("heatingValue", comps.getHeatingValue());
+    SetR("heatingValueVolume", comps.getHeatingValueVolume());
     SetR("specificGravity", comps.getSpecificGravity());
     info.GetReturnValue().Set(r);
 }
@@ -627,23 +624,13 @@ NAN_METHOD(o2Enrichment) {
         info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(availableHeat) {
-
-    inp = info[0]->ToObject();
-    r = Nan::New<Object>();
-    AvailableHeat av(Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"));
-    double availableHeat = av.getAvailableHeat();
-    Local<Number> retval = Nan::New(availableHeat);
-    info.GetReturnValue().Set(retval);
-}
-
 NAN_METHOD(energyInputExhaustGasLosses) {
-
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    EnergyInputExhaustGasLosses e(Get("totalHeatInput"), Get("electricalPowerInput"), Get("availableHeat"), Get("otherLosses"));
+    EnergyInputExhaustGasLosses e(Get("excessAir"), Get("combustionAirTemp"), Get("exhaustGasTemp"), Get("totalHeatInput"));
 	SetR("heatDelivered", e.getHeatDelivered());
     SetR("exhaustGasLosses", e.getExhaustGasLosses());
+    SetR("availableHeat", e.getAvailableHeat());
 	info.GetReturnValue().Set(r);
 }
 

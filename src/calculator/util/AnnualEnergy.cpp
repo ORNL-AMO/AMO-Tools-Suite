@@ -16,6 +16,6 @@
  * @return Annual Energy
  */
 double AnnualEnergy::calculate() {
-    annualEnergy_ = fieldPower_ * 8760 * operatingFraction_ / 1000;
-    return annualEnergy_;
+    annualEnergy = fieldPower * 8760 * operatingFraction / 1000;
+    return annualEnergy;
 }

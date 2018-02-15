@@ -18,6 +18,6 @@
  * @return Annual Energy Cost
  */
 double AnnualCost::calculate() {
-    annualEnergyCost_ = annualEnergy_ * kwhRate_;
-    return annualEnergyCost_;
+    annualEnergyCost = annualEnergy * kwhRate;
+    return annualEnergyCost;
 }

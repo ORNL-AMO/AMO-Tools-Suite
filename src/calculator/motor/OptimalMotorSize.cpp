@@ -21,7 +21,7 @@ double OptimalMotorSize::calculate() {
             30000, 35000, 40000, 45000, 50000
     };
 
-    double const requiredShaftPower = optimalMotorShaftPower_ * (1 + sizeMargin_);
-    optimalMotorRatedPower_ = *motorSize.lower_bound(requiredShaftPower);
-    return optimalMotorRatedPower_;
+    double const requiredShaftPower = optimalMotorShaftPower * (1 + sizeMargin);
+    optimalMotorRatedPower = *motorSize.lower_bound(requiredShaftPower);
+    return optimalMotorRatedPower;
 }

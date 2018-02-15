@@ -362,6 +362,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == outputs[0].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[0].getGasByVol("O2") );
         CHECK( outputs[0].getHeatingValue() == Approx(22030.67089880065) );
+        CHECK( outputs[0].getHeatingValueVolume() == Approx(1032.445) );
         CHECK( outputs[0].getSpecificGravity() == Approx(0.6571206283343215));
     }
 
@@ -382,6 +383,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
         CHECK( output.getHeatingValue() == Approx(22030.67089880065) );
+        CHECK( output.getHeatingValueVolume() == Approx(1032.445) );
         CHECK( output.getSpecificGravity() == Approx(0.6571206283343215) );
     }
 
@@ -404,6 +406,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == outputs[1].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[1].getGasByVol("O2") );
         CHECK( outputs[1].getHeatingValue() == Approx(19185.932389233436) );
+        CHECK( outputs[1].getHeatingValueVolume() == Approx(610.52) );
         CHECK( outputs[1].getSpecificGravity() == Approx(0.44638781861292243) );
     }
 
@@ -424,6 +427,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
         CHECK( output.getHeatingValue() == Approx(19185.932389233436) );
+        CHECK( output.getHeatingValueVolume() == Approx(610.52) );
         CHECK( output.getSpecificGravity() == Approx(0.44638781861292243) );
     }
 
@@ -447,6 +451,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == outputs[2].getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == outputs[2].getGasByVol("O2") );
         CHECK( outputs[2].getHeatingValue() == 1080.6848266529887 );
+        CHECK( outputs[2].getHeatingValueVolume() == 83.605 );
         CHECK( outputs[2].getSpecificGravity() == 1.0870540901007706 );
     }
 
@@ -467,6 +472,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
         CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
         CHECK( output.getHeatingValue() == 1080.6848266529887 );
+        CHECK( output.getHeatingValueVolume() == 83.605 );
         CHECK( output.getSpecificGravity() == 1.0870540901007706 );
     }
 }
@@ -491,6 +497,17 @@ TEST_CASE( "SQLite - CustomGasFlueGasMaterials", "[sqlite]" ) {
         auto const output = sqlite.getCustomGasFlueGasMaterials();
         CHECK(output.size() == 2);
         CHECK(output[1].getSubstance() == expected.getSubstance());
+    }
+    {
+        auto comp = GasCompositions("customGasFlueGas3", 45, 45, 1, 1, 3, 2, 0, 1, 0, 0, 2);
+        comp.setID(sqlite.getGasFlueGasMaterials().size());
+        sqlite.insertGasFlueGasMaterial(comp);
+        auto const output = sqlite.getCustomGasFlueGasMaterials();
+        CHECK(output.size() == 3);
+        CHECK(output[2].getSubstance() == comp.getSubstance());
+        CHECK(output[2].getHeatingValue() == Approx(21684.26));
+        CHECK(output[2].getSpecificGravity() == Approx(0.9060143746));
+        CHECK(output[2].getHeatingValueVolume() == Approx(1400.8));
     }
 
 }

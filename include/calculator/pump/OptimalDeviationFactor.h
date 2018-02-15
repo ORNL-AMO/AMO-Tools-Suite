@@ -18,21 +18,20 @@ public:
     * Constructor
     * @param flowRate double, rate of flow in gpm
     */
-    OptimalDeviationFactor(
+    explicit OptimalDeviationFactor(
         double flowRate
     ) :
-        flowRate_(flowRate)
+        flowRate(flowRate)
     {}
 
     /**
      * Calculates the optimal deviation factor
-     *
      * @return double, optimal deviation factor - unitless
      */
     double calculate();
 
 private:
-    double flowRate_;
+    double flowRate;
 };
 
 

@@ -314,8 +314,9 @@ std::vector<GasCompositions> SQLite::getGasFlueGasMaterials() const
         auto const SO2 = sqlite3_column_double(stmt, 12);
         auto const O2 = sqlite3_column_double(stmt, 13);
         auto const heatingValue = sqlite3_column_double(stmt, 14);
-        auto const specificGravity = sqlite3_column_double(stmt, 15);
-        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, specificGravity);
+        auto const heatingValueVolume = sqlite3_column_double(stmt, 15);
+        auto const specificGravity = sqlite3_column_double(stmt, 16);
+        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, heatingValueVolume, specificGravity);
         comp.setID(id);
         return comp;
     };
@@ -341,8 +342,9 @@ GasCompositions SQLite::getGasFlueGasMaterialById(int id) const
         auto const SO2 = sqlite3_column_double(stmt, 12);
         auto const O2 = sqlite3_column_double(stmt, 13);
         auto const heatingValue = sqlite3_column_double(stmt, 14);
-        auto const specificGravity = sqlite3_column_double(stmt, 15);
-        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, specificGravity);
+        auto const heatingValueVolume = sqlite3_column_double(stmt, 15);
+        auto const specificGravity = sqlite3_column_double(stmt, 16);
+        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, heatingValueVolume, specificGravity);
         comp.setID(id);
         return comp;
     };
@@ -367,8 +369,9 @@ std::vector<GasCompositions> SQLite::getCustomGasFlueGasMaterials() const
         auto const SO2 = sqlite3_column_double(stmt, 12);
         auto const O2 = sqlite3_column_double(stmt, 13);
         auto const heatingValue = sqlite3_column_double(stmt, 14);
-        auto const specificGravity = sqlite3_column_double(stmt, 15);
-        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, specificGravity);
+        auto const heatingValueVolume = sqlite3_column_double(stmt, 15);
+        auto const specificGravity = sqlite3_column_double(stmt, 16);
+        auto comp = GasCompositions(substance, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2, heatingValue, heatingValueVolume, specificGravity);
         comp.setID(id);
         return comp;
     };
@@ -723,14 +726,14 @@ void SQLite::create_select_stmt()
 
     std::string const select_gas_flue_gas_materials =
             R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
-                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, heatingValueVolume, specificGravity
            FROM gas_flue_gas_materials)";
 
     prepare_statement(m_gas_flue_gas_materials_select_stmt, select_gas_flue_gas_materials);
 
     std::string const select_single_gas_flue_gas_materials =
             R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
-                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, heatingValueVolume, specificGravity
            FROM gas_flue_gas_materials
            WHERE id = ?)";
 
@@ -738,7 +741,7 @@ void SQLite::create_select_stmt()
 
     std::string const select_custom_gas_flue_gas_materials =
             R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
-                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, heatingValueVolume, specificGravity
            FROM gas_flue_gas_materials
            WHERE sid = 1)";
 
@@ -847,8 +850,8 @@ void SQLite::create_insert_stmt() {
 
     const std::string gas_flue_gas_materials_insert_sql =
             R"(INSERT INTO gas_flue_gas_materials(sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
-                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
+                  carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, heatingValueVolume, specificGravity)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
 
     prepare_statement(m_gas_flue_gas_materials_insert_stmt, gas_flue_gas_materials_insert_sql);
 
@@ -955,9 +958,10 @@ void SQLite::create_tables()
              hydrogen_sulfide real NOT NULL, -- H2S
              benzene real NOT NULL, -- C2H4
              heatingValue real NOT NULL, -- HV
+             heatingValueVolume real NOT NULL, -- HvVolume
              specificGravity real NOT NULL, -- specificGrav
              UNIQUE (substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide, carbon_monoxide, carbon_dioxide,
-                     nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, specificGravity)
+                     nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, heatingValueVolume, specificGravity)
       );)";
 
     execute_command(gas_flue_gas_materials_table_sql);
@@ -1225,7 +1229,8 @@ bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
     bind_value(m_gas_flue_gas_materials_insert_stmt, 12, comps.getGasByVol("SO2"));
     bind_value(m_gas_flue_gas_materials_insert_stmt, 13, comps.getGasByVol("O2"));
     bind_value(m_gas_flue_gas_materials_insert_stmt, 14, comps.heatingValue);
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 15, comps.specificGravity);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 15, comps.heatingValueVolume);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 16, comps.specificGravity);
 
     int rc = step_command(m_gas_flue_gas_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
@@ -1249,7 +1254,8 @@ bool SQLite::insertGasFlueGasMaterial(GasCompositions const & comps) const {
     bind_value(m_gas_flue_gas_materials_insert_stmt, 12, comps.getGasByVol("SO2"));
     bind_value(m_gas_flue_gas_materials_insert_stmt, 13, comps.getGasByVol("O2"));
     bind_value(m_gas_flue_gas_materials_insert_stmt, 14, comps.heatingValue);
-    bind_value(m_gas_flue_gas_materials_insert_stmt, 15, comps.specificGravity);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 15, comps.heatingValueVolume);
+    bind_value(m_gas_flue_gas_materials_insert_stmt, 16, comps.specificGravity);
 
     int rc = step_command(m_gas_flue_gas_materials_insert_stmt);
     bool valid_insert = step_validity(rc);

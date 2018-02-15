@@ -9,5 +9,5 @@
 #include "calculator/losses/GasCoolingLosses.h"
 
 double GasCoolingLosses::getHeatLoss() const {
-    return flowRate_ * 60.0 * gasDensity_ * specificHeat_ * (finalTemperature_ - initialTemperature_) * correctionFactor_;
+    return flowRate * 60.0 * gasDensity * specificHeat * (finalTemperature - initialTemperature) * correctionFactor;
 }

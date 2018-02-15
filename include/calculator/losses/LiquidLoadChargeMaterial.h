@@ -17,7 +17,7 @@
 #include "LoadChargeMaterial.h"
 
 /** Moisture boiling point is 210°F */
-#define MOISTURE_BOILING_POINT 210.0
+//#define MOISTURE_BOILING_POINT 210.0
 
 /**
  * Liquid Load Charge Material class

@@ -46,120 +46,98 @@ public:
     *
     */
     MotorShaftPower(
-		double motorRatedPower,
-		double motorMeasuredPower,
-		int motorRPM,
-		Motor::LineFrequency lineFrequency,
-		Motor::EfficiencyClass efficiencyClass,
-		double specifiedEfficiency,
-		double ratedVoltage,
-		double fullLoadAmps,
-		double fieldVoltage,
-		FieldData::LoadEstimationMethod loadEstimationMethod,
-		double fieldCurrent
+		const double motorRatedPower,
+		const double motorMeasuredPower,
+		const double motorRPM,
+		const Motor::LineFrequency lineFrequency,
+		const Motor::EfficiencyClass efficiencyClass,
+		const double specifiedEfficiency,
+		const double ratedVoltage,
+		const double fullLoadAmps,
+		const double fieldVoltage,
+		const FieldData::LoadEstimationMethod loadEstimationMethod,
+		const double fieldCurrent
 	) :
-		motorRatedPower_(motorRatedPower),
-		fieldPower_(motorMeasuredPower),
-		motorRPM_(motorRPM),
-		lineFrequency_(lineFrequency),
-		ratedVoltage_(ratedVoltage),
-		fullLoadAmps_(fullLoadAmps),
-		fieldVoltage_(fieldVoltage),
-		efficiencyClass_(efficiencyClass),
-		specifiedEfficiency_(specifiedEfficiency),
-		fieldCurrent_(fieldCurrent),
-		loadEstimationMethod_(loadEstimationMethod)
+		motorRatedPower(motorRatedPower),
+		fieldPower(motorMeasuredPower),
+		motorRPM(motorRPM),
+		lineFrequency(lineFrequency),
+		ratedVoltage(ratedVoltage),
+		fullLoadAmps(fullLoadAmps),
+		fieldVoltage(fieldVoltage),
+		efficiencyClass(efficiencyClass),
+		specifiedEfficiency(specifiedEfficiency),
+		fieldCurrent(fieldCurrent),
+		loadEstimationMethod(loadEstimationMethod)
 	{};
 
 	/**
      * Calculate motor shaft power
-     *
      * @return double, motor shaft power in hp
      */
     double calculate();
 
 	/**
      * Calculates the motor shaft current
-     *
      * @return double, motor shaft current in A
      */
-    double calculateCurrent();
+    double getCurrent() {
+		return current;
+	};
 
 	/**
      * Calculates the motor shaft efficiency
-     *
      * @return double, motor shaft efficiency as %
      */
-    double calculateEfficiency();
+    double getEfficiency() {
+		return eff;
+	};
 
 	/**
      * Calculate the power
-     *
      * @return double, power in hp
      */
-    double calculatePower();
+    double getPower() {
+		return power;
+	};
 
 	/**
      * Calculates the power factor
-     *
      * @return double, power factor - unitless
      */
-    double calculatePowerFactor();
+    double getPowerFactor() {
+		return pf;
+	};
 
 	/**
      * Calculates estimated full load amps
-     *
      * @return double, estimated full load amps in A
      */
-    double calculateEstimatedFLA();
+    double getEstimatedFLA() {
+		return estimatedFLA;
+	};
 
     ///double, temp load fraction
-    double tempLoadFraction_ = 0.01;
+    double tempLoadFraction = 0.01;
 	///double, power in hp
     double power = 0.0;
-	///double, power in hp
-	double powerE1 = 0.0;
-	///double, power in hp
-	double powerE2 = 0.0;
-	///double, line frequency in Hz
-    double lf1 = 0.0;
-	///double, line frequency in Hz
-	double lf2 = 0.0;
 	///double efficiency in %
     double eff = 0.0;
-	///double efficiency in %
-	double eff1 = 0.0;
-	///double efficiency in %
-	double eff2 = 0.0;
 	///double, current in A
     double current = 0.0;
-	///double, current in A
-	double current1 = 0.0;
-	///double, current in A
-	double current2 = 0.0;
 	///double, power factor - unitless
     double pf = 0.0;
-	///double, power factor - unitless
-	double pf1 = 0.0;
-	///double, power factor - unitless
-	double pf2 = 0.0;
 	///double, estimated full load amps in A
-    double estimatedFLA;
+    double estimatedFLA = 0;
 
 private:
-    double motorRatedPower_ = 0.0;
-    double fieldPower_ = 0.0;
-    int motorRPM_ = 0;
-    Motor::LineFrequency lineFrequency_;
-    double ratedVoltage_ = 0.0;
-    double fullLoadAmps_ = 0.0;
-    double fieldVoltage_ = 0.0;
-    Motor::EfficiencyClass efficiencyClass_;
+    double motorRatedPower, fieldPower, motorRPM;
+    Motor::LineFrequency lineFrequency;
+    double ratedVoltage, fullLoadAmps, fieldVoltage;
+    Motor::EfficiencyClass efficiencyClass;
 
-    double specifiedEfficiency_;
-    double motorShaftPower_ = 0.0;
-    double fieldCurrent_ = 0.0;
-    FieldData::LoadEstimationMethod loadEstimationMethod_;
+    double specifiedEfficiency, motorShaftPower = 0.0, fieldCurrent;
+    FieldData::LoadEstimationMethod loadEstimationMethod;
 };
 
 #endif //AMO_LIBRARY_MOTORSHAFTPOWER_H

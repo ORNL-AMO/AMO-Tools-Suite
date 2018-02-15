@@ -95,6 +95,14 @@ double GasCompositions::calculateHeatingValueFuel() {
     return heatValueFuel;
 }
 
+double GasCompositions::calculateHeatingValueFuelVolume() {
+    double heatValueFuel = 0;
+    for ( auto const & comp : gasses ) {
+        heatValueFuel += comp.second->compAdjByVol * comp.second->heatingValueVolume;
+    }
+    return heatValueFuel;
+}
+
 void GasCompositions::calculateMassFlueGasComponents(const double excessAir) {
 	mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
     for ( auto const & comp : gasses ) {
@@ -150,10 +158,10 @@ double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTem
     };
 
 	double result = 0.0;
-    for ( std::size_t i = 0; i < gasArray.size(); i++ ) {
-	    auto const & tup = gasArray[i];
-	    auto const & c = std::get<0>(tup);
-        const double mass = std::get<1>(tup);
+    for ( auto const & gas : gasArray ) {
+//	    auto const & tup = gas;
+	    auto const & c = std::get<0>(gas);
+        const double mass = std::get<1>(gas);
         result += mass * (0.5 * ((c->specificHeat(flueGasTemp + 460) / c->molecularWeight) + (c->specificHeat(520) / c->molecularWeight)) * (flueGasTemp - 32));
     }
 

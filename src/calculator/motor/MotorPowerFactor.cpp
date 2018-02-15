@@ -15,7 +15,7 @@
 double MotorPowerFactor::calculate() {
     double motorPowerFactor_ = 0.0;
 
-    if (loadFactor_ == 0.0 || std::abs(loadFactor_ - 0.0) < 0.001) {
+    if (loadFactor == 0.0 || std::abs(loadFactor - 0.0) < 0.001) {
         /**
          * When the loadFactor is 0
          *  The powerFactor is calculated from the Motor KW loss and Motor kW Input development.
@@ -24,19 +24,18 @@ double MotorPowerFactor::calculate() {
          *  motorkVA (0) = 460 * sqrt(3) * motorCurrent_ (0)/1000;
          *  MotorPowerFactor (0) = motorKwInput (0) / motorkVA (0);
          */
-        MotorEfficiency motorEfficiency(lineFrequency_, motorRpm_, efficiencyClass_, specifiedEfficiency_,
-                                        motorRatedPower_, 0.25);
-        motorEfficiency.calculate();
+        MotorEfficiency motorEfficiency(lineFrequency, motorRpm, efficiencyClass, motorRatedPower);
+        motorEfficiency.calculate(0.25, specifiedEfficiency);
         motorKwInput = motorEfficiency.getKWloss0();
-        motorkVA = 460 * sqrt(3) * motorCurrent_ / 1000;
+        motorkVA = 460 * sqrt(3) * motorCurrent / 1000;
         motorPowerFactor_ = motorKwInput / motorkVA;
     } else {
         /**
          *  Make sure the loadfactor comes not in %.
          *  pf (X) = [(X/100) * rated hp * 0.746] / [Amps (X) * Eff (X) * Rated Voltage * Square root (3) / 1000]
          */
-        motorPowerFactor_ = (loadFactor_ * motorRatedPower_ * 0.746) /
-                            (motorCurrent_ * motorEfficiency_ * ratedVoltage_ * sqrt(3) / 1000);
+        motorPowerFactor_ = (loadFactor * motorRatedPower * 0.746) /
+                            (motorCurrent * motorEfficiency * ratedVoltage * sqrt(3) / 1000);
     }
     return motorPowerFactor_;
 
