@@ -15,6 +15,7 @@ class GasCompositions;
 class SolidLiquidFlueGasMaterial;
 class Atmosphere;
 class WallLosses;
+class MotorData;
 
 class SQLiteWrapper
 {
@@ -141,6 +142,12 @@ public:
     bool insertWallLossesSurface(WallLosses const & material);
     bool deleteWallLossesSurface(std::string const & substance);
 
+    std::vector<MotorData> getMotorData() const;
+    std::vector<MotorData> getCustomMotorData() const;
+    MotorData getMotorDataById(int id) const;
+    bool insertMotorData(MotorData const & motor);
+    bool deleteMotorData(int id);
+
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
@@ -177,6 +184,11 @@ private:
     sqlite3_stmt * m_wall_losses_surface_select_single_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_custom_stmt = nullptr;
 
+    sqlite3_stmt * m_motor_data_insert_stmt = nullptr;
+    sqlite3_stmt * m_motor_data_select_stmt = nullptr;
+	sqlite3_stmt * m_motor_data_select_single_stmt = nullptr;
+    sqlite3_stmt * m_motor_data_select_custom_stmt = nullptr;
+
     void create_select_stmt();
 
     void create_insert_stmt();
@@ -197,6 +209,8 @@ private:
 
     bool insert_wall_losses_surface(WallLosses const & surface);
 
+    bool insert_motor_data(MotorData const & m);
+
     void insert_default_data();
 
     std::vector<SolidLoadChargeMaterial> get_default_solid_load_charge_materials();
@@ -212,6 +226,8 @@ private:
     std::vector<Atmosphere> get_default_atmosphere_specific_heat();
 
     std::vector<WallLosses> get_default_wall_losses_surface();
+
+    std::vector<MotorData> get_default_motor_data();
 };
 
 

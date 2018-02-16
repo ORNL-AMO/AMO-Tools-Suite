@@ -114,11 +114,12 @@ set(SOURCE_FILES
         src/ssmt/Deaerator.cpp
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
-        src/calculator/util/CHP.cpp
         src/fans/FanShaftPower.cpp
         src/fans/Planar.cpp
         src/fans/FanCurve.cpp
-        src/calculator/util/CompressedAir.cpp)
+        src/calculator/util/CompressedAir.cpp
+        src/calculator/util/CHP.cpp
+        src/calculator/motor/MotorData.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -198,7 +199,9 @@ set(INCLUDE_FILES
         include/ssmt/Turbine.h
         include/calculator/util/CHP.h
         include/fans/FanCurve.h
-        include/calculator/util/CompressedAir.h)
+        include/calculator/util/CompressedAir.h
+        include/calculator/motor/MotorData.h
+        include/sqlite/MotorData.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
