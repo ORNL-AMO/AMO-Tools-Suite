@@ -623,7 +623,7 @@ NAN_METHOD(selectMotorById) {
         SetMotorData(motor, sql->getMotorDataById(static_cast<int>(info[0]->NumberValue())));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in selectWallLossesSurfaceById - db.h: " + what).c_str());
+        ThrowError(std::string("std::runtime_error thrown in selectMotorById - db.h: " + what).c_str());
     }
     info.GetReturnValue().Set(motor);
 };
