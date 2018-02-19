@@ -596,6 +596,109 @@ test('dbDeletions', function (t) {
     t.equal(last, res[res.length - 1].surface, last + " != " + res[res.length - 1].surface);
 });
 
+// 42 tests per call
+function testMotorEqual(t, motor1, motor2) {
+    t.equal(motor1.id, motor2.id);
+    t.equal(motor1.manufacturer, motor2.manufacturer, 'manufacturer is ' + motor2.manufacturer);
+    t.equal(motor1.model, motor2.model);
+    t.equal(motor1.catalog, motor2.catalog);
+    t.equal(motor1.motorType, motor2.motorType);
+    t.equal(motor1.hp, motor2.hp);
+    t.equal(motor1.speed, motor2.speed);
+    t.equal(motor1.fullLoadSpeed, motor2.fullLoadSpeed);
+    t.equal(motor1.enclosureType, motor2.enclosureType);
+    t.equal(motor1.frameNumber, motor2.frameNumber);
+    t.equal(motor1.voltageRating, motor2.voltageRating);
+    t.equal(motor1.purpose, motor2.purpose);
+    t.equal(motor1.uFrame, motor2.uFrame);
+    t.equal(motor1.cFace, motor2.cFace);
+    t.equal(motor1.verticalShaft, motor2.verticalShaft);
+    t.equal(motor1.dFlange, motor2.dFlange);
+    t.equal(motor1.serviceFactor, motor2.serviceFactor);
+    t.equal(motor1.insulationClass, motor2.insulationClass);
+    t.equal(motor1.weight, motor2.weight);
+    t.equal(motor1.listPrice, motor2.listPrice);
+    t.equal(motor1.windingResistance, motor2.windingResistance);
+    t.equal(motor1.warranty, motor2.warranty);
+    t.equal(motor1.rotorBars, motor2.rotorBars);
+    t.equal(motor1.statorSlots, motor2.statorSlots);
+    t.equal(motor1.efficiency100, motor2.efficiency100);
+    t.equal(motor1.efficiency75, motor2.efficiency75);
+    t.equal(motor1.efficiency50, motor2.efficiency50);
+    t.equal(motor1.efficiency25, motor2.efficiency25);
+    t.equal(motor1.powerFactor100, motor2.powerFactor100);
+    t.equal(motor1.powerFactor75, motor2.powerFactor75);
+    t.equal(motor1.powerFactor50, motor2.powerFactor50);
+    t.equal(motor1.powerFactor25, motor2.powerFactor25);
+    t.equal(motor1.torqueFullLoad, motor2.torqueFullLoad);
+    t.equal(motor1.torqueBreakDown, motor2.torqueBreakDown);
+    t.equal(motor1.torqueLockedRotor, motor2.torqueLockedRotor);
+    t.equal(motor1.ampsFullLoad, motor2.ampsFullLoad);
+    t.equal(motor1.ampsIdle, motor2.ampsIdle);
+    t.equal(motor1.ampsLockedRotor, motor2.ampsLockedRotor);
+    t.equal(motor1.stalledRotorTimeHot, motor2.stalledRotorTimeHot);
+    t.equal(motor1.stalledRotorTimeCold, motor2.stalledRotorTimeCold);
+    t.equal(motor1.peakVoltage0ms, motor2.peakVoltage0ms);
+    t.equal(motor1.peakVoltage5ms, motor2.peakVoltage5ms);
+}
+
+test('dbSelectMotor', function (t) {
+    t.plan(87);
+    bindings.unitTestStartup();
+
+    var expectedMotor =
+        {
+            id: 1, manufacturer: "GE", model: "X$D Ultra IEEE 841", catalog: "M9455", motorType: "NEMA Design B",
+            hp: 50, speed: 1800, fullLoadSpeed: 1780, enclosureType: "TEFC", frameNumber: "326T", voltageRating: 460,
+            purpose: "IEEE 841 Petroleum/Chemical", uFrame: 0, cFace: 0, verticalShaft: 0, dFlange: 0,
+            serviceFactor: 1.15, insulationClass: "F", weight: 511, listPrice: 4, windingResistance: 615,
+            warranty: 99.5, rotorBars: 5, statorSlots: 38, efficiency100: 48, efficiency75: 94.5, efficiency50: 94.7,
+            efficiency25: 94.3, powerFactor100: 91.6, powerFactor75: 78, powerFactor50: 73.6, powerFactor25: 63.3,
+            torqueFullLoad: 41.5, torqueBreakDown: 147.4, torqueLockedRotor: 294.8, ampsFullLoad: 206.4,
+            ampsIdle: 63.5, ampsLockedRotor: 25.7, stalledRotorTimeHot: 362.5, stalledRotorTimeCold: 92.9,
+            peakVoltage0ms: 115.2, peakVoltage5ms: 2000
+        };
+
+    t.type(bindings.selectMotorById, 'function');
+    testMotorEqual(t, bindings.selectMotorById(1), expectedMotor);
+
+    t.type(bindings.selectMotors, 'function');
+    var res = bindings.selectMotors();
+    t.equal(res.length, 3);
+    testMotorEqual(t, res[0], expectedMotor);
+});
+
+test('dbInsertAndDeleteMotor', function (t) {
+    t.plan(86);
+    bindings.unitTestStartup();
+
+    var expectedMotor =
+        {
+            id: 4, manufacturer: "Beta", model: "x-trainer", catalog: "M9455", motorType: "NEMA Design B",
+            hp: 50, speed: 1800, fullLoadSpeed: 1780, enclosureType: "TEFC", frameNumber: "326T", voltageRating: 460,
+            purpose: "IEEE 841 Petroleum/Chemical", uFrame: 0, cFace: 0, verticalShaft: 0, dFlange: 0,
+            serviceFactor: 1.15, insulationClass: "F", weight: 511, listPrice: 4, windingResistance: 615,
+            warranty: 99.5, rotorBars: 5, statorSlots: 38, efficiency100: 48, efficiency75: 94.5, efficiency50: 94.7,
+            efficiency25: 94.3, powerFactor100: 91.6, powerFactor75: 78, powerFactor50: 73.6, powerFactor25: 63.3,
+            torqueFullLoad: 41.5, torqueBreakDown: 147.4, torqueLockedRotor: 294.8, ampsFullLoad: 206.4,
+            ampsIdle: 63.5, ampsLockedRotor: 25.7, stalledRotorTimeHot: 362.5, stalledRotorTimeCold: 92.9,
+            peakVoltage0ms: 115.2, peakVoltage5ms: 2000
+        };
+
+    var length = bindings.selectMotors().length;
+    t.type(bindings.insertMotor, 'function');
+    bindings.insertMotor(expectedMotor);
+    testMotorEqual(t, bindings.selectMotorById(length + 1), expectedMotor);
+
+    expectedMotor.manufacturer = "GE";
+    expectedMotor.model = "X$D Ultra IEEE 841";
+    expectedMotor.id = 1;
+
+    t.type(bindings.deleteMotor, 'function');
+    bindings.deleteMotor(4);
+    testMotorEqual(t, bindings.selectMotors()[0], expectedMotor);
+});
+
 // // commented out bc it writes files to the HDD
 // test('dbTestMigrations', function (t) {
 //     t.plan(8);

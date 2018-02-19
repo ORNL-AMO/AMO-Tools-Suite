@@ -14,6 +14,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <calculator/motor/MotorData.h>
 
 using namespace Nan;
 using namespace v8;
@@ -41,6 +42,59 @@ std::string GetStr(std::string const & nm) {
     return std::string(*s);
 }
 
+inline void SetObj(Local<Object> & obj, const std::string & key, double val) {
+    Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
+}
+
+inline void SetObj(Local<Object> & obj, const std::string & key, const std::string & val) {
+    Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<String>(val).ToLocalChecked());
+}
+
+void SetMotorData(Local<Object> & obj, const MotorData & motor) {
+    SetObj(obj, "id", motor.getId());
+    SetObj(obj, "manufacturer", motor.getManufacturer());
+    SetObj(obj, "model", motor.getModel());
+    SetObj(obj, "catalog", motor.getCatalog());
+    SetObj(obj, "motorType", motor.getMotorType());
+    SetObj(obj, "hp", motor.getHp());
+    SetObj(obj, "speed", motor.getSpeed());
+    SetObj(obj, "fullLoadSpeed", motor.getFullLoadSpeed());
+    SetObj(obj, "enclosureType", motor.getEnclosureType());
+    SetObj(obj, "frameNumber", motor.getFrameNumber());
+    SetObj(obj, "voltageRating", motor.getVoltageRating());
+    SetObj(obj, "purpose", motor.getPurpose());
+    SetObj(obj, "uFrame", motor.getUFrame());
+    SetObj(obj, "cFace", motor.getCFace());
+    SetObj(obj, "verticalShaft", motor.getVerticalShaft());
+    SetObj(obj, "dFlange", motor.getDFlange());
+    SetObj(obj, "serviceFactor", motor.getServiceFactor());
+    SetObj(obj, "insulationClass", motor.getInsulationClass());
+    SetObj(obj, "weight", motor.getWeight());
+    SetObj(obj, "listPrice", motor.getListPrice());
+    SetObj(obj, "windingResistance", motor.getWindingResistance());
+    SetObj(obj, "warranty", motor.getWarranty());
+    SetObj(obj, "rotorBars", motor.getRotorBars());
+    SetObj(obj, "statorSlots", motor.getStatorSlots());
+    SetObj(obj, "efficiency100", motor.getEfficiency100());
+    SetObj(obj, "efficiency75", motor.getEfficiency75());
+    SetObj(obj, "efficiency50", motor.getEfficiency50());
+    SetObj(obj, "efficiency25", motor.getEfficiency25());
+    SetObj(obj, "powerFactor100", motor.getPowerFactor100());
+    SetObj(obj, "powerFactor75", motor.getPowerFactor75());
+    SetObj(obj, "powerFactor50", motor.getPowerFactor50());
+    SetObj(obj, "powerFactor25", motor.getPowerFactor25());
+    SetObj(obj, "torqueFullLoad", motor.getTorqueFullLoad());
+    SetObj(obj, "torqueBreakDown", motor.getTorqueBreakDown());
+    SetObj(obj, "torqueLockedRotor", motor.getTorqueLockedRotor());
+    SetObj(obj, "ampsFullLoad", motor.getAmpsFullLoad());
+    SetObj(obj, "ampsIdle", motor.getAmpsIdle());
+    SetObj(obj, "ampsLockedRotor", motor.getAmpsLockedRotor());
+    SetObj(obj, "stalledRotorTimeHot", motor.getStalledRotorTimeHot());
+    SetObj(obj, "stalledRotorTimeCold", motor.getStalledRotorTimeCold());
+    SetObj(obj, "peakVoltage0ms", motor.getPeakVoltage0ms());
+    SetObj(obj, "peakVoltage5ms", motor.getPeakVoltage5ms());
+}
+
 
 // update all tables to have secondary key
 // when creating sqlite, add table that has history, put in tools-suite number and the date so that we know where db's came from
@@ -65,32 +119,6 @@ std::string GetStr(std::string const & nm) {
         std::string dbName = ":memory:";
         sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
     }
-
-// commented out due to the likely removal of these methods
-//// to be run before program shutdown upon software update, shouldn't be used in unit tests
-//    NAN_METHOD(preUpdate) {
-//        sql.reset();
-//        std::rename("db/amo_tools_suite.db", "db/amo_tools_suite_temporary_backup.db");
-//    }
-//
-//// to be called after program shutdown, upon software restart, shouldn't be used in unit tests
-//NAN_METHOD(postUpdate) {
-//    auto const backupSql = SQLite("db/amo_tools_suite_temporary_backup.db", false);
-//    auto const customSolidLoadChargeMats = backupSql.getCustomSolidLoadChargeMaterials();
-//
-//    auto const now = std::chrono::system_clock::now();
-//    auto const date = std::chrono::system_clock::to_time_t(now);
-//    std::string dateStr = (ctime(&date));
-//    dateStr = dateStr.substr(0, dateStr.size() - 1);
-//    std::string db = "db/amo_tools_suite_" + dateStr + ".db";
-//    std::rename("db/amo_tools_suite_temporary_backup.db", db.c_str());
-//
-//    startup(info);
-//
-//    for (auto const mat : customSolidLoadChargeMats) {
-//        sql->insertSolidLoadChargeMaterials(mat);
-//    }
-//}
 
     NAN_METHOD(selectSolidLoadChargeMaterials) {
 	    Local<String> id = Nan::New<String>("id").ToLocalChecked();
@@ -574,6 +602,50 @@ NAN_METHOD(selectWallLossesSurfaceById) {
     }
 
     info.GetReturnValue().Set(obj);
+};
+
+NAN_METHOD(selectMotors) {
+    auto const motors = sql->getMotorData();
+
+    auto motorsNan = Nan::New<v8::Array>();
+    for (std::size_t i = 0; i < motors.size(); i++) {
+        Local<Object> motor = Nan::New<Object>();
+	    SetMotorData(motor, motors[i]);
+        Nan::Set(motorsNan, i, motor);
+    }
+
+    info.GetReturnValue().Set(motorsNan);
+};
+
+NAN_METHOD(selectMotorById) {
+    Local<Object> motor = Nan::New<Object>();
+    try {
+        SetMotorData(motor, sql->getMotorDataById(static_cast<int>(info[0]->NumberValue())));
+    } catch (std::runtime_error const & e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in selectWallLossesSurfaceById - db.h: " + what).c_str());
+    }
+    info.GetReturnValue().Set(motor);
+};
+
+NAN_METHOD(insertMotor) {
+    inp = info[0]->ToObject();
+    MotorData motor(GetStr("manufacturer"), GetStr("model"), GetStr("catalog"), GetStr("motorType"),
+                    Get("hp"), Get("speed"), Get("fullLoadSpeed"), GetStr("enclosureType"), GetStr("frameNumber"),
+                    Get("voltageRating"), GetStr("purpose"), Get("uFrame"), Get("cFace"), Get("verticalShaft"), Get("dFlange"),
+                    Get("serviceFactor"), GetStr("insulationClass"), Get("weight"), Get("listPrice"), Get("windingResistance"),
+                    Get("warranty"), Get("rotorBars"), Get("statorSlots"), Get("efficiency100"), Get("efficiency75"),
+                    Get("efficiency50"), Get("efficiency25"), Get("powerFactor100"), Get("powerFactor75"), Get("powerFactor50"),
+                    Get("powerFactor25"), Get("torqueFullLoad"), Get("torqueBreakDown"), Get("torqueLockedRotor"),
+                    Get("ampsFullLoad"), Get("ampsIdle"), Get("ampsLockedRotor"), Get("stalledRotorTimeHot"),
+                    Get("stalledRotorTimeCold"), Get("peakVoltage0ms"), Get("peakVoltage5ms")
+    );
+	bool success = sql->insertMotorData(motor);
+    info.GetReturnValue().Set(success);
+};
+
+NAN_METHOD(deleteMotor) {
+    sql->deleteMotorData(static_cast<int>(info[0]->NumberValue()));
 };
 
 
