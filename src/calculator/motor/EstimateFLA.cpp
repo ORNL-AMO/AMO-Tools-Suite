@@ -136,7 +136,7 @@ std::array<double, 6> EstimateFLA::calculate() {
     double const seMultiplier = seFlaMultipliers[0][pole]
                                 + (seFlaMultipliers[1][pole] * std::exp(-seFlaMultipliers[2][pole] * motorRatedPower))
                                 + (seFlaMultipliers[3][pole] * std::exp(-seFlaMultipliers[4][pole] * motorRatedPower));
-
+    
     /**
      * Calculate EE or SE values
      */
@@ -173,18 +173,30 @@ std::array<double, 6> EstimateFLA::calculate() {
     };
 
     if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
-        auto motorEfficiency = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower);
-        const double effValEE = motorEfficiency.calculate(1);
-        motorEfficiency.setEfficiencyClass(Motor::EfficiencyClass::PREMIUM);
-        const double effValPE = motorEfficiency.calculate(1);
-        const double val = eeFLAValue * effValPE / effValEE;
-	    estimatedFLA = adjustForVoltage(val * plMultiplier[4]);
+        double const peMultiplier = peFlaMultipliers[0][pole]
+                                    + (peFlaMultipliers[1][pole] * std::exp(-peFlaMultipliers[2][pole] * motorRatedPower));
+        
+        double const peFLAValue = peMultiplier * basicFLAValue;
+        estimatedFLA = adjustForVoltage(peFLAValue * plMultiplier[4]);
         return {
                 {
-                        val * plMultiplier[0], val * plMultiplier[1], val * plMultiplier[2],
-                        val * plMultiplier[3], val * plMultiplier[4], val * plMultiplier[5]
+                        peFLAValue * plMultiplier[0], peFLAValue * plMultiplier[1], peFLAValue * plMultiplier[2],
+                        peFLAValue * plMultiplier[3], peFLAValue * plMultiplier[4], peFLAValue * plMultiplier[5]
                 }
         };
+        
+//        auto motorEfficiency = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT, motorRatedPower);
+//        const double effValEE = motorEfficiency.calculate(1);
+//        motorEfficiency.setEfficiencyClass(Motor::EfficiencyClass::PREMIUM);
+//        const double effValPE = motorEfficiency.calculate(1);
+//        const double val = eeFLAValue * effValPE / effValEE;
+//	    estimatedFLA = adjustForVoltage(val * plMultiplier[4]);
+//        return {
+//                {
+//                        val * plMultiplier[0], val * plMultiplier[1], val * plMultiplier[2],
+//                        val * plMultiplier[3], val * plMultiplier[4], val * plMultiplier[5]
+//                }
+//        };
     }
 
 
