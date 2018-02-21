@@ -36,7 +36,6 @@ public:
         double motorRPM,
         Motor::LineFrequency lineFrequency,
         Motor::EfficiencyClass efficiencyClass,
-        Motor::EfficiencyClass optimalEfficiencyClass,
         double specifiedEfficiency,
         double ratedVoltage,
         double fieldVoltage,
