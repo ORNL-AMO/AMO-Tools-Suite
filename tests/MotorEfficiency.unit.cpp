@@ -28,7 +28,7 @@ TEST_CASE( "Calculate Motor Efficiencies", "[MotorEfficiency]" ) {
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 2585, Motor::EfficiencyClass::ENERGY_EFFICIENT, 120).calculate(0.5) == Approx(0.9395868071));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 2885, Motor::EfficiencyClass::ENERGY_EFFICIENT, 150).calculate(0.5) == Approx( 0.9404486692));
 
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1285, Motor::EfficiencyClass::STANDARD, 100).calculate(0.5) == Approx(0.9205681925));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1285, Motor::EfficiencyClass::STANDARD, 100).calculate(0.5) == Approx(0.9184557213));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::STANDARD, 120).calculate(0.5) == Approx(0.9213249265));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::STANDARD, 150).calculate(0.1) == Approx(0.780716097));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::STANDARD, 150).calculate(0.9) == Approx(0.9350877877));

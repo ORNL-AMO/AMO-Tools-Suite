@@ -174,8 +174,9 @@ std::array<double, 6> EstimateFLA::calculate() {
 
     if (efficiencyClass == Motor::EfficiencyClass::PREMIUM) {
         double const peMultiplier = peFlaMultipliers[0][pole]
-                                    + (peFlaMultipliers[1][pole] * std::exp(-peFlaMultipliers[2][pole] * motorRatedPower));
-        
+                                    + (peFlaMultipliers[1][pole] * std::exp(-peFlaMultipliers[2][pole] * motorRatedPower))
+                                    + (peFlaMultipliers[3][pole] * std::exp(-peFlaMultipliers[4][pole] * motorRatedPower));
+
         double const peFLAValue = peMultiplier * basicFLAValue;
         estimatedFLA = adjustForVoltage(peFLAValue * plMultiplier[4]);
         return {

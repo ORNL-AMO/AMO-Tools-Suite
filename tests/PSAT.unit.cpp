@@ -56,8 +56,8 @@ TEST_CASE( "PSATResultsPremium", "[PSAT results]" ) {
 	CHECK(opt.motorShaftPower == Approx(93.6145627007516));
 	CHECK(opt.pumpShaftPower == Approx(93.614562700751));
 	CHECK(opt.motorEfficiency * 100 == Approx(95.5185443048));
-	CHECK(opt.motorPowerFactor * 100 == Approx(86.0346294189));
-	CHECK(opt.motorCurrent == Approx(102.2161653402));
+	CHECK(opt.motorPowerFactor * 100 == Approx(86.0468881576));
+	CHECK(opt.motorCurrent == Approx(102.2016030326));
 	CHECK(opt.motorPower == Approx(73.1130230639));
 	CHECK(opt.annualEnergy == Approx(640.4700820397));
 	CHECK(opt.annualCost * 1000.0 == Approx(32023.5041019837));
@@ -129,8 +129,8 @@ TEST_CASE( "PSATResults", "[PSAT results]" ) {
 	CHECK(opt.motorShaftPower == Approx(93.6145627007516));
 	CHECK(opt.pumpShaftPower == Approx(93.614562700751));
 	CHECK(opt.motorEfficiency * 100 == Approx(95.518544304));
-	CHECK(opt.motorPowerFactor * 100 == Approx(86.0346294189));
-	CHECK(opt.motorCurrent == Approx(102.2161653402));
+	CHECK(opt.motorPowerFactor * 100 == Approx(86.0468881576));
+	CHECK(opt.motorCurrent == Approx(102.2016030326));
 	CHECK(opt.motorPower == Approx(73.1130230639));
 	CHECK(opt.annualEnergy == Approx(640.4700820397));
 	CHECK(opt.annualCost * 1000.0 == Approx(32023.5041019837));
@@ -442,7 +442,7 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 
 	t = EstimateFLA(120, 1900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 90, 220);
 	t.calculate();
-	CHECK(t.getEstimatedFLA() ==  Approx(301.1782164872));
+	CHECK(t.getEstimatedFLA() ==  Approx(291.0633925033));
 
 	t = EstimateFLA(90, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 95, 120);
 	t.calculate();
