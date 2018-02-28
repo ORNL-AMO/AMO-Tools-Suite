@@ -258,7 +258,7 @@ public:
 		auto const x = (planeData.fanOrEvaseOutletFlange.gasTotalPressure - planeData.fanInletFlange.gasTotalPressure)
 		               / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.barometricPressure);
 
-		double isentropicExponent = 0; // TODO what value to use for GasTypes other than Air ?
+		double isentropicExponent = 1.4; // TODO what value to use for GasTypes other than Air ?
 		if (baseGasDensity.gasType == BaseGasDensity::GasType::AIR) isentropicExponent = 1.4;
 
 		// TODO barometricPressure = barometric pressure, what to do if barometric pressure does vary between planes ? pg 61
