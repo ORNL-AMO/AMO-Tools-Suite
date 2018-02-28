@@ -17,10 +17,11 @@ TEST_CASE( "Fan", "[Fan]") {
 			}
 	};
 
-	FanInletFlange fanInletFlange(143.63, 32.63, 123, 26.57, 2);
-	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70, 78, 132.7, 26.57);
+	const double area = (143.63 * 32.63 * 2) / 144.0;
+	FanInletFlange fanInletFlange(area, 123, 26.57);
+	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70 * 78 / 144.0, 132.7, 26.57);
 
-	FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
+	FlowTraverse flowTraverse(143.63 * 32.63 / 144.0, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
 
 	traverseHoleData = {
 			{
@@ -35,11 +36,11 @@ TEST_CASE( "Fan", "[Fan]") {
 	};
 
 	std::vector<AddlTravPlane> addlTravPlanes({
-			                                          {143.63, 32.63, 123.0, 26.57, -17.0, std::sqrt(0.762), traverseHoleData}
+			                                          {143.63 * 32.63 / 144.0, 123.0, 26.57, -17.0, std::sqrt(0.762), traverseHoleData}
 	                                          });
 
-	InletMstPlane inletMstPlane(143.63, 32.63, 123.0, 26.57, -17.55, 2);
-	OutletMstPlane outletMstPlane(55.42, 60.49, 132.7, 26.57, 1.8);
+	InletMstPlane inletMstPlane(area, 123.0, 26.57, -17.55);
+	OutletMstPlane outletMstPlane(55.42 * 60.49 / 144.0, 132.7, 26.57, 1.8);
 
 	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
 	                           outletMstPlane, 0, 0.627, true);
@@ -53,19 +54,9 @@ TEST_CASE( "Fan", "[Fan]") {
 	auto fan = Fan(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
 	auto results = fan.calculate();
 
-	auto const fanEfficiencyTp = results["fanEfficiencyTp"];
-	auto const fanEfficiencySp = results["fanEfficiencySp"];
-	auto const fanEfficiencySpr = results["fanEfficiencySpr"];
-	auto const Qc = results["Qc"];
-	auto const Ptc = results["Ptc"];
-	auto const Psc = results["Psc"];
-	auto const SPRc = results["SPRc"];
-	auto const Hc = results["Hc"];
-	auto const Kpc = results["Kpc"];
-
-	CHECK(fanEfficiencyTp == Approx(53.607386));
-	CHECK(fanEfficiencySp == Approx(49.206914));
-	CHECK(fanEfficiencySpr == Approx(50.768875));
+	CHECK(results.fanEfficiencyTotalPressure == Approx(53.607386));
+	CHECK(results.fanEfficiencyStaticPressure == Approx(49.206914));
+	CHECK(results.fanEfficiencyStaticPressureRise == Approx(50.768875));
 	// TODO add checks for other stuff besides efficiency
 }
 

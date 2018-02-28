@@ -38,10 +38,6 @@ std::string GetStr(std::string const & key, Local<Object> obj) {
 	return std::string(*s);
 }
 
-bool isUndefined(Local<Object> obj, std::string const & key) {
-	return obj->Get(Nan::New<String>(key).ToLocalChecked())->IsUndefined();
-}
-
 bool isDefined(Local<Object> obj, std::string const & key) {
 	return !obj->Get(Nan::New<String>(key).ToLocalChecked())->IsUndefined();
 }
@@ -67,27 +63,15 @@ std::vector <std::vector<double>> getTraverseInputData(Local<Object> obj) {
 }
 
 template <class Plane> Plane construct(Local<Object> obj) {
-	if (isUndefined(obj, "circularDuctDiameter")) {
-		auto const noInletBoxes = (isUndefined(obj, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", obj));
-		return {Get("length", obj), Get("width", obj), Get("tdx", obj), Get("pbx", obj), noInletBoxes};
-	}
-	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj)};
+	return {Get("area", obj), Get("tdx", obj), Get("pbx", obj)};
 }
 
 template <class Plane> Plane constructMst(Local<Object> obj) {
-	if (isUndefined(obj, "circularDuctDiameter")) {
-		auto const noInletBoxes = (isUndefined(obj, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", obj));
-		return {Get("length", obj), Get("width", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), noInletBoxes};
-	}
-	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj)};
+	return {Get("area", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj)};
 }
 
 template <class Plane> Plane constructTraverse(Local<Object> obj) {
-	if (isUndefined(obj, "circularDuctDiameter")) {
-		unsigned const noInletBoxes = (isUndefined(obj, "noInletBoxes")) ? 1 : static_cast<unsigned>(Get("noInletBoxes", obj));
-		return {Get("length", obj), Get("width", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj), noInletBoxes};
-	}
-	return {Get("circularDuctDiameter", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
+	return {Get("area", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
 }
 
 FanRatedInfo getFanRatedInfo() {
@@ -178,15 +162,15 @@ NAN_METHOD(fan203) {
 	r = Nan::New<Object>();
 	try {
 		auto const rv = Fan(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();
-		SetR("fanEfficiencyTp", rv.at("fanEfficiencyTp"));
-		SetR("fanEfficiencySp", rv.at("fanEfficiencySp"));
-		SetR("fanEfficiencySpr", rv.at("fanEfficiencySpr"));
-		SetR("Qc", rv.at("Qc"));
-		SetR("Ptc", rv.at("Ptc"));
-		SetR("Psc", rv.at("Psc"));
-		SetR("SPRc", rv.at("SPRc"));
-		SetR("Hc", rv.at("Hc"));
-		SetR("Kpc", rv.at("Kpc"));
+		SetR("fanEfficiencyTotalPressure", rv.fanEfficiencyTotalPressure);
+		SetR("fanEfficiencyStaticPressure", rv.fanEfficiencyStaticPressure);
+		SetR("fanEfficiencyStaticPressureRise", rv.fanEfficiencyStaticPressureRise);
+		SetR("flowCorrected", rv.flowCorrected);
+		SetR("pressureTotalCorrected", rv.pressureTotalCorrected);
+		SetR("pressureStaticCorrected", rv.pressureStaticCorrected);
+		SetR("staticPressureRiseCorrected", rv.staticPressureRiseCorrected);
+		SetR("powerCorrected", rv.powerCorrected);
+		SetR("kpc", rv.kpc);
 	} catch (std::runtime_error const & e) {
 		std::string const what = e.what();
 		ThrowError(std::string("std::runtime_error thrown in fan203 - fan.h: " + what).c_str());
