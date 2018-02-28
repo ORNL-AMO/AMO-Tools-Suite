@@ -63,15 +63,15 @@ std::vector <std::vector<double>> getTraverseInputData(Local<Object> obj) {
 }
 
 template <class Plane> Plane construct(Local<Object> obj) {
-	return {Get("area", obj), Get("tdx", obj), Get("pbx", obj)};
+	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj)};
 }
 
 template <class Plane> Plane constructMst(Local<Object> obj) {
-	return {Get("area", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj)};
+	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj), Get("staticPressure", obj)};
 }
 
 template <class Plane> Plane constructTraverse(Local<Object> obj) {
-	return {Get("area", obj), Get("tdx", obj), Get("pbx", obj), Get("psx", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
+	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj), Get("staticPressure", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
 }
 
 FanRatedInfo getFanRatedInfo() {

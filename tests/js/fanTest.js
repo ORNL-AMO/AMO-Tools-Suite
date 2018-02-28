@@ -26,19 +26,19 @@ test('fan test', function (t) {
             FanInletFlange: {
                 area: area * 2,
                 length: 32.63,
-                tdx: 123,
-                pbx: 26.57
+                dryBulbTemp: 123,
+                barometricPressure: 26.57
             },
             FanEvaseOrOutletFlange: {
                 area: 70 * 78 / 144.0,
-                tdx: 132.7,
-                pbx: 26.57
+                dryBulbTemp: 132.7,
+                barometricPressure: 26.57
             },
             FlowTraverse: {
                 area: area,
-                tdx: 123,
-                pbx: 26.57,
-                psx: -18.1,
+                dryBulbTemp: 123,
+                barometricPressure: 26.57,
+                staticPressure: -18.1,
                 pitotTubeCoefficient: 0.87292611371180784,
                 traverseData: [
                     [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
@@ -49,9 +49,9 @@ test('fan test', function (t) {
             AddlTraversePlanes: [
                 {
                     area: area,
-                    tdx: 123,
-                    pbx: 26.57,
-                    psx: -17.0,
+                    dryBulbTemp: 123,
+                    barometricPressure: 26.57,
+                    staticPressure: -17.0,
                     pitotTubeCoefficient: 0.87292611371180784,
                     traverseData: [
                         [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
@@ -62,15 +62,15 @@ test('fan test', function (t) {
             ],
             InletMstPlane: {
                 area: area * 2,
-                tdx: 123,
-                pbx: 26.57,
-                psx: -17.55
+                dryBulbTemp: 123,
+                barometricPressure: 26.57,
+                staticPressure: -17.55
             },
             OutletMstPlane: {
                 area: (55.42 * 60.49) / 144.0,
-                tdx: 132.7,
-                pbx: 26.57,
-                psx: 1.8
+                dryBulbTemp: 132.7,
+                barometricPressure: 26.57,
+                staticPressure: 1.8
             }
         },
         BaseGasDensity: {
