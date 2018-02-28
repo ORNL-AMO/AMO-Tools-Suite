@@ -9,6 +9,8 @@ function rnd(value) {
 test('fan test', function (t) {
     t.plan(4);
     t.type(bindings.fan203, 'function');
+
+    var area = 143.63 * 32.63 / 144.0;
     var inp = {
         FanRatedInfo: {
             fanSpeed: 1191,
@@ -22,22 +24,18 @@ test('fan test', function (t) {
             totalPressureLossBtwnPlanes1and4: 0,
             totalPressureLossBtwnPlanes2and5: 0.627,
             FanInletFlange: {
-                width: 143.63,
+                area: area * 2,
                 length: 32.63,
                 tdx: 123,
-                pbx: 26.57,
-                noInletBoxes: 2
+                pbx: 26.57
             },
             FanEvaseOrOutletFlange: {
-                width: 70,
-                length: 78,
+                area: 70 * 78 / 144.0,
                 tdx: 132.7,
                 pbx: 26.57
-                // noInletBoxes isn't necessary, will default to 1
             },
             FlowTraverse: {
-                width: 143.63,
-                length: 32.63,
+                area: area,
                 tdx: 123,
                 pbx: 26.57,
                 psx: -18.1,
@@ -50,8 +48,7 @@ test('fan test', function (t) {
             },
             AddlTraversePlanes: [
                 {
-                    width: 143.63,
-                    length: 32.63,
+                    area: area,
                     tdx: 123,
                     pbx: 26.57,
                     psx: -17.0,
@@ -64,20 +61,16 @@ test('fan test', function (t) {
                 }
             ],
             InletMstPlane: {
-                width: 143.63,
-                length: 32.63,
+                area: area * 2,
                 tdx: 123,
                 pbx: 26.57,
-                psx: -17.55,
-                noInletBoxes: 2
+                psx: -17.55
             },
             OutletMstPlane: {
-                width: 55.42,
-                length: 60.49,
+                area: (55.42 * 60.49) / 144.0,
                 tdx: 132.7,
                 pbx: 26.57,
                 psx: 1.8
-                // noInletBoxes not provided here.. defaults to 1
             }
         },
         BaseGasDensity: {
@@ -101,9 +94,9 @@ test('fan test', function (t) {
 
     var res = bindings.fan203(inp);
 
-    t.equal(rnd(res.fanEfficiencyTp), rnd(53.60738684355601));
-    t.equal(rnd(res.fanEfficiencySp), rnd(49.20691409764023));
-    t.equal(rnd(res.fanEfficiencySpr), rnd(50.768875240824116));
+    t.equal(rnd(res.fanEfficiencyTotalPressure), rnd(53.60738684355601));
+    t.equal(rnd(res.fanEfficiencyStaticPressure), rnd(49.20691409764023));
+    t.equal(rnd(res.fanEfficiencyStaticPressureRise), rnd(50.768875240824116));
 });
 
 test('fan curve test', function (t) {
