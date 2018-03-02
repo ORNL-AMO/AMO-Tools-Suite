@@ -109,73 +109,100 @@ PlaneData getPlaneData() {
 	};
 }
 
-BaseGasDensity getBaseGasDensity(bool isGettingDensityOnly = false) {
-	auto baseGasDensityV8 = (isGettingDensityOnly) ? inp->ToObject() : inp->ToObject()->Get(Nan::New<String>("BaseGasDensity").ToLocalChecked())->ToObject();
-	auto gasTypeStr = GetStr("gasType", baseGasDensityV8);
-	BaseGasDensity::GasType gasType;
-    BaseGasDensity::InputType inputType = BaseGasDensity::InputType::WetBulbTemp;
-
+BaseGasDensity::GasType getGasType(Local<Object> obj) {
+	auto const & gasTypeStr = GetStr("gasType", obj);
 	if (gasTypeStr == "AIR") {
-		gasType = BaseGasDensity::GasType::AIR;
+		return BaseGasDensity::GasType::AIR;
 	} else if (gasTypeStr == "STANDARDAIR") {
-		gasType = BaseGasDensity::GasType::STANDARDAIR;
-	} else {
-		gasType = BaseGasDensity::GasType::OTHERGAS;
+		return BaseGasDensity::GasType::STANDARDAIR;
 	}
+	return BaseGasDensity::GasType::OTHERGAS;
+};
 
-	if (isDefined(baseGasDensityV8, "inputType")) {
-		auto inputTypeStr = GetStr("inputType", baseGasDensityV8);
-		if (inputTypeStr == "relativeHumidity") {
-			inputType = BaseGasDensity::InputType::RelativeHumidity;
-		} else if (inputTypeStr == "dewPoint") {
-            inputType = BaseGasDensity::InputType::DewPoint;
-		} else {
-			inputType = BaseGasDensity::InputType::WetBulbTemp;
-		}
+BaseGasDensity::InputType getInputType(Local<Object> obj) {
+	auto const & inputTypeStr = GetStr("inputType", obj);
+	if (inputTypeStr == "relativeHumidity") {
+		return BaseGasDensity::InputType::RelativeHumidity;
+	} else if (inputTypeStr == "dewPoint") {
+		return BaseGasDensity::InputType::DewPoint;
 	}
+	return BaseGasDensity::InputType::WetBulbTemp;
+};
 
-	if (isDefined(baseGasDensityV8, "relativeHumidityOrDewPoint")) {
-		return {
-				Get("dryBulbTemp", baseGasDensityV8),
-				Get("staticPressure", baseGasDensityV8),
-				Get("barometricPressure", baseGasDensityV8),
-				Get("relativeHumidityOrDewPoint", baseGasDensityV8),
-				gasType,
-                inputType,
-				Get("specificGravity", baseGasDensityV8),
-		};
-	} else if (isDefined(baseGasDensityV8, "wetBulbTemp")) {
-		return {
-				Get("dryBulbTemp", baseGasDensityV8),
-				Get("staticPressure", baseGasDensityV8),
-				Get("barometricPressure", baseGasDensityV8),
-				Get("wetBulbTemp", baseGasDensityV8),
-				gasType,
-				inputType,
-				Get("specificGravity", baseGasDensityV8),
-				Get("specificHeatGas", baseGasDensityV8),
-		};
+
+NAN_METHOD(getBaseGasDensityRelativeHumidity) {
+	inp = info[0]->ToObject();
+	try {
+		info.GetReturnValue().Set(
+				BaseGasDensity(
+						Get("dryBulbTemp", inp->ToObject()),
+						Get("staticPressure", inp->ToObject()),
+						Get("barometricPressure", inp->ToObject()),
+						Get("relativeHumidity", inp->ToObject()),
+						getGasType(inp->ToObject()),
+						getInputType(inp->ToObject()),
+						Get("specificGravity", inp->ToObject())
+				).getGasDensity()
+		);
+	} catch (std::runtime_error const & e) {
+		info.GetReturnValue().Set(0);
+		std::string const what = e.what();
+		ThrowError(std::string("std::runtime_error thrown in getBaseGasDensityRelativeHumidity - fan.h: " + what).c_str());
 	}
+}
 
+NAN_METHOD(getBaseGasDensityDewPoint) {
+	inp = info[0]->ToObject();
+	try {
+		info.GetReturnValue().Set(
+				BaseGasDensity(
+						Get("dryBulbTemp", inp->ToObject()),
+						Get("staticPressure", inp->ToObject()),
+						Get("barometricPressure", inp->ToObject()),
+						Get("dewPoint", inp->ToObject()),
+						getGasType(inp->ToObject()),
+						getInputType(inp->ToObject()),
+						Get("specificGravity", inp->ToObject())
+				).getGasDensity()
+		);
+	} catch (std::runtime_error const & e) {
+		info.GetReturnValue().Set(0);
+		std::string const what = e.what();
+		ThrowError(std::string("std::runtime_error thrown in getBaseGasDensityDewPoint - fan.h: " + what).c_str());
+	}
+}
+
+NAN_METHOD(getBaseGasDensityWetBulb) {
+	inp = info[0]->ToObject();
+	try {
+		info.GetReturnValue().Set(
+				BaseGasDensity(
+						Get("dryBulbTemp", inp->ToObject()),
+						Get("staticPressure", inp->ToObject()),
+						Get("barometricPressure", inp->ToObject()),
+						Get("wetBulbTemp", inp->ToObject()),
+						getGasType(inp->ToObject()),
+						getInputType(inp->ToObject()),
+						Get("specificGravity", inp->ToObject()),
+						Get("specificHeatGas", inp->ToObject())
+				).getGasDensity()
+		);
+	} catch (std::runtime_error const & e) {
+		info.GetReturnValue().Set(0);
+		std::string const what = e.what();
+		ThrowError(std::string("std::runtime_error thrown in getBaseGasDensityWetBulb - fan.h: " + what).c_str());
+	}
+}
+
+BaseGasDensity getBaseGasDensity() {
+	auto baseGasDensityV8 = inp->ToObject()->Get(Nan::New<String>("BaseGasDensity").ToLocalChecked())->ToObject();
 	return {
 			Get("dryBulbTemp", baseGasDensityV8),
 			Get("staticPressure", baseGasDensityV8),
 			Get("barometricPressure", baseGasDensityV8),
 			Get("gasDensity", baseGasDensityV8),
-			gasType
+			getGasType(baseGasDensityV8)
 	};
-}
-
-NAN_METHOD(getBaseGasDensity) {
-		inp = info[0]->ToObject();
-
-		try {
-            info.GetReturnValue().Set(getBaseGasDensity(true).getGasDensity());
-		} catch (std::runtime_error const & e) {
-			info.GetReturnValue().Set(0);
-			std::string const what = e.what();
-			ThrowError(std::string("std::runtime_error thrown in getBaseGasDensity - fan.h: " + what).c_str());
-		}
 }
 
 FanShaftPower getFanShaftPower() {
