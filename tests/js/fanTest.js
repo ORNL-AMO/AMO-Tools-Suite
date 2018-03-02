@@ -100,33 +100,23 @@ test('fan203 test', function (t) {
 });
 
 test('getBaseGasDensity', function (t) {
-    t.plan(5);
-    t.type(bindings.getBaseGasDensity, 'function');
+    t.plan(6);
+    t.type(bindings.getBaseGasDensityRelativeHumidity, 'function');
+    t.type(bindings.getBaseGasDensityDewPoint, 'function');
+    t.type(bindings.getBaseGasDensityWetBulb, 'function');
 
     var inp = {
         dryBulbTemp: 123,
         staticPressure: -17.6,
         barometricPressure: 26.57,
         gasDensity: 0.0547,
-        gasType: 'AIR'
-    };
-
-    var res = bindings.getBaseGasDensity(inp);
-
-    t.equal(res, rnd(0.0547));
-
-    inp = {
-        dryBulbTemp: 123,
-        staticPressure: -17.6,
-        barometricPressure: 26.57,
-        gasDensity: 0.0547,
         gasType: 'AIR',
         inputType: 'relativeHumidity',
-        relativeHumidityOrDewPoint: 0.35,
+        relativeHumidity: 0.35,
         specificGravity: 1.05
     };
 
-    res = bindings.getBaseGasDensity(inp);
+    var res = bindings.getBaseGasDensityRelativeHumidity(inp);
     t.equal(rnd(res), rnd(0.06231117736966));
 
     inp = {
@@ -136,11 +126,11 @@ test('getBaseGasDensity', function (t) {
         gasDensity: 0.0547,
         gasType: 'AIR',
         inputType: 'dewPoint',
-        relativeHumidityOrDewPoint: 0.35,
+        dewPoint: 0.35,
         specificGravity: 1.05
     };
 
-    res = bindings.getBaseGasDensity(inp);
+    res = bindings.getBaseGasDensityDewPoint(inp);
     t.equal(rnd(res), rnd(0.06551801779516826));
 
     inp = {
@@ -155,7 +145,7 @@ test('getBaseGasDensity', function (t) {
         specificHeatGas: 1.03
     };
 
-    res = bindings.getBaseGasDensity(inp);
+    res = bindings.getBaseGasDensityWetBulb(inp);
     t.equal(rnd(res), rnd(0.065456));
 });
 
