@@ -29,9 +29,9 @@ public:
 	};
 
 	enum class InputType {
-		DEW,
-		RH,
-		WET
+		DewPoint,
+		RelativeHumidity,
+		WetBulbTemp
 	};
 
 	// used for method 1
@@ -41,36 +41,40 @@ public:
 	{}
 
 	// TODO ensure correctness
-//	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
-//	               double const relativeHumidityOrDewPoint, GasType const gasType,
-//	               InputType const inputType, double const specificGravity)
-//			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
-//	{
-//		auto const satPress = calculateSaturationPressure(tdo);
-//		double rh = 0;
-//		if (inputType == InputType::RH) {
-//			rh = relativeHumidityOrDewPoint;
-//		} else if (inputType == InputType::DEW) {
-//			rh = calculateSaturationPressure(relativeHumidityOrDewPoint) / satPress;
-//		} else if (inputType == InputType::WET) {
-//			throw std::runtime_error("The wrong constructor for BaseGasDensity was called here");
-//		}
-//
-//		auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
-//		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
-//	}
-//
-//	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
-//	               double const wetBulbTemp, GasType const gasType,
-//	               InputType const inputType, double const specificGravity, const double cpGas)
-//			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
-//	{
-//		if (inputType != InputType::WET) throw std::runtime_error("The wrong constructor for BaseGasDensity was called");
-//		auto const satPress = calculateSaturationPressure(tdo);
-//		auto const rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
-//		auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
-//		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
-//	}
+	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
+	               double const relativeHumidityOrDewPoint, GasType const gasType,
+	               InputType const inputType, double const specificGravity)
+			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
+	{
+		auto const satPress = calculateSaturationPressure(tdo);
+		double rh = 0;
+		if (inputType == InputType::RelativeHumidity) {
+			rh = relativeHumidityOrDewPoint;
+		} else if (inputType == InputType::DewPoint) {
+			rh = calculateSaturationPressure(relativeHumidityOrDewPoint) / satPress;
+		} else if (inputType == InputType::WetBulbTemp) {
+			throw std::runtime_error("The wrong constructor for BaseGasDensity was called here - check inputType field");
+		}
+
+		auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
+		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+	}
+
+	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
+	               double const wetBulbTemp, GasType const gasType,
+	               InputType const inputType, double const specificGravity, const double cpGas)
+			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
+	{
+		if (inputType != InputType::WetBulbTemp) throw std::runtime_error("The wrong constructor for BaseGasDensity was called - check inputType field");
+		auto const satPress = calculateSaturationPressure(tdo);
+		auto const rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
+		auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
+		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+	}
+
+	double getGasDensity() const {
+		return po;
+	}
 
 private:
 

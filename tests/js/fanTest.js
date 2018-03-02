@@ -6,7 +6,7 @@ function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
 }
 
-test('fan test', function (t) {
+test('fan203 test', function (t) {
     t.plan(4);
     t.type(bindings.fan203, 'function');
 
@@ -97,6 +97,66 @@ test('fan test', function (t) {
     t.equal(rnd(res.fanEfficiencyTotalPressure), rnd(53.60738684355601));
     t.equal(rnd(res.fanEfficiencyStaticPressure), rnd(49.20691409764023));
     t.equal(rnd(res.fanEfficiencyStaticPressureRise), rnd(50.768875240824116));
+});
+
+test('getBaseGasDensity', function (t) {
+    t.plan(5);
+    t.type(bindings.getBaseGasDensity, 'function');
+
+    var inp = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR'
+    };
+
+    var res = bindings.getBaseGasDensity(inp);
+
+    t.equal(res, rnd(0.0547));
+
+    inp = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        inputType: 'relativeHumidity',
+        relativeHumidityOrDewPoint: 0.35,
+        specificGravity: 1.05
+    };
+
+    res = bindings.getBaseGasDensity(inp);
+    t.equal(rnd(res), rnd(0.06231117736966));
+
+    inp = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        inputType: 'dewPoint',
+        relativeHumidityOrDewPoint: 0.35,
+        specificGravity: 1.05
+    };
+
+    res = bindings.getBaseGasDensity(inp);
+    t.equal(rnd(res), rnd(0.06551801779516826));
+
+    inp = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        inputType: 'wetBulb',
+        wetBulbTemp: 110,
+        specificGravity: 1.05,
+        specificHeatGas: 1.03
+    };
+
+    res = bindings.getBaseGasDensity(inp);
+    t.equal(rnd(res), rnd(0.065456));
 });
 
 test('fan curve test', function (t) {
