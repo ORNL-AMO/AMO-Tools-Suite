@@ -159,6 +159,46 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res), rnd(0.065456));
 });
 
+test('getVelocityPressureData', function (t) {
+    t.plan(5);
+    t.type(bindings.getVelocityPressureData, 'function');
+
+    var inp = {
+        area: 143.63 * 32.63 / 144.0,
+        dryBulbTemp: 123,
+        barometricPressure: 26.57,
+        staticPressure: -18.1,
+        pitotTubeCoefficient: 0.87292611371180784,
+        traverseData: [
+            [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+            [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+            [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+        ]
+    };
+
+    var res = bindings.getVelocityPressureData(inp);
+
+    t.equal(rnd(res.pv3), rnd(0.7508102988157324));
+    t.equal(rnd(res.percent75Rule), rnd(100));
+
+    inp = {
+        area: 143.63 * 32.63 / 144.0,
+        dryBulbTemp: 123,
+        barometricPressure: 26.57,
+        staticPressure: -17.0,
+        pitotTubeCoefficient: 0.87292611371180784,
+        traverseData: [
+            [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
+            [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
+            [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+        ]
+    };
+
+    res = bindings.getVelocityPressureData(inp);
+    t.equal(rnd(res.pv3), rnd(0.6007));
+    t.equal(rnd(res.percent75Rule), rnd(100));
+});
+
 test('fan curve test', function (t) {
     t.plan(121);
     t.type(bindings.fanCurve, 'function');

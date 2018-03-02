@@ -203,6 +203,15 @@ FanShaftPower getFanShaftPower() {
 	};
 }
 
+NAN_METHOD(getVelocityPressureData) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+	auto const travPlane = constructTraverse<FlowTraverse>(inp->ToObject());
+	SetR("pv3", travPlane.getPv3Value());
+	SetR("percent75Rule", travPlane.get75percentRule() * 100);
+	info.GetReturnValue().Set(r);
+}
+
 NAN_METHOD(fan203) {
 	inp = info[0]->ToObject();
 

@@ -6,6 +6,14 @@
 
 // to be inherited by planes 3 and 3a, 3b
 class VelocityPressureTraverseData {
+public:
+	double getPv3Value() const {
+		return pv3;
+	}
+
+	double get75percentRule() const {
+		return percent75Rule;
+	}
 protected:
 	// protected constructor to be used only during the construction of its derived classes
 	VelocityPressureTraverseData(double pitotTubeCoefficient, std::vector< std::vector< double > > traverseHoleData);
