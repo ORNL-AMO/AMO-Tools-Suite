@@ -207,22 +207,8 @@ BaseGasDensity getBaseGasDensity() {
 
 FanShaftPower getFanShaftPower() {
 	auto fanShaftPowerV8 = inp->ToObject()->Get(Nan::New<String>("FanShaftPower").ToLocalChecked())->ToObject();
-	auto const isMethodOne = GetBool("isMethodOne", fanShaftPowerV8);
-
-	if (isMethodOne) {
-		return {
-				Get("hi", fanShaftPowerV8),
-				Get("efficiencyMotor", fanShaftPowerV8),
-				Get("efficiencyVFD", fanShaftPowerV8),
-				Get("efficiencyBelt", fanShaftPowerV8),
-				Get("sumSEF", fanShaftPowerV8)
-		};
-	}
-
 	return {
-			Get("voltage", fanShaftPowerV8),
-			Get("amps", fanShaftPowerV8),
-			Get("powerFactorAtLoad", fanShaftPowerV8),
+			Get("motorShaftPower", fanShaftPowerV8),
 			Get("efficiencyMotor", fanShaftPowerV8),
 			Get("efficiencyVFD", fanShaftPowerV8),
 			Get("efficiencyBelt", fanShaftPowerV8),
