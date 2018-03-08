@@ -23,9 +23,9 @@ public:
 			: efficiencyMotor(efficiencyMotor / 100), efficiencyVFD(efficiencyVFD / 100), efficiencyBelt(efficiencyBelt / 100),
 			  sumSEF(sumSEF)
 	{
-		//	hMo = (motorShaftPower * this->efficiencyMotor * this->efficiencyVFD) / 0.7457;
-		hMo = (motorShaftPower * this->efficiencyMotor * this->efficiencyVFD) / 746.0;
-		hFi = hMo * this->efficiencyBelt;
+		//	motorPowerOutput = (motorShaftPower * this->efficiencyMotor * this->efficiencyVFD) / 0.7457;
+		motorPowerOutput = motorShaftPower * this->efficiencyMotor * this->efficiencyVFD; // / 746.0;
+		fanPowerInput = motorPowerOutput * this->efficiencyBelt;
 	}
 
 	/**
@@ -39,7 +39,7 @@ public:
 		return voltage * amps * powerFactorAtLoad * std::sqrt(3);
 	}
 
-	double getFanShaftPower() const { return hFi; }
+	double getFanPowerInput() const { return fanPowerInput; }
 
 	double getSEF() const { return sumSEF; }
 
@@ -47,7 +47,7 @@ private:
 	const double efficiencyMotor, efficiencyVFD, efficiencyBelt;
 	const double sumSEF;
 
-	double hMo, hFi;
+	double motorPowerOutput, fanPowerInput;
 };
 
 

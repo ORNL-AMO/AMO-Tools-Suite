@@ -18,10 +18,10 @@ TEST_CASE( "Fan", "[Fan]") {
 	};
 
 	const double area = (143.63 * 32.63 * 2) / 144.0;
-	FanInletFlange fanInletFlange(area, 123, 26.57);
-	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70 * 78 / 144.0, 132.7, 26.57);
+	FanFlange fanInletFlange(area, 123, 26.57);
+	FanFlange fanOrEvaseOutletFlange(70 * 78 / 144.0, 132.7, 26.57);
 
-	FlowTraverse flowTraverse(143.63 * 32.63 / 144.0, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
+	TraversePlane flowTraverse(143.63 * 32.63 / 144.0, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
 
 	traverseHoleData = {
 			{
@@ -35,19 +35,19 @@ TEST_CASE( "Fan", "[Fan]") {
 			}
 	};
 
-	std::vector<AddlTravPlane> addlTravPlanes({
+	std::vector<TraversePlane> addlTravPlanes({
 			                                          {143.63 * 32.63 / 144.0, 123.0, 26.57, -17.0, std::sqrt(0.762), traverseHoleData}
 	                                          });
 
-	InletMstPlane inletMstPlane(area, 123.0, 26.57, -17.55);
-	OutletMstPlane outletMstPlane(55.42 * 60.49 / 144.0, 132.7, 26.57, 1.8);
+	MstPlane inletMstPlane(area, 123.0, 26.57, -17.55);
+	MstPlane outletMstPlane(55.42 * 60.49 / 144.0, 132.7, 26.57, 1.8);
 
 	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
 	                           outletMstPlane, 0, 0.627, true);
 
 	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547, BaseGasDensity::GasType::AIR);
 
-	auto const motorShaftPower = FanShaftPower::calculateMotorShaftPower(4200, 205, 0.88);
+	auto const motorShaftPower = FanShaftPower::calculateMotorShaftPower(4200, 205, 0.88) / 746.0;
 	auto fanShaftPower = FanShaftPower(motorShaftPower, 95.0, 100, 100, 0);
 
 	auto fan = Fan(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);

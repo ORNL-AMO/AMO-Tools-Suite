@@ -62,15 +62,15 @@ std::vector <std::vector<double>> getTraverseInputData(Local<Object> obj) {
 	return traverseData;
 }
 
-template <class Plane> Plane construct(Local<Object> obj) {
+FanFlange constructFlange(Local<Object> obj) {
 	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj)};
 }
 
-template <class Plane> Plane constructMst(Local<Object> obj) {
+MstPlane constructMst(Local<Object> obj) {
 	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj), Get("staticPressure", obj)};
 }
 
-template <class Plane> Plane constructTraverse(Local<Object> obj) {
+TraversePlane constructTraverse(Local<Object> obj) {
 	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj), Get("staticPressure", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
 }
 
@@ -90,19 +90,19 @@ PlaneData getPlaneData() {
 
 	auto const addlTravTmp = planeDataV8->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
 	auto const & addlTravArray = v8::Local<v8::Array>::Cast(addlTravTmp);
-	std::vector<AddlTravPlane> addlTravPlanes;
+	std::vector<TraversePlane> addlTravPlanes;
 
 	for (std::size_t i = 0; i < addlTravArray->Length(); i++) {
-		addlTravPlanes.emplace_back(constructTraverse<AddlTravPlane>(addlTravArray->Get(i)->ToObject()));
+		addlTravPlanes.emplace_back(constructTraverse(addlTravArray->Get(i)->ToObject()));
 	}
 
 	return {
-			construct<FanInletFlange>(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())->ToObject()),
-			construct<FanOrEvaseOutletFlange>(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())->ToObject()),
-			constructTraverse<FlowTraverse>(planeDataV8->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject()),
+			constructFlange(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())->ToObject()),
+			constructFlange(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())->ToObject()),
+			constructTraverse(planeDataV8->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject()),
 			std::move(addlTravPlanes),
-			constructMst<InletMstPlane>(planeDataV8->Get(Nan::New<String>("InletMstPlane").ToLocalChecked())->ToObject()),
-			constructMst<OutletMstPlane>(planeDataV8->Get(Nan::New<String>("OutletMstPlane").ToLocalChecked())->ToObject()),
+			constructMst(planeDataV8->Get(Nan::New<String>("InletMstPlane").ToLocalChecked())->ToObject()),
+			constructMst(planeDataV8->Get(Nan::New<String>("OutletMstPlane").ToLocalChecked())->ToObject()),
 			Get("totalPressureLossBtwnPlanes1and4", planeDataV8),
 			Get("totalPressureLossBtwnPlanes2and5", planeDataV8),
 			GetBool("plane5upstreamOfPlane2", planeDataV8)
@@ -219,7 +219,7 @@ FanShaftPower getFanShaftPower() {
 NAN_METHOD(getVelocityPressureData) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
-	auto const travPlane = constructTraverse<FlowTraverse>(inp->ToObject());
+	auto const travPlane = constructTraverse(inp->ToObject());
 	SetR("pv3", travPlane.getPv3Value());
 	SetR("percent75Rule", travPlane.get75percentRule() * 100);
 	info.GetReturnValue().Set(r);
