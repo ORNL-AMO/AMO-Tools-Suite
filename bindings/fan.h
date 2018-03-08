@@ -62,7 +62,7 @@ std::vector <std::vector<double>> getTraverseInputData(Local<Object> obj) {
 	return traverseData;
 }
 
-FanFlange construct(Local<Object> obj) {
+FanFlange constructFlange(Local<Object> obj) {
 	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj)};
 }
 
@@ -97,8 +97,8 @@ PlaneData getPlaneData() {
 	}
 
 	return {
-			construct(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())->ToObject()),
-			construct(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())->ToObject()),
+			constructFlange(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())->ToObject()),
+			constructFlange(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())->ToObject()),
 			constructTraverse(planeDataV8->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject()),
 			std::move(addlTravPlanes),
 			constructMst(planeDataV8->Get(Nan::New<String>("InletMstPlane").ToLocalChecked())->ToObject()),
