@@ -23,8 +23,7 @@ public:
 			: efficiencyMotor(efficiencyMotor / 100), efficiencyVFD(efficiencyVFD / 100), efficiencyBelt(efficiencyBelt / 100),
 			  sumSEF(sumSEF)
 	{
-		//	motorPowerOutput = (motorShaftPower * this->efficiencyMotor * this->efficiencyVFD) / 0.7457;
-		motorPowerOutput = motorShaftPower * this->efficiencyMotor * this->efficiencyVFD; // / 746.0;
+		motorPowerOutput = motorShaftPower * this->efficiencyMotor * this->efficiencyVFD;
 		fanPowerInput = motorPowerOutput * this->efficiencyBelt;
 	}
 

@@ -62,7 +62,7 @@ std::vector <std::vector<double>> getTraverseInputData(Local<Object> obj) {
 	return traverseData;
 }
 
-FanFlange constructFlange(Local<Object> obj) {
+FlangePlane constructFlange(Local<Object> obj) {
 	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj)};
 }
 
@@ -223,6 +223,46 @@ NAN_METHOD(getVelocityPressureData) {
 	SetR("pv3", travPlane.getPv3Value());
 	SetR("percent75Rule", travPlane.get75percentRule() * 100);
 	info.GetReturnValue().Set(r);
+}
+
+
+NAN_METHOD(getPlaneResults) {
+	Local<Object> rv = Nan::New<Object>();
+
+	auto const setData = [&rv](const PlaneData::NodeBinding::Data & data, std::string const & name,
+							bool isStaticPressure = false, const double staticPressure = 0) {
+		r = Nan::New<Object>();
+		SetR("gasDensity", data.gasDensity);
+		SetR("gasVolumeFlowRate", data.gasVolumeFlowRate);
+		SetR("gasVelocity", data.gasVelocity);
+		SetR("gasVelocityPressure", data.gasVelocityPressure);
+		SetR("gasTotalPressure", data.gasTotalPressure);
+		if (isStaticPressure) {
+			SetR("staticPressure", staticPressure);
+		}
+
+		Local<String> objName = Nan::New<String>(name).ToLocalChecked();
+		Nan::Set(rv, objName, r);
+	};
+
+	inp = info[0]->ToObject();
+
+	try {
+		auto planeData = getPlaneData();
+		auto baseGasDensity = getBaseGasDensity();
+		auto const output = PlaneData::NodeBinding::calculate(planeData, baseGasDensity);
+		setData(output.fanInletFlange, "FanInletFlange", true, output.fanInletFlange.staticPressure);
+		setData(output.fanOrEvaseOutletFlange, "FanOrEvaseOutletFlange", true, output.fanOrEvaseOutletFlange.staticPressure);
+		setData(output.flowTraverse, "FlowTraverse");
+		setData(output.inletMstPlane, "InletMstPlane");
+		setData(output.outletMstPlane, "OutletMstPlane");
+		// TODO need vector
+	} catch (std::runtime_error const & e) {
+		std::string const what = e.what();
+		ThrowError(std::string("std::runtime_error thrown in getPlaneResults - fan.h: " + what).c_str());
+	}
+
+	info.GetReturnValue().Set(rv);
 }
 
 NAN_METHOD(fan203) {
