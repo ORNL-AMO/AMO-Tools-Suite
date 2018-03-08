@@ -18,8 +18,8 @@ TEST_CASE( "Fan", "[Fan]") {
 	};
 
 	const double area = (143.63 * 32.63 * 2) / 144.0;
-	FanFlange fanInletFlange(area, 123, 26.57);
-	FanFlange fanOrEvaseOutletFlange(70 * 78 / 144.0, 132.7, 26.57);
+	FlangePlane fanInletFlange(area, 123, 26.57);
+	FlangePlane fanOrEvaseOutletFlange(70 * 78 / 144.0, 132.7, 26.57);
 
 	TraversePlane flowTraverse(143.63 * 32.63 / 144.0, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
 

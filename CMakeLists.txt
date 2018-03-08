@@ -114,7 +114,6 @@ set(SOURCE_FILES
         src/ssmt/Deaerator.cpp
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
-        src/fans/Planar.cpp
         src/fans/FanCurve.cpp
         src/calculator/util/CompressedAir.cpp
         src/calculator/util/CHP.cpp

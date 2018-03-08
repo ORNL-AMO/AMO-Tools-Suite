@@ -12,7 +12,7 @@
 
 class FanRatedInfo;
 class Planar;
-class FanFlange;
+class FlangePlane;
 class TraversePlane;
 class MstPlane;
 
@@ -129,7 +129,61 @@ private:
 
 class PlaneData {
 public:
-	PlaneData(FanFlange fanInletFlange, FanFlange fanOrEvaseOutletFlange,
+	// used to access private stuff from the nan bindings
+	struct NodeBinding {
+		struct Data {
+			Data(const double density, const double velocity, const double volumeFlowRate, const double velocityPressure,
+				 const double totalPressure)
+			: gasDensity(density), gasVelocity(velocity), gasVolumeFlowRate(volumeFlowRate),
+			  gasVelocityPressure(velocityPressure), gasTotalPressure(totalPressure) {}
+
+			const double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
+		};
+		struct DataFlange : Data {
+			DataFlange(const double density, const double velocity, const double volumeFlowRate, const double velocityPressure,
+				 const double totalPressure, const double staticPressure)
+					: Data(density, velocity, volumeFlowRate, velocityPressure, totalPressure),
+					  staticPressure(staticPressure) {}
+
+			const double staticPressure = 0;
+		};
+		struct Output {
+			explicit Output(PlaneData const & planeData)
+					: fanInletFlange(getDataFlange(planeData.fanInletFlange)),
+					  fanOrEvaseOutletFlange(getDataFlange(planeData.fanOrEvaseOutletFlange)),
+					  flowTraverse(getData(planeData.flowTraverse)),
+					  inletMstPlane(getData(planeData.inletMstPlane)),
+					  outletMstPlane(getData(planeData.outletMstPlane)),
+					  addlTravPlanes(getDataTrav(planeData.addlTravPlanes))
+			{}
+			DataFlange fanInletFlange, fanOrEvaseOutletFlange;
+			Data flowTraverse, inletMstPlane, outletMstPlane;
+			std::vector<Data> addlTravPlanes;
+		};
+
+		static Output calculate(PlaneData & planeData, BaseGasDensity const & baseGasDensity) {
+			planeData.calculate(baseGasDensity);
+			return Output(planeData);
+		}
+
+	private:
+		static Data getData(Planar const & plane) {
+			return {plane.gasDensity, plane.gasVelocity, plane.gasVolumeFlowRate, plane.gasVelocityPressure, plane.gasTotalPressure};
+		}
+		static DataFlange getDataFlange(Planar const & plane) {
+			return {plane.gasDensity, plane.gasVelocity, plane.gasVolumeFlowRate, plane.gasVelocityPressure, plane.gasTotalPressure, plane.staticPressure};
+		}
+		static std::vector<Data> getDataTrav(std::vector<TraversePlane> const & addlPlanes) {
+			std::vector<Data> data;
+			for (auto const & plane : addlPlanes) {
+				data.push_back({plane.gasDensity, plane.gasVelocity, plane.gasVolumeFlowRate, plane.gasVelocityPressure, plane.gasTotalPressure});
+			}
+			return data;
+		}
+	};
+
+
+	PlaneData(FlangePlane fanInletFlange, FlangePlane fanOrEvaseOutletFlange,
 			  TraversePlane flowTraverse, std::vector<TraversePlane> addlTravPlanes,
 			  MstPlane inletMstPlane, MstPlane outletMstPlane,
 	          const double totalPressureLossBtwnPlanes1and4, const double totalPressureLossBtwnPlanes2and5,
@@ -215,7 +269,7 @@ private:
 	}
 
 
-	FanFlange fanInletFlange, fanOrEvaseOutletFlange;
+	FlangePlane fanInletFlange, fanOrEvaseOutletFlange;
 	TraversePlane flowTraverse;
 	std::vector<TraversePlane> addlTravPlanes;
 	MstPlane inletMstPlane;
@@ -225,6 +279,7 @@ private:
 	const double totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5;
 
 	friend class Fan;
+	friend class NodeBinding;
 };
 
 
