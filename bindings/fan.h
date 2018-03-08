@@ -90,10 +90,10 @@ PlaneData getPlaneData() {
 
 	auto const addlTravTmp = planeDataV8->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
 	auto const & addlTravArray = v8::Local<v8::Array>::Cast(addlTravTmp);
-	std::vector<AddlTravPlane> addlTravPlanes;
+	std::vector<TraversePlane> addlTravPlanes;
 
 	for (std::size_t i = 0; i < addlTravArray->Length(); i++) {
-		addlTravPlanes.emplace_back(constructTraverse<AddlTravPlane>(addlTravArray->Get(i)->ToObject()));
+		addlTravPlanes.emplace_back(constructTraverse(addlTravArray->Get(i)->ToObject()));
 	}
 
 	return {
@@ -219,7 +219,7 @@ FanShaftPower getFanShaftPower() {
 NAN_METHOD(getVelocityPressureData) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
-	auto const travPlane = constructTraverse<FlowTraverse>(inp->ToObject());
+	auto const travPlane = constructTraverse(inp->ToObject());
 	SetR("pv3", travPlane.getPv3Value());
 	SetR("percent75Rule", travPlane.get75percentRule() * 100);
 	info.GetReturnValue().Set(r);
