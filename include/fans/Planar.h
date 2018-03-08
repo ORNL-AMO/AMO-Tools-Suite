@@ -38,37 +38,20 @@ protected:
 	friend class Fan;
 };
 
-class FanInletFlange : public Planar {
+class FanFlange : public Planar {
 public:
-	FanInletFlange(double area, double tdx, double pbx);
+	FanFlange(double area, double tdx, double pbx);
 };
 
-class FanOrEvaseOutletFlange : public Planar {
+class TraversePlane : public Planar, public VelocityPressureTraverseData {
 public:
-	FanOrEvaseOutletFlange(double area, double tdx, double pbx);
+	TraversePlane(double area, double tdx, double pbx, double psx, double pitotTubeCoefficient,
+				  std::vector< std::vector< double > > traverseHoleData);
 };
 
-
-class FlowTraverse : public Planar, public VelocityPressureTraverseData {
+class MstPlane : public Planar {
 public:
-	FlowTraverse(double area, double tdx, double pbx, double psx, double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > traverseHoleData);
-};
-
-class AddlTravPlane : public Planar, public VelocityPressureTraverseData {
-public:
-	AddlTravPlane(double area, double tdx, double pbx, double psx, double pitotTubeCoefficient,
-	              std::vector< std::vector< double > > traverseHoleData);
-};
-
-class InletMstPlane : public Planar {
-public:
-	InletMstPlane(double area, double tdx, double pbx, double psx);
-};
-
-class OutletMstPlane : public Planar {
-public:
-	OutletMstPlane(double area, double tdx, double pbx, double psx);
+	MstPlane(double area, double tdx, double pbx, double psx);
 };
 
 #endif //AMO_TOOLS_SUITE_PLANAR_H

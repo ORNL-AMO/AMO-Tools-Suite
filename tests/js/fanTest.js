@@ -81,7 +81,7 @@ test('fan203 test', function (t) {
             gasType: 'AIR'
         },
         FanShaftPower: {
-            motorShaftPower: 4200 * 205 * 0.88 * Math.sqrt(3),
+            motorShaftPower: (4200 * 205 * 0.88 * Math.sqrt(3)) / 746.0,
             efficiencyMotor: 95,
             efficiencyVFD: 100,
             efficiencyBelt: 100,

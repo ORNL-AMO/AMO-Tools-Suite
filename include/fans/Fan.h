@@ -12,12 +12,9 @@
 
 class FanRatedInfo;
 class Planar;
-class FanInletFlange;
-class FanOrEvaseOutletFlange;
-class FlowTraverse;
-class AddlTravPlane;
-class InletMstPlane;
-class OutletMstPlane;
+class FanFlange;
+class TraversePlane;
+class MstPlane;
 
 class BaseGasDensity {
 public:
@@ -132,9 +129,9 @@ private:
 
 class PlaneData {
 public:
-	PlaneData(FanInletFlange fanInletFlange, FanOrEvaseOutletFlange fanOrEvaseOutletFlange,
-	          FlowTraverse flowTraverse, std::vector<AddlTravPlane> addlTravPlanes,
-	          InletMstPlane inletMstPlane, OutletMstPlane outletMstPlane,
+	PlaneData(FanFlange fanInletFlange, FanFlange fanOrEvaseOutletFlange,
+			  TraversePlane flowTraverse, std::vector<TraversePlane> addlTravPlanes,
+			  MstPlane inletMstPlane, MstPlane outletMstPlane,
 	          const double totalPressureLossBtwnPlanes1and4, const double totalPressureLossBtwnPlanes2and5,
 	          bool const plane5upstreamOfPlane2)
 			: fanInletFlange(std::move(fanInletFlange)), fanOrEvaseOutletFlange(std::move(fanOrEvaseOutletFlange)), flowTraverse(std::move(flowTraverse)),
@@ -218,12 +215,11 @@ private:
 	}
 
 
-	FanInletFlange fanInletFlange;
-	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
-	FlowTraverse flowTraverse;
-	std::vector<AddlTravPlane> addlTravPlanes;
-	InletMstPlane inletMstPlane;
-	OutletMstPlane outletMstPlane;
+	FanFlange fanInletFlange, fanOrEvaseOutletFlange;
+	TraversePlane flowTraverse;
+	std::vector<TraversePlane> addlTravPlanes;
+	MstPlane inletMstPlane;
+	MstPlane outletMstPlane;
 
 	bool const plane5upstreamOfPlane2;
 	const double totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5;
@@ -267,7 +263,7 @@ public:
 
 		// TODO barometricPressure = barometric pressure, what to do if barometric pressure does vary between planes ? pg 61
 		auto const z = ((isentropicExponent - 1) / isentropicExponent)
-		               * ((6362 * fanShaftPower.getFanShaftPower() / planeData.fanInletFlange.gasVolumeFlowRate)
+		               * ((6362 * fanShaftPower.getFanPowerInput() / planeData.fanInletFlange.gasVolumeFlowRate)
 		                  / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.barometricPressure));
 
 		auto const kp = (std::log(1 + x) / x) * (z / (std::log(1 + z)));
@@ -300,7 +296,7 @@ public:
 		auto const sprc = staticPressureRise * kpFactorRatio * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
 		                  * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
-		auto const hc = fanShaftPower.getFanShaftPower() * kpFactorRatio
+		auto const hc = fanShaftPower.getFanPowerInput() * kpFactorRatio
 		                * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 3)
 		                * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 

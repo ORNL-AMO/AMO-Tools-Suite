@@ -62,15 +62,15 @@ std::vector <std::vector<double>> getTraverseInputData(Local<Object> obj) {
 	return traverseData;
 }
 
-template <class Plane> Plane construct(Local<Object> obj) {
+FanFlange construct(Local<Object> obj) {
 	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj)};
 }
 
-template <class Plane> Plane constructMst(Local<Object> obj) {
+MstPlane constructMst(Local<Object> obj) {
 	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj), Get("staticPressure", obj)};
 }
 
-template <class Plane> Plane constructTraverse(Local<Object> obj) {
+TraversePlane constructTraverse(Local<Object> obj) {
 	return {Get("area", obj), Get("dryBulbTemp", obj), Get("barometricPressure", obj), Get("staticPressure", obj), Get("pitotTubeCoefficient", obj), getTraverseInputData(obj)};
 }
 
@@ -97,12 +97,12 @@ PlaneData getPlaneData() {
 	}
 
 	return {
-			construct<FanInletFlange>(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())->ToObject()),
-			construct<FanOrEvaseOutletFlange>(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())->ToObject()),
-			constructTraverse<FlowTraverse>(planeDataV8->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject()),
+			construct(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())->ToObject()),
+			construct(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())->ToObject()),
+			constructTraverse(planeDataV8->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject()),
 			std::move(addlTravPlanes),
-			constructMst<InletMstPlane>(planeDataV8->Get(Nan::New<String>("InletMstPlane").ToLocalChecked())->ToObject()),
-			constructMst<OutletMstPlane>(planeDataV8->Get(Nan::New<String>("OutletMstPlane").ToLocalChecked())->ToObject()),
+			constructMst(planeDataV8->Get(Nan::New<String>("InletMstPlane").ToLocalChecked())->ToObject()),
+			constructMst(planeDataV8->Get(Nan::New<String>("OutletMstPlane").ToLocalChecked())->ToObject()),
 			Get("totalPressureLossBtwnPlanes1and4", planeDataV8),
 			Get("totalPressureLossBtwnPlanes2and5", planeDataV8),
 			GetBool("plane5upstreamOfPlane2", planeDataV8)
