@@ -34,12 +34,6 @@ PneumaticAirRequirement::Output PneumaticAirRequirement::calculate() {
 	return {volumeAirIntakeDouble, compressionRatio, volumeAirIntakeDouble * compressionRatio};
 }
 
-double ReceiverTank::calculateUsableCapacity(const double tankSize, const double airPressureIn,
-                                             const double airPressureOut)
-{
-	return (tankSize / 7.48) * (airPressureIn - airPressureOut) / 14.7;
-}
-
 ReceiverTank::ReceiverTank(const Method method, const double airDemand, const double allowablePressureDrop,
                            const double atmosphericPressure)
 		: method(method), airDemand(airDemand), allowablePressureDrop(allowablePressureDrop),

@@ -54,12 +54,14 @@ NAN_METHOD(CHPcalculator) {
 	info.GetReturnValue().Set(r);
 }
 
+NAN_METHOD(usableAirCapacity) {
+	inp = info[0]->ToObject();
+	info.GetReturnValue().Set(ReceiverTank::calculateUsableCapacity(Get("tankSize"), Get("airPressureIn"), Get("airPressureOut")));
+}
+
 NAN_METHOD(pneumaticAirRequirement) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
-
-//	unsigned val = static_cast<unsigned>(Get("pistonType"));
-//	PneumaticAirRequirement::PistonType pistonType = static_cast<PneumaticAirRequirement::PistonType>(val);
 
 	int val = Get("pistonType");
 	auto const pistonType = (!val) ? PneumaticAirRequirement::PistonType::SingleActing : PneumaticAirRequirement::PistonType::DoubleActing;
