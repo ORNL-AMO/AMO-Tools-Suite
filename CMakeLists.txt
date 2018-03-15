@@ -80,9 +80,6 @@ set(SOURCE_FILES
         src/calculator/motor/Poles.cpp
         src/calculator/pump/PumpEfficiency.cpp
         src/calculator/pump/PumpShaftPower.cpp
-        src/calculator/losses/GasLoadChargeMaterial.cpp
-        src/calculator/losses/LiquidLoadChargeMaterial.cpp
-        src/calculator/losses/SolidLoadChargeMaterial.cpp
         src/calculator/losses/Atmosphere.cpp
         src/calculator/losses/FixtureLosses.cpp
         src/calculator/losses/GasCoolingLosses.cpp

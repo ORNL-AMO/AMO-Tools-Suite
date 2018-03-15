@@ -239,14 +239,6 @@ public:
     }
 
     /**
-     * Sets the total heat required
-     * @param totalHeat double, total heat required in btu/hr
-     */
-    void setTotalHeat(double totalHeat) {
-        this->totalHeat = totalHeat;
-    }
-
-    /**
      * Gets the ID of material
      * @return std::size_t, ID of material
      */
@@ -266,7 +258,20 @@ public:
      * Gets the total heat required
      * @return double, total heat required in btu/hr
      */
-    double getTotalHeat();
+    double getTotalHeat() {
+        const double tempDiff = dischargeTemperature - initialTemperature;
+        const double hgas = (1.0 - percentVapor) * feedRate * specificHeatGas * tempDiff;
+        const double hvapor = percentVapor * feedRate * specificHeatVapor * tempDiff;
+
+        // heatReact ignored when exothermic
+        double heatReact = 0.0;
+        if (thermicReactionType == LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC) {
+            heatReact =feedRate * percentReacted * reactionHeat;
+        }
+
+        totalHeat =  hgas + hvapor + heatReact + additionalHeat;
+        return totalHeat;
+    }
 
     ///bool operator
     bool operator == (const GasLoadChargeMaterial& rhs) const
