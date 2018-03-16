@@ -383,7 +383,7 @@ public:
 					* (waterEvaporation + specificHeatWaterVapor * (waterVaporDischargeTemperature - waterBoilTemp));
 		}
 		// (H_mr )=m_st×(%w_0 )×〖(t〗_wo-t_si)
-		double hmr = chargeFeedRate * waterContentDischarged * (waterVaporDischargeTemperature - initialTemperature);
+		double hmr = chargeFeedRate * waterContentDischarged * (waterVaporDischargeTemperature - waterBoilTemp);
 
 		// Heat required for solid
 		double hs;
