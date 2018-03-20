@@ -16,9 +16,6 @@
 #include <string>
 #include "LoadChargeMaterial.h"
 
-/** Moisture boiling point is 210°F */
-//#define MOISTURE_BOILING_POINT 210.0
-
 /**
  * Liquid Load Charge Material class
  * Contains all properties of a liquid load charge material
@@ -282,14 +279,6 @@ public:
     }
 
     /**
-     * Sets the total heat required
-     * @param totalHeat double, total heat required in btu/hr
-     */
-    void setTotalHeat(const double totalHeat) {
-        this->totalHeat = totalHeat;
-    }
-
-    /**
      * Gets the ID of material
      * @return size_t, ID of material
      */
@@ -311,7 +300,26 @@ public:
      *
      * @return double, total heat required in btu/hr
      */
-    double getTotalHeat();
+    double getTotalHeat() {
+        double hliq;
+        if (dischargeTemperature < vaporizingTemperature) {
+            // H_liq=m_li×C_pl×(t_lo-t_li )
+            hliq = chargeFeedRate  * specificHeatLiquid * (dischargeTemperature - initialTemperature);
+        } else {
+            // H_liq=m_li×C_pl×(t_lv-t_li )+%lv×m_lt×[h_lv+C_pv  (t_lo-T_lv )]+(1-%lv)×C_pl (t_lo-t_lv)
+            hliq = chargeFeedRate *
+                   (specificHeatLiquid * (vaporizingTemperature - initialTemperature)
+                    + percentVaporized * (latentHeat + specificHeatVapor * (dischargeTemperature - vaporizingTemperature))
+                    + (1 - percentVaporized) * specificHeatLiquid * (dischargeTemperature - vaporizingTemperature));
+        }
+
+        double heatReacted = 0.0;
+        if (thermicReactionType == LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC) {
+            heatReacted = chargeFeedRate * percentReacted * reactionHeat;
+        }
+        totalHeat = hliq + heatReacted + additionalHeat;
+        return totalHeat;
+    }
 
     /**
      *bool operator
