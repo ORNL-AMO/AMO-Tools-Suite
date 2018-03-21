@@ -5,7 +5,7 @@ set(CMAKE_MACOSX_RPATH 1)
 
 set( CMAKE_VERSION_MAJOR 0 )
 set( CMAKE_VERSION_MINOR 2 )
-set( CMAKE_VERSION_PATCH 12 )
+set( CMAKE_VERSION_PATCH 24 )
 
 set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
 INCLUDE_DIRECTORIES (node_modules/nan)
@@ -80,9 +80,6 @@ set(SOURCE_FILES
         src/calculator/motor/Poles.cpp
         src/calculator/pump/PumpEfficiency.cpp
         src/calculator/pump/PumpShaftPower.cpp
-        src/calculator/losses/GasLoadChargeMaterial.cpp
-        src/calculator/losses/LiquidLoadChargeMaterial.cpp
-        src/calculator/losses/SolidLoadChargeMaterial.cpp
         src/calculator/losses/Atmosphere.cpp
         src/calculator/losses/FixtureLosses.cpp
         src/calculator/losses/GasCoolingLosses.cpp
@@ -103,7 +100,6 @@ set(SOURCE_FILES
         src/calculator/furnace/EfficiencyImprovement.cpp
         src/calculator/furnace/O2Enrichment.cpp
         src/calculator/furnace/FlowCalculationsEnergyUse.cpp
-        src/calculator/losses/EnergyInputExhaustGasLosses.cpp
         src/calculator/furnace/HumidityRatio.cpp
         src/ssmt/SaturatedProperties.cpp
         src/ssmt/SteamProperties.cpp
@@ -115,11 +111,10 @@ set(SOURCE_FILES
         src/ssmt/Deaerator.cpp
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
-        src/calculator/util/CHP.cpp
-        src/fans/FanShaftPower.cpp
-        src/fans/Planar.cpp
         src/fans/FanCurve.cpp
-        src/calculator/util/CompressedAir.cpp)
+        src/calculator/util/CompressedAir.cpp
+        src/calculator/util/CHP.cpp
+        src/calculator/motor/MotorData.cpp)
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
@@ -199,7 +194,9 @@ set(INCLUDE_FILES
         include/ssmt/Turbine.h
         include/calculator/util/CHP.h
         include/fans/FanCurve.h
-        include/calculator/util/CompressedAir.h)
+        include/calculator/util/CompressedAir.h
+        include/calculator/motor/MotorData.h
+        include/sqlite/MotorData.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

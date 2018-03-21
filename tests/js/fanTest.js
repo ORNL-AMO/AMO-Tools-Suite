@@ -6,9 +6,11 @@ function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
 }
 
-test('fan test', function (t) {
+test('fan203 test', function (t) {
     t.plan(4);
     t.type(bindings.fan203, 'function');
+
+    var area = 143.63 * 32.63 / 144.0;
     var inp = {
         FanRatedInfo: {
             fanSpeed: 1191,
@@ -22,25 +24,21 @@ test('fan test', function (t) {
             totalPressureLossBtwnPlanes1and4: 0,
             totalPressureLossBtwnPlanes2and5: 0.627,
             FanInletFlange: {
-                width: 143.63,
+                area: area * 2,
                 length: 32.63,
-                tdx: 123,
-                pbx: 26.57,
-                noInletBoxes: 2
+                dryBulbTemp: 123,
+                barometricPressure: 26.57
             },
             FanEvaseOrOutletFlange: {
-                width: 70,
-                length: 78,
-                tdx: 132.7,
-                pbx: 26.57
-                // noInletBoxes isn't necessary, will default to 1
+                area: 70 * 78 / 144.0,
+                dryBulbTemp: 132.7,
+                barometricPressure: 26.57
             },
             FlowTraverse: {
-                width: 143.63,
-                length: 32.63,
-                tdx: 123,
-                pbx: 26.57,
-                psx: -18.1,
+                area: area,
+                dryBulbTemp: 123,
+                barometricPressure: 26.57,
+                staticPressure: -18.1,
                 pitotTubeCoefficient: 0.87292611371180784,
                 traverseData: [
                     [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
@@ -50,11 +48,10 @@ test('fan test', function (t) {
             },
             AddlTraversePlanes: [
                 {
-                    width: 143.63,
-                    length: 32.63,
-                    tdx: 123,
-                    pbx: 26.57,
-                    psx: -17.0,
+                    area: area,
+                    dryBulbTemp: 123,
+                    barometricPressure: 26.57,
+                    staticPressure: -17.0,
                     pitotTubeCoefficient: 0.87292611371180784,
                     traverseData: [
                         [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
@@ -64,20 +61,16 @@ test('fan test', function (t) {
                 }
             ],
             InletMstPlane: {
-                width: 143.63,
-                length: 32.63,
-                tdx: 123,
-                pbx: 26.57,
-                psx: -17.55,
-                noInletBoxes: 2
+                area: area * 2,
+                dryBulbTemp: 123,
+                barometricPressure: 26.57,
+                staticPressure: -17.55
             },
             OutletMstPlane: {
-                width: 55.42,
-                length: 60.49,
-                tdx: 132.7,
-                pbx: 26.57,
-                psx: 1.8
-                // noInletBoxes not provided here.. defaults to 1
+                area: (55.42 * 60.49) / 144.0,
+                dryBulbTemp: 132.7,
+                barometricPressure: 26.57,
+                staticPressure: 1.8
             }
         },
         BaseGasDensity: {
@@ -88,10 +81,7 @@ test('fan test', function (t) {
             gasType: 'AIR'
         },
         FanShaftPower: {
-            isMethodOne: false,
-            voltage: 4200,
-            amps: 205,
-            powerFactorAtLoad: 0.88,
+            motorShaftPower: (4200 * 205 * 0.88 * Math.sqrt(3)) / 746.0,
             efficiencyMotor: 95,
             efficiencyVFD: 100,
             efficiencyBelt: 100,
@@ -101,9 +91,253 @@ test('fan test', function (t) {
 
     var res = bindings.fan203(inp);
 
-    t.equal(rnd(res.fanEfficiencyTp), rnd(53.60738684355601));
-    t.equal(rnd(res.fanEfficiencySp), rnd(49.20691409764023));
-    t.equal(rnd(res.fanEfficiencySpr), rnd(50.768875240824116));
+    t.equal(rnd(res.fanEfficiencyTotalPressure), rnd(53.60738684355601));
+    t.equal(rnd(res.fanEfficiencyStaticPressure), rnd(49.20691409764023));
+    t.equal(rnd(res.fanEfficiencyStaticPressureRise), rnd(50.768875240824116));
+});
+
+test('getBaseGasDensity', function (t) {
+    t.plan(6);
+    t.type(bindings.getBaseGasDensityRelativeHumidity, 'function');
+    t.type(bindings.getBaseGasDensityDewPoint, 'function');
+    t.type(bindings.getBaseGasDensityWetBulb, 'function');
+
+    var inp = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        inputType: 'relativeHumidity',
+        relativeHumidity: 0.35,
+        specificGravity: 1.05
+    };
+
+    var res = bindings.getBaseGasDensityRelativeHumidity(inp);
+    t.equal(rnd(res), rnd(0.06231117736966));
+
+    inp = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        inputType: 'dewPoint',
+        dewPoint: 0.35,
+        specificGravity: 1.05
+    };
+
+    res = bindings.getBaseGasDensityDewPoint(inp);
+    t.equal(rnd(res), rnd(0.06551801779516826));
+
+    inp = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        inputType: 'wetBulb',
+        wetBulbTemp: 110,
+        specificGravity: 1.05,
+        specificHeatGas: 1.03
+    };
+
+    res = bindings.getBaseGasDensityWetBulb(inp);
+    t.equal(rnd(res), rnd(0.065456));
+});
+
+test('getVelocityPressureData', function (t) {
+    t.plan(5);
+    t.type(bindings.getVelocityPressureData, 'function');
+
+    var inp = {
+        area: 143.63 * 32.63 / 144.0,
+        dryBulbTemp: 123,
+        barometricPressure: 26.57,
+        staticPressure: -18.1,
+        pitotTubeCoefficient: 0.87292611371180784,
+        traverseData: [
+            [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+            [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+            [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+        ]
+    };
+
+    var res = bindings.getVelocityPressureData(inp);
+
+    t.equal(rnd(res.pv3), rnd(0.7508102988157324));
+    t.equal(rnd(res.percent75Rule), rnd(100));
+
+    inp = {
+        area: 143.63 * 32.63 / 144.0,
+        dryBulbTemp: 123,
+        barometricPressure: 26.57,
+        staticPressure: -17.0,
+        pitotTubeCoefficient: 0.87292611371180784,
+        traverseData: [
+            [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
+            [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
+            [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+        ]
+    };
+
+    res = bindings.getVelocityPressureData(inp);
+    t.equal(rnd(res.pv3), rnd(0.6007));
+    t.equal(rnd(res.percent75Rule), rnd(100));
+});
+
+test('getPlaneResults', function (t) {
+    t.plan(38);
+    t.type(bindings.getPlaneResults, 'function');
+
+    var area = 143.63 * 32.63 / 144.0;
+
+    inp = {
+        PlaneData: {
+            plane5upstreamOfPlane2: true,
+            totalPressureLossBtwnPlanes1and4: 0,
+            totalPressureLossBtwnPlanes2and5: 0.627,
+            FanInletFlange: {
+                area: area * 2,
+                length: 32.63,
+                dryBulbTemp: 123,
+                barometricPressure: 26.57
+            },
+            FanEvaseOrOutletFlange: {
+                area: 70 * 78 / 144.0,
+                dryBulbTemp: 132.7,
+                barometricPressure: 26.57
+            },
+            FlowTraverse: {
+                area: area,
+                dryBulbTemp: 123,
+                barometricPressure: 26.57,
+                staticPressure: -18.1,
+                pitotTubeCoefficient: 0.87292611371180784,
+                traverseData: [
+                    [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+                    [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+                    [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+                ]
+            },
+            AddlTraversePlanes: [
+                {
+                    area: area,
+                    dryBulbTemp: 123,
+                    barometricPressure: 26.57,
+                    staticPressure: -17.0,
+                    pitotTubeCoefficient: 0.87292611371180784,
+                    traverseData: [
+                        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
+                        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
+                        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+                    ]
+                },
+                {
+                    area: area,
+                    dryBulbTemp: 124,
+                    barometricPressure: 26.57,
+                    staticPressure: -16.5,
+                    pitotTubeCoefficient: 0.872,
+                    traverseData: [
+                        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
+                        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
+                        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+                    ]
+                }
+            ],
+            InletMstPlane: {
+                area: area * 2,
+                dryBulbTemp: 123,
+                barometricPressure: 26.57,
+                staticPressure: -17.55
+            },
+            OutletMstPlane: {
+                area: (55.42 * 60.49) / 144.0,
+                dryBulbTemp: 132.7,
+                barometricPressure: 26.57,
+                staticPressure: 1.8
+            }
+        },
+        BaseGasDensity: {
+            dryBulbTemp: 123,
+            staticPressure: -17.6,
+            barometricPressure: 26.57,
+            gasDensity: 0.0547,
+            gasType: 'AIR'
+        }
+    };
+
+
+    var res = bindings.getPlaneResults(inp);
+    function testEq(results, expected, isStaticPressure) {
+        t.equal(rnd(results.gasDensity), rnd(expected.gasDensity));
+        t.equal(rnd(results.gasVolumeFlowRate), rnd(expected.gasVolumeFlowRate));
+        t.equal(rnd(results.gasVelocity), rnd(expected.gasVelocity));
+        t.equal(rnd(results.gasVelocityPressure), rnd(expected.gasVelocityPressure));
+        t.equal(rnd(results.gasTotalPressure), rnd(expected.gasTotalPressure));
+        if (isStaticPressure) {
+            t.equal(rnd(results.staticPressure), rnd(expected.staticPressure));
+        }
+    }
+
+    testEq(res.FanInletFlange, {
+        "gasDensity": 0.054707937910736096,
+        "gasVolumeFlowRate": 368484.70105160266,
+        "gasVelocity": 5660.955271820326,
+        "gasVelocityPressure": 1.4595154074095142,
+        "gasTotalPressure": -16.090484592590485,
+        "staticPressure": -17.55
+    }, true);
+    testEq(res.FanOrEvaseOutletFlange, {
+        "gasDensity": 0.05781581992717993,
+        "gasVolumeFlowRate": 348742.34384798247,
+        "gasVelocity": 9197.600277309428,
+        "gasVelocityPressure": 4.070924792774011,
+        "gasTotalPressure": 12.156298668206892,
+        "staticPressure": 8.085373875432882
+    }, true);
+    testEq(res.FlowTraverse, {
+        "gasDensity": 0.0546206208926391,
+        "gasVolumeFlowRate": 132250.42933608184,
+        "gasVelocity": 4063.47271956754,
+        "gasVelocityPressure": 0,
+        "gasTotalPressure": 0
+    }, false);
+    testEq(res.InletMstPlane, {
+        "gasDensity": 0.054707937910736096,
+        "gasVolumeFlowRate": 368484.70105160266,
+        "gasVelocity": 5660.955271820326,
+        "gasVelocityPressure": 1.4595154074095142,
+        "gasTotalPressure": -16.090484592590485
+    }, false);
+    testEq(res.OutletMstPlane, {
+        "gasDensity": 0.05683429586662124,
+        "gasVolumeFlowRate": 354698.4763125503,
+        "gasVelocity": 15236.026136905648,
+        "gasVelocityPressure": 10.983298668206892,
+        "gasTotalPressure": 12.783298668206893
+    }, false);
+    var trav = [
+        {
+            "gasDensity": 0.054795254928833075,
+            "gasVolumeFlowRate": 118104.78734062292,
+            "gasVelocity": 3628.839496538495,
+            "gasVelocityPressure": 0,
+            "gasTotalPressure": 0
+        },
+        {
+            "gasDensity": 0.054780670621748434,
+            "gasVolumeFlowRate": 117995.19024728928,
+            "gasVelocity": 3625.472060975973,
+            "gasVelocityPressure": 0,
+            "gasTotalPressure": 0
+        }
+    ];
+    for (var i = 0; i < res.AddlTraversePlanes.length; i++) {
+        testEq(res.AddlTraversePlanes[i], trav[i], false);
+    }
+
 });
 
 test('fan curve test', function (t) {

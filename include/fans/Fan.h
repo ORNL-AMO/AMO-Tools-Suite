@@ -12,12 +12,9 @@
 
 class FanRatedInfo;
 class Planar;
-class FanInletFlange;
-class FanOrEvaseOutletFlange;
-class FlowTraverse;
-class AddlTravPlane;
-class InletMstPlane;
-class OutletMstPlane;
+class FlangePlane;
+class TraversePlane;
+class MstPlane;
 
 class BaseGasDensity {
 public:
@@ -29,9 +26,9 @@ public:
 	};
 
 	enum class InputType {
-		DEW,
-		RH,
-		WET
+		DewPoint,
+		RelativeHumidity,
+		WetBulbTemp
 	};
 
 	// used for method 1
@@ -41,36 +38,40 @@ public:
 	{}
 
 	// TODO ensure correctness
-//	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
-//	               double const relativeHumidityOrDewPoint, GasType const gasType,
-//	               InputType const inputType, double const specificGravity)
-//			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
-//	{
-//		auto const satPress = calculateSaturationPressure(tdo);
-//		double rh = 0;
-//		if (inputType == InputType::RH) {
-//			rh = relativeHumidityOrDewPoint;
-//		} else if (inputType == InputType::DEW) {
-//			rh = calculateSaturationPressure(relativeHumidityOrDewPoint) / satPress;
-//		} else if (inputType == InputType::WET) {
-//			throw std::runtime_error("The wrong constructor for BaseGasDensity was called here");
-//		}
-//
-//		auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
-//		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
-//	}
-//
-//	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
-//	               double const wetBulbTemp, GasType const gasType,
-//	               InputType const inputType, double const specificGravity, const double cpGas)
-//			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
-//	{
-//		if (inputType != InputType::WET) throw std::runtime_error("The wrong constructor for BaseGasDensity was called");
-//		auto const satPress = calculateSaturationPressure(tdo);
-//		auto const rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
-//		auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
-//		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
-//	}
+	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
+	               double const relativeHumidityOrDewPoint, GasType const gasType,
+	               InputType const inputType, double const specificGravity)
+			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
+	{
+		auto const satPress = calculateSaturationPressure(tdo);
+		double rh = 0;
+		if (inputType == InputType::RelativeHumidity) {
+			rh = relativeHumidityOrDewPoint;
+		} else if (inputType == InputType::DewPoint) {
+			rh = calculateSaturationPressure(relativeHumidityOrDewPoint) / satPress;
+		} else if (inputType == InputType::WetBulbTemp) {
+			throw std::runtime_error("The wrong constructor for BaseGasDensity was called here - check inputType field");
+		}
+
+		auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
+		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+	}
+
+	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
+	               double const wetBulbTemp, GasType const gasType,
+	               InputType const inputType, double const specificGravity, const double cpGas)
+			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
+	{
+		if (inputType != InputType::WetBulbTemp) throw std::runtime_error("The wrong constructor for BaseGasDensity was called - check inputType field");
+		auto const satPress = calculateSaturationPressure(tdo);
+		auto const rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
+		auto const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
+		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+	}
+
+	double getGasDensity() const {
+		return po;
+	}
 
 private:
 
@@ -128,9 +129,63 @@ private:
 
 class PlaneData {
 public:
-	PlaneData(FanInletFlange fanInletFlange, FanOrEvaseOutletFlange fanOrEvaseOutletFlange,
-	          FlowTraverse flowTraverse, std::vector<AddlTravPlane> addlTravPlanes,
-	          InletMstPlane inletMstPlane, OutletMstPlane outletMstPlane,
+	// used to access private stuff from the nan bindings
+	struct NodeBinding {
+		struct Data {
+			Data(const double density, const double velocity, const double volumeFlowRate, const double velocityPressure,
+				 const double totalPressure)
+			: gasDensity(density), gasVelocity(velocity), gasVolumeFlowRate(volumeFlowRate),
+			  gasVelocityPressure(velocityPressure), gasTotalPressure(totalPressure) {}
+
+			const double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
+		};
+		struct DataFlange : Data {
+			DataFlange(const double density, const double velocity, const double volumeFlowRate, const double velocityPressure,
+				 const double totalPressure, const double staticPressure)
+					: Data(density, velocity, volumeFlowRate, velocityPressure, totalPressure),
+					  staticPressure(staticPressure) {}
+
+			const double staticPressure = 0;
+		};
+		struct Output {
+			explicit Output(PlaneData const & planeData)
+					: fanInletFlange(getDataFlange(planeData.fanInletFlange)),
+					  fanOrEvaseOutletFlange(getDataFlange(planeData.fanOrEvaseOutletFlange)),
+					  flowTraverse(getData(planeData.flowTraverse)),
+					  inletMstPlane(getData(planeData.inletMstPlane)),
+					  outletMstPlane(getData(planeData.outletMstPlane)),
+					  addlTravPlanes(getDataTrav(planeData.addlTravPlanes))
+			{}
+			DataFlange fanInletFlange, fanOrEvaseOutletFlange;
+			Data flowTraverse, inletMstPlane, outletMstPlane;
+			std::vector<Data> addlTravPlanes;
+		};
+
+		static Output calculate(PlaneData & planeData, BaseGasDensity const & baseGasDensity) {
+			planeData.calculate(baseGasDensity);
+			return Output(planeData);
+		}
+
+	private:
+		static Data getData(Planar const & plane) {
+			return {plane.gasDensity, plane.gasVelocity, plane.gasVolumeFlowRate, plane.gasVelocityPressure, plane.gasTotalPressure};
+		}
+		static DataFlange getDataFlange(Planar const & plane) {
+			return {plane.gasDensity, plane.gasVelocity, plane.gasVolumeFlowRate, plane.gasVelocityPressure, plane.gasTotalPressure, plane.staticPressure};
+		}
+		static std::vector<Data> getDataTrav(std::vector<TraversePlane> const & addlPlanes) {
+			std::vector<Data> data;
+			for (auto const & plane : addlPlanes) {
+				data.push_back({plane.gasDensity, plane.gasVelocity, plane.gasVolumeFlowRate, plane.gasVelocityPressure, plane.gasTotalPressure});
+			}
+			return data;
+		}
+	};
+
+
+	PlaneData(FlangePlane fanInletFlange, FlangePlane fanOrEvaseOutletFlange,
+			  TraversePlane flowTraverse, std::vector<TraversePlane> addlTravPlanes,
+			  MstPlane inletMstPlane, MstPlane outletMstPlane,
 	          const double totalPressureLossBtwnPlanes1and4, const double totalPressureLossBtwnPlanes2and5,
 	          bool const plane5upstreamOfPlane2)
 			: fanInletFlange(std::move(fanInletFlange)), fanOrEvaseOutletFlange(std::move(fanOrEvaseOutletFlange)), flowTraverse(std::move(flowTraverse)),
@@ -158,7 +213,7 @@ private:
 			calculatedDensity = fanInletOrOutletGasDensity;
 			if (std::abs(fanInletOrOutletGasDensity - plane.gasDensity) < 0.0001) {
 				plane.gasDensity = fanInletOrOutletGasDensity;
-				plane.psx = fanInletOrOutletStaticPressure;
+				plane.staticPressure = fanInletOrOutletStaticPressure;
 				return;
 			}
 		}
@@ -167,15 +222,15 @@ private:
 
 	void calculate(BaseGasDensity const & bgd) {
 		auto const calcDensity = [&bgd] (Planar const & plane, const double psx) {
-			return bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.pbx) / ((plane.tdx + 460) * (bgd.pso + 13.63 * bgd.pbo));
+			return bgd.po * (bgd.tdo + 460) * (psx + 13.63 * plane.barometricPressure) / ((plane.dryBulbTemperature + 460) * (bgd.pso + 13.63 * bgd.pbo));
 		};
 
-		flowTraverse.gasDensity = calcDensity(flowTraverse, flowTraverse.psx);
+		flowTraverse.gasDensity = calcDensity(flowTraverse, flowTraverse.staticPressure);
 		for (auto & p : addlTravPlanes) {
-			p.gasDensity = calcDensity(p, p.psx);
+			p.gasDensity = calcDensity(p, p.staticPressure);
 		}
-		inletMstPlane.gasDensity = calcDensity(inletMstPlane, inletMstPlane.psx);
-		outletMstPlane.gasDensity = calcDensity(outletMstPlane, outletMstPlane.psx);
+		inletMstPlane.gasDensity = calcDensity(inletMstPlane, inletMstPlane.staticPressure);
+		outletMstPlane.gasDensity = calcDensity(outletMstPlane, outletMstPlane.staticPressure);
 
 		flowTraverse.gasVelocity = 1096 * std::sqrt(flowTraverse.pv3 / flowTraverse.gasDensity);
 		flowTraverse.gasVolumeFlowRate = flowTraverse.gasVelocity * flowTraverse.area;
@@ -190,7 +245,7 @@ private:
 		inletMstPlane.gasVolumeFlowRate = mTotal / inletMstPlane.gasDensity;
 		inletMstPlane.gasVelocity = inletMstPlane.gasVolumeFlowRate / inletMstPlane.area;
 		inletMstPlane.gasVelocityPressure = inletMstPlane.gasDensity * std::pow((inletMstPlane.gasVelocity / 1096), 2);
-		inletMstPlane.gasTotalPressure = inletMstPlane.psx + inletMstPlane.gasVelocityPressure;
+		inletMstPlane.gasTotalPressure = inletMstPlane.staticPressure + inletMstPlane.gasVelocityPressure;
 
 		// step 7
 		fanInletFlange.gasTotalPressure = inletMstPlane.gasTotalPressure - totalPressureLossBtwnPlanes1and4;
@@ -202,7 +257,7 @@ private:
 		outletMstPlane.gasVolumeFlowRate = mTotal / outletMstPlane.gasDensity;
 		outletMstPlane.gasVelocity = outletMstPlane.gasVolumeFlowRate / outletMstPlane.area;
 		outletMstPlane.gasVelocityPressure = outletMstPlane.gasDensity * std::pow(outletMstPlane.gasVelocity / 1096, 2);
-		outletMstPlane.gasTotalPressure = outletMstPlane.psx + outletMstPlane.gasVelocityPressure;
+		outletMstPlane.gasTotalPressure = outletMstPlane.staticPressure + outletMstPlane.gasVelocityPressure;
 
 		// step 7
 		fanOrEvaseOutletFlange.gasTotalPressure = outletMstPlane.gasTotalPressure;
@@ -214,17 +269,17 @@ private:
 	}
 
 
-	FanInletFlange fanInletFlange;
-	FanOrEvaseOutletFlange fanOrEvaseOutletFlange;
-	FlowTraverse flowTraverse;
-	std::vector<AddlTravPlane> addlTravPlanes;
-	InletMstPlane inletMstPlane;
-	OutletMstPlane outletMstPlane;
+	FlangePlane fanInletFlange, fanOrEvaseOutletFlange;
+	TraversePlane flowTraverse;
+	std::vector<TraversePlane> addlTravPlanes;
+	MstPlane inletMstPlane;
+	MstPlane outletMstPlane;
 
 	bool const plane5upstreamOfPlane2;
 	const double totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5;
 
 	friend class Fan;
+	friend class NodeBinding;
 };
 
 
@@ -237,33 +292,49 @@ public:
 		this->planeData.calculate(this->baseGasDensity);
 	};
 
-	std::unordered_map<std::string, double> calculate() {
-		// TODO pbx = barometric pressure, what to do if barometric pressure does vary between planes ? pg
-		auto const x = (planeData.fanOrEvaseOutletFlange.gasTotalPressure - planeData.fanInletFlange.gasTotalPressure)
-		               / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.pbx);
+	struct FanResults {
+		FanResults(const double fanEfficiencyTotalPressure, const double fanEfficiencyStaticPressure,
+		           const double fanEfficiencyStaticPressureRise, const double kpc, const double powerCorrected,
+		           const double flowCorrected, const double pressureTotalCorrected,
+		           const double pressureStaticCorrected, const double staticPressureRiseCorrected) :
+				fanEfficiencyTotalPressure(fanEfficiencyTotalPressure), fanEfficiencyStaticPressure(fanEfficiencyStaticPressure),
+				fanEfficiencyStaticPressureRise(fanEfficiencyStaticPressureRise), kpc(kpc), powerCorrected(powerCorrected),
+				flowCorrected(flowCorrected), pressureTotalCorrected(pressureTotalCorrected),
+				pressureStaticCorrected(pressureStaticCorrected), staticPressureRiseCorrected(staticPressureRiseCorrected)
+		{}
 
-		double isentropicExponent = 0; // TODO what value to use for GasTypes other than Air ?
+		const double fanEfficiencyTotalPressure, fanEfficiencyStaticPressure, fanEfficiencyStaticPressureRise;
+		const double kpc, powerCorrected, flowCorrected, pressureTotalCorrected;
+		const double pressureStaticCorrected, staticPressureRiseCorrected;
+	};
+
+	FanResults calculate() {
+		// TODO barometricPressure = barometric pressure, what to do if barometric pressure does vary between planes ? pg
+		auto const x = (planeData.fanOrEvaseOutletFlange.gasTotalPressure - planeData.fanInletFlange.gasTotalPressure)
+		               / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.barometricPressure);
+
+		double isentropicExponent = 1.4; // TODO what value to use for GasTypes other than Air ?
 		if (baseGasDensity.gasType == BaseGasDensity::GasType::AIR) isentropicExponent = 1.4;
 
-		// TODO pbx = barometric pressure, what to do if barometric pressure does vary between planes ? pg 61
+		// TODO barometricPressure = barometric pressure, what to do if barometric pressure does vary between planes ? pg 61
 		auto const z = ((isentropicExponent - 1) / isentropicExponent)
-		               * ((6362 * fanShaftPower.getFanShaftPower() / planeData.fanInletFlange.gasVolumeFlowRate)
-		                  / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.pbx));
+		               * ((6362 * fanShaftPower.getFanPowerInput() / planeData.fanInletFlange.gasVolumeFlowRate)
+		                  / (planeData.fanInletFlange.gasTotalPressure + 13.63 * planeData.fanInletFlange.barometricPressure));
 
 		auto const kp = (std::log(1 + x) / x) * (z / (std::log(1 + z)));
 
-		planeData.flowTraverse.gasTotalPressure = planeData.flowTraverse.psx + planeData.flowTraverse.gasVelocityPressure;
+		planeData.flowTraverse.gasTotalPressure = planeData.flowTraverse.staticPressure + planeData.flowTraverse.gasVelocityPressure;
 		for (auto & p : planeData.addlTravPlanes) {
-			p.gasTotalPressure =  p.psx +  p.gasVelocityPressure;
+			p.gasTotalPressure =  p.staticPressure +  p.gasVelocityPressure;
 		}
 
 		auto const fanTotalPressure = planeData.fanOrEvaseOutletFlange.gasTotalPressure
 		                              - planeData.fanInletFlange.gasTotalPressure + fanShaftPower.getSEF();
 
-		auto const fanStaticPressure = planeData.fanOrEvaseOutletFlange.psx
+		auto const fanStaticPressure = planeData.fanOrEvaseOutletFlange.staticPressure
 		                               - planeData.fanInletFlange.gasTotalPressure + fanShaftPower.getSEF();
 
-		auto const staticPressureRise = planeData.fanOrEvaseOutletFlange.psx - planeData.fanInletFlange.psx + fanShaftPower.getSEF();
+		auto const staticPressureRise = planeData.fanOrEvaseOutletFlange.staticPressure - planeData.fanInletFlange.staticPressure + fanShaftPower.getSEF();
 
 		auto const kpFactorRatio = calculateCompressibilityFactor(x, z, isentropicExponent);
 
@@ -280,7 +351,7 @@ public:
 		auto const sprc = staticPressureRise * kpFactorRatio * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
 		                  * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
-		auto const hc = fanShaftPower.getFanShaftPower() * kpFactorRatio
+		auto const hc = fanShaftPower.getFanPowerInput() * kpFactorRatio
 		                * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 3)
 		                * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
@@ -288,17 +359,8 @@ public:
 
 		auto const efficiency = qc * kpc / (6362 * hc);
 
-		return {
-				{"fanEfficiencyTp", ptc * efficiency * 100},
-				{"fanEfficiencySp", psc * efficiency * 100},
-				{"fanEfficiencySpr", sprc * efficiency * 100},
-				{"Kpc", kpc},
-				{"Hc", hc},
-				{"Qc", qc},
-				{"Ptc", ptc},
-				{"Psc", psc},
-				{"SPRc", sprc}
-		};
+
+		return {ptc * efficiency * 100, psc * efficiency * 100, sprc * efficiency * 100, kpc, hc, qc, ptc, psc, sprc};
 	}
 
 private:
@@ -311,7 +373,7 @@ private:
 			                  * (fanRatedInfo.densityCorrected / p1.gasDensity) * assumedKpOverKpc;
 
 			// TODO how to get isentropic exponent for gas at converted conditions? section 9.4.1 step 2
-			auto const zOverZc = ((pt1c + 13.63 * fanRatedInfo.pressureBarometricCorrected) / (p1.gasTotalPressure + 13.63 * p1.pbx))
+			auto const zOverZc = ((pt1c + 13.63 * fanRatedInfo.pressureBarometricCorrected) / (p1.gasTotalPressure + 13.63 * p1.barometricPressure))
 			                     * (p1.gasDensity /  fanRatedInfo.densityCorrected) * std::pow(fanRatedInfo.fanSpeed / fanRatedInfo.fanSpeedCorrected, 2)
 			                     * ((isentropic - 1) / isentropic) * (isentropic / (isentropic - 1));
 

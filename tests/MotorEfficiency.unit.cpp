@@ -28,7 +28,7 @@ TEST_CASE( "Calculate Motor Efficiencies", "[MotorEfficiency]" ) {
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 2585, Motor::EfficiencyClass::ENERGY_EFFICIENT, 120).calculate(0.5) == Approx(0.9395868071));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 2885, Motor::EfficiencyClass::ENERGY_EFFICIENT, 150).calculate(0.5) == Approx( 0.9404486692));
 
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1285, Motor::EfficiencyClass::STANDARD, 100).calculate(0.5) == Approx(0.9205681925));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1285, Motor::EfficiencyClass::STANDARD, 100).calculate(0.5) == Approx(0.9184557213));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::STANDARD, 120).calculate(0.5) == Approx(0.9213249265));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::STANDARD, 150).calculate(0.1) == Approx(0.780716097));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::STANDARD, 150).calculate(0.9) == Approx(0.9350877877));
@@ -95,30 +95,30 @@ TEST_CASE( "Calculate Motor25 Efficiencies", "[MotorEfficiency25]" ) {
 
 TEST_CASE( "MotorEfficiency25 Premium", "[MotorEfficiency][PREMIUM]" ) {
     auto results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 200).calculate25intervals();
-    CHECK(results[0] == Approx(0.9199840391));
-    CHECK(results[1] == Approx(0.9514158668));
-    CHECK(results[2] == Approx(0.9610411879));
-    CHECK(results[3] == Approx(0.962));
-    CHECK(results[4] == Approx(0.9298570145));
+    CHECK(results[0] == Approx(0.9351618364));
+    CHECK(results[1] == Approx(0.9635434578));
+    CHECK(results[2] == Approx(0.9645106139));
+    CHECK(results[3] == Approx(0.9612112999));
+    CHECK(results[4] == Approx(0.9515991869));
 
     results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 7.5).calculate25intervals();
-	CHECK(results[0] == Approx(0.8117812241));
-	CHECK(results[1] == Approx(0.901053769));
-	CHECK(results[2] == Approx(0.9211496507));
-	CHECK(results[3] == Approx(0.917));
-	CHECK(results[4] == Approx(0.8506174007));
+	CHECK(results[0] == Approx(0.8630684058));
+	CHECK(results[1] == Approx(0.9145841785));
+	CHECK(results[2] == Approx(0.921334108));
+	CHECK(results[3] == Approx(0.9153351555));
+	CHECK(results[4] == Approx(0.9061818039));
 
     results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 10).calculate25intervals();
-    CHECK(results[0] == Approx(0.8233684237));
-    CHECK(results[1] == Approx(0.9063152482));
-    CHECK(results[2] == Approx(0.9235856227));
-    CHECK(results[3] == Approx(0.917));
-    CHECK(results[4] == Approx(0.8594576811));
+    CHECK(results[0] == Approx(0.8716755415));
+    CHECK(results[1] == Approx(0.9191159795));
+    CHECK(results[2] == Approx(0.924712152));
+    CHECK(results[3] == Approx(0.9187215894));
+    CHECK(results[4] == Approx(0.9095343735));
 
     results = MotorEfficiency(Motor::LineFrequency::FREQ60, 1780, Motor::EfficiencyClass::PREMIUM, 8.75).calculate25intervals();
-    CHECK(results[0] == Approx(0.8180317983));
-    CHECK(results[1] == Approx(0.9040703806));
-    CHECK(results[2] == Approx(0.9226980538));
-    CHECK(results[3] == Approx(0.917));
-    CHECK(results[4] == Approx(0.8553943447));
+    CHECK(results[0] == Approx(0.867531194));
+    CHECK(results[1] == Approx(0.9173686836));
+    CHECK(results[2] == Approx(0.9233015806));
+    CHECK(results[3] == Approx(0.9170659857));
+    CHECK(results[4] == Approx(0.9078953258));
 }

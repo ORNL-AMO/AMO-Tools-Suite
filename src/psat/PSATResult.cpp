@@ -102,9 +102,8 @@ double PSATResult::calculateOptimal() {
     OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.getSizeMargin());
     optimal.motorRatedPower = optimalMotorSize.calculate();
     OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, motor.getMotorRpm(), motor.getLineFrequency(),
-                                        motor.getEfficiencyClass(), Motor::EfficiencyClass::PREMIUM,
-                                        motor.getSpecifiedEfficiency(), motor.getMotorRatedVoltage(),
-                                        fieldData.getVoltage(), optimal.motorShaftPower);
+                                        motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
+                                        motor.getMotorRatedVoltage(), fieldData.getVoltage(), optimal.motorShaftPower);
     optimalMotorPower.calculate();
     optimal.motorCurrent = optimalMotorPower.getMotorCurrent();
     optimal.motorEfficiency = optimalMotorPower.getMotorEff();
@@ -156,9 +155,8 @@ double PSATResult::calculateModified() {
 
     modified.motorRatedPower = motor.getMotorRatedPower();
     OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.getMotorRpm(), motor.getLineFrequency(),
-                                         motor.getEfficiencyClass(), motor.getEfficiencyClass(),
-                                         motor.getSpecifiedEfficiency(), motor.getMotorRatedVoltage(),
-                                         fieldData.getVoltage(), modified.motorShaftPower);
+                                         motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
+                                         motor.getMotorRatedVoltage(), fieldData.getVoltage(), modified.motorShaftPower);
     modifiedMotorPower.calculate();
     modified.motorCurrent = modifiedMotorPower.getMotorCurrent();
     modified.motorEfficiency = modifiedMotorPower.getMotorEff();
