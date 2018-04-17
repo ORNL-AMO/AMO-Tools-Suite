@@ -11,6 +11,7 @@
 
 #include "SteamProperties.h"
 #include "SaturatedProperties.h"
+#include "SteamSystemModelerTool.h"
 
 #ifndef AMO_TOOLS_SUITE_FLASHTANK_H
 #define AMO_TOOLS_SUITE_FLASHTANK_H
@@ -22,7 +23,6 @@
 class FlashTank {
 public:
     /**
-     *
      * Constructor for the flash tank calculator
      *
      * @param inletWaterPressure double, inlet water pressure in MPa
@@ -31,7 +31,6 @@ public:
      * @param inletWaterMassFlow double, inlet water mass flow in kg/hr
      * @param tankPressure double, pressure of the tank in MPa
      *
-     *
      * */
     FlashTank(double inletWaterPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,
               double inletWaterMassFlow, double tankPressure);
@@ -39,15 +38,16 @@ public:
 
     /**
      * Gets all of the properties of the inlet water
-     * @return std::unordered_map <std::string, double>, inlet water properties
+     * @return SteamSystemModelerTool::FluidProperties, inlet water properties
      */
-    std::unordered_map <std::string, double> const & getInletWaterProperties() const { return inletWaterProperties; };
+    SteamSystemModelerTool::FluidProperties const & getInletWaterProperties() const { return inletWaterProperties; };
 
     /**
      * Gets all of the saturated properties of the outlet gas and liquid
-     * @return std::unordered_map <std::string, double>, outlet gas and liquid saturated properties
+     * @return SteamSystemModelerTool::FluidProperties, outlet gas and liquid saturated properties
      */
-    std::unordered_map <std::string, double> const & getOutletSaturatedProperties() const { return outletSaturatedProperties; }
+    SteamSystemModelerTool::FluidProperties const & getOutletGasSaturatedProperties() const { return outletGasSaturatedProperties; }
+	SteamSystemModelerTool::FluidProperties const & getOutletLiquidSaturatedProperties() const { return outletLiquidSaturatedProperties; }
 
 	/**
      * Gets the inlet water pressure
@@ -115,7 +115,8 @@ private:
     double inletWaterPressure, quantityValue, inletWaterMassFlow, tankPressure;
     SteamProperties::ThermodynamicQuantity quantityType;
 
-    std::unordered_map <std::string, double> inletWaterProperties, outletSaturatedProperties;
+    SteamSystemModelerTool::FluidProperties inletWaterProperties, outletLiquidSaturatedProperties, outletGasSaturatedProperties;
+//	std::unordered_map <std::string, double> inletWaterProperties, outletSaturatedProperties;
 };
 
 

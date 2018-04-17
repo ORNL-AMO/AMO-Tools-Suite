@@ -3,7 +3,7 @@
 #include <cmath>
 
 // where t is temperature and p is pressure
-std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const double t, const double p) {
+SteamProperties::Output SteamSystemModelerTool::region1(const double t, const double p) {
 
 	static const std::array<double, 34> n = {
 			{
@@ -47,19 +47,14 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region1(const do
 
 	auto const r = 0.461526;
 	return {
-			{"temperature", t}, //temperature in Kelvin
-			{"pressure", p}, //pressure in MPa
-//			{"phase", "Liquid"},
-			{"quality", 0},
-			{"specificVolume", reducedPressure * gibbsPi * t * r / p / 1000.0}, //volume in m³/kg
-			{"density", 1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³
-			{"specificEnthalpy", inversedReducedTemp * gibbsT * t * r}, // enthalpy in kJ/kg
-			{"specificEntropy", (inversedReducedTemp * gibbsT - gibbs) * r} // entropy in kJ/kg/K
+			t, p, 0,
+			reducedPressure * gibbsPi * t * r / p / 1000.0, 1 / (reducedPressure * gibbsPi * t * r / p / 1000.0),
+			inversedReducedTemp * gibbsT * t * r, (inversedReducedTemp * gibbsT - gibbs) * r
 	};
 }
 
 // where t is temperature in K and p is pressure in MPa
-std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const double t, const double p) {
+SteamProperties::Output SteamSystemModelerTool::region2(const double t, const double p) {
 
 	static const std::array<double, 9> n0 = {
 			{
@@ -122,37 +117,32 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region2(const do
 	}
 	auto const r = 0.461526;
 	return {
-			{"temperature", t}, // temperature in Kelvin
-			{"pressure", p}, //pressure in MPa
-//			{"phase", "Gas"},
-			{"quality", 1},
-			{"specificVolume", reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0}, // volume in m³/kg
-			{"density", 1 / (reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0)}, // density in kg/m³
-			{"internalEnergy", (inverseReducedTemp * (gibbsT0 + gibbsT1) - reducedPressure
-			                                                               * (gibbsPi0 + gibbsPi1) * t * r)}, // energy in MJ
-
-			{"specificEnthalpy", inverseReducedTemp * (gibbsT0 + gibbsT1) * t * r}, // enthalpy in kJ/kg
-			{"specificEntropy", ((inverseReducedTemp * (gibbsT0 + gibbsT1)) - (gibbs0 + gibbs1)) * r} // entropy in kJ/kg/K
+			t, p, 1,
+			reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0,
+			1 / (reducedPressure * (gibbsPi0 + gibbsPi1) * t * r / p / 1000.0),
+			inverseReducedTemp * (gibbsT0 + gibbsT1) * t * r,
+			((inverseReducedTemp * (gibbsT0 + gibbsT1)) - (gibbs0 + gibbs1)) * r,
+			inverseReducedTemp * (gibbsT0 + gibbsT1) - reducedPressure * (gibbsPi0 + gibbsPi1) * t * r
 	};
 }
 
-std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const double t, const double p) {
+SteamProperties::Output SteamSystemModelerTool::region3(const double t, const double p) {
 	auto boundary13Properties = region1(TEMPERATURE_Tp, p);
-	auto densityA = boundary13Properties["density"];
+	auto densityA = boundary13Properties.density;
 	auto region3propNew = region3Density( densityA, t);
-	auto testPressureA = region3propNew["pressure"];
+	auto testPressureA = region3propNew.pressure;
 
 
 	auto boundary23Properties = region2(boundaryByPressureRegion3to2(p), p);
-	auto densityB = boundary23Properties["density"];
+	auto densityB = boundary23Properties.density;
 	region3propNew = region3Density(densityB, t);
-	auto testPressureB = region3propNew["pressure"];
+	auto testPressureB = region3propNew.pressure;
 
 	double pressureNew = 0;
 	for (std::size_t i = 0; i < 4; i++) {
 		auto const densityNew = (densityA + densityB) / 2.0;
 		region3propNew = region3Density(densityNew, t);
-		pressureNew = region3propNew["pressure"];
+		pressureNew = region3propNew.pressure;
 		if ( p > pressureNew ) {
 			densityB = densityNew;
 			testPressureB = pressureNew;
@@ -168,7 +158,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 	while ((std::abs(pressureNew - p) > 1e-10) && (counter++ < 50) && (testPressureA != testPressureB)) {
 		auto const densityNew = p * (densityA - densityB) / (testPressureA - testPressureB) + densityA - testPressureA * (densityA - densityB) / (testPressureA - testPressureB);
 		region3propNew = region3Density(densityNew, t);
-		pressureNew = region3propNew["pressure"];
+		pressureNew = region3propNew.pressure;
 		densityB = densityA;
 		densityA = densityNew;
 		testPressureB = testPressureA;
@@ -179,7 +169,7 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3(const do
 
 }
 
-std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(const double d, const double t) {
+SteamProperties::Output SteamSystemModelerTool::region3Density(const double d, const double t) {
 
 	static const std::array<double, 40> n = {
 			{
@@ -221,15 +211,13 @@ std::unordered_map<std::string, double> SteamSystemModelerTool::region3Density(c
 	}
 
 	auto const r = 0.461526;
+
+	// TODO determine what quality should be in this region - Quality question
 	return {
-			{"temperature", t}, // temperature in Kelvin
-			{"pressure", reducedDensity * helmholtzS * d * t * r / 1000.0},
-			{"density", d },
-			{"quality", 1 }, // TODO determine what quality should be in this region
-			{"specificVolume", 1 / d},
-			{"internalEnergy", (inverseReducedTemp * helmholtzT * t * r)},
-			{"specificEnthalpy", (inverseReducedTemp * helmholtzT + reducedDensity * helmholtzS) * t * r},
-			{"specificEntropy", (inverseReducedTemp * helmholtzT - helmholtz) * r}
+			t, reducedDensity * helmholtzS * d * t * r / 1000.0, 1, 1 / d, d,
+			(inverseReducedTemp * helmholtzT + reducedDensity * helmholtzS) * t * r,
+			(inverseReducedTemp * helmholtzT - helmholtz) * r,
+			inverseReducedTemp * helmholtzT * t * r
 	};
 }
 
@@ -507,7 +495,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 }
 
 Point SteamSystemModelerTool::generatePoint(int region, SteamSystemModelerTool::Key key, double pressure, double temperature) {
-    std::unordered_map<std::string, double> result;
+    SteamProperties::Output result;
 
     switch (region) {
         case 1: {
@@ -526,9 +514,9 @@ Point SteamSystemModelerTool::generatePoint(int region, SteamSystemModelerTool::
 		    throw std::range_error("Region must be 1, 2, or 3");
     }
 
-	if (key == SteamSystemModelerTool::Key::ENTHALPY) return {result["specificEnthalpy"], temperature};
+	if (key == SteamSystemModelerTool::Key::ENTHALPY) return {result.specificEnthalpy, temperature};
 
-	return {result["specificEntropy"], temperature}; // else key must be ENTROPY
+	return {result.specificEntropy, temperature}; // else key must be ENTROPY
 }
 
 double SteamSystemModelerTool::linearTestPoint(const double X, Point const point1, Point const point2) {

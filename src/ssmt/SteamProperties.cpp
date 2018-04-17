@@ -2,7 +2,7 @@
 #include "ssmt/SteamProperties.h"
 #include "ssmt/SaturatedProperties.h"
 
-std::unordered_map <std::string, double> SteamProperties::calculate() {
+SteamProperties::Output SteamProperties::calculate() {
 	switch (thermodynamicQuantity_) {
 		case ThermodynamicQuantity::TEMPERATURE:
 			return waterPropertiesPressureTemperature(this->pressure_, this->quantityValue_);
@@ -13,35 +13,35 @@ std::unordered_map <std::string, double> SteamProperties::calculate() {
 		case ThermodynamicQuantity::QUALITY:
 			return waterPropertiesPressureQuality(this->pressure_, this->quantityValue_);
         default:
-            return waterPropertiesPressureQuality(this->pressure_, this->quantityValue_);;
+            return waterPropertiesPressureQuality(this->pressure_, this->quantityValue_);
 	};
 }
 
-std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureTemperature(const double p, const double t) {
+SteamProperties::Output SteamProperties::waterPropertiesPressureTemperature(const double p, const double t) {
 	switch (SteamSystemModelerTool::regionSelect(p, t)) {
 		case 1: {
             auto rv = SteamSystemModelerTool::region1(t, p);
-			rv["quality"] = 0;
+			rv.quality = 0;
 			return rv;
 		}
 		case 2: {
 			auto rv = SteamSystemModelerTool::region2(t, p);
-			rv["quality"] = 1;
+			rv.quality = 1;
 			return rv;
 		}
 		case 3: {
 			auto rv = SteamSystemModelerTool::region3(t, p);
-			rv["quality"] = 0;
+			rv.quality = 0;
 			return rv;
 		}
 		default:
             break;
 	}
-	return {{}};
+	return {0, 0, 0, 0, 0, 0, 0};
 };
 
 // TODO combine this with waterPropertiesPressureEntropy?
-std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {
+SteamProperties::Output SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {
 	double specificEnthalpyLimit = 0;
     std::unordered_map <std::string, double> pressureSatProps;
     double temperature;
@@ -53,39 +53,40 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
 	}
 	if ( pressure > SteamSystemModelerTool::PRESSURE_Tp) {
 		const double boundaryTemperature = SteamSystemModelerTool::boundaryByPressureRegion3to2(pressure);
-		std::unordered_map<std::string, double> boundaryProps = SteamSystemModelerTool::region2(boundaryTemperature, pressure);
-		specificEnthalpyLimit = boundaryProps["specificEnthalpy"];
+		auto const boundaryProps = SteamSystemModelerTool::region2(boundaryTemperature, pressure);
+		specificEnthalpyLimit = boundaryProps.specificEnthalpy;
 	}
 
 	if ( enthalpy < specificEnthalpyLimit ) {
-		std::unordered_map<std::string, double> region13boundary;
+//		SteamProperties::Output region13boundary(0, 0, 0, 0, 0, 0, 0);
 
 		if (pressure > SteamSystemModelerTool::PRESSURE_Tp) {
-			region13boundary = waterPropertiesPressureTemperature(pressure, SteamSystemModelerTool::TEMPERATURE_Tp);
+			auto const region13boundary = waterPropertiesPressureTemperature(pressure, SteamSystemModelerTool::TEMPERATURE_Tp);
+			if (enthalpy < region13boundary.specificEnthalpy) {
+				temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion1Exact(pressure, enthalpy);
+				return SteamSystemModelerTool::region1(temperature, pressure);
+			}
 		}
 
-		if ((pressure <= SteamSystemModelerTool::PRESSURE_Tp) || (enthalpy < region13boundary["specificEnthalpy"]) ) {
-			temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion1Exact(pressure, enthalpy);
-			return SteamSystemModelerTool::region1(temperature, pressure);
-		}
+//		if ((pressure <= SteamSystemModelerTool::PRESSURE_Tp) || (enthalpy < region13boundary.specificEnthalpy) ) {
+//			temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion1Exact(pressure, enthalpy);
+//			return SteamSystemModelerTool::region1(temperature, pressure);
+//		}
 
 		temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion3(pressure, enthalpy);
 		auto rv = SteamSystemModelerTool::region3(temperature, pressure);
-		rv["quality"] = -1; // TODO what should this do?
+		rv.quality = -1; // TODO quality question - what should this do?
 		return rv;
 	}
 
     if ( (pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (enthalpy >= pressureSatProps["liquidSpecificEnthalpy"]) && (enthalpy <= pressureSatProps["gasSpecificEnthalpy"])) {
         const double quality = (enthalpy - pressureSatProps["liquidSpecificEnthalpy"]) / (pressureSatProps["gasSpecificEnthalpy"] - pressureSatProps["liquidSpecificEnthalpy"]);
+	    const double specificVolume = (pressureSatProps["gasSpecificVolume"] - pressureSatProps["liquidSpecificVolume"]) * quality + pressureSatProps["liquidSpecificVolume"];
         return {
-                {"temperature", pressureSatProps["temperature"]}, //temperature in Kelvin
-                {"pressure", pressure}, //pressure in MPa
-//			    {"phase", "Liquid"},
-			    {"quality", quality},
-                {"specificVolume", (pressureSatProps["gasSpecificVolume"] - pressureSatProps["liquidSpecificVolume"]) * quality + pressureSatProps["liquidSpecificVolume"]}, //volume in m³/kg
-                //{"density", 1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³
-                {"specificEnthalpy", enthalpy}, // enthalpy in kJ/kg
-                {"specificEntropy", (pressureSatProps["gasSpecificEntropy"] - pressureSatProps["liquidSpecificEntropy"]) * quality + pressureSatProps["liquidSpecificEntropy"]} // entropy in kJ/kg/K
+                pressureSatProps["temperature"], pressure, quality, specificVolume, 1 / specificVolume,
+		        /* TODO Density question was commented out ->   1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³ */
+                enthalpy,
+                (pressureSatProps["gasSpecificEntropy"] - pressureSatProps["liquidSpecificEntropy"]) * quality + pressureSatProps["liquidSpecificEntropy"],
         };
     }
 
@@ -106,11 +107,10 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     return SteamSystemModelerTool::region2(temperature, pressure);
 };
 
-std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureEntropy(const double pressure, const double entropy) {
+SteamProperties::Output SteamProperties::waterPropertiesPressureEntropy(const double pressure, const double entropy) {
     std::unordered_map <std::string, double> pressureSatProps;
     double specificEntropyLimit = 0;
-    std::unordered_map <std::string, double> boundaryProps;
-    std::unordered_map <std::string, double> region13boundary;
+    SteamProperties::Output boundaryProps, region13boundary;
 
     if (pressure < SteamSystemModelerTool::PRESSURE_CRIT) {
         double const satTemperature = SaturatedTemperature(pressure).calculate();
@@ -123,7 +123,7 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     if (pressure > SteamSystemModelerTool::PRESSURE_Tp) {
         const double boundaryTemperature = SteamSystemModelerTool::boundaryByPressureRegion3to2(pressure);
         boundaryProps = SteamSystemModelerTool::region2(boundaryTemperature, pressure);
-        specificEntropyLimit = boundaryProps["specificEntropy"];
+        specificEntropyLimit = boundaryProps.specificEntropy;
     }
 
 	// this if statement decides if you're in region one or three when you're near the boundary
@@ -132,13 +132,13 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
             region13boundary = SteamProperties::waterPropertiesPressureTemperature(pressure, SteamSystemModelerTool::TEMPERATURE_Tp);
         }
 
-        if (pressure <= SteamSystemModelerTool::PRESSURE_Tp || entropy < region13boundary.at("specificEntropy")) {
+        if (pressure <= SteamSystemModelerTool::PRESSURE_Tp || entropy < region13boundary.specificEntropy) {
             const double temperature = SteamSystemModelerTool::backwardPressureEntropyRegion1Exact(pressure, entropy);
             return SteamSystemModelerTool::region1(temperature, pressure);
         }
 	    const double temperature = SteamSystemModelerTool::backwardPressureEntropyRegion3(pressure, entropy);
 	    auto rv = SteamSystemModelerTool::region3(temperature, pressure);
-	    rv["quality"] = -1; // TODO what should this do?
+	    rv.quality = -1; // TODO quality question - what should this do?
 	    return rv;
     }
 
@@ -147,16 +147,14 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
         const double quality = (entropy - pressureSatProps["liquidSpecificEntropy"])
                                / (pressureSatProps["gasSpecificEntropy"] - pressureSatProps["liquidSpecificEntropy"]);
 
-        return {
-                {"temperature", pressureSatProps["temperature"]}, //temperature in Kelvin
-                {"pressure", pressure}, //pressure in MPa
-//			    {"phase", "Liquid"},
-                {"quality", quality},
-                {"specificVolume", (pressureSatProps["gasSpecificVolume"] - pressureSatProps["liquidSpecificVolume"]) * quality + pressureSatProps["liquidSpecificVolume"]}, //volume in m³/kg
-                //{"density", 1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³
-                {"specificEnthalpy", (pressureSatProps["gasSpecificEnthalpy"] - pressureSatProps["liquidSpecificEnthalpy"]) * quality + pressureSatProps["liquidSpecificEnthalpy"]}, // enthalpy in kJ/kg
-                {"specificEntropy", entropy} // entropy in kJ/kg/K
-        };
+	    const double specificVolume = (pressureSatProps["gasSpecificVolume"] - pressureSatProps["liquidSpecificVolume"]) * quality + pressureSatProps["liquidSpecificVolume"];
+
+	    return {
+			    pressureSatProps["temperature"], pressure, quality, specificVolume, 1 / specificVolume,
+			    /* TODO question density ->   1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³ */
+			    (pressureSatProps["gasSpecificEnthalpy"] - pressureSatProps["liquidSpecificEnthalpy"]) * quality + pressureSatProps["liquidSpecificEnthalpy"],
+			    entropy
+	    };
     }
 
 	double temperature = 0;
@@ -173,18 +171,14 @@ std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressur
     return SteamSystemModelerTool::region2(temperature, pressure);
 };
 
-std::unordered_map <std::string, double> SteamProperties::waterPropertiesPressureQuality(const double pressure, const double quality) {
+SteamProperties::Output SteamProperties::waterPropertiesPressureQuality(const double pressure, const double quality) {
     auto satProps = SaturatedProperties(pressure, SaturatedTemperature(pressure).calculate()).calculate();
 
 	const double specificVolume = satProps["gasSpecificVolume"] * quality + satProps["liquidSpecificVolume"] * (1 - quality);
 
 	return {
-			{"temperature", satProps["temperature"]},
-			{"pressure", satProps["pressure"]},
-			{"specificEnthalpy", satProps["gasSpecificEnthalpy"] * quality + satProps["liquidSpecificEnthalpy"] * (1 - quality)},
-			{"specificEntropy", satProps["gasSpecificEntropy"] * quality + satProps["liquidSpecificEntropy"] * (1 - quality)},
-			{"specificVolume", specificVolume},
-			{"density", 1 / specificVolume},
-			{"quality", quality}
+			satProps["temperature"], satProps["pressure"], quality, specificVolume, 1 / specificVolume,
+			satProps["gasSpecificEnthalpy"] * quality + satProps["liquidSpecificEnthalpy"] * (1 - quality),
+			satProps["gasSpecificEntropy"] * quality + satProps["liquidSpecificEntropy"] * (1 - quality)
 	};
 };

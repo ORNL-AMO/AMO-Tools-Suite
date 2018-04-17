@@ -18,6 +18,12 @@ FlashTank::FlashTank(const double inletWaterPressure, const SteamProperties::The
 }
 
 void FlashTank::calculateProperties() {
+	// here do this
+	auto sp =  SteamProperties(inletWaterPressure, quantityType, quantityValue).calculate();
+	inletWaterProperties["massFlow"] = inletWaterMassFlow;
+	inletWaterProperties["energyFlow"] = inletWaterMassFlow * inletWaterProperties.at("specificEnthalpy") / 1000;
+
+
     inletWaterProperties = SteamProperties(inletWaterPressure, quantityType, quantityValue).calculate();
 	inletWaterProperties["massFlow"] = inletWaterMassFlow;
 	inletWaterProperties["energyFlow"] = inletWaterMassFlow * inletWaterProperties.at("specificEnthalpy") / 1000;

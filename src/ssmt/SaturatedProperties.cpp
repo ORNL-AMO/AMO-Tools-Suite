@@ -43,7 +43,7 @@ double SaturatedPressure::calculate() const {
 
 std::unordered_map<std::string, double> SaturatedProperties::calculate() {
     auto const gasProperties = SteamSystemModelerTool::region2(saturatedTemperature_, saturatedPressure_);
-    std::unordered_map<std::string, double> liquidProperties;
+    SteamProperties::Output liquidProperties;
 
     if ((saturatedTemperature_ >= SteamSystemModelerTool::TEMPERATURE_MIN)
         && (saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_Tp)) {
@@ -55,19 +55,19 @@ std::unordered_map<std::string, double> SaturatedProperties::calculate() {
         liquidProperties = SteamSystemModelerTool::region3(saturatedTemperature_, saturatedPressure_);
     }
 
-    const double evaporationEnthalpy = gasProperties.at("specificEnthalpy") - liquidProperties.at("specificEnthalpy");
-    const double evaporationEntropy = gasProperties.at("specificEntropy") - liquidProperties.at("specificEntropy");
-    const double evaporationVolume = gasProperties.at("specificVolume") - liquidProperties.at("specificVolume");
+    const double evaporationEnthalpy = gasProperties.specificEnthalpy - liquidProperties.specificEnthalpy;
+    const double evaporationEntropy = gasProperties.specificEntropy - liquidProperties.specificEntropy;
+    const double evaporationVolume = gasProperties.specificVolume - liquidProperties.specificVolume;
 
     return {
             {"pressure", saturatedPressure_}, //pressure in MPa
             {"temperature", saturatedTemperature_}, // temperature in Kelvin
-            {"gasSpecificEnthalpy", gasProperties.at("specificEnthalpy")}, //enthalpy in kJ/kg
-            {"gasSpecificEntropy", gasProperties.at("specificEntropy")}, // entropy in kJ/kg/K
-            {"gasSpecificVolume", gasProperties.at("specificVolume")}, // volume in m³/kg
-            {"liquidSpecificEnthalpy", liquidProperties.at("specificEnthalpy")}, // enthalpy in kJ/kg
-            {"liquidSpecificEntropy", liquidProperties.at("specificEntropy")}, // entropy in kJ/kg/K
-            {"liquidSpecificVolume", liquidProperties.at("specificVolume")}, // volume in m³/kg
+            {"gasSpecificEnthalpy", gasProperties.specificEnthalpy}, //enthalpy in kJ/kg
+            {"gasSpecificEntropy", gasProperties.specificEntropy}, // entropy in kJ/kg/K
+            {"gasSpecificVolume", gasProperties.specificVolume}, // volume in m³/kg
+            {"liquidSpecificEnthalpy", liquidProperties.specificEnthalpy}, // enthalpy in kJ/kg
+            {"liquidSpecificEntropy", liquidProperties.specificEntropy}, // entropy in kJ/kg/K
+            {"liquidSpecificVolume", liquidProperties.specificVolume}, // volume in m³/kg
             {"evaporationSpecificEnthalpy", evaporationEnthalpy}, // enthalpy in kJ/kg
             {"evaporationSpecificEntropy", evaporationEntropy}, // entropy in kJ/kg/K
             {"evaporationSpecificVolume", evaporationVolume}, // volume in m³/kg

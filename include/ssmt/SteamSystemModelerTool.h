@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <unordered_map>
+#include "SteamProperties.h"
 
 class Point {
 public:
@@ -21,6 +22,26 @@ private:
 
 class SteamSystemModelerTool {
 public:
+    struct FluidProperties: public SteamProperties::Output {
+        FluidProperties(const double massFlow, const double energyFlow, const double temperature, const double pressure,
+                        const double quality, const double specificVolume, const double density, const double specificEnthalpy,
+                        const double specificEntropy, const double internalEnergy = 0):
+                SteamProperties::Output(temperature, pressure, quality, specificVolume, density, specificEnthalpy,
+                                        specificEntropy, internalEnergy),
+                massFlow(massFlow), energyFlow(energyFlow)
+        {}
+
+        FluidProperties(): SteamProperties::Output(), massFlow(0), energyFlow(0) {}
+
+        FluidProperties(const double massFlow, const double energyFlow, SteamProperties::Output const & sp):
+                SteamProperties::Output(sp.temperature, sp.pressure, sp.quality, sp.specificVolume, sp.density,
+                                        sp.specificEnthalpy, sp.specificEntropy, sp.internalEnergy),
+                massFlow(massFlow), energyFlow(energyFlow)
+        {}
+
+        double massFlow, energyFlow;
+    };
+
     enum class Key{
         ENTHALPY,
         ENTROPY
@@ -49,9 +70,9 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamProperties::Output, steam properties
      */
-	static std::unordered_map <std::string, double> region1(double temperature, double pressure);
+	static SteamProperties::Output region1(double temperature, double pressure);
 
     /**
      * Calculates the steam properties using region 2 equations
@@ -59,9 +80,9 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamProperties::Output, steam properties
      */
-	static std::unordered_map <std::string, double> region2(double temperature, double pressure);
+	static SteamProperties::Output region2(double temperature, double pressure);
 
     /**
      * Calculates the steam properties using region 3 equations
@@ -69,11 +90,11 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamProperties::Output, steam properties
      */
-	static std::unordered_map <std::string, double> region3(double temperature, double pressure);
+	static SteamProperties::Output region3(double temperature, double pressure);
 
-	static std::unordered_map <std::string, double> region3Density(double density, double temperature);
+	static SteamProperties::Output region3Density(double density, double temperature);
 
     /**
      * Calculates the steam properties using region 4 equations (saturated properties)
@@ -81,7 +102,7 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamProperties::Output, steam properties
      */
 	static double region4(double temperature);
 
@@ -332,13 +353,6 @@ private:
     static inline double boundaryByPressureRegion3to2(const double p) {
         return 0.57254459862746E+03 + std::pow((p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5);
     }
-
-//	static int regionSelect(const double pressure, const double temperature);
-//	static std::unordered_map <std::string, double> region1(const double pressure, const double temperature);
-//	static std::unordered_map <std::string, double> region2(const double pressure, const double temperature);
-//	static std::unordered_map <std::string, double> region3(const double pressure, const double temperature);
-//	static std::unordered_map <std::string, double> region3Density(const double density, const double temperature);
-//	static double region4(const double temperature);
 
 	friend class SteamProperties;
     friend class SaturatedProperties;
