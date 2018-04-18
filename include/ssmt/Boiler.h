@@ -38,7 +38,7 @@ public:
     Boiler(double deaeratorPressure, double combustionEfficiency, double blowdownRate, double steamPressure,
            SteamProperties::ThermodynamicQuantity quantityType, double quantityValue, double steamMassFlow);
 
-    SteamProperties::Output const & getSteamProperties() const { return steamProperties; }
+    SteamSystemModelerTool::SteamPropertiesOutput const & getSteamProperties() const { return steamProperties; }
 
     SteamSystemModelerTool::FluidProperties const & getBlowdownProperties() const { return blowdownProperties; }
 

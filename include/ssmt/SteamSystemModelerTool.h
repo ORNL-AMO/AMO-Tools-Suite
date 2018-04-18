@@ -3,8 +3,6 @@
 
 #include <cmath>
 #include <string>
-#include <unordered_map>
-#include "SteamProperties.h"
 
 class Point {
 public:
@@ -22,19 +20,49 @@ private:
 
 class SteamSystemModelerTool {
 public:
-    struct FluidProperties: public SteamProperties::Output {
+    /**
+    * SteamPropertiesOutput contains the properties of steam
+    * @param temperature in Kelvin
+    * @param pressure in MPa
+    * @param quality - unitless
+    * @param specificVolume in m³/kg
+    * @param density in kg/m³
+    * @param specificEnthalpy in kJ/kg
+    * @param specificEntropy in kJ/kg/K
+    * @param internalEnergy - optional parameter - in MJ
+    */
+    struct SteamPropertiesOutput {
+        SteamPropertiesOutput(const double temperature, const double pressure, const double quality,
+                              const double specificVolume, const double density, const double specificEnthalpy,
+                              const double specificEntropy, const double internalEnergy = 0):
+                temperature(temperature), pressure(pressure), quality(quality), specificVolume(specificVolume),
+                density(density), specificEnthalpy(specificEnthalpy), specificEntropy(specificEntropy),
+                internalEnergy(internalEnergy)
+        {}
+
+        SteamPropertiesOutput():
+                temperature(0), pressure(0), quality(0), specificVolume(0), density(0),
+                specificEnthalpy(0), specificEntropy(0), internalEnergy(0)
+        {}
+
+        double temperature, pressure, quality, specificVolume, density, specificEnthalpy, specificEntropy, internalEnergy;
+    };
+
+
+
+    struct FluidProperties: public SteamPropertiesOutput {
         FluidProperties(const double massFlow, const double energyFlow, const double temperature, const double pressure,
                         const double quality, const double specificVolume, const double density, const double specificEnthalpy,
                         const double specificEntropy, const double internalEnergy = 0):
-                SteamProperties::Output(temperature, pressure, quality, specificVolume, density, specificEnthalpy,
+                SteamPropertiesOutput(temperature, pressure, quality, specificVolume, density, specificEnthalpy,
                                         specificEntropy, internalEnergy),
                 massFlow(massFlow), energyFlow(energyFlow)
         {}
 
-        FluidProperties(): SteamProperties::Output(), massFlow(0), energyFlow(0) {}
+        FluidProperties(): SteamPropertiesOutput(), massFlow(0), energyFlow(0) {}
 
-        FluidProperties(const double massFlow, const double energyFlow, SteamProperties::Output const & sp):
-                SteamProperties::Output(sp.temperature, sp.pressure, sp.quality, sp.specificVolume, sp.density,
+        FluidProperties(const double massFlow, const double energyFlow, SteamPropertiesOutput const & sp):
+                SteamPropertiesOutput(sp.temperature, sp.pressure, sp.quality, sp.specificVolume, sp.density,
                                         sp.specificEnthalpy, sp.specificEntropy, sp.internalEnergy),
                 massFlow(massFlow), energyFlow(energyFlow)
         {}
@@ -70,9 +98,9 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return SteamProperties::Output, steam properties
+     * @return SteamPropertiesOutput, steam properties
      */
-	static SteamProperties::Output region1(double temperature, double pressure);
+	static SteamPropertiesOutput region1(double temperature, double pressure);
 
     /**
      * Calculates the steam properties using region 2 equations
@@ -82,7 +110,7 @@ private:
      *
      * @return SteamProperties::Output, steam properties
      */
-	static SteamProperties::Output region2(double temperature, double pressure);
+	static SteamPropertiesOutput region2(double temperature, double pressure);
 
     /**
      * Calculates the steam properties using region 3 equations
@@ -92,9 +120,9 @@ private:
      *
      * @return SteamProperties::Output, steam properties
      */
-	static SteamProperties::Output region3(double temperature, double pressure);
+	static SteamPropertiesOutput region3(double temperature, double pressure);
 
-	static SteamProperties::Output region3Density(double density, double temperature);
+	static SteamPropertiesOutput region3Density(double density, double temperature);
 
     /**
      * Calculates the steam properties using region 4 equations (saturated properties)

@@ -43,7 +43,7 @@ double SaturatedPressure::calculate() const {
 
 std::unordered_map<std::string, double> SaturatedProperties::calculate() {
     auto const gasProperties = SteamSystemModelerTool::region2(saturatedTemperature_, saturatedPressure_);
-    SteamProperties::Output liquidProperties;
+    SteamSystemModelerTool::SteamPropertiesOutput liquidProperties;
 
     if ((saturatedTemperature_ >= SteamSystemModelerTool::TEMPERATURE_MIN)
         && (saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_Tp)) {

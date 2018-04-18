@@ -116,7 +116,6 @@ private:
     SteamProperties::ThermodynamicQuantity quantityType;
 
     SteamSystemModelerTool::FluidProperties inletWaterProperties, outletLiquidSaturatedProperties, outletGasSaturatedProperties;
-//	std::unordered_map <std::string, double> inletWaterProperties, outletSaturatedProperties;
 };
 
 

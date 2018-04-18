@@ -3,7 +3,7 @@
 #include <cmath>
 
 // where t is temperature and p is pressure
-SteamProperties::Output SteamSystemModelerTool::region1(const double t, const double p) {
+SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(const double t, const double p) {
 
 	static const std::array<double, 34> n = {
 			{
@@ -54,7 +54,7 @@ SteamProperties::Output SteamSystemModelerTool::region1(const double t, const do
 }
 
 // where t is temperature in K and p is pressure in MPa
-SteamProperties::Output SteamSystemModelerTool::region2(const double t, const double p) {
+SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region2(const double t, const double p) {
 
 	static const std::array<double, 9> n0 = {
 			{
@@ -126,7 +126,7 @@ SteamProperties::Output SteamSystemModelerTool::region2(const double t, const do
 	};
 }
 
-SteamProperties::Output SteamSystemModelerTool::region3(const double t, const double p) {
+SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3(const double t, const double p) {
 	auto boundary13Properties = region1(TEMPERATURE_Tp, p);
 	auto densityA = boundary13Properties.density;
 	auto region3propNew = region3Density( densityA, t);
@@ -169,7 +169,7 @@ SteamProperties::Output SteamSystemModelerTool::region3(const double t, const do
 
 }
 
-SteamProperties::Output SteamSystemModelerTool::region3Density(const double d, const double t) {
+SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3Density(const double d, const double t) {
 
 	static const std::array<double, 40> n = {
 			{
@@ -495,7 +495,7 @@ double SteamSystemModelerTool::backwardPressureEntropyRegion2C(const double pres
 }
 
 Point SteamSystemModelerTool::generatePoint(int region, SteamSystemModelerTool::Key key, double pressure, double temperature) {
-    SteamProperties::Output result;
+    SteamSystemModelerTool::SteamPropertiesOutput result;
 
     switch (region) {
         case 1: {

@@ -2,7 +2,7 @@
 #include "ssmt/SteamProperties.h"
 #include "ssmt/SaturatedProperties.h"
 
-SteamProperties::Output SteamProperties::calculate() {
+SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::calculate() {
 	switch (thermodynamicQuantity_) {
 		case ThermodynamicQuantity::TEMPERATURE:
 			return waterPropertiesPressureTemperature(this->pressure_, this->quantityValue_);
@@ -17,7 +17,7 @@ SteamProperties::Output SteamProperties::calculate() {
 	};
 }
 
-SteamProperties::Output SteamProperties::waterPropertiesPressureTemperature(const double p, const double t) {
+SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureTemperature(const double p, const double t) {
 	switch (SteamSystemModelerTool::regionSelect(p, t)) {
 		case 1: {
             auto rv = SteamSystemModelerTool::region1(t, p);
@@ -41,7 +41,7 @@ SteamProperties::Output SteamProperties::waterPropertiesPressureTemperature(cons
 };
 
 // TODO combine this with waterPropertiesPressureEntropy?
-SteamProperties::Output SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {
+SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {
 	double specificEnthalpyLimit = 0;
     std::unordered_map <std::string, double> pressureSatProps;
     double temperature;
@@ -58,20 +58,16 @@ SteamProperties::Output SteamProperties::waterPropertiesPressureEnthalpy(const d
 	}
 
 	if ( enthalpy < specificEnthalpyLimit ) {
-//		SteamProperties::Output region13boundary(0, 0, 0, 0, 0, 0, 0);
+		SteamSystemModelerTool::SteamPropertiesOutput region13boundary;
 
 		if (pressure > SteamSystemModelerTool::PRESSURE_Tp) {
-			auto const region13boundary = waterPropertiesPressureTemperature(pressure, SteamSystemModelerTool::TEMPERATURE_Tp);
-			if (enthalpy < region13boundary.specificEnthalpy) {
-				temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion1Exact(pressure, enthalpy);
-				return SteamSystemModelerTool::region1(temperature, pressure);
-			}
+			region13boundary = waterPropertiesPressureTemperature(pressure, SteamSystemModelerTool::TEMPERATURE_Tp);
 		}
 
-//		if ((pressure <= SteamSystemModelerTool::PRESSURE_Tp) || (enthalpy < region13boundary.specificEnthalpy) ) {
-//			temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion1Exact(pressure, enthalpy);
-//			return SteamSystemModelerTool::region1(temperature, pressure);
-//		}
+		if (pressure <= SteamSystemModelerTool::PRESSURE_Tp || enthalpy < region13boundary.specificEnthalpy) {
+			temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion1Exact(pressure, enthalpy);
+			return SteamSystemModelerTool::region1(temperature, pressure);
+		}
 
 		temperature = SteamSystemModelerTool::backwardPressureEnthalpyRegion3(pressure, enthalpy);
 		auto rv = SteamSystemModelerTool::region3(temperature, pressure);
@@ -107,10 +103,10 @@ SteamProperties::Output SteamProperties::waterPropertiesPressureEnthalpy(const d
     return SteamSystemModelerTool::region2(temperature, pressure);
 };
 
-SteamProperties::Output SteamProperties::waterPropertiesPressureEntropy(const double pressure, const double entropy) {
+SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureEntropy(const double pressure, const double entropy) {
     std::unordered_map <std::string, double> pressureSatProps;
     double specificEntropyLimit = 0;
-    SteamProperties::Output boundaryProps, region13boundary;
+    SteamSystemModelerTool::SteamPropertiesOutput boundaryProps, region13boundary;
 
     if (pressure < SteamSystemModelerTool::PRESSURE_CRIT) {
         double const satTemperature = SaturatedTemperature(pressure).calculate();
@@ -171,7 +167,7 @@ SteamProperties::Output SteamProperties::waterPropertiesPressureEntropy(const do
     return SteamSystemModelerTool::region2(temperature, pressure);
 };
 
-SteamProperties::Output SteamProperties::waterPropertiesPressureQuality(const double pressure, const double quality) {
+SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureQuality(const double pressure, const double quality) {
     auto satProps = SaturatedProperties(pressure, SaturatedTemperature(pressure).calculate()).calculate();
 
 	const double specificVolume = satProps["gasSpecificVolume"] * quality + satProps["liquidSpecificVolume"] * (1 - quality);

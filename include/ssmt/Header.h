@@ -2,7 +2,6 @@
 #define AMO_TOOLS_SUITE_HEADER_H
 
 #include <string>
-#include <unordered_map>
 #include <vector>
 #include "SteamProperties.h"
 
@@ -23,7 +22,7 @@ public:
 	double getMassFlow() const { return massFlow; }
 	SteamProperties::ThermodynamicQuantity getQuantityType() const { return quantityType; }
 	double getInletEnergyFlow() const { return  inletEnergyFlow; }
-	std::unordered_map<std::string, double> const & getInletProperties() const { return inletProperties; }
+	SteamSystemModelerTool::SteamPropertiesOutput const & getInletProperties() const { return inletProperties; }
 
 	void setPressure(double pressure);
 	void setQuantityValue(double quantityValue);
@@ -36,7 +35,7 @@ private:
 	double pressure, quantityValue, massFlow;
 	SteamProperties::ThermodynamicQuantity quantityType;
 	double inletEnergyFlow;
-	std::unordered_map<std::string, double> inletProperties;
+	SteamSystemModelerTool::SteamPropertiesOutput inletProperties;
 };
 
 class Header {
@@ -76,8 +75,8 @@ public:
 
 	/**
      * Gets the Header properties
-     * @return std::unordered_map<std::string, double> const &, header properties */
-	std::unordered_map<std::string, double> const & getHeaderProperties() const { return headerProperties; }
+     * @return SteamSystemModelerTool::SteamPropertiesOutput const &, header properties */
+	SteamSystemModelerTool::SteamPropertiesOutput const & getHeaderProperties() const { return headerProperties; }
 
 	/**
      * Sets the Header pressure - units of MPa
@@ -93,7 +92,7 @@ private:
 	void calculate();
 	double headerPressure, specificEnthalpy, inletEnergyFlow, inletMassFlow;
 	std::vector<Inlet> inlets;
-	std::unordered_map<std::string, double> headerProperties;
+	SteamSystemModelerTool::SteamPropertiesOutput headerProperties;
 };
 
 #endif //AMO_TOOLS_SUITE_HEADER_H
