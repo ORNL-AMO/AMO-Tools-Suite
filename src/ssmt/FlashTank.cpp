@@ -21,52 +21,28 @@ void FlashTank::calculateProperties() {
 	auto sp =  SteamProperties(inletWaterPressure, quantityType, quantityValue).calculate();
     inletWaterProperties = {inletWaterMassFlow, inletWaterMassFlow * sp.specificEnthalpy / 1000, sp};
 
-//    inletWaterProperties = SteamProperties(inletWaterPressure, quantityType, quantityValue).calculate();
-//	inletWaterProperties["massFlow"] = inletWaterMassFlow;
-//	inletWaterProperties["energyFlow"] = inletWaterMassFlow * inletWaterProperties.at("specificEnthalpy") / 1000;
-
-//	if (quantityType == SteamProperties::ThermodynamicQuantity::QUALITY) inletWaterProperties["quality"] = quantityValue;
-//	else inletWaterProperties["quality"] = 0;
-
     auto saturatedProperties = SaturatedProperties(tankPressure, SaturatedTemperature(tankPressure).calculate()).calculate();
-	double const liquidMassFlow = inletWaterMassFlow * (inletWaterProperties.specificEnthalpy - saturatedProperties.at("gasSpecificEnthalpy"))
-						  / (saturatedProperties.at("liquidSpecificEnthalpy") - saturatedProperties.at("gasSpecificEnthalpy"));
+	double const liquidMassFlow = inletWaterMassFlow * (inletWaterProperties.specificEnthalpy - saturatedProperties.gasSpecificEnthalpy)
+						  / (saturatedProperties.liquidSpecificEnthalpy - saturatedProperties.gasSpecificEnthalpy);
 	// TODO question density is 0 below bc saturated properties doesn't return density, same with both sp objects here
     sp = {
-			saturatedProperties.at("temperature"), saturatedProperties.at("pressure"), 0,
-			saturatedProperties.at("liquidSpecificVolume"), 0,
-			saturatedProperties.at("liquidSpecificEnthalpy"), saturatedProperties.at("liquidSpecificEntropy")
+			saturatedProperties.temperature, saturatedProperties.pressure, 0,
+			saturatedProperties.liquidSpecificVolume, 0,
+			saturatedProperties.liquidSpecificEnthalpy, saturatedProperties.liquidSpecificEntropy
 	};
 	outletLiquidSaturatedProperties = {
             liquidMassFlow,
-			liquidMassFlow * saturatedProperties.at("liquidSpecificEnthalpy") / 1000,
+			liquidMassFlow * saturatedProperties.liquidSpecificEnthalpy / 1000,
             sp
 	};
 
 	sp = {
-			saturatedProperties.at("temperature"), saturatedProperties.at("pressure"), 1,
-			saturatedProperties.at("gasSpecificVolume"), 0,
-			saturatedProperties.at("gasSpecificEnthalpy"), saturatedProperties.at("gasSpecificEntropy")
+			saturatedProperties.temperature, saturatedProperties.pressure, 1,
+			saturatedProperties.gasSpecificVolume, 0,
+			saturatedProperties.gasSpecificEnthalpy, saturatedProperties.gasSpecificEntropy
 	};
 	double const gasMassFlow = inletWaterMassFlow - outletLiquidSaturatedProperties.massFlow;
 	outletGasSaturatedProperties = {gasMassFlow, gasMassFlow * sp.specificEnthalpy / 1000, sp};
-
-//	outletSaturatedProperties = SaturatedProperties(tankPressure, SaturatedTemperature(tankPressure).calculate()).calculate();
-//    outletSaturatedProperties["liquidMassFlow"] = inletWaterMassFlow
-//                                                  * (inletWaterProperties.at("specificEnthalpy")
-//                                                     - outletSaturatedProperties.at("gasSpecificEnthalpy"))
-//                                                  / (outletSaturatedProperties.at("liquidSpecificEnthalpy")
-//                                                     - outletSaturatedProperties.at("gasSpecificEnthalpy"));
-
-//    outletSaturatedProperties["gasMassFlow"] = inletWaterMassFlow - outletSaturatedProperties.at("liquidMassFlow");
-//	outletSaturatedProperties["gasQuality"] = 1;
-//
-//    outletSaturatedProperties["gasEnergyFlow"] = outletSaturatedProperties.at("gasMassFlow")
-//                                                 * outletSaturatedProperties.at("gasSpecificEnthalpy") / 1000;
-
-//    outletSaturatedProperties["liquidEnergyFlow"] = outletSaturatedProperties.at("liquidMassFlow")
-//                                                    * outletSaturatedProperties.at("liquidSpecificEnthalpy") / 1000;
-//	outletSaturatedProperties["liquidQuality"] = 0;
 }
 
 double FlashTank::getInletWaterPressure() const { return inletWaterPressure; }

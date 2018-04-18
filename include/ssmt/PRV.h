@@ -424,7 +424,6 @@ private:
 
     // Out values
     SteamSystemModelerTool::SteamPropertiesOutput inletProperties, outletProperties, feedwaterProperties;
-//    std::unordered_map <std::string, double> inletProperties, outletProperties, feedwaterProperties;
     double inletEnergyFlow, outletMassFlow, outletEnergyFlow, feedwaterMassFlow, feedwaterEnergyFlow;
 };
 

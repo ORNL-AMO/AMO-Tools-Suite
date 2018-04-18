@@ -28,20 +28,6 @@ void HeatLoss::calculateProperties() {
 	                     outletEnergyFlow / inletMassFlow).calculate();
 	outletProperties = {inletMassFlow, outletEnergyFlow, sp};
 
-
-//	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
-//	inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow / 1000;
-//	outletEnergyFlow = inletEnergyFlow * (1 - percentHeatLoss);
-
-
-
-//	outletProperties  = SteamProperties(inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-//	                                    outletEnergyFlow / inletMassFlow).calculate();
-//	inletProperties["massFlow"] = inletMassFlow;
-//	inletProperties["energyFlow"] = inletEnergyFlow;
-//	outletProperties["massFlow"] = inletMassFlow;
-//	outletProperties["energyFlow"] = outletEnergyFlow;
-
 	heatLoss = inletEnergyFlow - outletEnergyFlow;
 }
 

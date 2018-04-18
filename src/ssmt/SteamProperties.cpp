@@ -43,13 +43,13 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
 // TODO combine this with waterPropertiesPressureEntropy?
 SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {
 	double specificEnthalpyLimit = 0;
-    std::unordered_map <std::string, double> pressureSatProps;
+    SteamSystemModelerTool::SaturatedPropertiesOutput pressureSatProps;
     double temperature;
 
 	if ( pressure < SteamSystemModelerTool::PRESSURE_CRIT) {
         const double temp = SaturatedTemperature(pressure).calculate();
 		pressureSatProps = SaturatedProperties(pressure, temp).calculate();
-		specificEnthalpyLimit = pressureSatProps["liquidSpecificEnthalpy"];
+		specificEnthalpyLimit = pressureSatProps.liquidSpecificEnthalpy;
 	}
 	if ( pressure > SteamSystemModelerTool::PRESSURE_Tp) {
 		const double boundaryTemperature = SteamSystemModelerTool::boundaryByPressureRegion3to2(pressure);
@@ -75,14 +75,14 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
 		return rv;
 	}
 
-    if ( (pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (enthalpy >= pressureSatProps["liquidSpecificEnthalpy"]) && (enthalpy <= pressureSatProps["gasSpecificEnthalpy"])) {
-        const double quality = (enthalpy - pressureSatProps["liquidSpecificEnthalpy"]) / (pressureSatProps["gasSpecificEnthalpy"] - pressureSatProps["liquidSpecificEnthalpy"]);
-	    const double specificVolume = (pressureSatProps["gasSpecificVolume"] - pressureSatProps["liquidSpecificVolume"]) * quality + pressureSatProps["liquidSpecificVolume"];
+    if ( (pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (enthalpy >= pressureSatProps.liquidSpecificEnthalpy) && (enthalpy <= pressureSatProps.gasSpecificEnthalpy)) {
+        const double quality = (enthalpy - pressureSatProps.liquidSpecificEnthalpy) / (pressureSatProps.gasSpecificEnthalpy - pressureSatProps.liquidSpecificEnthalpy);
+	    const double specificVolume = (pressureSatProps.gasSpecificVolume - pressureSatProps.liquidSpecificVolume) * quality + pressureSatProps.liquidSpecificVolume;
         return {
-                pressureSatProps["temperature"], pressure, quality, specificVolume, 1 / specificVolume,
+                pressureSatProps.temperature, pressure, quality, specificVolume, 1 / specificVolume,
 		        /* TODO Density question was commented out ->   1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³ */
                 enthalpy,
-                (pressureSatProps["gasSpecificEntropy"] - pressureSatProps["liquidSpecificEntropy"]) * quality + pressureSatProps["liquidSpecificEntropy"],
+                (pressureSatProps.gasSpecificEntropy - pressureSatProps.liquidSpecificEntropy) * quality + pressureSatProps.liquidSpecificEntropy,
         };
     }
 
@@ -104,7 +104,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
 };
 
 SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureEntropy(const double pressure, const double entropy) {
-    std::unordered_map <std::string, double> pressureSatProps;
+    SteamSystemModelerTool::SaturatedPropertiesOutput pressureSatProps;
     double specificEntropyLimit = 0;
     SteamSystemModelerTool::SteamPropertiesOutput boundaryProps, region13boundary;
 
@@ -112,7 +112,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
         double const satTemperature = SaturatedTemperature(pressure).calculate();
         SaturatedProperties sp = SaturatedProperties(pressure, satTemperature);
         pressureSatProps = sp.calculate();
-        specificEntropyLimit = pressureSatProps["liquidSpecificEntropy"];
+        specificEntropyLimit = pressureSatProps.liquidSpecificEntropy;
     }
 
 	// this does stuff that determines what the boundary between 2 and 3 is
@@ -138,17 +138,17 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
 	    return rv;
     }
 
-    if ((pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (entropy >= pressureSatProps["liquidSpecificEntropy"])
-        && (entropy <= pressureSatProps["gasSpecificEntropy"])) {
-        const double quality = (entropy - pressureSatProps["liquidSpecificEntropy"])
-                               / (pressureSatProps["gasSpecificEntropy"] - pressureSatProps["liquidSpecificEntropy"]);
+    if ((pressure < SteamSystemModelerTool::PRESSURE_CRIT) && (entropy >= pressureSatProps.liquidSpecificEntropy)
+        && (entropy <= pressureSatProps.gasSpecificEntropy)) {
+        const double quality = (entropy - pressureSatProps.liquidSpecificEntropy)
+                               / (pressureSatProps.gasSpecificEntropy - pressureSatProps.liquidSpecificEntropy);
 
-	    const double specificVolume = (pressureSatProps["gasSpecificVolume"] - pressureSatProps["liquidSpecificVolume"]) * quality + pressureSatProps["liquidSpecificVolume"];
+	    const double specificVolume = (pressureSatProps.gasSpecificVolume - pressureSatProps.liquidSpecificVolume) * quality + pressureSatProps.liquidSpecificVolume;
 
 	    return {
-			    pressureSatProps["temperature"], pressure, quality, specificVolume, 1 / specificVolume,
+			    pressureSatProps.temperature, pressure, quality, specificVolume, 1 / specificVolume,
 			    /* TODO question density ->   1 / (reducedPressure * gibbsPi * t * r / p / 1000.0)}, //density in kg/m³ */
-			    (pressureSatProps["gasSpecificEnthalpy"] - pressureSatProps["liquidSpecificEnthalpy"]) * quality + pressureSatProps["liquidSpecificEnthalpy"],
+			    (pressureSatProps.gasSpecificEnthalpy - pressureSatProps.liquidSpecificEnthalpy) * quality + pressureSatProps.liquidSpecificEnthalpy,
 			    entropy
 	    };
     }
@@ -168,13 +168,13 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
 };
 
 SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureQuality(const double pressure, const double quality) {
-    auto satProps = SaturatedProperties(pressure, SaturatedTemperature(pressure).calculate()).calculate();
+    auto const satProps = SaturatedProperties(pressure, SaturatedTemperature(pressure).calculate()).calculate();
 
-	const double specificVolume = satProps["gasSpecificVolume"] * quality + satProps["liquidSpecificVolume"] * (1 - quality);
+	const double specificVolume = satProps.gasSpecificVolume * quality + satProps.liquidSpecificVolume * (1 - quality);
 
 	return {
-			satProps["temperature"], satProps["pressure"], quality, specificVolume, 1 / specificVolume,
-			satProps["gasSpecificEnthalpy"] * quality + satProps["liquidSpecificEnthalpy"] * (1 - quality),
-			satProps["gasSpecificEntropy"] * quality + satProps["liquidSpecificEntropy"] * (1 - quality)
+			satProps.temperature, satProps.pressure, quality, specificVolume, 1 / specificVolume,
+			satProps.gasSpecificEnthalpy * quality + satProps.liquidSpecificEnthalpy * (1 - quality),
+			satProps.gasSpecificEntropy * quality + satProps.liquidSpecificEntropy * (1 - quality)
 	};
 };

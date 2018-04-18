@@ -16,7 +16,7 @@ double SaturatedTemperature::calculate() const {
     const double C7 = -0.48232657361591E+04, C8 = 0.40511340542057E+06, C9 = -0.23855557567849E+00;
     const double C10 = 0.65017534844798E+03;
 
-    const double SS = std::pow(saturatedPressure_, 0.25);
+    const double SS = std::pow(saturatedPressure, 0.25);
     const double E = SS * SS + C3 * SS + C6;
     const double F = C1 * SS * SS + C4 * SS + C7;
     const double G = C2 * SS * SS + C5 * SS + C8;
@@ -31,7 +31,7 @@ double SaturatedPressure::calculate() const {
     const double C7 = -0.48232657361591E+04, C8 = 0.40511340542057E+06, C9 = -0.23855557567849E+00;
     const double C10 = 0.65017534844798E+03;
 
-    const double v = saturatedTemperature_ + (C9 / (saturatedTemperature_ - C10));
+    const double v = saturatedTemperature + (C9 / (saturatedTemperature - C10));
     const double vSquared = std::pow(v, 2);
 
     const double A = vSquared + (C1 * v) + C2;
@@ -41,35 +41,25 @@ double SaturatedPressure::calculate() const {
     return std::pow((2 * C) / (-B + std::sqrt(std::pow(B, 2) - 4 * A * C)), 4);
 }
 
-std::unordered_map<std::string, double> SaturatedProperties::calculate() {
-    auto const gasProperties = SteamSystemModelerTool::region2(saturatedTemperature_, saturatedPressure_);
+SteamSystemModelerTool::SaturatedPropertiesOutput SaturatedProperties::calculate() {
+    auto const gasProperties = SteamSystemModelerTool::region2(saturatedTemperature, saturatedPressure);
     SteamSystemModelerTool::SteamPropertiesOutput liquidProperties;
 
-    if ((saturatedTemperature_ >= SteamSystemModelerTool::TEMPERATURE_MIN)
-        && (saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_Tp)) {
-        liquidProperties = SteamSystemModelerTool::region1(saturatedTemperature_, saturatedPressure_);
+    if ((saturatedTemperature >= SteamSystemModelerTool::TEMPERATURE_MIN)
+        && (saturatedTemperature <= SteamSystemModelerTool::TEMPERATURE_Tp)) {
+        liquidProperties = SteamSystemModelerTool::region1(saturatedTemperature, saturatedPressure);
     }
 
-    if ((saturatedTemperature_ > SteamSystemModelerTool::TEMPERATURE_Tp)
-        && (saturatedTemperature_ <= SteamSystemModelerTool::TEMPERATURE_CRIT)) {
-        liquidProperties = SteamSystemModelerTool::region3(saturatedTemperature_, saturatedPressure_);
+    if ((saturatedTemperature > SteamSystemModelerTool::TEMPERATURE_Tp)
+        && (saturatedTemperature <= SteamSystemModelerTool::TEMPERATURE_CRIT)) {
+        liquidProperties = SteamSystemModelerTool::region3(saturatedTemperature, saturatedPressure);
     }
 
     const double evaporationEnthalpy = gasProperties.specificEnthalpy - liquidProperties.specificEnthalpy;
     const double evaporationEntropy = gasProperties.specificEntropy - liquidProperties.specificEntropy;
     const double evaporationVolume = gasProperties.specificVolume - liquidProperties.specificVolume;
 
-    return {
-            {"pressure", saturatedPressure_}, //pressure in MPa
-            {"temperature", saturatedTemperature_}, // temperature in Kelvin
-            {"gasSpecificEnthalpy", gasProperties.specificEnthalpy}, //enthalpy in kJ/kg
-            {"gasSpecificEntropy", gasProperties.specificEntropy}, // entropy in kJ/kg/K
-            {"gasSpecificVolume", gasProperties.specificVolume}, // volume in m³/kg
-            {"liquidSpecificEnthalpy", liquidProperties.specificEnthalpy}, // enthalpy in kJ/kg
-            {"liquidSpecificEntropy", liquidProperties.specificEntropy}, // entropy in kJ/kg/K
-            {"liquidSpecificVolume", liquidProperties.specificVolume}, // volume in m³/kg
-            {"evaporationSpecificEnthalpy", evaporationEnthalpy}, // enthalpy in kJ/kg
-            {"evaporationSpecificEntropy", evaporationEntropy}, // entropy in kJ/kg/K
-            {"evaporationSpecificVolume", evaporationVolume}, // volume in m³/kg
-    };
+	return {saturatedTemperature, saturatedPressure, gasProperties.specificVolume, gasProperties.specificEnthalpy,
+            gasProperties.specificEntropy, liquidProperties.specificVolume, liquidProperties.specificEnthalpy,
+            liquidProperties.specificEntropy, evaporationVolume, evaporationEnthalpy, evaporationEntropy};
 }

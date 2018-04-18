@@ -40,15 +40,44 @@ public:
                 internalEnergy(internalEnergy)
         {}
 
-        SteamPropertiesOutput():
-                temperature(0), pressure(0), quality(0), specificVolume(0), density(0),
-                specificEnthalpy(0), specificEntropy(0), internalEnergy(0)
-        {}
+        SteamPropertiesOutput() = default;
 
-        double temperature, pressure, quality, specificVolume, density, specificEnthalpy, specificEntropy, internalEnergy;
+        double temperature = 0, pressure = 0, quality = 0, specificVolume = 0, density = 0;
+        double specificEnthalpy = 0, specificEntropy = 0, internalEnergy = 0;
     };
 
+    /**
+    * SteamPropertiesOutput contains the properties of steam
+     * @param pressure, pressure in MPa
+     * @param temperature,  temperature in Kelvin
+     * @param gasSpecificEnthalpy, enthalpy in kJ/kg
+     * @param gasSpecificEntropy,  entropy in kJ/kg/K
+     * @param gasSpecificVolume,  volume in m³/kg
+     * @param liquidSpecificEnthalpy,  enthalpy in kJ/kg
+     * @param liquidSpecificEntropy,  entropy in kJ/kg/K
+     * @param liquidSpecificVolume,  volume in m³/kg
+     * @param evaporationSpecificEnthalpy,  enthalpy in kJ/kg
+     * @param evaporationSpecificEntropy,  entropy in kJ/kg/K
+     * @param evaporationSpecificVolume,  volume in m³/kg
+    */
+    struct SaturatedPropertiesOutput {
+        SaturatedPropertiesOutput(const double temperature, const double pressure,
+                                  const double gasSpecificVolume, const double gasSpecificEnthalpy, const double gasSpecificEntropy,
+                                  const double liquidSpecificVolume, const double liquidSpecificEnthalpy, const double liquidSpecificEntropy,
+                                  const double evaporationSpecificVolume, const double evaporationSpecificEnthalpy, const double evaporationSpecificEntropy):
+                temperature(temperature), pressure(pressure),
+                gasSpecificVolume(gasSpecificVolume), gasSpecificEnthalpy(gasSpecificEnthalpy), gasSpecificEntropy(gasSpecificEntropy),
+                liquidSpecificVolume(liquidSpecificVolume), liquidSpecificEnthalpy(liquidSpecificEnthalpy), liquidSpecificEntropy(liquidSpecificEntropy),
+                evaporationSpecificVolume(evaporationSpecificVolume), evaporationSpecificEnthalpy(evaporationSpecificEnthalpy), evaporationSpecificEntropy(evaporationSpecificEntropy)
+        {}
 
+        SaturatedPropertiesOutput() = default;
+
+        double temperature = 0, pressure = 0;
+        double gasSpecificVolume = 0, gasSpecificEnthalpy = 0, gasSpecificEntropy = 0;
+        double liquidSpecificVolume = 0, liquidSpecificEnthalpy = 0, liquidSpecificEntropy = 0;
+        double evaporationSpecificVolume = 0, evaporationSpecificEnthalpy = 0, evaporationSpecificEntropy = 0;
+    };
 
     struct FluidProperties: public SteamPropertiesOutput {
         FluidProperties(const double massFlow, const double energyFlow, const double temperature, const double pressure,
@@ -59,15 +88,15 @@ public:
                 massFlow(massFlow), energyFlow(energyFlow)
         {}
 
-        FluidProperties(): SteamPropertiesOutput(), massFlow(0), energyFlow(0) {}
-
         FluidProperties(const double massFlow, const double energyFlow, SteamPropertiesOutput const & sp):
                 SteamPropertiesOutput(sp.temperature, sp.pressure, sp.quality, sp.specificVolume, sp.density,
                                         sp.specificEnthalpy, sp.specificEntropy, sp.internalEnergy),
                 massFlow(massFlow), energyFlow(energyFlow)
         {}
 
-        double massFlow, energyFlow;
+        FluidProperties() = default;
+
+        double massFlow = 0, energyFlow = 0;
     };
 
     enum class Key{
