@@ -31,9 +31,10 @@ void FlashTank::calculateProperties() {
     auto saturatedProperties = SaturatedProperties(tankPressure, SaturatedTemperature(tankPressure).calculate()).calculate();
 	double const liquidMassFlow = inletWaterMassFlow * (inletWaterProperties.specificEnthalpy - saturatedProperties.at("gasSpecificEnthalpy"))
 						  / (saturatedProperties.at("liquidSpecificEnthalpy") - saturatedProperties.at("gasSpecificEnthalpy"));
+	// TODO question density is 0 below bc saturated properties doesn't return density, same with both sp objects here
     sp = {
 			saturatedProperties.at("temperature"), saturatedProperties.at("pressure"), 0,
-			saturatedProperties.at("specificVolume"), saturatedProperties.at("density"),
+			saturatedProperties.at("liquidSpecificVolume"), 0,
 			saturatedProperties.at("liquidSpecificEnthalpy"), saturatedProperties.at("liquidSpecificEntropy")
 	};
 	outletLiquidSaturatedProperties = {
@@ -44,7 +45,7 @@ void FlashTank::calculateProperties() {
 
 	sp = {
 			saturatedProperties.at("temperature"), saturatedProperties.at("pressure"), 1,
-			saturatedProperties.at("specificVolume"), saturatedProperties.at("density"),
+			saturatedProperties.at("gasSpecificVolume"), 0,
 			saturatedProperties.at("gasSpecificEnthalpy"), saturatedProperties.at("gasSpecificEntropy")
 	};
 	double const gasMassFlow = inletWaterMassFlow - outletLiquidSaturatedProperties.massFlow;

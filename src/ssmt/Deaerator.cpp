@@ -65,14 +65,14 @@ void Deaerator::calculateProperties() {
     auto const totalDAMassFlow = ventedSteamMassFlow + feedwaterMassFlow;
     auto const totalOutletEnergyFlow = (feedwaterProperties.specificEnthalpy * feedwaterMassFlow
                                         + ventedSteamProperties.specificEnthalpy * ventedSteamMassFlow) / 1000;
-    auto const minEnergyFlow = inletWaterProperties.specificEnthalpy * totalDAMassFlow / 1000;
+    auto const minEnergyFlow = inletWaterProps.specificEnthalpy * totalDAMassFlow / 1000;
     auto const neededEnergyFlow = totalOutletEnergyFlow - minEnergyFlow;
-    auto const inletSteamMassFlow = 1000 * neededEnergyFlow / (inletSteamProperties.specificEnthalpy
-                                                               - inletWaterProperties.specificEnthalpy);
+    auto const inletSteamMassFlow = 1000 * neededEnergyFlow / (inletSteamProps.specificEnthalpy
+                                                               - inletWaterProps.specificEnthalpy);
 
     auto const inletWaterMassFlow = totalDAMassFlow - inletSteamMassFlow;
-    auto const inletSteamEnergyFlow = inletSteamProperties.specificEnthalpy * inletSteamMassFlow / 1000;
-    auto const inletWaterEnergyFlow = inletWaterProperties.specificEnthalpy * inletWaterMassFlow / 1000;
+    auto const inletSteamEnergyFlow = inletSteamProps.specificEnthalpy * inletSteamMassFlow / 1000;
+    auto const inletWaterEnergyFlow = inletWaterProps.specificEnthalpy * inletWaterMassFlow / 1000;
 
 	inletWaterProperties = {
 			inletWaterMassFlow, inletWaterEnergyFlow, inletWaterProps

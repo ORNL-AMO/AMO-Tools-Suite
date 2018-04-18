@@ -38,8 +38,8 @@ void Boiler::calculateProperties() {
 //	                                             * feedwaterProperties.at("feedwaterMassFlow") / 1000;
 
 	sp = SteamProperties(steamPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
-	blowdownProperties = {feedwaterProperties.massFlow * (blowdownRate / 100),
-	                      blowdownProperties.specificEnthalpy * blowdownProperties.massFlow / 1000, sp};
+	double const blowdownMassFlow = feedwaterProperties.massFlow * (blowdownRate / 100);
+	blowdownProperties = {blowdownMassFlow, sp.specificEnthalpy * blowdownMassFlow / 1000, sp};
 
 //	blowdownProperties = SteamProperties(steamPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
 //	blowdownProperties["blowdownMassFlow"] = feedwaterProperties.at("feedwaterMassFlow") * (blowdownRate / 100);
