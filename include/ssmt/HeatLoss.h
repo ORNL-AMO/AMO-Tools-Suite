@@ -22,7 +22,6 @@
 class HeatLoss {
 public:
     /**
-     *
      * Constructor for the heat loss calculator
      *
      * @param inletPressure double, inlet pressure in MPa
@@ -31,20 +30,19 @@ public:
      * @param inletMassFlow double, inlet mass flow in kg/hr
      * @param percentHeatLoss double, heat loss as %
      *
-     *
      * */
     HeatLoss(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,
              double inletMassFlow, double percentHeatLoss);
 
     /**
      * Gets all of the inlet properties
-     * @return std::unordered_map <std::string, double>, inlet properties
+     * @return SteamSystemModelerTool::FluidProperties, inlet properties
      */
     SteamSystemModelerTool::FluidProperties const & getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the outlet steam properties
-     * @return std::unordered_map <std::string, double>, outlet steam properties
+     * @return SteamSystemModelerTool::FluidProperties, outlet steam properties
      */
     SteamSystemModelerTool::FluidProperties const & getOutletProperties() const { return outletProperties; };
 

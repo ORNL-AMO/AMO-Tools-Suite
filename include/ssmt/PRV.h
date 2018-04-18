@@ -78,13 +78,13 @@ public:
 
     /**
      * Gets all of the properties of the inlet steam
-     * @return std::unordered_map <std::string, double>, inlet steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput , inlet steam properties
      */
     SteamSystemModelerTool::SteamPropertiesOutput const & getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the properties of the outlet steam
-     * @return std::unordered_map <std::string, double>, outlet steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput , outlet steam properties
      */
     SteamSystemModelerTool::SteamPropertiesOutput const & getOutletProperties() const { return outletProperties; };
 
