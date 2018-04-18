@@ -8,7 +8,7 @@ TEST_CASE( "Calculate Boiler properties", "[Boiler][ssmt]") {
     CHECK(b.getFeedwaterProperties().at("feedwaterEnergyFlow") == Approx(64.6469770669));
     CHECK(b.getBlowdownProperties().at("blowdownMassFlow") == Approx(0.9183673469));
     CHECK(b.getBlowdownProperties().at("blowdownEnergyFlow") == Approx(1.6779495529));
-//    CHECK(b.getBlowdownProperties().at("quality") == Approx(0)); // I have no idea if this is what the quality should actually be or not
+//    CHECK(b.getBlowdownProperties().at("quality") == Approx(0)); // Quality question: I have no idea if this is what the quality should actually be or not
     CHECK( b.getBoilerEnergy() == Approx(47.7843372368));
     CHECK(b.getFuelEnergy() == Approx(56.2168673374));
 
