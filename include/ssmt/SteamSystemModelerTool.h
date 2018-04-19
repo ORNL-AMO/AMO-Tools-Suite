@@ -3,7 +3,6 @@
 
 #include <cmath>
 #include <string>
-#include <unordered_map>
 
 class Point {
 public:
@@ -21,6 +20,85 @@ private:
 
 class SteamSystemModelerTool {
 public:
+    /**
+    * SteamPropertiesOutput contains the properties of steam
+    * @param temperature in Kelvin
+    * @param pressure in MPa
+    * @param quality - unitless
+    * @param specificVolume in m³/kg
+    * @param density in kg/m³
+    * @param specificEnthalpy in kJ/kg
+    * @param specificEntropy in kJ/kg/K
+    * @param internalEnergy - optional parameter - in MJ
+    */
+    struct SteamPropertiesOutput {
+        SteamPropertiesOutput(const double temperature, const double pressure, const double quality,
+                              const double specificVolume, const double density, const double specificEnthalpy,
+                              const double specificEntropy, const double internalEnergy = 0):
+                temperature(temperature), pressure(pressure), quality(quality), specificVolume(specificVolume),
+                density(density), specificEnthalpy(specificEnthalpy), specificEntropy(specificEntropy),
+                internalEnergy(internalEnergy)
+        {}
+
+        SteamPropertiesOutput() = default;
+
+        double temperature = 0, pressure = 0, quality = 0, specificVolume = 0, density = 0;
+        double specificEnthalpy = 0, specificEntropy = 0, internalEnergy = 0;
+    };
+
+    /**
+    * SteamPropertiesOutput contains the properties of steam
+     * @param pressure, pressure in MPa
+     * @param temperature,  temperature in Kelvin
+     * @param gasSpecificEnthalpy, enthalpy in kJ/kg
+     * @param gasSpecificEntropy,  entropy in kJ/kg/K
+     * @param gasSpecificVolume,  volume in m³/kg
+     * @param liquidSpecificEnthalpy,  enthalpy in kJ/kg
+     * @param liquidSpecificEntropy,  entropy in kJ/kg/K
+     * @param liquidSpecificVolume,  volume in m³/kg
+     * @param evaporationSpecificEnthalpy,  enthalpy in kJ/kg
+     * @param evaporationSpecificEntropy,  entropy in kJ/kg/K
+     * @param evaporationSpecificVolume,  volume in m³/kg
+    */
+    struct SaturatedPropertiesOutput {
+        SaturatedPropertiesOutput(const double temperature, const double pressure,
+                                  const double gasSpecificVolume, const double gasSpecificEnthalpy, const double gasSpecificEntropy,
+                                  const double liquidSpecificVolume, const double liquidSpecificEnthalpy, const double liquidSpecificEntropy,
+                                  const double evaporationSpecificVolume, const double evaporationSpecificEnthalpy, const double evaporationSpecificEntropy):
+                temperature(temperature), pressure(pressure),
+                gasSpecificVolume(gasSpecificVolume), gasSpecificEnthalpy(gasSpecificEnthalpy), gasSpecificEntropy(gasSpecificEntropy),
+                liquidSpecificVolume(liquidSpecificVolume), liquidSpecificEnthalpy(liquidSpecificEnthalpy), liquidSpecificEntropy(liquidSpecificEntropy),
+                evaporationSpecificVolume(evaporationSpecificVolume), evaporationSpecificEnthalpy(evaporationSpecificEnthalpy), evaporationSpecificEntropy(evaporationSpecificEntropy)
+        {}
+
+        SaturatedPropertiesOutput() = default;
+
+        double temperature = 0, pressure = 0;
+        double gasSpecificVolume = 0, gasSpecificEnthalpy = 0, gasSpecificEntropy = 0;
+        double liquidSpecificVolume = 0, liquidSpecificEnthalpy = 0, liquidSpecificEntropy = 0;
+        double evaporationSpecificVolume = 0, evaporationSpecificEnthalpy = 0, evaporationSpecificEntropy = 0;
+    };
+
+    struct FluidProperties: public SteamPropertiesOutput {
+        FluidProperties(const double massFlow, const double energyFlow, const double temperature, const double pressure,
+                        const double quality, const double specificVolume, const double density, const double specificEnthalpy,
+                        const double specificEntropy, const double internalEnergy = 0):
+                SteamPropertiesOutput(temperature, pressure, quality, specificVolume, density, specificEnthalpy,
+                                        specificEntropy, internalEnergy),
+                massFlow(massFlow), energyFlow(energyFlow)
+        {}
+
+        FluidProperties(const double massFlow, const double energyFlow, SteamPropertiesOutput const & sp):
+                SteamPropertiesOutput(sp.temperature, sp.pressure, sp.quality, sp.specificVolume, sp.density,
+                                        sp.specificEnthalpy, sp.specificEntropy, sp.internalEnergy),
+                massFlow(massFlow), energyFlow(energyFlow)
+        {}
+
+        FluidProperties() = default;
+
+        double massFlow = 0, energyFlow = 0;
+    };
+
     enum class Key{
         ENTHALPY,
         ENTROPY
@@ -49,9 +127,9 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamPropertiesOutput, steam properties
      */
-	static std::unordered_map <std::string, double> region1(double temperature, double pressure);
+	static SteamPropertiesOutput region1(double temperature, double pressure);
 
     /**
      * Calculates the steam properties using region 2 equations
@@ -59,9 +137,9 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamProperties::Output, steam properties
      */
-	static std::unordered_map <std::string, double> region2(double temperature, double pressure);
+	static SteamPropertiesOutput region2(double temperature, double pressure);
 
     /**
      * Calculates the steam properties using region 3 equations
@@ -69,11 +147,11 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamProperties::Output, steam properties
      */
-	static std::unordered_map <std::string, double> region3(double temperature, double pressure);
+	static SteamPropertiesOutput region3(double temperature, double pressure);
 
-	static std::unordered_map <std::string, double> region3Density(double density, double temperature);
+	static SteamPropertiesOutput region3Density(double density, double temperature);
 
     /**
      * Calculates the steam properties using region 4 equations (saturated properties)
@@ -81,7 +159,7 @@ private:
      * @param temperature double, temperature in Kelvin
      * @param pressure double, pressure in MPa
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamProperties::Output, steam properties
      */
 	static double region4(double temperature);
 
@@ -332,13 +410,6 @@ private:
     static inline double boundaryByPressureRegion3to2(const double p) {
         return 0.57254459862746E+03 + std::pow((p - 0.13918839778870E+02) / 0.10192970039326E-02, 0.5);
     }
-
-//	static int regionSelect(const double pressure, const double temperature);
-//	static std::unordered_map <std::string, double> region1(const double pressure, const double temperature);
-//	static std::unordered_map <std::string, double> region2(const double pressure, const double temperature);
-//	static std::unordered_map <std::string, double> region3(const double pressure, const double temperature);
-//	static std::unordered_map <std::string, double> region3Density(const double density, const double temperature);
-//	static double region4(const double temperature);
 
 	friend class SteamProperties;
     friend class SaturatedProperties;

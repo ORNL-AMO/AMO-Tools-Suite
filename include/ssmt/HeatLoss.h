@@ -10,6 +10,7 @@
  */
 
 #include "SteamProperties.h"
+#include "SteamSystemModelerTool.h"
 
 #ifndef AMO_TOOLS_SUITE_HEATLOSS_H
 #define AMO_TOOLS_SUITE_HEATLOSS_H
@@ -21,7 +22,6 @@
 class HeatLoss {
 public:
     /**
-     *
      * Constructor for the heat loss calculator
      *
      * @param inletPressure double, inlet pressure in MPa
@@ -30,22 +30,21 @@ public:
      * @param inletMassFlow double, inlet mass flow in kg/hr
      * @param percentHeatLoss double, heat loss as %
      *
-     *
      * */
     HeatLoss(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,
              double inletMassFlow, double percentHeatLoss);
 
     /**
      * Gets all of the inlet properties
-     * @return std::unordered_map <std::string, double>, inlet properties
+     * @return SteamSystemModelerTool::FluidProperties, inlet properties
      */
-    std::unordered_map <std::string, double> const & getInletProperties() const { return inletProperties; };
+    SteamSystemModelerTool::FluidProperties const & getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the outlet steam properties
-     * @return std::unordered_map <std::string, double>, outlet steam properties
+     * @return SteamSystemModelerTool::FluidProperties, outlet steam properties
      */
-    std::unordered_map <std::string, double> const & getOutletProperties() const { return outletProperties; };
+    SteamSystemModelerTool::FluidProperties const & getOutletProperties() const { return outletProperties; };
 
     /**
      * Gets the heat loss
@@ -117,9 +116,9 @@ private:
     void calculateProperties();
 
     double inletPressure, quantityValue, inletMassFlow, percentHeatLoss;
-    std::unordered_map <std::string, double> inletProperties;
+    SteamSystemModelerTool::FluidProperties inletProperties;
     double inletEnergyFlow, outletEnergyFlow;
-    std::unordered_map <std::string, double> outletProperties;
+    SteamSystemModelerTool::FluidProperties outletProperties;
 
     double heatLoss;
     SteamProperties::ThermodynamicQuantity quantityType;

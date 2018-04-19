@@ -9,11 +9,10 @@
  *
  */
 
-#include <unordered_map>
-#include <string>
-
 #ifndef AMO_TOOLS_SUITE_SATURATEDPROPERTIES_H
 #define AMO_TOOLS_SUITE_SATURATEDPROPERTIES_H
+
+#include "SteamSystemModelerTool.h"
 
 /**
  * Saturated temperature class
@@ -26,7 +25,7 @@ public:
      * @param saturatedPressure double, saturated pressure in MPa
      * */
     explicit SaturatedTemperature(double saturatedPressure)
-            : saturatedPressure_(saturatedPressure) {}
+            : saturatedPressure(saturatedPressure) {}
     /**
      * Calculates the saturated temperature
      * @return double, saturated temperature in Kelvin
@@ -34,7 +33,7 @@ public:
     double calculate() const;
 
 private:
-    const double saturatedPressure_;
+    const double saturatedPressure;
 };
 
 
@@ -48,7 +47,7 @@ public:
      * Constructor for the saturated pressure calculator
      * @param saturatedTemperature double, saturated temperature in Kelvin
      * */
-    explicit SaturatedPressure(double saturatedTemperature) : saturatedTemperature_(saturatedTemperature) {}
+    explicit SaturatedPressure(double saturatedTemperature) : saturatedTemperature(saturatedTemperature) {}
 
     /**
      * Calculates the saturated pressure
@@ -57,7 +56,7 @@ public:
     double calculate() const;
 
 private:
-    const double saturatedTemperature_;
+    const double saturatedTemperature;
 };
 
 
@@ -74,13 +73,13 @@ public:
      * @param saturatedTemperature double, saturated temperature in Kelvin
      * */
     SaturatedProperties(double saturatedPressure, double saturatedTemperature)
-            : saturatedPressure_(saturatedPressure),
-              saturatedTemperature_(saturatedTemperature) {}
+            : saturatedPressure(saturatedPressure),
+              saturatedTemperature(saturatedTemperature) {}
 
-    std::unordered_map<std::string, double> calculate();
+    SteamSystemModelerTool::SaturatedPropertiesOutput calculate();
 
 private:
-    const double saturatedPressure_, saturatedTemperature_;
+    const double saturatedPressure, saturatedTemperature;
 };
 
 

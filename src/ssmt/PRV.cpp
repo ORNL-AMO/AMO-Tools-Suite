@@ -22,8 +22,8 @@ PrvWithoutDesuperheating::PrvWithoutDesuperheating(const double inletPressure,
 void PrvWithoutDesuperheating::calculateProperties() {
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
     outletProperties = SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-                                       inletProperties.at("specificEnthalpy")).calculate();
-    inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow / 1000;
+                                       inletProperties.specificEnthalpy).calculate();
+    inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow / 1000;
 }
 
 PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
@@ -46,12 +46,11 @@ void PrvWithDesuperheating::calculateProperties() {
     outletProperties= SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
                                       desuperheatingTemp).calculate();
 
-    inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow / 1000;
-    feedwaterMassFlow = inletMassFlow * (inletProperties.at("specificEnthalpy")
-                                         - outletProperties.at("specificEnthalpy"))
-                        / (outletProperties.at("specificEnthalpy") - feedwaterProperties.at("specificEnthalpy"));
+    inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow / 1000;
+	feedwaterMassFlow = inletMassFlow * (inletProperties.specificEnthalpy - outletProperties.specificEnthalpy)
+						/ (outletProperties.specificEnthalpy - feedwaterProperties.specificEnthalpy);
 
-	feedwaterEnergyFlow = feedwaterMassFlow * feedwaterProperties.at("specificEnthalpy") / 1000;
+	feedwaterEnergyFlow = feedwaterMassFlow * feedwaterProperties.specificEnthalpy / 1000;
     outletMassFlow = inletMassFlow + feedwaterMassFlow;
-	outletEnergyFlow = outletMassFlow * outletProperties.at("specificEnthalpy") / 1000;
+	outletEnergyFlow = outletMassFlow * outletProperties.specificEnthalpy / 1000;
 }

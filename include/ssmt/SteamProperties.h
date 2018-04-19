@@ -1,11 +1,14 @@
-#include <unordered_map>
-#include <string>
-
 #ifndef AMO_TOOLS_SUITE_STEAMPROPERTIES_H
 #define AMO_TOOLS_SUITE_STEAMPROPERTIES_H
 
+#include <string>
+#include "SteamSystemModelerTool.h"
+
+class SteamSystemModelerTool;
+
 class SteamProperties {
 public:
+
     ///enum class for ThermodynamicQuantity
 	enum class ThermodynamicQuantity {
 		TEMPERATURE,
@@ -31,42 +34,42 @@ public:
      * @param pressure double, pressure in MPa
      * @param quantityValue ThermodynamicQuantity, the type of value that will be used to calculate the steam properties (TEMPERATURE,ENTHALPY, etc.)
      *
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput, steam properties
      */
-	std::unordered_map <std::string, double> calculate();
+     SteamSystemModelerTool::SteamPropertiesOutput calculate();
 
 private:
     /**
      * Calculates the steam properties using temperature
      * @param pressure double, pressure in MPa
      * @param temperature double, temperature in Kelvins
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput, steam properties
      */
-	std::unordered_map <std::string, double> waterPropertiesPressureTemperature(double pressure, double temperature);
+	SteamSystemModelerTool::SteamPropertiesOutput waterPropertiesPressureTemperature(double pressure, double temperature);
 
     /**
      * Calculates the steam properties using specific enthalpy
      * @param pressure double, pressure in MPa
      * @param enthalpy double, specific enthalpy in kJ/kg
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput, steam properties
      */
-	std::unordered_map <std::string, double> waterPropertiesPressureEnthalpy(double pressure, double enthalpy);
+	SteamSystemModelerTool::SteamPropertiesOutput waterPropertiesPressureEnthalpy(double pressure, double enthalpy);
 
     /**
      * Calculates the steam properties using specific entropy
      * @param pressure double, pressure in MPa
      * @param entropy double, specific entropy in kJ/kg/K
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput, steam properties
      */
-	std::unordered_map <std::string, double> waterPropertiesPressureEntropy(double pressure, double entropy);
+	SteamSystemModelerTool::SteamPropertiesOutput waterPropertiesPressureEntropy(double pressure, double entropy);
 
     /**
      * Calculates the steam properties using specific quality
      * @param pressure double, pressure in MPa
      * @param quality double, specific quality - unitless
-     * @return unordered_map <string, double>, steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput, steam properties
      */
-	std::unordered_map <std::string, double> waterPropertiesPressureQuality(double pressure, double quality);
+	SteamSystemModelerTool::SteamPropertiesOutput waterPropertiesPressureQuality(double pressure, double quality);
 
 //	enum class Region {
 //		LIQUIDREGION1,

@@ -10,6 +10,7 @@
  */
 
 #include "SteamProperties.h"
+#include "SteamSystemModelerTool.h"
 
 #ifndef AMO_TOOLS_SUITE_BOILER_H
 #define AMO_TOOLS_SUITE_BOILER_H
@@ -33,16 +34,15 @@ public:
      * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param steamMassFlow double, steam mass flow in kg/hr
      *
-     *
      * */
     Boiler(double deaeratorPressure, double combustionEfficiency, double blowdownRate, double steamPressure,
            SteamProperties::ThermodynamicQuantity quantityType, double quantityValue, double steamMassFlow);
 
-    std::unordered_map <std::string, double> const & getSteamProperties() const { return steamProperties; }
+    SteamSystemModelerTool::FluidProperties const & getSteamProperties() const { return steamProperties; }
 
-    std::unordered_map <std::string, double> const & getBlowdownProperties() const { return blowdownProperties; }
+    SteamSystemModelerTool::FluidProperties const & getBlowdownProperties() const { return blowdownProperties; }
 
-    std::unordered_map <std::string, double> const & getFeedwaterProperties() const { return feedwaterProperties; }
+    SteamSystemModelerTool::FluidProperties const & getFeedwaterProperties() const { return feedwaterProperties; }
 
     /**
 	 * Gets the deaerator pressure
@@ -148,9 +148,7 @@ private:
     SteamProperties::ThermodynamicQuantity quantityType;
     double quantityValue, steamMassFlow;
 
-    std::unordered_map <std::string, double> steamProperties;
-    std::unordered_map <std::string, double> blowdownProperties;
-    std::unordered_map <std::string, double> feedwaterProperties;
+    SteamSystemModelerTool::FluidProperties steamProperties, blowdownProperties, feedwaterProperties;
     double boilerEnergy, fuelEnergy;
 };
 
