@@ -279,7 +279,7 @@ private:
 	const double totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5;
 
 	friend class Fan;
-	friend class NodeBinding;
+	friend struct NodeBinding;
 };
 
 

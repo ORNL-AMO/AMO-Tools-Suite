@@ -22,14 +22,14 @@ class SteamSystemModelerTool {
 public:
     /**
     * SteamPropertiesOutput contains the properties of steam
-    * @param temperature in Kelvin
-    * @param pressure in MPa
-    * @param quality - unitless
-    * @param specificVolume in m³/kg
-    * @param density in kg/m³
-    * @param specificEnthalpy in kJ/kg
-    * @param specificEntropy in kJ/kg/K
-    * @param internalEnergy - optional parameter - in MJ
+    * @param temperature, double in Kelvin
+    * @param pressure, double in MPa
+    * @param quality, double - unitless
+    * @param specificVolume, double in m³/kg
+    * @param density, double in kg/m³
+    * @param specificEnthalpy, double in kJ/kg
+    * @param specificEntropy, double in kJ/kg/K
+    * @param internalEnergy, double - optional parameter - in MJ
     */
     struct SteamPropertiesOutput {
         SteamPropertiesOutput(const double temperature, const double pressure, const double quality,
@@ -47,18 +47,18 @@ public:
     };
 
     /**
-    * SteamPropertiesOutput contains the properties of steam
-     * @param pressure, pressure in MPa
-     * @param temperature,  temperature in Kelvin
-     * @param gasSpecificEnthalpy, enthalpy in kJ/kg
-     * @param gasSpecificEntropy,  entropy in kJ/kg/K
-     * @param gasSpecificVolume,  volume in m³/kg
-     * @param liquidSpecificEnthalpy,  enthalpy in kJ/kg
-     * @param liquidSpecificEntropy,  entropy in kJ/kg/K
-     * @param liquidSpecificVolume,  volume in m³/kg
-     * @param evaporationSpecificEnthalpy,  enthalpy in kJ/kg
-     * @param evaporationSpecificEntropy,  entropy in kJ/kg/K
-     * @param evaporationSpecificVolume,  volume in m³/kg
+    * SaturatedPropertiesOutput contains properties of saturated steam
+     * @param pressure, double in MPa
+     * @param temperature, double in Kelvin
+     * @param gasSpecificEnthalpy, double in kJ/kg
+     * @param gasSpecificEntropy,  double in kJ/kg/K
+     * @param gasSpecificVolume, double in m³/kg
+     * @param liquidSpecificEnthalpy, double in kJ/kg
+     * @param liquidSpecificEntropy, double in kJ/kg/K
+     * @param liquidSpecificVolume, double in m³/kg
+     * @param evaporationSpecificEnthalpy, double in kJ/kg
+     * @param evaporationSpecificEntropy, double in kJ/kg/K
+     * @param evaporationSpecificVolume, double in m³/kg
     */
     struct SaturatedPropertiesOutput {
         SaturatedPropertiesOutput(const double temperature, const double pressure,
@@ -79,6 +79,19 @@ public:
         double evaporationSpecificVolume = 0, evaporationSpecificEnthalpy = 0, evaporationSpecificEntropy = 0;
     };
 
+    /**
+    * FluidProperties contains the properties of steam and fluid, inherits from SteamPropertiesOutput
+    * @param massFlow, double kg/hr
+    * @param energyFlow, double
+    * @param temperature, double Kelvin
+    * @param pressure, double MPa
+    * @param quality, double - unitless
+    * @param specificVolume, double m³/kg
+    * @param density, double kg/m³
+    * @param specificEnthalpy, double kJ/kg
+    * @param specificEntropy, double kJ/kg/K
+    * @param internalEnergy, double - optional parameter - in MJ
+    */
     struct FluidProperties: public SteamPropertiesOutput {
         FluidProperties(const double massFlow, const double energyFlow, const double temperature, const double pressure,
                         const double quality, const double specificVolume, const double density, const double specificEnthalpy,
