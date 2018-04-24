@@ -15,6 +15,7 @@
 
 #include "psat/Motor.h"
 #include "psat/FieldData.h"
+#include "psat/PSATResult.h"
 
 class OptimalMotorPower {
 public:
@@ -53,8 +54,9 @@ public:
 
     /**
      * Calculates the optimal motor power
+     * @param isPsatOptimal bool, defaults to true so that calculate will use energy efficient or premium depending on motor pole number
      */
-    void calculate();
+    void calculate(bool isPsatOptimal = true);
 
     /**
      * Gets the optimal motor shaft power

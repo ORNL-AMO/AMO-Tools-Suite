@@ -26,7 +26,6 @@
  * Used to calculate the existing efficiency of the pump and the optimal efficiency of the pump so they can be compared.
  */
 class PSATResult {
-
 public:
     PSATResult() = default;
 
@@ -35,7 +34,7 @@ public:
      * @param pump Pump, contains all pump-related calculations, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param financial Financial, contains all financial-related calculations, passed by reference
-     * @param fieldData FiledData, contains all field data-related calculations, passed by reference
+     * @param fieldData FieldData, contains all field data-related calculations, passed by reference
      */
     PSATResult(
         Pump &pump,
@@ -55,7 +54,8 @@ public:
      * @param pump Pump, contains all pump-related calculations, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param financial Financial, contains all financial-related calculations, passed by reference
-     * @param fieldData FiledData, contains all field data-related calculations, passed by reference
+     * @param fieldData FieldData, contains all field data-related calculations, passed by reference
+     * @param baselinePumpEfficiency double, baseline pump efficiency
      */
     PSATResult(
             Pump &pump,

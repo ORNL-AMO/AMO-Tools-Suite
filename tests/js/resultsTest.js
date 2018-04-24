@@ -34,22 +34,22 @@ test('psatExistingAndOptimal', function (t) {
     t.equal(rnd(psatResult.pump_shaft_power[1]), rnd(93.61456270075166), 'optimal pump power is ' + psatResult.pump_shaft_power[1]);
 
     t.equal(rnd(psatResult.motor_efficiency[0]), rnd(94.35732315337191), 'existing motor efficiency is ' + psatResult.motor_efficiency[0]);
-    t.equal(rnd(psatResult.motor_efficiency[1]), rnd(95.518544), 'optimal motor efficiency is ' + psatResult.motor_efficiency[1]);
+    t.equal(rnd(psatResult.motor_efficiency[1]), rnd(95.086522), 'optimal motor efficiency is ' + psatResult.motor_efficiency[1]);
 
     t.equal(rnd(psatResult.motor_power_factor[0]), rnd(76.45602656178534), 'existing motor power factor is ' + psatResult.motor_power_factor[0]);
-    t.equal(rnd(psatResult.motor_power_factor[1]), rnd(86.046888), 'optimal motor power factor is ' + psatResult.motor_power_factor[1]);
+    t.equal(rnd(psatResult.motor_power_factor[1]), rnd(85.923389), 'optimal motor power factor is ' + psatResult.motor_power_factor[1]);
 
     t.equal(rnd(psatResult.motor_current[0]), rnd(125.85671685040634), 'existing motor current is ' + psatResult.motor_current[0]);
-    t.equal(rnd(psatResult.motor_current[1]), rnd(102.201603), 'optimal motor current is ' + psatResult.motor_current[1]);
+    t.equal(rnd(psatResult.motor_current[1]), rnd(102.8135), 'optimal motor current is ' + psatResult.motor_current[1]);
 
     t.equal(psatResult.motor_power[0], 80, 'existing motor power is ' + psatResult.motor_power[0]);
-    t.equal(rnd(psatResult.motor_power[1]), rnd(73.113023), 'optimal motor power is ' + psatResult.motor_power[1]);
+    t.equal(rnd(psatResult.motor_power[1]), rnd(73.445198), 'optimal motor power is ' + psatResult.motor_power[1]);
 
     t.equal(psatResult.annual_energy[0], 700.8, 'existing annual energy is ' + psatResult.annual_energy[0]);
-    t.equal(rnd(psatResult.annual_energy[1]), rnd(640.470082), 'optimal annual energy is ' + psatResult.annual_energy[1]);
+    t.equal(rnd(psatResult.annual_energy[1]), rnd(643.379933), 'optimal annual energy is ' + psatResult.annual_energy[1]);
 
     t.equal(psatResult.annual_cost[0], 35040, 'existing annual cost is ' + psatResult.annual_cost[0]);
-    t.equal(rnd(psatResult.annual_cost[1]), rnd(32023.504102), 'optimal annual cost is ' + psatResult.annual_cost[1]);
+    t.equal(rnd(psatResult.annual_cost[1]), rnd(32168.996627), 'optimal annual cost is ' + psatResult.annual_cost[1]);
 
     t.equal(psatResult.annual_savings_potential[0], 0.0, 'annual savings potential is ' + psatResult.annual_savings_potential[0]);
     t.equal(psatResult.optimization_rating[0], 0.0, 'optimization rating is ' + psatResult.optimization_rating[0]);
@@ -99,12 +99,12 @@ test('psatOptimal', function (t) {
     t.equal(psatResult.motor_rated_power, 100 , 'optimal motor rated power is ' + psatResult.motor_rated_power);
     t.equal(rnd(psatResult.motor_shaft_power), rnd(93.61456270075166), 'optimal motor shaft power is ' + psatResult.motor_shaft_power);
     t.equal(rnd(psatResult.pump_shaft_power), rnd(93.61456270075166), 'optimal pump power is ' + psatResult.pump_shaft_power);
-    t.equal(rnd(psatResult.motor_efficiency), rnd(95.518544), 'optimal motor efficiency is ' + psatResult.motor_efficiency);
-    t.equal(rnd(psatResult.motor_power_factor), rnd(86.046888), 'optimal motor power factor is ' + psatResult.motor_power_factor);
-    t.equal(rnd(psatResult.motor_current), rnd(102.201603), 'optimal motor current is ' + psatResult.motor_current);
-    t.equal(rnd(psatResult.motor_power), rnd(73.113023), 'optimal motor power is ' + psatResult.motor_power);
-    t.equal(rnd(psatResult.annual_energy), rnd(640.470082), 'optimal annual energy is ' + psatResult.annual_energy);
-    t.equal(rnd(psatResult.annual_cost), rnd(32023.504102), 'optimal annual cost is ' + psatResult.annual_cost);
+    t.equal(rnd(psatResult.motor_efficiency), rnd(95.086522), 'optimal motor efficiency is ' + psatResult.motor_efficiency);
+    t.equal(rnd(psatResult.motor_power_factor), rnd(85.923389), 'optimal motor power factor is ' + psatResult.motor_power_factor);
+    t.equal(rnd(psatResult.motor_current), rnd(102.8135), 'optimal motor current is ' + psatResult.motor_current);
+    t.equal(rnd(psatResult.motor_power), rnd(73.445198), 'optimal motor power is ' + psatResult.motor_power);
+    t.equal(rnd(psatResult.annual_energy), rnd(643.379933), 'optimal annual energy is ' + psatResult.annual_energy);
+    t.equal(rnd(psatResult.annual_cost), rnd(32168.996627), 'optimal annual cost is ' + psatResult.annual_cost);
 });
 
 test('psatModified', function (t) {
@@ -125,12 +125,12 @@ test('psatModified', function (t) {
     t.equal(psatResult.motor_rated_power, 100 , 'modified motor rated power is ' + psatResult.motor_rated_power);
     t.equal(rnd(psatResult.motor_shaft_power), rnd(101.51891512553706), 'modified motor shaft power is ' + psatResult.motor_shaft_power);
     t.equal(rnd(psatResult.pump_shaft_power), rnd(101.51891512553706), 'modified pump power is ' + psatResult.pump_shaft_power);
-    t.equal(rnd(psatResult.motor_efficiency), rnd(95.371824), 'modified motor efficiency is ' + psatResult.motor_efficiency);
-    t.equal(rnd(psatResult.motor_power_factor), rnd(87.0819), 'modified motor power factor is ' + psatResult.motor_power_factor);
-    t.equal(rnd(psatResult.motor_current), rnd(109.682208), 'modified motor current is ' + psatResult.motor_current);
-    t.equal(rnd(psatResult.motor_power), rnd(79.408308), 'modified motor power is ' + psatResult.motor_power);
-    t.equal(rnd(psatResult.annual_energy), rnd(695.61678), 'modified annual energy is ' + psatResult.annual_energy);
-    t.equal(rnd(psatResult.annual_cost), rnd(34780.839004), 'modified annual cost is ' + psatResult.annual_cost);
+    t.equal(rnd(psatResult.motor_efficiency), rnd(94.973283), 'modified motor efficiency is ' + psatResult.motor_efficiency);
+    t.equal(rnd(psatResult.motor_power_factor), rnd(86.926875), 'modified motor power factor is ' + psatResult.motor_power_factor);
+    t.equal(rnd(psatResult.motor_current), rnd(110.338892), 'modified motor current is ' + psatResult.motor_current);
+    t.equal(rnd(psatResult.motor_power), rnd(79.741528), 'modified motor power is ' + psatResult.motor_power);
+    t.equal(rnd(psatResult.annual_energy), rnd(698.535785), 'modified annual energy is ' + psatResult.annual_energy);
+    t.equal(rnd(psatResult.annual_cost), rnd(34926.789251), 'modified annual cost is ' + psatResult.annual_cost);
 });
 
 test('psatModified2', function (t) {
@@ -151,10 +151,10 @@ test('psatModified2', function (t) {
     t.equal(psatResult.motor_rated_power, 100 , 'modified motor rated power is ' + psatResult.motor_rated_power);
     t.equal(rnd(psatResult.motor_shaft_power), rnd(90.23903566714407), 'modified motor shaft power is ' + psatResult.motor_shaft_power);
     t.equal(rnd(psatResult.pump_shaft_power), rnd(90.23903566714407), 'modified pump power is ' + psatResult.pump_shaft_power);
-    t.equal(rnd(psatResult.motor_efficiency), rnd(95.573615), 'modified motor efficiency is ' + psatResult.motor_efficiency);
-    t.equal(rnd(psatResult.motor_power_factor), rnd(85.54299), 'modified motor power factor is ' + psatResult.motor_power_factor);
-    t.equal(rnd(psatResult.motor_current), rnd(99.039654), 'modified motor current is ' + psatResult.motor_current);
-    t.equal(rnd(psatResult.motor_power), rnd(70.436117), 'modified motor power is ' + psatResult.motor_power);
-    t.equal(rnd(psatResult.annual_energy), rnd(617.020386), 'modified annual energy is ' + psatResult.annual_energy);
-    t.equal(rnd(psatResult.annual_cost), rnd(30851.019318), 'modified annual cost is ' + psatResult.annual_cost);
+    t.equal(rnd(psatResult.motor_efficiency), rnd(95.118454), 'modified motor efficiency is ' + psatResult.motor_efficiency);
+    t.equal(rnd(psatResult.motor_power_factor), rnd(85.44077), 'modified motor power factor is ' + psatResult.motor_power_factor);
+    t.equal(rnd(psatResult.motor_current), rnd(99.63262), 'modified motor current is ' + psatResult.motor_current);
+    t.equal(rnd(psatResult.motor_power), rnd(70.773157), 'modified motor power is ' + psatResult.motor_power);
+    t.equal(rnd(psatResult.annual_energy), rnd(619.972854), 'modified annual energy is ' + psatResult.annual_energy);
+    t.equal(rnd(psatResult.annual_cost), rnd(30998.642708), 'modified annual cost is ' + psatResult.annual_cost);
 });
