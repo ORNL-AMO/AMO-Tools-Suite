@@ -22,12 +22,10 @@ void OptimalMotorPower::calculate(bool isPsatOptimal) {
     double tempMsp = 0, tempMsp1 = 0, tempMsp2 = 0, powerE1 = 0, powerE2 = 0;
     double eff1 = 0, eff2 = 0, lf = 0, current1 = 0, current2 = 0;
     while (true) {
-        auto const poleCase = Poles(motorRPM, lineFrequency).calculate() / 2 - 1;
-        Motor::EfficiencyClass optimalEfficiencyClass;
-        if (isPsatOptimal) {
+        Motor::EfficiencyClass optimalEfficiencyClass = efficiencyClass;
+        if (isPsatOptimal) { // if in PSATOptimal, use energy_efficient or premium efficiency classes regardless of user input
+            int const poleCase = Poles(motorRPM, lineFrequency).calculate() / 2 - 1;
             optimalEfficiencyClass = (poleCase > 2) ? Motor::EfficiencyClass::ENERGY_EFFICIENT : Motor::EfficiencyClass::PREMIUM;
-        } else {
-            optimalEfficiencyClass = efficiencyClass;
         }
 
         MotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, optimalEfficiencyClass,
