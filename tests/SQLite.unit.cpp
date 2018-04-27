@@ -33,6 +33,67 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
+TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+	{
+		SolidLoadChargeMaterial slcm;
+		slcm.setSubstance("custom");
+		slcm.setSpecificHeatSolid(0.25);
+		slcm.setLatentHeat(100);
+		slcm.setSpecificHeatLiquid(0.50);
+		slcm.setMeltingPoint(1200);
+		sqlite.insertSolidLoadChargeMaterials(slcm);
+
+		slcm = sqlite.getCustomSolidLoadChargeMaterials()[0];
+		slcm.setSubstance("updatedCustom");
+		slcm.setSpecificHeatSolid(0.5);
+		slcm.setLatentHeat(115);
+		slcm.setSpecificHeatLiquid(0.20);
+		slcm.setMeltingPoint(900);
+
+		sqlite.updateSolidLoadChargeMaterial(slcm);
+
+		slcm = sqlite.getCustomSolidLoadChargeMaterials()[0];
+
+		CHECK(slcm.getSubstance() == "updatedCustom");
+		CHECK(Approx(slcm.getSpecificHeatSolid()) == 0.5);
+		CHECK(Approx(slcm.getLatentHeat()) == 115);
+		CHECK(Approx(slcm.getSpecificHeatLiquid()) == 0.20);
+		CHECK(Approx(slcm.getMeltingPoint()) == 900);
+	}
+
+    {
+        GasLoadChargeMaterial glcm;
+        glcm.setSubstance("custom");
+        glcm.setSpecificHeatVapor(0.05);
+        sqlite.insertGasLoadChargeMaterials(glcm);
+
+        glcm.setSubstance("custom2");
+        sqlite.insertGasLoadChargeMaterials(glcm);
+
+        auto getCustom1 = sqlite.getCustomGasLoadChargeMaterials().at(0);
+        auto getCustom2 = sqlite.getCustomGasLoadChargeMaterials().at(1);
+
+        getCustom1.setSubstance("updatedCustom");
+        getCustom1.setSpecificHeatVapor(0.1);
+
+        getCustom2.setSubstance("updatedCustom2");
+        getCustom2.setSpecificHeatVapor(1.5);
+
+	    sqlite.updateGasLoadChargeMaterial(getCustom1);
+        sqlite.updateGasLoadChargeMaterial(getCustom2);
+
+        getCustom1 = sqlite.getCustomGasLoadChargeMaterials().at(0);
+        getCustom2 = sqlite.getCustomGasLoadChargeMaterials().at(1);
+
+        CHECK(getCustom1.getSubstance() == "updatedCustom");
+        CHECK(getCustom1.getSpecificHeatVapor() == 0.1);
+        CHECK(getCustom2.getSubstance() == "updatedCustom2");
+        CHECK(getCustom2.getSpecificHeatVapor() == 1.5);
+    }
+}
+
 TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 	auto sqlite = SQLite(":memory:", true);
 
@@ -41,42 +102,54 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 
 		SolidLoadChargeMaterial mat;
 		mat.setSubstance("custom");
-		mat.setID(output.size());
         SolidLoadChargeMaterial mat2;
         mat2.setSubstance("custom2");
-        mat2.setID(output.size() + 1);
 
         sqlite.insertSolidLoadChargeMaterials(mat);
         sqlite.insertSolidLoadChargeMaterials(mat2);
-        sqlite.deleteSolidLoadChargeMaterial(mat2.getSubstance());
+
+		auto getMat2 = sqlite.getCustomSolidLoadChargeMaterials().back();
+        auto getMat1 = sqlite.getCustomSolidLoadChargeMaterials().at(0);
+        sqlite.deleteSolidLoadChargeMaterial(getMat2.getID());
+        sqlite.deleteSolidLoadChargeMaterial(getMat1.getID());
         auto const output2 = sqlite.getSolidLoadChargeMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == "custom" );
+        CHECK( output2.back().getSubstance() == output.back().getSubstance() );
 	}
 
     {
         auto const output = sqlite.getLiquidLoadChargeMaterials();
-        auto const last = output[output.size() - 1].getSubstance();
-        LiquidLoadChargeMaterial llcm;
-        llcm.setID(output.size());
-        llcm.setSubstance("custom");
+        LiquidLoadChargeMaterial mat;
+        mat.setSubstance("custom");
+        LiquidLoadChargeMaterial mat2;
+        mat2.setSubstance("custom2");
 
-	    sqlite.insertLiquidLoadChargeMaterials(llcm);
-	    sqlite.deleteLiquidLoadChargeMaterial(llcm.getSubstance());
+        sqlite.insertLiquidLoadChargeMaterials(mat);
+        sqlite.insertLiquidLoadChargeMaterials(mat2);
+
+        auto getMat2 = sqlite.getCustomLiquidLoadChargeMaterials().back();
+        auto getMat1 = sqlite.getCustomLiquidLoadChargeMaterials().at(0);
+        sqlite.deleteLiquidLoadChargeMaterial(getMat2.getID());
+        sqlite.deleteLiquidLoadChargeMaterial(getMat1.getID());
         auto const output2 = sqlite.getLiquidLoadChargeMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+        CHECK( output2.back().getSubstance() == output.back().getSubstance() );
     }
 
     {
-        auto const output = sqlite.getGasLoadChargeMaterials();
-        auto const last = output[output.size() - 1].getSubstance();
-        GasLoadChargeMaterial glcm;
-        glcm.setID(output.size());
-        glcm.setSubstance("custom");
+        auto const originalMats = sqlite.getGasLoadChargeMaterials();
 
+        GasLoadChargeMaterial glcm;
+        glcm.setSubstance("custom");
         sqlite.insertGasLoadChargeMaterials(glcm);
-        sqlite.deleteGasLoadChargeMaterial(glcm.getSubstance());
-        auto const output2 = sqlite.getGasLoadChargeMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+
+        glcm.setSubstance("custom2");
+        sqlite.insertGasLoadChargeMaterials(glcm);
+
+        auto const custom = sqlite.getCustomGasLoadChargeMaterials();
+        sqlite.deleteGasLoadChargeMaterial(custom.at(1).getID());
+        sqlite.deleteGasLoadChargeMaterial(custom.at(0).getID());
+
+        auto const afterDeleteMats = sqlite.getGasLoadChargeMaterials();
+        CHECK( afterDeleteMats.back().getSubstance() == originalMats.back().getSubstance() );
     }
 
     {

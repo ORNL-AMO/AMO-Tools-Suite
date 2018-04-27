@@ -39,7 +39,7 @@ SQLite::SQLite(std::string const & db_name, bool init_db)
         create_insert_stmt();
     }
 
-    create_select_stmt();
+    create_select_and_update_stmt();
 }
 
 SQLite::~SQLite()
@@ -48,16 +48,22 @@ SQLite::~SQLite()
     sqlite3_finalize(m_solid_load_charge_materials_select_single_stmt);
     sqlite3_finalize(m_solid_load_charge_materials_select_custom_stmt);
     sqlite3_finalize(m_solid_load_charge_materials_insert_stmt);
+    sqlite3_finalize(m_solid_load_charge_materials_update_stmt);
+    sqlite3_finalize(m_solid_load_charge_materials_delete_stmt);
 
     sqlite3_finalize(m_gas_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_single_stmt);
 	sqlite3_finalize(m_gas_load_charge_materials_select_custom_stmt);
+	sqlite3_finalize(m_gas_load_charge_materials_update_stmt);
+	sqlite3_finalize(m_gas_load_charge_materials_delete_stmt);
 
     sqlite3_finalize(m_liquid_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_single_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_custom_stmt);
+    sqlite3_finalize(m_liquid_load_charge_materials_update_stmt);
+    sqlite3_finalize(m_liquid_load_charge_materials_delete_stmt);
 
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_stmt);
@@ -636,7 +642,7 @@ MotorData SQLite::getMotorDataById(int id) const
     return get_object<MotorData>(m_motor_data_select_single_stmt, id, cb);
 }
 
-void SQLite::create_select_stmt()
+void SQLite::create_select_and_update_stmt()
 {
     std::string const select_solid_load_charge_materials =
         R"(SELECT id, sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
@@ -661,6 +667,18 @@ void SQLite::create_select_stmt()
 
     prepare_statement(m_solid_load_charge_materials_select_custom_stmt, select_custom_solid_load_charge_materials);
 
+    std::string const delete_solid_load_charge_materials =
+            R"(DELETE from solid_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_solid_load_charge_materials_delete_stmt, delete_solid_load_charge_materials);
+
+    std::string const update_custom_solid_load_charge_materials =
+            R"(UPDATE solid_load_charge_materials
+               SET substance=?, mean_specific_heat_of_solid=?, latent_heat_of_fusion=?, mean_specific_heat_of_liquid=?, melting_point=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_solid_load_charge_materials_update_stmt, update_custom_solid_load_charge_materials);
+
     std::string const select_gas_load_charge_materials =
         R"(SELECT id, sid, substance, mean_specific_heat_of_vapor
            FROM gas_load_charge_materials)";
@@ -680,6 +698,18 @@ void SQLite::create_select_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_gas_load_charge_materials_select_custom_stmt, select_custom_gas_load_charge_materials);
+
+    std::string const delete_gas_load_charge_materials =
+            R"(DELETE from gas_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_gas_load_charge_materials_delete_stmt, delete_gas_load_charge_materials);
+
+    std::string const update_gas_load_charge_materials =
+            R"(UPDATE gas_load_charge_materials
+               SET substance=?, mean_specific_heat_of_vapor=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_gas_load_charge_materials_update_stmt, update_gas_load_charge_materials);
 
     std::string const select_liquid_load_charge_materials =
         R"(SELECT id, sid, substance, mean_specific_heat_of_liquid, latent_heat_of_vaporisation,
@@ -703,6 +733,18 @@ void SQLite::create_select_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_liquid_load_charge_materials_select_custom_stmt, select_custom_liquid_load_charge_materials);
+
+    std::string const delete_liquid_load_charge_materials =
+            R"(DELETE from liquid_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_liquid_load_charge_materials_delete_stmt, delete_liquid_load_charge_materials);
+
+    std::string const update_liquid_load_charge_materials =
+            R"(UPDATE liquid_load_charge_materials
+               SET substance=?, mean_specific_heat_of_liquid=?, latent_heat_of_vaporisation=?, mean_specific_heat_of_vapor=?, boiling_point=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_liquid_load_charge_materials_update_stmt, update_liquid_load_charge_materials);
 
     std::string const select_solid_liquid_flue_gas_materials =
             R"(SELECT id, sid, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
@@ -1102,9 +1144,26 @@ bool SQLite::insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & mate
     return valid_insert;
 }
 
-bool SQLite::deleteSolidLoadChargeMaterial(std::string const & substance) const {
-    int rc = execute_command("DELETE from solid_load_charge_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK;
+bool SQLite::deleteSolidLoadChargeMaterial(const int id) const {
+	bind_value(m_solid_load_charge_materials_delete_stmt, 1, id);
+    int rc = step_command(m_solid_load_charge_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+	reset_command(m_solid_load_charge_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateSolidLoadChargeMaterial(SolidLoadChargeMaterial const & material) {
+    bind_value(m_solid_load_charge_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_solid_load_charge_materials_update_stmt, 2, material.getSpecificHeatSolid());
+    bind_value(m_solid_load_charge_materials_update_stmt, 3, material.getLatentHeat());
+    bind_value(m_solid_load_charge_materials_update_stmt, 4, material.getSpecificHeatLiquid());
+    bind_value(m_solid_load_charge_materials_update_stmt, 5, material.getMeltingPoint());
+    bind_value(m_solid_load_charge_materials_update_stmt, 6, material.getID());
+
+    int rc = step_command(m_solid_load_charge_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_solid_load_charge_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_gas_load_charge_materials(GasLoadChargeMaterial const & material)
@@ -1132,9 +1191,23 @@ bool SQLite::insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material
     return valid_insert;
 }
 
-bool SQLite::deleteGasLoadChargeMaterial(std::string const & substance){
-	int rc = execute_command("DELETE from gas_load_charge_materials where substance = '" + substance + "' and sid=1");
-	return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteGasLoadChargeMaterial(int const id) {
+    bind_value(m_gas_load_charge_materials_delete_stmt, 1, id);
+    int rc = step_command(m_gas_load_charge_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_gas_load_charge_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateGasLoadChargeMaterial(GasLoadChargeMaterial const & material) {
+    bind_value(m_gas_load_charge_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_gas_load_charge_materials_update_stmt, 2, material.getSpecificHeatVapor());
+    bind_value(m_gas_load_charge_materials_update_stmt, 3, material.getID());
+
+    int rc = step_command(m_gas_load_charge_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_gas_load_charge_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const & material)
@@ -1168,9 +1241,28 @@ bool SQLite::insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & ma
     return valid_insert;
 }
 
-bool SQLite::deleteLiquidLoadChargeMaterial(std::string const &substance){
-    int rc = execute_command("DELETE from liquid_load_charge_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteLiquidLoadChargeMaterial(const int id) {
+    bind_value(m_liquid_load_charge_materials_delete_stmt, 1, id);
+    int rc = step_command(m_liquid_load_charge_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_liquid_load_charge_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateLiquidLoadChargeMaterial(LiquidLoadChargeMaterial const & material) {
+    bind_value(m_liquid_load_charge_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 2, material.getSpecificHeatLiquid());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 3, material.getLatentHeat());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 4, material.getSpecificHeatVapor());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 5, material.getVaporizingTemperature());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 6, material.getID());
+
+//    SET substance=?, mean_specific_heat_of_liquid=?, latent_heat_of_vaporisation=?, mean_specific_heat_of_vapor=?, boiling_point=?
+
+    int rc = step_command(m_liquid_load_charge_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_liquid_load_charge_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material)

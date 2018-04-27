@@ -104,19 +104,22 @@ public:
     SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
     std::vector<SolidLoadChargeMaterial> getCustomSolidLoadChargeMaterials() const;
     bool insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material);
-    bool deleteSolidLoadChargeMaterial(std::string const & substance) const;
+    bool deleteSolidLoadChargeMaterial(int id) const;
+    bool updateSolidLoadChargeMaterial(SolidLoadChargeMaterial const & material);
 
     std::vector<GasLoadChargeMaterial> getGasLoadChargeMaterials() const;
     GasLoadChargeMaterial getGasLoadChargeMaterialById(int id) const;
     std::vector<GasLoadChargeMaterial> getCustomGasLoadChargeMaterials() const;
     bool insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material);
-	bool deleteGasLoadChargeMaterial(std::string const & substance);
+	bool deleteGasLoadChargeMaterial(int id);
+    bool updateGasLoadChargeMaterial(const GasLoadChargeMaterial & material);
 
     std::vector<LiquidLoadChargeMaterial> getLiquidLoadChargeMaterials() const;
     LiquidLoadChargeMaterial getLiquidLoadChargeMaterialById(int id) const;
     std::vector<LiquidLoadChargeMaterial> getCustomLiquidLoadChargeMaterials() const;
     bool insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & material);
-    bool deleteLiquidLoadChargeMaterial(std::string const & substance);
+    bool deleteLiquidLoadChargeMaterial(int id);
+    bool updateLiquidLoadChargeMaterial(const LiquidLoadChargeMaterial & material);
 
     std::vector<SolidLiquidFlueGasMaterial> getSolidLiquidFlueGasMaterials() const;
     SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterialById(int id) const;
@@ -153,16 +156,22 @@ private:
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_solid_load_charge_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_solid_load_charge_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_gas_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_gas_load_charge_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_gas_load_charge_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_liquid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_liquid_load_charge_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_liquid_load_charge_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_stmt = nullptr;
@@ -189,7 +198,7 @@ private:
 	sqlite3_stmt * m_motor_data_select_single_stmt = nullptr;
     sqlite3_stmt * m_motor_data_select_custom_stmt = nullptr;
 
-    void create_select_stmt();
+    void create_select_and_update_stmt();
 
     void create_insert_stmt();
 

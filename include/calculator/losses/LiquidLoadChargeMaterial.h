@@ -280,9 +280,9 @@ public:
 
     /**
      * Gets the ID of material
-     * @return size_t, ID of material
+     * @return int, ID of material
      */
-    size_t getID() const {
+    int getID() const {
         return id;
     }
 
@@ -357,7 +357,7 @@ private:
     double reactionHeat = 0.0;
     double additionalHeat = 0.0;
     std::string substance = "Unknown";
-    size_t id = 0;
+    int id = 0;
     // Out value
     double totalHeat = 0.0;
 
