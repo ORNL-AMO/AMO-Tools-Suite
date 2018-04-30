@@ -125,7 +125,8 @@ public:
     SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterialById(int id) const;
     std::vector<SolidLiquidFlueGasMaterial> getCustomSolidLiquidFlueGasMaterials() const;
     bool insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material) const;
-    bool deleteSolidLiquidFlueGasMaterial(std::string const & substance);
+    bool deleteSolidLiquidFlueGasMaterial(int id);
+    bool updateSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material);
 
     std::vector<GasCompositions> getGasFlueGasMaterials() const;
     GasCompositions getGasFlueGasMaterialById(int id) const;
@@ -177,26 +178,36 @@ private:
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_single_stmt = nullptr;
 	sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_solid_liquid_flue_gas_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_solid_liquid_flue_gas_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_gas_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_gas_flue_gas_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_gas_flue_gas_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_atmosphere_specific_heat_insert_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_single_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_atmosphere_specific_heat_update_stmt = nullptr;
+    sqlite3_stmt * m_atmosphere_specific_heat_delete_stmt = nullptr;
 
     sqlite3_stmt * m_wall_losses_surface_insert_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_single_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_wall_losses_surface_update_stmt = nullptr;
+    sqlite3_stmt * m_wall_losses_surface_delete_stmt = nullptr;
 
     sqlite3_stmt * m_motor_data_insert_stmt = nullptr;
     sqlite3_stmt * m_motor_data_select_stmt = nullptr;
 	sqlite3_stmt * m_motor_data_select_single_stmt = nullptr;
     sqlite3_stmt * m_motor_data_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_motor_data_update_stmt = nullptr;
+    sqlite3_stmt * m_motor_data_delete_stmt = nullptr;
 
     void create_select_and_update_stmt();
 

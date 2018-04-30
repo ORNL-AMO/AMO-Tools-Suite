@@ -136,42 +136,49 @@ public:
      * @return double, % of carbon in fuel
      */
 	double getCarbon() const { return carbon; }
+	void setCarbon(const double carbon) { this->carbon = carbon; }
 
 	/**
      * Gets the percentage of hydrogen in fuel
      * @return double, % of hydrogen in fuel
      */
 	double getHydrogen() const { return hydrogen; }
+	void setHydrogen(const double hydrogen) { this->hydrogen = hydrogen; }
 
 	/**
      * Gets the percentage of sulfer in fuel
      * @return double, % of sulfer in fuel
      */
 	double getSulphur() const { return sulphur; }
+	void setSulphur(const double sulphur) { this->sulphur = sulphur; }
 
 	/**
      * Gets the percentage of inert ash in fuel
      * @return double, % of inert ash in fuel
      */
 	double getInertAsh() const { return inertAsh; }
+	void setInertAsh(const double inertAsh) { this->inertAsh = inertAsh; }
 
 	/**
      * Gets the percentage of O2 in fuel
      * @return double, % of O2 in fuel
      */
 	double getO2() const { return o2; }
+	void setO2(const double o2) { this->o2 = o2; }
 
 	/**
      * Gets the percentage of moisture in fuel
      * @return double, % of moisture in fuel
      */
 	double getMoisture() const { return moisture; }
+	void setMoisture(const double moisture) { this->moisture = moisture; }
 
 	/**
      * Gets the percentage of nitrogen in fuel
      * @return double, % of nitrogen in fuel
      */
 	double getNitrogen() const { return nitrogen; }
+	void setNitrogen(const double nitrogen) { this->nitrogen = nitrogen; }
 
 	/**
      * Sets the ID of substance
@@ -256,7 +263,7 @@ private:
 	std::string substance = "UndefinedSubstance";
 	double flueGasTemperature, excessAir, combustionAirTemperature;
 	double fuelTemperature, moistureInAirCombustion, ashDischargeTemperature, unburnedCarbonInAsh;
-	const double carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen;
+	double carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen;
 };
 
 #endif //AMO_TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIAL_H

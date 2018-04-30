@@ -69,26 +69,36 @@ SQLite::~SQLite()
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_single_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_custom_stmt);
+	sqlite3_finalize(m_solid_liquid_flue_gas_materials_update_stmt);
+	sqlite3_finalize(m_solid_liquid_flue_gas_materials_delete_stmt);
 
     sqlite3_finalize(m_gas_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_single_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_custom_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_update_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_delete_stmt);
 
     sqlite3_finalize(m_atmosphere_specific_heat_insert_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_single_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_custom_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_update_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_delete_stmt);
 
     sqlite3_finalize(m_wall_losses_surface_insert_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_single_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_custom_stmt);
+    sqlite3_finalize(m_wall_losses_surface_update_stmt);
+    sqlite3_finalize(m_wall_losses_surface_delete_stmt);
 
     sqlite3_finalize(m_motor_data_insert_stmt);
     sqlite3_finalize(m_motor_data_select_stmt);
     sqlite3_finalize(m_motor_data_select_single_stmt);
     sqlite3_finalize(m_motor_data_select_custom_stmt);
+    sqlite3_finalize(m_motor_data_update_stmt);
+    sqlite3_finalize(m_motor_data_delete_stmt);
 }
 
 std::string SQLiteWrapper::convert_text( const unsigned char * text ) {
@@ -766,6 +776,18 @@ void SQLite::create_select_and_update_stmt()
 
     prepare_statement(m_solid_liquid_flue_gas_materials_select_custom_stmt, select_custom_solid_liquid_flue_gas_materials);
 
+    std::string const delete_solid_liquid_flue_gas_materials =
+            R"(DELETE from solid_liquid_flue_gas_materials where id=? and sid=1)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_delete_stmt, delete_solid_liquid_flue_gas_materials);
+
+    std::string const update_solid_liquid_flue_gas_materials =
+            R"(UPDATE solid_liquid_flue_gas_materials
+               SET substance=?, carbon=?, hydrogen=?, nitrogen=?, sulfur=?, oxygen=?, moisture=?, ash=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_update_stmt, update_solid_liquid_flue_gas_materials);
+
     std::string const select_gas_flue_gas_materials =
             R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
                   carbon_monoxide, carbon_dioxide, nitrogen, oxygen, hydrogen_sulfide, benzene, heatingValue, heatingValueVolume, specificGravity
@@ -788,6 +810,18 @@ void SQLite::create_select_and_update_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_gas_flue_gas_materials_select_custom_stmt, select_custom_gas_flue_gas_materials);
+
+    std::string const delete_gas_flue_gas_materials =
+            R"(DELETE from gas_flue_gas_materials where id=? and sid=1)";
+
+    prepare_statement(m_gas_flue_gas_materials_delete_stmt, delete_gas_flue_gas_materials);
+
+    std::string const update_gas_flue_gas_materials =
+            R"(UPDATE gas_flue_gas_materials
+               SET substance=?, carbon=?, hydrogen=?, nitrogen=?, sulfur=?, oxygen=?, moisture=?, ash=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_gas_flue_gas_materials_update_stmt, update_gas_flue_gas_materials);
 
     std::string const select_atmosphere_specific_heat =
             R"(SELECT id, sid, substance, specificHeat
@@ -1298,9 +1332,29 @@ bool SQLite::insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const &
     return valid_insert;
 }
 
-bool SQLite::deleteSolidLiquidFlueGasMaterial(std::string const & substance){
-    int rc = execute_command("DELETE from solid_liquid_flue_gas_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteSolidLiquidFlueGasMaterial(const int id) {
+    bind_value(m_solid_liquid_flue_gas_materials_delete_stmt, 1, id);
+    int rc = step_command(m_solid_liquid_flue_gas_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_solid_liquid_flue_gas_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material) {
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 2, material.getCarbon());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 3, material.getHydrogen());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 4, material.getNitrogen());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 5, material.getSulphur());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 6, material.getO2());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 7, material.getMoisture());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 8, material.getInertAsh());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 9, material.getID());
+
+    int rc = step_command(m_solid_liquid_flue_gas_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_solid_liquid_flue_gas_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
