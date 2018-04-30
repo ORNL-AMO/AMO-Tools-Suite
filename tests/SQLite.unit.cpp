@@ -194,6 +194,72 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
         CHECK(Approx(custom2.getMoisture()) == 130);
         CHECK(Approx(custom2.getNitrogen()) == 140);
     }
+
+	{
+        sqlite.insertGasFlueGasMaterial({"custom1", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+        sqlite.insertGasFlueGasMaterial({"custom2", 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22});
+
+        GasCompositions custom1 = {"updatedCustom1", 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110};
+        custom1.setID(sqlite.getCustomGasFlueGasMaterials().at(0).getID());
+        GasCompositions custom2 = {"updatedCustom2", 120, 130, 140, 150, 160, 170, 180, 19, 20, 21, 22};
+		custom2.setID(sqlite.getCustomGasFlueGasMaterials().at(1).getID());
+
+        sqlite.updateGasFlueGasMaterial(custom1);
+        sqlite.updateGasFlueGasMaterial(custom2);
+
+        CHECK(custom1.getSubstance() == "updatedCustom1");
+        CHECK(Approx(custom1.getGasByVol("CH4")) == 10);
+        CHECK(Approx(custom1.getGasByVol("C2H6")) == 20);
+        CHECK(Approx(custom1.getGasByVol("N2")) == 30);
+        CHECK(Approx(custom1.getGasByVol("H2")) == 40);
+        CHECK(Approx(custom1.getGasByVol("C3H8")) == 50);
+        CHECK(Approx(custom1.getGasByVol("C4H10_CnH2n")) == 60);
+        CHECK(Approx(custom1.getGasByVol("H2O")) == 70);
+        CHECK(Approx(custom1.getGasByVol("CO")) == 80);
+        CHECK(Approx(custom1.getGasByVol("CO2")) == 90);
+        CHECK(Approx(custom1.getGasByVol("SO2")) == 100);
+        CHECK(Approx(custom1.getGasByVol("O2")) == 110);
+
+        CHECK(custom2.getSubstance() == "updatedCustom2");
+        CHECK(Approx(custom2.getGasByVol("CH4")) == 120);
+        CHECK(Approx(custom2.getGasByVol("C2H6")) == 130);
+        CHECK(Approx(custom2.getGasByVol("N2")) == 140);
+        CHECK(Approx(custom2.getGasByVol("H2")) == 150);
+        CHECK(Approx(custom2.getGasByVol("C3H8")) == 160);
+        CHECK(Approx(custom2.getGasByVol("C4H10_CnH2n")) == 170);
+        CHECK(Approx(custom2.getGasByVol("H2O")) == 180);
+        CHECK(Approx(custom2.getGasByVol("CO")) == 19);
+        CHECK(Approx(custom2.getGasByVol("CO2")) == 20);
+        CHECK(Approx(custom2.getGasByVol("SO2")) == 21);
+        CHECK(Approx(custom2.getGasByVol("O2")) == 22);
+	}
+
+    {
+        Atmosphere custom1;
+        custom1.setSubstance("custom1");
+        custom1.setSpecificHeat(0.5);
+        sqlite.insertAtmosphereSpecificHeat(custom1);
+
+        custom1.setSubstance("custom2");
+        custom1.setSpecificHeat(0.75);
+        sqlite.insertAtmosphereSpecificHeat(custom1);
+
+        auto custom2 = sqlite.getCustomAtmosphereSpecificHeat().at(0);
+        custom2.setSpecificHeat(500);
+        custom2.setSubstance("updatedCustom1");
+
+        auto custom3 = sqlite.getCustomAtmosphereSpecificHeat().at(1);
+        custom3.setSpecificHeat(150);
+        custom3.setSubstance("updatedCustom2");
+
+        sqlite.updateAtmosphereSpecificHeat(custom2);
+        sqlite.updateAtmosphereSpecificHeat(custom3);
+
+		CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(0).getSubstance() == "updatedCustom1");
+        CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(1).getSubstance() == "updatedCustom2");
+        CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(0).getSpecificHeat() == 500);
+        CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(1).getSpecificHeat() == 150);
+    }
 }
 
 TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
@@ -256,41 +322,34 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 
     {
         auto const output = sqlite.getGasFlueGasMaterials();
-        auto const last = output[output.size() - 1].getSubstance();
-//        GasCompositions gc("custom", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        auto const last = output.back().getSubstance();
         GasCompositions gc("custom", 12, 13, 14, 15, 16, 14, 12, 12, 12, 12, 11);
-        gc.setID(output.size());
 
         sqlite.insertGasFlueGasMaterial(gc);
-        sqlite.deleteGasFlueGasMaterial(gc.getSubstance());
-        auto const output2 = sqlite.getGasFlueGasMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+        sqlite.deleteGasFlueGasMaterial(sqlite.getCustomGasFlueGasMaterials().back().getID());
+        CHECK( sqlite.getGasFlueGasMaterials().back().getSubstance() == last );
     }
 
     {
-        auto const output = sqlite.getSolidLiquidFlueGasMaterials();
-        auto const last = output[output.size() - 1].getSubstance();
+        auto const last = sqlite.getSolidLiquidFlueGasMaterials().back().getSubstance();
         SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        slfgm.setID(output.size());
         slfgm.setSubstance("custom");
 
         sqlite.insertSolidLiquidFlueGasMaterial(slfgm);
         sqlite.deleteSolidLiquidFlueGasMaterial(sqlite.getCustomSolidLiquidFlueGasMaterials().back().getID());
-        auto const output2 = sqlite.getSolidLiquidFlueGasMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+        CHECK( sqlite.getSolidLiquidFlueGasMaterials().back().getSubstance() == last );
     }
 
     {
         auto const output = sqlite.getAtmosphereSpecificHeat();
-        auto const last = output[output.size() - 1].getSubstance();
+        auto const last = output.back().getSubstance();
 	    Atmosphere a;
-        a.setID(output.size());
         a.setSubstance("custom");
+		a.setSpecificHeat(0.56);
 
         sqlite.insertAtmosphereSpecificHeat(a);
-        sqlite.deleteAtmosphereSpecificHeat(a.getSubstance());
-        auto const output2 = sqlite.getAtmosphereSpecificHeat();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+        sqlite.deleteAtmosphereSpecificHeat(sqlite.getCustomAtmosphereSpecificHeat().back().getID());
+        CHECK( sqlite.getAtmosphereSpecificHeat().back().getSubstance() == last );
     }
 
     {

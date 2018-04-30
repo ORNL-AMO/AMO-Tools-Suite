@@ -132,13 +132,15 @@ public:
     GasCompositions getGasFlueGasMaterialById(int id) const;
     std::vector<GasCompositions> getCustomGasFlueGasMaterials() const;
     bool insertGasFlueGasMaterial(GasCompositions const & material) const;
-    bool deleteGasFlueGasMaterial(std::string const & substance);
+    bool deleteGasFlueGasMaterial(int id);
+    bool updateGasFlueGasMaterial(GasCompositions const & material);
 
     std::vector<Atmosphere> getAtmosphereSpecificHeat() const;
     Atmosphere getAtmosphereSpecificHeatById(int id) const;
     std::vector<Atmosphere> getCustomAtmosphereSpecificHeat() const;
     bool insertAtmosphereSpecificHeat(Atmosphere const & material);
-    bool deleteAtmosphereSpecificHeat(std::string const & substance);
+    bool updateAtmosphereSpecificHeat(Atmosphere const & material);
+    bool deleteAtmosphereSpecificHeat(int id);
 
     std::vector<WallLosses> getWallLossesSurface() const;
     std::vector<WallLosses> getCustomWallLossesSurface() const;

@@ -818,7 +818,9 @@ void SQLite::create_select_and_update_stmt()
 
     std::string const update_gas_flue_gas_materials =
             R"(UPDATE gas_flue_gas_materials
-               SET substance=?, carbon=?, hydrogen=?, nitrogen=?, sulfur=?, oxygen=?, moisture=?, ash=?
+               SET substance=?, hydrogen=?, methane=?, ethylene=?, ethane=?, sulfur_dioxide=?, carbon_monoxide=?,
+               carbon_dioxide=?, nitrogen=?, oxygen=?, hydrogen_sulfide=?, benzene=?, heatingValue=?,
+               heatingValueVolume=?, specificGravity=?
                WHERE id=? AND sid = 1)";
 
     prepare_statement(m_gas_flue_gas_materials_update_stmt, update_gas_flue_gas_materials);
@@ -842,6 +844,18 @@ void SQLite::create_select_and_update_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_atmosphere_specific_heat_select_custom_stmt, select_custom_atmosphere_specific_heat);
+
+    std::string const delete_atmosphere_specific_heat =
+            R"(DELETE from atmosphere_specific_heat where id=? and sid=1)";
+
+    prepare_statement(m_atmosphere_specific_heat_delete_stmt, delete_atmosphere_specific_heat);
+
+    std::string const update_atmosphere_specific_heat =
+            R"(UPDATE atmosphere_specific_heat
+               SET substance=?, specificHeat=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_atmosphere_specific_heat_update_stmt, update_atmosphere_specific_heat);
 
     std::string const select_wall_losses_surface =
             R"(SELECT id, sid, surface, conditionFactor
@@ -1407,9 +1421,36 @@ bool SQLite::insertGasFlueGasMaterial(GasCompositions const & comps) const {
     return valid_insert;
 }
 
-bool SQLite::deleteGasFlueGasMaterial(std::string const & substance){
-    int rc = execute_command("DELETE from gas_flue_gas_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteGasFlueGasMaterial(const int id) {
+    bind_value(m_gas_flue_gas_materials_delete_stmt, 1, id);
+    int rc = step_command(m_gas_flue_gas_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_gas_flue_gas_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateGasFlueGasMaterial(GasCompositions const & material ) {
+    bind_value(m_gas_flue_gas_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_gas_flue_gas_materials_update_stmt, 2, material.getGasByVol("CH4"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 3, material.getGasByVol("C2H6"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 4, material.getGasByVol("N2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 5, material.getGasByVol("H2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 6, material.getGasByVol("C3H8"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 7, material.getGasByVol("C4H10_CnH2n"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 8, material.getGasByVol("H2O"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 9, material.getGasByVol("CO"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 10, material.getGasByVol("CO2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 11, material.getGasByVol("SO2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 12, material.getGasByVol("O2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 13, material.heatingValue);
+    bind_value(m_gas_flue_gas_materials_update_stmt, 14, material.heatingValueVolume);
+    bind_value(m_gas_flue_gas_materials_update_stmt, 15, material.specificGravity);
+    bind_value(m_gas_flue_gas_materials_update_stmt, 16, material.getID());
+
+    int rc = step_command(m_gas_flue_gas_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_gas_flue_gas_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
@@ -1425,7 +1466,7 @@ bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
 }
 
 // part of the public API used to insert custom materials
-bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material){
+bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material) {
     bind_value(m_atmosphere_specific_heat_insert_stmt, 1, 1);
     bind_value(m_atmosphere_specific_heat_insert_stmt, 2, material.getSubstance());
     bind_value(m_atmosphere_specific_heat_insert_stmt, 3, material.getSpecificHeat());
@@ -1436,9 +1477,23 @@ bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material){
     return valid_insert;
 }
 
-bool SQLite::deleteAtmosphereSpecificHeat(std::string const & substance){
-    int rc = execute_command("DELETE from atmosphere_specific_heat where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteAtmosphereSpecificHeat(const int id) {
+    bind_value(m_atmosphere_specific_heat_delete_stmt, 1, id);
+    int rc = step_command(m_atmosphere_specific_heat_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_atmosphere_specific_heat_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateAtmosphereSpecificHeat(Atmosphere const &material){
+    bind_value(m_atmosphere_specific_heat_update_stmt, 1, material.getSubstance());
+    bind_value(m_atmosphere_specific_heat_update_stmt, 2, material.getSpecificHeat());
+    bind_value(m_atmosphere_specific_heat_update_stmt, 3, material.getID());
+
+    int rc = step_command(m_atmosphere_specific_heat_update_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_atmosphere_specific_heat_update_stmt);
+    return valid_insert;
 }
 
 bool SQLite::insert_wall_losses_surface(WallLosses const & cf)

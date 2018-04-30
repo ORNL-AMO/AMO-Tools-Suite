@@ -340,7 +340,7 @@ namespace Compressor {
 		double inletPressure, outletPressure, flowRate;
 		bool flowRateKnown;
 	};
-};
+}
 
 class BagMethod {
 public:

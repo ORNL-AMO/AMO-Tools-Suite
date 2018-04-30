@@ -151,7 +151,7 @@ public:
 
     /**
      * Sets the name of substance
-     * @param substance string const&, name of substance
+     * @param substance string, name of substance
      */
     void setSubstance(std::string substance) {
         this->substance = std::move(substance);
@@ -159,9 +159,9 @@ public:
 
     /**
      * Gets the ID of material
-     * @return double, ID of material
+     * @return int, ID of material
      */
-    double getID() const {
+    int getID() const {
         return this->id;
     }
 
@@ -169,7 +169,7 @@ public:
      * Sets the ID of material
      * @param id const int, ID of material
      */
-    void setID(const size_t id) {
+    void setID(const int id) {
         this->id = id;
     }
 
@@ -195,7 +195,7 @@ private:
     double specificHeat;
 
     std::string substance = "Unknown";
-    size_t id = 0;
+    int id = 0;
     // Out value
 
     /// Total heat loss measured in btu/hr
