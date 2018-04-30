@@ -195,10 +195,10 @@ std::vector<LiquidLoadChargeMaterial> SQLite::getLiquidLoadChargeMaterials() con
         sqlite3_column_int(stmt, 1);
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
-        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
-        auto const latentHeat = sqlite3_column_double(stmt, 6);
-        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 5);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 6);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, latentHeat, specificHeatVapor, vaporizingTemperature);
         llcm.setID(id);
         return llcm;
     };
@@ -212,10 +212,10 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterialById(int id) const
         sqlite3_column_int(stmt, 1);
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
-        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
-        auto const latentHeat = sqlite3_column_double(stmt, 6);
-        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 5);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 6);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, latentHeat, specificHeatVapor, vaporizingTemperature);
         llcm.setID(id);
         return llcm;
     };
@@ -229,10 +229,10 @@ std::vector<LiquidLoadChargeMaterial> SQLite::getCustomLiquidLoadChargeMaterials
         sqlite3_column_int(stmt, 1);
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
-        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
-        auto const latentHeat = sqlite3_column_double(stmt, 6);
-        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 5);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 6);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, latentHeat, specificHeatVapor, vaporizingTemperature);
         llcm.setID(id);
         return llcm;
     };
@@ -1256,8 +1256,6 @@ bool SQLite::updateLiquidLoadChargeMaterial(LiquidLoadChargeMaterial const & mat
     bind_value(m_liquid_load_charge_materials_update_stmt, 4, material.getSpecificHeatVapor());
     bind_value(m_liquid_load_charge_materials_update_stmt, 5, material.getVaporizingTemperature());
     bind_value(m_liquid_load_charge_materials_update_stmt, 6, material.getID());
-
-//    SET substance=?, mean_specific_heat_of_liquid=?, latent_heat_of_vaporisation=?, mean_specific_heat_of_vapor=?, boiling_point=?
 
     int rc = step_command(m_liquid_load_charge_materials_update_stmt);
     bool valid_command = step_validity(rc);

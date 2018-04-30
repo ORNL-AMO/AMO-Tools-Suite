@@ -92,6 +92,56 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
         CHECK(getCustom2.getSubstance() == "updatedCustom2");
         CHECK(getCustom2.getSpecificHeatVapor() == 1.5);
     }
+
+    {
+        LiquidLoadChargeMaterial llcm;
+        llcm.setSubstance("custom");
+        llcm.setSpecificHeatVapor(0.01);
+        llcm.setSpecificHeatLiquid(0.02);
+        llcm.setLatentHeat(0.03);
+        llcm.setVaporizingTemperature(0.05);
+        sqlite.insertLiquidLoadChargeMaterials(llcm);
+
+        llcm.setSubstance("custom2");
+        llcm.setSpecificHeatVapor(0.06);
+        llcm.setSpecificHeatLiquid(0.07);
+        llcm.setLatentHeat(0.08);
+        llcm.setVaporizingTemperature(0.1);
+        sqlite.insertLiquidLoadChargeMaterials(llcm);
+
+        auto getCustom1 = sqlite.getCustomLiquidLoadChargeMaterials().at(0);
+        auto getCustom2 = sqlite.getCustomLiquidLoadChargeMaterials().at(1);
+
+        getCustom1.setSubstance("updatedCustom");
+        getCustom1.setSpecificHeatVapor(0.1);
+        getCustom1.setSpecificHeatLiquid(0.2);
+        getCustom1.setLatentHeat(0.3);
+        getCustom1.setVaporizingTemperature(0.5);
+
+        getCustom2.setSubstance("updatedCustom2");
+        getCustom2.setSpecificHeatVapor(0.6);
+        getCustom2.setSpecificHeatLiquid(0.7);
+        getCustom2.setLatentHeat(0.8);
+        getCustom2.setVaporizingTemperature(1.0);
+
+        sqlite.updateLiquidLoadChargeMaterial(getCustom1);
+        sqlite.updateLiquidLoadChargeMaterial(getCustom2);
+
+        getCustom1 = sqlite.getCustomLiquidLoadChargeMaterials().at(0);
+        getCustom2 = sqlite.getCustomLiquidLoadChargeMaterials().at(1);
+
+        CHECK(getCustom1.getSubstance() == "updatedCustom");
+        CHECK(Approx(getCustom1.getSpecificHeatVapor()) == 0.1);
+        CHECK(Approx(getCustom1.getSpecificHeatLiquid()) == 0.2);
+        CHECK(Approx(getCustom1.getLatentHeat()) == 0.3);
+        CHECK(Approx(getCustom1.getVaporizingTemperature()) == 0.5);
+
+        CHECK(getCustom2.getSubstance() == "updatedCustom2");
+        CHECK(Approx(getCustom2.getSpecificHeatVapor()) == 0.6);
+        CHECK(Approx(getCustom2.getSpecificHeatLiquid()) == 0.7);
+        CHECK(Approx(getCustom2.getLatentHeat()) == 0.8);
+        CHECK(Approx(getCustom2.getVaporizingTemperature()) == 1.0);
+    }
 }
 
 TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {

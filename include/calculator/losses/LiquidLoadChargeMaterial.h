@@ -373,9 +373,10 @@ private:
     LiquidLoadChargeMaterial(
             std::string substance,
             double specificHeatLiquid,
-            double vaporizingTemperature,
             double latentHeat,
-            double specificHeatVapor)
+            double specificHeatVapor,
+            double vaporizingTemperature
+    )
             : specificHeatLiquid(specificHeatLiquid),
               vaporizingTemperature(vaporizingTemperature),
               latentHeat(latentHeat),
