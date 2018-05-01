@@ -213,7 +213,9 @@ private:
     sqlite3_stmt * m_motor_data_update_stmt = nullptr;
     sqlite3_stmt * m_motor_data_delete_stmt = nullptr;
 
-    void create_select_and_update_stmt();
+    void create_select_stmt();
+
+    void create_update_and_delete_stmt();
 
     void create_insert_stmt();
 

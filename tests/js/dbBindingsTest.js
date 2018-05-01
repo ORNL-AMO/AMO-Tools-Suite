@@ -8,7 +8,7 @@ function rnd(value) {
 
 test('dbSelectSolidMaterial', function (t) {
     t.plan(15);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectSolidLoadChargeMaterialById, 'function');
 
     var res = bindings.selectSolidLoadChargeMaterialById(1);
@@ -51,7 +51,7 @@ test('dbSelectSolidMaterial', function (t) {
 
 test('dbSelectLiquidMaterial', function (t) {
     t.plan(15);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectLiquidLoadChargeMaterialById, 'function');
 
     var res = bindings.selectLiquidLoadChargeMaterialById(1);
@@ -95,7 +95,7 @@ test('dbSelectLiquidMaterial', function (t) {
 
 test('dbInsertCustomLiquidMaterial', function (t) {
     t.plan(3);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectLiquidLoadChargeMaterials, 'function');
 
     var res = bindings.selectLiquidLoadChargeMaterials();
@@ -117,7 +117,7 @@ test('dbInsertCustomLiquidMaterial', function (t) {
 
 test('dbSelectGasMaterial', function (t) {
     t.plan(9);
-    bindings.unitTestStartup();
+    bindings.startup();
 
     t.type(bindings.selectGasLoadChargeMaterialById, 'function');
     var res = bindings.selectGasLoadChargeMaterialById(1);
@@ -147,7 +147,7 @@ test('dbSelectGasMaterial', function (t) {
 
 test('dbInsertGasLoadChargeMaterial', function (t) {
     t.plan(4);
-    bindings.unitTestStartup();
+    bindings.startup();
 
     t.type(bindings.insertGasLoadChargeMaterial, 'function');
     var res = bindings.selectGasLoadChargeMaterials();
@@ -167,7 +167,7 @@ test('dbInsertGasLoadChargeMaterial', function (t) {
 
 test('dbGasFlueGasMaterial select', function (t) {
     t.plan(29);
-    bindings.unitTestStartup();
+    bindings.startup();
 
     t.type(bindings.selectGasFlueGasMaterialById, 'function');
     var res = bindings.selectGasFlueGasMaterialById(1);
@@ -244,7 +244,7 @@ test('dbGasFlueGasMaterial select', function (t) {
 
 test('dbGasFlueGasMaterial insert', function (t) {
     t.plan(18);
-    bindings.unitTestStartup();
+    bindings.startup();
 
     t.type(bindings.selectGasFlueGasMaterials, 'function');
     var res = bindings.selectGasFlueGasMaterials();
@@ -307,7 +307,7 @@ test('dbGasFlueGasMaterial insert', function (t) {
 
 test('dbSolidLiquidFlueGasMaterial', function (t) {
     t.plan(21);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectSolidLiquidFlueGasMaterialById, 'function');
 
     res = bindings.selectSolidLiquidFlueGasMaterialById(2);
@@ -350,7 +350,7 @@ test('dbSolidLiquidFlueGasMaterial', function (t) {
 
 test('dbInsertSolidLiquidFlueGasMaterial', function (t) {
     t.plan(10);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectSolidLiquidFlueGasMaterialById, 'function');
 
     var res = bindings.selectSolidLiquidFlueGasMaterials();
@@ -382,7 +382,7 @@ test('dbInsertSolidLiquidFlueGasMaterial', function (t) {
 
 test('dbSelectAtmosphereSpecificHeat', function (t) {
     t.plan(9);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectAtmosphereSpecificHeatById, 'function');
 
     var res = bindings.selectAtmosphereSpecificHeatById(1);
@@ -414,7 +414,7 @@ test('dbSelectAtmosphereSpecificHeat', function (t) {
 
 test('dbInsertAtmosphereSpecificHeat', function (t) {
     t.plan(4);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectAtmosphereSpecificHeat, 'function');
 
     var res = bindings.selectAtmosphereSpecificHeat();
@@ -434,7 +434,7 @@ test('dbInsertAtmosphereSpecificHeat', function (t) {
 
 test('dbSelectWallLossesSurface', function (t) {
     t.plan(9);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectWallLossesSurfaceById, 'function');
 
     var res = bindings.selectWallLossesSurfaceById(1);
@@ -465,7 +465,7 @@ test('dbSelectWallLossesSurface', function (t) {
 
 test('dbInsertWallLossesSurface', function (t) {
     t.plan(4);
-    bindings.unitTestStartup();
+    bindings.startup();
     t.type(bindings.selectWallLossesSurface, 'function');
 
     var obj2 = {
@@ -484,12 +484,11 @@ test('dbInsertWallLossesSurface', function (t) {
 
 test('dbDeletions', function (t) {
     t.plan(7);
-    bindings.unitTestStartup();
+    bindings.startup();
 
     var res = bindings.selectLiquidLoadChargeMaterials();
     var last = res[res.length - 1].substance;
     var obj = {
-        id: res.length,
         substance: 'customLiquidLoadChargeMaterial',
         specificHeatLiquid: 0.6501,
         specificHeatVapor: 0.55,
@@ -497,14 +496,13 @@ test('dbDeletions', function (t) {
         vaporizationTemperature: 900
     };
     bindings.insertLiquidLoadChargeMaterial(obj);
-    bindings.deleteLiquidLoadChargeMaterial(obj);
+    bindings.deleteLiquidLoadChargeMaterial(bindings.selectLiquidLoadChargeMaterials().length);
     res = bindings.selectLiquidLoadChargeMaterials();
-    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+    t.equal(last, res[res.length - 1].substance);
 
     res = bindings.selectSolidLoadChargeMaterials();
     last = res[res.length - 1].substance;
     obj = {
-        id: res.length,
         substance: 'customSolidLoadChargeMaterial',
         specificHeatSolid: 0.247910198232625,
         latentHeat: 169,
@@ -512,26 +510,24 @@ test('dbDeletions', function (t) {
         meltingPoint: 1215
     };
     bindings.insertSolidLoadChargeMaterial(obj);
-    bindings.deleteSolidLoadChargeMaterial(obj);
+    bindings.deleteSolidLoadChargeMaterial(bindings.selectSolidLoadChargeMaterials().length);
     res = bindings.selectSolidLoadChargeMaterials();
-    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+    t.equal(last, res[res.length - 1].substance);
 
     res = bindings.selectGasLoadChargeMaterials();
     last = res[res.length - 1].substance;
     obj = {
-        id: res.length,
         substance: 'customGasMaterial',
         specificHeatVapor: 0.47
     };
     bindings.insertGasLoadChargeMaterial(obj);
-    bindings.deleteGasLoadChargeMaterial(obj);
+    bindings.deleteGasLoadChargeMaterial(bindings.selectGasLoadChargeMaterials().length);
     res = bindings.selectGasLoadChargeMaterials();
-    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+    t.equal(last, res[res.length - 1].substance);
 
     res = bindings.selectGasFlueGasMaterials();
     last = res[res.length - 1].substance;
     obj = {
-        id: res.length,
         substance: 'customGasFlueGasMaterial',
         CH4: 87.0,
         C2H6: 8.5,
@@ -548,15 +544,14 @@ test('dbDeletions', function (t) {
         specificGravity: 0.655
     };
     bindings.insertGasFlueGasMaterial(obj);
-    bindings.deleteGasFlueGasMaterial(obj);
+    bindings.deleteGasFlueGasMaterial(bindings.selectGasFlueGasMaterials().length);
     res = bindings.selectGasFlueGasMaterials();
-    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+    t.equal(last, res[res.length - 1].substance);
 
 
     res = bindings.selectSolidLiquidFlueGasMaterials();
     last = res[res.length - 1].substance;
     obj = {
-        id: res.length,
         substance: 'customSolidLiquidFlueGas',
         carbon: 77.7 / 100,
         hydrogen: 1.8 / 100,
@@ -567,38 +562,35 @@ test('dbDeletions', function (t) {
         nitrogen: 0.8 / 100
     };
     bindings.insertSolidLiquidFlueGasMaterial(obj);
-    bindings.deleteSolidLiquidFlueGasMaterial(obj);
+    bindings.deleteSolidLiquidFlueGasMaterial(bindings.selectSolidLiquidFlueGasMaterials().length);
     res = bindings.selectSolidLiquidFlueGasMaterials();
-    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+    t.equal(last, res[res.length - 1].substance);
 
     res = bindings.selectAtmosphereSpecificHeat();
     last = res[res.length - 1].substance;
     obj = {
-        id: res.length,
         substance: 'customAtmosphere',
         specificHeat: 0.018
     };
     bindings.insertAtmosphereSpecificHeat(obj);
-    bindings.deleteAtmosphereSpecificHeat(obj);
+    bindings.deleteAtmosphereSpecificHeat(bindings.selectAtmosphereSpecificHeat().length);
     res = bindings.selectAtmosphereSpecificHeat();
-    t.equal(last, res[res.length - 1].substance, last + " != " + res[res.length - 1].substance);
+    t.equal(last, res[res.length - 1].substance);
 
     res = bindings.selectWallLossesSurface();
     last = res[res.length - 1].surface;
     obj = {
-        id: res.length,
         surface: 'customWallLossesSurface',
         conditionFactor: 1.79
     };
     bindings.insertWallLossesSurface(obj);
-    bindings.deleteWallLossesSurface(obj);
+    bindings.deleteWallLossesSurface(bindings.selectWallLossesSurface().length);
     res = bindings.selectWallLossesSurface();
-    t.equal(last, res[res.length - 1].surface, last + " != " + res[res.length - 1].surface);
+    t.equal(last, res[res.length - 1].surface);
 });
 
-// 42 tests per call
+// 41 tests per call
 function testMotorEqual(t, motor1, motor2) {
-    t.equal(motor1.id, motor2.id);
     t.equal(motor1.manufacturer, motor2.manufacturer, 'manufacturer is ' + motor2.manufacturer);
     t.equal(motor1.model, motor2.model);
     t.equal(motor1.catalog, motor2.catalog);
@@ -643,12 +635,12 @@ function testMotorEqual(t, motor1, motor2) {
 }
 
 test('dbSelectMotor', function (t) {
-    t.plan(87);
-    bindings.unitTestStartup();
+    t.plan(85);
+    bindings.startup();
 
     var expectedMotor =
         {
-            id: 1, manufacturer: "GE", model: "X$D Ultra IEEE 841", catalog: "M9455", motorType: "NEMA Design B",
+            manufacturer: "GE", model: "X$D Ultra IEEE 841", catalog: "M9455", motorType: "NEMA Design B",
             hp: 50, speed: 1800, fullLoadSpeed: 1780, enclosureType: "TEFC", frameNumber: "326T", voltageRating: 460,
             purpose: "IEEE 841 Petroleum/Chemical", uFrame: 0, cFace: 0, verticalShaft: 0, dFlange: 0,
             serviceFactor: 1.15, insulationClass: "F", weight: 511, listPrice: 4, windingResistance: 615,
@@ -669,12 +661,12 @@ test('dbSelectMotor', function (t) {
 });
 
 test('dbInsertAndDeleteMotor', function (t) {
-    t.plan(86);
-    bindings.unitTestStartup();
+    t.plan(84);
+    bindings.startup();
 
     var expectedMotor =
         {
-            id: 4, manufacturer: "Beta", model: "x-trainer", catalog: "M9455", motorType: "NEMA Design B",
+            manufacturer: "Beta", model: "x-trainer", catalog: "M9455", motorType: "NEMA Design B",
             hp: 50, speed: 1800, fullLoadSpeed: 1780, enclosureType: "TEFC", frameNumber: "326T", voltageRating: 460,
             purpose: "IEEE 841 Petroleum/Chemical", uFrame: 0, cFace: 0, verticalShaft: 0, dFlange: 0,
             serviceFactor: 1.15, insulationClass: "F", weight: 511, listPrice: 4, windingResistance: 615,
@@ -692,12 +684,131 @@ test('dbInsertAndDeleteMotor', function (t) {
 
     expectedMotor.manufacturer = "GE";
     expectedMotor.model = "X$D Ultra IEEE 841";
-    expectedMotor.id = 1;
 
     t.type(bindings.deleteMotor, 'function');
     bindings.deleteMotor(4);
     testMotorEqual(t, bindings.selectMotors()[0], expectedMotor);
 });
+
+test('dbUpdates', function (t) {
+    t.plan(48);
+    bindings.startup();
+
+    var obj = {
+        substance: 'custom solid load charge',
+        specificHeatSolid: 0.247910198232625,
+        latentHeat: 169,
+        specificHeatLiquid: 0.2601,
+        meltingPoint: 1215
+    };
+    bindings.insertSolidLoadChargeMaterial(obj);
+    var mat = bindings.selectSolidLoadChargeMaterialById(bindings.selectSolidLoadChargeMaterials().length);
+    mat.substance = 'updated';
+    bindings.updateSolidLoadChargeMaterial(mat);
+    t.equal(bindings.selectSolidLoadChargeMaterialById(bindings.selectSolidLoadChargeMaterials().length).substance, 'updated');
+
+
+    obj = {
+        substance: 'Crude liquid load charge',
+        specificHeatLiquid: 0.6501,
+        specificHeatVapor: 0.55,
+        latentHeat: 105,
+        vaporizationTemperature: 900
+    };
+    bindings.insertLiquidLoadChargeMaterial(obj);
+    mat = bindings.selectLiquidLoadChargeMaterialById(bindings.selectLiquidLoadChargeMaterials().length);
+    mat.substance = 'updated';
+    bindings.updateLiquidLoadChargeMaterial(mat);
+    t.equal(bindings.selectLiquidLoadChargeMaterialById(bindings.selectLiquidLoadChargeMaterials().length).substance, 'updated');
+
+    obj = {
+        substance: 'Water vapor - Near Atm. Pressure Gas load charge material',
+        specificHeatVapor: 0.47
+    };
+    bindings.insertGasLoadChargeMaterial(obj);
+    mat = bindings.selectGasLoadChargeMaterialById(bindings.selectGasLoadChargeMaterials().length);
+    mat.substance = 'updated';
+    bindings.updateGasLoadChargeMaterial(mat);
+    t.equal(bindings.selectGasLoadChargeMaterialById(bindings.selectGasLoadChargeMaterials().length).substance, 'updated');
+
+    obj = {
+        substance: 'Typical Natural Gas - US gas flue gas material',
+        CH4: 87.0,
+        C2H6: 8.5,
+        N2: 3.6,
+        H2: 0.4,
+        C3H8: 0.0,
+        C4H10_CnH2n: 0.0,
+        H2O: 0.0,
+        CO: 0.0,
+        CO2: 0.4,
+        SO2: 0.0,
+        O2: 0.1,
+        heatingValue: 22030.67089880065,
+        heatingValueVolume: 1032.445,
+        specificGravity: 0.6571206283343215
+    };
+    bindings.insertGasFlueGasMaterial(obj);
+    mat = bindings.selectGasFlueGasMaterialById(bindings.selectGasFlueGasMaterials().length);
+    mat.substance = 'updated';
+    bindings.updateGasFlueGasMaterial(mat);
+    t.equal(bindings.selectGasFlueGasMaterialById(bindings.selectGasFlueGasMaterials().length).substance, 'updated');
+
+    obj = {
+        substance: 'custom Typical Anthracite - US solid liquid gas flue gas material',
+        carbon: 77.7,
+        hydrogen: 1.8,
+        sulphur: 0.7,
+        inertAsh: 9.8,
+        o2: 2.1,
+        moisture: 7.1,
+        nitrogen: 0.8
+    };
+    bindings.insertSolidLiquidFlueGasMaterial(obj);
+    mat = bindings.selectSolidLiquidFlueGasMaterialById(bindings.selectSolidLiquidFlueGasMaterials().length);
+    mat.substance = 'updated';
+    bindings.updateSolidLiquidFlueGasMaterial(mat);
+    t.equal(bindings.selectSolidLiquidFlueGasMaterialById(bindings.selectSolidLiquidFlueGasMaterials().length).substance, 'updated');
+
+    obj = {
+        substance: 'customAtmosphere',
+        specificHeat: 0.5
+    };
+    bindings.insertAtmosphereSpecificHeat(obj);
+    mat = bindings.selectAtmosphereSpecificHeatById(bindings.selectAtmosphereSpecificHeat().length);
+    mat.substance = 'updated';
+    bindings.updateAtmosphereSpecificHeat(mat);
+    t.equal(bindings.selectAtmosphereSpecificHeatById(bindings.selectAtmosphereSpecificHeat().length).substance, 'updated');
+
+    obj = {
+        surface: 'Horizontal cylinders Wall Losses Surface',
+        conditionFactor: 1.016
+    };
+    bindings.insertWallLossesSurface(obj);
+    mat = bindings.selectWallLossesSurfaceById(bindings.selectWallLossesSurface().length);
+    mat.surface = 'updated';
+    bindings.updateWallLossesSurface(mat);
+    t.equal(bindings.selectWallLossesSurfaceById(bindings.selectWallLossesSurface().length).surface, 'updated');
+
+    obj = {
+        manufacturer: "Sherco", model: "super sweet dirtbike", catalog: "M9455", motorType: "2 stroke of course",
+        hp: 50, speed: 1800, fullLoadSpeed: 1780, enclosureType: "TEFC", frameNumber: "326T", voltageRating: 460,
+        purpose: "IEEE 841 Petroleum/Chemical", uFrame: 0, cFace: 0, verticalShaft: 0, dFlange: 0,
+        serviceFactor: 1.15, insulationClass: "F", weight: 511, listPrice: 4, windingResistance: 615,
+        warranty: 99.5, rotorBars: 5, statorSlots: 38, efficiency100: 48, efficiency75: 94.5, efficiency50: 94.7,
+        efficiency25: 94.3, powerFactor100: 91.6, powerFactor75: 78, powerFactor50: 73.6, powerFactor25: 63.3,
+        torqueFullLoad: 41.5, torqueBreakDown: 147.4, torqueLockedRotor: 294.8, ampsFullLoad: 206.4,
+        ampsIdle: 63.5, ampsLockedRotor: 25.7, stalledRotorTimeHot: 362.5, stalledRotorTimeCold: 92.9,
+        peakVoltage0ms: 115.2, peakVoltage5ms: 2000
+    };
+    bindings.insertMotor(obj);
+    mat = bindings.selectMotorById(bindings.selectMotors().length);
+    mat.manufacturer = 'updated';
+    bindings.updateMotor(mat);
+    obj.manufacturer = 'updated';
+    testMotorEqual(t, obj, bindings.selectMotorById(bindings.selectMotors().length))
+});
+
 
 // // commented out bc it writes files to the HDD
 // test('dbTestMigrations', function (t) {

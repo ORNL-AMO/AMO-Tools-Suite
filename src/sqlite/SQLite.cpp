@@ -39,7 +39,8 @@ SQLite::SQLite(std::string const & db_name, bool init_db)
         create_insert_stmt();
     }
 
-    create_select_and_update_stmt();
+    create_select_stmt();
+    create_update_and_delete_stmt();
 }
 
 SQLite::~SQLite()
@@ -652,7 +653,7 @@ MotorData SQLite::getMotorDataById(int id) const
     return get_object<MotorData>(m_motor_data_select_single_stmt, id, cb);
 }
 
-void SQLite::create_select_and_update_stmt()
+void SQLite::create_select_stmt()
 {
     std::string const select_solid_load_charge_materials =
         R"(SELECT id, sid, substance, mean_specific_heat_of_solid, latent_heat_of_fusion,
@@ -677,18 +678,6 @@ void SQLite::create_select_and_update_stmt()
 
     prepare_statement(m_solid_load_charge_materials_select_custom_stmt, select_custom_solid_load_charge_materials);
 
-    std::string const delete_solid_load_charge_materials =
-            R"(DELETE from solid_load_charge_materials where id=? and sid=1)";
-
-    prepare_statement(m_solid_load_charge_materials_delete_stmt, delete_solid_load_charge_materials);
-
-    std::string const update_custom_solid_load_charge_materials =
-            R"(UPDATE solid_load_charge_materials
-               SET substance=?, mean_specific_heat_of_solid=?, latent_heat_of_fusion=?, mean_specific_heat_of_liquid=?, melting_point=?
-               WHERE id=? AND sid = 1)";
-
-    prepare_statement(m_solid_load_charge_materials_update_stmt, update_custom_solid_load_charge_materials);
-
     std::string const select_gas_load_charge_materials =
         R"(SELECT id, sid, substance, mean_specific_heat_of_vapor
            FROM gas_load_charge_materials)";
@@ -708,18 +697,6 @@ void SQLite::create_select_and_update_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_gas_load_charge_materials_select_custom_stmt, select_custom_gas_load_charge_materials);
-
-    std::string const delete_gas_load_charge_materials =
-            R"(DELETE from gas_load_charge_materials where id=? and sid=1)";
-
-    prepare_statement(m_gas_load_charge_materials_delete_stmt, delete_gas_load_charge_materials);
-
-    std::string const update_gas_load_charge_materials =
-            R"(UPDATE gas_load_charge_materials
-               SET substance=?, mean_specific_heat_of_vapor=?
-               WHERE id=? AND sid = 1)";
-
-    prepare_statement(m_gas_load_charge_materials_update_stmt, update_gas_load_charge_materials);
 
     std::string const select_liquid_load_charge_materials =
         R"(SELECT id, sid, substance, mean_specific_heat_of_liquid, latent_heat_of_vaporisation,
@@ -744,18 +721,6 @@ void SQLite::create_select_and_update_stmt()
 
     prepare_statement(m_liquid_load_charge_materials_select_custom_stmt, select_custom_liquid_load_charge_materials);
 
-    std::string const delete_liquid_load_charge_materials =
-            R"(DELETE from liquid_load_charge_materials where id=? and sid=1)";
-
-    prepare_statement(m_liquid_load_charge_materials_delete_stmt, delete_liquid_load_charge_materials);
-
-    std::string const update_liquid_load_charge_materials =
-            R"(UPDATE liquid_load_charge_materials
-               SET substance=?, mean_specific_heat_of_liquid=?, latent_heat_of_vaporisation=?, mean_specific_heat_of_vapor=?, boiling_point=?
-               WHERE id=? AND sid = 1)";
-
-    prepare_statement(m_liquid_load_charge_materials_update_stmt, update_liquid_load_charge_materials);
-
     std::string const select_solid_liquid_flue_gas_materials =
             R"(SELECT id, sid, substance, carbon, hydrogen, nitrogen, sulfur, oxygen, moisture, ash
            FROM solid_liquid_flue_gas_materials)";
@@ -775,18 +740,6 @@ void SQLite::create_select_and_update_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_solid_liquid_flue_gas_materials_select_custom_stmt, select_custom_solid_liquid_flue_gas_materials);
-
-    std::string const delete_solid_liquid_flue_gas_materials =
-            R"(DELETE from solid_liquid_flue_gas_materials where id=? and sid=1)";
-
-    prepare_statement(m_solid_liquid_flue_gas_materials_delete_stmt, delete_solid_liquid_flue_gas_materials);
-
-    std::string const update_solid_liquid_flue_gas_materials =
-            R"(UPDATE solid_liquid_flue_gas_materials
-               SET substance=?, carbon=?, hydrogen=?, nitrogen=?, sulfur=?, oxygen=?, moisture=?, ash=?
-               WHERE id=? AND sid = 1)";
-
-    prepare_statement(m_solid_liquid_flue_gas_materials_update_stmt, update_solid_liquid_flue_gas_materials);
 
     std::string const select_gas_flue_gas_materials =
             R"(SELECT id, sid, substance, hydrogen, methane, ethylene, ethane, sulfur_dioxide,
@@ -811,20 +764,6 @@ void SQLite::create_select_and_update_stmt()
 
     prepare_statement(m_gas_flue_gas_materials_select_custom_stmt, select_custom_gas_flue_gas_materials);
 
-    std::string const delete_gas_flue_gas_materials =
-            R"(DELETE from gas_flue_gas_materials where id=? and sid=1)";
-
-    prepare_statement(m_gas_flue_gas_materials_delete_stmt, delete_gas_flue_gas_materials);
-
-    std::string const update_gas_flue_gas_materials =
-            R"(UPDATE gas_flue_gas_materials
-               SET substance=?, hydrogen=?, methane=?, ethylene=?, ethane=?, sulfur_dioxide=?, carbon_monoxide=?,
-               carbon_dioxide=?, nitrogen=?, oxygen=?, hydrogen_sulfide=?, benzene=?, heatingValue=?,
-               heatingValueVolume=?, specificGravity=?
-               WHERE id=? AND sid = 1)";
-
-    prepare_statement(m_gas_flue_gas_materials_update_stmt, update_gas_flue_gas_materials);
-
     std::string const select_atmosphere_specific_heat =
             R"(SELECT id, sid, substance, specificHeat
            FROM atmosphere_specific_heat)";
@@ -845,18 +784,6 @@ void SQLite::create_select_and_update_stmt()
 
     prepare_statement(m_atmosphere_specific_heat_select_custom_stmt, select_custom_atmosphere_specific_heat);
 
-    std::string const delete_atmosphere_specific_heat =
-            R"(DELETE from atmosphere_specific_heat where id=? and sid=1)";
-
-    prepare_statement(m_atmosphere_specific_heat_delete_stmt, delete_atmosphere_specific_heat);
-
-    std::string const update_atmosphere_specific_heat =
-            R"(UPDATE atmosphere_specific_heat
-               SET substance=?, specificHeat=?
-               WHERE id=? AND sid = 1)";
-
-    prepare_statement(m_atmosphere_specific_heat_update_stmt, update_atmosphere_specific_heat);
-
     std::string const select_wall_losses_surface =
             R"(SELECT id, sid, surface, conditionFactor
            FROM wall_losses_surface)";
@@ -876,18 +803,6 @@ void SQLite::create_select_and_update_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_wall_losses_surface_select_custom_stmt, select_custom_wall_losses_surface);
-
-    std::string const delete_wall_losses_surface =
-            R"(DELETE from wall_losses_surface where id=? and sid=1)";
-
-    prepare_statement(m_wall_losses_surface_delete_stmt, delete_wall_losses_surface);
-
-    std::string const update_wall_losses_surface =
-            R"(UPDATE wall_losses_surface
-               SET surface=?, conditionFactor=?
-               WHERE id=? AND sid = 1)";
-
-    prepare_statement(m_wall_losses_surface_update_stmt, update_wall_losses_surface);
 
     std::string const select_motor_data =
             R"(SELECT id, sid, manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
@@ -920,6 +835,95 @@ void SQLite::create_select_and_update_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_motor_data_select_custom_stmt, select_custom_motor_data);
+}
+
+void SQLite::create_update_and_delete_stmt() {
+    std::string const delete_solid_load_charge_materials =
+            R"(DELETE from solid_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_solid_load_charge_materials_delete_stmt, delete_solid_load_charge_materials);
+
+    std::string const update_custom_solid_load_charge_materials =
+            R"(UPDATE solid_load_charge_materials
+               SET substance=?, mean_specific_heat_of_solid=?, latent_heat_of_fusion=?, mean_specific_heat_of_liquid=?, melting_point=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_solid_load_charge_materials_update_stmt, update_custom_solid_load_charge_materials);
+
+    std::string const delete_gas_load_charge_materials =
+            R"(DELETE from gas_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_gas_load_charge_materials_delete_stmt, delete_gas_load_charge_materials);
+
+    std::string const update_gas_load_charge_materials =
+            R"(UPDATE gas_load_charge_materials
+               SET substance=?, mean_specific_heat_of_vapor=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_gas_load_charge_materials_update_stmt, update_gas_load_charge_materials);
+
+    std::string const delete_liquid_load_charge_materials =
+            R"(DELETE from liquid_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_liquid_load_charge_materials_delete_stmt, delete_liquid_load_charge_materials);
+
+    std::string const update_liquid_load_charge_materials =
+            R"(UPDATE liquid_load_charge_materials
+               SET substance=?, mean_specific_heat_of_liquid=?, latent_heat_of_vaporisation=?, mean_specific_heat_of_vapor=?, boiling_point=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_liquid_load_charge_materials_update_stmt, update_liquid_load_charge_materials);
+
+    std::string const delete_solid_liquid_flue_gas_materials =
+            R"(DELETE from solid_liquid_flue_gas_materials where id=? and sid=1)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_delete_stmt, delete_solid_liquid_flue_gas_materials);
+
+    std::string const update_solid_liquid_flue_gas_materials =
+            R"(UPDATE solid_liquid_flue_gas_materials
+               SET substance=?, carbon=?, hydrogen=?, nitrogen=?, sulfur=?, oxygen=?, moisture=?, ash=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_update_stmt, update_solid_liquid_flue_gas_materials);
+
+    std::string const delete_gas_flue_gas_materials =
+            R"(DELETE from gas_flue_gas_materials where id=? and sid=1)";
+
+    prepare_statement(m_gas_flue_gas_materials_delete_stmt, delete_gas_flue_gas_materials);
+
+    std::string const update_gas_flue_gas_materials =
+            R"(UPDATE gas_flue_gas_materials
+               SET substance=?, hydrogen=?, methane=?, ethylene=?, ethane=?, sulfur_dioxide=?, carbon_monoxide=?,
+               carbon_dioxide=?, nitrogen=?, oxygen=?, hydrogen_sulfide=?, benzene=?, heatingValue=?,
+               heatingValueVolume=?, specificGravity=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_gas_flue_gas_materials_update_stmt, update_gas_flue_gas_materials);
+
+    std::string const delete_atmosphere_specific_heat =
+            R"(DELETE from atmosphere_specific_heat where id=? and sid=1)";
+
+    prepare_statement(m_atmosphere_specific_heat_delete_stmt, delete_atmosphere_specific_heat);
+
+    std::string const update_atmosphere_specific_heat =
+            R"(UPDATE atmosphere_specific_heat
+               SET substance=?, specificHeat=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_atmosphere_specific_heat_update_stmt, update_atmosphere_specific_heat);
+
+    std::string const delete_wall_losses_surface =
+            R"(DELETE from wall_losses_surface where id=? and sid=1)";
+
+    prepare_statement(m_wall_losses_surface_delete_stmt, delete_wall_losses_surface);
+
+    std::string const update_wall_losses_surface =
+            R"(UPDATE wall_losses_surface
+               SET surface=?, conditionFactor=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_wall_losses_surface_update_stmt, update_wall_losses_surface);
+
 
     std::string const delete_motor_data =
             R"(DELETE from motor_data where id=? and sid=1)";

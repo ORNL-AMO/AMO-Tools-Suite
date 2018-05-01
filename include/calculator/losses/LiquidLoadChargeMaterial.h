@@ -290,7 +290,7 @@ public:
      * Sets the ID of material
      * @param id int const, ID of material
      */
-    void setID(size_t const id) {
+    void setID(int const id) {
         this->id = id;
     }
 
