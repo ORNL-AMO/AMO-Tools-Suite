@@ -190,17 +190,17 @@ public:
 
     /**
      * Gets the ID of surface description
-     * @return double, ID of surface description
+     * @return int, ID of surface description
      */
-    double getID() const {
+    int getID() const {
         return this->id;
     }
 
     /**
      * Sets the ID of surface description
-     * @param id const size_t, ID of surface description
+     * @param id const int, ID of surface description
      */
-    void setID(const size_t id) {
+    void setID(const int id) {
         this->id = id;
     }
 
@@ -230,7 +230,7 @@ private:
 ///out value
     double heatLoss;
 
-    size_t id = 0;
+    int id = 0;
 
     friend class SQLite;
 

@@ -260,6 +260,57 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
         CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(0).getSpecificHeat() == 500);
         CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(1).getSpecificHeat() == 150);
     }
+
+    {
+        WallLosses wl;
+        wl.setSurface("custom");
+        wl.setConditionFactor(0.1);
+        sqlite.insertWallLossesSurface(wl);
+        wl.setSurface("custom2");
+        wl.setConditionFactor(0.2);
+        sqlite.insertWallLossesSurface(wl);
+
+        auto custom = sqlite.getCustomWallLossesSurface().at(0);
+        auto custom2 = sqlite.getCustomWallLossesSurface().at(1);
+
+        custom.setSurface("updatedCustom");
+        custom.setConditionFactor(0.5);
+        custom2.setSurface("updatedCustom2");
+        custom2.setConditionFactor(0.75);
+
+        sqlite.updateWallLossesSurface(custom);
+        sqlite.updateWallLossesSurface(custom2);
+
+        CHECK(sqlite.getCustomWallLossesSurface().at(0).getSurface() == "updatedCustom");
+        CHECK(sqlite.getCustomWallLossesSurface().at(1).getSurface() == "updatedCustom2");
+        CHECK(Approx(sqlite.getCustomWallLossesSurface().at(0).getConditionFactor()) == 0.5);
+        CHECK(Approx(sqlite.getCustomWallLossesSurface().at(1).getConditionFactor()) == 0.75);
+    }
+
+    {
+        MotorData m = {"Beta", "Xtrainer 300", "20018ET3G447", "2 Stroke 300cc", 200, 1800, 0, "TEFC",
+                       "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
+                       95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0};
+
+        MotorData m2 = {"Suzuki", "Drz400", "20018ET3G447", "4 Stroke 398cc", 200, 1800, 0, "TEFC",
+                        "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
+                        95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0};
+
+        sqlite.insertMotorData(m);
+        sqlite.insertMotorData(m2);
+
+	    auto custom = sqlite.getCustomMotorData().at(0);
+        auto custom2 = sqlite.getCustomMotorData().at(1);
+
+        custom.setManufacturer("Beta Motorcycles");
+        custom2.setManufacturer("Slow Suzuki");
+
+	    sqlite.updateMotorData(custom);
+        sqlite.updateMotorData(custom2);
+
+        CHECK(sqlite.getCustomMotorData().at(0).getManufacturer() == "Beta Motorcycles");
+        CHECK(sqlite.getCustomMotorData().at(1).getManufacturer() == "Slow Suzuki");
+    }
 }
 
 TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
@@ -354,13 +405,12 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 
     {
         auto const output = sqlite.getWallLossesSurface();
-        auto const last = output[output.size() - 1].getSurface();
+        auto const last = output.back().getSurface();
 	    WallLosses wall;
-        wall.setID(output.size());
         wall.setSurface("custom");
 
         sqlite.insertWallLossesSurface(wall);
-        sqlite.deleteWallLossesSurface(wall.getSurface());
+        sqlite.deleteWallLossesSurface(sqlite.getCustomWallLossesSurface().back().getID());
         auto const output2 = sqlite.getWallLossesSurface();
         CHECK( output2[output2.size() - 1].getSurface() == last );
     }

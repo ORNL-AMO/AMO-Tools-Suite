@@ -146,13 +146,15 @@ public:
     std::vector<WallLosses> getCustomWallLossesSurface() const;
     WallLosses getWallLossesSurfaceById(int id) const;
     bool insertWallLossesSurface(WallLosses const & material);
-    bool deleteWallLossesSurface(std::string const & substance);
+    bool deleteWallLossesSurface(int id);
+    bool updateWallLossesSurface(WallLosses const & material);
 
     std::vector<MotorData> getMotorData() const;
     std::vector<MotorData> getCustomMotorData() const;
     MotorData getMotorDataById(int id) const;
     bool insertMotorData(MotorData const & motor);
     bool deleteMotorData(int id);
+    bool updateMotorData(MotorData const & motor);
 
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
