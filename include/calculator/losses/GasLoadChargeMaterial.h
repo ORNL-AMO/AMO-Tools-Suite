@@ -240,9 +240,9 @@ public:
 
     /**
      * Gets the ID of material
-     * @return std::size_t, ID of material
+     * @return int, ID of material
      */
-    std::size_t getID() const {
+    int getID() const {
         return this->id;
     }
 
@@ -250,7 +250,7 @@ public:
      * Sets the ID of material
      * @param id const int, ID of material
      */
-    void setID(const std::size_t id) {
+    void setID(const int id) {
         this->id = id;
     }
 
@@ -298,7 +298,7 @@ private:
     double reactionHeat = 0.0;
     double additionalHeat = 0.0;
     std::string substance = "Unknown";
-    std::size_t id = 0;
+    int id = 0;
     // Out value
     double totalHeat = 0.0;
 

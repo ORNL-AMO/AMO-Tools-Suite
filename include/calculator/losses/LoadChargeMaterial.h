@@ -12,6 +12,6 @@ namespace LoadChargeMaterial {
         EXOTHERMIC,
         NONE
     };
-};
+}
 
 #endif //AMO_SUITE_LOADCHARGEMATERIAL_H

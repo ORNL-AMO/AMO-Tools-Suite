@@ -153,9 +153,9 @@ public:
 
     /**
      * Gets the ID of material
-     * @return double, ID number of material
+     * @return int, ID number of material
      */
-    double getID() const {
+    int getID() const {
         return this->id;
     }
 

@@ -104,92 +104,118 @@ public:
     SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
     std::vector<SolidLoadChargeMaterial> getCustomSolidLoadChargeMaterials() const;
     bool insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material);
-    bool deleteSolidLoadChargeMaterial(std::string const & substance) const;
+    bool deleteSolidLoadChargeMaterial(int id) const;
+    bool updateSolidLoadChargeMaterial(SolidLoadChargeMaterial const & material);
 
     std::vector<GasLoadChargeMaterial> getGasLoadChargeMaterials() const;
     GasLoadChargeMaterial getGasLoadChargeMaterialById(int id) const;
     std::vector<GasLoadChargeMaterial> getCustomGasLoadChargeMaterials() const;
     bool insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material);
-	bool deleteGasLoadChargeMaterial(std::string const & substance);
+	bool deleteGasLoadChargeMaterial(int id);
+    bool updateGasLoadChargeMaterial(const GasLoadChargeMaterial & material);
 
     std::vector<LiquidLoadChargeMaterial> getLiquidLoadChargeMaterials() const;
     LiquidLoadChargeMaterial getLiquidLoadChargeMaterialById(int id) const;
     std::vector<LiquidLoadChargeMaterial> getCustomLiquidLoadChargeMaterials() const;
     bool insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & material);
-    bool deleteLiquidLoadChargeMaterial(std::string const & substance);
+    bool deleteLiquidLoadChargeMaterial(int id);
+    bool updateLiquidLoadChargeMaterial(const LiquidLoadChargeMaterial & material);
 
     std::vector<SolidLiquidFlueGasMaterial> getSolidLiquidFlueGasMaterials() const;
     SolidLiquidFlueGasMaterial getSolidLiquidFlueGasMaterialById(int id) const;
     std::vector<SolidLiquidFlueGasMaterial> getCustomSolidLiquidFlueGasMaterials() const;
     bool insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material) const;
-    bool deleteSolidLiquidFlueGasMaterial(std::string const & substance);
+    bool deleteSolidLiquidFlueGasMaterial(int id);
+    bool updateSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material);
 
     std::vector<GasCompositions> getGasFlueGasMaterials() const;
     GasCompositions getGasFlueGasMaterialById(int id) const;
     std::vector<GasCompositions> getCustomGasFlueGasMaterials() const;
     bool insertGasFlueGasMaterial(GasCompositions const & material) const;
-    bool deleteGasFlueGasMaterial(std::string const & substance);
+    bool deleteGasFlueGasMaterial(int id);
+    bool updateGasFlueGasMaterial(GasCompositions const & material);
 
     std::vector<Atmosphere> getAtmosphereSpecificHeat() const;
     Atmosphere getAtmosphereSpecificHeatById(int id) const;
     std::vector<Atmosphere> getCustomAtmosphereSpecificHeat() const;
     bool insertAtmosphereSpecificHeat(Atmosphere const & material);
-    bool deleteAtmosphereSpecificHeat(std::string const & substance);
+    bool updateAtmosphereSpecificHeat(Atmosphere const & material);
+    bool deleteAtmosphereSpecificHeat(int id);
 
     std::vector<WallLosses> getWallLossesSurface() const;
     std::vector<WallLosses> getCustomWallLossesSurface() const;
     WallLosses getWallLossesSurfaceById(int id) const;
     bool insertWallLossesSurface(WallLosses const & material);
-    bool deleteWallLossesSurface(std::string const & substance);
+    bool deleteWallLossesSurface(int id);
+    bool updateWallLossesSurface(WallLosses const & material);
 
     std::vector<MotorData> getMotorData() const;
     std::vector<MotorData> getCustomMotorData() const;
     MotorData getMotorDataById(int id) const;
     bool insertMotorData(MotorData const & motor);
     bool deleteMotorData(int id);
+    bool updateMotorData(MotorData const & motor);
 
 private:
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_solid_load_charge_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_solid_load_charge_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_gas_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_gas_load_charge_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_gas_load_charge_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_gas_load_charge_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_liquid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_liquid_load_charge_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_liquid_load_charge_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_liquid_load_charge_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_single_stmt = nullptr;
 	sqlite3_stmt * m_solid_liquid_flue_gas_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_solid_liquid_flue_gas_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_solid_liquid_flue_gas_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_gas_flue_gas_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_single_stmt = nullptr;
     sqlite3_stmt * m_gas_flue_gas_materials_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_gas_flue_gas_materials_update_stmt = nullptr;
+    sqlite3_stmt * m_gas_flue_gas_materials_delete_stmt = nullptr;
 
     sqlite3_stmt * m_atmosphere_specific_heat_insert_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_single_stmt = nullptr;
     sqlite3_stmt * m_atmosphere_specific_heat_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_atmosphere_specific_heat_update_stmt = nullptr;
+    sqlite3_stmt * m_atmosphere_specific_heat_delete_stmt = nullptr;
 
     sqlite3_stmt * m_wall_losses_surface_insert_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_single_stmt = nullptr;
     sqlite3_stmt * m_wall_losses_surface_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_wall_losses_surface_update_stmt = nullptr;
+    sqlite3_stmt * m_wall_losses_surface_delete_stmt = nullptr;
 
     sqlite3_stmt * m_motor_data_insert_stmt = nullptr;
     sqlite3_stmt * m_motor_data_select_stmt = nullptr;
 	sqlite3_stmt * m_motor_data_select_single_stmt = nullptr;
     sqlite3_stmt * m_motor_data_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_motor_data_update_stmt = nullptr;
+    sqlite3_stmt * m_motor_data_delete_stmt = nullptr;
 
     void create_select_stmt();
+
+    void create_update_and_delete_stmt();
 
     void create_insert_stmt();
 
