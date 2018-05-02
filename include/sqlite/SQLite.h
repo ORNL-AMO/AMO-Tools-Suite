@@ -157,12 +157,9 @@ public:
     bool updateMotorData(MotorData const & motor);
 
 private:
-    // returns true if the material id falls in the default material id range or outside of the custom material id range
-    inline bool isDefaultOrNonExistentMaterial(const int id, std::size_t const defaultMaterialsSize, std::size_t const customMaterialsSize) {
-        if (id <= defaultMaterialsSize || id > customMaterialsSize + defaultMaterialsSize) {
-            return true;
-        }
-        return false;
+    // returns true if the material id falls in the default material id range
+    inline bool isDefaultMaterial(const int id, std::size_t const defaultMaterialsSize) {
+        return static_cast<std::size_t>(id) <= defaultMaterialsSize;
     }
 
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
