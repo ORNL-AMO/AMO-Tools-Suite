@@ -104,7 +104,7 @@ public:
     SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
     std::vector<SolidLoadChargeMaterial> getCustomSolidLoadChargeMaterials() const;
     bool insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material);
-    bool deleteSolidLoadChargeMaterial(int id) const;
+    bool deleteSolidLoadChargeMaterial(int id);
     bool updateSolidLoadChargeMaterial(SolidLoadChargeMaterial const & material);
 
     std::vector<GasLoadChargeMaterial> getGasLoadChargeMaterials() const;
@@ -157,6 +157,11 @@ public:
     bool updateMotorData(MotorData const & motor);
 
 private:
+    // returns true if the material id falls in the default material id range
+    inline bool isDefaultMaterial(const int id, std::size_t const defaultMaterialsSize) {
+        return static_cast<std::size_t>(id) <= defaultMaterialsSize;
+    }
+
     sqlite3_stmt * m_solid_load_charge_materials_insert_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_stmt = nullptr;
     sqlite3_stmt * m_solid_load_charge_materials_select_single_stmt = nullptr;
