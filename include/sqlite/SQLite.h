@@ -100,6 +100,15 @@ public:
     // Close database and free prepared statements
     virtual ~SQLite();
 
+    // returns true if the material id falls in the default material id range or outside of the custom material id range
+    inline bool isDefaultOrNonExistentMaterial(const int id, std::size_t const defaultMaterialsSize, std::size_t const customMaterialsSize) {
+        if (id <= defaultMaterialsSize || id > customMaterialsSize + defaultMaterialsSize) {
+            return true;
+        }
+        return false;
+    }
+
+
     std::vector<SolidLoadChargeMaterial> getSolidLoadChargeMaterials() const;
     SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
     std::vector<SolidLoadChargeMaterial> getCustomSolidLoadChargeMaterials() const;
