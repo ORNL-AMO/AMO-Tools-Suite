@@ -1279,9 +1279,9 @@ bool SQLite::insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material
 }
 
 bool SQLite::deleteGasLoadChargeMaterial(int const id) {
-    if (isDefaultOrNonExistentMaterial(id, get_default_gas_load_charge_materials().size(), getCustomGasLoadChargeMaterials().size())) {
-        return false;
-    }
+//    if (isDefaultOrNonExistentMaterial(id, get_default_gas_load_charge_materials().size(), getCustomGasLoadChargeMaterials().size())) {
+//        return false;
+//    }
     bind_value(m_gas_load_charge_materials_delete_stmt, 1, id);
     int rc = step_command(m_gas_load_charge_materials_delete_stmt);
     bool valid_command = step_validity(rc);
@@ -1290,9 +1290,9 @@ bool SQLite::deleteGasLoadChargeMaterial(int const id) {
 }
 
 bool SQLite::updateGasLoadChargeMaterial(GasLoadChargeMaterial const & material) {
-    if (isDefaultOrNonExistentMaterial(material.getID(), get_default_gas_load_charge_materials().size(), getCustomGasLoadChargeMaterials().size())) {
-        return false;
-    }
+//    if (isDefaultOrNonExistentMaterial(material.getID(), get_default_gas_load_charge_materials().size(), getCustomGasLoadChargeMaterials().size())) {
+//        return false;
+//    }
     bind_value(m_gas_load_charge_materials_update_stmt, 1, material.getSubstance());
     bind_value(m_gas_load_charge_materials_update_stmt, 2, material.getSpecificHeatVapor());
     bind_value(m_gas_load_charge_materials_update_stmt, 3, material.getID());
