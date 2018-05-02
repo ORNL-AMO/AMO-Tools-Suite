@@ -104,7 +104,7 @@ public:
     SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
     std::vector<SolidLoadChargeMaterial> getCustomSolidLoadChargeMaterials() const;
     bool insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & material);
-    bool deleteSolidLoadChargeMaterial(int id) const;
+    bool deleteSolidLoadChargeMaterial(int id);
     bool updateSolidLoadChargeMaterial(SolidLoadChargeMaterial const & material);
 
     std::vector<GasLoadChargeMaterial> getGasLoadChargeMaterials() const;

@@ -1225,7 +1225,13 @@ bool SQLite::insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & mate
     return valid_insert;
 }
 
-bool SQLite::deleteSolidLoadChargeMaterial(const int id) const {
+bool SQLite::deleteSolidLoadChargeMaterial(const int id) {
+    auto const defaultMats = get_default_solid_load_charge_materials().size();
+    auto const customMats = this->getCustomSolidLoadChargeMaterials().size();
+    if (id <= defaultMats || id > customMats + defaultMats) {
+        return false;
+    }
+
 	bind_value(m_solid_load_charge_materials_delete_stmt, 1, id);
     int rc = step_command(m_solid_load_charge_materials_delete_stmt);
     bool valid_command = step_validity(rc);
@@ -1323,6 +1329,12 @@ bool SQLite::insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & ma
 }
 
 bool SQLite::deleteLiquidLoadChargeMaterial(const int id) {
+    auto const defaultMats = get_default_liquid_load_charge_materials().size();
+    auto const customMats = this->getCustomLiquidLoadChargeMaterials().size();
+    if (id <= defaultMats || id > customMats + defaultMats) {
+        return false;
+    }
+
     bind_value(m_liquid_load_charge_materials_delete_stmt, 1, id);
     int rc = step_command(m_liquid_load_charge_materials_delete_stmt);
     bool valid_command = step_validity(rc);
@@ -1380,6 +1392,12 @@ bool SQLite::insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const &
 }
 
 bool SQLite::deleteSolidLiquidFlueGasMaterial(const int id) {
+    auto const defaultMats = get_default_solid_liquid_flue_gas_materials().size();
+    auto const customMats = this->getCustomSolidLiquidFlueGasMaterials().size();
+    if (id <= defaultMats || id > customMats + defaultMats) {
+        return false;
+    }
+
     bind_value(m_solid_liquid_flue_gas_materials_delete_stmt, 1, id);
     int rc = step_command(m_solid_liquid_flue_gas_materials_delete_stmt);
     bool valid_command = step_validity(rc);
@@ -1455,6 +1473,12 @@ bool SQLite::insertGasFlueGasMaterial(GasCompositions const & comps) const {
 }
 
 bool SQLite::deleteGasFlueGasMaterial(const int id) {
+	auto const defaultMats = get_default_gas_flue_gas_materials().size();
+	auto const customMats = this->getCustomGasFlueGasMaterials().size();
+	if (id <= defaultMats || id > customMats + defaultMats) {
+		return false;
+	}
+
     bind_value(m_gas_flue_gas_materials_delete_stmt, 1, id);
     int rc = step_command(m_gas_flue_gas_materials_delete_stmt);
     bool valid_command = step_validity(rc);
@@ -1511,6 +1535,12 @@ bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material) {
 }
 
 bool SQLite::deleteAtmosphereSpecificHeat(const int id) {
+    auto const defaultMats = get_default_atmosphere_specific_heat().size();
+    auto const customMats = this->getCustomAtmosphereSpecificHeat().size();
+    if (id <= defaultMats || id > customMats + defaultMats) {
+        return false;
+    }
+
     bind_value(m_atmosphere_specific_heat_delete_stmt, 1, id);
     int rc = step_command(m_atmosphere_specific_heat_delete_stmt);
     bool valid_command = step_validity(rc);
@@ -1554,6 +1584,12 @@ bool SQLite::insertWallLossesSurface(WallLosses const & material)
 }
 
 bool SQLite::deleteWallLossesSurface(int id) {
+    auto const defaultMats = get_default_wall_losses_surface().size();
+    auto const customMats = this->getCustomWallLossesSurface().size();
+    if (id <= defaultMats || id > customMats + defaultMats) {
+        return false;
+    }
+
     bind_value(m_wall_losses_surface_delete_stmt, 1, id);
     int rc = step_command(m_wall_losses_surface_delete_stmt);
     bool valid_command = step_validity(rc);
@@ -1675,6 +1711,12 @@ bool SQLite::insertMotorData(MotorData const & m){
 }
 
 bool SQLite::deleteMotorData(int id) {
+    auto const defaultMats = get_default_motor_data().size();
+    auto const customMats = this->getCustomMotorData().size();
+    if (id <= defaultMats || id > customMats + defaultMats) {
+        return false;
+    }
+
     bind_value(m_motor_data_delete_stmt, 1, id);
     int rc = step_command(m_motor_data_delete_stmt);
     bool valid_command = step_validity(rc);

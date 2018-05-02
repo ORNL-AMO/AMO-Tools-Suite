@@ -176,7 +176,8 @@ NAN_METHOD(insertSolidLoadChargeMaterial) {
 }
 
 NAN_METHOD(deleteSolidLoadChargeMaterial) {
-    sql->deleteSolidLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteSolidLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    info.GetReturnValue().Set(success);
 }
 
 
@@ -232,7 +233,8 @@ NAN_METHOD(insertLiquidLoadChargeMaterial) {
 }
 
 NAN_METHOD(deleteLiquidLoadChargeMaterial) {
-    sql->deleteLiquidLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteLiquidLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    info.GetReturnValue().Set(success);
 }
 
 NAN_METHOD(updateLiquidLoadChargeMaterial) {
@@ -303,7 +305,8 @@ NAN_METHOD(insertGasLoadChargeMaterial) {
 }
 
 NAN_METHOD(deleteGasLoadChargeMaterial) {
-    sql->deleteGasLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteGasLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    info.GetReturnValue().Set(success);
 }
 
 NAN_METHOD(updateGasLoadChargeMaterial) {
@@ -379,7 +382,8 @@ NAN_METHOD(insertSolidLiquidFlueGasMaterial) {
 };
 
 NAN_METHOD(deleteSolidLiquidFlueGasMaterial) {
-    sql->deleteSolidLiquidFlueGasMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteSolidLiquidFlueGasMaterial(static_cast<int>(info[0]->NumberValue()));
+    info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(updateSolidLiquidFlueGasMaterial) {
@@ -487,7 +491,8 @@ NAN_METHOD(insertGasFlueGasMaterial) {
 }
 
 NAN_METHOD(deleteGasFlueGasMaterial) {
-    sql->deleteGasFlueGasMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteGasFlueGasMaterial(static_cast<int>(info[0]->NumberValue()));
+    info.GetReturnValue().Set(success);
 }
 
 NAN_METHOD(updateGasFlueGasMaterial) {
@@ -581,7 +586,8 @@ NAN_METHOD(insertAtmosphereSpecificHeat) {
 };
 
 NAN_METHOD(deleteAtmosphereSpecificHeat) {
-    sql->deleteAtmosphereSpecificHeat(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteAtmosphereSpecificHeat(static_cast<int>(info[0]->NumberValue()));
+    info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(updateAtmosphereSpecificHeat) {
@@ -642,7 +648,8 @@ NAN_METHOD(insertWallLossesSurface) {
 };
 
 NAN_METHOD(deleteWallLossesSurface) {
-    sql->deleteWallLossesSurface(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteWallLossesSurface(static_cast<int>(info[0]->NumberValue()));
+    info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(updateWallLossesSurface) {
@@ -715,7 +722,8 @@ NAN_METHOD(insertMotor) {
 };
 
 NAN_METHOD(deleteMotor) {
-    sql->deleteMotorData(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteMotorData(static_cast<int>(info[0]->NumberValue()));
+    info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(updateMotor) {
