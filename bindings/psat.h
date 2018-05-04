@@ -45,22 +45,6 @@ void SetR(const char *nm, double n) {
 }
 
 NAN_METHOD(headToolSuctionTank) {
-    /**
-    * Constructor for the HeadToolSuctionTank class with all inputs specified
-    *
-    * @param specificGravity double, specific gravity - unitless
-    * @param flowRate double, flow rate in gpm (gallons per minute)
-    * @param suctionPipeDiameter double, diameter of suction pipe in inches
-    * @param suctionTankGasOverPressure double, gas over pressure of suction tank in psig (pounds per square inch gauge)
-    * @param suctionTankFluidSurfaceElevation double, fluid surface elevation of suction tank in inches
-    * @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
-    * @param dischargePipeDiameter double, diameter of discharge pipe in inches
-    * @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation double, gauge elevation of discharge in feet
-    * @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
-    *
- * */
-
     inp = info[0]->ToObject();
     const double specificGravity = Get("specificGravity");
     const double flowRate = Get("flowRate");
@@ -97,23 +81,6 @@ NAN_METHOD(headToolSuctionTank) {
 }
 
 NAN_METHOD(headTool) {
-
-    /**
-    * Constructor for the HeadTool class with all inputs specified
-    *
-    * @param specificGravity double, specific gravity - unitless
-    * @param flowRate double, flow rate in gpm (gallons per minute)
-    * @param suctionPipeDiameter double, diameter of suction pipe in inches
-    * @param suctionTankGasOverPressure double, gas over pressure of suction tank in psig (pounds per square inch gauge)
-    * @param suctionTankFluidSurfaceElevation double, fluid surface elevation of suction tank in inches
-    * @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
-    * @param dischargePipeDiameter double, diameter of discharge pipe in inches
-    * @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation double, gauge elevation of discharge in feet
-    * @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
-    *
- * */
-
     inp = info[0]->ToObject();
     const double specificGravity = Get("specificGravity");
     const double flowRate = Get("flowRate");
@@ -174,48 +141,6 @@ Pump::Speed speed() {
     unsigned val = static_cast<unsigned>(Get("fixed_speed"));
     return static_cast<Pump::Speed>(val);
 }
-//
-//// Operations
-//
-
-/**
- * Constructor Pump
- * @param pump_style Pump::Style, style of pump being used
- * @param pump_specified double, pump % efficiency at the specified operating conditions
- * @param rpm double, pump RPM to define its operating speed
- * @param drive Drive, type of drive the pump uses from either direct or belt drive
- * @param kinematic_viscosity double, kinematic viscosity of the fluid being pumped in centistokes
- * @param specific_gravity double, specific gravity - unitless
- * @param stages double, the number of pump stages
- * @param speed Speed, type of pump speed from either fixed or not fixed
- */
-/**
- * Constructor motor
- * @param line_frequency LineFrequency, mains supply frequency at either 50Hz or 60Hz
- * @param motor_rated_power double, rated power for the motor in hp
- * @param motor_rated_speed double, motor RPM
- * @param efficiency_class EfficiencyClass, classification of motor efficiency
- * @param efficiency double, specified % efficiency of motor, if efficiency class is SPECIFIED
- * @param motor_rated_voltage double, motor nameplate design voltage in volts
- * @param motor_rated_fla double, current at full load in amps
- * @param margin double, the size margin as defined in %
- */
-
-/**
- * Constructor financial
- * @param operating_fraction double, fraction(%) of calender hours the equipment is operating
- * @param cost_kw_hour double, per unit energy cost of electricity in $/kwhr.
- */
-
-/**
- * Constructor field data
- * @param flow_rate double, rate of flow in GPM
- * @param head double, pump head measured in feet
- * @param load_estimation_method LoadEstimationMethod, estimated power or current on motor input
- * @param motor_field_power double, power output of the pump's motor in hp
- * @param motor_field_current double, current measured from the pump's motor in amps
- * @param motor_field_voltage double, the measured bus voltage in volts
- */
 
 NAN_METHOD(resultsExistingAndOptimal) {
     inp = info[0]->ToObject();
@@ -251,9 +176,8 @@ NAN_METHOD(resultsExistingAndOptimal) {
 
     Pump pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed);
     Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-    Financial fin(fraction, cost);
     FieldData fd(flow, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-    PSATResult psat(pump, motor, fin, fd);
+    PSATResult psat(pump, motor, fd, fraction, cost);
 	try {
         psat.calculateExisting();
         psat.calculateOptimal();
@@ -307,12 +231,10 @@ NAN_METHOD(resultsExisting) {
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"));
 
-    Financial fin(Get("operating_fraction"), Get("cost_kw_hour"));
-
     FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
-    PSATResult psat(pump, motor, fin, fd);
+    PSATResult psat(pump, motor, fd, Get("operating_fraction"), Get("cost_kw_hour"));
 	try {
         psat.calculateExisting();
         auto const &ex = psat.getExisting();
@@ -366,12 +288,10 @@ NAN_METHOD(resultsModified) {
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
 
-    Financial fin(Get("operating_fraction"), Get("cost_kw_hour"));
-
     FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
-    PSATResult psat(pump, motor, fin, fd, baselinePumpEfficiency);
+    PSATResult psat(pump, motor, fd, baselinePumpEfficiency, Get("operating_fraction"), Get("cost_kw_hour"));
     try {
         psat.calculateModified();
         auto const &mod = psat.getModified();
@@ -423,12 +343,10 @@ NAN_METHOD(resultsOptimal) {
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
 
-    Financial fin(Get("operating_fraction"), Get("cost_kw_hour"));
-
     FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
-    PSATResult psat(pump, motor, fin, fd);
+    PSATResult psat(pump, motor, fd, Get("operating_fraction"), Get("cost_kw_hour"));
 	try {
         psat.calculateOptimal();
         auto const &opt = psat.getOptimal();
@@ -461,15 +379,6 @@ NAN_METHOD(resultsOptimal) {
     }
 }
 
-/**
- * Constructor estimate fla
- * @param motor_rated_power double, rated Power of motor in hp
- * @param motor_rated_speed double, RPM of motor
- * @param line_frequency LineFrequency, line frequency of motor in 50Hz or 60Hz
- * @param efficiency_class EfficiencyClass, efficiency class of motor
- * @param efficiency double, specified efficiency of motor as defined by %
- * @param motor_rated_voltage double, rated voltage of motor in volts
- */
 NAN_METHOD(estFLA) {
     inp = info[0]->ToObject();
     double motor_rated_power = Get("motor_rated_power");
@@ -482,17 +391,7 @@ NAN_METHOD(estFLA) {
     fla.calculate();
     info.GetReturnValue().Set(fla.getEstimatedFLA());
 }
-/**
- * Constructor motor performance
- * @param motor_rated_power double, rated power of motor in hp
- * @param motor_rated_speed double, RPM of motor
- * @param line_frequency LineFrequency, line frequency of motor in 50Hz or 60Hz
- * @param efficiency_class EfficiencyClass, efficiency class of motor
- * @param efficiency double, specified efficiency of motor as defined by %
- * @param load_factor double, load factor between 0.0001 and 1.25 - unitless
- * @param motor_rated_voltage double, rated voltage of motor in volts
- * @param motor_rated_fla double, motor rated full load amps
- */
+
 NAN_METHOD(motorPerformance) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
@@ -523,11 +422,7 @@ NAN_METHOD(motorPerformance) {
 
     info.GetReturnValue().Set(r);
 }
-/**
- * Constructor
- * @param style Pump::Style, style of pump being used
- * @param flow_rate double, flow rate in GPM
- */
+
 NAN_METHOD(pumpEfficiency)  {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
@@ -541,26 +436,13 @@ NAN_METHOD(pumpEfficiency)  {
     info.GetReturnValue().Set(r);
 }
 
-/**
- * Constructor
- * @param style Pump::Style, style Style of pump being used.
- * @param specific_speed double, specific speed in rpm*sqrt(gpm)/((ft/s)^(3/2))
- */
 NAN_METHOD(achievableEfficiency) {
     inp = info[0]->ToObject();
     double specific_speed = Get("specific_speed");
     Pump::Style s = style();
     info.GetReturnValue().Set(OptimalSpecificSpeedCorrection(s, specific_speed).calculate()*100);
 }
-/**
- * Constructor nema
- * @param motor_rated_power double, rated power of motor in hp
- * @param motor_rated_speed double, RPM of motor
- * @param line_frequency LineFrequency, line frequency of motor in 50Hz or 60Hz
- * @param efficiency_class EfficiencyClass, efficiency class of motor
- * @param efficiency double, specified efficiency of motor as defined by %
- * @param load_factor double, load factor between 0.0001 and 1.25 - unitless
- */
+
 NAN_METHOD(nema) {
     inp = info[0]->ToObject();
     Motor::LineFrequency l = line();

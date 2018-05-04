@@ -17,7 +17,6 @@
 
 #include "Motor.h"
 #include "psat/Pump.h"
-#include "Financial.h"
 #include "FieldData.h"
 
 /**
@@ -27,25 +26,26 @@
  */
 class PSATResult {
 public:
-    PSATResult() = default;
-
     /**
      * Constructor
      * @param pump Pump, contains all pump-related calculations, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
-     * @param financial Financial, contains all financial-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
+     * @param operatingFraction double, fraction(%) of calendar hours the equipment is operating
+     * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
     PSATResult(
         Pump &pump,
         Motor &motor,
-        Financial &financial,
-        FieldData &fieldData
+        FieldData &fieldData,
+        double operatingFraction,
+        double unitCost
     ) :
         pump(pump),
         motor(motor),
-        financial(financial),
         fieldData(fieldData),
+        operatingFraction(operatingFraction),
+        unitCost(unitCost),
         baselinePumpEfficiency(0.0)
     {};
 
@@ -53,21 +53,24 @@ public:
      * Constructor
      * @param pump Pump, contains all pump-related calculations, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
-     * @param financial Financial, contains all financial-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
      * @param baselinePumpEfficiency double, baseline pump efficiency
+     * @param operatingFraction double, fraction(%) of calendar hours the equipment is operating
+     * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
     PSATResult(
             Pump &pump,
             Motor &motor,
-            Financial &financial,
             FieldData &fieldData,
-            double baselinePumpEfficiency
+            double baselinePumpEfficiency,
+            double operatingFraction,
+            double unitCost
     ) :
             pump(pump),
             motor(motor),
-            financial(financial),
             fieldData(fieldData),
+            operatingFraction(operatingFraction),
+            unitCost(unitCost),
             baselinePumpEfficiency(baselinePumpEfficiency)
     {};
 
@@ -140,21 +143,18 @@ public:
 
     /**
      * Calculates existing conditions
-     * @return double, existing conditions
      */
-    double calculateExisting();
+    void calculateExisting();
 
     /**
      * Calculates modified conditions
-     * @return double, modified conditions
      */
-    double calculateModified();
+    void calculateModified();
 
     /**
      * Calculates optimal conditions
-     * @return double, optimal conditions
      */
-    double calculateOptimal();
+    void calculateOptimal();
 
 private:
     // Out values
@@ -164,8 +164,8 @@ private:
     // In values
     Pump pump;
     Motor motor;
-    Financial financial;
     FieldData fieldData;
+    double operatingFraction, unitCost;
     double baselinePumpEfficiency;
 };
 

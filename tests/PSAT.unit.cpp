@@ -1,7 +1,6 @@
 #include "catch.hpp"
 #include <psat/Pump.h>
 #include <psat/FieldData.h>
-#include <psat/Financial.h>
 #include <psat/Motor.h>
 #include <psat/PSATResult.h>
 #include <unordered_map>
@@ -26,9 +25,8 @@ TEST_CASE( "PSATResultsPremium existing and optimal", "[PSAT results]" ) {
 
 	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
 	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
 	psat.calculateExisting();
 //	psat.calculateModified();
@@ -80,9 +78,8 @@ TEST_CASE( "PSATResults existing, modified, optimal", "[PSAT results]" ) {
 
 	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
 	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
 	psat.calculateExisting();
 	psat.calculateModified();
@@ -151,9 +148,8 @@ TEST_CASE( "PSATResults - existing and modified", "[PSAT results]" ) {
 	FieldData::LoadEstimationMethod loadEstimationMethod1(FieldData::LoadEstimationMethod::POWER);
 	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
 	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 	psat.calculateExisting();
 	psat.calculateModified();
 	auto const & ex = psat.getExisting();
@@ -196,9 +192,8 @@ TEST_CASE( "PSATResults2 v-belt type", "[PSAT results]" ) {
 
 	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
 	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
 	psat.calculateExisting();
 	psat.calculateModified();
@@ -238,9 +233,8 @@ TEST_CASE( "PSATResults notched v belt", "[PSAT results]" ) {
 
 	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
 	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
 	psat.calculateExisting();
 	psat.calculateModified();
@@ -280,9 +274,8 @@ TEST_CASE( "PSATResults sync belt", "[PSAT results]" ) {
 
 	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
 	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
 	psat.calculateExisting();
 	psat.calculateModified();

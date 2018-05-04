@@ -24,7 +24,7 @@
 #include "calculator/motor/OptimalMotorPower.h"
 #include "calculator/motor/OptimalMotorSize.h"
 
-double PSATResult::calculateExisting() {
+void PSATResult::calculateExisting() {
     /**
      * 1a	Calculate motor shaft power from measured power, OR
      * 1b	Calculate motor shaft power from measured current, voltage
@@ -63,17 +63,15 @@ double PSATResult::calculateExisting() {
     existing.pumpEfficiency = pumpEfficiency.calculate();
 
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(existing.motorPower, financial.getOperatingFraction());
+    AnnualEnergy annualEnergy(existing.motorPower, operatingFraction);
     existing.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost
-    AnnualCost annualCost(existing.annualEnergy, financial.getUnitCost());
+    AnnualCost annualCost(existing.annualEnergy, unitCost);
     existing.annualCost = annualCost.calculate();
-
-    return 0;
 }
 
-double PSATResult::calculateOptimal() {
+void PSATResult::calculateOptimal() {
     /**
      * Steps for calculating the optimal values:
      *  1. Calculate optimal pump efficiency, fluid power and pump shaft power
@@ -110,20 +108,19 @@ double PSATResult::calculateOptimal() {
     optimal.motorPower = optimalMotorPower.getMotorPower();
     optimal.motorPowerFactor = optimalMotorPower.getMotorPf();
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(optimal.motorPower, financial.getOperatingFraction());
+    AnnualEnergy annualEnergy(optimal.motorPower, operatingFraction);
     optimal.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost
-    AnnualCost annualCost(optimal.annualEnergy, financial.getUnitCost());
+    AnnualCost annualCost(optimal.annualEnergy, unitCost);
     optimal.annualCost = annualCost.calculate();
 
     // Annual Savings potential
 //    annualSavingsPotential = existing.annualCost - optimal.annualCost;
     // Optimization Rating
 //    optimizationRating = optimal.motorPower / existing.motorPower;
-    return 0;
 }
-double PSATResult::calculateModified() {
+void PSATResult::calculateModified() {
     /**
          * Steps for calculating the modified values:
      *  1. Calculate fluid power and pump shaft power
@@ -164,11 +161,11 @@ double PSATResult::calculateModified() {
     modified.motorPowerFactor = modifiedMotorPower.getMotorPf();
 
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(modified.motorPower, financial.getOperatingFraction());
+    AnnualEnergy annualEnergy(modified.motorPower, operatingFraction);
     modified.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost
-    AnnualCost annualCost(modified.annualEnergy, financial.getUnitCost());
+    AnnualCost annualCost(modified.annualEnergy, unitCost);
     modified.annualCost = annualCost.calculate();
 
     // Annual Savings potential
@@ -177,5 +174,4 @@ double PSATResult::calculateModified() {
     // Optimization Rating
     //optimizationRating = modified.motorPower / existing.motorPower;
     optimizationRating = 0.0;
-    return 0;
 }

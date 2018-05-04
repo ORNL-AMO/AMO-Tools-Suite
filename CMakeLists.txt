@@ -118,7 +118,6 @@ set(SOURCE_FILES
 
 set(INCLUDE_FILES
         include/psat/FieldData.h
-        include/psat/Financial.h
         include/psat/Motor.h
         include/psat/PSATResult.h
         include/psat/Pump.h

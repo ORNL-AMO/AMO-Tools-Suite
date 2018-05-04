@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Function prototypes for the Financial fields
+ * @brief Function prototypes for the Pump fields
  *
  * This contains the prototypes for the Pump structure
  * including getters and setters for the important fields. Primary
@@ -85,7 +85,7 @@ public:
         speed(speed)
     {};
 
-    Pump() = default;
+//    Pump() = default;
 
     /**
      * Get the style of the pump being used
