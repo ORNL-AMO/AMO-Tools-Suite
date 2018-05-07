@@ -62,7 +62,6 @@ set(SOURCE_FILES
         src/calculator/util/AnnualEnergy.cpp
         src/calculator/util/CurveFitVal.cpp
         src/calculator/motor/EstimateFLA.cpp
-        src/calculator/pump/FluidPower.cpp
         src/calculator/motor/MotorCurrent.cpp
         src/calculator/motor/MotorEfficiency.cpp
         src/calculator/motor/MotorPower.cpp
@@ -195,7 +194,7 @@ set(INCLUDE_FILES
         include/fans/FanCurve.h
         include/calculator/util/CompressedAir.h
         include/calculator/motor/MotorData.h
-        include/sqlite/MotorData.h)
+        include/sqlite/MotorData.h include/fans/CompressibilityFactor.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -241,7 +240,7 @@ set(TEST_FILES
         tests/CurveFitVal.unit.cpp
         tests/MotorCurrent.unit.cpp
         tests/CompressedAir.unit.cpp
-        tests/FluidPower.unit.cpp)
+        tests/FluidPower.unit.cpp tests/CompressibilityFactor.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

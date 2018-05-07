@@ -25,7 +25,7 @@ public:
 
     /**
      * FluidPower constructor for Fan systems
-     * @param flowRate double, rate of flow in gpm
+     * @param flowRate double, rate of flow in cfm
      * @param inletPressure double, in inches of water column, gauge
      * @param outletPressure double, in inches of water column, gauge
      * @param compressibilityFactor double, unitless
@@ -39,7 +39,12 @@ public:
      * Calculates pump or fan fluid power in kw, depending on constructor input
      * @return double, fluid power
      */
-    double calculate();
+    double calculate() {
+        if (isPump) {
+            return 0.746 * flowRate * head * specificGravity / 3961.38;
+        }
+        return 0.746 * flowRate * (outletPressure - inletPressure) * compressibilityFactor / 6362;
+    }
 
 private:
     const double specificGravity = 0, flowRate, head = 0;
