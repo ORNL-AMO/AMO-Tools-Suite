@@ -3,7 +3,7 @@
  * @brief Contains the two main modules of PSATResult class.
  *
  * Contains 2 important functions:
- *          calculateExisting : calculates the values for the exisiting data.
+ *          calculateExisting : calculates the values for the existing data.
  *          calculateOptimal : calculates the values for the optimal case.
  *
  * @author Subhankar Mishra (mishras)
@@ -46,29 +46,21 @@ void PSATResult::calculateExisting() {
                                     motor.getMotorRatedVoltage(), motor.getFullLoadAmps(),
                                     fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
                                     fieldData.getMotorAmps());
-    existing.motorShaftPower = motorShaftPower.calculate();
-    existing.motorCurrent = motorShaftPower.getCurrent();
-    existing.motorPowerFactor = motorShaftPower.getPowerFactor();
-    existing.motorEfficiency = motorShaftPower.getEfficiency();
-    existing.motorRatedPower = motor.getMotorRatedPower();
-    existing.motorPower = motorShaftPower.getPower();
-    existing.estimatedFLA = motorShaftPower.getEstimatedFLA();
-    // Calculate PumpShaftPower
-    PumpShaftPower pumpShaftPower(existing.motorShaftPower, pump.getDrive());
-    existing.pumpShaftPower = pumpShaftPower.calculate();
+    auto const output = motorShaftPower.calculate();
 
-    // Calculate Pump Efficiency
-    PumpEfficiency pumpEfficiency(pump.getSpecificGravity(), fieldData.getFlowRate(), fieldData.getHead(),
-                                  existing.pumpShaftPower);
-    existing.pumpEfficiency = pumpEfficiency.calculate();
+    existing.motorShaftPower = output.shaftPower;
+    existing.motorCurrent = output.current;
+    existing.motorPowerFactor = output.powerFactor;
+    existing.motorEfficiency = output.efficiency;
+    existing.motorPower = output.power;
+    existing.estimatedFLA = output.estimatedFLA;
 
-    // Calculate Annual Energy
-    AnnualEnergy annualEnergy(existing.motorPower, operatingFraction);
-    existing.annualEnergy = annualEnergy.calculate();
-
-    // Calculate Annual Cost
-    AnnualCost annualCost(existing.annualEnergy, unitCost);
-    existing.annualCost = annualCost.calculate();
+	existing.motorRatedPower = motor.getMotorRatedPower();
+    existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pump.getDrive()).calculate();
+    existing.pumpEfficiency = PumpEfficiency(pump.getSpecificGravity(), fieldData.getFlowRate(), fieldData.getHead(),
+                                             existing.pumpShaftPower).calculate();
+    existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingFraction).calculate();
+    existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
 }
 
 void PSATResult::calculateOptimal() {
