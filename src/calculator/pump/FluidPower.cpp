@@ -11,9 +11,12 @@
 #include "calculator/pump/FluidPower.h"
 
 /**
- * Calculates the fluid power
+ * Calculates the fluid power for both Pump and Fan systems, depending on constructor input
  * @return Fluid power in kw
  */
 double FluidPower::calculate() {
-    return 0.746 * flowRate * head * specificGravity / 3961.38;
+    if (isPump) {
+        return 0.746 * flowRate * head * specificGravity / 3961.38;
+    }
+    return 0.746 * flowRate * (outletPressure - inletPressure) * compressibilityFactor / 6362;
 }
