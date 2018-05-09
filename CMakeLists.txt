@@ -116,7 +116,6 @@ set(SOURCE_FILES
         src/calculator/motor/MotorData.cpp)
 
 set(INCLUDE_FILES
-        include/results/FieldData.h
         include/results/Results.h
         include/calculator/util/AnnualCost.h
         include/calculator/util/AnnualEnergy.h

@@ -132,9 +132,9 @@ Pump::Style style() {
     unsigned val = static_cast<unsigned>(Get("pump_style"));
     return static_cast<Pump::Style>(val);
 }
-FieldData::LoadEstimationMethod  loadEstimationMethod() {
+Motor::LoadEstimationMethod  loadEstimationMethod() {
     unsigned val = static_cast<unsigned>(Get("load_estimation_method"));
-    return static_cast<FieldData::LoadEstimationMethod>(val);
+    return static_cast<Motor::LoadEstimationMethod>(val);
 }
 Pump::Speed speed() {
     unsigned val = static_cast<unsigned>(Get("fixed_speed"));
@@ -168,14 +168,14 @@ NAN_METHOD(resultsExistingAndOptimal) {
 
     double flow = Get("flow_rate");
     double head = Get("head");
-    FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+    Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
     double motor_field_power = Get("motor_field_power");
     double motor_field_current = Get("motor_field_current");
     double motor_field_voltage = Get("motor_field_voltage");
 
     Pump pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed);
     Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-    FieldData fd(flow, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+    Pump::FieldData fd(flow, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
     PSATResult psat(pump, motor, fd, fraction, cost);
 	try {
         psat.calculateExisting();
@@ -222,7 +222,7 @@ NAN_METHOD(resultsExisting) {
     Motor::LineFrequency lineFrequency = line();
     Motor::EfficiencyClass efficiencyClass = effCls();
 
-    FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+    Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
               Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::Speed::FIXED_SPEED);
@@ -230,7 +230,7 @@ NAN_METHOD(resultsExisting) {
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"));
 
-    FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
+    Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
     PSATResult psat(pump, motor, fd, Get("operating_fraction"), Get("cost_kw_hour"));
@@ -279,7 +279,7 @@ NAN_METHOD(resultsModified) {
     Motor::LineFrequency lineFrequency = line();
     Motor::EfficiencyClass efficiencyClass = effCls();
 
-    FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+    Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
               Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed);
@@ -287,7 +287,7 @@ NAN_METHOD(resultsModified) {
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
 
-    FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
+    Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
     PSATResult psat(pump, motor, fd, baselinePumpEfficiency, Get("operating_fraction"), Get("cost_kw_hour"));
@@ -334,7 +334,7 @@ NAN_METHOD(resultsOptimal) {
     Motor::LineFrequency lineFrequency = line();
     Motor::EfficiencyClass efficiencyClass = effCls();
 
-    FieldData::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+    Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
               Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed);
@@ -342,7 +342,7 @@ NAN_METHOD(resultsOptimal) {
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
 
-    FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
+    Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
     PSATResult psat(pump, motor, fd, Get("operating_fraction"), Get("cost_kw_hour"));

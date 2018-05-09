@@ -16,7 +16,6 @@
 #define AMO_LIBRARY_RESULTS_H
 
 #include <calculator/motor/MotorShaftPower.h>
-#include "FieldData.h"
 #include "InputData.h"
 
 
@@ -36,7 +35,7 @@ public:
 	struct FanFieldData {
         FanFieldData(const double measuredPower, const double measuredVoltage, const double measuredAmps, const double flowRate,
                      const double inletPressure, const double outletPressure, const double compressibilityFactor,
-                     FieldData::LoadEstimationMethod loadEstimationMethod)
+                     Motor::LoadEstimationMethod loadEstimationMethod)
                 : measuredPower(measuredPower), measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
                   inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor),
                   loadEstimationMethod(loadEstimationMethod)
@@ -45,7 +44,7 @@ public:
 		double measuredPower, measuredVoltage, measuredAmps;
         double flowRate, inletPressure, outletPressure, compressibilityFactor;
 
-        FieldData::LoadEstimationMethod loadEstimationMethod;
+        Motor::LoadEstimationMethod loadEstimationMethod;
 
     };
 
@@ -109,7 +108,7 @@ public:
     PSATResult(
         Pump &pump,
         Motor &motor,
-        FieldData &fieldData,
+        Pump::FieldData &fieldData,
         double operatingFraction,
         double unitCost
     ) :
@@ -133,7 +132,7 @@ public:
     PSATResult(
             Pump &pump,
             Motor &motor,
-            FieldData &fieldData,
+            Pump::FieldData &fieldData,
             double baselinePumpEfficiency,
             double operatingFraction,
             double unitCost
@@ -236,7 +235,7 @@ private:
     // In values
     Pump pump;
     Motor motor;
-    FieldData fieldData;
+    Pump::FieldData fieldData;
     double operatingFraction, unitCost;
     double baselinePumpEfficiency;
 };

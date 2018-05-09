@@ -12,7 +12,6 @@
 #define AMO_LIBRARY_MOTORPOWERFACTOR_H
 
 #include <results/InputData.h>
-#include "results/FieldData.h"
 
 class MotorPowerFactor {
 public:

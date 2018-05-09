@@ -3,7 +3,6 @@
 
 #include <cmath>
 
-
 struct Motor {
 	enum class EfficiencyClass {
 		STANDARD,
@@ -24,6 +23,10 @@ struct Motor {
 		S_BELT_DRIVE
 	};
 
+	enum class LoadEstimationMethod {
+		POWER,
+		CURRENT
+	};
 
 	/**
 	 * Constructor
@@ -68,6 +71,26 @@ struct Pump {
 		VERTICAL_TURBINE,
 		LARGE_END_SUCTION,
 		SPECIFIED_OPTIMAL_EFFICIENCY
+	};
+
+	struct FieldData {
+		/**
+		 * Constructor
+		 * @param flowRate double, rate of flow. Units are gpm
+		 * @param head double, pump head measured in feet
+		 * @param loadEstimationMethod LoadEstimationMethod, classification of load estimation method
+		 * @param motorPower double, power output of the pump's motor in hp.
+		 * @param motorAmps double, current measured from the pump's motor in amps
+		 * @param voltage double, the measured bus voltage in volts
+		 */
+		FieldData(const double flowRate, const double head, const Motor::LoadEstimationMethod loadEstimationMethod, const double motorPower,
+		          const double motorAmps, const double voltage)
+				: loadEstimationMethod(loadEstimationMethod), flowRate(flowRate), head(head), motorPower(motorPower),
+				  motorAmps(motorAmps), voltage(voltage)
+		{}
+
+		const Motor::LoadEstimationMethod loadEstimationMethod;
+		const double flowRate, head, motorPower, motorAmps, voltage;
 	};
 
 	/**

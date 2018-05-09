@@ -13,7 +13,6 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORPOWER_H
 #define AMO_LIBRARY_OPTIMALMOTORPOWER_H
 
-#include "results/FieldData.h"
 #include "results/Results.h"
 
 class OptimalMotorPower {

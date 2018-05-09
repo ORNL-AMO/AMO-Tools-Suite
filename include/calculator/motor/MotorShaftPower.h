@@ -19,7 +19,6 @@
 #define AMO_LIBRARY_MOTORSHAFTPOWER_H
 
 #include <results/InputData.h>
-#include "results/FieldData.h"
 
 /**
  * Motor Shaft Power class
@@ -75,7 +74,7 @@ public:
 		const double ratedVoltage,
 		const double fullLoadAmps,
 		const double fieldVoltage,
-		const FieldData::LoadEstimationMethod loadEstimationMethod,
+		const Motor::LoadEstimationMethod loadEstimationMethod,
 		const double fieldCurrent
 	) :
 		motorRatedPower(motorRatedPower),
@@ -104,7 +103,7 @@ private:
     Motor::EfficiencyClass efficiencyClass;
 
     double specifiedEfficiency, fieldCurrent;
-    FieldData::LoadEstimationMethod loadEstimationMethod;
+    Motor::LoadEstimationMethod loadEstimationMethod;
 };
 
 #endif //AMO_LIBRARY_MOTORSHAFTPOWER_H

@@ -12,7 +12,6 @@
 #define AMO_LIBRARY_MOTOREFFICIENCY_H
 
 #include <array>
-#include "results/FieldData.h"
 #include <results/InputData.h>
 #include <exception>
 #include <stdexcept>

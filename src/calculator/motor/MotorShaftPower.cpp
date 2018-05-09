@@ -8,7 +8,7 @@
 MotorShaftPower::Output MotorShaftPower::calculate() {
     double powerFactor, efficiency, current, power, estimatedFLA;
 
-    if (loadEstimationMethod == FieldData::LoadEstimationMethod::POWER) {
+    if (loadEstimationMethod == Motor::LoadEstimationMethod::POWER) {
         double tempLoadFraction = 0.01;
 	    double powerE1 = 0, powerE2 = 0, lf1 = 0, lf2 = 0, eff1 = 0, eff2 = 0, pf1 = 0, pf2 = 0;
         while (true) {

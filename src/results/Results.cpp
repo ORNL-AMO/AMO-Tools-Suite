@@ -54,10 +54,10 @@ void PSATResult::calculateExisting() {
      * 4	Calculate pump efficiency
      * 5	Calculate annual energy and energy cost
      */
-    MotorShaftPower motorShaftPower(motor.motorRatedPower, fieldData.getMotorPower(), motor.motorRpm,
+    MotorShaftPower motorShaftPower(motor.motorRatedPower, fieldData.motorPower, motor.motorRpm,
                                     motor.lineFrequency, motor.efficiencyClass, motor.specifiedEfficiency,
-                                    motor.motorRatedVoltage, motor.fullLoadAmps, fieldData.getVoltage(),
-                                    fieldData.getLoadEstimationMethod(), fieldData.getMotorAmps());
+                                    motor.motorRatedVoltage, motor.fullLoadAmps, fieldData.voltage,
+                                    fieldData.loadEstimationMethod, fieldData.motorAmps);
     auto const output = motorShaftPower.calculate();
 
     existing.motorShaftPower = output.shaftPower;
@@ -69,7 +69,7 @@ void PSATResult::calculateExisting() {
 
 	existing.motorRatedPower = motor.motorRatedPower;
     existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pump.drive).calculate();
-    existing.pumpEfficiency = MoverEfficiency(pump.specificGravity, fieldData.getFlowRate(), fieldData.getHead(),
+    existing.pumpEfficiency = MoverEfficiency(pump.specificGravity, fieldData.flowRate, fieldData.head,
                                               existing.pumpShaftPower).calculate();
     existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingFraction).calculate();
     existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
@@ -93,10 +93,10 @@ void PSATResult::calculateOptimal() {
      */
 
     OptimalPumpEfficiency optimalPumpEfficiency(pump.style, pump.achievableEfficiency, pump.rpm,
-                                                pump.kviscosity, pump.stageCount, fieldData.getFlowRate(),
-                                                fieldData.getHead());
+                                                pump.kviscosity, pump.stageCount, fieldData.flowRate,
+                                                fieldData.head);
     optimal.pumpEfficiency = optimalPumpEfficiency.calculate();
-    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.getFlowRate(), fieldData.getHead(), pump.specificGravity,
+    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.flowRate, fieldData.head, pump.specificGravity,
                                                 optimal.pumpEfficiency);
     optimal.pumpShaftPower = optimalPumpShaftPower.calculate();
     OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pump.drive);
@@ -105,7 +105,7 @@ void PSATResult::calculateOptimal() {
     optimal.motorRatedPower = optimalMotorSize.calculate();
     OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                         motor.efficiencyClass, motor.specifiedEfficiency,
-                                        motor.motorRatedVoltage, fieldData.getVoltage(), optimal.motorShaftPower);
+                                        motor.motorRatedVoltage, fieldData.voltage, optimal.motorShaftPower);
     optimalMotorPower.calculate(true);
     optimal.motorCurrent = optimalMotorPower.getMotorCurrent();
     optimal.motorEfficiency = optimalMotorPower.getMotorEff();
@@ -147,7 +147,7 @@ void PSATResult::calculateModified() {
         modified.pumpEfficiency = baselinePumpEfficiency;
     }
 
-    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.getFlowRate(), fieldData.getHead(), pump.specificGravity,
+    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.flowRate, fieldData.head, pump.specificGravity,
                                                 modified.pumpEfficiency);
     modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
 
@@ -157,7 +157,7 @@ void PSATResult::calculateModified() {
     modified.motorRatedPower = motor.motorRatedPower;
     OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                          motor.efficiencyClass, motor.specifiedEfficiency,
-                                         motor.motorRatedVoltage, fieldData.getVoltage(), modified.motorShaftPower);
+                                         motor.motorRatedVoltage, fieldData.voltage, modified.motorShaftPower);
     modifiedMotorPower.calculate(false);
     modified.motorCurrent = modifiedMotorPower.getMotorCurrent();
     modified.motorEfficiency = modifiedMotorPower.getMotorEff();
