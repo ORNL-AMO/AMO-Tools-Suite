@@ -13,31 +13,41 @@
 
 #include "FluidPower.h"
 
-class PumpEfficiency {
+class MoverEfficiency {
 
 public:
     /**
-     * Constructor
+     * Constructor for calculating pump mover efficiency
      * @param specificGravity double, specific gravity - unitless
      * @param flowRate double, measured or required flow rate in gpm
      * @param head double, measured or required pump head in feet
      * @param pumpShaftPower double, pump power as defined in hp
      */
-    PumpEfficiency(
-        double specificGravity,
-        double flowRate,
-        double head,
-        double pumpShaftPower
-    )
+    MoverEfficiency(double const specificGravity, double const flowRate, double const head, double const pumpShaftPower)
             : specificGravity(specificGravity),
-              flowRate(flowRate),
               head(head),
-              pumpShaftPower(pumpShaftPower)
+              flowRate(flowRate),
+              moverShaftPower(pumpShaftPower),
+              isPump(true)
     {}
 
     /**
-     * Calculates the pump efficiency
-     * @return double, pump efficiency as %
+     * Constructor for calculating fan mover efficiency
+     * @param flowRate double, measured or required flow rate in gpm
+     * @param fanShaftPower double, fanShaftPower as defined in hp
+     * @param inletPressure double,
+     * @param outletPressure double,
+     * @param compressibilityFactor double,
+     */
+    MoverEfficiency(double const flowRate, double const  fanShaftPower, double const inletPressure, double const outletPressure,
+                    double const compressibilityFactor)
+            : flowRate(flowRate), moverShaftPower(fanShaftPower), inletPressure(inletPressure), outletPressure(outletPressure),
+              compressibilityFactor(compressibilityFactor), isPump(false)
+    {}
+
+    /**
+     * Calculates the mover efficiency, either for a pump or fan system depending on constructor number of inputs
+     * @return double, mover efficiency as %
      */
     double calculate();
 
@@ -95,7 +105,7 @@ public:
      * @return double, pump shaft power in hp
      */
     double getPumpShaftPower() const {
-        return pumpShaftPower;
+        return moverShaftPower;
     }
 
     /**
@@ -103,14 +113,15 @@ public:
      * @param pumpShaftPower double, pump shaft power in hp
      */
     void setPumpShaftPower(double pumpShaftPower) {
-        this->pumpShaftPower = pumpShaftPower;
+        this->moverShaftPower = pumpShaftPower;
     }
 
 private:
-    double specificGravity;
-    double flowRate; // in gpm
-    double head; // in ft
-    double pumpShaftPower;
+    double specificGravity = 0, head = 0;
+    double flowRate, moverShaftPower;
+    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
+
+    const bool isPump;
 };
 
 

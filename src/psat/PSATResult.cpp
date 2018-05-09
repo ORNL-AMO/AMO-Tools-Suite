@@ -15,7 +15,7 @@
 #include "psat/PSATResult.h"
 #include "calculator/motor/MotorShaftPower.h"
 #include "calculator/pump/PumpShaftPower.h"
-#include "calculator/pump/PumpEfficiency.h"
+#include "calculator/pump/MoverEfficiency.h"
 #include "calculator/util/AnnualCost.h"
 #include "calculator/util/AnnualEnergy.h"
 #include "calculator/pump/OptimalPumpEfficiency.h"
@@ -23,6 +23,21 @@
 #include "calculator/motor/OptimalMotorShaftPower.h"
 #include "calculator/motor/OptimalMotorPower.h"
 #include "calculator/motor/OptimalMotorSize.h"
+
+FanResult::Output FanResult::calculateExisting() {
+    MotorShaftPower motorShaftPower(motor.getMotorRatedPower(), fanFieldData.measuredPower, motor.getMotorRpm(),
+                                    motor.getLineFrequency(), motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
+                                    motor.getMotorRatedVoltage(), motor.getFullLoadAmps(), fanFieldData.measuredVoltage,
+                                    fanFieldData.loadEstimationMethod, fanFieldData.measuredAmps);
+    auto const output = motorShaftPower.calculate();
+    double const fanShaftPower = PumpShaftPower(output.shaftPower, fanInput.drive).calculate();
+    double const fanEfficiency = MoverEfficiency(fanFieldData.flowRate, fanShaftPower, fanFieldData.inletPressure,
+                                                 fanFieldData.outletPressure, fanFieldData.compressibilityFactor).calculate();
+    double const annualEnergy = AnnualEnergy(output.power, operatingFraction).calculate();
+    double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
+
+    return {motorShaftPower.calculate(), fanEfficiency, motor.getMotorRatedPower(), fanShaftPower, annualEnergy, annualCost, output.estimatedFLA};
+}
 
 void PSATResult::calculateExisting() {
     /**
@@ -57,8 +72,8 @@ void PSATResult::calculateExisting() {
 
 	existing.motorRatedPower = motor.getMotorRatedPower();
     existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pump.getDrive()).calculate();
-    existing.pumpEfficiency = PumpEfficiency(pump.getSpecificGravity(), fieldData.getFlowRate(), fieldData.getHead(),
-                                             existing.pumpShaftPower).calculate();
+    existing.pumpEfficiency = MoverEfficiency(pump.getSpecificGravity(), fieldData.getFlowRate(), fieldData.getHead(),
+                                              existing.pumpShaftPower).calculate();
     existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingFraction).calculate();
     existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
 }

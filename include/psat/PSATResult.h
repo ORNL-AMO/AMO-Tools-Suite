@@ -15,9 +15,82 @@
 #ifndef AMO_LIBRARY_RESULTS_H
 #define AMO_LIBRARY_RESULTS_H
 
+#include <calculator/motor/MotorShaftPower.h>
 #include "Motor.h"
 #include "psat/Pump.h"
 #include "FieldData.h"
+
+
+class FanResult {
+public:
+	struct FanInput {
+        FanInput(double const fanSpeed, const Pump::Drive drive, const int stages): fanSpeed(fanSpeed), drive(drive)
+//                stages(stages)
+        {}
+
+        // TODO FanType enum of fan types
+        double fanSpeed; // rpm used here?
+        Pump::Drive drive; // this shouldn't be in Pump namespace
+//        int stages;
+    };
+
+	struct FanFieldData {
+        FanFieldData(const double measuredPower, const double measuredVoltage, const double measuredAmps, const double flowRate,
+                     const double inletPressure, const double outletPressure, const double compressibilityFactor,
+                     FieldData::LoadEstimationMethod loadEstimationMethod)
+                : measuredPower(measuredPower), measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
+                  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor),
+                  loadEstimationMethod(loadEstimationMethod)
+        {}
+
+		double measuredPower, measuredVoltage, measuredAmps;
+        double flowRate, inletPressure, outletPressure, compressibilityFactor;
+
+        FieldData::LoadEstimationMethod loadEstimationMethod;
+
+    };
+
+    struct Output {
+        Output(const double fanEfficiency, const double motorRatedPower, const double motorShaftPower, const double fanShaftPower,
+               const double motorEfficiency, const double motorPowerFactor, const double motorCurrent, const double motorPower,
+               const double annualEnergy, const double annualCost, const double estimatedFLA)
+                : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower),
+                  fanShaftPower(fanShaftPower), motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor),
+                  motorCurrent(motorCurrent), motorPower(motorPower), annualEnergy(annualEnergy), annualCost(annualCost),
+                  estimatedFLA(estimatedFLA)
+        {}
+
+        Output(const MotorShaftPower::Output output, const double fanEfficiency, const double motorRatedPower,
+               const double fanShaftPower, const double annualEnergy, const double annualCost, const double estimatedFLA)
+                : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
+                  fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
+                  motorCurrent(output.current), motorPower(output.power), annualEnergy(annualEnergy), annualCost(annualCost),
+                  estimatedFLA(estimatedFLA)
+        {}
+
+        const double fanEfficiency, motorRatedPower, motorShaftPower, fanShaftPower, motorEfficiency, motorPowerFactor, motorCurrent;
+        const double motorPower, annualEnergy, annualCost, estimatedFLA;
+    };
+
+    FanResult(FanInput & fanInput, Motor & motor, FanFieldData & fanFieldData, double baselineFanEfficiency,
+              double operatingFraction, double unitCost)
+            : fanInput(fanInput), motor(motor), fanFieldData(fanFieldData), operatingFraction(operatingFraction),
+              unitCost(unitCost), baselineFanEfficiency(baselineFanEfficiency)
+    {}
+
+    Output calculateExisting();
+
+
+private:
+    double annualSavingsPotential = 0;
+    double optimizationRating = 0;
+    // In values
+    FanInput fanInput;
+    Motor motor;
+    FanFieldData fanFieldData;
+    double operatingFraction, unitCost;
+    double baselineFanEfficiency = 0;
+};
 
 /**
  * PSAT Result class

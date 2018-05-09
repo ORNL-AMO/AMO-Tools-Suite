@@ -77,7 +77,7 @@ set(SOURCE_FILES
         src/calculator/pump/OptimalSpecificSpeed.cpp
         src/calculator/pump/OptimalSpecificSpeedCorrection.cpp
         src/calculator/motor/Poles.cpp
-        src/calculator/pump/PumpEfficiency.cpp
+        src/calculator/pump/MoverEfficiency.cpp
         src/calculator/pump/PumpShaftPower.cpp
         src/calculator/losses/Atmosphere.cpp
         src/calculator/losses/FixtureLosses.cpp
@@ -140,7 +140,7 @@ set(INCLUDE_FILES
         include/calculator/pump/OptimalSpecificSpeed.h
         include/calculator/pump/OptimalSpecificSpeedCorrection.h
         include/calculator/motor/Poles.h
-        include/calculator/pump/PumpEfficiency.h
+        include/calculator/pump/MoverEfficiency.h
         include/calculator/pump/PumpShaftPower.h
         include/calculator/losses/LoadChargeMaterial.h
         include/calculator/losses/SolidLoadChargeMaterial.h
@@ -199,7 +199,7 @@ set(INCLUDE_FILES
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
         tests/MotorEfficiency.unit.cpp
-        tests/PSAT.unit.cpp
+        tests/Results.unit.cpp
         tests/SolidLoadChargeMaterial.unit.cpp
         tests/LiquidLoadChargeMaterial.unit.cpp
         tests/Atmosphere.unit.cpp

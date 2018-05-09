@@ -5,9 +5,30 @@
 #include <psat/PSATResult.h>
 #include <unordered_map>
 #include <calculator/pump/PumpShaftPower.h>
-#include <calculator/pump/PumpEfficiency.h>
+#include <calculator/pump/MoverEfficiency.h>
 #include <array>
 #include <calculator/motor/EstimateFLA.h>
+
+TEST_CASE( "FanResults existing", "[Fan results]" ) {
+	FanResult::FanInput fanInput = {1180, Pump::Drive::DIRECT_DRIVE, 1};
+	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
+	FanResult::FanFieldData fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, FieldData::LoadEstimationMethod::POWER};
+	FanResult result = {fanInput, motor, fanFieldData, 0, 1.0, 0.06};
+	auto const output = result.calculateExisting();
+
+	CHECK(Approx(output.fanEfficiency) == 0.595398315);
+	CHECK(Approx(output.motorRatedPower) == 600.0);
+	CHECK(Approx(output.motorShaftPower) == 590.622186263);
+	CHECK(Approx(output.fanShaftPower) == 590.622186263);
+	CHECK(Approx(output.motorEfficiency) == 0.9578351108);
+	CHECK(Approx(output.motorPowerFactor) == 0.8577466651);
+	CHECK(Approx(output.motorCurrent) == 673.1011529439);
+	CHECK(Approx(output.motorPower) == 460.0);
+	CHECK(Approx(output.annualEnergy) == 4029.6);
+	CHECK(Approx(output.annualCost) == 241.776);
+	CHECK(Approx(output.estimatedFLA) == 683.2505707137);
+}
+
 
 TEST_CASE( "PSATResultsPremium existing and optimal", "[PSAT results]" ) {
 	double achievableEfficiency = 90, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
@@ -310,59 +331,59 @@ TEST_CASE( "PSAT pump shaft power", "[PSAT][pump shaft power][drive]" ) {
 }
 
 TEST_CASE( "PSAT pump efficiency", "[PSAT][pump efficiency]" ) {
-	CHECK(PumpEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
-	CHECK(PumpEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
-	CHECK(PumpEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
-	CHECK(PumpEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
-	CHECK(PumpEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
+	CHECK(MoverEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(MoverEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
+	CHECK(MoverEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
+	CHECK(MoverEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
+	CHECK(MoverEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
 
-	CHECK(PumpEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
-	CHECK(PumpEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
-	CHECK(PumpEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
-	CHECK(PumpEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
-	CHECK(PumpEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
+	CHECK(MoverEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
+	CHECK(MoverEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
+	CHECK(MoverEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
+	CHECK(MoverEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
+	CHECK(MoverEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
 
-	CHECK(PumpEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
-	CHECK(PumpEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
-	CHECK(PumpEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
-	CHECK(PumpEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
-	CHECK(PumpEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
+	CHECK(MoverEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
+	CHECK(MoverEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(MoverEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
+	CHECK(MoverEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
+	CHECK(MoverEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
 
-	CHECK(PumpEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
 }
 
 TEST_CASE( "PSAT motor efficiency", "[PSAT][pump efficiency]" ) {
-	CHECK(PumpEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
-	CHECK(PumpEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
-	CHECK(PumpEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
-	CHECK(PumpEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
-	CHECK(PumpEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
+	CHECK(MoverEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(MoverEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
+	CHECK(MoverEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
+	CHECK(MoverEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
+	CHECK(MoverEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
 
-	CHECK(PumpEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
-	CHECK(PumpEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
-	CHECK(PumpEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
-	CHECK(PumpEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
-	CHECK(PumpEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
+	CHECK(MoverEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
+	CHECK(MoverEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
+	CHECK(MoverEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
+	CHECK(MoverEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
+	CHECK(MoverEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
 
-	CHECK(PumpEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
-	CHECK(PumpEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
-	CHECK(PumpEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
-	CHECK(PumpEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
-	CHECK(PumpEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
+	CHECK(MoverEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
+	CHECK(MoverEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(MoverEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
+	CHECK(MoverEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
+	CHECK(MoverEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
 
-	CHECK(PumpEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
 }
 
 //TEST_CASE( "Motor Current", "[MotorCurrent][PSAT]" ) {

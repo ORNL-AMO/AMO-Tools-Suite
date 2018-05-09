@@ -36,7 +36,7 @@ public:
     {};
 
     /**
-     * Calculates pump or fan fluid power in kw, depending on constructor input
+     * Calculates pump or fan fluid power in kw, depending on the number of constructor inputs (isPump)
      * @return double, fluid power
      */
     double calculate() {
