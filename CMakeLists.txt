@@ -117,9 +117,7 @@ set(SOURCE_FILES
 
 set(INCLUDE_FILES
         include/results/FieldData.h
-        include/results/Motor.h
         include/results/Results.h
-        include/results/Pump.h
         include/calculator/util/AnnualCost.h
         include/calculator/util/AnnualEnergy.h
         include/calculator/util/CurveFitVal.h
@@ -194,7 +192,7 @@ set(INCLUDE_FILES
         include/fans/FanCurve.h
         include/calculator/util/CompressedAir.h
         include/calculator/motor/MotorData.h
-        include/sqlite/MotorData.h include/fans/CompressibilityFactor.h)
+        include/sqlite/MotorData.h include/fans/CompressibilityFactor.h include/results/InputData.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

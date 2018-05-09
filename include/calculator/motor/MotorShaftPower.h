@@ -18,7 +18,7 @@
 #ifndef AMO_LIBRARY_MOTORSHAFTPOWER_H
 #define AMO_LIBRARY_MOTORSHAFTPOWER_H
 
-#include "results/Motor.h"
+#include <results/InputData.h>
 #include "results/FieldData.h"
 
 /**

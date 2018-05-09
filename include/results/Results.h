@@ -16,21 +16,20 @@
 #define AMO_LIBRARY_RESULTS_H
 
 #include <calculator/motor/MotorShaftPower.h>
-#include "Motor.h"
-#include "results/Pump.h"
 #include "FieldData.h"
+#include "InputData.h"
 
 
 class FanResult {
 public:
 	struct FanInput {
-        FanInput(double const fanSpeed, const Pump::Drive drive, const int stages): fanSpeed(fanSpeed), drive(drive)
+        FanInput(double const fanSpeed, const Motor::Drive drive, const int stages): fanSpeed(fanSpeed), drive(drive)
 //                stages(stages)
         {}
 
         // TODO FanType enum of fan types
         double fanSpeed; // rpm used here?
-        Pump::Drive drive; // this shouldn't be in Pump namespace
+        Motor::Drive drive;
 //        int stages;
     };
 

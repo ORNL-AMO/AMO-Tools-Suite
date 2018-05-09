@@ -12,7 +12,7 @@
 #ifndef AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 #define AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 
-#include "results/Pump.h"
+#include <results/InputData.h>
 
 class OptimalPumpEfficiency {
 

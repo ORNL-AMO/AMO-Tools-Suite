@@ -12,7 +12,7 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORSHAFTPOWER_H
 #define AMO_LIBRARY_OPTIMALMOTORSHAFTPOWER_H
 
-#include "results/Pump.h"
+#include <results/InputData.h>
 
 class OptimalMotorShaftPower {
 public:
@@ -24,7 +24,7 @@ public:
      */
     OptimalMotorShaftPower(
         double pumpShaftPower,
-        Pump::Drive drive
+        Motor::Drive drive
     ) :
         pumpShaftPower(pumpShaftPower),
         drive(drive)
@@ -54,23 +54,23 @@ public:
 
     /**
      * Gets the type of drive the pump uses from either direct or belt drive
-     * @return Pump::Drive, type of drive
+     * @return Motor::Drive, type of drive
      */
-    Pump::Drive getDrive() const {
+    Motor::Drive getDrive() const {
         return drive;
     }
 
     /**
      * Sets the type of drive the pump uses from either direct or belt drive
-     * @param drive Pump::Drive, type of drive
+     * @param drive Motor::Drive, type of drive
      */
-    void setDrive(Pump::Drive drive) {
+    void setDrive(Motor::Drive drive) {
         this->drive = drive;
     }
 
 private:
     double pumpShaftPower;
-    Pump::Drive drive;
+    Motor::Drive drive;
     double motorShaftPower;
 };
 

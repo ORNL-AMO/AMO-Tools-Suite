@@ -11,7 +11,7 @@
 #ifndef UNTITLED_POLECALCULATE_H
 #define UNTITLED_POLECALCULATE_H
 
-#include "results/Motor.h"
+#include <results/InputData.h>
 
 class Poles {
 public:

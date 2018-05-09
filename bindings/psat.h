@@ -8,8 +8,7 @@
 #include <vector>
 #include <array>
 #include "results/Results.h"
-#include "results/Motor.h"
-#include "results/Pump.h"
+#include "results/InputData.h"
 #include "calculator/motor/EstimateFLA.h"
 #include "calculator/motor/MotorCurrent.h"
 #include "calculator/motor/MotorEfficiency.h"
@@ -125,9 +124,9 @@ Motor::EfficiencyClass effCls() {
 	unsigned val = static_cast<unsigned>(Get("efficiency_class"));
     return static_cast<Motor::EfficiencyClass>(val);
 }
-Pump::Drive drive() {
+Motor::Drive drive() {
     unsigned val = static_cast<unsigned>(Get("drive"));
-    return static_cast<Pump::Drive>(val);
+    return static_cast<Motor::Drive>(val);
 }
 Pump::Style style() {
     unsigned val = static_cast<unsigned>(Get("pump_style"));
@@ -147,7 +146,7 @@ NAN_METHOD(resultsExistingAndOptimal) {
     r = Nan::New<Object>();
 
     Pump::Style style1 = style();
-    Pump::Drive drive1 = drive();
+    Motor::Drive drive1 = drive();
     double viscosity = Get("kinematic_viscosity");
     double specifc_gravity = Get("specific_gravity");
     int stages = static_cast<int>(Get("stages"));
@@ -217,7 +216,7 @@ NAN_METHOD(resultsExisting) {
     r = Nan::New<Object>();
 
     Pump::Style style1 = style();
-    Pump::Drive drive1 = drive();
+    Motor::Drive drive1 = drive();
 //    Pump::Speed fixed_speed = speed();
 
     Motor::LineFrequency lineFrequency = line();
@@ -274,7 +273,7 @@ NAN_METHOD(resultsModified) {
     double baselinePumpEfficiency = Get("baseline_pump_efficiency") / 100;
 
     Pump::Style style1 = style();
-    Pump::Drive drive1 = drive();
+    Motor::Drive drive1 = drive();
     Pump::Speed fixed_speed = speed();
 
     Motor::LineFrequency lineFrequency = line();
@@ -329,7 +328,7 @@ NAN_METHOD(resultsOptimal) {
     r = Nan::New<Object>();
 
     Pump::Style style1 = style();
-    Pump::Drive drive1 = drive();
+    Motor::Drive drive1 = drive();
     Pump::Speed fixed_speed = speed();
 
     Motor::LineFrequency lineFrequency = line();

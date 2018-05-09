@@ -13,7 +13,6 @@
  */
 
 #include "results/Results.h"
-#include "calculator/motor/MotorShaftPower.h"
 #include "calculator/pump/PumpShaftPower.h"
 #include "calculator/pump/MoverEfficiency.h"
 #include "calculator/util/AnnualCost.h"
@@ -69,8 +68,8 @@ void PSATResult::calculateExisting() {
     existing.estimatedFLA = output.estimatedFLA;
 
 	existing.motorRatedPower = motor.motorRatedPower;
-    existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pump.getDrive()).calculate();
-    existing.pumpEfficiency = MoverEfficiency(pump.getSpecificGravity(), fieldData.getFlowRate(), fieldData.getHead(),
+    existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pump.drive).calculate();
+    existing.pumpEfficiency = MoverEfficiency(pump.specificGravity, fieldData.getFlowRate(), fieldData.getHead(),
                                               existing.pumpShaftPower).calculate();
     existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingFraction).calculate();
     existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
@@ -93,14 +92,14 @@ void PSATResult::calculateOptimal() {
      *  10.Calculate annual savings potential and optimization rating
      */
 
-    OptimalPumpEfficiency optimalPumpEfficiency(pump.getStyle(), pump.getAchievableEfficiency(), pump.getRpm(),
-                                                pump.getKviscosity(), pump.getStageCount(), fieldData.getFlowRate(),
+    OptimalPumpEfficiency optimalPumpEfficiency(pump.style, pump.achievableEfficiency, pump.rpm,
+                                                pump.kviscosity, pump.stageCount, fieldData.getFlowRate(),
                                                 fieldData.getHead());
     optimal.pumpEfficiency = optimalPumpEfficiency.calculate();
-    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.getFlowRate(), fieldData.getHead(), pump.getSpecificGravity(),
+    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.getFlowRate(), fieldData.getHead(), pump.specificGravity,
                                                 optimal.pumpEfficiency);
     optimal.pumpShaftPower = optimalPumpShaftPower.calculate();
-    OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pump.getDrive());
+    OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pump.drive);
     optimal.motorShaftPower = optimalMotorShaftPower.calculate();
     OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.sizeMargin);
     optimal.motorRatedPower = optimalMotorSize.calculate();
@@ -142,17 +141,17 @@ void PSATResult::calculateModified() {
 
      */
 
-    if (pump.getStyle() == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
-        modified.pumpEfficiency = pump.getAchievableEfficiency();
+    if (pump.style == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
+        modified.pumpEfficiency = pump.achievableEfficiency;
     } else {
         modified.pumpEfficiency = baselinePumpEfficiency;
     }
 
-    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.getFlowRate(), fieldData.getHead(), pump.getSpecificGravity(),
+    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.getFlowRate(), fieldData.getHead(), pump.specificGravity,
                                                 modified.pumpEfficiency);
     modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
 
-    OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pump.getDrive());
+    OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pump.drive);
     modified.motorShaftPower = modifiedMotorShaftPower.calculate();
 
     modified.motorRatedPower = motor.motorRatedPower;
