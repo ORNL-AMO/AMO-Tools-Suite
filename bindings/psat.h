@@ -7,9 +7,9 @@
 #include <node.h>
 #include <vector>
 #include <array>
-#include "psat/PSATResult.h"
-#include "psat/Motor.h"
-#include "psat/Pump.h"
+#include "results/Results.h"
+#include "results/Motor.h"
+#include "results/Pump.h"
 #include "calculator/motor/EstimateFLA.h"
 #include "calculator/motor/MotorCurrent.h"
 #include "calculator/motor/MotorEfficiency.h"

@@ -84,7 +84,7 @@
         },
         {
             "target_name": "psat",
-            'include_dirs': ['include', 'include/psat', 'include/calculator/pump', 'include/calculator/motor', 'include/calculator/util',
+            'include_dirs': ['include', 'include/results', 'include/calculator/pump', 'include/calculator/motor', 'include/calculator/util',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
@@ -92,7 +92,7 @@
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/pump/').map(f=>'src/calculator/pump/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/motor/').map(f=>'src/calculator/motor/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
-                "<!@(node -e \"console.log(require('fs').readdirSync('src/psat/').map(f=>'src/psat/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/results/').map(f=>'src/results/'+f).join(' '))\")",
             ],
             "conditions": [
                 [ 'OS=="mac"', {

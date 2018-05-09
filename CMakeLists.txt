@@ -57,7 +57,7 @@ endif (WIN32)
 file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
-        src/psat/PSATResult.cpp
+        src/results/Results.cpp
         src/calculator/util/AnnualCost.cpp
         src/calculator/util/AnnualEnergy.cpp
         src/calculator/util/CurveFitVal.cpp
@@ -116,10 +116,10 @@ set(SOURCE_FILES
         src/calculator/motor/MotorData.cpp)
 
 set(INCLUDE_FILES
-        include/psat/FieldData.h
-        include/psat/Motor.h
-        include/psat/PSATResult.h
-        include/psat/Pump.h
+        include/results/FieldData.h
+        include/results/Motor.h
+        include/results/Results.h
+        include/results/Pump.h
         include/calculator/util/AnnualCost.h
         include/calculator/util/AnnualEnergy.h
         include/calculator/util/CurveFitVal.h

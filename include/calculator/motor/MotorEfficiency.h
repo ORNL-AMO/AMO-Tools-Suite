@@ -12,8 +12,8 @@
 #define AMO_LIBRARY_MOTOREFFICIENCY_H
 
 #include <array>
-#include "psat/Motor.h"
-#include "psat/FieldData.h"
+#include "results/Motor.h"
+#include "results/FieldData.h"
 #include <exception>
 #include <stdexcept>
 

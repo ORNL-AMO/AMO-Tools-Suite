@@ -10,7 +10,7 @@
 #ifndef UNTITLED_ESTIMATEFLA_H
 #define UNTITLED_ESTIMATEFLA_H
 
-#include "psat/Motor.h"
+#include "results/Motor.h"
 #include <vector>
 
 class EstimateFLA {

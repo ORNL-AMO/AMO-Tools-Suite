@@ -18,8 +18,8 @@
 #ifndef AMO_LIBRARY_MOTORSHAFTPOWER_H
 #define AMO_LIBRARY_MOTORSHAFTPOWER_H
 
-#include "psat/Motor.h"
-#include "psat/FieldData.h"
+#include "results/Motor.h"
+#include "results/FieldData.h"
 
 /**
  * Motor Shaft Power class

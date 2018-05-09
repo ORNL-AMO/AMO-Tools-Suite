@@ -13,9 +13,9 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORPOWER_H
 #define AMO_LIBRARY_OPTIMALMOTORPOWER_H
 
-#include "psat/Motor.h"
-#include "psat/FieldData.h"
-#include "psat/PSATResult.h"
+#include "results/Motor.h"
+#include "results/FieldData.h"
+#include "results/Results.h"
 
 class OptimalMotorPower {
 public:

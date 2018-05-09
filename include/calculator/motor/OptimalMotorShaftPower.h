@@ -12,7 +12,7 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORSHAFTPOWER_H
 #define AMO_LIBRARY_OPTIMALMOTORSHAFTPOWER_H
 
-#include "psat/Pump.h"
+#include "results/Pump.h"
 
 class OptimalMotorShaftPower {
 public:

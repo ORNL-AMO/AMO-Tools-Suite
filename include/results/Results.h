@@ -1,10 +1,10 @@
 /**
  * @file
- * @brief Function prototypes for the PSAT result fields
+ * @brief Function prototypes for the PSAT and FSAT result fields
  *
- * This contains the prototypes for the PSAT results structure
+ * This contains the prototypes for the PSAT & FSAT results structure
  * including getters and setters for the important fields. Primary
- * importance are methods for calculating the existing and optimal results.
+ * importance are methods for calculating the existing, modified and optimal results.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
@@ -17,7 +17,7 @@
 
 #include <calculator/motor/MotorShaftPower.h>
 #include "Motor.h"
-#include "psat/Pump.h"
+#include "results/Pump.h"
 #include "FieldData.h"
 
 

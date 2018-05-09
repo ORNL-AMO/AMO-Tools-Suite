@@ -1,8 +1,8 @@
 #include "catch.hpp"
-#include <psat/Pump.h>
-#include <psat/FieldData.h>
-#include <psat/Motor.h>
-#include <psat/PSATResult.h>
+#include <results/Pump.h>
+#include <results/FieldData.h>
+#include <results/Motor.h>
+#include <results/Results.h>
 #include <unordered_map>
 #include <calculator/pump/PumpShaftPower.h>
 #include <calculator/pump/MoverEfficiency.h>

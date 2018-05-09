@@ -11,7 +11,7 @@
 #ifndef AMO_LIBRARY_PUMPSHAFTPOWER_H
 #define AMO_LIBRARY_PUMPSHAFTPOWER_H
 
-#include "psat/Pump.h"
+#include "results/Pump.h"
 
 class PumpShaftPower {
 public:

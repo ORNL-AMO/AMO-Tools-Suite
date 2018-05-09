@@ -12,7 +12,7 @@
  *
  */
 
-#include "psat/PSATResult.h"
+#include "results/Results.h"
 #include "calculator/motor/MotorShaftPower.h"
 #include "calculator/pump/PumpShaftPower.h"
 #include "calculator/pump/MoverEfficiency.h"
@@ -25,9 +25,9 @@
 #include "calculator/motor/OptimalMotorSize.h"
 
 FanResult::Output FanResult::calculateExisting() {
-    MotorShaftPower motorShaftPower(motor.getMotorRatedPower(), fanFieldData.measuredPower, motor.getMotorRpm(),
-                                    motor.getLineFrequency(), motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
-                                    motor.getMotorRatedVoltage(), motor.getFullLoadAmps(), fanFieldData.measuredVoltage,
+    MotorShaftPower motorShaftPower(motor.motorRatedPower, fanFieldData.measuredPower, motor.motorRpm,
+                                    motor.lineFrequency, motor.efficiencyClass, motor.specifiedEfficiency,
+                                    motor.motorRatedVoltage, motor.fullLoadAmps, fanFieldData.measuredVoltage,
                                     fanFieldData.loadEstimationMethod, fanFieldData.measuredAmps);
     auto const output = motorShaftPower.calculate();
     double const fanShaftPower = PumpShaftPower(output.shaftPower, fanInput.drive).calculate();
@@ -36,7 +36,7 @@ FanResult::Output FanResult::calculateExisting() {
     double const annualEnergy = AnnualEnergy(output.power, operatingFraction).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
 
-    return {motorShaftPower.calculate(), fanEfficiency, motor.getMotorRatedPower(), fanShaftPower, annualEnergy, annualCost, output.estimatedFLA};
+    return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost, output.estimatedFLA};
 }
 
 void PSATResult::calculateExisting() {
@@ -55,12 +55,10 @@ void PSATResult::calculateExisting() {
      * 4	Calculate pump efficiency
      * 5	Calculate annual energy and energy cost
      */
-    MotorShaftPower motorShaftPower(motor.getMotorRatedPower(), fieldData.getMotorPower(), motor.getMotorRpm(),
-                                    motor.getLineFrequency(),
-                                    motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
-                                    motor.getMotorRatedVoltage(), motor.getFullLoadAmps(),
-                                    fieldData.getVoltage(), fieldData.getLoadEstimationMethod(),
-                                    fieldData.getMotorAmps());
+    MotorShaftPower motorShaftPower(motor.motorRatedPower, fieldData.getMotorPower(), motor.motorRpm,
+                                    motor.lineFrequency, motor.efficiencyClass, motor.specifiedEfficiency,
+                                    motor.motorRatedVoltage, motor.fullLoadAmps, fieldData.getVoltage(),
+                                    fieldData.getLoadEstimationMethod(), fieldData.getMotorAmps());
     auto const output = motorShaftPower.calculate();
 
     existing.motorShaftPower = output.shaftPower;
@@ -70,7 +68,7 @@ void PSATResult::calculateExisting() {
     existing.motorPower = output.power;
     existing.estimatedFLA = output.estimatedFLA;
 
-	existing.motorRatedPower = motor.getMotorRatedPower();
+	existing.motorRatedPower = motor.motorRatedPower;
     existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pump.getDrive()).calculate();
     existing.pumpEfficiency = MoverEfficiency(pump.getSpecificGravity(), fieldData.getFlowRate(), fieldData.getHead(),
                                               existing.pumpShaftPower).calculate();
@@ -104,11 +102,11 @@ void PSATResult::calculateOptimal() {
     optimal.pumpShaftPower = optimalPumpShaftPower.calculate();
     OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pump.getDrive());
     optimal.motorShaftPower = optimalMotorShaftPower.calculate();
-    OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.getSizeMargin());
+    OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.sizeMargin);
     optimal.motorRatedPower = optimalMotorSize.calculate();
-    OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, motor.getMotorRpm(), motor.getLineFrequency(),
-                                        motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
-                                        motor.getMotorRatedVoltage(), fieldData.getVoltage(), optimal.motorShaftPower);
+    OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, motor.motorRpm, motor.lineFrequency,
+                                        motor.efficiencyClass, motor.specifiedEfficiency,
+                                        motor.motorRatedVoltage, fieldData.getVoltage(), optimal.motorShaftPower);
     optimalMotorPower.calculate(true);
     optimal.motorCurrent = optimalMotorPower.getMotorCurrent();
     optimal.motorEfficiency = optimalMotorPower.getMotorEff();
@@ -157,10 +155,10 @@ void PSATResult::calculateModified() {
     OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pump.getDrive());
     modified.motorShaftPower = modifiedMotorShaftPower.calculate();
 
-    modified.motorRatedPower = motor.getMotorRatedPower();
-    OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.getMotorRpm(), motor.getLineFrequency(),
-                                         motor.getEfficiencyClass(), motor.getSpecifiedEfficiency(),
-                                         motor.getMotorRatedVoltage(), fieldData.getVoltage(), modified.motorShaftPower);
+    modified.motorRatedPower = motor.motorRatedPower;
+    OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
+                                         motor.efficiencyClass, motor.specifiedEfficiency,
+                                         motor.motorRatedVoltage, fieldData.getVoltage(), modified.motorShaftPower);
     modifiedMotorPower.calculate(false);
     modified.motorCurrent = modifiedMotorPower.getMotorCurrent();
     modified.motorEfficiency = modifiedMotorPower.getMotorEff();
