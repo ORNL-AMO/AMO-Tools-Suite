@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "fans/Planar.h"
-#include "fans/Fan.h"
+#include "fans/Fan203.h"
 #include "fans/FanShaftPower.h"
 #include "fans/FanCurve.h"
 
@@ -280,7 +280,7 @@ NAN_METHOD(fan203) {
 
 	r = Nan::New<Object>();
 	try {
-		auto const rv = Fan(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();
+		auto const rv = Fan203(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();
 		SetR("fanEfficiencyTotalPressure", rv.fanEfficiencyTotalPressure);
 		SetR("fanEfficiencyStaticPressure", rv.fanEfficiencyStaticPressure);
 		SetR("fanEfficiencyStaticPressureRise", rv.fanEfficiencyStaticPressureRise);

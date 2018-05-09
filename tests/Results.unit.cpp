@@ -6,10 +6,10 @@
 #include <array>
 #include <calculator/motor/EstimateFLA.h>
 
-TEST_CASE( "FanResults existing", "[Fan results]" ) {
-	FanResult::FanInput fanInput = {1180, Motor::Drive::DIRECT_DRIVE, 1};
+TEST_CASE( "Output existing", "[Fan203 results]" ) {
+	Fan::Input fanInput = {1180, Motor::Drive::DIRECT_DRIVE, 1};
 	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
-	FanResult::FanFieldData fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER};
+	Fan::FieldData fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER};
 	FanResult result = {fanInput, motor, fanFieldData, 0, 1.0, 0.06};
 	auto const output = result.calculateExisting();
 

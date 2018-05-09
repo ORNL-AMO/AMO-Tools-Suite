@@ -1,8 +1,8 @@
 #include "catch.hpp"
-#include <fans/Fan.h>
+#include <fans/Fan203.h>
 #include <fans/FanCurve.h>
 
-TEST_CASE( "Fan", "[Fan]") {
+TEST_CASE( "Fan203", "[Fan203]") {
 	FanRatedInfo fanRatedInfo(1191, 1191, 1170, 0.05, 26.28);
 
 	std::vector< std::vector< double > > traverseHoleData = {
@@ -50,7 +50,7 @@ TEST_CASE( "Fan", "[Fan]") {
 	auto const motorShaftPower = FanShaftPower::calculateMotorShaftPower(4200, 205, 0.88) / 746.0;
 	auto fanShaftPower = FanShaftPower(motorShaftPower, 95.0, 100, 100, 0);
 
-	auto fan = Fan(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
+	auto fan = Fan203(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
 	auto results = fan.calculate();
 
 	CHECK(results.fanEfficiencyTotalPressure == Approx(53.607386));
@@ -59,7 +59,7 @@ TEST_CASE( "Fan", "[Fan]") {
 	// TODO add checks for other stuff besides efficiency
 }
 
-TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
+TEST_CASE( "FanCurve", "[Fan203][FanCurve]") {
 	// using row 2 appendix 1
 	double density = 0.0308, n = 1180, densityC = 0.0332, nC = 1187, pb = 29.36;
 	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;

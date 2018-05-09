@@ -21,33 +21,6 @@
 
 class FanResult {
 public:
-	struct FanInput {
-        FanInput(double const fanSpeed, const Motor::Drive drive, const int stages): fanSpeed(fanSpeed), drive(drive)
-//                stages(stages)
-        {}
-
-        // TODO FanType enum of fan types
-        double fanSpeed; // rpm used here?
-        Motor::Drive drive;
-//        int stages;
-    };
-
-	struct FanFieldData {
-        FanFieldData(const double measuredPower, const double measuredVoltage, const double measuredAmps, const double flowRate,
-                     const double inletPressure, const double outletPressure, const double compressibilityFactor,
-                     Motor::LoadEstimationMethod loadEstimationMethod)
-                : measuredPower(measuredPower), measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
-                  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor),
-                  loadEstimationMethod(loadEstimationMethod)
-        {}
-
-		double measuredPower, measuredVoltage, measuredAmps;
-        double flowRate, inletPressure, outletPressure, compressibilityFactor;
-
-        Motor::LoadEstimationMethod loadEstimationMethod;
-
-    };
-
     struct Output {
         Output(const double fanEfficiency, const double motorRatedPower, const double motorShaftPower, const double fanShaftPower,
                const double motorEfficiency, const double motorPowerFactor, const double motorCurrent, const double motorPower,
@@ -70,7 +43,7 @@ public:
         const double motorPower, annualEnergy, annualCost, estimatedFLA;
     };
 
-    FanResult(FanInput & fanInput, Motor & motor, FanFieldData & fanFieldData, double baselineFanEfficiency,
+    FanResult(Fan::Input & fanInput, Motor & motor, Fan::FieldData & fanFieldData, double baselineFanEfficiency,
               double operatingFraction, double unitCost)
             : fanInput(fanInput), motor(motor), fanFieldData(fanFieldData), operatingFraction(operatingFraction),
               unitCost(unitCost), baselineFanEfficiency(baselineFanEfficiency)
@@ -83,9 +56,9 @@ private:
     double annualSavingsPotential = 0;
     double optimizationRating = 0;
     // In values
-    FanInput fanInput;
+    Fan::Input fanInput;
     Motor motor;
-    FanFieldData fanFieldData;
+    Fan::FieldData fanFieldData;
     double operatingFraction, unitCost;
     double baselineFanEfficiency = 0;
 };

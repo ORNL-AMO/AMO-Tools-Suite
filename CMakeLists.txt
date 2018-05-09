@@ -183,7 +183,7 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
         include/ssmt/Header.h
-        include/fans/Fan.h
+        include/fans/Fan203.h
         include/fans/FanShaftPower.h
         include/fans/Planar.h
         include/ssmt/Turbine.h

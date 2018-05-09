@@ -1,5 +1,5 @@
-#ifndef AMO_TOOLS_SUITE_RESULTSINPUT_H
-#define AMO_TOOLS_SUITE_RESULTSINPUT_H
+#ifndef AMO_TOOLS_SUITE_INPUT_DATA_H
+#define AMO_TOOLS_SUITE_INPUT_DATA_H
 
 #include <cmath>
 
@@ -51,6 +51,35 @@ struct Motor {
 	const double motorRatedPower, motorRpm, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin;
 	const Motor::EfficiencyClass efficiencyClass;
 };
+
+namespace Fan {
+	struct Input {
+		Input(double const fanSpeed, const Motor::Drive drive, const int stages): fanSpeed(fanSpeed), drive(drive)
+//                stages(stages)
+		{}
+
+		// TODO FanType enum of fan types
+		double fanSpeed;
+		Motor::Drive drive;
+//        int stages;
+	};
+
+	struct FieldData {
+		FieldData(const double measuredPower, const double measuredVoltage, const double measuredAmps, const double flowRate,
+		          const double inletPressure, const double outletPressure, const double compressibilityFactor,
+		          Motor::LoadEstimationMethod loadEstimationMethod)
+				: measuredPower(measuredPower), measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
+				  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor),
+				  loadEstimationMethod(loadEstimationMethod)
+		{}
+
+		double measuredPower, measuredVoltage, measuredAmps;
+		double flowRate, inletPressure, outletPressure, compressibilityFactor;
+
+		Motor::LoadEstimationMethod loadEstimationMethod;
+
+	};
+}
 
 struct Pump {
 	enum class Speed {
@@ -117,5 +146,4 @@ struct Pump {
 	const int stageCount;
 };
 
-
-#endif //AMO_TOOLS_SUITE_RESULTSINPUT_H
+#endif //AMO_TOOLS_SUITE_INPUT_DATA_H

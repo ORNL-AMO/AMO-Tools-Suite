@@ -66,7 +66,7 @@ protected:
 	double staticPressure = 0;
 
 	friend class PlaneData;
-	friend class Fan;
+	friend class Fan203;
 };
 
 class FlangePlane : public Planar {
