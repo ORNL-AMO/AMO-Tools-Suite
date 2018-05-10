@@ -46,7 +46,7 @@ public:
     {}
 
 //    OptimalPumpEfficiency(double rpm, double kinematicViscosity, double stageCount, double flowRate, double head,
-//                          Pump::Speed speed, double actualEfficiency) : rpm(rpm),
+//                          Pump::SpecificSpeed speed, double actualEfficiency) : rpm(rpm),
 //                                                                        kinematicViscosity(kinematicViscosity),
 //                                                                        stageCount(stageCount), flowRate(flowRate),
 //                                                                        head(head), speed(speed),

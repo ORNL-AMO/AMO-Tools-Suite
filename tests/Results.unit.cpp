@@ -10,7 +10,7 @@ TEST_CASE( "Output existing", "[Fan203 results]" ) {
 	Fan::Input fanInput = {1180, Motor::Drive::DIRECT_DRIVE, 1};
 	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
 	Fan::FieldData fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER};
-	FanResult result = {fanInput, motor, fanFieldData, 0, 1.0, 0.06};
+	FanResult result = {fanInput, motor, fanFieldData, 1.0, 0.06};
 	auto const output = result.calculateExisting();
 
 	CHECK(Approx(output.fanEfficiency) == 0.595398315);
@@ -36,22 +36,20 @@ TEST_CASE( "PSATResultsPremium existing and optimal", "[PSAT results]" ) {
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
 	Motor::Drive drive1(Motor::Drive::DIRECT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::PREMIUM);
 	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
 	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
 	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
+	auto const & ex = psat.calculateExisting();
 //	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-//	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & opt = psat.calculateOptimal();
+//	auto const & mod = psat.calculateModified();
 
 	CHECK(ex.pumpEfficiency * 100 == Approx(78.555319445));
 	CHECK(ex.motorRatedPower == Approx(200));
@@ -89,22 +87,19 @@ TEST_CASE( "PSATResults existing, modified, optimal", "[PSAT results]" ) {
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
 	Motor::Drive drive1(Motor::Drive::DIRECT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::SPECIFIED);
 	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
 	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
 	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
-	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
+	auto const & opt = psat.calculateOptimal();
 
 	CHECK(ex.pumpEfficiency * 100 == Approx(80.2620381));
 	CHECK(ex.motorRatedPower == Approx(200));
@@ -160,18 +155,16 @@ TEST_CASE( "PSATResults - existing and modified", "[PSAT results]" ) {
 	double baseline_pump_efficiency = 0.382;
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
 	Motor::Drive drive1(Motor::Drive::V_BELT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::SPECIFIED);
 	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
 	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
 	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
-	psat.calculateExisting();
-	psat.calculateModified();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
 	CHECK(ex.pumpEfficiency * 100 == Approx(38.1094253534));
 	CHECK(ex.motorRatedPower == Approx(200));
 	CHECK(ex.motorShaftPower == Approx(191.1541214642));
@@ -203,22 +196,19 @@ TEST_CASE( "PSATResults2 v-belt type", "[PSAT results]" ) {
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
 	Motor::Drive drive1(Motor::Drive::V_BELT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::ENERGY_EFFICIENT);
 	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
 	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
 	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
-	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
+	auto const & opt = psat.calculateOptimal();
 
 	CHECK(mod.pumpEfficiency * 100 == Approx(62.3));
 	CHECK(mod.motorRatedPower == Approx(200));
@@ -244,22 +234,19 @@ TEST_CASE( "PSATResults notched v belt", "[PSAT results]" ) {
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
 	Motor::Drive drive1(Motor::Drive::N_V_BELT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::ENERGY_EFFICIENT);
 	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
 	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
 	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
-	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
+	auto const & opt = psat.calculateOptimal();
 
 	CHECK(mod.pumpEfficiency * 100 == Approx(62.3));
 	CHECK(mod.motorRatedPower == Approx(200));
@@ -285,22 +272,19 @@ TEST_CASE( "PSATResults sync belt", "[PSAT results]" ) {
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
 	Motor::Drive drive1(Motor::Drive::S_BELT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::ENERGY_EFFICIENT);
 	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
 	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
 	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
-	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
+	auto const & opt = psat.calculateOptimal();
 
 	CHECK(mod.motorShaftPower == Approx(194.767));
 	CHECK(mod.pumpShaftPower == Approx(192.468232632));

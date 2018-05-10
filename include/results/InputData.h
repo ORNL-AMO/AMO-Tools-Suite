@@ -11,7 +11,7 @@ struct Motor {
 		SPECIFIED,
 	};
 
-	enum class LineFrequency{
+	enum class LineFrequency {
 		FREQ60,
 		FREQ50
 	};
@@ -34,7 +34,7 @@ struct Motor {
 	 * @param motorRatedPower double, rated power for the motor in hp
 	 * @param motorRpm double, motor RPM
 	 * @param efficiencyClass EfficiencyClass, classification of motor efficiency
-	 * @param specifiedEfficiency double, specified % Efficiency of motor, if efficiency class is SPECIFIED
+	 * @param specifiedEfficiency double, specified % Efficiency of motor, unused unless efficiency class is SPECIFIED
 	 * @param motorRatedVoltage double, motor nameplate design voltage in volts
 	 * @param fullLoadAmps double, current at full load in amps
 	 * @param sizeMargin double, size margin as defined in %
@@ -81,8 +81,8 @@ namespace Fan {
 	};
 }
 
-struct Pump {
-	enum class Speed {
+namespace Pump {
+	enum class SpecificSpeed {
 		FIXED_SPEED,
 		NOT_FIXED_SPEED
 	};
@@ -122,28 +122,31 @@ struct Pump {
 		const double flowRate, head, motorPower, motorAmps, voltage;
 	};
 
-	/**
-	 * Constructor
-	 * @param style Style, classification of style of pump being used.
-	 * @param achievableEfficiency double, pump % efficiency at the specified operating conditions
-	 * @param rpm double, pump RPM to define its operating speed
-	 * @param drive Drive, type of drive the pump uses from either direct or belt drive.
-	 * @param kviscosity double, kinematic viscosity of the fluid being pumped in centistokes.
-	 * @param specificGravity double, specific gravity- unitless
-	 * @param stageCount int, the number of pump stages
-	 * @param speed Speed, type of pump speed from either fixed or not fixed.
-	 */
-	Pump(const Style style, const double achievableEfficiency, const double rpm, const Motor::Drive drive, const double kviscosity,
-	     const double specificGravity, const int stageCount, const Pump::Speed speed)
-			: style(style), drive(drive), speed(speed), achievableEfficiency(achievableEfficiency), rpm(rpm), kviscosity(kviscosity),
-			  specificGravity(specificGravity), stageCount(stageCount)
-	{};
+	struct Input {
+		/**
+		 * Constructor
+		 * @param style Style, classification of style of pump being used.
+		 * @param achievableEfficiency double, pump % efficiency at the specified operating conditions
+		 * @param rpm double, pump RPM to define its operating speed
+		 * @param drive Drive, type of drive the pump uses from either direct or belt drive.
+		 * @param kviscosity double, kinematic viscosity of the fluid being pumped in centistokes.
+		 * @param specificGravity double, specific gravity- unitless
+		 * @param stageCount int, the number of pump stages
+		 * @param speed Speed, type of pump speed from either fixed or not fixed.
+		 */
+		Input(const Style style, const double achievableEfficiency, const double rpm, const Motor::Drive drive,
+		     const double kviscosity,
+		     const double specificGravity, const int stageCount, const SpecificSpeed speed)
+				: style(style), drive(drive), speed(speed), achievableEfficiency(achievableEfficiency), rpm(rpm),
+				  kviscosity(kviscosity),
+				  specificGravity(specificGravity), stageCount(stageCount) {};
 
-	const Style style;
-	const Motor::Drive drive;
-	const Pump::Speed speed;
-	const double achievableEfficiency, rpm, kviscosity, specificGravity;
-	const int stageCount;
+		const Style style;
+		const Motor::Drive drive;
+		const SpecificSpeed speed;
+		const double achievableEfficiency, rpm, kviscosity, specificGravity;
+		const int stageCount;
+	};
 };
 
 #endif //AMO_TOOLS_SUITE_INPUT_DATA_H

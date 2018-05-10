@@ -43,10 +43,10 @@ public:
         const double motorPower, annualEnergy, annualCost, estimatedFLA;
     };
 
-    FanResult(Fan::Input & fanInput, Motor & motor, Fan::FieldData & fanFieldData, double baselineFanEfficiency,
+    FanResult(Fan::Input & fanInput, Motor & motor, Fan::FieldData & fanFieldData,
               double operatingFraction, double unitCost)
             : fanInput(fanInput), motor(motor), fanFieldData(fanFieldData), operatingFraction(operatingFraction),
-              unitCost(unitCost), baselineFanEfficiency(baselineFanEfficiency)
+              unitCost(unitCost)
     {}
 
     Output calculateExisting();
@@ -60,7 +60,7 @@ private:
     Motor motor;
     Fan::FieldData fanFieldData;
     double operatingFraction, unitCost;
-    double baselineFanEfficiency = 0;
+//    double baselineFanEfficiency = 0;
 };
 
 /**
@@ -72,56 +72,36 @@ class PSATResult {
 public:
     /**
      * Constructor
-     * @param pump Pump, contains all pump-related calculations, passed by reference
+     * @param pumpInput Pump::Input, contains all pump-related data, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
      * @param operatingFraction double, fraction(%) of calendar hours the equipment is operating
      * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
-    PSATResult(
-        Pump &pump,
-        Motor &motor,
-        Pump::FieldData &fieldData,
-        double operatingFraction,
-        double unitCost
-    ) :
-        pump(pump),
-        motor(motor),
-        fieldData(fieldData),
-        operatingFraction(operatingFraction),
-        unitCost(unitCost),
-        baselinePumpEfficiency(0.0)
+    PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingFraction, double unitCost)
+            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingFraction(operatingFraction),
+              unitCost(unitCost), baselinePumpEfficiency(0.0)
     {};
 
     /**
      * Constructor
-     * @param pump Pump, contains all pump-related calculations, passed by reference
+     * @param pumpInput Pump::Input, contains all pump-related data, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
      * @param baselinePumpEfficiency double, baseline pump efficiency
      * @param operatingFraction double, fraction(%) of calendar hours the equipment is operating
      * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
-    PSATResult(
-            Pump &pump,
-            Motor &motor,
-            Pump::FieldData &fieldData,
-            double baselinePumpEfficiency,
-            double operatingFraction,
-            double unitCost
-    ) :
-            pump(pump),
-            motor(motor),
-            fieldData(fieldData),
-            operatingFraction(operatingFraction),
-            unitCost(unitCost),
-            baselinePumpEfficiency(baselinePumpEfficiency)
+    PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double baselinePumpEfficiency,
+               double operatingFraction, double unitCost)
+            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingFraction(operatingFraction),
+              unitCost(unitCost), baselinePumpEfficiency(baselinePumpEfficiency)
     {};
 
     /**
-     * Result structure captures the same fields for the existing as well as the optimal condition.
+     * Result (output) structure captures the same fields for the existing as well as the optimal condition.
      */
-    struct result {
+    struct Result {
         double pumpEfficiency;     ///< Existing: Existing pump efficiency is fluid power added by the pump divided by pump input shaft power.
         ///< Optimal: Optimal pump efficiency is estimated based on the efficiency estimating algorithms contained in Hydraulic Institute Standard HI 1.3-2000, Centrifugal Pump Design and Application.
         double motorRatedPower;    ///< Existing: Existing motor nameplate power (same as Rated power in the Motor input section).
@@ -161,52 +141,17 @@ public:
         return optimizationRating;
     }
 
-    /**
-     * Gets the existing conditions
-     * @return const result, existing conditions
-     */
-    const result &getExisting() const {
-        return existing;
-    }
-
-    /**
-     * Gets the modified conditions
-     * @return const result, modified conditions
-     */
-    const result &getModified() const {
-        return modified;
-    }
-
-    /**
-     * Gets the optimal conditions
-     * @return const result, optimal conditions
-     */
-    const result &getOptimal() const {
-        return optimal;
-    }
-
-    /**
-     * Calculates existing conditions
-     */
-    void calculateExisting();
-
-    /**
-     * Calculates modified conditions
-     */
-    void calculateModified();
-
-    /**
-     * Calculates optimal conditions
-     */
-    void calculateOptimal();
+    Result & calculateExisting();
+    Result & calculateModified();
+    Result & calculateOptimal();
 
 private:
     // Out values
-    result existing, optimal, modified;
+    Result existing, optimal, modified;
     double annualSavingsPotential = 0.0;
     double optimizationRating = 0.0;
     // In values
-    Pump pump;
+    Pump::Input pumpInput;
     Motor motor;
     Pump::FieldData fieldData;
     double operatingFraction, unitCost;

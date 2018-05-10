@@ -6,6 +6,32 @@ function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
 }
 
+test('fansExisting', function (t) {
+    t.plan(11);
+
+    var input = {
+        "fanSpeed": 1180, "drive": 0, "stages": 1, "lineFrequency": 0, "motorRatedPower": 600, "motorRpm": 1180,
+        "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
+        "sizeMargin": 1, "measuredPower": 460, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
+        "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988, "loadEstimationMethod": 0,
+        "operatingFraction": 1.0, "unitCost": 0.06
+    };
+
+    var output = bindings.fanResultsExisting(input);
+
+    t.equal(rnd(output.fanEfficiency), rnd(0.595398315));
+    t.equal(rnd(output.motorRatedPower), rnd(600.0));
+    t.equal(rnd(output.motorShaftPower), rnd(590.622186263));
+    t.equal(rnd(output.fanShaftPower), rnd(590.622186263));
+    t.equal(rnd(output.motorEfficiency), rnd(0.9578351108));
+    t.equal(rnd(output.motorPowerFactor), rnd(0.8577466651));
+    t.equal(rnd(output.motorCurrent), rnd(673.1011529439));
+    t.equal(rnd(output.motorPower), rnd(460.0));
+    t.equal(rnd(output.annualEnergy), rnd(4029.6));
+    t.equal(rnd(output.annualCost), rnd(241.776));
+    t.equal(rnd(output.estimatedFLA), rnd(683.2505707137));
+});
+
 test('fan203 test', function (t) {
     t.plan(4);
     t.type(bindings.fan203, 'function');

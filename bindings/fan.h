@@ -6,6 +6,8 @@
 #include "fans/Fan203.h"
 #include "fans/FanShaftPower.h"
 #include "fans/FanCurve.h"
+#include "results/Results.h"
+#include "results/InputData.h"
 
 using namespace Nan;
 using namespace v8;
@@ -129,6 +131,52 @@ BaseGasDensity::InputType getInputType(Local<Object> obj) {
 	return BaseGasDensity::InputType::WetBulbTemp;
 };
 
+
+NAN_METHOD(fanResultsExisting) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	Fan::Input input = {Get("fanSpeed", inp), static_cast<Motor::Drive>(Get("drive", inp)), static_cast<int>(Get("stages", inp))};
+
+	Motor::LineFrequency const lineFrequency = static_cast<Motor::LineFrequency>(Get("lineFrequency", inp));
+	double const motorRatedPower = Get("motorRatedPower", inp);
+	double const motorRpm = Get("motorRpm", inp);
+	Motor::EfficiencyClass const efficiencyClass = static_cast<Motor::EfficiencyClass>(Get("efficiencyClass", inp));
+	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
+	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
+	double const fullLoadAmps = Get("fullLoadAmps", inp);
+	double const sizeMargin = Get("sizeMargin", inp);
+
+	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
+
+	double const measuredPower = Get("measuredPower", inp);
+	double const measuredVoltage = Get("measuredVoltage", inp);
+	double const measuredAmps = Get("measuredAmps", inp);
+	double const flowRate = Get("flowRate", inp);
+	double const inletPressure = Get("inletPressure", inp);
+	double const outletPressure = Get("outletPressure", inp);
+	double const compressibilityFactor = Get("compressibilityFactor", inp);
+	Motor::LoadEstimationMethod const loadEstimationMethod = static_cast<Motor::LoadEstimationMethod>(Get("loadEstimationMethod", inp));
+
+	Fan::FieldData fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor, loadEstimationMethod};
+
+	FanResult result = {input, motor, fanFieldData, Get("operatingFraction", inp), Get("unitCost", inp)};
+	auto const output = result.calculateExisting();
+
+	SetR("fanEfficiency", output.fanEfficiency);
+	SetR("motorRatedPower", output.motorRatedPower);
+	SetR("motorShaftPower", output.motorShaftPower);
+	SetR("fanShaftPower", output.fanShaftPower);
+	SetR("motorEfficiency", output.motorEfficiency);
+	SetR("motorPowerFactor", output.motorPowerFactor);
+	SetR("motorCurrent", output.motorCurrent);
+	SetR("motorPower", output.motorPower);
+	SetR("annualEnergy", output.annualEnergy);
+	SetR("annualCost", output.annualCost);
+	SetR("estimatedFLA", output.estimatedFLA);
+
+	info.GetReturnValue().Set(r);
+}
 
 NAN_METHOD(getBaseGasDensityRelativeHumidity) {
 	inp = info[0]->ToObject();

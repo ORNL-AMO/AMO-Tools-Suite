@@ -136,9 +136,9 @@ Motor::LoadEstimationMethod  loadEstimationMethod() {
     unsigned val = static_cast<unsigned>(Get("load_estimation_method"));
     return static_cast<Motor::LoadEstimationMethod>(val);
 }
-Pump::Speed speed() {
+Pump::SpecificSpeed speed() {
     unsigned val = static_cast<unsigned>(Get("fixed_speed"));
-    return static_cast<Pump::Speed>(val);
+    return static_cast<Pump::SpecificSpeed>(val);
 }
 
 NAN_METHOD(resultsExistingAndOptimal) {
@@ -150,7 +150,7 @@ NAN_METHOD(resultsExistingAndOptimal) {
     double viscosity = Get("kinematic_viscosity");
     double specifc_gravity = Get("specific_gravity");
     int stages = static_cast<int>(Get("stages"));
-    Pump::Speed fixed_speed = speed();
+    Pump::SpecificSpeed fixed_speed = speed();
     double pump_specified = Get("pump_specified")/100;
     double pump_rated_speed = Get("pump_rated_speed");
 
@@ -173,15 +173,13 @@ NAN_METHOD(resultsExistingAndOptimal) {
     double motor_field_current = Get("motor_field_current");
     double motor_field_voltage = Get("motor_field_voltage");
 
-    Pump pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed);
+    Pump::Input pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed);
     Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
     Pump::FieldData fd(flow, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
     PSATResult psat(pump, motor, fd, fraction, cost);
 	try {
-        psat.calculateExisting();
-        psat.calculateOptimal();
-        auto ex = psat.getExisting();
-        auto opt = psat.getOptimal();
+        auto const & ex = psat.calculateExisting();
+        auto const & opt = psat.calculateOptimal();
         std::map<const char *, std::vector<double>> out = {
                 {"pump_efficiency",          {ex.pumpEfficiency * 100,                 opt.pumpEfficiency * 100}},
                 {"motor_rated_power",        {ex.motorRatedPower,                      opt.motorRatedPower}},
@@ -217,15 +215,15 @@ NAN_METHOD(resultsExisting) {
 
     Pump::Style style1 = style();
     Motor::Drive drive1 = drive();
-//    Pump::Speed fixed_speed = speed();
+//    Pump::SpecificSpeed fixed_speed = speed();
 
     Motor::LineFrequency lineFrequency = line();
     Motor::EfficiencyClass efficiencyClass = effCls();
 
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
-    Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
-              Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::Speed::FIXED_SPEED);
+    Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
+              Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::SpecificSpeed::FIXED_SPEED);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"));
@@ -235,8 +233,7 @@ NAN_METHOD(resultsExisting) {
 
     PSATResult psat(pump, motor, fd, Get("operating_fraction"), Get("cost_kw_hour"));
 	try {
-        psat.calculateExisting();
-        auto const &ex = psat.getExisting();
+        auto const & ex = psat.calculateExisting();
 
         std::unordered_map<std::string, double> out = {
                 {"pump_efficiency",          ex.pumpEfficiency * 100},
@@ -274,14 +271,14 @@ NAN_METHOD(resultsModified) {
 
     Pump::Style style1 = style();
     Motor::Drive drive1 = drive();
-    Pump::Speed fixed_speed = speed();
+    Pump::SpecificSpeed fixed_speed = speed();
 
     Motor::LineFrequency lineFrequency = line();
     Motor::EfficiencyClass efficiencyClass = effCls();
 
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
-    Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
+    Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
               Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
@@ -292,8 +289,7 @@ NAN_METHOD(resultsModified) {
 
     PSATResult psat(pump, motor, fd, baselinePumpEfficiency, Get("operating_fraction"), Get("cost_kw_hour"));
     try {
-        psat.calculateModified();
-        auto const &mod = psat.getModified();
+        auto const & mod = psat.calculateModified();
 
         std::unordered_map<std::string, double> out = {
                 {"pump_efficiency",          mod.pumpEfficiency * 100},
@@ -329,14 +325,14 @@ NAN_METHOD(resultsOptimal) {
 
     Pump::Style style1 = style();
     Motor::Drive drive1 = drive();
-    Pump::Speed fixed_speed = speed();
+    Pump::SpecificSpeed fixed_speed = speed();
 
     Motor::LineFrequency lineFrequency = line();
     Motor::EfficiencyClass efficiencyClass = effCls();
 
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
-    Pump pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
+    Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
               Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
@@ -347,8 +343,7 @@ NAN_METHOD(resultsOptimal) {
 
     PSATResult psat(pump, motor, fd, Get("operating_fraction"), Get("cost_kw_hour"));
 	try {
-        psat.calculateOptimal();
-        auto const &opt = psat.getOptimal();
+        auto const & opt = psat.calculateOptimal();
 
         std::unordered_map<std::string, double> out = {
                 {"pump_efficiency",          opt.pumpEfficiency * 100},

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Contains the two main modules of PSATResult class.
+ * @brief Contains the two main modules of PSATResult class and the FanResult class.
  *
  * Contains 2 important functions:
  *          calculateExisting : calculates the values for the existing data.
@@ -38,7 +38,7 @@ FanResult::Output FanResult::calculateExisting() {
     return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost, output.estimatedFLA};
 }
 
-void PSATResult::calculateExisting() {
+PSATResult::Result & PSATResult::calculateExisting() {
     /**
      * 1a	Calculate motor shaft power from measured power, OR
      * 1b	Calculate motor shaft power from measured current, voltage
@@ -68,14 +68,15 @@ void PSATResult::calculateExisting() {
     existing.estimatedFLA = output.estimatedFLA;
 
 	existing.motorRatedPower = motor.motorRatedPower;
-    existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pump.drive).calculate();
-    existing.pumpEfficiency = MoverEfficiency(pump.specificGravity, fieldData.flowRate, fieldData.head,
+    existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive).calculate();
+    existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
                                               existing.pumpShaftPower).calculate();
     existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingFraction).calculate();
     existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
+    return existing;
 }
 
-void PSATResult::calculateOptimal() {
+PSATResult::Result & PSATResult::calculateOptimal() {
     /**
      * Steps for calculating the optimal values:
      *  1. Calculate optimal pump efficiency, fluid power and pump shaft power
@@ -92,14 +93,14 @@ void PSATResult::calculateOptimal() {
      *  10.Calculate annual savings potential and optimization rating
      */
 
-    OptimalPumpEfficiency optimalPumpEfficiency(pump.style, pump.achievableEfficiency, pump.rpm,
-                                                pump.kviscosity, pump.stageCount, fieldData.flowRate,
+    OptimalPumpEfficiency optimalPumpEfficiency(pumpInput.style, pumpInput.achievableEfficiency, pumpInput.rpm,
+                                                pumpInput.kviscosity, pumpInput.stageCount, fieldData.flowRate,
                                                 fieldData.head);
     optimal.pumpEfficiency = optimalPumpEfficiency.calculate();
-    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.flowRate, fieldData.head, pump.specificGravity,
+    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
                                                 optimal.pumpEfficiency);
     optimal.pumpShaftPower = optimalPumpShaftPower.calculate();
-    OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pump.drive);
+    OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pumpInput.drive);
     optimal.motorShaftPower = optimalMotorShaftPower.calculate();
     OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.sizeMargin);
     optimal.motorRatedPower = optimalMotorSize.calculate();
@@ -123,8 +124,10 @@ void PSATResult::calculateOptimal() {
 //    annualSavingsPotential = existing.annualCost - optimal.annualCost;
     // Optimization Rating
 //    optimizationRating = optimal.motorPower / existing.motorPower;
+	return optimal;
 }
-void PSATResult::calculateModified() {
+
+PSATResult::Result & PSATResult::calculateModified() {
     /**
          * Steps for calculating the modified values:
      *  1. Calculate fluid power and pump shaft power
@@ -141,17 +144,17 @@ void PSATResult::calculateModified() {
 
      */
 
-    if (pump.style == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
-        modified.pumpEfficiency = pump.achievableEfficiency;
+    if (pumpInput.style == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
+        modified.pumpEfficiency = pumpInput.achievableEfficiency;
     } else {
         modified.pumpEfficiency = baselinePumpEfficiency;
     }
 
-    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.flowRate, fieldData.head, pump.specificGravity,
+    OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
                                                 modified.pumpEfficiency);
     modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
 
-    OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pump.drive);
+    OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pumpInput.drive);
     modified.motorShaftPower = modifiedMotorShaftPower.calculate();
 
     modified.motorRatedPower = motor.motorRatedPower;
@@ -178,4 +181,5 @@ void PSATResult::calculateModified() {
     // Optimization Rating
     //optimizationRating = modified.motorPower / existing.motorPower;
     optimizationRating = 0.0;
+	return modified;
 }
