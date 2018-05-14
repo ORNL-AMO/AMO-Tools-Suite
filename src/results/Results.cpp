@@ -12,6 +12,7 @@
  *
  */
 
+#include <fans/FanEnergyIndex.h>
 #include "results/Results.h"
 #include "calculator/pump/PumpShaftPower.h"
 #include "calculator/pump/MoverEfficiency.h"
@@ -35,7 +36,20 @@ FanResult::Output FanResult::calculateExisting() {
     double const annualEnergy = AnnualEnergy(output.power, operatingFraction).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
 
-    return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost, output.estimatedFLA};
+    double const fanEnergyIndex = FanEnergyIndex(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
+                                                 fanFieldData.airDensity, fanFieldData.measuredPower).calculateEnergyIndex();
+
+    return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost, output.estimatedFLA, fanEnergyIndex};
+}
+
+FanResult::Output FanResult::calculateModified(const double fanEfficiency) {
+    double const optimalFanShaftPower = OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure,
+                                                               fanFieldData.outletPressure, fanFieldData.compressibilityFactor,
+                                                               fanEfficiency).calculate();
+
+    double const optimalMotorShaftPower = OptimalMotorShaftPower(optimalFanShaftPower, fanInput.drive).calculate();
+//    return {fanEfficiency, motorRatedPower, optimalMotorShaftPower, optimalFanShaftPower, motorEfficiency, motorPowerFactor, motorCurrent, motorPower, annualEnergy, annualCost, estimatedFLA};
+
 }
 
 PSATResult::Result & PSATResult::calculateExisting() {

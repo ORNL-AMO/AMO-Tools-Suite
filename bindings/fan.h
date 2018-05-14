@@ -6,6 +6,7 @@
 #include "fans/Fan203.h"
 #include "fans/FanShaftPower.h"
 #include "fans/FanCurve.h"
+#include "fans/FanEnergyIndex.h"
 #include "results/Results.h"
 #include "results/InputData.h"
 
@@ -157,8 +158,10 @@ NAN_METHOD(fanResultsExisting) {
 	double const outletPressure = Get("outletPressure", inp);
 	double const compressibilityFactor = Get("compressibilityFactor", inp);
 	Motor::LoadEstimationMethod const loadEstimationMethod = static_cast<Motor::LoadEstimationMethod>(Get("loadEstimationMethod", inp));
+	double const airDensity = Get("airDensity", inp);
 
-	Fan::FieldData fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor, loadEstimationMethod};
+	Fan::FieldData fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure,
+	                               compressibilityFactor, loadEstimationMethod, airDensity};
 
 	FanResult result = {input, motor, fanFieldData, Get("operatingFraction", inp), Get("unitCost", inp)};
 	auto const output = result.calculateExisting();
@@ -174,7 +177,7 @@ NAN_METHOD(fanResultsExisting) {
 	SetR("annualEnergy", output.annualEnergy);
 	SetR("annualCost", output.annualCost);
 	SetR("estimatedFLA", output.estimatedFLA);
-
+	SetR("fanEnergyIndex", output.fanEnergyIndex);
 	info.GetReturnValue().Set(r);
 }
 

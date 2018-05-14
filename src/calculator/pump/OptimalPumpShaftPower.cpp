@@ -11,9 +11,10 @@
 #include "calculator/pump/OptimalPumpShaftPower.h"
 
 double OptimalPumpShaftPower::calculate() {
-    FluidPower fluidPower(specificGravity,flowRate,head);
-    double fluidPower_ = fluidPower.calculate();
-    double requiredShaftPowerkW = fluidPower_ / pumpEfficiency;
-    double requiredShaftPowerhP = requiredShaftPowerkW / 0.746;
-    return requiredShaftPowerhP;
+    if (isPump) {
+        const double fluidPower = FluidPower(specificGravity, flowRate, head).calculate();
+        return (fluidPower / efficiency) / 0.746;
+    }
+    const double fluidPower = FluidPower(flowRate, inletPressure, outletPressure, compressibilityFactor).calculate();
+    return (fluidPower / efficiency) / 0.746;
 }

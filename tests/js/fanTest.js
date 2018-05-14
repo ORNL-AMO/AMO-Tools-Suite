@@ -7,14 +7,14 @@ function rnd(value) {
 }
 
 test('fansExisting', function (t) {
-    t.plan(11);
+    t.plan(12);
 
     var input = {
         "fanSpeed": 1180, "drive": 0, "stages": 1, "lineFrequency": 0, "motorRatedPower": 600, "motorRpm": 1180,
         "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
         "sizeMargin": 1, "measuredPower": 460, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
         "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988, "loadEstimationMethod": 0,
-        "operatingFraction": 1.0, "unitCost": 0.06
+        "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 1.02
     };
 
     var output = bindings.fanResultsExisting(input);
@@ -30,6 +30,7 @@ test('fansExisting', function (t) {
     t.equal(rnd(output.annualEnergy), rnd(4029.6));
     t.equal(rnd(output.annualCost), rnd(241.776));
     t.equal(rnd(output.estimatedFLA), rnd(683.2505707137));
+    t.equal(rnd(output.fanEnergyIndex), rnd(1.673424));
 });
 
 test('fan203 test', function (t) {

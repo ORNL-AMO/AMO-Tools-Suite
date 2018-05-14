@@ -24,23 +24,24 @@ public:
     struct Output {
         Output(const double fanEfficiency, const double motorRatedPower, const double motorShaftPower, const double fanShaftPower,
                const double motorEfficiency, const double motorPowerFactor, const double motorCurrent, const double motorPower,
-               const double annualEnergy, const double annualCost, const double estimatedFLA)
+               const double annualEnergy, const double annualCost, const double estimatedFLA, const double fanEnergyIndex)
                 : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower),
                   fanShaftPower(fanShaftPower), motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor),
                   motorCurrent(motorCurrent), motorPower(motorPower), annualEnergy(annualEnergy), annualCost(annualCost),
-                  estimatedFLA(estimatedFLA)
+                  estimatedFLA(estimatedFLA), fanEnergyIndex(fanEnergyIndex)
         {}
 
         Output(const MotorShaftPower::Output output, const double fanEfficiency, const double motorRatedPower,
-               const double fanShaftPower, const double annualEnergy, const double annualCost, const double estimatedFLA)
+               const double fanShaftPower, const double annualEnergy, const double annualCost, const double estimatedFLA,
+               const double fanEnergyIndex)
                 : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
                   fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
                   motorCurrent(output.current), motorPower(output.power), annualEnergy(annualEnergy), annualCost(annualCost),
-                  estimatedFLA(estimatedFLA)
+                  estimatedFLA(estimatedFLA), fanEnergyIndex(fanEnergyIndex)
         {}
 
         const double fanEfficiency, motorRatedPower, motorShaftPower, fanShaftPower, motorEfficiency, motorPowerFactor, motorCurrent;
-        const double motorPower, annualEnergy, annualCost, estimatedFLA;
+        const double motorPower, annualEnergy, annualCost, estimatedFLA, fanEnergyIndex;
     };
 
     FanResult(Fan::Input & fanInput, Motor & motor, Fan::FieldData & fanFieldData,
@@ -49,7 +50,18 @@ public:
               unitCost(unitCost)
     {}
 
+    /**
+     *
+     * @return FanResult::Output, the results of an existing fan system assessment
+     */
     Output calculateExisting();
+
+    /**
+     * @param fanEfficiency, double
+     *
+     * @return FanResult::Output, the results of a fan system assessment
+     */
+    Output calculateModified(double fanEfficiency);
 
 
 private:

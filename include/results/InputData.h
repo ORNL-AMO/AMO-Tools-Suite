@@ -67,14 +67,14 @@ namespace Fan {
 	struct FieldData {
 		FieldData(const double measuredPower, const double measuredVoltage, const double measuredAmps, const double flowRate,
 		          const double inletPressure, const double outletPressure, const double compressibilityFactor,
-		          Motor::LoadEstimationMethod loadEstimationMethod)
+		          Motor::LoadEstimationMethod loadEstimationMethod, const double airDensity)
 				: measuredPower(measuredPower), measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
 				  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor),
-				  loadEstimationMethod(loadEstimationMethod)
+				  airDensity(airDensity), loadEstimationMethod(loadEstimationMethod)
 		{}
 
 		double measuredPower, measuredVoltage, measuredAmps;
-		double flowRate, inletPressure, outletPressure, compressibilityFactor;
+		double flowRate, inletPressure, outletPressure, compressibilityFactor, airDensity;
 
 		Motor::LoadEstimationMethod loadEstimationMethod;
 
