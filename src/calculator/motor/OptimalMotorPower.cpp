@@ -15,11 +15,13 @@
 #include "calculator/motor/MotorPowerFactor.h"
 #include "calculator/motor/MotorPower.h"
 
-void OptimalMotorPower::calculate(bool isPsatOptimal) {
+OptimalMotorPower::Output OptimalMotorPower::calculate(bool isPsatOptimal) {
     double tempLoadFraction = 0.00;
     double mspkW;
     double tempMsp = 0, tempMsp1 = 0, tempMsp2 = 0, powerE1 = 0, powerE2 = 0;
     double eff1 = 0, eff2 = 0, lf = 0, current1 = 0, current2 = 0;
+
+    double power, efficiency, current, powerFactor;
     while (true) {
         Motor::EfficiencyClass optimalEfficiencyClass = efficiencyClass;
         if (isPsatOptimal && efficiencyClass != Motor::EfficiencyClass::SPECIFIED) {
@@ -33,27 +35,27 @@ void OptimalMotorPower::calculate(bool isPsatOptimal) {
         //Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction))) + 1);
         MotorEfficiency motorEfficiency(lineFrequency, motorRPM, optimalEfficiencyClass, motorRatedPower);
-        eff = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
+        efficiency = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
         //Similar to motorpowerfactor in existing case instead of ratedVoltage
         MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
-                                          motorRatedPower, tempLoadFraction, current, eff, fieldVoltage);
-        pf = motorPowerFactor.calculate();
+                                          motorRatedPower, tempLoadFraction, current, efficiency, fieldVoltage);
+        powerFactor = motorPowerFactor.calculate();
 
-        power = MotorPower(fieldVoltage, current, pf).calculate();
-        tempMsp = power * eff;
+        power = MotorPower(fieldVoltage, current, powerFactor).calculate();
+        tempMsp = power * efficiency;
         // Converting to KW for matching purpose.
         mspkW = optimalMotorShaftPower * 0.746;
 
         if (tempMsp > mspkW || tempLoadFraction > 1.5) {
             powerE2 = power;
-            eff2 = eff;
+            eff2 = efficiency;
             current2 = current;
             tempMsp2 = tempMsp;
             break;
         } else {
             powerE1 = power;
             lf = tempLoadFraction;
-            eff1 = eff;
+            eff1 = efficiency;
             current1 = current;
             tempMsp1 = tempMsp;
             tempLoadFraction += 0.01;
@@ -69,7 +71,9 @@ void OptimalMotorPower::calculate(bool isPsatOptimal) {
     //double adjCurrent2 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf2)) + 1) * current2;
     //current = adjCurrent1 + 100 * (fractionalIndex - lf) * (adjCurrent2 - adjCurrent1);
     current = current1 + 100 * (fractionalIndex - lf) * (current2 - current1);
-    eff = eff1 + 100 * (fractionalIndex - lf) * (eff2 - eff1);
+    efficiency = eff1 + 100 * (fractionalIndex - lf) * (eff2 - eff1);
     power = powerE1 + 100 * (fractionalIndex - lf) * (powerE2 - powerE1);
-    pf = power / (current * fieldVoltage * std::sqrt(3) / 1000);
+    powerFactor = power / (current * fieldVoltage * std::sqrt(3) / 1000);
+
+    return {power, efficiency, current, powerFactor};
 }

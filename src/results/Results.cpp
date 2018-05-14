@@ -43,12 +43,18 @@ FanResult::Output FanResult::calculateExisting() {
 }
 
 FanResult::Output FanResult::calculateModified(const double fanEfficiency) {
-    double const optimalFanShaftPower = OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure,
+    double const fanShaftPower = OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure,
                                                                fanFieldData.outletPressure, fanFieldData.compressibilityFactor,
                                                                fanEfficiency).calculate();
 
-    double const optimalMotorShaftPower = OptimalMotorShaftPower(optimalFanShaftPower, fanInput.drive).calculate();
-//    return {fanEfficiency, motorRatedPower, optimalMotorShaftPower, optimalFanShaftPower, motorEfficiency, motorPowerFactor, motorCurrent, motorPower, annualEnergy, annualCost, estimatedFLA};
+    double const motorShaftPower = OptimalMotorShaftPower(fanShaftPower, fanInput.drive).calculate();
+
+    OptimalMotorPower::Output output = OptimalMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
+                                                         motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
+                                                         fanFieldData.measuredVoltage, fanShaftPower).calculate();
+
+
+//    return {fanEfficiency, motorRatedPower, motorShaftPower, optimalFanShaftPower, motorEfficiency, motorPowerFactor, motorCurrent, motorPower, annualEnergy, annualCost, estimatedFLA};
 
 }
 
@@ -121,11 +127,11 @@ PSATResult::Result & PSATResult::calculateOptimal() {
     OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                         motor.efficiencyClass, motor.specifiedEfficiency,
                                         motor.motorRatedVoltage, fieldData.voltage, optimal.motorShaftPower);
-    optimalMotorPower.calculate(true);
-    optimal.motorCurrent = optimalMotorPower.getMotorCurrent();
-    optimal.motorEfficiency = optimalMotorPower.getMotorEff();
-    optimal.motorPower = optimalMotorPower.getMotorPower();
-    optimal.motorPowerFactor = optimalMotorPower.getMotorPf();
+    OptimalMotorPower::Output output = optimalMotorPower.calculate(true);
+    optimal.motorCurrent = output.current;
+    optimal.motorEfficiency = output.efficiency;
+    optimal.motorPower = output.power;
+    optimal.motorPowerFactor = output.powerFactor;
     // Calculate Annual Energy
     AnnualEnergy annualEnergy(optimal.motorPower, operatingFraction);
     optimal.annualEnergy = annualEnergy.calculate();
@@ -175,11 +181,11 @@ PSATResult::Result & PSATResult::calculateModified() {
     OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                          motor.efficiencyClass, motor.specifiedEfficiency,
                                          motor.motorRatedVoltage, fieldData.voltage, modified.motorShaftPower);
-    modifiedMotorPower.calculate(false);
-    modified.motorCurrent = modifiedMotorPower.getMotorCurrent();
-    modified.motorEfficiency = modifiedMotorPower.getMotorEff();
-    modified.motorPower = modifiedMotorPower.getMotorPower();
-    modified.motorPowerFactor = modifiedMotorPower.getMotorPf();
+    OptimalMotorPower::Output output = modifiedMotorPower.calculate(false);
+    modified.motorCurrent = output.current;
+    modified.motorEfficiency = output.efficiency;
+    modified.motorPower = output.power;
+    modified.motorPowerFactor = output.powerFactor;
 
     // Calculate Annual Energy
     AnnualEnergy annualEnergy(modified.motorPower, operatingFraction);
