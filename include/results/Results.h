@@ -24,7 +24,7 @@ public:
     struct Output {
         Output(const double fanEfficiency, const double motorRatedPower, const double motorShaftPower, const double fanShaftPower,
                const double motorEfficiency, const double motorPowerFactor, const double motorCurrent, const double motorPower,
-               const double annualEnergy, const double annualCost, const double estimatedFLA, const double fanEnergyIndex)
+               const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double estimatedFLA = 0)
                 : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower),
                   fanShaftPower(fanShaftPower), motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor),
                   motorCurrent(motorCurrent), motorPower(motorPower), annualEnergy(annualEnergy), annualCost(annualCost),
@@ -32,8 +32,8 @@ public:
         {}
 
         Output(const MotorShaftPower::Output output, const double fanEfficiency, const double motorRatedPower,
-               const double fanShaftPower, const double annualEnergy, const double annualCost, const double estimatedFLA,
-               const double fanEnergyIndex)
+               const double fanShaftPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex,
+               const double estimatedFLA = 0)
                 : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
                   fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
                   motorCurrent(output.current), motorPower(output.power), annualEnergy(annualEnergy), annualCost(annualCost),

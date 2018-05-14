@@ -33,6 +33,40 @@ test('fansExisting', function (t) {
     t.equal(rnd(output.fanEnergyIndex), rnd(1.673424));
 });
 
+test('fansModified', function (t) {
+    t.plan(11);
+
+    var input = {
+        "fanSpeed": 1180, "drive": 0, "stages": 1, "lineFrequency": 0, "motorRatedPower": 600, "motorRpm": 1180,
+        "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
+        "sizeMargin": 1, "measuredPower": 460, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
+        "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988, "loadEstimationMethod": 0,
+        "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 1.02, "fanEfficiency": 59.5398315
+    };
+
+    var output = bindings.fanResultsModified(input);
+
+    // CHECK(Approx(output.motorEfficiency) == 0.9596114694);
+    // CHECK(Approx(output.motorPowerFactor) == 0.8626817267);
+    // CHECK(Approx(output.motorCurrent) == 668.0118828209);
+    // CHECK(Approx(output.motorPower) == 459.1485803735);
+    // CHECK(Approx(output.annualEnergy) == 4022.1415640714);
+    // CHECK(Approx(output.annualCost) == 241.3284938443);
+    // CHECK(Approx(output.fanEnergyIndex) == 1.3057433802);
+
+    t.equal(rnd(output.fanEfficiency), rnd(0.595398315));
+    t.equal(rnd(output.motorRatedPower), rnd(600.0));
+    t.equal(rnd(output.motorShaftPower), rnd(590.622186263));
+    t.equal(rnd(output.fanShaftPower), rnd(590.622186263));
+    t.equal(rnd(output.motorEfficiency), rnd(0.959611));
+    t.equal(rnd(output.motorPowerFactor), rnd(0.862682));
+    t.equal(rnd(output.motorCurrent), rnd(668.011883));
+    t.equal(rnd(output.motorPower), rnd(459.14858));
+    t.equal(rnd(output.annualEnergy), rnd(4022.141564));
+    t.equal(rnd(output.annualCost), rnd(241.328494));
+    t.equal(rnd(output.fanEnergyIndex), rnd(1.676527));
+});
+
 test('fan203 test', function (t) {
     t.plan(4);
     t.type(bindings.fan203, 'function');

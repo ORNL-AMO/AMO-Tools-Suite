@@ -29,7 +29,7 @@ FanResult::Output FanResult::calculateExisting() {
                                     motor.lineFrequency, motor.efficiencyClass, motor.specifiedEfficiency,
                                     motor.motorRatedVoltage, motor.fullLoadAmps, fanFieldData.measuredVoltage,
                                     fanFieldData.loadEstimationMethod, fanFieldData.measuredAmps);
-    auto const output = motorShaftPower.calculate();
+    MotorShaftPower::Output const output = motorShaftPower.calculate();
     double const fanShaftPower = PumpShaftPower(output.shaftPower, fanInput.drive).calculate();
     double const fanEfficiency = MoverEfficiency(fanFieldData.flowRate, fanShaftPower, fanFieldData.inletPressure,
                                                  fanFieldData.outletPressure, fanFieldData.compressibilityFactor).calculate();
@@ -39,7 +39,8 @@ FanResult::Output FanResult::calculateExisting() {
     double const fanEnergyIndex = FanEnergyIndex(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
                                                  fanFieldData.airDensity, fanFieldData.measuredPower).calculateEnergyIndex();
 
-    return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost, output.estimatedFLA, fanEnergyIndex};
+    return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost,
+            fanEnergyIndex, output.estimatedFLA};
 }
 
 FanResult::Output FanResult::calculateModified(const double fanEfficiency) {
@@ -49,12 +50,18 @@ FanResult::Output FanResult::calculateModified(const double fanEfficiency) {
 
     double const motorShaftPower = OptimalMotorShaftPower(fanShaftPower, fanInput.drive).calculate();
 
-    OptimalMotorPower::Output output = OptimalMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
-                                                         motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
-                                                         fanFieldData.measuredVoltage, fanShaftPower).calculate();
+    OptimalMotorPower::Output const output = OptimalMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
+                                                               motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
+                                                               fanFieldData.measuredVoltage, fanShaftPower).calculate();
 
+    double const annualEnergy = AnnualEnergy(output.power, operatingFraction).calculate();
+    double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
 
-//    return {fanEfficiency, motorRatedPower, motorShaftPower, optimalFanShaftPower, motorEfficiency, motorPowerFactor, motorCurrent, motorPower, annualEnergy, annualCost, estimatedFLA};
+    double const fanEnergyIndex = FanEnergyIndex(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
+                                                 fanFieldData.airDensity, output.power).calculateEnergyIndex();
+
+    return {fanEfficiency, motor.motorRatedPower, motorShaftPower, fanShaftPower, output.efficiency, output.powerFactor,
+            output.current, output.power, annualEnergy, annualCost, fanEnergyIndex};
 
 }
 
