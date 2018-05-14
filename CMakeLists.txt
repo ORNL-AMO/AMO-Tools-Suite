@@ -191,7 +191,7 @@ set(INCLUDE_FILES
         include/fans/FanCurve.h
         include/calculator/util/CompressedAir.h
         include/calculator/motor/MotorData.h
-        include/sqlite/MotorData.h include/fans/CompressibilityFactor.h include/results/InputData.h)
+        include/sqlite/MotorData.h include/fans/CompressibilityFactor.h include/results/InputData.h include/fans/FanEnergyIndex.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

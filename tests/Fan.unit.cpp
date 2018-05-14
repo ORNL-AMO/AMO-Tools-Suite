@@ -1,6 +1,12 @@
 #include "catch.hpp"
 #include <fans/Fan203.h>
+#include <fans/FanEnergyIndex.h>
 #include <fans/FanCurve.h>
+
+TEST_CASE( "FanEnergyIndex", "[FanEnergyIndex]") {
+	CHECK(Approx(FanEnergyIndex(129691, -16, 1, 0.07024, 450).calculateEnergyIndex()) == 1.2979330486);
+	CHECK(Approx(FanEnergyIndex(80364, -9, 1, 0.07024, 150).calculateEnergyIndex()) == 1.44518830420);
+}
 
 TEST_CASE( "Fan203", "[Fan203]") {
 	FanRatedInfo fanRatedInfo(1191, 1191, 1170, 0.05, 26.28);
