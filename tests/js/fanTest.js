@@ -46,14 +46,6 @@ test('fansModified', function (t) {
 
     var output = bindings.fanResultsModified(input);
 
-    // CHECK(Approx(output.motorEfficiency) == 0.9596114694);
-    // CHECK(Approx(output.motorPowerFactor) == 0.8626817267);
-    // CHECK(Approx(output.motorCurrent) == 668.0118828209);
-    // CHECK(Approx(output.motorPower) == 459.1485803735);
-    // CHECK(Approx(output.annualEnergy) == 4022.1415640714);
-    // CHECK(Approx(output.annualCost) == 241.3284938443);
-    // CHECK(Approx(output.fanEnergyIndex) == 1.3057433802);
-
     t.equal(rnd(output.fanEfficiency), rnd(0.595398315));
     t.equal(rnd(output.motorRatedPower), rnd(600.0));
     t.equal(rnd(output.motorShaftPower), rnd(590.622186263));
