@@ -3,7 +3,6 @@
 
 #include <functional>
 #include <cfloat>
-#include <array>
 
 class OptimalFanEfficiency {
 public:
@@ -28,6 +27,10 @@ public:
 			  inletPressure(inletPressure), compressibility(compressibility)
 	{};
 
+	/**
+	 * OptimalFanEfficiency::calculate()
+	 * @return optimal fan efficiency, double as a %
+	 */
 	double calculate() {
 		FanTypeProperties const & currentFan = fanTypeProperties[static_cast<std::size_t>(fanType)];
 		double specificSpeed = (fanSpeed * std::sqrt(flowRate)) / (std::pow(outletPressure - inletPressure, 0.75)
@@ -76,6 +79,7 @@ private:
 		friend class OptimalFanEfficiency;
 	};
 
+	// TODO consider making this static. I think C++17 should allow this to be done inline, in this header file
 	const FanTypeProperties fanTypeProperties[12] = {
 			{
 					FanType::AirfoilSISW, 40500, 25000, 1200100,

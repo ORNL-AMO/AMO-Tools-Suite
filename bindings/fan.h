@@ -141,7 +141,7 @@ NAN_METHOD(fanResultsExisting) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	Fan::Input input = {Get("fanSpeed", inp), static_cast<Motor::Drive>(Get("drive", inp)), static_cast<int>(Get("stages", inp))};
+	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), static_cast<Motor::Drive>(Get("drive", inp))};
 
 	Motor::LineFrequency const lineFrequency = static_cast<Motor::LineFrequency>(Get("lineFrequency", inp));
 	double const motorRatedPower = Get("motorRatedPower", inp);
@@ -162,13 +162,12 @@ NAN_METHOD(fanResultsExisting) {
 	double const outletPressure = Get("outletPressure", inp);
 	double const compressibilityFactor = Get("compressibilityFactor", inp);
 	Motor::LoadEstimationMethod const loadEstimationMethod = static_cast<Motor::LoadEstimationMethod>(Get("loadEstimationMethod", inp));
-	double const airDensity = Get("airDensity", inp);
 
-	Fan::FieldData fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure,
-	                               compressibilityFactor, loadEstimationMethod, airDensity};
+	Fan::FieldDataBaseline fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure,
+	                                       compressibilityFactor, loadEstimationMethod};
 
-	FanResult result = {input, motor, fanFieldData, Get("operatingFraction", inp), Get("unitCost", inp)};
-	auto const output = result.calculateExisting();
+	FanResult result = {input, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+	auto const output = result.calculateExisting(fanFieldData);
 
 	SetR("fanEfficiency", output.fanEfficiency);
 	SetR("motorRatedPower", output.motorRatedPower);
@@ -189,21 +188,17 @@ NAN_METHOD(fanResultsModified) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	const double fanEfficiency = Get("fanEfficiency", inp) / 100;
 
-	Fan::Input fanInput = {Get("fanSpeed", inp), static_cast<Motor::Drive>(Get("drive", inp)), static_cast<int>(Get("stages", inp))};
+	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), static_cast<Motor::Drive>(Get("drive", inp))};
 
-	double const measuredPower = Get("measuredPower", inp);
 	double const measuredVoltage = Get("measuredVoltage", inp);
 	double const measuredAmps = Get("measuredAmps", inp);
 	double const flowRate = Get("flowRate", inp);
 	double const inletPressure = Get("inletPressure", inp);
 	double const outletPressure = Get("outletPressure", inp);
 	double const compressibilityFactor = Get("compressibilityFactor", inp);
-	Motor::LoadEstimationMethod const loadEstimationMethod = static_cast<Motor::LoadEstimationMethod>(Get("loadEstimationMethod", inp));
-	double const airDensity = Get("airDensity", inp);
-	Fan::FieldData fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure,
-	                               compressibilityFactor, loadEstimationMethod, airDensity};
+	Fan::FieldDataModifiedAndOptimal fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
+	                                                 outletPressure, compressibilityFactor};
 
 	Motor::LineFrequency const lineFrequency = static_cast<Motor::LineFrequency>(Get("lineFrequency", inp));
 	double const motorRatedPower = Get("motorRatedPower", inp);
@@ -216,8 +211,10 @@ NAN_METHOD(fanResultsModified) {
 
 	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
 
-	FanResult result = {fanInput, motor, fanFieldData, Get("operatingFraction", inp), Get("unitCost", inp)};
-	auto const output = result.calculateModified(fanEfficiency);
+	FanResult result = {fanInput, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+
+	const double fanEfficiency = Get("fanEfficiency", inp) / 100;
+	auto const output = result.calculateModified(fanFieldData, fanEfficiency, false);
 
 	SetR("fanEfficiency", output.fanEfficiency);
 	SetR("motorRatedPower", output.motorRatedPower);

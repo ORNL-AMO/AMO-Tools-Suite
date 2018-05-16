@@ -6,12 +6,12 @@
 #include <array>
 #include <calculator/motor/EstimateFLA.h>
 
-TEST_CASE( "Output existing", "[Fan results existing]" ) {
-	Fan::Input fanInput = {1180, Motor::Drive::DIRECT_DRIVE, 1};
+TEST_CASE( "Fan Output existing", "[Fan results existing]" ) {
+	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE};
 	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
-	Fan::FieldData fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER, 0.07024};
-	FanResult result = {fanInput, motor, fanFieldData, 1.0, 0.06};
-	auto const output = result.calculateExisting();
+	Fan::FieldDataBaseline fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER};
+	FanResult result = {fanInput, motor, 1.0, 0.06};
+	auto const output = result.calculateExisting(fanFieldData);
 
 	CHECK(Approx(output.fanEfficiency) == 0.595398315);
 	CHECK(Approx(output.motorRatedPower) == 600.0);
@@ -27,24 +27,44 @@ TEST_CASE( "Output existing", "[Fan results existing]" ) {
 	CHECK(Approx(output.fanEnergyIndex) == 1.3033265638);
 }
 
-TEST_CASE( "Output modified", "[Fan results modified]" ) {
-	Fan::Input fanInput = {1180, Motor::Drive::DIRECT_DRIVE, 1};
+TEST_CASE( "Fan Output modified", "[Fan results modified]" ) {
+	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE};
 	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
-	Fan::FieldData fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER, 0.07024};
-	FanResult result = {fanInput, motor, fanFieldData, 1.0, 0.06};
-	auto const output = result.calculateModified(0.595398315);
+	Fan::FieldDataModifiedAndOptimal fanFieldData = {460, 660, 129691, -16.36, 1.1, 0.988};
+	FanResult result = {fanInput, motor, 1.0, 0.06};
+	auto const output = result.calculateModified(fanFieldData, 0.595398315, false);
 
 	CHECK(Approx(output.fanEfficiency) == 0.595398315);
 	CHECK(Approx(output.motorRatedPower) == 600.0);
 	CHECK(Approx(output.motorShaftPower) == 590.622186263);
 	CHECK(Approx(output.fanShaftPower) == 590.622186263);
-	CHECK(Approx(output.motorEfficiency) == 0.9596114694);
+	CHECK(Approx(output.motorEfficiency) == 0.9578351072);
+	CHECK(Approx(output.motorPowerFactor) == 0.8577480086);
+	CHECK(Approx(output.motorCurrent) == 673.1003093353);
+	CHECK(Approx(output.motorPower) == 460.0001440224);
+	CHECK(Approx(output.annualEnergy) == 4029.6012616363);
+	CHECK(Approx(output.annualCost) == 241.7760756982);
+	CHECK(Approx(output.fanEnergyIndex) == 1.3033261557);
+}
+
+TEST_CASE( "Fan Output Optimal", "[Fan results optimal]" ) {
+	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE};
+	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
+	Fan::FieldDataModifiedAndOptimal fanFieldData = {460, 660, 129691, -16.36, 1.1, 0.988};
+	FanResult result = {fanInput, motor, 1.0, 0.06};
+	auto const output = result.calculateOptimal(fanFieldData, OptimalFanEfficiency::FanType::AirfoilSISW);
+
+	CHECK(Approx(output.fanEfficiency) == 0.7565784493);
+	CHECK(Approx(output.motorRatedPower) == 600.0);
+	CHECK(Approx(output.motorShaftPower) == 464.7970806678);
+	CHECK(Approx(output.fanShaftPower) == 464.7970806678);
+	CHECK(Approx(output.motorEfficiency) == 0.9603146828);
 	CHECK(Approx(output.motorPowerFactor) == 0.8626817267);
 	CHECK(Approx(output.motorCurrent) == 668.0118828209);
-	CHECK(Approx(output.motorPower) == 459.1485803735);
-	CHECK(Approx(output.annualEnergy) == 4022.1415640714);
-	CHECK(Approx(output.annualCost) == 241.3284938443);
-	CHECK(Approx(output.fanEnergyIndex) == 1.3057433802);
+	CHECK(Approx(output.motorPower) == 361.0677290572);
+	CHECK(Approx(output.annualEnergy) == 3162.9533065408);
+	CHECK(Approx(output.annualCost) == 189.7771983924);
+	CHECK(Approx(output.fanEnergyIndex) == 0.999217);
 }
 
 

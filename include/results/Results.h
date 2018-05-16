@@ -16,6 +16,7 @@
 #define AMO_LIBRARY_RESULTS_H
 
 #include <calculator/motor/MotorShaftPower.h>
+#include <fans/OptimalFanEfficiency.h>
 #include "InputData.h"
 
 
@@ -44,24 +45,31 @@ public:
         const double motorPower, annualEnergy, annualCost, estimatedFLA, fanEnergyIndex;
     };
 
-    FanResult(Fan::Input & fanInput, Motor & motor, Fan::FieldData & fanFieldData,
-              double operatingFraction, double unitCost)
-            : fanInput(fanInput), motor(motor), fanFieldData(fanFieldData), operatingFraction(operatingFraction),
-              unitCost(unitCost)
+    FanResult(Fan::Input & fanInput, Motor & motor, double operatingFraction, double unitCost)
+            : fanInput(fanInput), motor(motor), operatingFraction(operatingFraction), unitCost(unitCost)
     {}
 
     /**
-     *
+     * @param fanFieldData, Fan::FieldDataBaseline
      * @return FanResult::Output, the results of an existing fan system assessment
      */
-    Output calculateExisting();
+    Output calculateExisting(Fan::FieldDataBaseline const & fanFieldData);
 
     /**
+     * @param fanFieldData, Fan::FieldDataModifiedAndOptimal
      * @param fanEfficiency, double
-     *
+     * @param isOptimal, bool determines whether or not to optimize motor (use EE or PE) or use existing efficiency class
      * @return FanResult::Output, the results of a fan system assessment
      */
-    Output calculateModified(double fanEfficiency);
+    Output calculateModified(Fan::FieldDataModifiedAndOptimal const & fanFieldData, double fanEfficiency, bool isOptimal);
+
+    /**
+     *
+     * @param fanFieldData
+     * @param fanType
+     * @return FanResult::Output, the results of a fan system assessment
+     */
+    Output calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData, OptimalFanEfficiency::FanType fanType);
 
 
 private:
@@ -70,9 +78,7 @@ private:
     // In values
     Fan::Input fanInput;
     Motor motor;
-    Fan::FieldData fanFieldData;
     double operatingFraction, unitCost;
-//    double baselineFanEfficiency = 0;
 };
 
 /**

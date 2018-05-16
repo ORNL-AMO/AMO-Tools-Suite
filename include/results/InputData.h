@@ -54,30 +54,54 @@ struct Motor {
 
 namespace Fan {
 	struct Input {
-		Input(double const fanSpeed, const Motor::Drive drive, const int stages): fanSpeed(fanSpeed), drive(drive)
-//                stages(stages)
+		Input(double const fanSpeed, const double airDensity, const Motor::Drive drive)
+				: fanSpeed(fanSpeed), airDensity(airDensity), drive(drive)
 		{}
 
-		// TODO FanType enum of fan types
-		double fanSpeed;
+		double fanSpeed, airDensity;
 		Motor::Drive drive;
-//        int stages;
 	};
 
-	struct FieldData {
-		FieldData(const double measuredPower, const double measuredVoltage, const double measuredAmps, const double flowRate,
-		          const double inletPressure, const double outletPressure, const double compressibilityFactor,
-		          Motor::LoadEstimationMethod loadEstimationMethod, const double airDensity)
-				: measuredPower(measuredPower), measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
-				  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor),
-				  airDensity(airDensity), loadEstimationMethod(loadEstimationMethod)
+	struct FieldDataModifiedAndOptimal {
+		/**
+		 * To be used for Modified and Optimal Fan results
+		 * @param measuredVoltage
+		 * @param measuredAmps
+		 * @param flowRate
+		 * @param inletPressure
+		 * @param outletPressure
+		 * @param compressibilityFactor
+		 */
+		FieldDataModifiedAndOptimal(const double measuredVoltage, const double measuredAmps, const double flowRate, const double inletPressure,
+		                            const double outletPressure, const double compressibilityFactor)
+				: measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
+				  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor)
 		{}
 
-		double measuredPower, measuredVoltage, measuredAmps;
-		double flowRate, inletPressure, outletPressure, compressibilityFactor, airDensity;
+		double measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor;
+	};
 
+	struct FieldDataBaseline: public FieldDataModifiedAndOptimal {
+		/**
+		 * To be used for Baseline Fan results
+		 * @param measuredPower
+		 * @param measuredVoltage
+		 * @param measuredAmps
+		 * @param flowRate
+		 * @param inletPressure
+		 * @param outletPressure
+		 * @param compressibilityFactor
+		 * @param loadEstimationMethod
+		 */
+		FieldDataBaseline(const double measuredPower, const double measuredVoltage, const double measuredAmps,
+		                  const double flowRate, const double inletPressure, const double outletPressure,
+		                  const double compressibilityFactor, Motor::LoadEstimationMethod loadEstimationMethod)
+				: FieldDataModifiedAndOptimal(measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor),
+				  measuredPower(measuredPower), loadEstimationMethod(loadEstimationMethod)
+		{}
+
+		double measuredPower;
 		Motor::LoadEstimationMethod loadEstimationMethod;
-
 	};
 }
 

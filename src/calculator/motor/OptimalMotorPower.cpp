@@ -15,7 +15,7 @@
 #include "calculator/motor/MotorPowerFactor.h"
 #include "calculator/motor/MotorPower.h"
 
-OptimalMotorPower::Output OptimalMotorPower::calculate(bool isPsatOptimal) {
+OptimalMotorPower::Output OptimalMotorPower::calculate(bool isOptimal) {
     double tempLoadFraction = 0.00;
     double mspkW;
     double tempMsp = 0, tempMsp1 = 0, tempMsp2 = 0, powerE1 = 0, powerE2 = 0;
@@ -24,7 +24,7 @@ OptimalMotorPower::Output OptimalMotorPower::calculate(bool isPsatOptimal) {
     double power, efficiency, current, powerFactor;
     while (true) {
         Motor::EfficiencyClass optimalEfficiencyClass = efficiencyClass;
-        if (isPsatOptimal && efficiencyClass != Motor::EfficiencyClass::SPECIFIED) {
+        if (isOptimal && efficiencyClass != Motor::EfficiencyClass::SPECIFIED) {
             int const poleCase = Poles(motorRPM, lineFrequency).calculate() / 2 - 1;
             optimalEfficiencyClass = (poleCase > 2) ? Motor::EfficiencyClass::ENERGY_EFFICIENT : Motor::EfficiencyClass::PREMIUM;
         }
