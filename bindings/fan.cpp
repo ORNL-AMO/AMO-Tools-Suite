@@ -12,6 +12,9 @@ NAN_MODULE_INIT(InitFans) {
 	Nan::Set(target, New<String>("fanResultsModified").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(fanResultsModified)).ToLocalChecked());
 
+	Nan::Set(target, New<String>("fanResultsOptimal").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(fanResultsOptimal)).ToLocalChecked());
+
 	Nan::Set(target, New<String>("fan203").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(fan203)).ToLocalChecked());
 

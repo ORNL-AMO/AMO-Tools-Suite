@@ -4,8 +4,8 @@
 #include <fans/FanCurve.h>
 
 TEST_CASE( "FanEnergyIndex", "[FanEnergyIndex]") {
-	CHECK(Approx(FanEnergyIndex(129691, -16, 1, 0.07024, 450).calculateEnergyIndex()) == 1.2979330486);
-	CHECK(Approx(FanEnergyIndex(80364, -9, 1, 0.07024, 150).calculateEnergyIndex()) == 1.44518830420);
+	CHECK(Approx(FanEnergyIndex(129691, -16, 1, 0.07024, 450).calculateEnergyIndex()) == 0.9678686743);
+	CHECK(Approx(FanEnergyIndex(80364, -9, 1, 0.07024, 150).calculateEnergyIndex()) == 1.0776769184);
 }
 
 TEST_CASE( "Fan203", "[Fan203]") {

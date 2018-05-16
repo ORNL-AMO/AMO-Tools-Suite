@@ -19,6 +19,12 @@ class OptimalMotorPower {
 public:
 
     struct Output {
+	    /**
+	     * @param power - kW
+	     * @param efficiency - unitless
+	     * @param current in amps
+	     * @param powerFactor  unitless
+	     */
         Output(const double power, const double efficiency, const double current, const double powerFactor)
                 : power(power), efficiency(efficiency), current(current), powerFactor(powerFactor)
         {}

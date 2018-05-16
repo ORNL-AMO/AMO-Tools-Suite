@@ -11,7 +11,7 @@ public:
 	 * @param inletPressure, double in inch ws
 	 * @param outletPressure, double in inch ws
 	 * @param airDensity, double in lbm/ft
-	 * @param motorPower, double in horsepower
+	 * @param motorPower, double in kW
 	 */
 	FanEnergyIndex(const double flowRate, const double inletPressure, const double outletPressure, const double airDensity,
 	               const double motorPower)
@@ -36,7 +36,7 @@ public:
 			              0.125559 * std::log10(kWreferencePower) + 0.850274;
 		}
 
-		return (referencePower * (1 / efficiency1) * (1 / efficiency2)) / motorPower;
+		return (kWreferencePower * (1 / efficiency1) * (1 / efficiency2)) / motorPower;
 	}
 
 private:

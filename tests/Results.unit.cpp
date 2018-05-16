@@ -24,7 +24,7 @@ TEST_CASE( "Fan Output existing", "[Fan results existing]" ) {
 	CHECK(Approx(output.annualEnergy) == 4029.6);
 	CHECK(Approx(output.annualCost) == 241.776);
 	CHECK(Approx(output.estimatedFLA) == 683.2505707137);
-	CHECK(Approx(output.fanEnergyIndex) == 1.3033265638);
+	CHECK(Approx(output.fanEnergyIndex) == 0.9718906186);
 }
 
 TEST_CASE( "Fan Output modified", "[Fan results modified]" ) {
@@ -44,27 +44,27 @@ TEST_CASE( "Fan Output modified", "[Fan results modified]" ) {
 	CHECK(Approx(output.motorPower) == 460.0001440224);
 	CHECK(Approx(output.annualEnergy) == 4029.6012616363);
 	CHECK(Approx(output.annualCost) == 241.7760756982);
-	CHECK(Approx(output.fanEnergyIndex) == 1.3033261557);
+	CHECK(Approx(output.fanEnergyIndex) == 0.9718903143);
 }
 
 TEST_CASE( "Fan Output Optimal", "[Fan results optimal]" ) {
 	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE};
-	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
+	Motor motor = {Motor::LineFrequency::FREQ60, 500, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
 	Fan::FieldDataModifiedAndOptimal fanFieldData = {460, 660, 129691, -16.36, 1.1, 0.988};
 	FanResult result = {fanInput, motor, 1.0, 0.06};
 	auto const output = result.calculateOptimal(fanFieldData, OptimalFanEfficiency::FanType::AirfoilSISW);
 
 	CHECK(Approx(output.fanEfficiency) == 0.7565784493);
-	CHECK(Approx(output.motorRatedPower) == 600.0);
+	CHECK(Approx(output.motorRatedPower) == 500.0);
 	CHECK(Approx(output.motorShaftPower) == 464.7970806678);
 	CHECK(Approx(output.fanShaftPower) == 464.7970806678);
-	CHECK(Approx(output.motorEfficiency) == 0.9603146828);
-	CHECK(Approx(output.motorPowerFactor) == 0.8626817267);
-	CHECK(Approx(output.motorCurrent) == 668.0118828209);
-	CHECK(Approx(output.motorPower) == 361.0677290572);
-	CHECK(Approx(output.annualEnergy) == 3162.9533065408);
-	CHECK(Approx(output.annualCost) == 189.7771983924);
-	CHECK(Approx(output.fanEnergyIndex) == 0.999217);
+	CHECK(Approx(output.motorEfficiency) == 0.9599974605);
+	CHECK(Approx(output.motorPowerFactor) == 0.8542724641);
+	CHECK(Approx(output.motorCurrent) == 530.6611260876);
+	CHECK(Approx(output.motorPower) == 361.1870254817);
+	CHECK(Approx(output.annualEnergy) == 3163.9983432194);
+	CHECK(Approx(output.annualCost) == 189.839900593);
+	CHECK(Approx(output.fanEnergyIndex) == 1.2377789151);
 }
 
 
