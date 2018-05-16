@@ -17,19 +17,21 @@ public:
 protected:
 	// protected constructor to be used only during the construction of its derived classes
 	VelocityPressureTraverseData(const double pitotTubeCoefficient,
-								 std::vector< std::vector< double > > traverseHoleData)
+	                             std::vector< std::vector< double > > traverseHoleData)
 			: pitotTubeCoefficient(pitotTubeCoefficient), traverseHoleData(std::move(traverseHoleData))
 	{
-		auto maxPv3r = 0.0;
-		auto sumPv3r = 0.0;
+		double maxPv3r = 0.0;
+		double sumPv3r = 0.0;
 		for (auto & row : this->traverseHoleData) {
-			for (auto & val : row) {
+			for (double & val : row) {
 				if (val <= 0) {
 					val = 0;
 					continue;
 				}
 				val *= std::pow(pitotTubeCoefficient, 2);
-				if (val > maxPv3r) maxPv3r = val;
+				if (val > maxPv3r) {
+					maxPv3r = val;
+				}
 				sumPv3r += std::sqrt(val);
 			}
 		}
@@ -43,7 +45,6 @@ protected:
 			}
 		}
 
-		// TODO this will need to be reworked for circular planes
 		percent75Rule = count / static_cast<double>(this->traverseHoleData.size() * this->traverseHoleData[0].size());
 	}
 

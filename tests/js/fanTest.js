@@ -86,7 +86,7 @@ test('fansOptimal', function (t) {
 });
 
 test('fan203 test', function (t) {
-    t.plan(4);
+    t.plan(16);
     t.type(bindings.fan203, 'function');
 
     var area = 143.63 * 32.63 / 144.0;
@@ -173,6 +173,20 @@ test('fan203 test', function (t) {
     t.equal(rnd(res.fanEfficiencyTotalPressure), rnd(53.60738684355601));
     t.equal(rnd(res.fanEfficiencyStaticPressure), rnd(49.20691409764023));
     t.equal(rnd(res.fanEfficiencyStaticPressureRise), rnd(50.768875240824116));
+
+    t.equal(rnd(res.flow), rnd(250332.6394178045));
+    t.equal(rnd(res.kpc), rnd(0.9982905074));
+    t.equal(rnd(res.power), rnd(1671.2107816151));
+    t.equal(rnd(res.pressureStatic), rnd(21.2207447999));
+    t.equal(rnd(res.pressureTotal), rnd(23.1184721997));
+    t.equal(rnd(res.staticPressureRise), rnd(21.8943488943));
+
+    t.equal(rnd(res.flowCorrected), rnd(245498.3175715673));
+    t.equal(rnd(res.kpcCorrected), rnd(0.986542913));
+    t.equal(rnd(res.powerCorrected), rnd(1445.5400545013));
+    t.equal(rnd(res.pressureStaticCorrected), rnd(18.6846696404));
+    t.equal(rnd(res.pressureTotalCorrected), rnd(20.355601074));
+    t.equal(rnd(res.staticPressureRiseCorrected), rnd(19.277771819));
 });
 
 test('getBaseGasDensity', function (t) {

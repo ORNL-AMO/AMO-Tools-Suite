@@ -429,12 +429,20 @@ NAN_METHOD(fan203) {
 		SetR("fanEfficiencyTotalPressure", rv.fanEfficiencyTotalPressure);
 		SetR("fanEfficiencyStaticPressure", rv.fanEfficiencyStaticPressure);
 		SetR("fanEfficiencyStaticPressureRise", rv.fanEfficiencyStaticPressureRise);
-		SetR("flowCorrected", rv.flowCorrected);
-		SetR("pressureTotalCorrected", rv.pressureTotalCorrected);
-		SetR("pressureStaticCorrected", rv.pressureStaticCorrected);
-		SetR("staticPressureRiseCorrected", rv.staticPressureRiseCorrected);
-		SetR("powerCorrected", rv.powerCorrected);
-		SetR("kpc", rv.kpc);
+
+		SetR("flow", rv.asTested.flow);
+		SetR("pressureTotal", rv.asTested.pressureTotal);
+		SetR("pressureStatic", rv.asTested.pressureStatic);
+		SetR("staticPressureRise", rv.asTested.staticPressureRise);
+		SetR("power", rv.asTested.power);
+		SetR("kpc", rv.asTested.kpc);
+
+		SetR("flowCorrected", rv.converted.flow);
+		SetR("pressureTotalCorrected", rv.converted.pressureTotal);
+		SetR("pressureStaticCorrected", rv.converted.pressureStatic);
+		SetR("staticPressureRiseCorrected", rv.converted.staticPressureRise);
+		SetR("powerCorrected", rv.converted.power);
+		SetR("kpcCorrected", rv.converted.kpc);
 	} catch (std::runtime_error const & e) {
 		std::string const what = e.what();
 		ThrowError(std::string("std::runtime_error thrown in fan203 - fan.h: " + what).c_str());

@@ -7,6 +7,7 @@
 #include <vector>
 #include <stdexcept>
 #include <functional>
+#include <mach/port.h>
 #include "Planar.h"
 #include "FanShaftPower.h"
 
@@ -291,20 +292,27 @@ public:
 		this->planeData.calculate(this->baseGasDensity);
 	};
 
+	struct Results {
+		Results(const double kpc, const double power, const double flow,
+		        const double pressureTotal, const double pressureStatic,
+		        const double staticPressureRise)
+				: kpc(kpc), power(power),
+				  flow(flow), pressureTotal(pressureTotal),
+				  pressureStatic(pressureStatic), staticPressureRise(staticPressureRise)
+		{}
+		const double kpc, power, flow, pressureTotal;
+		const double pressureStatic, staticPressureRise;
+	};
+
 	struct Output {
 		Output(const double fanEfficiencyTotalPressure, const double fanEfficiencyStaticPressure,
-		           const double fanEfficiencyStaticPressureRise, const double kpc, const double powerCorrected,
-		           const double flowCorrected, const double pressureTotalCorrected,
-		           const double pressureStaticCorrected, const double staticPressureRiseCorrected) :
-				fanEfficiencyTotalPressure(fanEfficiencyTotalPressure), fanEfficiencyStaticPressure(fanEfficiencyStaticPressure),
-				fanEfficiencyStaticPressureRise(fanEfficiencyStaticPressureRise), kpc(kpc), powerCorrected(powerCorrected),
-				flowCorrected(flowCorrected), pressureTotalCorrected(pressureTotalCorrected),
-				pressureStaticCorrected(pressureStaticCorrected), staticPressureRiseCorrected(staticPressureRiseCorrected)
+		       const double fanEfficiencyStaticPressureRise, const Results asTested, const Results converted)
+				: fanEfficiencyTotalPressure(fanEfficiencyTotalPressure), fanEfficiencyStaticPressure(fanEfficiencyStaticPressure),
+				  fanEfficiencyStaticPressureRise(fanEfficiencyStaticPressureRise), asTested(asTested), converted(converted)
 		{}
 
 		const double fanEfficiencyTotalPressure, fanEfficiencyStaticPressure, fanEfficiencyStaticPressureRise;
-		const double kpc, powerCorrected, flowCorrected, pressureTotalCorrected;
-		const double pressureStaticCorrected, staticPressureRiseCorrected;
+		const Results asTested, converted;
 	};
 
 	Output calculate() {
@@ -322,9 +330,10 @@ public:
 
 		double const kp = (std::log(1 + x) / x) * (z / (std::log(1 + z)));
 
-		planeData.flowTraverse.gasTotalPressure = planeData.flowTraverse.staticPressure + planeData.flowTraverse.gasVelocityPressure;
-		for (auto & p : planeData.addlTravPlanes) {
-			p.gasTotalPressure =  p.staticPressure +  p.gasVelocityPressure;
+		planeData.flowTraverse.gasTotalPressure =
+				planeData.flowTraverse.staticPressure + planeData.flowTraverse.gasVelocityPressure;
+		for (auto &p : planeData.addlTravPlanes) {
+			p.gasTotalPressure = p.staticPressure + p.gasVelocityPressure;
 		}
 
 		double const fanTotalPressure = planeData.fanOrEvaseOutletFlange.gasTotalPressure
@@ -333,7 +342,9 @@ public:
 		double const fanStaticPressure = planeData.fanOrEvaseOutletFlange.staticPressure
 		                                 - planeData.fanInletFlange.gasTotalPressure + fanShaftPower.getSEF();
 
-		double const staticPressureRise = planeData.fanOrEvaseOutletFlange.staticPressure - planeData.fanInletFlange.staticPressure + fanShaftPower.getSEF();
+		double const staticPressureRise =
+				planeData.fanOrEvaseOutletFlange.staticPressure - planeData.fanInletFlange.staticPressure +
+				fanShaftPower.getSEF();
 
 		double const kpFactorRatio = calculateCompressibilityFactor(x, z, isentropicExponent);
 
@@ -347,8 +358,9 @@ public:
 		double const psc = fanStaticPressure * kpFactorRatio * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
 		                   * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
-		double const sprc = staticPressureRise * kpFactorRatio * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
-		                    * (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
+		double const sprc =
+				staticPressureRise * kpFactorRatio * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 2)
+				* (fanRatedInfo.densityCorrected / planeData.fanInletFlange.gasDensity);
 
 		double const hc = fanShaftPower.getFanPowerInput() * kpFactorRatio
 		                  * std::pow(fanRatedInfo.fanSpeedCorrected / fanRatedInfo.fanSpeed, 3)
@@ -358,7 +370,16 @@ public:
 
 		double const efficiency = qc * kpc / (6362 * hc);
 
-		return {ptc * efficiency * 100, psc * efficiency * 100, sprc * efficiency * 100, kpc, hc, qc, ptc, psc, sprc};
+		return {
+				ptc * efficiency * 100, psc * efficiency * 100, sprc * efficiency * 100,
+				{
+						kpFactorRatio, fanShaftPower.getFanPowerInput(), planeData.fanInletFlange.gasVolumeFlowRate, fanTotalPressure,
+						fanStaticPressure, staticPressureRise
+				},
+				{
+						kpc, hc, qc, ptc, psc, sprc
+				}
+		};
 	}
 
 private:

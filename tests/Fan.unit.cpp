@@ -62,7 +62,20 @@ TEST_CASE( "Fan203", "[Fan203]") {
 	CHECK(results.fanEfficiencyTotalPressure == Approx(53.607386));
 	CHECK(results.fanEfficiencyStaticPressure == Approx(49.206914));
 	CHECK(results.fanEfficiencyStaticPressureRise == Approx(50.768875));
-	// TODO add checks for other stuff besides efficiency
+
+	CHECK(results.asTested.flow == Approx(250332.6394178045));
+	CHECK(results.asTested.kpc == Approx(0.9982905074));
+	CHECK(results.asTested.power == Approx(1671.2107816151));
+	CHECK(results.asTested.pressureStatic == Approx(21.2207447999));
+	CHECK(results.asTested.pressureTotal == Approx(23.1184721997));
+	CHECK(results.asTested.staticPressureRise == Approx(21.8943488943));
+
+	CHECK(results.converted.flow == Approx(245498.3175715673));
+	CHECK(results.converted.kpc == Approx(0.986542913));
+	CHECK(results.converted.power == Approx(1445.5400545013));
+	CHECK(results.converted.pressureStatic == Approx(18.6846696404));
+	CHECK(results.converted.pressureTotal == Approx(20.355601074));
+	CHECK(results.converted.staticPressureRise == Approx(19.277771819));
 }
 
 TEST_CASE( "FanCurve", "[Fan203][FanCurve]") {
