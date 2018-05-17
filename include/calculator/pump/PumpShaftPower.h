@@ -18,7 +18,7 @@ public:
     /**
      * Constructor
      * @param motorShaftPower double, motor shaft power as defined in hp
-     * @param drive Pump::Motor, type of drive the pump uses from either direct or belt drive.
+     * @param drive Motor::Drive, type of drive the pump uses from either direct or belt drive.
      */
     PumpShaftPower(
         double motorShaftPower,

@@ -1,3 +1,11 @@
+/**
+ * @brief Contains InputData for both PSAT and Fan results
+ *
+ * @author Preston Shires (pshires)
+ * @bug No known bugs.
+ *
+ */
+
 #ifndef AMO_TOOLS_SUITE_INPUT_DATA_H
 #define AMO_TOOLS_SUITE_INPUT_DATA_H
 

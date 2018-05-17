@@ -1,3 +1,11 @@
+/**
+ * @brief Contains some of the Fan related classes
+ *
+ * @author Preston Shires (pshires)
+ * @bug No known bugs.
+ *
+ */
+
 #ifndef AMO_TOOLS_SUITE_FAN_H
 #define AMO_TOOLS_SUITE_FAN_H
 
