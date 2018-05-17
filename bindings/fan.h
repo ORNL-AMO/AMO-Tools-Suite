@@ -28,10 +28,20 @@ double Get(std::string const & key, Local<Object> obj) {
 	return rObj->NumberValue();
 }
 
+template <typename T>
+T GetEnumVal(std::string const & key, Local<Object> obj) {
+	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	if (rObj->IsUndefined()) {
+		ThrowTypeError(std::string("GetEnumVal method in fan.h: " + key + " not present in object").c_str());
+	}
+	return static_cast<T>(rObj->IntegerValue());
+}
+
+
 bool GetBool(std::string const & key, Local<Object> obj) {
 	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (rObj->IsUndefined()) {
-		ThrowTypeError(std::string("Get method in fan.h: Boolean value " + key + " not present in object").c_str());
+		ThrowTypeError(std::string("GetBool method in fan.h: Boolean value " + key + " not present in object").c_str());
 	}
 	return rObj->BooleanValue();
 }
@@ -141,12 +151,12 @@ NAN_METHOD(fanResultsExisting) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), static_cast<Motor::Drive>(Get("drive", inp))};
+	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
 
-	Motor::LineFrequency const lineFrequency = static_cast<Motor::LineFrequency>(Get("lineFrequency", inp));
+	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
 	double const motorRatedPower = Get("motorRatedPower", inp);
 	double const motorRpm = Get("motorRpm", inp);
-	Motor::EfficiencyClass const efficiencyClass = static_cast<Motor::EfficiencyClass>(Get("efficiencyClass", inp));
+	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
 	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
 	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
 	double const fullLoadAmps = Get("fullLoadAmps", inp);
@@ -161,7 +171,7 @@ NAN_METHOD(fanResultsExisting) {
 	double const inletPressure = Get("inletPressure", inp);
 	double const outletPressure = Get("outletPressure", inp);
 	double const compressibilityFactor = Get("compressibilityFactor", inp);
-	Motor::LoadEstimationMethod const loadEstimationMethod = static_cast<Motor::LoadEstimationMethod>(Get("loadEstimationMethod", inp));
+	Motor::LoadEstimationMethod const loadEstimationMethod = GetEnumVal<Motor::LoadEstimationMethod>("loadEstimationMethod", inp);
 
 	Fan::FieldDataBaseline fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure,
 	                                       compressibilityFactor, loadEstimationMethod};
@@ -188,7 +198,7 @@ NAN_METHOD(fanResultsModified) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), static_cast<Motor::Drive>(Get("drive", inp))};
+	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
 
 	double const measuredVoltage = Get("measuredVoltage", inp);
 	double const measuredAmps = Get("measuredAmps", inp);
@@ -199,10 +209,10 @@ NAN_METHOD(fanResultsModified) {
 	Fan::FieldDataModifiedAndOptimal fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
 	                                                 outletPressure, compressibilityFactor};
 
-	Motor::LineFrequency const lineFrequency = static_cast<Motor::LineFrequency>(Get("lineFrequency", inp));
+	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
 	double const motorRatedPower = Get("motorRatedPower", inp);
 	double const motorRpm = Get("motorRpm", inp);
-	Motor::EfficiencyClass const efficiencyClass = static_cast<Motor::EfficiencyClass>(Get("efficiencyClass", inp));
+	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
 	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
 	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
 	double const fullLoadAmps = Get("fullLoadAmps", inp);
@@ -234,7 +244,7 @@ NAN_METHOD(fanResultsOptimal) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), static_cast<Motor::Drive>(Get("drive", inp))};
+	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
 
 	double const measuredVoltage = Get("measuredVoltage", inp);
 	double const measuredAmps = Get("measuredAmps", inp);
@@ -245,10 +255,10 @@ NAN_METHOD(fanResultsOptimal) {
 	Fan::FieldDataModifiedAndOptimal fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
 	                                                 outletPressure, compressibilityFactor};
 
-	Motor::LineFrequency const lineFrequency = static_cast<Motor::LineFrequency>(Get("lineFrequency", inp));
+	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
 	double const motorRatedPower = Get("motorRatedPower", inp);
 	double const motorRpm = Get("motorRpm", inp);
-	Motor::EfficiencyClass const efficiencyClass = static_cast<Motor::EfficiencyClass>(Get("efficiencyClass", inp));
+	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
 	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
 	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
 	double const fullLoadAmps = Get("fullLoadAmps", inp);
@@ -258,7 +268,7 @@ NAN_METHOD(fanResultsOptimal) {
 
 	FanResult result = {fanInput, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
 
-	auto const output = result.calculateOptimal(fanFieldData, static_cast<OptimalFanEfficiency::FanType>(Get("fanType", inp)));
+	auto const output = result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
 
 	SetR("fanEfficiency", output.fanEfficiency);
 	SetR("motorRatedPower", output.motorRatedPower);
