@@ -11,18 +11,18 @@
 #ifndef AMO_LIBRARY_PUMPSHAFTPOWER_H
 #define AMO_LIBRARY_PUMPSHAFTPOWER_H
 
-#include "psat/Pump.h"
+#include <results/InputData.h>
 
 class PumpShaftPower {
 public:
     /**
      * Constructor
      * @param motorShaftPower double, motor shaft power as defined in hp
-     * @param drive Pump::Motor, type of drive the pump uses from either direct or belt drive.
+     * @param drive Motor::Drive, type of drive the pump uses from either direct or belt drive.
      */
     PumpShaftPower(
         double motorShaftPower,
-        Pump::Drive drive
+        Motor::Drive drive
     ) :
         motorShaftPower(motorShaftPower),
         drive(drive)
@@ -54,21 +54,21 @@ public:
      * Gets the type of drive the pump uses from either direct or belt drive
      * @return Pump:Drive, type of drive
      */
-    Pump::Drive getDrive() const {
+    Motor::Drive getDrive() const {
         return drive;
     }
 
     /**
      * Set the type of drive the pump uses from either direct or belt drive
-     * @param drive Pump:Drive, type of drive
+     * @param drive Motor:Drive, type of drive
      */
-    void setDrive(Pump::Drive drive) {
+    void setDrive(Motor::Drive drive) {
         this->drive = drive;
     }
 
 private:
     double motorShaftPower;
-    Pump::Drive drive;
+    Motor::Drive drive;
 };
 
 #endif //AMO_LIBRARY_PUMPSHAFTPOWER_H

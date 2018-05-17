@@ -10,8 +10,8 @@
 #ifndef UNTITLED_ESTIMATEFLA_H
 #define UNTITLED_ESTIMATEFLA_H
 
-#include "psat/Motor.h"
 #include <vector>
+#include <results/InputData.h>
 
 class EstimateFLA {
 public:

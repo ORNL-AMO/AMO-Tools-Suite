@@ -57,12 +57,11 @@ endif (WIN32)
 #file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
-        src/psat/PSATResult.cpp
+        src/results/Results.cpp
         src/calculator/util/AnnualCost.cpp
         src/calculator/util/AnnualEnergy.cpp
         src/calculator/util/CurveFitVal.cpp
         src/calculator/motor/EstimateFLA.cpp
-        src/calculator/pump/FluidPower.cpp
         src/calculator/motor/MotorCurrent.cpp
         src/calculator/motor/MotorEfficiency.cpp
         src/calculator/motor/MotorPower.cpp
@@ -78,7 +77,7 @@ set(SOURCE_FILES
         src/calculator/pump/OptimalSpecificSpeed.cpp
         src/calculator/pump/OptimalSpecificSpeedCorrection.cpp
         src/calculator/motor/Poles.cpp
-        src/calculator/pump/PumpEfficiency.cpp
+        src/calculator/pump/MoverEfficiency.cpp
         src/calculator/pump/PumpShaftPower.cpp
         src/calculator/losses/Atmosphere.cpp
         src/calculator/losses/FixtureLosses.cpp
@@ -117,11 +116,7 @@ set(SOURCE_FILES
         src/calculator/motor/MotorData.cpp)
 
 set(INCLUDE_FILES
-        include/psat/FieldData.h
-        include/psat/Financial.h
-        include/psat/Motor.h
-        include/psat/PSATResult.h
-        include/psat/Pump.h
+        include/results/Results.h
         include/calculator/util/AnnualCost.h
         include/calculator/util/AnnualEnergy.h
         include/calculator/util/CurveFitVal.h
@@ -142,7 +137,7 @@ set(INCLUDE_FILES
         include/calculator/pump/OptimalSpecificSpeed.h
         include/calculator/pump/OptimalSpecificSpeedCorrection.h
         include/calculator/motor/Poles.h
-        include/calculator/pump/PumpEfficiency.h
+        include/calculator/pump/MoverEfficiency.h
         include/calculator/pump/PumpShaftPower.h
         include/calculator/losses/LoadChargeMaterial.h
         include/calculator/losses/SolidLoadChargeMaterial.h
@@ -188,7 +183,7 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
         include/ssmt/Header.h
-        include/fans/Fan.h
+        include/fans/Fan203.h
         include/fans/FanShaftPower.h
         include/fans/Planar.h
         include/ssmt/Turbine.h
@@ -196,12 +191,12 @@ set(INCLUDE_FILES
         include/fans/FanCurve.h
         include/calculator/util/CompressedAir.h
         include/calculator/motor/MotorData.h
-        include/sqlite/MotorData.h)
+        include/sqlite/MotorData.h include/fans/CompressibilityFactor.h include/results/InputData.h include/fans/FanEnergyIndex.h include/fans/OptimalFanEfficiency.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
         tests/MotorEfficiency.unit.cpp
-        tests/PSAT.unit.cpp
+        tests/Results.unit.cpp
         tests/SolidLoadChargeMaterial.unit.cpp
         tests/LiquidLoadChargeMaterial.unit.cpp
         tests/Atmosphere.unit.cpp
@@ -242,7 +237,7 @@ set(TEST_FILES
         tests/CurveFitVal.unit.cpp
         tests/MotorCurrent.unit.cpp
         tests/CompressedAir.unit.cpp
-        )
+        tests/FluidPower.unit.cpp tests/CompressibilityFactor.unit.cpp tests/OptimalFanEfficiency.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

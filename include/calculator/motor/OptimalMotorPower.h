@@ -13,12 +13,24 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORPOWER_H
 #define AMO_LIBRARY_OPTIMALMOTORPOWER_H
 
-#include "psat/Motor.h"
-#include "psat/FieldData.h"
-#include "psat/PSATResult.h"
+#include "results/Results.h"
 
 class OptimalMotorPower {
 public:
+
+    struct Output {
+	    /**
+	     * @param power - kW
+	     * @param efficiency - unitless
+	     * @param current in amps
+	     * @param powerFactor  unitless
+	     */
+        Output(const double power, const double efficiency, const double current, const double powerFactor)
+                : power(power), efficiency(efficiency), current(current), powerFactor(powerFactor)
+        {}
+
+        const double power, efficiency, current, powerFactor;
+    };
 
     /**
      * Constructor
@@ -54,9 +66,9 @@ public:
 
     /**
      * Calculates the optimal motor power
-     * @param isPsatOptimal bool, defaults to true so that calculate will use energy efficient or premium depending on motor pole number
+     * @param isOptimal bool, defaults to true so that calculate will use energy efficient or premium depending on motor pole number
      */
-    void calculate(bool isPsatOptimal = true);
+    Output calculate(bool isOptimal = true);
 
     /**
      * Gets the optimal motor shaft power
@@ -74,47 +86,12 @@ public:
         this->optimalMotorShaftPower = optimalMotorShaftPower;
     }
 
-    /**
-     * Gets the motor current
-     * @return double, motor current in A
-     */
-    double getMotorCurrent() {
-        return current;
-    }
-
-    /**
-     * Gets motor power factor
-     * @return double, power factor of motor - unitless
-     */
-    double getMotorPf() {
-        return pf;
-    }
-
-    /**
-     * Get motor efficiency if efficiency class is not SPECIFIED
-     * @return double, motor efficiency as %
-     */
-    double getMotorEff() {
-        return eff;
-    }
-
-    /**
-     * Gets motor power
-     * @return double, motor power in hp
-     */
-    double getMotorPower() {
-        return power;
-    }
-
 private:
     double optimalMotorShaftPower, motorRatedPower, motorRPM;
     Motor::LineFrequency lineFrequency;
     double ratedVoltage, fieldVoltage;
     Motor::EfficiencyClass efficiencyClass;
     double specifiedEfficiency;
-
-    // values set in calculate()
-    double power = 0, eff = 0, current = 0, pf = 0;
 };
 
 

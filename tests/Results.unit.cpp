@@ -1,14 +1,72 @@
 #include "catch.hpp"
-#include <psat/Pump.h>
-#include <psat/FieldData.h>
-#include <psat/Financial.h>
-#include <psat/Motor.h>
-#include <psat/PSATResult.h>
+#include <results/Results.h>
 #include <unordered_map>
 #include <calculator/pump/PumpShaftPower.h>
-#include <calculator/pump/PumpEfficiency.h>
+#include <calculator/pump/MoverEfficiency.h>
 #include <array>
 #include <calculator/motor/EstimateFLA.h>
+
+TEST_CASE( "Fan Output existing", "[Fan results existing]" ) {
+	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE};
+	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
+	Fan::FieldDataBaseline fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER};
+	FanResult result = {fanInput, motor, 1.0, 0.06};
+	auto const output = result.calculateExisting(fanFieldData);
+
+	CHECK(Approx(output.fanEfficiency) == 0.595398315);
+	CHECK(Approx(output.motorRatedPower) == 600.0);
+	CHECK(Approx(output.motorShaftPower) == 590.622186263);
+	CHECK(Approx(output.fanShaftPower) == 590.622186263);
+	CHECK(Approx(output.motorEfficiency) == 0.9578351108);
+	CHECK(Approx(output.motorPowerFactor) == 0.8577466651);
+	CHECK(Approx(output.motorCurrent) == 673.1011529439);
+	CHECK(Approx(output.motorPower) == 460.0);
+	CHECK(Approx(output.annualEnergy) == 4029.6);
+	CHECK(Approx(output.annualCost) == 241.776);
+	CHECK(Approx(output.estimatedFLA) == 683.2505707137);
+	CHECK(Approx(output.fanEnergyIndex) == 0.9718906186);
+}
+
+TEST_CASE( "Fan Output modified", "[Fan results modified]" ) {
+	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE};
+	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
+	Fan::FieldDataModifiedAndOptimal fanFieldData = {460, 660, 129691, -16.36, 1.1, 0.988};
+	FanResult result = {fanInput, motor, 1.0, 0.06};
+	auto const output = result.calculateModified(fanFieldData, 0.595398315, false);
+
+	CHECK(Approx(output.fanEfficiency) == 0.595398315);
+	CHECK(Approx(output.motorRatedPower) == 600.0);
+	CHECK(Approx(output.motorShaftPower) == 590.622186263);
+	CHECK(Approx(output.fanShaftPower) == 590.622186263);
+	CHECK(Approx(output.motorEfficiency) == 0.9578351072);
+	CHECK(Approx(output.motorPowerFactor) == 0.8577480086);
+	CHECK(Approx(output.motorCurrent) == 673.1003093353);
+	CHECK(Approx(output.motorPower) == 460.0001440224);
+	CHECK(Approx(output.annualEnergy) == 4029.6012616363);
+	CHECK(Approx(output.annualCost) == 241.7760756982);
+	CHECK(Approx(output.fanEnergyIndex) == 0.9718903143);
+}
+
+TEST_CASE( "Fan Output Optimal", "[Fan results optimal]" ) {
+	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE};
+	Motor motor = {Motor::LineFrequency::FREQ60, 500, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
+	Fan::FieldDataModifiedAndOptimal fanFieldData = {460, 660, 129691, -16.36, 1.1, 0.988};
+	FanResult result = {fanInput, motor, 1.0, 0.06};
+	auto const output = result.calculateOptimal(fanFieldData, OptimalFanEfficiency::FanType::AirfoilSISW);
+
+	CHECK(Approx(output.fanEfficiency) == 0.7565784493);
+	CHECK(Approx(output.motorRatedPower) == 500.0);
+	CHECK(Approx(output.motorShaftPower) == 464.7970806678);
+	CHECK(Approx(output.fanShaftPower) == 464.7970806678);
+	CHECK(Approx(output.motorEfficiency) == 0.9599974605);
+	CHECK(Approx(output.motorPowerFactor) == 0.8542724641);
+	CHECK(Approx(output.motorCurrent) == 530.6611260876);
+	CHECK(Approx(output.motorPower) == 361.1870254817);
+	CHECK(Approx(output.annualEnergy) == 3163.9983432194);
+	CHECK(Approx(output.annualCost) == 189.839900593);
+	CHECK(Approx(output.fanEnergyIndex) == 1.2377789151);
+}
+
 
 TEST_CASE( "PSATResultsPremium existing and optimal", "[PSAT results]" ) {
 	double achievableEfficiency = 90, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
@@ -18,24 +76,21 @@ TEST_CASE( "PSATResultsPremium existing and optimal", "[PSAT results]" ) {
 	double baseline_pump_efficiency = 0.80;
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
-	Pump::Drive drive1(Pump::Drive::DIRECT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Motor::Drive drive1(Motor::Drive::DIRECT_DRIVE);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::PREMIUM);
-	FieldData::LoadEstimationMethod loadEstimationMethod1(FieldData::LoadEstimationMethod::POWER);
+	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
-	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
+	auto const & ex = psat.calculateExisting();
 //	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-//	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & opt = psat.calculateOptimal();
+//	auto const & mod = psat.calculateModified();
 
 	CHECK(ex.pumpEfficiency * 100 == Approx(78.555319445));
 	CHECK(ex.motorRatedPower == Approx(200));
@@ -72,24 +127,20 @@ TEST_CASE( "PSATResults existing, modified, optimal", "[PSAT results]" ) {
 	double baseline_pump_efficiency = 0.80;
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
-	Pump::Drive drive1(Pump::Drive::DIRECT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Motor::Drive drive1(Motor::Drive::DIRECT_DRIVE);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::SPECIFIED);
-	FieldData::LoadEstimationMethod loadEstimationMethod1(FieldData::LoadEstimationMethod::POWER);
+	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
-	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
-	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
+	auto const & opt = psat.calculateOptimal();
 
 	CHECK(ex.pumpEfficiency * 100 == Approx(80.2620381));
 	CHECK(ex.motorRatedPower == Approx(200));
@@ -144,20 +195,17 @@ TEST_CASE( "PSATResults - existing and modified", "[PSAT results]" ) {
 	double head = 277.0, motor_field_power = 150.0, motor_field_current = 125.857, motor_field_voltage = 480;
 	double baseline_pump_efficiency = 0.382;
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
-	Pump::Drive drive1(Pump::Drive::V_BELT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Motor::Drive drive1(Motor::Drive::V_BELT_DRIVE);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::SPECIFIED);
-	FieldData::LoadEstimationMethod loadEstimationMethod1(FieldData::LoadEstimationMethod::POWER);
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
-	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
-	psat.calculateExisting();
-	psat.calculateModified();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
+	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
 	CHECK(ex.pumpEfficiency * 100 == Approx(38.1094253534));
 	CHECK(ex.motorRatedPower == Approx(200));
 	CHECK(ex.motorShaftPower == Approx(191.1541214642));
@@ -188,24 +236,20 @@ TEST_CASE( "PSATResults2 v-belt type", "[PSAT results]" ) {
 	double baseline_pump_efficiency = 0.623;
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
-	Pump::Drive drive1(Pump::Drive::V_BELT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Motor::Drive drive1(Motor::Drive::V_BELT_DRIVE);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::ENERGY_EFFICIENT);
-	FieldData::LoadEstimationMethod loadEstimationMethod1(FieldData::LoadEstimationMethod::POWER);
+	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
-	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
-	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
+	auto const & opt = psat.calculateOptimal();
 
 	CHECK(mod.pumpEfficiency * 100 == Approx(62.3));
 	CHECK(mod.motorRatedPower == Approx(200));
@@ -230,24 +274,20 @@ TEST_CASE( "PSATResults notched v belt", "[PSAT results]" ) {
 	double baseline_pump_efficiency = 0.623;
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
-	Pump::Drive drive1(Pump::Drive::N_V_BELT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Motor::Drive drive1(Motor::Drive::N_V_BELT_DRIVE);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::ENERGY_EFFICIENT);
-	FieldData::LoadEstimationMethod loadEstimationMethod1(FieldData::LoadEstimationMethod::POWER);
+	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
-	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
-	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
+	auto const & opt = psat.calculateOptimal();
 
 	CHECK(mod.pumpEfficiency * 100 == Approx(62.3));
 	CHECK(mod.motorRatedPower == Approx(200));
@@ -272,24 +312,20 @@ TEST_CASE( "PSATResults sync belt", "[PSAT results]" ) {
 	double baseline_pump_efficiency = 0.623;
 
 	Pump::Style style1(Pump::Style::END_SUCTION_ANSI_API);
-	Pump::Drive drive1(Pump::Drive::S_BELT_DRIVE);
-	Pump::Speed fixed_speed(Pump::Speed::NOT_FIXED_SPEED);
+	Motor::Drive drive1(Motor::Drive::S_BELT_DRIVE);
+	Pump::SpecificSpeed fixed_speed(Pump::SpecificSpeed::NOT_FIXED_SPEED);
 	Motor::LineFrequency lineFrequency(Motor::LineFrequency::FREQ60);
 	Motor::EfficiencyClass efficiencyClass(Motor::EfficiencyClass::ENERGY_EFFICIENT);
-	FieldData::LoadEstimationMethod loadEstimationMethod1(FieldData::LoadEstimationMethod::POWER);
+	Motor::LoadEstimationMethod loadEstimationMethod1(Motor::LoadEstimationMethod::POWER);
 
-	Pump pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
+	Pump::Input pump(style1, achievableEfficiency, pump_rated_speed, drive1, kinematic_viscosity, specific_gravity, stages, fixed_speed);
 	Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-	Financial fin(operating_fraction, cost_kw_hour);
-	FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-	PSATResult psat(pump, motor, fin, fd, baseline_pump_efficiency);
+	Pump::FieldData fd(flow_rate, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
+	PSATResult psat(pump, motor, fd, baseline_pump_efficiency, operating_fraction, cost_kw_hour);
 
-	psat.calculateExisting();
-	psat.calculateModified();
-	psat.calculateOptimal();
-	auto const & ex = psat.getExisting();
-	auto const & mod = psat.getModified();
-	auto const & opt = psat.getOptimal();
+	auto const & ex = psat.calculateExisting();
+	auto const & mod = psat.calculateModified();
+	auto const & opt = psat.calculateOptimal();
 
 	CHECK(mod.motorShaftPower == Approx(194.767));
 	CHECK(mod.pumpShaftPower == Approx(192.468232632));
@@ -297,79 +333,79 @@ TEST_CASE( "PSATResults sync belt", "[PSAT results]" ) {
 }
 
 TEST_CASE( "PSAT pump shaft power", "[PSAT][pump shaft power][drive]" ) {
-	CHECK(PumpShaftPower(50, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(48.4814329723));
-	CHECK(PumpShaftPower(100, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(97.0776282082));
-	CHECK(PumpShaftPower(150, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(145.6804036099));
-	CHECK(PumpShaftPower(200, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(194.2722411119));
-	CHECK(PumpShaftPower(250, Pump::Drive::N_V_BELT_DRIVE).calculate() == Approx(242.8550331213));
+	CHECK(PumpShaftPower(50, Motor::Drive::N_V_BELT_DRIVE).calculate() == Approx(48.4814329723));
+	CHECK(PumpShaftPower(100, Motor::Drive::N_V_BELT_DRIVE).calculate() == Approx(97.0776282082));
+	CHECK(PumpShaftPower(150, Motor::Drive::N_V_BELT_DRIVE).calculate() == Approx(145.6804036099));
+	CHECK(PumpShaftPower(200, Motor::Drive::N_V_BELT_DRIVE).calculate() == Approx(194.2722411119));
+	CHECK(PumpShaftPower(250, Motor::Drive::N_V_BELT_DRIVE).calculate() == Approx(242.8550331213));
 
-	CHECK(PumpShaftPower(50, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(47.8740061612));
-	CHECK(PumpShaftPower(100, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(95.9086794914));
-	CHECK(PumpShaftPower(150, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(143.9525650539));
-	CHECK(PumpShaftPower(200, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(191.981137556));
-	CHECK(PumpShaftPower(250, Pump::Drive::V_BELT_DRIVE).calculate() == Approx(239.9970463698));
+	CHECK(PumpShaftPower(50, Motor::Drive::V_BELT_DRIVE).calculate() == Approx(47.8740061612));
+	CHECK(PumpShaftPower(100, Motor::Drive::V_BELT_DRIVE).calculate() == Approx(95.9086794914));
+	CHECK(PumpShaftPower(150, Motor::Drive::V_BELT_DRIVE).calculate() == Approx(143.9525650539));
+	CHECK(PumpShaftPower(200, Motor::Drive::V_BELT_DRIVE).calculate() == Approx(191.981137556));
+	CHECK(PumpShaftPower(250, Motor::Drive::V_BELT_DRIVE).calculate() == Approx(239.9970463698));
 
-	CHECK(PumpShaftPower(50, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(49.3925731889));
-	CHECK(PumpShaftPower(100, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(98.8310512833));
-	CHECK(PumpShaftPower(150, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(148.272161444));
-	CHECK(PumpShaftPower(200, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(197.7088964447));
-	CHECK(PumpShaftPower(250, Pump::Drive::S_BELT_DRIVE).calculate() == Approx(247.1420132485));
+	CHECK(PumpShaftPower(50, Motor::Drive::S_BELT_DRIVE).calculate() == Approx(49.3925731889));
+	CHECK(PumpShaftPower(100, Motor::Drive::S_BELT_DRIVE).calculate() == Approx(98.8310512833));
+	CHECK(PumpShaftPower(150, Motor::Drive::S_BELT_DRIVE).calculate() == Approx(148.272161444));
+	CHECK(PumpShaftPower(200, Motor::Drive::S_BELT_DRIVE).calculate() == Approx(197.7088964447));
+	CHECK(PumpShaftPower(250, Motor::Drive::S_BELT_DRIVE).calculate() == Approx(247.1420132485));
 }
 
 TEST_CASE( "PSAT pump efficiency", "[PSAT][pump efficiency]" ) {
-	CHECK(PumpEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
-	CHECK(PumpEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
-	CHECK(PumpEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
-	CHECK(PumpEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
-	CHECK(PumpEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
+	CHECK(MoverEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(MoverEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
+	CHECK(MoverEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
+	CHECK(MoverEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
+	CHECK(MoverEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
 
-	CHECK(PumpEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
-	CHECK(PumpEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
-	CHECK(PumpEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
-	CHECK(PumpEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
-	CHECK(PumpEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
+	CHECK(MoverEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
+	CHECK(MoverEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
+	CHECK(MoverEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
+	CHECK(MoverEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
+	CHECK(MoverEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
 
-	CHECK(PumpEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
-	CHECK(PumpEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
-	CHECK(PumpEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
-	CHECK(PumpEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
-	CHECK(PumpEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
+	CHECK(MoverEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
+	CHECK(MoverEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(MoverEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
+	CHECK(MoverEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
+	CHECK(MoverEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
 
-	CHECK(PumpEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
 }
 
 TEST_CASE( "PSAT motor efficiency", "[PSAT][pump efficiency]" ) {
-	CHECK(PumpEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
-	CHECK(PumpEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
-	CHECK(PumpEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
-	CHECK(PumpEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
-	CHECK(PumpEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
+	CHECK(MoverEfficiency(0.5, 1000, 125, 125).calculate() == Approx(0.126218641));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(MoverEfficiency(3.5, 1000, 125, 125).calculate() == Approx(0.8835304869));
+	CHECK(MoverEfficiency(9.5, 1000, 125, 125).calculate() == Approx(2.3981541786));
+	CHECK(MoverEfficiency(20.5, 1000, 125, 125).calculate() == Approx(5.1749642801));
+	CHECK(MoverEfficiency(50.5, 1000, 125, 125).calculate() == Approx(12.7480827388));
 
-	CHECK(PumpEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
-	CHECK(PumpEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
-	CHECK(PumpEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
-	CHECK(PumpEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
-	CHECK(PumpEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
+	CHECK(MoverEfficiency(1.5, 500, 125, 125).calculate() == Approx(0.1893279615));
+	CHECK(MoverEfficiency(1.5, 700, 125, 125).calculate() == Approx(0.2650591461));
+	CHECK(MoverEfficiency(1.5, 1100, 125, 125).calculate() == Approx(0.4165215152));
+	CHECK(MoverEfficiency(1.5, 1800, 125, 125).calculate() == Approx(0.6815806613));
+	CHECK(MoverEfficiency(1.5, 2800, 125, 125).calculate() == Approx(1.0602365842));
 
-	CHECK(PumpEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
-	CHECK(PumpEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
-	CHECK(PumpEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
-	CHECK(PumpEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
-	CHECK(PumpEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
+	CHECK(MoverEfficiency(1.5, 1000, 25, 125).calculate() == Approx(0.0757311846));
+	CHECK(MoverEfficiency(1.5, 1000, 75, 125).calculate() == Approx(0.2271935538));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 125).calculate() == Approx(0.3786559229));
+	CHECK(MoverEfficiency(1.5, 1000, 195, 125).calculate() == Approx(0.5907032398));
+	CHECK(MoverEfficiency(1.5, 1000, 225, 125).calculate() == Approx(0.6815806613));
+	CHECK(MoverEfficiency(1.5, 1000, 325, 125).calculate() == Approx(0.9845053996));
 
-	CHECK(PumpEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
-	CHECK(PumpEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 25).calculate() == Approx(1.8932796147));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 75).calculate() == Approx(0.6310932049));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 155).calculate() == Approx(0.3053676798));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 255).calculate() == Approx(0.1856156485));
+	CHECK(MoverEfficiency(1.5, 1000, 125, 425).calculate() == Approx(0.1113693891));
 }
 
 //TEST_CASE( "Motor Current", "[MotorCurrent][PSAT]" ) {

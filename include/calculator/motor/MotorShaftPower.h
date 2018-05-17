@@ -18,8 +18,7 @@
 #ifndef AMO_LIBRARY_MOTORSHAFTPOWER_H
 #define AMO_LIBRARY_MOTORSHAFTPOWER_H
 
-#include "psat/Motor.h"
-#include "psat/FieldData.h"
+#include <results/InputData.h>
 
 /**
  * Motor Shaft Power class
@@ -28,6 +27,26 @@
  */
 class MotorShaftPower {
 public:
+
+	struct Output {
+		/**
+		 * Constructor for MotorShaftPower::Output
+		 * @param shaftPower double, hp
+		 * @param current double, amps
+		 * @param powerFactor double, unitless
+		 * @param efficiency double, % motor shaft efficiency
+		 * @param power double
+		 * @param estimatedFLA double
+		 *
+		 */
+		Output(const double shaftPower, const double current, const double powerFactor, const double efficiency,
+		       const double power, const double estimatedFLA)
+				: shaftPower(shaftPower), current(current), powerFactor(powerFactor), efficiency(efficiency),
+				  power(power), estimatedFLA(estimatedFLA)
+		{}
+
+		const double shaftPower, current, powerFactor, efficiency, power, estimatedFLA;
+	};
 
    /**
     * Constructor for Motor Shaft Power class
@@ -55,7 +74,7 @@ public:
 		const double ratedVoltage,
 		const double fullLoadAmps,
 		const double fieldVoltage,
-		const FieldData::LoadEstimationMethod loadEstimationMethod,
+		const Motor::LoadEstimationMethod loadEstimationMethod,
 		const double fieldCurrent
 	) :
 		motorRatedPower(motorRatedPower),
@@ -73,62 +92,9 @@ public:
 
 	/**
      * Calculate motor shaft power
-     * @return double, motor shaft power in hp
+     * @return MotorShaftPower::Output, class containing all the results of the MotorShaftPower calculations, see Output class for more details
      */
-    double calculate();
-
-	/**
-     * Calculates the motor shaft current
-     * @return double, motor shaft current in A
-     */
-    double getCurrent() {
-		return current;
-	};
-
-	/**
-     * Calculates the motor shaft efficiency
-     * @return double, motor shaft efficiency as %
-     */
-    double getEfficiency() {
-		return eff;
-	};
-
-	/**
-     * Calculate the power
-     * @return double, power in hp
-     */
-    double getPower() {
-		return power;
-	};
-
-	/**
-     * Calculates the power factor
-     * @return double, power factor - unitless
-     */
-    double getPowerFactor() {
-		return pf;
-	};
-
-	/**
-     * Calculates estimated full load amps
-     * @return double, estimated full load amps in A
-     */
-    double getEstimatedFLA() {
-		return estimatedFLA;
-	};
-
-    ///double, temp load fraction
-    double tempLoadFraction = 0.01;
-	///double, power in hp
-    double power = 0.0;
-	///double efficiency in %
-    double eff = 0.0;
-	///double, current in A
-    double current = 0.0;
-	///double, power factor - unitless
-    double pf = 0.0;
-	///double, estimated full load amps in A
-    double estimatedFLA = 0;
+    Output calculate();
 
 private:
     double motorRatedPower, fieldPower, motorRPM;
@@ -136,8 +102,8 @@ private:
     double ratedVoltage, fullLoadAmps, fieldVoltage;
     Motor::EfficiencyClass efficiencyClass;
 
-    double specifiedEfficiency, motorShaftPower = 0.0, fieldCurrent;
-    FieldData::LoadEstimationMethod loadEstimationMethod;
+    double specifiedEfficiency, fieldCurrent;
+    Motor::LoadEstimationMethod loadEstimationMethod;
 };
 
 #endif //AMO_LIBRARY_MOTORSHAFTPOWER_H

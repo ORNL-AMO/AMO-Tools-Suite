@@ -13,7 +13,7 @@ public:
 
 private:
 	double const fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected;
-	friend class Fan;
+	friend class Fan203;
 };
 
 class FanShaftPower {

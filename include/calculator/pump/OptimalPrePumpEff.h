@@ -11,7 +11,7 @@
 #ifndef AMO_LIBRARY_OPTIMALPREPUMPEFF_H
 #define AMO_LIBRARY_OPTIMALPREPUMPEFF_H
 
-#include "psat/Pump.h"
+#include <results/InputData.h>
 
 class OptimalPrePumpEff {
 public:

@@ -3,9 +3,16 @@
 #include <string>
 #include <vector>
 #include "fans/Planar.h"
-#include "fans/Fan.h"
+#include "fans/Fan203.h"
 #include "fans/FanShaftPower.h"
 #include "fans/FanCurve.h"
+#include "fans/FanEnergyIndex.h"
+#include "results/Results.h"
+#include "results/InputData.h"
+
+#include "calculator/pump/OptimalPumpShaftPower.h"
+#include "calculator/motor/OptimalMotorShaftPower.h"
+#include "calculator/motor/OptimalMotorPower.h"
 
 using namespace Nan;
 using namespace v8;
@@ -21,10 +28,20 @@ double Get(std::string const & key, Local<Object> obj) {
 	return rObj->NumberValue();
 }
 
+template <typename T>
+T GetEnumVal(std::string const & key, Local<Object> obj) {
+	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	if (rObj->IsUndefined()) {
+		ThrowTypeError(std::string("GetEnumVal method in fan.h: " + key + " not present in object").c_str());
+	}
+	return static_cast<T>(rObj->IntegerValue());
+}
+
+
 bool GetBool(std::string const & key, Local<Object> obj) {
 	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (rObj->IsUndefined()) {
-		ThrowTypeError(std::string("Get method in fan.h: Boolean value " + key + " not present in object").c_str());
+		ThrowTypeError(std::string("GetBool method in fan.h: Boolean value " + key + " not present in object").c_str());
 	}
 	return rObj->BooleanValue();
 }
@@ -129,6 +146,144 @@ BaseGasDensity::InputType getInputType(Local<Object> obj) {
 	return BaseGasDensity::InputType::WetBulbTemp;
 };
 
+
+NAN_METHOD(fanResultsExisting) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
+
+	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
+	double const motorRatedPower = Get("motorRatedPower", inp);
+	double const motorRpm = Get("motorRpm", inp);
+	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
+	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
+	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
+	double const fullLoadAmps = Get("fullLoadAmps", inp);
+	double const sizeMargin = Get("sizeMargin", inp);
+
+	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
+
+	double const measuredPower = Get("measuredPower", inp);
+	double const measuredVoltage = Get("measuredVoltage", inp);
+	double const measuredAmps = Get("measuredAmps", inp);
+	double const flowRate = Get("flowRate", inp);
+	double const inletPressure = Get("inletPressure", inp);
+	double const outletPressure = Get("outletPressure", inp);
+	double const compressibilityFactor = Get("compressibilityFactor", inp);
+	Motor::LoadEstimationMethod const loadEstimationMethod = GetEnumVal<Motor::LoadEstimationMethod>("loadEstimationMethod", inp);
+
+	Fan::FieldDataBaseline fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure,
+	                                       compressibilityFactor, loadEstimationMethod};
+
+	FanResult result = {input, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+	auto const output = result.calculateExisting(fanFieldData);
+
+	SetR("fanEfficiency", output.fanEfficiency);
+	SetR("motorRatedPower", output.motorRatedPower);
+	SetR("motorShaftPower", output.motorShaftPower);
+	SetR("fanShaftPower", output.fanShaftPower);
+	SetR("motorEfficiency", output.motorEfficiency);
+	SetR("motorPowerFactor", output.motorPowerFactor);
+	SetR("motorCurrent", output.motorCurrent);
+	SetR("motorPower", output.motorPower);
+	SetR("annualEnergy", output.annualEnergy);
+	SetR("annualCost", output.annualCost);
+	SetR("estimatedFLA", output.estimatedFLA);
+	SetR("fanEnergyIndex", output.fanEnergyIndex);
+	info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(fanResultsModified) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
+
+	double const measuredVoltage = Get("measuredVoltage", inp);
+	double const measuredAmps = Get("measuredAmps", inp);
+	double const flowRate = Get("flowRate", inp);
+	double const inletPressure = Get("inletPressure", inp);
+	double const outletPressure = Get("outletPressure", inp);
+	double const compressibilityFactor = Get("compressibilityFactor", inp);
+	Fan::FieldDataModifiedAndOptimal fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
+	                                                 outletPressure, compressibilityFactor};
+
+	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
+	double const motorRatedPower = Get("motorRatedPower", inp);
+	double const motorRpm = Get("motorRpm", inp);
+	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
+	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
+	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
+	double const fullLoadAmps = Get("fullLoadAmps", inp);
+	double const sizeMargin = Get("sizeMargin", inp);
+
+	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
+
+	FanResult result = {fanInput, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+
+	const double fanEfficiency = Get("fanEfficiency", inp) / 100;
+	auto const output = result.calculateModified(fanFieldData, fanEfficiency, false);
+
+	SetR("fanEfficiency", output.fanEfficiency);
+	SetR("motorRatedPower", output.motorRatedPower);
+	SetR("motorShaftPower", output.motorShaftPower);
+	SetR("fanShaftPower", output.fanShaftPower);
+	SetR("motorEfficiency", output.motorEfficiency);
+	SetR("motorPowerFactor", output.motorPowerFactor);
+	SetR("motorCurrent", output.motorCurrent);
+	SetR("motorPower", output.motorPower);
+	SetR("annualEnergy", output.annualEnergy);
+	SetR("annualCost", output.annualCost);
+	SetR("estimatedFLA", output.estimatedFLA);
+	SetR("fanEnergyIndex", output.fanEnergyIndex);
+	info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(fanResultsOptimal) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
+
+	double const measuredVoltage = Get("measuredVoltage", inp);
+	double const measuredAmps = Get("measuredAmps", inp);
+	double const flowRate = Get("flowRate", inp);
+	double const inletPressure = Get("inletPressure", inp);
+	double const outletPressure = Get("outletPressure", inp);
+	double const compressibilityFactor = Get("compressibilityFactor", inp);
+	Fan::FieldDataModifiedAndOptimal fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
+	                                                 outletPressure, compressibilityFactor};
+
+	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
+	double const motorRatedPower = Get("motorRatedPower", inp);
+	double const motorRpm = Get("motorRpm", inp);
+	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
+	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
+	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
+	double const fullLoadAmps = Get("fullLoadAmps", inp);
+	double const sizeMargin = Get("sizeMargin", inp);
+
+	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
+
+	FanResult result = {fanInput, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+
+	auto const output = result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
+
+	SetR("fanEfficiency", output.fanEfficiency);
+	SetR("motorRatedPower", output.motorRatedPower);
+	SetR("motorShaftPower", output.motorShaftPower);
+	SetR("fanShaftPower", output.fanShaftPower);
+	SetR("motorEfficiency", output.motorEfficiency);
+	SetR("motorPowerFactor", output.motorPowerFactor);
+	SetR("motorCurrent", output.motorCurrent);
+	SetR("motorPower", output.motorPower);
+	SetR("annualEnergy", output.annualEnergy);
+	SetR("annualCost", output.annualCost);
+	SetR("estimatedFLA", output.estimatedFLA);
+	SetR("fanEnergyIndex", output.fanEnergyIndex);
+	info.GetReturnValue().Set(r);
+}
 
 NAN_METHOD(getBaseGasDensityRelativeHumidity) {
 	inp = info[0]->ToObject();
@@ -280,16 +435,24 @@ NAN_METHOD(fan203) {
 
 	r = Nan::New<Object>();
 	try {
-		auto const rv = Fan(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();
+		auto const rv = Fan203(getFanRatedInfo(), getPlaneData(), getBaseGasDensity(), getFanShaftPower()).calculate();
 		SetR("fanEfficiencyTotalPressure", rv.fanEfficiencyTotalPressure);
 		SetR("fanEfficiencyStaticPressure", rv.fanEfficiencyStaticPressure);
 		SetR("fanEfficiencyStaticPressureRise", rv.fanEfficiencyStaticPressureRise);
-		SetR("flowCorrected", rv.flowCorrected);
-		SetR("pressureTotalCorrected", rv.pressureTotalCorrected);
-		SetR("pressureStaticCorrected", rv.pressureStaticCorrected);
-		SetR("staticPressureRiseCorrected", rv.staticPressureRiseCorrected);
-		SetR("powerCorrected", rv.powerCorrected);
-		SetR("kpc", rv.kpc);
+
+		SetR("flow", rv.asTested.flow);
+		SetR("pressureTotal", rv.asTested.pressureTotal);
+		SetR("pressureStatic", rv.asTested.pressureStatic);
+		SetR("staticPressureRise", rv.asTested.staticPressureRise);
+		SetR("power", rv.asTested.power);
+		SetR("kpc", rv.asTested.kpc);
+
+		SetR("flowCorrected", rv.converted.flow);
+		SetR("pressureTotalCorrected", rv.converted.pressureTotal);
+		SetR("pressureStaticCorrected", rv.converted.pressureStatic);
+		SetR("staticPressureRiseCorrected", rv.converted.staticPressureRise);
+		SetR("powerCorrected", rv.converted.power);
+		SetR("kpcCorrected", rv.converted.kpc);
 	} catch (std::runtime_error const & e) {
 		std::string const what = e.what();
 		ThrowError(std::string("std::runtime_error thrown in fan203 - fan.h: " + what).c_str());

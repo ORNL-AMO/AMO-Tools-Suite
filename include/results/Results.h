@@ -1,10 +1,10 @@
 /**
  * @file
- * @brief Function prototypes for the PSAT result fields
+ * @brief Function prototypes for the PSAT and FSAT result fields
  *
- * This contains the prototypes for the PSAT results structure
+ * This contains the prototypes for the PSAT & FSAT results structure
  * including getters and setters for the important fields. Primary
- * importance are methods for calculating the existing and optimal results.
+ * importance are methods for calculating the existing, modified and optimal results.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
@@ -15,10 +15,71 @@
 #ifndef AMO_LIBRARY_RESULTS_H
 #define AMO_LIBRARY_RESULTS_H
 
-#include "Motor.h"
-#include "psat/Pump.h"
-#include "Financial.h"
-#include "FieldData.h"
+#include <calculator/motor/MotorShaftPower.h>
+#include <fans/OptimalFanEfficiency.h>
+#include "InputData.h"
+
+
+class FanResult {
+public:
+    struct Output {
+        Output(const double fanEfficiency, const double motorRatedPower, const double motorShaftPower, const double fanShaftPower,
+               const double motorEfficiency, const double motorPowerFactor, const double motorCurrent, const double motorPower,
+               const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double estimatedFLA = 0)
+                : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower),
+                  fanShaftPower(fanShaftPower), motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor),
+                  motorCurrent(motorCurrent), motorPower(motorPower), annualEnergy(annualEnergy), annualCost(annualCost),
+                  estimatedFLA(estimatedFLA), fanEnergyIndex(fanEnergyIndex)
+        {}
+
+        Output(const MotorShaftPower::Output output, const double fanEfficiency, const double motorRatedPower,
+               const double fanShaftPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex,
+               const double estimatedFLA = 0)
+                : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
+                  fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
+                  motorCurrent(output.current), motorPower(output.power), annualEnergy(annualEnergy), annualCost(annualCost),
+                  estimatedFLA(estimatedFLA), fanEnergyIndex(fanEnergyIndex)
+        {}
+
+        const double fanEfficiency, motorRatedPower, motorShaftPower, fanShaftPower, motorEfficiency, motorPowerFactor, motorCurrent;
+        const double motorPower, annualEnergy, annualCost, estimatedFLA, fanEnergyIndex;
+    };
+
+    FanResult(Fan::Input & fanInput, Motor & motor, double operatingFraction, double unitCost)
+            : fanInput(fanInput), motor(motor), operatingFraction(operatingFraction), unitCost(unitCost)
+    {}
+
+    /**
+     * @param fanFieldData, Fan::FieldDataBaseline
+     * @return FanResult::Output, the results of an existing fan system assessment
+     */
+    Output calculateExisting(Fan::FieldDataBaseline const & fanFieldData);
+
+    /**
+     * @param fanFieldData, Fan::FieldDataModifiedAndOptimal
+     * @param fanEfficiency, double
+     * @param isOptimal, bool determines whether or not to optimize motor (use EE or PE) or use existing efficiency class
+     * @return FanResult::Output, the results of a fan system assessment
+     */
+    Output calculateModified(Fan::FieldDataModifiedAndOptimal const & fanFieldData, double fanEfficiency, bool isOptimal);
+
+    /**
+     *
+     * @param fanFieldData
+     * @param fanType
+     * @return FanResult::Output, the results of a fan system assessment
+     */
+    Output calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData, OptimalFanEfficiency::FanType fanType);
+
+
+private:
+    double annualSavingsPotential = 0;
+    double optimizationRating = 0;
+    // In values
+    Fan::Input fanInput;
+    Motor motor;
+    double operatingFraction, unitCost;
+};
 
 /**
  * PSAT Result class
@@ -27,54 +88,38 @@
  */
 class PSATResult {
 public:
-    PSATResult() = default;
-
     /**
      * Constructor
-     * @param pump Pump, contains all pump-related calculations, passed by reference
+     * @param pumpInput Pump::Input, contains all pump-related data, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
-     * @param financial Financial, contains all financial-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
+     * @param operatingFraction double, fraction(%) of calendar hours the equipment is operating
+     * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
-    PSATResult(
-        Pump &pump,
-        Motor &motor,
-        Financial &financial,
-        FieldData &fieldData
-    ) :
-        pump(pump),
-        motor(motor),
-        financial(financial),
-        fieldData(fieldData),
-        baselinePumpEfficiency(0.0)
+    PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingFraction, double unitCost)
+            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingFraction(operatingFraction),
+              unitCost(unitCost), baselinePumpEfficiency(0.0)
     {};
 
     /**
      * Constructor
-     * @param pump Pump, contains all pump-related calculations, passed by reference
+     * @param pumpInput Pump::Input, contains all pump-related data, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
-     * @param financial Financial, contains all financial-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
      * @param baselinePumpEfficiency double, baseline pump efficiency
+     * @param operatingFraction double, fraction(%) of calendar hours the equipment is operating
+     * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
-    PSATResult(
-            Pump &pump,
-            Motor &motor,
-            Financial &financial,
-            FieldData &fieldData,
-            double baselinePumpEfficiency
-    ) :
-            pump(pump),
-            motor(motor),
-            financial(financial),
-            fieldData(fieldData),
-            baselinePumpEfficiency(baselinePumpEfficiency)
+    PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double baselinePumpEfficiency,
+               double operatingFraction, double unitCost)
+            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingFraction(operatingFraction),
+              unitCost(unitCost), baselinePumpEfficiency(baselinePumpEfficiency)
     {};
 
     /**
-     * Result structure captures the same fields for the existing as well as the optimal condition.
+     * Result (output) structure captures the same fields for the existing as well as the optimal condition.
      */
-    struct result {
+    struct Result {
         double pumpEfficiency;     ///< Existing: Existing pump efficiency is fluid power added by the pump divided by pump input shaft power.
         ///< Optimal: Optimal pump efficiency is estimated based on the efficiency estimating algorithms contained in Hydraulic Institute Standard HI 1.3-2000, Centrifugal Pump Design and Application.
         double motorRatedPower;    ///< Existing: Existing motor nameplate power (same as Rated power in the Motor input section).
@@ -114,58 +159,20 @@ public:
         return optimizationRating;
     }
 
-    /**
-     * Gets the existing conditions
-     * @return const result, existing conditions
-     */
-    const result &getExisting() const {
-        return existing;
-    }
-
-    /**
-     * Gets the modified conditions
-     * @return const result, modified conditions
-     */
-    const result &getModified() const {
-        return modified;
-    }
-
-    /**
-     * Gets the optimal conditions
-     * @return const result, optimal conditions
-     */
-    const result &getOptimal() const {
-        return optimal;
-    }
-
-    /**
-     * Calculates existing conditions
-     * @return double, existing conditions
-     */
-    double calculateExisting();
-
-    /**
-     * Calculates modified conditions
-     * @return double, modified conditions
-     */
-    double calculateModified();
-
-    /**
-     * Calculates optimal conditions
-     * @return double, optimal conditions
-     */
-    double calculateOptimal();
+    Result & calculateExisting();
+    Result & calculateModified();
+    Result & calculateOptimal();
 
 private:
     // Out values
-    result existing, optimal, modified;
+    Result existing, optimal, modified;
     double annualSavingsPotential = 0.0;
     double optimizationRating = 0.0;
     // In values
-    Pump pump;
+    Pump::Input pumpInput;
     Motor motor;
-    Financial financial;
-    FieldData fieldData;
+    Pump::FieldData fieldData;
+    double operatingFraction, unitCost;
     double baselinePumpEfficiency;
 };
 
