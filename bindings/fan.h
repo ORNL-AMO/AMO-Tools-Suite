@@ -179,12 +179,12 @@ NAN_METHOD(fanResultsExisting) {
 	FanResult result = {input, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
 	auto const output = result.calculateExisting(fanFieldData);
 
-	SetR("fanEfficiency", output.fanEfficiency);
+	SetR("fanEfficiency", output.fanEfficiency * 100);
 	SetR("motorRatedPower", output.motorRatedPower);
 	SetR("motorShaftPower", output.motorShaftPower);
 	SetR("fanShaftPower", output.fanShaftPower);
-	SetR("motorEfficiency", output.motorEfficiency);
-	SetR("motorPowerFactor", output.motorPowerFactor);
+	SetR("motorEfficiency", output.motorEfficiency * 100);
+	SetR("motorPowerFactor", output.motorPowerFactor * 100);
 	SetR("motorCurrent", output.motorCurrent);
 	SetR("motorPower", output.motorPower);
 	SetR("annualEnergy", output.annualEnergy);
@@ -226,12 +226,12 @@ NAN_METHOD(fanResultsModified) {
 
 	auto const output = result.calculateModified(fanFieldData, fanEfficiency, false);
 
-	SetR("fanEfficiency", output.fanEfficiency);
+	SetR("fanEfficiency", output.fanEfficiency * 100);
 	SetR("motorRatedPower", output.motorRatedPower);
 	SetR("motorShaftPower", output.motorShaftPower);
 	SetR("fanShaftPower", output.fanShaftPower);
-	SetR("motorEfficiency", output.motorEfficiency);
-	SetR("motorPowerFactor", output.motorPowerFactor);
+	SetR("motorEfficiency", output.motorEfficiency * 100);
+	SetR("motorPowerFactor", output.motorPowerFactor * 100);
 	SetR("motorCurrent", output.motorCurrent);
 	SetR("motorPower", output.motorPower);
 	SetR("annualEnergy", output.annualEnergy);
@@ -272,12 +272,12 @@ NAN_METHOD(fanResultsOptimal) {
 	auto const output = GetBool("isSpecified", inp) ? result.calculateOptimal(fanFieldData, Get("userInputFanEfficiency", inp) / 100)
 	                                                : result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
 
-	SetR("fanEfficiency", output.fanEfficiency);
+	SetR("fanEfficiency", output.fanEfficiency * 100);
 	SetR("motorRatedPower", output.motorRatedPower);
 	SetR("motorShaftPower", output.motorShaftPower);
 	SetR("fanShaftPower", output.fanShaftPower);
-	SetR("motorEfficiency", output.motorEfficiency);
-	SetR("motorPowerFactor", output.motorPowerFactor);
+	SetR("motorEfficiency", output.motorEfficiency * 100);
+	SetR("motorPowerFactor", output.motorPowerFactor * 100);
 	SetR("motorCurrent", output.motorCurrent);
 	SetR("motorPower", output.motorPower);
 	SetR("annualEnergy", output.annualEnergy);

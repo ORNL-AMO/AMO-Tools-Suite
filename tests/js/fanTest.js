@@ -19,12 +19,12 @@ test('fansExisting', function (t) {
 
     var output = bindings.fanResultsExisting(input);
 
-    t.equal(rnd(output.fanEfficiency), rnd(0.595398315));
+    t.equal(rnd(output.fanEfficiency), rnd(59.5398315));
     t.equal(rnd(output.motorRatedPower), rnd(600.0));
     t.equal(rnd(output.motorShaftPower), rnd(590.622186263));
     t.equal(rnd(output.fanShaftPower), rnd(590.622186263));
-    t.equal(rnd(output.motorEfficiency), rnd(0.9578351108));
-    t.equal(rnd(output.motorPowerFactor), rnd(0.8577466651));
+    t.equal(rnd(output.motorEfficiency), rnd(95.78351108));
+    t.equal(rnd(output.motorPowerFactor), rnd(85.77466651));
     t.equal(rnd(output.motorCurrent), rnd(673.1011529439));
     t.equal(rnd(output.motorPower), rnd(460.0));
     t.equal(rnd(output.annualEnergy), rnd(4029.6));
@@ -46,12 +46,12 @@ test('fansModified', function (t) {
 
     var output = bindings.fanResultsModified(input);
 
-    t.equal(rnd(output.fanEfficiency), rnd(0.595398315));
+    t.equal(rnd(output.fanEfficiency), rnd(59.5398315));
     t.equal(rnd(output.motorRatedPower), rnd(600.0));
     t.equal(rnd(output.motorShaftPower), rnd(590.622186263));
     t.equal(rnd(output.fanShaftPower), rnd(590.622186263));
-    t.equal(rnd(output.motorEfficiency), rnd(0.957835));
-    t.equal(rnd(output.motorPowerFactor), rnd(0.857748));
+    t.equal(rnd(output.motorEfficiency), rnd(95.783511));
+    t.equal(rnd(output.motorPowerFactor), rnd(85.774801));
     t.equal(rnd(output.motorCurrent), rnd(673.100309));
     t.equal(rnd(output.motorPower), rnd(460.000144));
     t.equal(rnd(output.annualEnergy), rnd(4029.601262));
@@ -72,12 +72,12 @@ test('fansOptimal', function (t) {
 
     var output = bindings.fanResultsOptimal(input);
 
-    t.equal(rnd(output.fanEfficiency), rnd(0.756578));
+    t.equal(rnd(output.fanEfficiency), rnd(75.657845));
     t.equal(rnd(output.motorRatedPower), rnd(500.0));
     t.equal(rnd(output.motorShaftPower), rnd(464.7970806678));
     t.equal(rnd(output.fanShaftPower), rnd(464.7970806678));
-    t.equal(rnd(output.motorEfficiency), rnd(0.9599974605));
-    t.equal(rnd(output.motorPowerFactor), rnd(0.854272));
+    t.equal(rnd(output.motorEfficiency), rnd(95.99974605));
+    t.equal(rnd(output.motorPowerFactor), rnd(85.427246));
     t.equal(rnd(output.motorCurrent), rnd(530.661126));
     t.equal(rnd(output.motorPower), rnd(361.187025));
     t.equal(rnd(output.annualEnergy), rnd(3163.998343));
@@ -98,12 +98,12 @@ test('fansOptimal specified ', function (t) {
 
     var output = bindings.fanResultsOptimal(input);
 
-    t.equal(rnd(output.fanEfficiency), rnd(0.756578));
+    t.equal(rnd(output.fanEfficiency), rnd(75.657845));
     t.equal(rnd(output.motorRatedPower), rnd(500.0));
     t.equal(rnd(output.motorShaftPower), rnd(464.7970806678));
     t.equal(rnd(output.fanShaftPower), rnd(464.7970806678));
-    t.equal(rnd(output.motorEfficiency), rnd(0.9599974605));
-    t.equal(rnd(output.motorPowerFactor), rnd(0.854272));
+    t.equal(rnd(output.motorEfficiency), rnd(95.99974605));
+    t.equal(rnd(output.motorPowerFactor), rnd(85.427246));
     t.equal(rnd(output.motorCurrent), rnd(530.661126));
     t.equal(rnd(output.motorPower), rnd(361.187025));
     t.equal(rnd(output.annualEnergy), rnd(3163.998343));
