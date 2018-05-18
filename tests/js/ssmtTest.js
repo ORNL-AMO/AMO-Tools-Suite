@@ -6,6 +6,29 @@ function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
 }
 
+test('steamPropertiesData', function (t) {
+    t.plan(12);
+
+    var input = {
+        "pressure": 5,
+        "wantEntropy": true
+    };
+
+    var res = bindings.steamPropertiesData(input);
+
+    var data = res.results;
+
+
+    input.wantEntropy = false;
+    input.temperature = 300;
+
+    res = bindings.steamPropertiesData(input);
+
+    var otherData = res.results;
+
+
+});
+
 test('saturatedPropertiesGivenTemperature', function (t) {
     t.plan(12);
     t.type(bindings.saturatedPropertiesGivenTemperature, 'function');
