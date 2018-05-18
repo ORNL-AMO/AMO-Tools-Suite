@@ -73,6 +73,11 @@ FanResult::Output FanResult::calculateOptimal(Fan::FieldDataModifiedAndOptimal c
     return calculateModified(fanFieldData, fanEfficiency, true);
 }
 
+FanResult::Output FanResult::calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData,
+                                              const double userInputFanEfficiency) {
+    return calculateModified(fanFieldData, userInputFanEfficiency, true);
+}
+
 PSATResult::Result & PSATResult::calculateExisting() {
     /**
      * 1a	Calculate motor shaft power from measured power, OR

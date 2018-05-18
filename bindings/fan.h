@@ -222,7 +222,8 @@ NAN_METHOD(fanResultsModified) {
 
 	FanResult result = {fanInput, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
 
-	const double fanEfficiency = Get("fanEfficiency", inp) / 100;
+	const double fanEfficiency = GetBool("isSpecified", inp) ? Get("userInputFanEfficiency", inp) / 100 : Get("fanEfficiency", inp) / 100;
+
 	auto const output = result.calculateModified(fanFieldData, fanEfficiency, false);
 
 	SetR("fanEfficiency", output.fanEfficiency);
@@ -268,7 +269,8 @@ NAN_METHOD(fanResultsOptimal) {
 
 	FanResult result = {fanInput, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
 
-	auto const output = result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
+	auto const output = GetBool("isSpecified", inp) ? result.calculateOptimal(fanFieldData, Get("userInputFanEfficiency", inp) / 100)
+	                                                : result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
 
 	SetR("fanEfficiency", output.fanEfficiency);
 	SetR("motorRatedPower", output.motorRatedPower);

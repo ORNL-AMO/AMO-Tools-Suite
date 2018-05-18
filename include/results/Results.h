@@ -71,6 +71,14 @@ public:
      */
     Output calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData, OptimalFanEfficiency::FanType fanType);
 
+    /**
+     * For when the user defines their fan efficiency, which will skip over the OptimalFanEfficiency::calculate() function
+     * @param fanFieldData
+     * @param userInputFanEfficiency
+     * @return FanResult::Output
+     */
+    Output calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData, double userInputFanEfficiency);
+
 
 private:
     double annualSavingsPotential = 0;
