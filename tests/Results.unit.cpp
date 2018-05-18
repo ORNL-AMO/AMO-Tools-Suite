@@ -67,6 +67,26 @@ TEST_CASE( "Fan Output Optimal", "[Fan results optimal]" ) {
 	CHECK(Approx(output.fanEnergyIndex) == 1.2377789151);
 }
 
+TEST_CASE( "Fan Output Optimal Specified", "[Fan results optimal specified]" ) {
+	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE};
+	Motor motor = {Motor::LineFrequency::FREQ60, 500, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
+	Fan::FieldDataModifiedAndOptimal fanFieldData = {460, 660, 129691, -16.36, 1.1, 0.988};
+	FanResult result = {fanInput, motor, 1.0, 0.06};
+	auto const output = result.calculateOptimal(fanFieldData, 0.7565784493);
+
+	CHECK(Approx(output.fanEfficiency) == 0.7565784493);
+	CHECK(Approx(output.motorRatedPower) == 500.0);
+	CHECK(Approx(output.motorShaftPower) == 464.7970806678);
+	CHECK(Approx(output.fanShaftPower) == 464.7970806678);
+	CHECK(Approx(output.motorEfficiency) == 0.9599974605);
+	CHECK(Approx(output.motorPowerFactor) == 0.8542724641);
+	CHECK(Approx(output.motorCurrent) == 530.6611260876);
+	CHECK(Approx(output.motorPower) == 361.1870254817);
+	CHECK(Approx(output.annualEnergy) == 3163.9983432194);
+	CHECK(Approx(output.annualCost) == 189.839900593);
+	CHECK(Approx(output.fanEnergyIndex) == 1.2377789151);
+}
+
 
 TEST_CASE( "PSATResultsPremium existing and optimal", "[PSAT results]" ) {
 	double achievableEfficiency = 90, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
