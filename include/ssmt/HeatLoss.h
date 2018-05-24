@@ -110,7 +110,7 @@ public:
      * Sets the quantity type
      * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      */
-    void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType);;
+    void setQuantityType(SteamProperties::ThermodynamicQuantity quantityType);
 
 private:
     void calculateProperties();
