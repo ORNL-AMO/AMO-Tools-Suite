@@ -5,7 +5,7 @@ AMO Tools Suite is a cross-platform collection of calculations and tools to supp
 See our hosted documentation for the latest release at [ornl-amo.github.io](https://ornl-amo.github.io/)
 
 ### Dependencies
-- CMake
+- CMake (cmake-curses to use the ccmake gui)
 - GCC 4.8.5 or later
 - Node [https://nodejs.org/en/](https://nodejs.org/en/)
 - Doxygen (only for building documentation)
@@ -22,7 +22,8 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 
 ### Packaging
 - Enable the `BUILD_PACKAGE` flag in the CMakeCache, then `cmake ./` then `make package`
-- Or use this directly: `cmake -D BUILD_TESTING:BOOL=OFF ./` and `cmake --build . --config Release --target PACKAGE`
+- Or use this directly for Mac and Windows: `cmake -D BUILD_TESTING:BOOL=OFF ./` and `cmake --build . --config Release --target PACKAGE`
+- To make package on Linux, run ccmake. Set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
 
 ### Documentation
 - To generate documentation: `doxygen Doxyfile.in`
