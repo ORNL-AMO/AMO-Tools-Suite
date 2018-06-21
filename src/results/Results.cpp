@@ -53,7 +53,7 @@ FanResult::Output FanResult::calculateModified(Fan::FieldDataModifiedAndOptimal 
 
     OptimalMotorPower::Output const output = OptimalMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                                                motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
-                                                               fanFieldData.measuredVoltage, fanShaftPower).calculate(isOptimal);
+                                                               fanFieldData.measuredVoltage, motorShaftPower).calculate(isOptimal);
 
     double const annualEnergy = AnnualEnergy(output.power, operatingFraction).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
