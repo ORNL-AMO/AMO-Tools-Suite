@@ -179,6 +179,6 @@ namespace Pump {
 		const double achievableEfficiency, rpm, kviscosity, specificGravity;
 		const int stageCount;
 	};
-};
+}
 
 #endif //AMO_TOOLS_SUITE_INPUT_DATA_H

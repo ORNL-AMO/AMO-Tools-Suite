@@ -34,11 +34,15 @@ double MotorCurrent::calculateCurrent(const double fullLoadAmps) {
     estimatedFLA = estimateFLA.getEstimatedFLA();
 
     // Adjustment based on the rated voltage and Adjustment based on the specified FLA
-	auto const tempFLA = plValues[4];
     for (auto & val : plValues) {
         val *= 460 / ratedVoltage;
+//        val *= fullLoadAmps / tempFLA;
+    }
+    auto const tempFLA = plValues[4];
+    for (auto & val : plValues) {
         val *= fullLoadAmps / tempFLA;
     }
+
 
     if (loadFactor < 0.251) {
         return CurveFitVal({0, 0.25, 0.5}, {plValues[0], plValues[1], plValues[2]}, 2, loadFactor).calculate();
