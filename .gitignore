@@ -30,6 +30,9 @@ local.properties
 .loadpath
 .recommenders
 
+# CMake
+*.cmake
+
 # Eclipse Core
 .project
 
