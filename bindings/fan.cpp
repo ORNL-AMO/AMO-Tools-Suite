@@ -36,6 +36,8 @@ NAN_MODULE_INIT(InitFans) {
 	Nan::Set(target, New<String>("fanCurve").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(fanCurve)).ToLocalChecked());
 
+	Nan::Set(target, New<String>("optimalFanEfficiency").ToLocalChecked(),
+			 GetFunction(New<FunctionTemplate>(optimalFanEfficiency)).ToLocalChecked());
 }
 
 NODE_MODULE(fan, InitFans)
