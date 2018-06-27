@@ -17,7 +17,8 @@
 #include "ssmt/Turbine.h"
 #include <string>
 #include <stdexcept>
-
+#include <array>
+#include <cmath>
 
 using namespace Nan;
 using namespace v8;
@@ -35,10 +36,26 @@ double Get(std::string const & nm) {
     return rObj->NumberValue();
 }
 
+bool GetBool(std::string const & key) {
+    Local<String> getName = Nan::New<String>(key).ToLocalChecked();
+
+    auto rObj = inp->ToObject()->Get(getName);
+    if (rObj->IsUndefined()) {
+        ThrowTypeError(std::string("GetBool method in ssmt.h: " + key + " not present in object").c_str());
+    }
+    return rObj->BooleanValue();
+}
+
 void SetR(std::string const & nm, double n) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     Local<Number> getNum = Nan::New<Number>(n);
     Nan::Set(r, getName, getNum);
+}
+
+void SetRobject(std::string const & nm, double n, Local<Object> obj) {
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    Local<Number> getNum = Nan::New<Number>(n);
+    Nan::Set(obj, getName, getNum);
 }
 
 SteamProperties::ThermodynamicQuantity thermodynamicQuantity() {
@@ -59,6 +76,73 @@ SteamProperties::ThermodynamicQuantity waterThermodynamicQuantity() {
 SteamProperties::ThermodynamicQuantity steamThermodynamicQuantity() {
     unsigned val = static_cast<unsigned>(Get("steamThermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
+}
+
+NAN_METHOD(steamPropertiesData) {
+	inp = info[0]->ToObject();
+	r = Nan::New<Object>();
+
+
+	if (GetBool("wantEntropy")) {
+        std::vector<std::array<double, 3>> results;
+        auto const pressure = Get("pressure");
+
+        for (double entropy = 0; entropy < 10.000001; entropy += 0.1) {
+            auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::ENTROPY, entropy).calculate();
+            if (isnan(sp.pressure) || isnan(sp.temperature) || isnan(sp.specificEntropy)
+                || sp.pressure < 0 || sp.temperature < 0 || sp.specificEntropy < 0) {
+                continue;
+            }
+            results.push_back({{sp.pressure, sp.temperature, sp.specificEntropy}});
+        }
+
+        Handle <Array> data = Array::New(v8::Isolate::GetCurrent(), results.size());
+        for (std::size_t i = 0; i < results.size(); i++) {
+            auto obj = Nan::New<Object>();
+            SetRobject("pressure", results.at(i).at(0), obj);
+            SetRobject("temperature", results.at(i).at(1), obj);
+            SetRobject("entropy", results.at(i).at(2), obj);
+            data->Set(i, obj);
+        }
+        Nan::Set(r, Nan::New<String>("results").ToLocalChecked(), data);
+        info.GetReturnValue().Set(r);
+    } else {
+        std::vector <std::array<double, 4>>  results;
+		double const temperature = Get("temperature");
+
+        auto const iterate = [&results, temperature](double pressureStart, double pressureEnd, double pressureStep) {
+            const double a = 0.000000001;
+            for (auto pressure = pressureStart; pressure <= pressureEnd + a; pressure += pressureStep) {
+                auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE, temperature).calculate();
+                if (isnan(sp.pressure) || isnan(sp.temperature) || isnan(sp.specificEnthalpy) || isnan(sp.specificVolume)
+                    || sp.pressure < 0 || sp.temperature < 0 || sp.specificEnthalpy < 0 || sp.specificVolume < 0) {
+                    continue;
+                }
+                results.push_back({{sp.pressure, sp.temperature, sp.specificEnthalpy, sp.specificVolume}});
+            }
+        };
+
+        iterate(0.0005, 0.01, 0.0005);
+        iterate(0.015, 0.1, 0.005);
+        iterate(0.11, 0.5, 0.01);
+        iterate(0.55, 1, 0.05);
+        iterate(1.1, 5, 0.1);
+        iterate(5.5, 10, 0.5);
+        iterate(11, 25, 1);
+        iterate(30, 100, 5);
+
+        Handle <Array> data = Array::New(v8::Isolate::GetCurrent(), results.size());
+        for (std::size_t i = 0; i < results.size(); i++) {
+            auto obj = Nan::New<Object>();
+            SetRobject("pressure", results.at(i).at(0), obj);
+            SetRobject("temperature", results.at(i).at(1), obj);
+            SetRobject("enthalpy", results.at(i).at(2), obj);
+            SetRobject("volume", results.at(i).at(3), obj);
+            data->Set(i, obj);
+        }
+        Nan::Set(r, Nan::New<String>("results").ToLocalChecked(), data);
+        info.GetReturnValue().Set(r);
+    }
 }
 
 NAN_METHOD(saturatedPressure) {
