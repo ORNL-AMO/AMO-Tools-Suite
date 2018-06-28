@@ -542,3 +542,42 @@ test('fan curve test', function (t) {
     res = bindings.fanCurve(inp);
     testEq(res.ResultData, expected);
 });
+
+test('optimalFanEfficiency', function (t) {
+    t.plan(4);
+    t.type(bindings.optimalFanEfficiency, 'function');
+
+    var input = {
+        fanType: 0,
+        fanSpeed: 1180,
+        flowRate: 40000,
+        inletPressure: -9,
+        outletPressure: 1,
+        compressibility: 0.995
+    };
+
+    var efficiency = bindings.optimalFanEfficiency(input);
+    t.equal(rnd(efficiency), rnd(80.56103029));
+
+    input = {
+        fanType: 11,
+        fanSpeed: 1180,
+        flowRate: 10000,
+        inletPressure: -9,
+        outletPressure: 1,
+        compressibility: 0.995
+    };
+    efficiency = bindings.optimalFanEfficiency(input);
+    t.equal(rnd(efficiency), rnd(60.6953126));
+
+    input = {
+        fanType: 6,
+        fanSpeed: 1180,
+        flowRate: 500000,
+        inletPressure: -6,
+        outletPressure: 1,
+        compressibility: 0.995
+    };
+    efficiency = bindings.optimalFanEfficiency(input);
+    t.equal(rnd(efficiency), rnd(29.31237501));
+});
