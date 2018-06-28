@@ -1,4 +1,4 @@
-AMO Tools Suite  <img src="https://img.shields.io/badge/license-MIT-blue.svg"> 
+AMO Tools Suite  
 ---------------
 
 AMO Tools Suite is a cross-platform collection of calculations and tools to support industrial equipment modeling.
