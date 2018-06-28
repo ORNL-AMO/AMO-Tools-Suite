@@ -23,7 +23,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 ### Packaging
 - Enable the `BUILD_PACKAGE` flag in the CMakeCache, then `cmake ./` then `make package`
 - Or use this directly for Windows: `cmake -D BUILD_TESTING:BOOL=OFF ./` and `cmake --build . --config Release --target PACKAGE`
-- To make package on Linux or Mac, run ccmake. Set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
+- To make package on Linux or Mac, run `ccmake.` and set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
 
 ### Documentation
 - To generate documentation: `doxygen Doxyfile.in`
