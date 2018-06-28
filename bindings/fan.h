@@ -567,3 +567,19 @@ NAN_METHOD(fanCurve) {
 
 	info.GetReturnValue().Set(r);
 }
+
+NAN_METHOD(optimalFanEfficiency) {
+	inp = info[0]->ToObject();
+
+	auto const fanType = GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp);
+	double const fanSpeed = Get("fanSpeed", inp);
+	double const flowRate = Get("flowRate", inp);
+	double const inletPressure = Get("inletPressure", inp);
+	double const outletPressure = Get("outletPressure", inp);
+	double const compressibility = Get("compressibility", inp);
+
+	double const efficiency = OptimalFanEfficiency(fanType, fanSpeed, flowRate, inletPressure, outletPressure,
+												   compressibility).calculate();
+
+	info.GetReturnValue().Set(efficiency * 100);
+}
