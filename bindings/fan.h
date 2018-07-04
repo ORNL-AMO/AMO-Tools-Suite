@@ -9,6 +9,7 @@
 #include "fans/FanEnergyIndex.h"
 #include "results/Results.h"
 #include "results/InputData.h"
+#include "fans/CompressibilityFactor.h"
 
 #include "calculator/pump/OptimalPumpShaftPower.h"
 #include "calculator/motor/OptimalMotorShaftPower.h"
@@ -582,4 +583,15 @@ NAN_METHOD(optimalFanEfficiency) {
 												   compressibility).calculate();
 
 	info.GetReturnValue().Set(efficiency * 100);
+}
+
+NAN_METHOD(compressibilityFactor) {
+	inp = info[0]->ToObject();
+
+	double const compressibilityFactor = CompressibilityFactor(
+			Get("moverShaftPower", inp), Get("inletPressure", inp), Get("outletPressure", inp),
+			Get("barometricPressure", inp), Get("flowRate", inp), Get("specificHeatRatio", inp)
+	).calculate();
+
+	info.GetReturnValue().Set(compressibilityFactor);
 }
