@@ -581,3 +581,31 @@ test('optimalFanEfficiency', function (t) {
     efficiency = bindings.optimalFanEfficiency(input);
     t.equal(rnd(efficiency), rnd(29.31237501));
 });
+
+test('compressibilityFactor', function (t) {
+    t.plan(4);
+    t.type(bindings.compressibilityFactor, 'function');
+
+    var input = {
+        moverShaftPower: 300, inletPressure: -8.5, outletPressure: 3,
+        barometricPressure: 29, flowRate: 1000, specificHeatRatio: 1.4
+    };
+
+    var compressibilityFactor = bindings.compressibilityFactor(input);
+    t.equal(rnd(compressibilityFactor), rnd(1.5795535958));
+
+    input = {
+        moverShaftPower: 566, inletPressure: -16.36, outletPressure: 1.1,
+        barometricPressure: 29.36, flowRate: 129691, specificHeatRatio: 1.4
+    };
+    compressibilityFactor = bindings.compressibilityFactor(input);
+
+    t.equal(rnd(compressibilityFactor), rnd(0.9879934727));
+
+    input = {
+        moverShaftPower: 623, inletPressure: -8.92, outletPressure: 2.28,
+        barometricPressure: 29.36, flowRate: 151961, specificHeatRatio: 1.4
+    };
+    compressibilityFactor = bindings.compressibilityFactor(input);
+    t.equal(rnd(compressibilityFactor), rnd(0.9953146218));
+});

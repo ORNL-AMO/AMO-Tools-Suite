@@ -88,8 +88,9 @@ NAN_METHOD(steamPropertiesData) {
         auto const pressure = Get("pressure");
 
         for (double entropy = 0; entropy < 10.000001; entropy += 0.1) {
-            auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::ENTROPY, entropy).calculate();
-            if (isnan(sp.pressure) || isnan(sp.temperature) || isnan(sp.specificEntropy)
+            auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::ENTROPY,
+                                            entropy).calculate();
+            if (std::isnan(sp.pressure) || std::isnan(sp.temperature) || std::isnan(sp.specificEntropy)
                 || sp.pressure < 0 || sp.temperature < 0 || sp.specificEntropy < 0) {
                 continue;
             }
@@ -113,9 +114,11 @@ NAN_METHOD(steamPropertiesData) {
         auto const iterate = [&results, temperature](double pressureStart, double pressureEnd, double pressureStep) {
             const double a = 0.000000001;
             for (auto pressure = pressureStart; pressure <= pressureEnd + a; pressure += pressureStep) {
-                auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE, temperature).calculate();
-                if (isnan(sp.pressure) || isnan(sp.temperature) || isnan(sp.specificEnthalpy) || isnan(sp.specificVolume)
-                    || sp.pressure < 0 || sp.temperature < 0 || sp.specificEnthalpy < 0 || sp.specificVolume < 0) {
+                auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
+                                                temperature).calculate();
+                if (std::isnan(sp.pressure) || std::isnan(sp.temperature) || std::isnan(sp.specificEnthalpy)
+                    || std::isnan(sp.specificVolume) || sp.pressure < 0 || sp.temperature < 0
+                    || sp.specificEnthalpy < 0 || sp.specificVolume < 0) {
                     continue;
                 }
                 results.push_back({{sp.pressure, sp.temperature, sp.specificEnthalpy, sp.specificVolume}});
