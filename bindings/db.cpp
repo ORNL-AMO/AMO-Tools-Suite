@@ -4,7 +4,7 @@
 using namespace Nan;
 
 NAN_MODULE_INIT(InitDb) {
-
+    auto test = SQLite("test_db_name", true);
     // PHAST
     Nan::Set(target, New<String>("startup").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(startup)).ToLocalChecked());

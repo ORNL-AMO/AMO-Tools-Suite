@@ -39,6 +39,8 @@ test('dbSelectSolidMaterial', function (t) {
         meltingPoint: 5000
     };
 
+
+
     res = bindings.selectSolidLoadChargeMaterials();
     t.equal(res.length, 40, "array is not of size 40");
     t.equal(res[39].id, obj2.id, res[39].id + " != " + obj2.id);

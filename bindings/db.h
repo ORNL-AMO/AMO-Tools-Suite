@@ -100,12 +100,18 @@ void SetMotorData(Local<Object> & obj, const MotorData & motor) {
 // to save the backup,
 
 NAN_METHOD(startup) {
+
 //        std::string dbName = "db/amo_tools_suite.db";
 //        std::ifstream ifs(dbName);
 //	    const bool fileExists = ifs.is_open();
 //        ifs.close();
 //	    sql.reset();
 //        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
+
+
+    std::string const dbName = "amo_tools_suite.db";
+    sql.reset();
+    sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
 
     std::string const dbName = ":memory:";
     sql.reset();
