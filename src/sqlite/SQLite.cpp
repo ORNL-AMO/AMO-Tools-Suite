@@ -1571,7 +1571,7 @@ bool SQLite::insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & mate
     int rc = step_command(m_solid_load_charge_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
     reset_command(m_solid_load_charge_materials_insert_stmt);
-    return valid_insert;
+    return valid_insert;;
 }
 
 bool SQLite::deleteSolidLoadChargeMaterial(const int id) {
