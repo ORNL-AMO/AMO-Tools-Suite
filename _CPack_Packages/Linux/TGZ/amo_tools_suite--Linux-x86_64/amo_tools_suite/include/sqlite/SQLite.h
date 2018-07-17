@@ -16,6 +16,7 @@ class SolidLiquidFlueGasMaterial;
 class Atmosphere;
 class WallLosses;
 class MotorData;
+class PumpData;
 
 class SQLiteWrapper
 {
@@ -156,6 +157,13 @@ public:
     bool deleteMotorData(int id);
     bool updateMotorData(MotorData const & motor);
 
+    std::vector<PumpData> getPumpData() const;
+    std::vector<PumpData> getCustomPumpData() const;
+    PumpData getPumpDataById(int id) const;
+    bool insertPumpData(PumpData const & pump);
+    bool deletePumpData(int id);
+    bool updatePumpData(PumpData const & pump);
+
 private:
     // returns true if the material id falls in the default material id range
     inline bool isDefaultMaterial(const int id, std::size_t const defaultMaterialsSize) {
@@ -218,6 +226,13 @@ private:
     sqlite3_stmt * m_motor_data_update_stmt = nullptr;
     sqlite3_stmt * m_motor_data_delete_stmt = nullptr;
 
+    sqlite3_stmt * m_pump_data_insert_stmt = nullptr;
+    sqlite3_stmt * m_pump_data_select_stmt = nullptr;
+    sqlite3_stmt * m_pump_data_select_single_stmt = nullptr;
+    sqlite3_stmt * m_pump_data_select_custom_stmt = nullptr;
+    sqlite3_stmt * m_pump_data_update_stmt = nullptr;
+    sqlite3_stmt * m_pump_data_delete_stmt = nullptr;
+
     void create_select_stmt();
 
     void create_update_and_delete_stmt();
@@ -241,6 +256,8 @@ private:
     bool insert_wall_losses_surface(WallLosses const & surface);
 
     bool insert_motor_data(MotorData const & m);
+
+    bool insert_pump_data(PumpData const & pump);
 
     void insert_default_data();
 

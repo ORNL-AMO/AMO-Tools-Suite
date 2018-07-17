@@ -113,7 +113,8 @@ set(SOURCE_FILES
         src/fans/FanCurve.cpp
         src/calculator/util/CompressedAir.cpp
         src/calculator/util/CHP.cpp
-        src/calculator/motor/MotorData.cpp)
+        src/calculator/motor/MotorData.cpp
+        src/calculator/pump/PumpData.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -192,10 +193,11 @@ set(INCLUDE_FILES
         include/calculator/util/CompressedAir.h
         include/calculator/motor/MotorData.h
         include/sqlite/MotorData.h
+        include/sqlite/PumpData.h
         include/fans/CompressibilityFactor.h
         include/results/InputData.h
         include/fans/FanEnergyIndex.h
-        include/fans/OptimalFanEfficiency.h)
+        include/fans/OptimalFanEfficiency.h include/calculator/pump/PumpData.h src/calculator/pump/PumpData.cpp include/sqlite/PumpData.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp

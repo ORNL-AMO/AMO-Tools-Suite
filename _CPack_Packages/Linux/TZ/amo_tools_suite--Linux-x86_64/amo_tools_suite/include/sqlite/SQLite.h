@@ -242,6 +242,8 @@ private:
 
     bool insert_motor_data(MotorData const & m);
 
+    bool insert_pump_data(PumpData const & pump);
+
     void insert_default_data();
 
     std::vector<SolidLoadChargeMaterial> get_default_solid_load_charge_materials();
