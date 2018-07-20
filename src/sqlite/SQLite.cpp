@@ -1571,7 +1571,7 @@ bool SQLite::insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & mate
     int rc = step_command(m_solid_load_charge_materials_insert_stmt);
     bool valid_insert = step_validity(rc);
     reset_command(m_solid_load_charge_materials_insert_stmt);
-    return valid_insert;;
+    return valid_insert;
 }
 
 bool SQLite::deleteSolidLoadChargeMaterial(const int id) {
@@ -2198,7 +2198,7 @@ bool SQLite::deletePumpData(int id) {
 }
 
 bool SQLite::updatePumpData(PumpData const &pump) {
-    if (isDefaultMaterial(pump.id, get_default_motor_data().size())) {
+    if (isDefaultMaterial(pump.id, get_default_pump_data().size())) {
         return false;
     }
     bind_value(m_pump_data_insert_stmt, 1, pump.id);
