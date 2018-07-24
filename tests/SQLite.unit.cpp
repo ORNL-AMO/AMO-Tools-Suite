@@ -8,6 +8,7 @@
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
 #include <calculator/motor/MotorData.h>
+#include <calculator/motor/PumpData.h>
 #include <fstream>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {

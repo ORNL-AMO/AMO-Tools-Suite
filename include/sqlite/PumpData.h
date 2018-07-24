@@ -5,8 +5,7 @@
 #ifndef AMO_TOOLS_SUITE_PUMPDATA_H
 #define AMO_TOOLS_SUITE_PUMPDATA_H
 
-#include <vector>
-#include "SQLite.h"
+
 
 class PumpData;
 

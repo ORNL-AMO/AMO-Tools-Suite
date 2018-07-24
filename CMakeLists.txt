@@ -192,6 +192,7 @@ set(INCLUDE_FILES
         include/fans/FanCurve.h
         include/calculator/util/CompressedAir.h
         include/calculator/motor/MotorData.h
+        include/calculator/motor/PumpData.h
         include/sqlite/MotorData.h
         include/sqlite/PumpData.h
         include/fans/CompressibilityFactor.h
