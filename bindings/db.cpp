@@ -145,5 +145,4 @@ NAN_MODULE_INIT(InitDb) {
              GetFunction(New<FunctionTemplate>(updatePump)).ToLocalChecked());
 }
 
-
 NODE_MODULE(db, InitDb)
