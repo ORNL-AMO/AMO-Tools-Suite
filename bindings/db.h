@@ -97,7 +97,6 @@ void SetMotorData(Local<Object> & obj, const MotorData & motor) {
 }
 
 void SetPumpData(Local<Object> & obj, const PumpData & pump) {
-    SetObj(obj, "id", pump.getId());
     SetObj(obj, "manufacturer", pump.getManufacturer());
     SetObj(obj, "serialNumber", pump.getSerialNumber());
     SetObj(obj, "type", pump.getType());
@@ -122,8 +121,8 @@ void SetPumpData(Local<Object> & obj, const PumpData & pump) {
     SetObj(obj, "weight", pump.getWeight());
     SetObj(obj, "outletDiameter", pump.getOutletDiameter());
     SetObj(obj, "percentageOfSchedule", pump.getPercentageOfSchedule());
-    SetObj(obj, "measuredPumpCapacity", pump.getMeasuredPumpCapacity());
     SetObj(obj, "dailyPumpCapacity", pump.getDailyPumpCapacity());
+    SetObj(obj, "measuredPumpCapacity", pump.getMeasuredPumpCapacity());
     SetObj(obj, "pumpPerformance", pump.getPumpPerformance());
     SetObj(obj, "staticSuctionHead", pump.getStaticSuctionHead());
     SetObj(obj, "staticDischargeHead", pump.getStaticDischargeHead());
@@ -143,6 +142,7 @@ void SetPumpData(Local<Object> & obj, const PumpData & pump) {
     SetObj(obj, "minFlowSize", pump.getMinFlowSize());
     SetObj(obj, "pumpSize", pump.getPumpSize());
     SetObj(obj, "outOfService", pump.getOutOfService());
+    SetObj(obj, "id", pump.getId());
 }
 
 
@@ -164,9 +164,11 @@ NAN_METHOD(startup) {
     sql.reset();
     sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
 
+    /*
     std::string const dbName = ":memory:";
     sql.reset();
     sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
+     */
 }
 
 
@@ -839,8 +841,8 @@ NAN_METHOD(insertPump) {
                     Get("inletDiameter"), GetStr("weight"), Get("outletDiameter"), Get("percentageOfSchedule"), Get("dailyPumpCapacity"),
                     Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"), Get("staticDischargeHead"), Get("fluidDensity"),
                     Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"), Get("maxWorkingPressure"), Get("maxAmbientTemperature"), Get("maxSuctionLift"),
-                    Get("displacement"), Get("startingTorque"), Get("ratedSpeed"), Get("shaftDiameter"), Get("minFlowSize"),
-                    Get("impellerDiameter"), Get("efficiency"), Get("output60Hz"), Get("outOfService"),
+                    Get("displacement"), Get("startingTorque"), Get("ratedSpeed"), Get("shaftDiameter"),
+                    Get("impellerDiameter"), Get("efficiency"), Get("output60Hz"),  Get("minFlowSize"), Get("pumpSize"), Get("outOfService"),
                     Get("id")
     );
     bool success = sql->insertPumpData(pump);
@@ -863,8 +865,8 @@ NAN_METHOD(updatePump) {
                   Get("inletDiameter"), GetStr("weight"), Get("outletDiameter"), Get("percentageOfSchedule"), Get("dailyPumpCapacity"),
                   Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"), Get("staticDischargeHead"), Get("fluidDensity"),
                   Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"), Get("maxWorkingPressure"), Get("maxAmbientTemperature"), Get("maxSuctionLift"),
-                  Get("displacement"), Get("startingTorque"), Get("ratedSpeed"), Get("shaftDiameter"), Get("minFlowSize"),
-                  Get("impellerDiameter"), Get("efficiency"), Get("output60Hz"), Get("outOfService"),
+                  Get("displacement"), Get("startingTorque"), Get("ratedSpeed"), Get("shaftDiameter"),
+                  Get("impellerDiameter"), Get("efficiency"), Get("output60Hz"),  Get("minFlowSize"), Get("pumpSize"), Get("outOfService"),
                   Get("id")
     );
 

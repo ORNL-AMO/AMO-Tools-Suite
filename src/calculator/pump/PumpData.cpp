@@ -5,31 +5,30 @@
 #include "calculator/pump/PumpData.h"
 
 PumpData::PumpData(std::string manufacturer, std::string model, std::string type, std::string serialNumber,
-                   std::string status, bool outOfService, double weight, std::string pumpType, int speed,
-                   double inletDiameter, double outletDiameter, std::string radialBearingType,
-                   std::string thrustBearingType, std::string shaftOrientation, std::string shaftSealType,
-                   int numShafts, int numStages, std::string fluidType, int yearlyOperatingHours, int yearInstalled,
-                   std::string priority, double percentageOfSchedule, double dailyPumpCapacity,
+                   std::string status,  std::string pumpType, std::string radialBearingType,  std::string thrustBearingType, std::string shaftOrientation, std::string shaftSealType,
+                   std::string fluidType, std::string priority, std::string driveType, std::string flangeConnectionClass, std::string flangeConnectionSize,
+                   int numShafts, int speed, int numStages,  int yearlyOperatingHours, int yearInstalled, int finalMotorRpm,
+                   double inletDiameter, double weight, double outletDiameter, double percentageOfSchedule, double dailyPumpCapacity,
                    double measuredPumpCapacity, double pumpPerformance, double staticSuctionHead,
                    double staticDischargeHead, double fluidDensity, double lengthOfDischargePipe,
-                   double pipeDesignFrictionLosses, std::string driveType, double maxWorkingPressure,
-                   double maxAmbientTemperature, double maxSuctionLift, int finalMotorRpm, double displacement,
-                   double startingTorque, double ratedSpeed, double shaftDiameter, std::string flangeConnectionClass,
-                   std::string flangeConnectionSize, double minFlowSize, double pumpSize, double impellerDiameter,
-                   double efficiency, double output60Hz)
-            : manufacturer(std::move(manufacturer)), model(std::move(model)), type(std::move(type)), serialNumber(std::move(serialNumber)), status(std::move(status)),
-              shaftOrientation(std::move(shaftOrientation)), shaftSealType(std::move(shaftSealType)), fluidType(std::move(fluidType)),
-              priority(std::move(priority)), driveType(std::move(driveType)), flangeConnectionClass(std::move(flangeConnectionClass)), flangeConnectionSize(std::move(flangeConnectionSize)),
-              pumpType(std::move(pumpType)), radialBearingType(std::move(radialBearingType)), thrustBearingType(std::move(thrustBearingType)),
-              outOfService(outOfService), weight(weight), speed(speed), inletDiameter(inletDiameter),
-              outletDiameter(outletDiameter), numShafts(numShafts), numStages(numStages), yearlyOperatingHours(yearlyOperatingHours),
-              yearInstalled(yearInstalled), percentageOfSchedule(percentageOfSchedule), dailyPumpCapacity(dailyPumpCapacity),
+                   double pipeDesignFrictionLosses,  double maxWorkingPressure,
+                   double maxAmbientTemperature, double maxSuctionLift,  double displacement,
+                   double startingTorque, double ratedSpeed, double shaftDiameter, double impellerDiameter,  
+                   double efficiency, double output60Hz, double minFlowSize, double pumpSize,  bool outOfService, int id)
+            : manufacturer(std::move(manufacturer)), model(std::move(model)), type(std::move(type)), serialNumber(std::move(serialNumber)),
+              status(std::move(status)),  pumpType(std::move(pumpType)), radialBearingType(std::move(radialBearingType)),
+              thrustBearingType(std::move(thrustBearingType)), shaftOrientation(std::move(shaftOrientation)), shaftSealType(std::move(shaftSealType)),
+              fluidType(std::move(fluidType)), priority(std::move(priority)), driveType(std::move(driveType)), flangeConnectionClass(std::move(flangeConnectionClass)),
+              flangeConnectionSize(std::move(flangeConnectionSize)), numShafts(numShafts), speed(speed), numStages(numStages),
+              yearlyOperatingHours(yearlyOperatingHours), yearInstalled(yearInstalled), finalMotorRpm(finalMotorRpm),
+              inletDiameter(inletDiameter), weight(weight), outletDiameter(outletDiameter), percentageOfSchedule(percentageOfSchedule), dailyPumpCapacity(dailyPumpCapacity),
               measuredPumpCapacity(measuredPumpCapacity), pumpPerformance(pumpPerformance), staticSuctionHead(staticSuctionHead),
               staticDischargeHead(staticDischargeHead), fluidDensity(fluidDensity), lengthOfDischargePipe(lengthOfDischargePipe),
-              pipeDesignFrictionLosses(pipeDesignFrictionLosses), maxWorkingPressure(maxWorkingPressure), maxAmbientTemperature(maxAmbientTemperature),
-              maxSuctionLift(maxSuctionLift), finalMotorRpm(finalMotorRpm), displacement(displacement), startingTorque(startingTorque),
-              ratedSpeed(ratedSpeed), shaftDiameter(shaftDiameter), minFlowSize(minFlowSize), pumpSize(pumpSize), impellerDiameter(impellerDiameter),
-              efficiency(efficiency), output60Hz(output60Hz)
+              pipeDesignFrictionLosses(pipeDesignFrictionLosses),  maxWorkingPressure(maxWorkingPressure),
+              maxAmbientTemperature(maxAmbientTemperature), maxSuctionLift(maxSuctionLift),  displacement(displacement),
+              startingTorque(startingTorque), ratedSpeed(ratedSpeed), shaftDiameter(shaftDiameter), impellerDiameter(impellerDiameter),
+              efficiency(efficiency), output60Hz(output60Hz), minFlowSize(minFlowSize), pumpSize(pumpSize), outOfService(outOfService), id(id)
+
 
 {}
 

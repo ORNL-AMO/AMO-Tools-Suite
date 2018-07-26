@@ -9,15 +9,17 @@
 
 class PumpData {
 public:
-    PumpData(std::string manufacturer, std::string model, std::string type, std::string serialNumber, std::string status, bool outOfService
-            , double weight, std::string pumpType, int speed, double inletDiameter, double outletDiameter, std::string radialBearingType, std::string thrustBearingType
-            , std::string shaftOrientation, std::string shaftSealType, int numShafts, int numStages, std::string fluidType
-            , int yearlyOperatingHours, int yearInstalled, std::string priority, double percentageOfSchedule, double dailyPumpCapacity
-            , double measuredPumpCapacity, double pumpPerformance, double staticSuctionHead, double staticDischargeHead, double fluidDensity
-            , double lengthOfDischargePipe, double pipeDesignFrictionLosses, std::string driveType, double maxWorkingPressure, double maxAmbientTemperature
-            , double maxSuctionLift, int finalMotorRpm, double displacement, double startingTorque, double ratedSpeed, double shaftDiameter
-            , std::string flangeConnectionClass, std::string flangeConnectionSize, double minFlowSize, double pumpSize
-            , double impellerDiameter, double efficiency, double output60Hz);
+    PumpData(std::string manufacturer, std::string model, std::string type, std::string serialNumber,
+             std::string status,  std::string pumpType, std::string radialBearingType,  std::string thrustBearingType, std::string shaftOrientation, std::string shaftSealType,
+             std::string fluidType, std::string priority, std::string driveType, std::string flangeConnectionClass, std::string flangeConnectionSize,
+             int numShafts, int speed, int numStages,  int yearlyOperatingHours, int yearInstalled, int finalMotorRpm,
+             double inletDiameter, double weight, double outletDiameter, double percentageOfSchedule, double dailyPumpCapacity,
+             double measuredPumpCapacity, double pumpPerformance, double staticSuctionHead,
+             double staticDischargeHead, double fluidDensity, double lengthOfDischargePipe,
+             double pipeDesignFrictionLosses,  double maxWorkingPressure,
+             double maxAmbientTemperature, double maxSuctionLift,  double displacement,
+             double startingTorque, double ratedSpeed, double shaftDiameter, double impellerDiameter,
+             double efficiency, double output60Hz, double minFlowSize, double pumpSize,  bool outOfService, int id);
 
 
 

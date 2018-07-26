@@ -6,7 +6,7 @@ class MotorData;
 std::vector<MotorData> SQLite::get_default_motor_data() {
 	return {
 			{
-					"GEeeee", "X$D Ultra IEEE 841", "M9455", "NEMA Design B", 50, 1800, 1780, "TEFC", "326T", 460,
+					"GE", "X$D Ultra IEEE 841", "M9455", "NEMA Design B", 50, 1800, 1780, "TEFC", "326T", 460,
 					"IEEE 841 Petroleum/Chemical", 0, 0, 0, 0, 1.15, "F", 511, 4, 615, 99.5, 5, 38, 48, 94.5, 94.7,
 					94.3, 91.6, 78, 73.6, 63.3, 41.5, 147.4, 294.8, 206.4, 63.5, 25.7, 362.5, 92.9, 115.2, 2000
 			},
