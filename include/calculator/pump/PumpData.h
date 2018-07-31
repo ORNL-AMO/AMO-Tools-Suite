@@ -10,20 +10,17 @@
 class PumpData {
 public:
     PumpData(std::string manufacturer, std::string model, std::string type, std::string serialNumber,
-             std::string status,  std::string pumpType, std::string radialBearingType,  std::string thrustBearingType, std::string shaftOrientation, std::string shaftSealType,
-             std::string fluidType, std::string priority, std::string driveType, std::string flangeConnectionClass, std::string flangeConnectionSize,
+             std::string status, std::string pumpType, std::string radialBearingType,  std::string thrustBearingType,
+             std::string shaftOrientation, std::string shaftSealType, std::string fluidType, std::string priority,
+             std::string driveType, std::string flangeConnectionClass, std::string flangeConnectionSize,
              int numShafts, int speed, int numStages,  int yearlyOperatingHours, int yearInstalled, int finalMotorRpm,
-             double inletDiameter, double weight, double outletDiameter, double percentageOfSchedule, double dailyPumpCapacity,
-             double measuredPumpCapacity, double pumpPerformance, double staticSuctionHead,
+             double inletDiameter, double weight, double outletDiameter, double percentageOfSchedule,
+             double dailyPumpCapacity, double measuredPumpCapacity, double pumpPerformance, double staticSuctionHead,
              double staticDischargeHead, double fluidDensity, double lengthOfDischargePipe,
-             double pipeDesignFrictionLosses,  double maxWorkingPressure,
-             double maxAmbientTemperature, double maxSuctionLift,  double displacement,
-             double startingTorque, double ratedSpeed, double shaftDiameter, double impellerDiameter,
-             double efficiency, double output60Hz, double minFlowSize, double pumpSize,  bool outOfService, int id);
-
-
-
-
+             double pipeDesignFrictionLosses,  double maxWorkingPressure, double maxAmbientTemperature,
+             double maxSuctionLift,  double displacement, double startingTorque, double ratedSpeed,
+             double shaftDiameter, double impellerDiameter, double efficiency, double output60Hz, double minFlowSize,
+             double pumpSize,  bool outOfService);
 
     const bool &getOutOfService() const;
 
@@ -217,9 +214,9 @@ public:
 
 
 private:
-    std::string manufacturer, model, serialNumber, type, status, pumpType, radialBearingType,
-            thrustBearingType, shaftOrientation, shaftSealType;
-    std::string fluidType, priority, driveType, flangeConnectionClass, flangeConnectionSize;
+    std::string manufacturer, model, serialNumber, type, status, pumpType, radialBearingType, thrustBearingType;
+    std::string shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass;
+    std::string flangeConnectionSize;
 
     int numShafts, speed, numStages, yearlyOperatingHours, yearInstalled, finalMotorRpm;
 
