@@ -1451,7 +1451,7 @@ void SQLite::create_tables()
             R"(CREATE TABLE IF NOT EXISTS pump_data (
              id integer PRIMARY KEY AUTOINCREMENT,
              sid integer NOT NULL,
-             manufacturer text NOT NULL,
+             manufacturer text NOT NULL DEFAULT "" UNIQUE,
              model text NOT NULL,
              type text NOT NULL,
              serialNumber text NOT NULL,
@@ -1537,12 +1537,23 @@ void SQLite::insert_default_data()
 		insert_motor_data(motor);
     }
 
-    for( auto const & pump : get_default_pump_data() ) {
-       insert_pump_data(pump);
-//       auto testing = getPumpDataById(1);
-//       auto hello = 0;
+    auto test = get_default_pump_data();
 
+    std::ofstream ofs("debug.txt");
+    ofs << "get_default_pump_data() returned a size of " << test.size();
+    auto index = 0;
+    for( auto const & pump : get_default_pump_data() ) {
+        ofs << " pump: " << pump.manufacturer << " pump.id (uninitialized prob): " << pump.id << std::endl;
+        auto result = insert_pump_data(pump);
+        ofs << " result: " << result << std::endl;
+        auto all_pumps_so_far = getPumpData();
+        ofs << "pump count as of now: " << all_pumps_so_far.size() << std::endl << std::endl;
+        for( auto const & pump_inner : all_pumps_so_far ) {
+            ofs << " pump_inner: " << pump_inner.manufacturer << " pump_inner.id (should be initialized): " << pump_inner.id << std::endl;
+        }
+        ofs << std::endl << std::endl;
     }
+    auto hello = 0;
 }
 
 bool SQLite::insert_solid_load_charge_materials(SolidLoadChargeMaterial const & material)
@@ -2249,6 +2260,7 @@ bool SQLite::updatePumpData(PumpData const &pump) {
     bind_value(m_pump_data_update_stmt, 44, pump.minFlowSize);
     bind_value(m_pump_data_update_stmt, 45, pump.pumpSize);
     bind_value(m_pump_data_update_stmt, 46, pump.outOfService);
+    bind_value(m_pump_data_update_stmt, 47, pump.id);
 
     int rc = step_command(m_pump_data_update_stmt);
     bool valid_insert = step_validity(rc);

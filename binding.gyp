@@ -145,13 +145,15 @@
         },
 		{
             "target_name": "db",
-            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses', 'include/calculator/motor',
+            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses',
+                'include/calculator/motor', 'include/calculator/pump',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
                 'bindings/db.cpp',
                 'third_party/sqlite/sqlite3.c',
                 'src/calculator/motor/MotorData.cpp',
+                'src/calculator/pump/PumpData.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
             ],

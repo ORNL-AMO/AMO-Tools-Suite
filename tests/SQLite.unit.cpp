@@ -415,6 +415,37 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
         auto const output2 = sqlite.getWallLossesSurface();
         CHECK( output2[output2.size() - 1].getSurface() == last );
     }
+
+    {
+        auto const output = sqlite.getMotorData();
+        auto const last = output.back().getManufacturer();
+        MotorData motor(
+                "Throwaway motor to be deleted", "XD", "M9455", "NEMA Design C", 50, 1800, 1780, "TEFC", "326T", 460,
+                "IEEE 841 Petroleum/Chemical", 0, 0, 0, 0, 1.15, "F", 511, 4, 615, 99.5, 5, 38, 48, 94.5, 94.7,
+                94.3, 91.6, 78, 73.6, 63.3, 41.5, 147.4, 294.8, 206.4, 63.5, 25.7, 362.5, 92.9, 115.2, 2000
+        );
+
+        sqlite.insertMotorData(motor);
+        sqlite.deleteMotorData(sqlite.getMotorData().back().getId());
+        auto const output2 = sqlite.getMotorData();
+        CHECK( output2[output2.size() - 1].getManufacturer() == last );
+    }
+
+    {
+        auto const output = sqlite.getPumpData();
+        auto const last = output.back().getManufacturer();
+        PumpData pump(
+                "throw this pump away delete", "model", "type", "serialNumber", "status", "pumpType", "radial",
+                "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
+                "flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
+                85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1
+        );
+
+        sqlite.insertPumpData(pump);
+        sqlite.deletePumpData(sqlite.getPumpData().back().getId());
+        auto const output2 = sqlite.getPumpData();
+        CHECK( output2[output2.size() - 1].getManufacturer() == last );
+    }
 }
 
 //// commented because it writes to HDD
@@ -1215,7 +1246,7 @@ TEST_CASE( "SQLite - Motor Data", "[sqlite][motor]" ) {
     }
 }
 
-TEST_CASE( "SQLite - Pump Data", "[sqlite][pump]" ) {
+TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]" ) {
     auto const compare = [](PumpData result, PumpData expected) {
         CHECK(result.getManufacturer() == expected.getManufacturer());
         CHECK(result.getModel() == expected.getModel());
@@ -1267,6 +1298,7 @@ TEST_CASE( "SQLite - Pump Data", "[sqlite][pump]" ) {
     };
 
     auto sqlite = SQLite(":memory:", true);
+//    auto sqlite = SQLite("cpp_amo_tools_suite.db", true);
 
     {
         auto const pumps = sqlite.getPumpData();
@@ -1290,6 +1322,12 @@ TEST_CASE( "SQLite - Pump Data", "[sqlite][pump]" ) {
 
         sqlite.insertPumpData(pump);
         pump.setId(2);
+        compare(sqlite.getPumpData().back(), pump);
+
+        pump = sqlite.getPumpData().back();
+        pump.setManufacturer("updated");
+        sqlite.updatePumpData(pump);
+
         compare(sqlite.getPumpData().back(), pump);
     }
 }
