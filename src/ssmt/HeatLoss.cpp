@@ -25,7 +25,7 @@ void HeatLoss::calculateProperties() {
 	inletProperties = {inletMassFlow, inletEnergyFlow, sp};
 
 	sp = SteamProperties(inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-	                     outletEnergyFlow / inletMassFlow).calculate();
+	                     1000 * outletEnergyFlow / inletMassFlow).calculate();
 	outletProperties = {inletMassFlow, outletEnergyFlow, sp};
 
 	heatLoss = inletEnergyFlow - outletEnergyFlow;
