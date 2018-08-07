@@ -30,7 +30,7 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const & fa
                                     motor.motorRatedVoltage, motor.fullLoadAmps, fanFieldData.measuredVoltage,
                                     fanFieldData.loadEstimationMethod, fanFieldData.measuredAmps);
     MotorShaftPower::Output const output = motorShaftPower.calculate();
-    double const fanShaftPower = PumpShaftPower(output.shaftPower, fanInput.drive).calculate();
+    double const fanShaftPower = PumpShaftPower(output.shaftPower, fanInput.drive, fanInput.specifiedEfficiency).calculate();
     double const fanEfficiency = MoverEfficiency(fanFieldData.flowRate, fanShaftPower, fanFieldData.inletPressure,
                                                  fanFieldData.outletPressure, fanFieldData.compressibilityFactor).calculate();
     double const annualEnergy = AnnualEnergy(output.power, operatingFraction).calculate();
@@ -49,7 +49,7 @@ FanResult::Output FanResult::calculateModified(Fan::FieldDataModifiedAndOptimal 
                                                        fanFieldData.outletPressure, fanFieldData.compressibilityFactor,
                                                        fanEfficiency).calculate();
 
-    double const motorShaftPower = OptimalMotorShaftPower(fanShaftPower, fanInput.drive).calculate();
+    double const motorShaftPower = OptimalMotorShaftPower(fanShaftPower, fanInput.drive, fanInput.specifiedEfficiency).calculate();
 
     OptimalMotorPower::Output const output = OptimalMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                                                motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
@@ -108,7 +108,7 @@ PSATResult::Result & PSATResult::calculateExisting() {
     existing.estimatedFLA = output.estimatedFLA;
 
 	existing.motorRatedPower = motor.motorRatedPower;
-    existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive).calculate();
+    existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
     existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
                                               existing.pumpShaftPower).calculate();
     existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingFraction).calculate();
@@ -140,7 +140,7 @@ PSATResult::Result & PSATResult::calculateOptimal() {
     OptimalPumpShaftPower optimalPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
                                                 optimal.pumpEfficiency);
     optimal.pumpShaftPower = optimalPumpShaftPower.calculate();
-    OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pumpInput.drive);
+    OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
     optimal.motorShaftPower = optimalMotorShaftPower.calculate();
     OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.sizeMargin);
     optimal.motorRatedPower = optimalMotorSize.calculate();
@@ -194,7 +194,7 @@ PSATResult::Result & PSATResult::calculateModified() {
                                                 modified.pumpEfficiency);
     modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
 
-    OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pumpInput.drive);
+    OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
     modified.motorShaftPower = modifiedMotorShaftPower.calculate();
 
     modified.motorRatedPower = motor.motorRatedPower;

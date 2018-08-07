@@ -28,7 +28,8 @@ struct Motor {
 		DIRECT_DRIVE,
 		V_BELT_DRIVE,
 		N_V_BELT_DRIVE,
-		S_BELT_DRIVE
+		S_BELT_DRIVE,
+		SPECIFIED
 	};
 
 	enum class LoadEstimationMethod {
@@ -63,10 +64,10 @@ struct Motor {
 namespace Fan {
 	struct Input {
 		Input(double const fanSpeed, const double airDensity, const Motor::Drive drive)
-				: fanSpeed(fanSpeed), airDensity(airDensity), drive(drive)
+				: fanSpeed(fanSpeed), airDensity(airDensity), drive(drive), specifiedEfficiency(specifiedEfficiency)
 		{}
 
-		double fanSpeed, airDensity;
+		double fanSpeed, airDensity, specifiedEfficiency;
 		Motor::Drive drive;
 	};
 
@@ -168,15 +169,15 @@ namespace Pump {
 		 */
 		Input(const Style style, const double achievableEfficiency, const double rpm, const Motor::Drive drive,
 		     const double kviscosity,
-		     const double specificGravity, const int stageCount, const SpecificSpeed speed)
+		     const double specificGravity, const int stageCount, const SpecificSpeed speed, const double specifiedEfficiency)
 				: style(style), drive(drive), speed(speed), achievableEfficiency(achievableEfficiency), rpm(rpm),
 				  kviscosity(kviscosity),
-				  specificGravity(specificGravity), stageCount(stageCount) {};
+				  specificGravity(specificGravity), stageCount(stageCount), specifiedEfficiency(specifiedEfficiency) {};
 
 		const Style style;
 		const Motor::Drive drive;
 		const SpecificSpeed speed;
-		const double achievableEfficiency, rpm, kviscosity, specificGravity;
+		const double achievableEfficiency, rpm, kviscosity, specificGravity, specifiedEfficiency;
 		const int stageCount;
 	};
 }
