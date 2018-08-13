@@ -7,6 +7,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <calculator/motor/MotorData.h>
 #include <fstream>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
@@ -32,6 +33,286 @@ TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
     }
 }
 
+TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
+    auto sqlite = SQLite(":memory:", true);
+
+	{
+		SolidLoadChargeMaterial slcm;
+		slcm.setSubstance("custom");
+		slcm.setSpecificHeatSolid(0.25);
+		slcm.setLatentHeat(100);
+		slcm.setSpecificHeatLiquid(0.50);
+		slcm.setMeltingPoint(1200);
+		sqlite.insertSolidLoadChargeMaterials(slcm);
+
+		slcm = sqlite.getCustomSolidLoadChargeMaterials()[0];
+		slcm.setSubstance("updatedCustom");
+		slcm.setSpecificHeatSolid(0.5);
+		slcm.setLatentHeat(115);
+		slcm.setSpecificHeatLiquid(0.20);
+		slcm.setMeltingPoint(900);
+
+		sqlite.updateSolidLoadChargeMaterial(slcm);
+
+		slcm = sqlite.getCustomSolidLoadChargeMaterials()[0];
+
+		CHECK(slcm.getSubstance() == "updatedCustom");
+		CHECK(Approx(slcm.getSpecificHeatSolid()) == 0.5);
+		CHECK(Approx(slcm.getLatentHeat()) == 115);
+		CHECK(Approx(slcm.getSpecificHeatLiquid()) == 0.20);
+		CHECK(Approx(slcm.getMeltingPoint()) == 900);
+	}
+
+    {
+        GasLoadChargeMaterial glcm;
+        glcm.setSubstance("custom");
+        glcm.setSpecificHeatVapor(0.05);
+        sqlite.insertGasLoadChargeMaterials(glcm);
+
+        glcm.setSubstance("custom2");
+        sqlite.insertGasLoadChargeMaterials(glcm);
+
+        auto getCustom1 = sqlite.getCustomGasLoadChargeMaterials().at(0);
+        auto getCustom2 = sqlite.getCustomGasLoadChargeMaterials().at(1);
+
+        getCustom1.setSubstance("updatedCustom");
+        getCustom1.setSpecificHeatVapor(0.1);
+
+        getCustom2.setSubstance("updatedCustom2");
+        getCustom2.setSpecificHeatVapor(1.5);
+
+	    sqlite.updateGasLoadChargeMaterial(getCustom1);
+        sqlite.updateGasLoadChargeMaterial(getCustom2);
+
+        getCustom1 = sqlite.getCustomGasLoadChargeMaterials().at(0);
+        getCustom2 = sqlite.getCustomGasLoadChargeMaterials().at(1);
+
+        CHECK(getCustom1.getSubstance() == "updatedCustom");
+        CHECK(getCustom1.getSpecificHeatVapor() == 0.1);
+        CHECK(getCustom2.getSubstance() == "updatedCustom2");
+        CHECK(getCustom2.getSpecificHeatVapor() == 1.5);
+    }
+
+    {
+        LiquidLoadChargeMaterial llcm;
+        llcm.setSubstance("custom");
+        llcm.setSpecificHeatVapor(0.01);
+        llcm.setSpecificHeatLiquid(0.02);
+        llcm.setLatentHeat(0.03);
+        llcm.setVaporizingTemperature(0.05);
+        sqlite.insertLiquidLoadChargeMaterials(llcm);
+
+        llcm.setSubstance("custom2");
+        llcm.setSpecificHeatVapor(0.06);
+        llcm.setSpecificHeatLiquid(0.07);
+        llcm.setLatentHeat(0.08);
+        llcm.setVaporizingTemperature(0.1);
+        sqlite.insertLiquidLoadChargeMaterials(llcm);
+
+        auto getCustom1 = sqlite.getCustomLiquidLoadChargeMaterials().at(0);
+        auto getCustom2 = sqlite.getCustomLiquidLoadChargeMaterials().at(1);
+
+        getCustom1.setSubstance("updatedCustom");
+        getCustom1.setSpecificHeatVapor(0.1);
+        getCustom1.setSpecificHeatLiquid(0.2);
+        getCustom1.setLatentHeat(0.3);
+        getCustom1.setVaporizingTemperature(0.5);
+
+        getCustom2.setSubstance("updatedCustom2");
+        getCustom2.setSpecificHeatVapor(0.6);
+        getCustom2.setSpecificHeatLiquid(0.7);
+        getCustom2.setLatentHeat(0.8);
+        getCustom2.setVaporizingTemperature(1.0);
+
+        sqlite.updateLiquidLoadChargeMaterial(getCustom1);
+        sqlite.updateLiquidLoadChargeMaterial(getCustom2);
+
+        getCustom1 = sqlite.getCustomLiquidLoadChargeMaterials().at(0);
+        getCustom2 = sqlite.getCustomLiquidLoadChargeMaterials().at(1);
+
+        CHECK(getCustom1.getSubstance() == "updatedCustom");
+        CHECK(Approx(getCustom1.getSpecificHeatVapor()) == 0.1);
+        CHECK(Approx(getCustom1.getSpecificHeatLiquid()) == 0.2);
+        CHECK(Approx(getCustom1.getLatentHeat()) == 0.3);
+        CHECK(Approx(getCustom1.getVaporizingTemperature()) == 0.5);
+
+        CHECK(getCustom2.getSubstance() == "updatedCustom2");
+        CHECK(Approx(getCustom2.getSpecificHeatVapor()) == 0.6);
+        CHECK(Approx(getCustom2.getSpecificHeatLiquid()) == 0.7);
+        CHECK(Approx(getCustom2.getLatentHeat()) == 0.8);
+        CHECK(Approx(getCustom2.getVaporizingTemperature()) == 1.0);
+    }
+
+    {
+        SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7);
+	    slfgm.setSubstance("initial");
+	    sqlite.insertSolidLiquidFlueGasMaterial(slfgm);
+
+        slfgm = {0, 0, 0, 0, 0, 0, 0, 8, 9, 10, 11, 12, 13, 14};
+        slfgm.setSubstance("initial2");
+        sqlite.insertSolidLiquidFlueGasMaterial(slfgm);
+
+        auto custom1 = sqlite.getCustomSolidLiquidFlueGasMaterials().at(0);
+        auto custom2 = sqlite.getCustomSolidLiquidFlueGasMaterials().at(1);
+
+        custom1.setSubstance("updatedCustom1");
+        custom1.setCarbon(0.1);
+        custom1.setHydrogen(0.2);
+        custom1.setSulphur(0.3);
+        custom1.setInertAsh(0.4);
+        custom1.setO2(0.5);
+        custom1.setMoisture(0.6);
+        custom1.setNitrogen(0.7);
+
+        custom2.setSubstance("updatedCustom2");
+        custom2.setCarbon(80);
+        custom2.setHydrogen(90);
+        custom2.setSulphur(100);
+        custom2.setInertAsh(110);
+        custom2.setO2(120);
+        custom2.setMoisture(130);
+        custom2.setNitrogen(140);
+
+        sqlite.updateSolidLiquidFlueGasMaterial(custom1);
+        sqlite.updateSolidLiquidFlueGasMaterial(custom2);
+
+        CHECK(custom1.getSubstance() == "updatedCustom1");
+        CHECK(Approx(custom1.getCarbon()) == 0.1);;
+        CHECK(Approx(custom1.getHydrogen()) == 0.2);
+        CHECK(Approx(custom1.getSulphur()) == 0.3);
+        CHECK(Approx(custom1.getInertAsh()) == 0.4);
+        CHECK(Approx(custom1.getO2()) == 0.5);
+        CHECK(Approx(custom1.getMoisture()) == 0.6);
+        CHECK(Approx(custom1.getNitrogen()) == 0.7);
+
+        CHECK(custom2.getSubstance() == "updatedCustom2");
+        CHECK(Approx(custom2.getCarbon()) == 80);
+        CHECK(Approx(custom2.getHydrogen()) == 90);
+        CHECK(Approx(custom2.getSulphur()) == 100);
+        CHECK(Approx(custom2.getInertAsh()) == 110);
+        CHECK(Approx(custom2.getO2()) == 120);
+        CHECK(Approx(custom2.getMoisture()) == 130);
+        CHECK(Approx(custom2.getNitrogen()) == 140);
+    }
+
+	{
+        sqlite.insertGasFlueGasMaterial({"custom1", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+        sqlite.insertGasFlueGasMaterial({"custom2", 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22});
+
+        GasCompositions custom1 = {"updatedCustom1", 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110};
+        custom1.setID(sqlite.getCustomGasFlueGasMaterials().at(0).getID());
+        GasCompositions custom2 = {"updatedCustom2", 120, 130, 140, 150, 160, 170, 180, 19, 20, 21, 22};
+		custom2.setID(sqlite.getCustomGasFlueGasMaterials().at(1).getID());
+
+        sqlite.updateGasFlueGasMaterial(custom1);
+        sqlite.updateGasFlueGasMaterial(custom2);
+
+        CHECK(custom1.getSubstance() == "updatedCustom1");
+        CHECK(Approx(custom1.getGasByVol("CH4")) == 10);
+        CHECK(Approx(custom1.getGasByVol("C2H6")) == 20);
+        CHECK(Approx(custom1.getGasByVol("N2")) == 30);
+        CHECK(Approx(custom1.getGasByVol("H2")) == 40);
+        CHECK(Approx(custom1.getGasByVol("C3H8")) == 50);
+        CHECK(Approx(custom1.getGasByVol("C4H10_CnH2n")) == 60);
+        CHECK(Approx(custom1.getGasByVol("H2O")) == 70);
+        CHECK(Approx(custom1.getGasByVol("CO")) == 80);
+        CHECK(Approx(custom1.getGasByVol("CO2")) == 90);
+        CHECK(Approx(custom1.getGasByVol("SO2")) == 100);
+        CHECK(Approx(custom1.getGasByVol("O2")) == 110);
+
+        CHECK(custom2.getSubstance() == "updatedCustom2");
+        CHECK(Approx(custom2.getGasByVol("CH4")) == 120);
+        CHECK(Approx(custom2.getGasByVol("C2H6")) == 130);
+        CHECK(Approx(custom2.getGasByVol("N2")) == 140);
+        CHECK(Approx(custom2.getGasByVol("H2")) == 150);
+        CHECK(Approx(custom2.getGasByVol("C3H8")) == 160);
+        CHECK(Approx(custom2.getGasByVol("C4H10_CnH2n")) == 170);
+        CHECK(Approx(custom2.getGasByVol("H2O")) == 180);
+        CHECK(Approx(custom2.getGasByVol("CO")) == 19);
+        CHECK(Approx(custom2.getGasByVol("CO2")) == 20);
+        CHECK(Approx(custom2.getGasByVol("SO2")) == 21);
+        CHECK(Approx(custom2.getGasByVol("O2")) == 22);
+	}
+
+    {
+        Atmosphere custom1;
+        custom1.setSubstance("custom1");
+        custom1.setSpecificHeat(0.5);
+        sqlite.insertAtmosphereSpecificHeat(custom1);
+
+        custom1.setSubstance("custom2");
+        custom1.setSpecificHeat(0.75);
+        sqlite.insertAtmosphereSpecificHeat(custom1);
+
+        auto custom2 = sqlite.getCustomAtmosphereSpecificHeat().at(0);
+        custom2.setSpecificHeat(500);
+        custom2.setSubstance("updatedCustom1");
+
+        auto custom3 = sqlite.getCustomAtmosphereSpecificHeat().at(1);
+        custom3.setSpecificHeat(150);
+        custom3.setSubstance("updatedCustom2");
+
+        sqlite.updateAtmosphereSpecificHeat(custom2);
+        sqlite.updateAtmosphereSpecificHeat(custom3);
+
+		CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(0).getSubstance() == "updatedCustom1");
+        CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(1).getSubstance() == "updatedCustom2");
+        CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(0).getSpecificHeat() == 500);
+        CHECK(sqlite.getCustomAtmosphereSpecificHeat().at(1).getSpecificHeat() == 150);
+    }
+
+    {
+        WallLosses wl;
+        wl.setSurface("custom");
+        wl.setConditionFactor(0.1);
+        sqlite.insertWallLossesSurface(wl);
+        wl.setSurface("custom2");
+        wl.setConditionFactor(0.2);
+        sqlite.insertWallLossesSurface(wl);
+
+        auto custom = sqlite.getCustomWallLossesSurface().at(0);
+        auto custom2 = sqlite.getCustomWallLossesSurface().at(1);
+
+        custom.setSurface("updatedCustom");
+        custom.setConditionFactor(0.5);
+        custom2.setSurface("updatedCustom2");
+        custom2.setConditionFactor(0.75);
+
+        sqlite.updateWallLossesSurface(custom);
+        sqlite.updateWallLossesSurface(custom2);
+
+        CHECK(sqlite.getCustomWallLossesSurface().at(0).getSurface() == "updatedCustom");
+        CHECK(sqlite.getCustomWallLossesSurface().at(1).getSurface() == "updatedCustom2");
+        CHECK(Approx(sqlite.getCustomWallLossesSurface().at(0).getConditionFactor()) == 0.5);
+        CHECK(Approx(sqlite.getCustomWallLossesSurface().at(1).getConditionFactor()) == 0.75);
+    }
+
+    {
+        MotorData m = {"Beta", "Xtrainer 300", "20018ET3G447", "2 Stroke 300cc", 200, 1800, 0, "TEFC",
+                       "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
+                       95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0};
+
+        MotorData m2 = {"Suzuki", "Drz400", "20018ET3G447", "4 Stroke 398cc", 200, 1800, 0, "TEFC",
+                        "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
+                        95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0};
+
+        sqlite.insertMotorData(m);
+        sqlite.insertMotorData(m2);
+
+	    auto custom = sqlite.getCustomMotorData().at(0);
+        auto custom2 = sqlite.getCustomMotorData().at(1);
+
+        custom.setManufacturer("Beta Motorcycles");
+        custom2.setManufacturer("Slow Suzuki");
+
+	    sqlite.updateMotorData(custom);
+        sqlite.updateMotorData(custom2);
+
+        CHECK(sqlite.getCustomMotorData().at(0).getManufacturer() == "Beta Motorcycles");
+        CHECK(sqlite.getCustomMotorData().at(1).getManufacturer() == "Slow Suzuki");
+    }
+}
+
 TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 	auto sqlite = SQLite(":memory:", true);
 
@@ -40,92 +321,96 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 
 		SolidLoadChargeMaterial mat;
 		mat.setSubstance("custom");
-		mat.setID(output.size());
         SolidLoadChargeMaterial mat2;
         mat2.setSubstance("custom2");
-        mat2.setID(output.size() + 1);
 
         sqlite.insertSolidLoadChargeMaterials(mat);
         sqlite.insertSolidLoadChargeMaterials(mat2);
-        sqlite.deleteSolidLoadChargeMaterial(mat2.getSubstance());
+
+		auto getMat2 = sqlite.getCustomSolidLoadChargeMaterials().back();
+        auto getMat1 = sqlite.getCustomSolidLoadChargeMaterials().at(0);
+        sqlite.deleteSolidLoadChargeMaterial(getMat2.getID());
+        sqlite.deleteSolidLoadChargeMaterial(getMat1.getID());
         auto const output2 = sqlite.getSolidLoadChargeMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == "custom" );
+        CHECK( output2.back().getSubstance() == output.back().getSubstance() );
 	}
 
     {
         auto const output = sqlite.getLiquidLoadChargeMaterials();
-        auto const last = output[output.size() - 1].getSubstance();
-        LiquidLoadChargeMaterial llcm;
-        llcm.setID(output.size());
-        llcm.setSubstance("custom");
+        LiquidLoadChargeMaterial mat;
+        mat.setSubstance("custom");
+        LiquidLoadChargeMaterial mat2;
+        mat2.setSubstance("custom2");
 
-	    sqlite.insertLiquidLoadChargeMaterials(llcm);
-	    sqlite.deleteLiquidLoadChargeMaterial(llcm.getSubstance());
+        sqlite.insertLiquidLoadChargeMaterials(mat);
+        sqlite.insertLiquidLoadChargeMaterials(mat2);
+
+        auto getMat2 = sqlite.getCustomLiquidLoadChargeMaterials().back();
+        auto getMat1 = sqlite.getCustomLiquidLoadChargeMaterials().at(0);
+        sqlite.deleteLiquidLoadChargeMaterial(getMat2.getID());
+        sqlite.deleteLiquidLoadChargeMaterial(getMat1.getID());
         auto const output2 = sqlite.getLiquidLoadChargeMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+        CHECK( output2.back().getSubstance() == output.back().getSubstance() );
     }
 
     {
-        auto const output = sqlite.getGasLoadChargeMaterials();
-        auto const last = output[output.size() - 1].getSubstance();
-        GasLoadChargeMaterial glcm;
-        glcm.setID(output.size());
-        glcm.setSubstance("custom");
+        auto const originalMats = sqlite.getGasLoadChargeMaterials();
 
+        GasLoadChargeMaterial glcm;
+        glcm.setSubstance("custom");
         sqlite.insertGasLoadChargeMaterials(glcm);
-        sqlite.deleteGasLoadChargeMaterial(glcm.getSubstance());
-        auto const output2 = sqlite.getGasLoadChargeMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+
+        glcm.setSubstance("custom2");
+        sqlite.insertGasLoadChargeMaterials(glcm);
+
+        auto const custom = sqlite.getCustomGasLoadChargeMaterials();
+        sqlite.deleteGasLoadChargeMaterial(custom.at(1).getID());
+        sqlite.deleteGasLoadChargeMaterial(custom.at(0).getID());
+
+        auto const afterDeleteMats = sqlite.getGasLoadChargeMaterials();
+        CHECK( afterDeleteMats.back().getSubstance() == originalMats.back().getSubstance() );
     }
 
     {
         auto const output = sqlite.getGasFlueGasMaterials();
-        auto const last = output[output.size() - 1].getSubstance();
-//        GasCompositions gc("custom", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        auto const last = output.back().getSubstance();
         GasCompositions gc("custom", 12, 13, 14, 15, 16, 14, 12, 12, 12, 12, 11);
-        gc.setID(output.size());
 
         sqlite.insertGasFlueGasMaterial(gc);
-        sqlite.deleteGasFlueGasMaterial(gc.getSubstance());
-        auto const output2 = sqlite.getGasFlueGasMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+        sqlite.deleteGasFlueGasMaterial(sqlite.getCustomGasFlueGasMaterials().back().getID());
+        CHECK( sqlite.getGasFlueGasMaterials().back().getSubstance() == last );
     }
 
     {
-        auto const output = sqlite.getSolidLiquidFlueGasMaterials();
-        auto const last = output[output.size() - 1].getSubstance();
+        auto const last = sqlite.getSolidLiquidFlueGasMaterials().back().getSubstance();
         SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        slfgm.setID(output.size());
         slfgm.setSubstance("custom");
 
         sqlite.insertSolidLiquidFlueGasMaterial(slfgm);
-        sqlite.deleteSolidLiquidFlueGasMaterial(slfgm.getSubstance());
-        auto const output2 = sqlite.getSolidLiquidFlueGasMaterials();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+        sqlite.deleteSolidLiquidFlueGasMaterial(sqlite.getCustomSolidLiquidFlueGasMaterials().back().getID());
+        CHECK( sqlite.getSolidLiquidFlueGasMaterials().back().getSubstance() == last );
     }
 
     {
         auto const output = sqlite.getAtmosphereSpecificHeat();
-        auto const last = output[output.size() - 1].getSubstance();
+        auto const last = output.back().getSubstance();
 	    Atmosphere a;
-        a.setID(output.size());
         a.setSubstance("custom");
+		a.setSpecificHeat(0.56);
 
         sqlite.insertAtmosphereSpecificHeat(a);
-        sqlite.deleteAtmosphereSpecificHeat(a.getSubstance());
-        auto const output2 = sqlite.getAtmosphereSpecificHeat();
-        CHECK( output2[output2.size() - 1].getSubstance() == last );
+        sqlite.deleteAtmosphereSpecificHeat(sqlite.getCustomAtmosphereSpecificHeat().back().getID());
+        CHECK( sqlite.getAtmosphereSpecificHeat().back().getSubstance() == last );
     }
 
     {
         auto const output = sqlite.getWallLossesSurface();
-        auto const last = output[output.size() - 1].getSurface();
+        auto const last = output.back().getSurface();
 	    WallLosses wall;
-        wall.setID(output.size());
         wall.setSurface("custom");
 
         sqlite.insertWallLossesSurface(wall);
-        sqlite.deleteWallLossesSurface(wall.getSurface());
+        sqlite.deleteWallLossesSurface(sqlite.getCustomWallLossesSurface().back().getID());
         auto const output2 = sqlite.getWallLossesSurface();
         CHECK( output2[output2.size() - 1].getSurface() == last );
     }
@@ -837,3 +1122,95 @@ TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
         CHECK( output[1].getConditionFactor() == expected.getConditionFactor() );
     }
 }
+
+TEST_CASE( "SQLite - Motor Data", "[sqlite][motor]" ) {
+    auto const compare = [](MotorData result, MotorData expected) {
+		CHECK(result.getManufacturer() == expected.getManufacturer());
+		CHECK(result.getModel() == expected.getModel());
+		CHECK(result.getCatalog() == expected.getCatalog());
+		CHECK(result.getMotorType() == expected.getMotorType());
+		CHECK(result.getHp() == expected.getHp());
+		CHECK(result.getSpeed() == expected.getSpeed());
+		CHECK(result.getFullLoadSpeed() == expected.getFullLoadSpeed());
+		CHECK(result.getEnclosureType() == expected.getEnclosureType());
+		CHECK(result.getFrameNumber() == expected.getFrameNumber());
+		CHECK(result.getVoltageRating() == expected.getVoltageRating());
+		CHECK(result.getPurpose() == expected.getPurpose());
+		CHECK(result.getUFrame() == expected.getUFrame());
+		CHECK(result.getCFace() == expected.getCFace());
+		CHECK(result.getVerticalShaft() == expected.getVerticalShaft());
+		CHECK(result.getDFlange() == expected.getDFlange());
+		CHECK(result.getServiceFactor() == expected.getServiceFactor());
+		CHECK(result.getInsulationClass() == expected.getInsulationClass());
+		CHECK(result.getWeight() == expected.getWeight());
+		CHECK(result.getListPrice() == expected.getListPrice());
+		CHECK(result.getWindingResistance() == expected.getWindingResistance());
+		CHECK(result.getWarranty() == expected.getWarranty());
+		CHECK(result.getRotorBars() == expected.getRotorBars());
+		CHECK(result.getStatorSlots() == expected.getStatorSlots());
+		CHECK(result.getEfficiency100() == expected.getEfficiency100());
+		CHECK(result.getEfficiency75() == expected.getEfficiency75());
+		CHECK(result.getEfficiency50() == expected.getEfficiency50());
+		CHECK(result.getEfficiency25() == expected.getEfficiency25());
+		CHECK(result.getPowerFactor100() == expected.getPowerFactor100());
+		CHECK(result.getPowerFactor75() == expected.getPowerFactor75());
+		CHECK(result.getPowerFactor50() == expected.getPowerFactor50());
+		CHECK(result.getPowerFactor25() == expected.getPowerFactor25());
+		CHECK(result.getTorqueFullLoad() == expected.getTorqueFullLoad());
+		CHECK(result.getTorqueBreakDown() == expected.getTorqueBreakDown());
+		CHECK(result.getTorqueLockedRotor() == expected.getTorqueLockedRotor());
+		CHECK(result.getAmpsFullLoad() == expected.getAmpsFullLoad());
+		CHECK(result.getAmpsIdle() == expected.getAmpsIdle());
+		CHECK(result.getAmpsLockedRotor() == expected.getAmpsLockedRotor());
+		CHECK(result.getStalledRotorTimeHot() == expected.getStalledRotorTimeHot());
+		CHECK(result.getStalledRotorTimeCold() == expected.getStalledRotorTimeCold());
+		CHECK(result.getPeakVoltage0ms() == expected.getPeakVoltage0ms());
+		CHECK(result.getPeakVoltage5ms() == expected.getPeakVoltage5ms());
+        CHECK(result.getId() == expected.getId());
+    };
+
+    auto sqlite = SQLite(":memory:", true);
+
+    {
+        auto const motors = sqlite.getMotorData();
+
+        auto expected = MotorData(
+                "GE", "X$D Ultra IEEE 841", "M9455", "NEMA Design B", 50, 1800, 1780, "TEFC", "326T", 460,
+                "IEEE 841 Petroleum/Chemical", 0, 0, 0, 0, 1.15, "F", 511, 4, 615, 99.5, 5, 38, 48, 94.5, 94.7,
+                94.3, 91.6, 78, 73.6, 63.3, 41.5, 147.4, 294.8, 206.4, 63.5, 25.7, 362.5, 92.9, 115.2, 2000
+        );
+        expected.setId(1);
+
+	    compare(motors[0], expected);
+
+	    auto expected2 = MotorData(
+			    "WEG Electric", "W22-NEMA Premium SD", "20018ET3G447", "NEMA Design B", 200, 1800, 0, "TEFC",
+			    "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
+			    95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0
+	    );
+        expected2.setId(2);
+
+	    auto const motor = sqlite.getMotorDataById(2);
+        compare(motor, expected2);
+    }
+
+    {
+        auto ktm = MotorData(
+                "KTM", "Freeride-e", "KTM Motors 2018", "electric motor", 24, 4500, 5000, "TEFC",
+                "447/9T", 260, "to provide hours of fun on a single charge", 0, 0, 0, 0, 1.15, "undefined", 60, 5000, 0, 2, 0, 0, 96.2, 96.2,
+                95.4, 0, 85, 82, 73, 0, 42, 42, 42, 230, 0, 1564, 16, 35, 300, 300
+        );
+	    ktm.setId(4);
+
+        sqlite.insertMotorData(ktm);
+        auto const motors = sqlite.getMotorData();
+	    compare(ktm, motors.back());
+
+        auto const customMotors = sqlite.getCustomMotorData();
+        compare(ktm, customMotors[0]);
+
+        sqlite.deleteMotorData(ktm.getId());
+	    CHECK(sqlite.getCustomMotorData().size() == 0);
+    }
+}
+

@@ -239,18 +239,10 @@ public:
     }
 
     /**
-     * Sets the total heat required
-     * @param totalHeat double, total heat required in btu/hr
-     */
-    void setTotalHeat(double totalHeat) {
-        this->totalHeat = totalHeat;
-    }
-
-    /**
      * Gets the ID of material
-     * @return std::size_t, ID of material
+     * @return int, ID of material
      */
-    std::size_t getID() const {
+    int getID() const {
         return this->id;
     }
 
@@ -258,7 +250,7 @@ public:
      * Sets the ID of material
      * @param id const int, ID of material
      */
-    void setID(const std::size_t id) {
+    void setID(const int id) {
         this->id = id;
     }
 
@@ -266,7 +258,20 @@ public:
      * Gets the total heat required
      * @return double, total heat required in btu/hr
      */
-    double getTotalHeat();
+    double getTotalHeat() {
+        const double tempDiff = dischargeTemperature - initialTemperature;
+        const double hgas = (1.0 - percentVapor) * feedRate * specificHeatGas * tempDiff;
+        const double hvapor = percentVapor * feedRate * specificHeatVapor * tempDiff;
+
+        // heatReact ignored when exothermic
+        double heatReact = 0.0;
+        if (thermicReactionType == LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC) {
+            heatReact =feedRate * percentReacted * reactionHeat;
+        }
+
+        totalHeat =  hgas + hvapor + heatReact + additionalHeat;
+        return totalHeat;
+    }
 
     ///bool operator
     bool operator == (const GasLoadChargeMaterial& rhs) const
@@ -293,7 +298,7 @@ private:
     double reactionHeat = 0.0;
     double additionalHeat = 0.0;
     std::string substance = "Unknown";
-    std::size_t id = 0;
+    int id = 0;
     // Out value
     double totalHeat = 0.0;
 

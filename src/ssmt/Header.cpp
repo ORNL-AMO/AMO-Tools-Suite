@@ -40,7 +40,7 @@ void Header::setInlets(std::vector<Inlet> & inlets) {
 
 void Inlet::calculate() {
 	inletProperties = SteamProperties(pressure, quantityType, quantityValue).calculate();
-	inletEnergyFlow = inletProperties.at("specificEnthalpy") * massFlow;
+	inletEnergyFlow = inletProperties.specificEnthalpy * massFlow;
 }
 
 void Inlet::setPressure(const double pressure) {
@@ -55,7 +55,7 @@ void Inlet::setQuantityValue(const double quantityValue) {
 
 void Inlet::setMassFlow(const double massFlow) {
 	this->massFlow = massFlow;
-	inletEnergyFlow = inletProperties.at("specificEnthalpy") * massFlow;
+	inletEnergyFlow = inletProperties.specificEnthalpy * massFlow;
 }
 
 void Inlet::setQuantityType(const SteamProperties::ThermodynamicQuantity quantityType) {

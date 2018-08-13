@@ -3,14 +3,6 @@
 
 #include <vector>
 
-//class CurveConditions {
-//public:
-//	CurveConditions(double density, double rpm, double barometricPressure, double isentropicExponent);
-//
-//private:
-//	double density, rpm, barometricPressure, isentropicExponent;
-//};
-
 enum class FanCurveType {
 	FanStaticPressure,
 	FanTotalPressure,
@@ -37,8 +29,7 @@ public:
 		BaseOperatingPoint
 	};
 
-	class BaseCurve {
-	public:
+	struct BaseCurve {
 		// pressure here is pressureBox, determined by Curve Type
 		BaseCurve(const double flow, const double pressure, const double power)
 				: flow(flow),
@@ -50,8 +41,7 @@ public:
 		friend class FanCurveData;
 	};
 
-	class RatedPoint : public BaseCurve {
-	public:
+	struct RatedPoint : public BaseCurve {
 		// pressure here is pressureBox, determined by Curve Type
 		RatedPoint(const double flow, const double pressure, const double power, const double density,
 		           const double speed, const double speedCorrected)
@@ -65,8 +55,7 @@ public:
 		friend class FanCurveData;
 	};
 
-	class BaseOperatingPoint : public RatedPoint {
-	public:
+	struct BaseOperatingPoint : public RatedPoint {
 		// pressure here is pressureBox, determined by Curve Type
 		BaseOperatingPoint(const double flow, const double pressure, const double power, const double density,
 		                   const double speed, const double speedCorrected, const double pressureBarometric,
@@ -141,19 +130,5 @@ private:
 
 	FanCurveData curveData;
 };
-
-//class FanCurve {
-//public:
-//	enum class FanCurveType {
-//		FanStaticPressure,
-//		FanTotalPressure,
-//		StaticPressureRise
-//	};
-//	FanCurve(double flow, double pressure, double horsepower, double density, double rpm, FanCurveType curveType);
-//
-//private:
-//	CurveConditions base, optimized;
-//	double flow, pressure, horsepower, density, rpm, isentropicExponent;
-//};
 
 #endif //AMO_TOOLS_SUITE_FANCURVE_H

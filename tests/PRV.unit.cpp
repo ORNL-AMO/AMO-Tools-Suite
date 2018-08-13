@@ -21,8 +21,8 @@ TEST_CASE( "Calculate the Outlet Energy Flow without Desuperheating", "[Outlet E
 }
 
 TEST_CASE( "Calculate the Outlet Temperature without Desuperheating", "[Outlet Temperature][PRV][ssmt]") {
-    std::unordered_map <std::string, double> props = PrvWithoutDesuperheating(4.8794, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 691.5, 37970, 4.0823).getOutletProperties();
-    CHECK( props.at("temperature") == Approx(686.0087848902));
+    auto const props = PrvWithoutDesuperheating(4.8794, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 691.5, 37970, 4.0823).getOutletProperties();
+    CHECK( props.temperature == Approx(686.0087848902));
 }
 
 TEST_CASE( "Calculate the Inlet Energy Flow with Desuperheating", "[Inlet Energy Flow][PRV][ssmt]") {

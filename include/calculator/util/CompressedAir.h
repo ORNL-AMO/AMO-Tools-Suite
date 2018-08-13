@@ -140,7 +140,9 @@ public:
 	 * @param airPressureOut double, a.	Pressure of air leaving the Tank - psi
 	 * @return double, Useable air storage capacity - scf
 	 */
-	static double calculateUsableCapacity(double tankSize, double airPressureIn, double airPressureOut);
+	static double calculateUsableCapacity(const double tankSize, const double airPressureIn, const double airPressureOut) {
+		return (tankSize / 7.48) * (airPressureIn - airPressureOut) / 14.7;
+	}
 
 	/**
 	 * Calculates and returns receiver tank useable air capacity
@@ -338,7 +340,7 @@ namespace Compressor {
 		double inletPressure, outletPressure, flowRate;
 		bool flowRateKnown;
 	};
-};
+}
 
 class BagMethod {
 public:

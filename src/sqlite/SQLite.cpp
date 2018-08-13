@@ -11,12 +11,14 @@
 #include <sqlite/GasFlueGasMaterialData.h>
 #include <sqlite/AtmosphereSpecificHeatData.h>
 #include <sqlite/WallLossesSurfaceData.h>
+#include <calculator/motor/MotorData.h>
 
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <sqlite/SolidLiquidFlueGasMaterialData.h>
+#include <sqlite/MotorData.h>
 
 SQLite::SQLite(std::string const & db_name, bool init_db)
         :
@@ -38,6 +40,7 @@ SQLite::SQLite(std::string const & db_name, bool init_db)
     }
 
     create_select_stmt();
+    create_update_and_delete_stmt();
 }
 
 SQLite::~SQLite()
@@ -46,36 +49,57 @@ SQLite::~SQLite()
     sqlite3_finalize(m_solid_load_charge_materials_select_single_stmt);
     sqlite3_finalize(m_solid_load_charge_materials_select_custom_stmt);
     sqlite3_finalize(m_solid_load_charge_materials_insert_stmt);
+    sqlite3_finalize(m_solid_load_charge_materials_update_stmt);
+    sqlite3_finalize(m_solid_load_charge_materials_delete_stmt);
 
     sqlite3_finalize(m_gas_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_stmt);
     sqlite3_finalize(m_gas_load_charge_materials_select_single_stmt);
 	sqlite3_finalize(m_gas_load_charge_materials_select_custom_stmt);
+	sqlite3_finalize(m_gas_load_charge_materials_update_stmt);
+	sqlite3_finalize(m_gas_load_charge_materials_delete_stmt);
 
     sqlite3_finalize(m_liquid_load_charge_materials_insert_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_single_stmt);
     sqlite3_finalize(m_liquid_load_charge_materials_select_custom_stmt);
+    sqlite3_finalize(m_liquid_load_charge_materials_update_stmt);
+    sqlite3_finalize(m_liquid_load_charge_materials_delete_stmt);
 
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_single_stmt);
     sqlite3_finalize(m_solid_liquid_flue_gas_materials_select_custom_stmt);
+	sqlite3_finalize(m_solid_liquid_flue_gas_materials_update_stmt);
+	sqlite3_finalize(m_solid_liquid_flue_gas_materials_delete_stmt);
 
     sqlite3_finalize(m_gas_flue_gas_materials_insert_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_single_stmt);
     sqlite3_finalize(m_gas_flue_gas_materials_select_custom_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_update_stmt);
+    sqlite3_finalize(m_gas_flue_gas_materials_delete_stmt);
 
     sqlite3_finalize(m_atmosphere_specific_heat_insert_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_single_stmt);
     sqlite3_finalize(m_atmosphere_specific_heat_select_custom_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_update_stmt);
+    sqlite3_finalize(m_atmosphere_specific_heat_delete_stmt);
 
     sqlite3_finalize(m_wall_losses_surface_insert_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_single_stmt);
     sqlite3_finalize(m_wall_losses_surface_select_custom_stmt);
+    sqlite3_finalize(m_wall_losses_surface_update_stmt);
+    sqlite3_finalize(m_wall_losses_surface_delete_stmt);
+
+    sqlite3_finalize(m_motor_data_insert_stmt);
+    sqlite3_finalize(m_motor_data_select_stmt);
+    sqlite3_finalize(m_motor_data_select_single_stmt);
+    sqlite3_finalize(m_motor_data_select_custom_stmt);
+    sqlite3_finalize(m_motor_data_update_stmt);
+    sqlite3_finalize(m_motor_data_delete_stmt);
 }
 
 std::string SQLiteWrapper::convert_text( const unsigned char * text ) {
@@ -182,10 +206,10 @@ std::vector<LiquidLoadChargeMaterial> SQLite::getLiquidLoadChargeMaterials() con
         sqlite3_column_int(stmt, 1);
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
-        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
-        auto const latentHeat = sqlite3_column_double(stmt, 6);
-        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 5);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 6);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, latentHeat, specificHeatVapor, vaporizingTemperature);
         llcm.setID(id);
         return llcm;
     };
@@ -199,10 +223,10 @@ LiquidLoadChargeMaterial SQLite::getLiquidLoadChargeMaterialById(int id) const
         sqlite3_column_int(stmt, 1);
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
-        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
-        auto const latentHeat = sqlite3_column_double(stmt, 6);
-        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 5);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 6);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, latentHeat, specificHeatVapor, vaporizingTemperature);
         llcm.setID(id);
         return llcm;
     };
@@ -216,10 +240,10 @@ std::vector<LiquidLoadChargeMaterial> SQLite::getCustomLiquidLoadChargeMaterials
         sqlite3_column_int(stmt, 1);
         std::string const substance = convert_text(sqlite3_column_text(stmt, 2));
         auto const specificHeatLiquid = sqlite3_column_double(stmt, 3);
-        auto const specificHeatVapor = sqlite3_column_double(stmt, 4);
-        auto const vaporizingTemperature = sqlite3_column_double(stmt, 5);
-        auto const latentHeat = sqlite3_column_double(stmt, 6);
-        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor);
+        auto const latentHeat = sqlite3_column_double(stmt, 4);
+        auto const specificHeatVapor = sqlite3_column_double(stmt, 5);
+        auto const vaporizingTemperature = sqlite3_column_double(stmt, 6);
+        auto llcm = LiquidLoadChargeMaterial(substance, specificHeatLiquid, latentHeat, specificHeatVapor, vaporizingTemperature);
         llcm.setID(id);
         return llcm;
     };
@@ -455,6 +479,180 @@ WallLosses SQLite::getWallLossesSurfaceById(int id) const
     return get_object<WallLosses>(m_wall_losses_surface_select_single_stmt, id, cb);
 }
 
+std::vector<MotorData> SQLite::getMotorData() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        auto const manufacturer = convert_text(sqlite3_column_text(stmt, 2));
+        auto const model = convert_text(sqlite3_column_text(stmt, 3));
+        auto const catalog = convert_text(sqlite3_column_text(stmt, 4));
+        auto const motorType = convert_text(sqlite3_column_text(stmt, 5));
+        auto const hp = sqlite3_column_int(stmt, 6);
+        auto const speed = sqlite3_column_int(stmt, 7);
+        auto const fullLoadSpeed = sqlite3_column_int(stmt, 8);
+        auto const enclosureType = convert_text(sqlite3_column_text(stmt, 9));
+        auto const frameNumber = convert_text(sqlite3_column_text(stmt, 10));
+        auto const voltageRating = sqlite3_column_int(stmt, 11);
+        auto const purpose = convert_text(sqlite3_column_text(stmt, 12));
+        auto const uFrame = sqlite3_column_int(stmt, 13);
+        auto const cFace = sqlite3_column_int(stmt, 14);
+        auto const verticalShaft = sqlite3_column_int(stmt, 15);
+        auto const dFlange = sqlite3_column_int(stmt, 16);
+        auto const serviceFactor = sqlite3_column_double(stmt, 17);
+        auto const insulationClass = convert_text(sqlite3_column_text(stmt, 18));
+        auto const weight = sqlite3_column_double(stmt, 19);
+        auto const listPrice = sqlite3_column_double(stmt, 20);
+        auto const windingResistance = sqlite3_column_double(stmt, 21);
+        auto const warranty = sqlite3_column_double(stmt, 22);
+        auto const rotorBars = sqlite3_column_int(stmt, 23);
+        auto const statorSlots = sqlite3_column_int(stmt, 24);
+        auto const efficiency100 = sqlite3_column_double(stmt, 25);
+        auto const efficiency75 = sqlite3_column_double(stmt, 26);
+        auto const efficiency50 = sqlite3_column_double(stmt, 27);
+        auto const efficiency25 = sqlite3_column_double(stmt, 28);
+        auto const powerFactor100 = sqlite3_column_double(stmt, 29);
+        auto const powerFactor75 = sqlite3_column_double(stmt, 30);
+        auto const powerFactor50 = sqlite3_column_double(stmt, 31);
+        auto const powerFactor25 = sqlite3_column_double(stmt, 32);
+        auto const torqueFullLoad = sqlite3_column_double(stmt, 33);
+        auto const torqueBreakDown = sqlite3_column_double(stmt, 34);
+        auto const torqueLockedRotor = sqlite3_column_double(stmt, 35);
+        auto const ampsFullLoad = sqlite3_column_double(stmt, 36);
+        auto const ampsIdle = sqlite3_column_double(stmt, 37);
+        auto const ampsLockedRotor = sqlite3_column_double(stmt, 38);
+        auto const stalledRotorTimeHot = sqlite3_column_double(stmt, 39);
+        auto const stalledRotorTimeCold = sqlite3_column_double(stmt, 40);
+        auto const peakVoltage0ms = sqlite3_column_double(stmt, 41);
+        auto const peakVoltage5ms = sqlite3_column_double(stmt, 42);
+
+        auto m = MotorData(manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                           uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                           rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                           powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                           stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms);
+	    m.setId(id);
+        return m;
+    };
+    return get_all_objects<MotorData>(m_motor_data_select_stmt, cb);
+}
+
+std::vector<MotorData> SQLite::getCustomMotorData() const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const id = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        auto const manufacturer = convert_text(sqlite3_column_text(stmt, 2));
+        auto const model = convert_text(sqlite3_column_text(stmt, 3));
+        auto const catalog = convert_text(sqlite3_column_text(stmt, 4));
+        auto const motorType = convert_text(sqlite3_column_text(stmt, 5));
+        auto const hp = sqlite3_column_int(stmt, 6);
+        auto const speed = sqlite3_column_int(stmt, 7);
+        auto const fullLoadSpeed = sqlite3_column_int(stmt, 8);
+        auto const enclosureType = convert_text(sqlite3_column_text(stmt, 9));
+        auto const frameNumber = convert_text(sqlite3_column_text(stmt, 10));
+        auto const voltageRating = sqlite3_column_int(stmt, 11);
+        auto const purpose = convert_text(sqlite3_column_text(stmt, 12));
+        auto const uFrame = sqlite3_column_int(stmt, 13);
+        auto const cFace = sqlite3_column_int(stmt, 14);
+        auto const verticalShaft = sqlite3_column_int(stmt, 15);
+        auto const dFlange = sqlite3_column_int(stmt, 16);
+        auto const serviceFactor = sqlite3_column_double(stmt, 17);
+        auto const insulationClass = convert_text(sqlite3_column_text(stmt, 18));
+        auto const weight = sqlite3_column_double(stmt, 19);
+        auto const listPrice = sqlite3_column_double(stmt, 20);
+        auto const windingResistance = sqlite3_column_double(stmt, 21);
+        auto const warranty = sqlite3_column_double(stmt, 22);
+        auto const rotorBars = sqlite3_column_int(stmt, 23);
+        auto const statorSlots = sqlite3_column_int(stmt, 24);
+        auto const efficiency100 = sqlite3_column_double(stmt, 25);
+        auto const efficiency75 = sqlite3_column_double(stmt, 26);
+        auto const efficiency50 = sqlite3_column_double(stmt, 27);
+        auto const efficiency25 = sqlite3_column_double(stmt, 28);
+        auto const powerFactor100 = sqlite3_column_double(stmt, 29);
+        auto const powerFactor75 = sqlite3_column_double(stmt, 30);
+        auto const powerFactor50 = sqlite3_column_double(stmt, 31);
+        auto const powerFactor25 = sqlite3_column_double(stmt, 32);
+        auto const torqueFullLoad = sqlite3_column_double(stmt, 33);
+        auto const torqueBreakDown = sqlite3_column_double(stmt, 34);
+        auto const torqueLockedRotor = sqlite3_column_double(stmt, 35);
+        auto const ampsFullLoad = sqlite3_column_double(stmt, 36);
+        auto const ampsIdle = sqlite3_column_double(stmt, 37);
+        auto const ampsLockedRotor = sqlite3_column_double(stmt, 38);
+        auto const stalledRotorTimeHot = sqlite3_column_double(stmt, 39);
+        auto const stalledRotorTimeCold = sqlite3_column_double(stmt, 40);
+        auto const peakVoltage0ms = sqlite3_column_double(stmt, 41);
+        auto const peakVoltage5ms = sqlite3_column_double(stmt, 42);
+
+        auto m = MotorData(manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                           uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                           rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                           powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                           stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms);
+	    m.setId(id);
+        return m;
+    };
+    return get_all_objects<MotorData>(m_motor_data_select_custom_stmt, cb);
+}
+
+MotorData SQLite::getMotorDataById(int id) const
+{
+    auto cb = [] (sqlite3_stmt * stmt) {
+        auto const dbId = sqlite3_column_int(stmt, 0);
+        sqlite3_column_int(stmt, 1);
+        auto const manufacturer = convert_text(sqlite3_column_text(stmt, 2));
+        auto const model = convert_text(sqlite3_column_text(stmt, 3));
+        auto const catalog = convert_text(sqlite3_column_text(stmt, 4));
+        auto const motorType = convert_text(sqlite3_column_text(stmt, 5));
+        auto const hp = sqlite3_column_int(stmt, 6);
+        auto const speed = sqlite3_column_int(stmt, 7);
+        auto const fullLoadSpeed = sqlite3_column_int(stmt, 8);
+        auto const enclosureType = convert_text(sqlite3_column_text(stmt, 9));
+        auto const frameNumber = convert_text(sqlite3_column_text(stmt, 10));
+        auto const voltageRating = sqlite3_column_int(stmt, 11);
+        auto const purpose = convert_text(sqlite3_column_text(stmt, 12));
+        auto const uFrame = sqlite3_column_int(stmt, 13);
+        auto const cFace = sqlite3_column_int(stmt, 14);
+        auto const verticalShaft = sqlite3_column_int(stmt, 15);
+        auto const dFlange = sqlite3_column_int(stmt, 16);
+        auto const serviceFactor = sqlite3_column_double(stmt, 17);
+        auto const insulationClass = convert_text(sqlite3_column_text(stmt, 18));
+        auto const weight = sqlite3_column_double(stmt, 19);
+        auto const listPrice = sqlite3_column_double(stmt, 20);
+        auto const windingResistance = sqlite3_column_double(stmt, 21);
+        auto const warranty = sqlite3_column_double(stmt, 22);
+        auto const rotorBars = sqlite3_column_int(stmt, 23);
+        auto const statorSlots = sqlite3_column_int(stmt, 24);
+        auto const efficiency100 = sqlite3_column_double(stmt, 25);
+        auto const efficiency75 = sqlite3_column_double(stmt, 26);
+        auto const efficiency50 = sqlite3_column_double(stmt, 27);
+        auto const efficiency25 = sqlite3_column_double(stmt, 28);
+        auto const powerFactor100 = sqlite3_column_double(stmt, 29);
+        auto const powerFactor75 = sqlite3_column_double(stmt, 30);
+        auto const powerFactor50 = sqlite3_column_double(stmt, 31);
+        auto const powerFactor25 = sqlite3_column_double(stmt, 32);
+        auto const torqueFullLoad = sqlite3_column_double(stmt, 33);
+        auto const torqueBreakDown = sqlite3_column_double(stmt, 34);
+        auto const torqueLockedRotor = sqlite3_column_double(stmt, 35);
+        auto const ampsFullLoad = sqlite3_column_double(stmt, 36);
+        auto const ampsIdle = sqlite3_column_double(stmt, 37);
+        auto const ampsLockedRotor = sqlite3_column_double(stmt, 38);
+        auto const stalledRotorTimeHot = sqlite3_column_double(stmt, 39);
+        auto const stalledRotorTimeCold = sqlite3_column_double(stmt, 40);
+        auto const peakVoltage0ms = sqlite3_column_double(stmt, 41);
+        auto const peakVoltage5ms = sqlite3_column_double(stmt, 42);
+
+        auto m = MotorData(manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                           uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                           rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                           powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                           stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms);
+	    m.setId(dbId);
+        return m;
+    };
+    return get_object<MotorData>(m_motor_data_select_single_stmt, id, cb);
+}
+
 void SQLite::create_select_stmt()
 {
     std::string const select_solid_load_charge_materials =
@@ -605,6 +803,144 @@ void SQLite::create_select_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_wall_losses_surface_select_custom_stmt, select_custom_wall_losses_surface);
+
+    std::string const select_motor_data =
+            R"(SELECT id, sid, manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                    uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                    rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                    powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                    stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms
+           FROM motor_data)";
+
+    prepare_statement(m_motor_data_select_stmt, select_motor_data);
+
+    std::string const select_single_motor_data =
+            R"(SELECT id, sid, manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                    uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                    rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                    powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                    stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms
+           FROM motor_data
+           WHERE id = ?)";
+
+    prepare_statement(m_motor_data_select_single_stmt, select_single_motor_data);
+
+    std::string const select_custom_motor_data =
+            R"(SELECT id, sid, manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                    uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                    rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                    powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                    stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms
+           FROM motor_data
+           WHERE sid = 1)";
+
+    prepare_statement(m_motor_data_select_custom_stmt, select_custom_motor_data);
+}
+
+void SQLite::create_update_and_delete_stmt() {
+    std::string const delete_solid_load_charge_materials =
+            R"(DELETE from solid_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_solid_load_charge_materials_delete_stmt, delete_solid_load_charge_materials);
+
+    std::string const update_custom_solid_load_charge_materials =
+            R"(UPDATE solid_load_charge_materials
+               SET substance=?, mean_specific_heat_of_solid=?, latent_heat_of_fusion=?, mean_specific_heat_of_liquid=?, melting_point=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_solid_load_charge_materials_update_stmt, update_custom_solid_load_charge_materials);
+
+    std::string const delete_gas_load_charge_materials =
+            R"(DELETE from gas_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_gas_load_charge_materials_delete_stmt, delete_gas_load_charge_materials);
+
+    std::string const update_gas_load_charge_materials =
+            R"(UPDATE gas_load_charge_materials
+               SET substance=?, mean_specific_heat_of_vapor=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_gas_load_charge_materials_update_stmt, update_gas_load_charge_materials);
+
+    std::string const delete_liquid_load_charge_materials =
+            R"(DELETE from liquid_load_charge_materials where id=? and sid=1)";
+
+    prepare_statement(m_liquid_load_charge_materials_delete_stmt, delete_liquid_load_charge_materials);
+
+    std::string const update_liquid_load_charge_materials =
+            R"(UPDATE liquid_load_charge_materials
+               SET substance=?, mean_specific_heat_of_liquid=?, latent_heat_of_vaporisation=?, mean_specific_heat_of_vapor=?, boiling_point=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_liquid_load_charge_materials_update_stmt, update_liquid_load_charge_materials);
+
+    std::string const delete_solid_liquid_flue_gas_materials =
+            R"(DELETE from solid_liquid_flue_gas_materials where id=? and sid=1)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_delete_stmt, delete_solid_liquid_flue_gas_materials);
+
+    std::string const update_solid_liquid_flue_gas_materials =
+            R"(UPDATE solid_liquid_flue_gas_materials
+               SET substance=?, carbon=?, hydrogen=?, nitrogen=?, sulfur=?, oxygen=?, moisture=?, ash=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_solid_liquid_flue_gas_materials_update_stmt, update_solid_liquid_flue_gas_materials);
+
+    std::string const delete_gas_flue_gas_materials =
+            R"(DELETE from gas_flue_gas_materials where id=? and sid=1)";
+
+    prepare_statement(m_gas_flue_gas_materials_delete_stmt, delete_gas_flue_gas_materials);
+
+    std::string const update_gas_flue_gas_materials =
+            R"(UPDATE gas_flue_gas_materials
+               SET substance=?, hydrogen=?, methane=?, ethylene=?, ethane=?, sulfur_dioxide=?, carbon_monoxide=?,
+               carbon_dioxide=?, nitrogen=?, oxygen=?, hydrogen_sulfide=?, benzene=?, heatingValue=?,
+               heatingValueVolume=?, specificGravity=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_gas_flue_gas_materials_update_stmt, update_gas_flue_gas_materials);
+
+    std::string const delete_atmosphere_specific_heat =
+            R"(DELETE from atmosphere_specific_heat where id=? and sid=1)";
+
+    prepare_statement(m_atmosphere_specific_heat_delete_stmt, delete_atmosphere_specific_heat);
+
+    std::string const update_atmosphere_specific_heat =
+            R"(UPDATE atmosphere_specific_heat
+               SET substance=?, specificHeat=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_atmosphere_specific_heat_update_stmt, update_atmosphere_specific_heat);
+
+    std::string const delete_wall_losses_surface =
+            R"(DELETE from wall_losses_surface where id=? and sid=1)";
+
+    prepare_statement(m_wall_losses_surface_delete_stmt, delete_wall_losses_surface);
+
+    std::string const update_wall_losses_surface =
+            R"(UPDATE wall_losses_surface
+               SET surface=?, conditionFactor=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_wall_losses_surface_update_stmt, update_wall_losses_surface);
+
+
+    std::string const delete_motor_data =
+            R"(DELETE from motor_data where id=? and sid=1)";
+
+    prepare_statement(m_motor_data_delete_stmt, delete_motor_data);
+
+    std::string const update_motor_data =
+            R"(UPDATE motor_data
+               SET manufacturer=?, model=?, catalog=?, motorType=?, hp=?, speed=?, fullLoadSpeed=?, enclosureType=?, frameNumber=?,
+               voltageRating=?, purpose=?, uFrame=?, cFace=?, verticalShaft=?, dFlange=?, serviceFactor=?, insulationClass=?,
+               weight=?, listPrice=?, windingResistance=?, warranty=?, rotorBars=?, statorSlots=?, efficiency100=?, efficiency75=?,
+               efficiency50=?, efficiency25=?, powerFactor100=?, powerFactor75=?, powerFactor50=?, powerFactor25=?, torqueFullLoad=?,
+               torqueBreakDown=?, torqueLockedRotor=?, ampsFullLoad=?, ampsIdle=?, ampsLockedRotor=?, stalledRotorTimeHot=?,
+               stalledRotorTimeCold=?, peakVoltage0ms=?, peakVoltage5ms=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_motor_data_update_stmt, update_motor_data);
 }
 
 void SQLite::create_insert_stmt() {
@@ -653,6 +989,18 @@ void SQLite::create_insert_stmt() {
            VALUES (?,?,?))";
 
     prepare_statement(m_wall_losses_surface_insert_stmt, wall_losses_surface_insert_sql);
+
+    const std::string motor_data_insert_sql =
+            R"(INSERT INTO motor_data(sid, manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                    uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                    rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                    powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                    stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
+
+    // 42 entries
+
+    prepare_statement(m_motor_data_insert_stmt, motor_data_insert_sql);
 }
 
 
@@ -762,6 +1110,60 @@ void SQLite::create_tables()
       );)";
 
     execute_command(wall_losses_surface_table_sql);
+
+    const std::string motor_table_sql =
+            R"(CREATE TABLE IF NOT EXISTS motor_data (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
+             manufacturer text NOT NULL DEFAULT "" UNIQUE,
+             model text NOT NULL,
+             catalog text NOT NULL,
+             motorType text NOT NULL,
+             hp integer NOT NULL,
+             speed integer NOT NULL,
+             fullLoadSpeed integer NOT NULL,
+             enclosureType text NOT NULL,
+             frameNumber text NOT NULL,
+             voltageRating integer NOT NULL,
+             purpose text NOT NULL,
+             uFrame integer NOT NULL,
+             cFace integer NOT NULL,
+             verticalShaft integer NOT NULL,
+             dFlange integer NOT NULL,
+             serviceFactor real NOT NULL,
+             insulationClass text NOT NULL,
+             weight real NOT NULL, -- lbs,
+             listPrice real NOT NULL, -- US dollars,
+             windingResistance real NOT NULL, -- mOhms at 25C,
+             warranty real NOT NULL, -- years,
+             rotorBars integer NOT NULL,
+             statorSlots integer NOT NULL,
+             efficiency100 real NOT NULL,
+             efficiency75 real NOT NULL,
+             efficiency50 real NOT NULL,
+             efficiency25 real NOT NULL,
+             powerFactor100 real NOT NULL,
+             powerFactor75 real NOT NULL,
+             powerFactor50 real NOT NULL,
+             powerFactor25 real NOT NULL,
+             torqueFullLoad real NOT NULL,
+             torqueBreakDown real NOT NULL,
+             torqueLockedRotor real NOT NULL,
+             ampsFullLoad real NOT NULL,
+             ampsIdle real NOT NULL,
+             ampsLockedRotor real NOT NULL,
+             stalledRotorTimeHot real NOT NULL, -- seconds,
+             stalledRotorTimeCold real NOT NULL, -- seconds,
+             peakVoltage0ms real NOT NULL,
+             peakVoltage5ms real NOT NULL,
+             UNIQUE (manufacturer, model, catalog, motorType, hp, speed, fullLoadSpeed, enclosureType, frameNumber, voltageRating, purpose,
+                    uFrame, cFace, verticalShaft, dFlange, serviceFactor, insulationClass, weight, listPrice, windingResistance, warranty,
+                    rotorBars, statorSlots, efficiency100, efficiency75, efficiency50, efficiency25, powerFactor100, powerFactor75, powerFactor50,
+                    powerFactor25, torqueFullLoad, torqueBreakDown, torqueLockedRotor, ampsFullLoad, ampsIdle, ampsLockedRotor, stalledRotorTimeHot,
+                    stalledRotorTimeCold, peakVoltage0ms, peakVoltage5ms)
+      );)";
+
+    execute_command(motor_table_sql);
 }
 
 void SQLite::insert_default_data()
@@ -786,6 +1188,9 @@ void SQLite::insert_default_data()
     }
     for( auto const & surface : get_default_wall_losses_surface() ) {
         insert_wall_losses_surface(surface);
+    }
+	for( auto const & motor : get_default_motor_data() ) {
+		insert_motor_data(motor);
     }
 }
 
@@ -820,9 +1225,32 @@ bool SQLite::insertSolidLoadChargeMaterials(SolidLoadChargeMaterial const & mate
     return valid_insert;
 }
 
-bool SQLite::deleteSolidLoadChargeMaterial(std::string const & substance) const {
-    int rc = execute_command("DELETE from solid_load_charge_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK;
+bool SQLite::deleteSolidLoadChargeMaterial(const int id) {
+	if (isDefaultMaterial(id, get_default_solid_load_charge_materials().size())) {
+        return false;
+    }
+	bind_value(m_solid_load_charge_materials_delete_stmt, 1, id);
+    int rc = step_command(m_solid_load_charge_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+	reset_command(m_solid_load_charge_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateSolidLoadChargeMaterial(SolidLoadChargeMaterial const & material) {
+    if (isDefaultMaterial(material.getID(), get_default_solid_load_charge_materials().size())) {
+        return false;
+    }
+    bind_value(m_solid_load_charge_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_solid_load_charge_materials_update_stmt, 2, material.getSpecificHeatSolid());
+    bind_value(m_solid_load_charge_materials_update_stmt, 3, material.getLatentHeat());
+    bind_value(m_solid_load_charge_materials_update_stmt, 4, material.getSpecificHeatLiquid());
+    bind_value(m_solid_load_charge_materials_update_stmt, 5, material.getMeltingPoint());
+    bind_value(m_solid_load_charge_materials_update_stmt, 6, material.getID());
+
+    int rc = step_command(m_solid_load_charge_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_solid_load_charge_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_gas_load_charge_materials(GasLoadChargeMaterial const & material)
@@ -850,9 +1278,29 @@ bool SQLite::insertGasLoadChargeMaterials(GasLoadChargeMaterial const & material
     return valid_insert;
 }
 
-bool SQLite::deleteGasLoadChargeMaterial(std::string const & substance){
-	int rc = execute_command("DELETE from gas_load_charge_materials where substance = '" + substance + "' and sid=1");
-	return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteGasLoadChargeMaterial(int const id) {
+    if (isDefaultMaterial(id, get_default_gas_load_charge_materials().size())) {
+        return false;
+    }
+    bind_value(m_gas_load_charge_materials_delete_stmt, 1, id);
+    int rc = step_command(m_gas_load_charge_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_gas_load_charge_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateGasLoadChargeMaterial(GasLoadChargeMaterial const & material) {
+    if (isDefaultMaterial(material.getID(), get_default_gas_load_charge_materials().size())) {
+        return false;
+    }
+    bind_value(m_gas_load_charge_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_gas_load_charge_materials_update_stmt, 2, material.getSpecificHeatVapor());
+    bind_value(m_gas_load_charge_materials_update_stmt, 3, material.getID());
+
+    int rc = step_command(m_gas_load_charge_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_gas_load_charge_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_liquid_load_charge_materials(LiquidLoadChargeMaterial const & material)
@@ -886,9 +1334,32 @@ bool SQLite::insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial const & ma
     return valid_insert;
 }
 
-bool SQLite::deleteLiquidLoadChargeMaterial(std::string const &substance){
-    int rc = execute_command("DELETE from liquid_load_charge_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteLiquidLoadChargeMaterial(const int id) {
+    if (isDefaultMaterial(id, get_default_liquid_load_charge_materials().size())) {
+        return false;
+    }
+    bind_value(m_liquid_load_charge_materials_delete_stmt, 1, id);
+    int rc = step_command(m_liquid_load_charge_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_liquid_load_charge_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateLiquidLoadChargeMaterial(LiquidLoadChargeMaterial const & material) {
+    if (isDefaultMaterial(material.getID(), get_default_liquid_load_charge_materials().size())) {
+        return false;
+    }
+    bind_value(m_liquid_load_charge_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 2, material.getSpecificHeatLiquid());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 3, material.getLatentHeat());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 4, material.getSpecificHeatVapor());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 5, material.getVaporizingTemperature());
+    bind_value(m_liquid_load_charge_materials_update_stmt, 6, material.getID());
+
+    int rc = step_command(m_liquid_load_charge_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_liquid_load_charge_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_solid_liquid_flue_gas_materials(SolidLiquidFlueGasMaterial const & material)
@@ -926,9 +1397,35 @@ bool SQLite::insertSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const &
     return valid_insert;
 }
 
-bool SQLite::deleteSolidLiquidFlueGasMaterial(std::string const & substance){
-    int rc = execute_command("DELETE from solid_liquid_flue_gas_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteSolidLiquidFlueGasMaterial(const int id) {
+    if (isDefaultMaterial(id, get_default_solid_liquid_flue_gas_materials().size())) {
+        return false;
+    }
+    bind_value(m_solid_liquid_flue_gas_materials_delete_stmt, 1, id);
+    int rc = step_command(m_solid_liquid_flue_gas_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_solid_liquid_flue_gas_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial const & material) {
+    if (isDefaultMaterial(material.getID(), get_default_solid_liquid_flue_gas_materials().size())) {
+        return false;
+    }
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 2, material.getCarbon());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 3, material.getHydrogen());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 4, material.getNitrogen());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 5, material.getSulphur());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 6, material.getO2());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 7, material.getMoisture());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 8, material.getInertAsh());
+    bind_value(m_solid_liquid_flue_gas_materials_update_stmt, 9, material.getID());
+
+    int rc = step_command(m_solid_liquid_flue_gas_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_solid_liquid_flue_gas_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_gas_flue_gas_materials(GasCompositions const & comps)
@@ -981,9 +1478,42 @@ bool SQLite::insertGasFlueGasMaterial(GasCompositions const & comps) const {
     return valid_insert;
 }
 
-bool SQLite::deleteGasFlueGasMaterial(std::string const & substance){
-    int rc = execute_command("DELETE from gas_flue_gas_materials where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteGasFlueGasMaterial(const int id) {
+    if (isDefaultMaterial(id, get_default_gas_flue_gas_materials().size())) {
+        return false;
+    }
+    bind_value(m_gas_flue_gas_materials_delete_stmt, 1, id);
+    int rc = step_command(m_gas_flue_gas_materials_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_gas_flue_gas_materials_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateGasFlueGasMaterial(GasCompositions const & material ) {
+    if (isDefaultMaterial(material.getID(), get_default_gas_flue_gas_materials().size())) {
+        return false;
+    }
+    bind_value(m_gas_flue_gas_materials_update_stmt, 1, material.getSubstance());
+    bind_value(m_gas_flue_gas_materials_update_stmt, 2, material.getGasByVol("CH4"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 3, material.getGasByVol("C2H6"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 4, material.getGasByVol("N2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 5, material.getGasByVol("H2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 6, material.getGasByVol("C3H8"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 7, material.getGasByVol("C4H10_CnH2n"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 8, material.getGasByVol("H2O"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 9, material.getGasByVol("CO"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 10, material.getGasByVol("CO2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 11, material.getGasByVol("SO2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 12, material.getGasByVol("O2"));
+    bind_value(m_gas_flue_gas_materials_update_stmt, 13, material.heatingValue);
+    bind_value(m_gas_flue_gas_materials_update_stmt, 14, material.heatingValueVolume);
+    bind_value(m_gas_flue_gas_materials_update_stmt, 15, material.specificGravity);
+    bind_value(m_gas_flue_gas_materials_update_stmt, 16, material.getID());
+
+    int rc = step_command(m_gas_flue_gas_materials_update_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_gas_flue_gas_materials_update_stmt);
+    return valid_command;
 }
 
 bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
@@ -999,7 +1529,7 @@ bool SQLite::insert_atmosphere_specific_heat(Atmosphere const & sh)
 }
 
 // part of the public API used to insert custom materials
-bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material){
+bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material) {
     bind_value(m_atmosphere_specific_heat_insert_stmt, 1, 1);
     bind_value(m_atmosphere_specific_heat_insert_stmt, 2, material.getSubstance());
     bind_value(m_atmosphere_specific_heat_insert_stmt, 3, material.getSpecificHeat());
@@ -1010,9 +1540,29 @@ bool SQLite::insertAtmosphereSpecificHeat(Atmosphere const & material){
     return valid_insert;
 }
 
-bool SQLite::deleteAtmosphereSpecificHeat(std::string const & substance){
-    int rc = execute_command("DELETE from atmosphere_specific_heat where substance = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteAtmosphereSpecificHeat(const int id) {
+    if (isDefaultMaterial(id, get_default_atmosphere_specific_heat().size())) {
+        return false;
+    }
+    bind_value(m_atmosphere_specific_heat_delete_stmt, 1, id);
+    int rc = step_command(m_atmosphere_specific_heat_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_atmosphere_specific_heat_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateAtmosphereSpecificHeat(Atmosphere const &material){
+    if (isDefaultMaterial(material.getID(), get_default_atmosphere_specific_heat().size())) {
+        return false;
+    }
+    bind_value(m_atmosphere_specific_heat_update_stmt, 1, material.getSubstance());
+    bind_value(m_atmosphere_specific_heat_update_stmt, 2, material.getSpecificHeat());
+    bind_value(m_atmosphere_specific_heat_update_stmt, 3, material.getID());
+
+    int rc = step_command(m_atmosphere_specific_heat_update_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_atmosphere_specific_heat_update_stmt);
+    return valid_insert;
 }
 
 bool SQLite::insert_wall_losses_surface(WallLosses const & cf)
@@ -1039,11 +1589,196 @@ bool SQLite::insertWallLossesSurface(WallLosses const & material)
     return valid_insert;
 }
 
-bool SQLite::deleteWallLossesSurface(std::string const & substance){
-    int rc = execute_command("DELETE from wall_losses_surface where surface = '" + substance + "' and sid=1");
-    return rc == SQLITE_OK; // always returns true even if entry didn't exist
+bool SQLite::deleteWallLossesSurface(int id) {
+    if (isDefaultMaterial(id, get_default_wall_losses_surface().size())) {
+        return false;
+    }
+    bind_value(m_wall_losses_surface_delete_stmt, 1, id);
+    int rc = step_command(m_wall_losses_surface_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_wall_losses_surface_delete_stmt);
+    return valid_command;
 }
 
+bool SQLite::updateWallLossesSurface(WallLosses const &material) {
+    if (isDefaultMaterial(material.getID(), get_default_wall_losses_surface().size())) {
+        return false;
+    }
+    bind_value(m_wall_losses_surface_update_stmt, 1, material.getSurface());
+    bind_value(m_wall_losses_surface_update_stmt, 2, material.getConditionFactor());
+    bind_value(m_wall_losses_surface_update_stmt, 3, material.getID());
+
+    int rc = step_command(m_wall_losses_surface_update_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_wall_losses_surface_update_stmt);
+    return valid_insert;
+}
+
+bool SQLite::insert_motor_data(MotorData const & m)
+{
+    bind_value(m_motor_data_insert_stmt, 1, 0);
+    bind_value(m_motor_data_insert_stmt, 2, m.manufacturer);
+    bind_value(m_motor_data_insert_stmt, 3, m.model);
+    bind_value(m_motor_data_insert_stmt, 4, m.catalog);
+    bind_value(m_motor_data_insert_stmt, 5, m.motorType);
+    bind_value(m_motor_data_insert_stmt, 6, m.hp);
+    bind_value(m_motor_data_insert_stmt, 7, m.speed);
+    bind_value(m_motor_data_insert_stmt, 8, m.fullLoadSpeed);
+    bind_value(m_motor_data_insert_stmt, 9, m.enclosureType);
+    bind_value(m_motor_data_insert_stmt, 10, m.frameNumber);
+    bind_value(m_motor_data_insert_stmt, 11, m.voltageRating);
+    bind_value(m_motor_data_insert_stmt, 12, m.purpose);
+    bind_value(m_motor_data_insert_stmt, 13, m.uFrame);
+    bind_value(m_motor_data_insert_stmt, 14, m.cFace);
+    bind_value(m_motor_data_insert_stmt, 15, m.verticalShaft);
+    bind_value(m_motor_data_insert_stmt, 16, m.dFlange);
+    bind_value(m_motor_data_insert_stmt, 17, m.serviceFactor);
+    bind_value(m_motor_data_insert_stmt, 18, m.insulationClass);
+    bind_value(m_motor_data_insert_stmt, 19, m.weight);
+    bind_value(m_motor_data_insert_stmt, 20, m.listPrice);
+    bind_value(m_motor_data_insert_stmt, 21, m.windingResistance);
+    bind_value(m_motor_data_insert_stmt, 22, m.warranty);
+    bind_value(m_motor_data_insert_stmt, 23, m.rotorBars);
+    bind_value(m_motor_data_insert_stmt, 24, m.statorSlots);
+    bind_value(m_motor_data_insert_stmt, 25, m.efficiency100);
+    bind_value(m_motor_data_insert_stmt, 26, m.efficiency75);
+    bind_value(m_motor_data_insert_stmt, 27, m.efficiency50);
+    bind_value(m_motor_data_insert_stmt, 28, m.efficiency25);
+    bind_value(m_motor_data_insert_stmt, 29, m.powerFactor100);
+    bind_value(m_motor_data_insert_stmt, 30, m.powerFactor75);
+    bind_value(m_motor_data_insert_stmt, 31, m.powerFactor50);
+    bind_value(m_motor_data_insert_stmt, 32, m.powerFactor25);
+    bind_value(m_motor_data_insert_stmt, 33, m.torqueFullLoad);
+    bind_value(m_motor_data_insert_stmt, 34, m.torqueBreakDown);
+    bind_value(m_motor_data_insert_stmt, 35, m.torqueLockedRotor);
+    bind_value(m_motor_data_insert_stmt, 36, m.ampsFullLoad);
+    bind_value(m_motor_data_insert_stmt, 37, m.ampsIdle);
+    bind_value(m_motor_data_insert_stmt, 38, m.ampsLockedRotor);
+    bind_value(m_motor_data_insert_stmt, 39, m.stalledRotorTimeHot);
+    bind_value(m_motor_data_insert_stmt, 40, m.stalledRotorTimeCold);
+    bind_value(m_motor_data_insert_stmt, 41, m.peakVoltage0ms);
+    bind_value(m_motor_data_insert_stmt, 42, m.peakVoltage5ms);
+
+    int rc = step_command(m_motor_data_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_motor_data_insert_stmt);
+    return valid_insert;
+}
+
+// public API for inserts
+bool SQLite::insertMotorData(MotorData const & m){
+    bind_value(m_motor_data_insert_stmt, 1, 1);
+    bind_value(m_motor_data_insert_stmt, 2, m.manufacturer);
+    bind_value(m_motor_data_insert_stmt, 3, m.model);
+    bind_value(m_motor_data_insert_stmt, 4, m.catalog);
+    bind_value(m_motor_data_insert_stmt, 5, m.motorType);
+    bind_value(m_motor_data_insert_stmt, 6, m.hp);
+    bind_value(m_motor_data_insert_stmt, 7, m.speed);
+    bind_value(m_motor_data_insert_stmt, 8, m.fullLoadSpeed);
+    bind_value(m_motor_data_insert_stmt, 9, m.enclosureType);
+    bind_value(m_motor_data_insert_stmt, 10, m.frameNumber);
+    bind_value(m_motor_data_insert_stmt, 11, m.voltageRating);
+    bind_value(m_motor_data_insert_stmt, 12, m.purpose);
+    bind_value(m_motor_data_insert_stmt, 13, m.uFrame);
+    bind_value(m_motor_data_insert_stmt, 14, m.cFace);
+    bind_value(m_motor_data_insert_stmt, 15, m.verticalShaft);
+    bind_value(m_motor_data_insert_stmt, 16, m.dFlange);
+    bind_value(m_motor_data_insert_stmt, 17, m.serviceFactor);
+    bind_value(m_motor_data_insert_stmt, 18, m.insulationClass);
+    bind_value(m_motor_data_insert_stmt, 19, m.weight);
+    bind_value(m_motor_data_insert_stmt, 20, m.listPrice);
+    bind_value(m_motor_data_insert_stmt, 21, m.windingResistance);
+    bind_value(m_motor_data_insert_stmt, 22, m.warranty);
+    bind_value(m_motor_data_insert_stmt, 23, m.rotorBars);
+    bind_value(m_motor_data_insert_stmt, 24, m.statorSlots);
+    bind_value(m_motor_data_insert_stmt, 25, m.efficiency100);
+    bind_value(m_motor_data_insert_stmt, 26, m.efficiency75);
+    bind_value(m_motor_data_insert_stmt, 27, m.efficiency50);
+    bind_value(m_motor_data_insert_stmt, 28, m.efficiency25);
+    bind_value(m_motor_data_insert_stmt, 29, m.powerFactor100);
+    bind_value(m_motor_data_insert_stmt, 30, m.powerFactor75);
+    bind_value(m_motor_data_insert_stmt, 31, m.powerFactor50);
+    bind_value(m_motor_data_insert_stmt, 32, m.powerFactor25);
+    bind_value(m_motor_data_insert_stmt, 33, m.torqueFullLoad);
+    bind_value(m_motor_data_insert_stmt, 34, m.torqueBreakDown);
+    bind_value(m_motor_data_insert_stmt, 35, m.torqueLockedRotor);
+    bind_value(m_motor_data_insert_stmt, 36, m.ampsFullLoad);
+    bind_value(m_motor_data_insert_stmt, 37, m.ampsIdle);
+    bind_value(m_motor_data_insert_stmt, 38, m.ampsLockedRotor);
+    bind_value(m_motor_data_insert_stmt, 39, m.stalledRotorTimeHot);
+    bind_value(m_motor_data_insert_stmt, 40, m.stalledRotorTimeCold);
+    bind_value(m_motor_data_insert_stmt, 41, m.peakVoltage0ms);
+    bind_value(m_motor_data_insert_stmt, 42, m.peakVoltage5ms);
+
+    int rc = step_command(m_motor_data_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_motor_data_insert_stmt);
+    return valid_insert;
+}
+
+bool SQLite::deleteMotorData(int id) {
+    if (isDefaultMaterial(id, get_default_motor_data().size())) {
+        return false;
+    }
+    bind_value(m_motor_data_delete_stmt, 1, id);
+    int rc = step_command(m_motor_data_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_motor_data_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updateMotorData(MotorData const & m) {
+    if (isDefaultMaterial(m.id, get_default_motor_data().size())) {
+        return false;
+    }
+    bind_value(m_motor_data_update_stmt, 1, m.manufacturer);
+    bind_value(m_motor_data_update_stmt, 2, m.model);
+    bind_value(m_motor_data_update_stmt, 3, m.catalog);
+    bind_value(m_motor_data_update_stmt, 4, m.motorType);
+    bind_value(m_motor_data_update_stmt, 5, m.hp);
+    bind_value(m_motor_data_update_stmt, 6, m.speed);
+    bind_value(m_motor_data_update_stmt, 7, m.fullLoadSpeed);
+    bind_value(m_motor_data_update_stmt, 8, m.enclosureType);
+    bind_value(m_motor_data_update_stmt, 9, m.frameNumber);
+    bind_value(m_motor_data_update_stmt, 10, m.voltageRating);
+    bind_value(m_motor_data_update_stmt, 11, m.purpose);
+    bind_value(m_motor_data_update_stmt, 12, m.uFrame);
+    bind_value(m_motor_data_update_stmt, 13, m.cFace);
+    bind_value(m_motor_data_update_stmt, 14, m.verticalShaft);
+    bind_value(m_motor_data_update_stmt, 15, m.dFlange);
+    bind_value(m_motor_data_update_stmt, 16, m.serviceFactor);
+    bind_value(m_motor_data_update_stmt, 17, m.insulationClass);
+    bind_value(m_motor_data_update_stmt, 18, m.weight);
+    bind_value(m_motor_data_update_stmt, 19, m.listPrice);
+    bind_value(m_motor_data_update_stmt, 20, m.windingResistance);
+    bind_value(m_motor_data_update_stmt, 21, m.warranty);
+    bind_value(m_motor_data_update_stmt, 22, m.rotorBars);
+    bind_value(m_motor_data_update_stmt, 23, m.statorSlots);
+    bind_value(m_motor_data_update_stmt, 24, m.efficiency100);
+    bind_value(m_motor_data_update_stmt, 25, m.efficiency75);
+    bind_value(m_motor_data_update_stmt, 26, m.efficiency50);
+    bind_value(m_motor_data_update_stmt, 27, m.efficiency25);
+    bind_value(m_motor_data_update_stmt, 28, m.powerFactor100);
+    bind_value(m_motor_data_update_stmt, 29, m.powerFactor75);
+    bind_value(m_motor_data_update_stmt, 30, m.powerFactor50);
+    bind_value(m_motor_data_update_stmt, 31, m.powerFactor25);
+    bind_value(m_motor_data_update_stmt, 32, m.torqueFullLoad);
+    bind_value(m_motor_data_update_stmt, 33, m.torqueBreakDown);
+    bind_value(m_motor_data_update_stmt, 34, m.torqueLockedRotor);
+    bind_value(m_motor_data_update_stmt, 35, m.ampsFullLoad);
+    bind_value(m_motor_data_update_stmt, 36, m.ampsIdle);
+    bind_value(m_motor_data_update_stmt, 37, m.ampsLockedRotor);
+    bind_value(m_motor_data_update_stmt, 38, m.stalledRotorTimeHot);
+    bind_value(m_motor_data_update_stmt, 39, m.stalledRotorTimeCold);
+    bind_value(m_motor_data_update_stmt, 40, m.peakVoltage0ms);
+    bind_value(m_motor_data_update_stmt, 41, m.peakVoltage5ms);
+    bind_value(m_motor_data_update_stmt, 42, m.id);
+
+    int rc = step_command(m_motor_data_update_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_motor_data_update_stmt);
+    return valid_insert;
+}
 
 SQLiteWrapper::SQLiteWrapper( std::shared_ptr<sqlite3> const & db )
     :

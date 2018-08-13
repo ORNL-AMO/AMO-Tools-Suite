@@ -9,15 +9,6 @@ NAN_MODULE_INIT(InitDb) {
     Nan::Set(target, New<String>("startup").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(startup)).ToLocalChecked());
 
-	Nan::Set(target, New<String>("unitTestStartup").ToLocalChecked(),
-	         GetFunction(New<FunctionTemplate>(unitTestStartup)).ToLocalChecked());
-
-//    Nan::Set(target, New<String>("preUpdate").ToLocalChecked(),
-//             GetFunction(New<FunctionTemplate>(preUpdate)).ToLocalChecked());
-//
-//    Nan::Set(target, New<String>("postUpdate").ToLocalChecked(),
-//             GetFunction(New<FunctionTemplate>(postUpdate)).ToLocalChecked());
-
     Nan::Set(target, New<String>("selectSolidLoadChargeMaterials").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectSolidLoadChargeMaterials)).ToLocalChecked());
 
@@ -29,6 +20,9 @@ NAN_MODULE_INIT(InitDb) {
 
     Nan::Set(target, New<String>("deleteSolidLoadChargeMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(deleteSolidLoadChargeMaterial)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("updateSolidLoadChargeMaterial").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateSolidLoadChargeMaterial)).ToLocalChecked());
 
     Nan::Set(target, New<String>("selectLiquidLoadChargeMaterials").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectLiquidLoadChargeMaterials)).ToLocalChecked());
@@ -42,6 +36,9 @@ NAN_MODULE_INIT(InitDb) {
     Nan::Set(target, New<String>("deleteLiquidLoadChargeMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(deleteLiquidLoadChargeMaterial)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("updateLiquidLoadChargeMaterial").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateLiquidLoadChargeMaterial)).ToLocalChecked());
+
     Nan::Set(target, New<String>("selectGasLoadChargeMaterials").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectGasLoadChargeMaterials)).ToLocalChecked());
 
@@ -53,6 +50,9 @@ NAN_MODULE_INIT(InitDb) {
 
     Nan::Set(target, New<String>("deleteGasLoadChargeMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(deleteGasLoadChargeMaterial)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("updateGasLoadChargeMaterial").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateGasLoadChargeMaterial)).ToLocalChecked());
 
     Nan::Set(target, New<String>("selectSolidLiquidFlueGasMaterials").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectSolidLiquidFlueGasMaterials)).ToLocalChecked());
@@ -66,6 +66,9 @@ NAN_MODULE_INIT(InitDb) {
     Nan::Set(target, New<String>("deleteSolidLiquidFlueGasMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(deleteSolidLiquidFlueGasMaterial)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("updateSolidLiquidFlueGasMaterial").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateSolidLiquidFlueGasMaterial)).ToLocalChecked());
+
     Nan::Set(target, New<String>("selectGasFlueGasMaterials").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectGasFlueGasMaterials)).ToLocalChecked());
 
@@ -77,6 +80,9 @@ NAN_MODULE_INIT(InitDb) {
 
     Nan::Set(target, New<String>("deleteGasFlueGasMaterial").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(deleteGasFlueGasMaterial)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("updateGasFlueGasMaterial").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateGasFlueGasMaterial)).ToLocalChecked());
 
     Nan::Set(target, New<String>("selectAtmosphereSpecificHeat").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectAtmosphereSpecificHeat)).ToLocalChecked());
@@ -90,6 +96,9 @@ NAN_MODULE_INIT(InitDb) {
     Nan::Set(target, New<String>("deleteAtmosphereSpecificHeat").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(deleteAtmosphereSpecificHeat)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("updateAtmosphereSpecificHeat").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateAtmosphereSpecificHeat)).ToLocalChecked());
+
     Nan::Set(target, New<String>("selectWallLossesSurface").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(selectWallLossesSurface)).ToLocalChecked());
 
@@ -101,6 +110,24 @@ NAN_MODULE_INIT(InitDb) {
 
     Nan::Set(target, New<String>("deleteWallLossesSurface").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(deleteWallLossesSurface)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("updateWallLossesSurface").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateWallLossesSurface)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("selectMotors").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectMotors)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("selectMotorById").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectMotorById)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("insertMotor").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(insertMotor)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("deleteMotor").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(deleteMotor)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("updateMotor").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateMotor)).ToLocalChecked());
 }
 
 NODE_MODULE(db, InitDb)

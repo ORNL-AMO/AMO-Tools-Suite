@@ -20,23 +20,19 @@ Boiler::Boiler(const double deaeratorPressure, const double combustionEfficiency
 }
 
 void Boiler::calculateProperties() {
-	steamProperties = SteamProperties(steamPressure, quantityType, quantityValue).calculate();
-	steamProperties["steamEnergyFlow"] = steamProperties.at("specificEnthalpy") * steamMassFlow / 1000;
-	steamProperties["steamMassFlow"] = steamMassFlow;
-	steamProperties["quality"] = 1; // TODO tell UI guys that there needs to be warning
+	auto sp = SteamProperties(steamPressure, quantityType, quantityValue).calculate();
+	steamProperties = {steamMassFlow, sp.specificEnthalpy * steamMassFlow / 1000, sp};
+	steamProperties.quality = 1; // TODO question tell UI guys that there needs to be a warning
 
-	feedwaterProperties = SteamProperties(deaeratorPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
-	feedwaterProperties["feedwaterMassFlow"] = steamMassFlow / (1 - blowdownRate / 100);
-	feedwaterProperties["feedwaterEnergyFlow"] = feedwaterProperties.at("specificEnthalpy")
-	                                             * feedwaterProperties.at("feedwaterMassFlow") / 1000;
+	sp = SteamProperties(deaeratorPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
+	feedwaterProperties = {steamMassFlow / (1 - blowdownRate / 100),
+	                       sp.specificEnthalpy * (steamMassFlow / (1 - blowdownRate / 100)) / 1000, sp};
 
-	blowdownProperties = SteamProperties(steamPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
-	blowdownProperties["blowdownMassFlow"] = feedwaterProperties.at("feedwaterMassFlow") * (blowdownRate / 100);
-	blowdownProperties["blowdownEnergyFlow"] = blowdownProperties.at("specificEnthalpy")
-	                                           * blowdownProperties.at("blowdownMassFlow") / 1000;
+	sp = SteamProperties(steamPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
+	double const blowdownMassFlow = feedwaterProperties.massFlow * (blowdownRate / 100);
+	blowdownProperties = {blowdownMassFlow, sp.specificEnthalpy * blowdownMassFlow / 1000, sp};
 
-	boilerEnergy = steamProperties.at("steamEnergyFlow") + blowdownProperties.at("blowdownEnergyFlow")
-	               - feedwaterProperties.at("feedwaterEnergyFlow");
+	boilerEnergy = steamProperties.energyFlow + blowdownProperties.energyFlow - feedwaterProperties.energyFlow;
 	fuelEnergy = boilerEnergy / (combustionEfficiency / 100);
 }
 

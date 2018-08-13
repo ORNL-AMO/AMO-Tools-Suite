@@ -44,27 +44,27 @@ public:
 
 	/**
      * Gets all of the feedwater properties
-     * @return std::unordered_map <std::string, double>, feedwater properties
+     * @return SteamSystemModelerTool::FluidProperties feedwater properties
      */
-	std::unordered_map<std::string, double> const & getFeedwaterProperties() const { return feedwaterProperties; }
+	SteamSystemModelerTool::FluidProperties const & getFeedwaterProperties() const { return feedwaterProperties; }
 
 	/**
      * Gets all of the vented steam properties
-     * @return std::unordered_map <std::string, double>, vented steam properties
+     * @return SteamSystemModelerTool::FluidProperties, vented steam properties
      */
-    std::unordered_map<std::string, double> const & getVentedSteamProperties() const { return ventedSteamProperties; }
+	SteamSystemModelerTool::FluidProperties const & getVentedSteamProperties() const { return ventedSteamProperties; }
 
 	/**
      * Gets all of the inlet water properties
-     * @return std::unordered_map <std::string, double>, inlet water properties
+     * @return SteamSystemModelerTool::FluidProperties, inlet water properties
      */
-    std::unordered_map<std::string, double> const & getInletWaterProperties() const { return inletWaterProperties; }
+	SteamSystemModelerTool::FluidProperties const & getInletWaterProperties() const { return inletWaterProperties; }
 
 	/**
      * Gets all of the inlet steam properties
-     * @return std::unordered_map <std::string, double>, inlet steam properties
+     * @return SteamSystemModelerTool::FluidProperties, inlet steam properties
      */
-    std::unordered_map<std::string, double> const & getInletSteamProperties() const { return inletSteamProperties; }
+	SteamSystemModelerTool::FluidProperties const & getInletSteamProperties() const { return inletSteamProperties; }
 
 	/**
      * Gets the deaerator pressure
@@ -183,8 +183,8 @@ private:
     double steamPressure, steamQuantityValue;
     SteamProperties::ThermodynamicQuantity waterQuantityType, steamQuantityType;
 
-    std::unordered_map <std::string, double> feedwaterProperties, ventedSteamProperties, inletWaterProperties;
-    std::unordered_map <std::string, double> inletSteamProperties;
+	SteamSystemModelerTool::FluidProperties feedwaterProperties, ventedSteamProperties, inletWaterProperties;
+	SteamSystemModelerTool::FluidProperties inletSteamProperties;
 };
 
 #endif //AMO_TOOLS_SUITE_DEAERATOR_H

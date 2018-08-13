@@ -35,8 +35,8 @@ public:
 	double getInletQuantityValue() const { return inletQuantityValue; }
 	double getOutletQuantityValue() const { return outletQuantityValue; }
 	TurbineProperty getTurbineProperty() const { return turbineProperty; }
-	std::unordered_map<std::string, double> const & getInletProperties() const { return inletProperties; }
-	std::unordered_map<std::string, double> const & getOutletProperties() const { return outletProperties; }
+	SteamSystemModelerTool::SteamPropertiesOutput const & getInletProperties() const { return inletProperties; }
+	SteamSystemModelerTool::SteamPropertiesOutput const & getOutletProperties() const { return outletProperties; }
 	double getInletEnergyFlow() const { return inletEnergyFlow; }
 	double getOutletEnergyFlow() const { return outletEnergyFlow; }
 	double getPowerOut() const { return powerOut; }
@@ -67,7 +67,7 @@ private:
 	double inletQuantityValue, outletQuantityValue = 0;
 	TurbineProperty turbineProperty;
 
-	std::unordered_map<std::string, double> inletProperties, outletProperties;
+	SteamSystemModelerTool::SteamPropertiesOutput inletProperties, outletProperties;
 
 	double inletEnergyFlow, outletEnergyFlow = 0, energyOut, powerOut, massFlow;
 };

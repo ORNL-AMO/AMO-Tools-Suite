@@ -30,6 +30,41 @@
             ]
         },
         {
+            "target_name": "fan",
+            'include_dirs': [
+                "include",
+                "include/fans",
+                "include/results/",
+                "include/calculator/motor/",
+                "include/calculator/pump/",
+                "include/calculator/util/",
+                "<!(node -e \"require('nan')\")",
+            ],
+            'sources' : [
+                'bindings/fan.cpp',
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/fans/').map(f=>'src/fans/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/pump/').map(f=>'src/calculator/pump/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/motor/').map(f=>'src/calculator/motor/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/results/').map(f=>'src/results/'+f).join(' '))\")"
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
+        },
+        {
             "target_name": "phast",
             'include_dirs': ['include', 'include/calculator/losses', 'include/phast', 'include/calculator/furnace' ,
                 "<!(node -e \"require('nan')\")"
@@ -57,7 +92,7 @@
         },
         {
             "target_name": "psat",
-            'include_dirs': ['include', 'include/psat', 'include/calculator/pump', 'include/calculator/motor', 'include/calculator/util',
+            'include_dirs': ['include', 'include/results', 'include/calculator/pump', 'include/calculator/motor', 'include/calculator/util',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
@@ -65,7 +100,7 @@
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/pump/').map(f=>'src/calculator/pump/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/motor/').map(f=>'src/calculator/motor/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
-                "<!@(node -e \"console.log(require('fs').readdirSync('src/psat/').map(f=>'src/psat/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/results/').map(f=>'src/results/'+f).join(' '))\")",
             ],
             "conditions": [
                 [ 'OS=="mac"', {
@@ -110,12 +145,13 @@
         },
 		{
             "target_name": "db",
-            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses',
+            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses', 'include/calculator/motor',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
                 'bindings/db.cpp',
                 'third_party/sqlite/sqlite3.c',
+                'src/calculator/motor/MotorData.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
             ],

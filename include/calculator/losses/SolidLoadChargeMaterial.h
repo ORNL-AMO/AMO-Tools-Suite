@@ -18,12 +18,6 @@
 #include <string>
 #include "LoadChargeMaterial.h"
 
-/** Latent heat of evaporation for water is 970 Btu/lb */
-#define WATER_EVAPORATION 970.0
-
-/** Heat required temperature is 212.0°F */
-#define HEAT_REQUIRED_TEMP 212.0
-
 /**
  * Solid Load Charge Material class
  * Contains all of the properties of a solid load charge material
@@ -159,9 +153,9 @@ public:
 
     /**
      * Gets the ID of material
-     * @return double, ID number of material
+     * @return int, ID number of material
      */
-    double getID() const {
+    int getID() const {
         return this->id;
     }
 
@@ -358,16 +352,7 @@ public:
     }
 
     /**
-     * Sets the total heat required
-     * @param totalHeat double, total heat required in btu/hr
-     */
-    void setTotalHeat(const double totalHeat) {
-        this->totalHeat = totalHeat;
-    }
-
-
-    /**
-     * bool operator
+     * bool == operator used to compare values in unit testing
      */
     bool operator == (const SolidLoadChargeMaterial& rhs) const
     {
@@ -379,17 +364,49 @@ public:
     }
 
     /**
-     * bool operature
-     */
-    bool operator != (const SolidLoadChargeMaterial& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    /**
      * Obtain the total heat for the solid charge material in Btu/hr
      * */
-    double getTotalHeat();
+	double getTotalHeat() {
+		double const waterBoilTemp = 212.0; // Heat required temperature is 212.0°F
+
+		// Heat required for removal of moisture
+		double hmv;
+		if (waterVaporDischargeTemperature < waterBoilTemp) {
+			//   (H_mv )=m_st×(%w_i )×〖(t〗_wo-t_si)
+			hmv = chargeFeedRate * waterContentCharged * (waterVaporDischargeTemperature - initialTemperature);
+		} else {
+			double const specificHeatWaterVapor = 0.481;
+			double const waterEvaporation = 970.0; // Latent heat of evaporation for water is 970 Btu/lb
+			// (H_mv )=m_st×(%w_i )×(212-t_si )+m_st×(%w_i-%w_o )  ×[970+0.481×〖(t〗_wo-212)]
+			hmv = (chargeFeedRate * waterContentCharged * (waterBoilTemp - initialTemperature))
+				  + chargeFeedRate * (waterContentCharged - waterContentDischarged)
+					* (waterEvaporation + specificHeatWaterVapor * (waterVaporDischargeTemperature - waterBoilTemp));
+		}
+		// (H_mr )=m_st×(%w_0 )×〖(t〗_wo-t_si)
+		double hmr = chargeFeedRate * waterContentDischarged * (waterVaporDischargeTemperature - waterBoilTemp);
+
+		// Heat required for solid
+		double hs;
+		if (dischargeTemperature < meltingPoint) {
+			// (H_s)=m_st×(1-%w_i )×C_ps×(t_so-t_si)
+			hs = chargeFeedRate * (1.0 - waterContentCharged) * specificHeatSolid * (dischargeTemperature - initialTemperature);
+		} else {
+			// (H_s )=m_st×(1-%w_i )×C_ps×(T_sm-t_si )+h_m+C_(pl ×) (t_so-T_sm)
+			hs = chargeFeedRate * (1.0 - waterContentCharged)
+				 * (specificHeatSolid * (meltingPoint - initialTemperature)
+					+ (latentHeat * chargeMelted) + specificHeatLiquid * (dischargeTemperature - meltingPoint) * (chargeMelted)
+					+ (specificHeatSolid * (1 - chargeMelted) * (dischargeTemperature - meltingPoint)));
+		}
+
+		double heatReaction = 0.0;
+		if (thermicReactionType == LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC) {
+			heatReaction = chargeFeedRate * (1.0 - waterContentCharged) * chargeReacted * reactionHeat;
+		}
+
+		// H_t=H_mv+H_mr+H_s±H_r
+		totalHeat = hmv + hmr + hs + heatReaction + additionalHeat;
+		return totalHeat;
+	}
 
 private:
 

@@ -12,7 +12,7 @@
 #ifndef AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 #define AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 
-#include "psat/Pump.h"
+#include <results/InputData.h>
 
 class OptimalPumpEfficiency {
 
@@ -46,7 +46,7 @@ public:
     {}
 
 //    OptimalPumpEfficiency(double rpm, double kinematicViscosity, double stageCount, double flowRate, double head,
-//                          Pump::Speed speed, double actualEfficiency) : rpm(rpm),
+//                          Pump::SpecificSpeed speed, double actualEfficiency) : rpm(rpm),
 //                                                                        kinematicViscosity(kinematicViscosity),
 //                                                                        stageCount(stageCount), flowRate(flowRate),
 //                                                                        head(head), speed(speed),

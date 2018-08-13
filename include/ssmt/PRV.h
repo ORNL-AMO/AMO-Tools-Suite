@@ -78,15 +78,15 @@ public:
 
     /**
      * Gets all of the properties of the inlet steam
-     * @return std::unordered_map <std::string, double>, inlet steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput , inlet steam properties
      */
-    std::unordered_map <std::string, double> const & getInletProperties() const { return inletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const & getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the properties of the outlet steam
-     * @return std::unordered_map <std::string, double>, outlet steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput , outlet steam properties
      */
-    std::unordered_map <std::string, double> const & getOutletProperties() const { return outletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const & getOutletProperties() const { return outletProperties; };
 
     /**
      * Gets the inlet energy flow
@@ -166,7 +166,7 @@ private:
     double inletPressure, quantityValue, inletMassFlow, outletPressure, inletEnergyFlow;
     SteamProperties::ThermodynamicQuantity quantityType;
 
-    std::unordered_map <std::string, double> inletProperties, outletProperties;
+    SteamSystemModelerTool::SteamPropertiesOutput inletProperties, outletProperties;
 };
 
 
@@ -368,21 +368,21 @@ public:
 
     /**
      * Gets all of the properties of the inlet steam
-     * @return std::unordered_map <std::string, double>, inlet steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput, inlet steam properties
      */
-    std::unordered_map <std::string, double> const & getInletProperties() const { return inletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const & getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the properties of the outlet steam
-     * @return std::unordered_map <std::string, double>, outlet steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput, outlet steam properties
      */
-    std::unordered_map <std::string, double> const & getOutletProperties() const { return outletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const & getOutletProperties() const { return outletProperties; };
 
     /**
      * Gets all of the properties of the feedwater steam
-     * @return std::unordered_map <std::string, double>, feedwater steam properties
+     * @return SteamSystemModelerTool::SteamPropertiesOutput, feedwater steam properties
      */
-    std::unordered_map <std::string, double> const & getFeedwaterProperties() const { return feedwaterProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const & getFeedwaterProperties() const { return feedwaterProperties; };
 
     /**
      * Gets the inlet energy flow
@@ -423,7 +423,7 @@ private:
     SteamProperties::ThermodynamicQuantity quantityType, feedwaterQuantityType;
 
     // Out values
-    std::unordered_map <std::string, double> inletProperties, outletProperties, feedwaterProperties;
+    SteamSystemModelerTool::SteamPropertiesOutput inletProperties, outletProperties, feedwaterProperties;
     double inletEnergyFlow, outletMassFlow, outletEnergyFlow, feedwaterMassFlow, feedwaterEnergyFlow;
 };
 

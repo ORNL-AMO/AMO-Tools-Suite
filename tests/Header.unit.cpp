@@ -17,10 +17,10 @@ TEST_CASE( "Calculate Header properties", "[Header][ssmt]") {
 
 	header.setInlets(inlets);
 	CHECK(header.getSpecificEnthalpy() == Approx(1941.73683349));
-	CHECK(header.getHeaderProperties().at("temperature") == Approx(388.8366691795));
-	CHECK(header.getHeaderProperties().at("quality") == Approx(0.65771447961));
+	CHECK(header.getHeaderProperties().temperature == Approx(388.8366691795));
+	CHECK(header.getHeaderProperties().quality == Approx(0.65771447961));
 
 	header.setHeaderPressure(0.15);
 	header.setHeaderPressure(0.173);
-	CHECK(header.getHeaderProperties().at("quality") == Approx(0.65771447961));
+	CHECK(header.getHeaderProperties().quality == Approx(0.65771447961));
 }

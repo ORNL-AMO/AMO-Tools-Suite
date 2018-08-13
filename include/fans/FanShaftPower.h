@@ -1,52 +1,52 @@
 #ifndef AMO_TOOLS_SUITE_FANSHAFTPOWER_H
 #define AMO_TOOLS_SUITE_FANSHAFTPOWER_H
 
+#include <cmath>
+
 class FanRatedInfo {
 public:
-	enum class DriveType {
-		DIRECT,
-		BELT
-	};
-
-	// this currently does not take the field SystemDamperPosition, as it is used "only for reference purposes" as per
-	// page 8 in the algorithm document
-	FanRatedInfo(double fanDamperPosition, double fanSpeed, double motorSpeed, double nc,
-	             double pc, double pbc, DriveType driveType);
+	FanRatedInfo(double const fanSpeed, double const motorSpeed, double const fanSpeedCorrected,
+				 double const densityCorrected, double const pressureBarometricCorrected)
+			: fanSpeed(fanSpeed), motorSpeed(motorSpeed), fanSpeedCorrected(fanSpeedCorrected),
+			  densityCorrected(densityCorrected), pressureBarometricCorrected(pressureBarometricCorrected)
+	{}
 
 private:
-	double const fanDamperPosition, fanSpeed, motorSpeed, nc, pc, pbc;
-	DriveType const driveType;
-	friend class Fan;
+	double const fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected;
+	friend class Fan203;
 };
 
 class FanShaftPower {
 public:
-	// method 1
-	FanShaftPower(bool fanEquippedWithVFD, bool mainsVoltageDataAvailable, double ratedHp,
-	              double synchronousSpeed, double npv, double fla, double hi,
-	              double efficiencyMotor, double efficiencyVFD, double efficiencyBelt,
-	              FanRatedInfo::DriveType driveType, double sumSEF);
+	FanShaftPower(const double motorShaftPower, const double efficiencyMotor, const double efficiencyVFD,
+				  const double efficiencyBelt, const double sumSEF)
+			: efficiencyMotor(efficiencyMotor / 100), efficiencyVFD(efficiencyVFD / 100), efficiencyBelt(efficiencyBelt / 100),
+			  sumSEF(sumSEF)
+	{
+		motorPowerOutput = motorShaftPower * this->efficiencyMotor * this->efficiencyVFD;
+		fanPowerInput = motorPowerOutput * this->efficiencyBelt;
+	}
 
-	// method 2
-	FanShaftPower(bool fanEquippedWithVFD, bool mainsVoltageDataAvailable, double ratedHp,
-	              double synchronousSpeed, double npv, double fla, double voltage,
-	              double amps, double powerFactorAtLoad, double efficiencyMotor,
-	              double efficiencyVFD, double efficiencyBelt, FanRatedInfo::DriveType driveType, double sumSEF);
+	/**
+	 * Calculates and returns motorShaftPower - used to construct a FanShaftPower object
+	 * @param voltage const double
+	 * @param amps const double
+	 * @param powerFactorAtLoad const double
+	 * @return MotorShaftPower, const double
+	 */
+	static double calculateMotorShaftPower(const double voltage, const double amps, const double powerFactorAtLoad) {
+		return voltage * amps * powerFactorAtLoad * std::sqrt(3);
+	}
 
-	double getFanShaftPower() const { return hFi; }
+	double getFanPowerInput() const { return fanPowerInput; }
 
 	double getSEF() const { return sumSEF; }
 
 private:
-	const bool fanEquippedWithVFD, mainsVoltageDataAvailable;
-	const double ratedHp, synchronousSpeed, npv, fla;
-	const double voltage = 0, amps = 0, powerFactorAtLoad = 0;
-	const double hi = 0;
-	const double efficiencyMotor, efficiencyVFD, efficiencyBelt, powerFactor = 0;
-	const FanRatedInfo::DriveType driveType;
+	const double efficiencyMotor, efficiencyVFD, efficiencyBelt;
 	const double sumSEF;
 
-	double hMo, hFi;
+	double motorPowerOutput, fanPowerInput;
 };
 
 

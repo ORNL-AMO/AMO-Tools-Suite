@@ -7,18 +7,47 @@
 // to be inherited by planes 3 and 3a, 3b
 class VelocityPressureTraverseData {
 public:
-	enum class TubeType {
-		STANDARD,
-		STYPE
-	};
+	double getPv3Value() const {
+		return pv3;
+	}
 
+	double get75percentRule() const {
+		return percent75Rule;
+	}
 protected:
-
 	// protected constructor to be used only during the construction of its derived classes
-	VelocityPressureTraverseData(TubeType pitotTubeType, double pitotTubeCoefficient,
-	                             std::vector< std::vector< double > > & traverseHoleData);
+	VelocityPressureTraverseData(const double pitotTubeCoefficient,
+	                             std::vector< std::vector< double > > traverseHoleData)
+			: pitotTubeCoefficient(pitotTubeCoefficient), traverseHoleData(std::move(traverseHoleData))
+	{
+		double maxPv3r = 0.0;
+		double sumPv3r = 0.0;
+		for (auto & row : this->traverseHoleData) {
+			for (double & val : row) {
+				if (val <= 0) {
+					val = 0;
+					continue;
+				}
+				val *= std::pow(pitotTubeCoefficient, 2);
+				if (val > maxPv3r) {
+					maxPv3r = val;
+				}
+				sumPv3r += std::sqrt(val);
+			}
+		}
 
-	const TubeType pitotTubeType;
+		pv3 = std::pow(sumPv3r / (this->traverseHoleData.size() * this->traverseHoleData[0].size()), 2);
+
+		std::size_t count = 0;
+		for (auto & row : this->traverseHoleData) {
+			for (auto & val : row) {
+				if (val > (0.1 * maxPv3r)) count++;
+			}
+		}
+
+		percent75Rule = count / static_cast<double>(this->traverseHoleData.size() * this->traverseHoleData[0].size());
+	}
+
 	const double pitotTubeCoefficient;
 	double pv3 = 0, percent75Rule = 0;
 
@@ -29,94 +58,37 @@ protected:
 
 class Planar {
 protected:
+	Planar(const double area, const double tdx, const double pbx, const double psx)
+			: dryBulbTemperature(tdx), barometricPressure(pbx), area(area), staticPressure(psx)
+	{}
 
-	Planar(double circularDuctDiameter, double tdx, double pbx, double psx);
-
-	Planar(double rectLength, double rectWidth, double tdx, double pbx, double psx);
-
-	Planar(double rectLength, double rectWidth, unsigned noInletBoxes, double tdx,
-	       double pbx, double psx);
-
-//	where tdx = dryBulbTemperature and pbx = barometric pressure
-	const double tdx, pbx, area;
+	const double dryBulbTemperature, barometricPressure, area;
 	double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
-	double psx = 0;
+	double staticPressure = 0;
 
 	friend class PlaneData;
-	friend class Fan;
+	friend class Fan203;
 };
 
-class FanInletFlange : public Planar {
+class FlangePlane : public Planar {
 public:
-	FanInletFlange(double circularDuctDiameter, double tdx, double pbx);
-
-	FanInletFlange(double rectLength, double rectWidth, double tdx, double pbx);
-
-	FanInletFlange(double rectLength, double rectWidth, unsigned noInletBoxes,
-	               double tdx, double pbx);
+	FlangePlane(const double area, const double tdx, const double pbx)
+			: Planar(area, tdx, pbx, 0) {}
 };
 
-class FanOrEvaseOutletFlange : public Planar {
+class TraversePlane : public Planar, public VelocityPressureTraverseData {
 public:
-	FanOrEvaseOutletFlange(double circularDuctDiameter, double tdx, double pbx);
-
-	FanOrEvaseOutletFlange(double rectLength, double rectWidth, double tdx, double pbx);
-
-	FanOrEvaseOutletFlange(double rectLength, double rectWidth, unsigned noInletBoxes,
-	                       double tdx, double pbx);
+	TraversePlane(const double area, const double tdx, const double pbx, const double psx,
+				  const double pitotTubeCoefficient, std::vector< std::vector< double > > traverseHoleData)
+			: Planar(area, tdx, pbx, psx),
+			  VelocityPressureTraverseData(pitotTubeCoefficient, std::move(traverseHoleData))
+	{}
 };
 
-
-class FlowTraverse : public Planar, public VelocityPressureTraverseData {
+class MstPlane : public Planar {
 public:
-	FlowTraverse(double circularDuctDiameter, double tdx, double pbx,
-	             double psx, TubeType tubeType, double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > & traverseHoleData);
-
-	FlowTraverse(double rectLength, double rectWidth, double tdx,
-	             double pbx, double psx, TubeType tubeType, double pitotTubeCoefficient,
-	             std::vector< std::vector< double > > & traverseHoleData);
-
-	FlowTraverse(double rectLength, double rectWidth, unsigned noInletBoxes,
-	             double tdx, double pbx, double psx, TubeType tubeType,
-	             double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
+	MstPlane(const double area, const double tdx, const double pbx, const double psx)
+			: Planar(area, tdx, pbx, psx) {}
 };
-
-class AddlTravPlane : public Planar, public VelocityPressureTraverseData {
-public:
-	AddlTravPlane(double circularDuctDiameter, double tdx, double pbx,
-	              double psx, TubeType tubeType, double pitotTubeCoefficient,
-	              std::vector< std::vector< double > > & traverseHoleData);
-
-	AddlTravPlane(double rectLength, double rectWidth, double tdx,
-	              double pbx, double psx, TubeType tubeType, double pitotTubeCoefficient,
-	              std::vector< std::vector< double > > & traverseHoleData);
-
-	AddlTravPlane(double rectLength, double rectWidth, unsigned noInletBoxes,
-	              double tdx, double pbx, double psx, TubeType tubeType,
-	              double pitotTubeCoefficient, std::vector< std::vector< double > > & traverseHoleData);
-};
-
-class InletMstPlane : public Planar {
-public:
-	InletMstPlane(double circularDuctDiameter, double tdx, double pbx, double psx);
-
-	InletMstPlane(double rectLength, double rectWidth, double tdx, double pbx, double psx);
-
-	InletMstPlane(double rectLength, double rectWidth, unsigned noInletBoxes, double tdx,
-	              double pbx, double psx);
-};
-
-class OutletMstPlane : public Planar {
-public:
-	OutletMstPlane(double circularDuctDiameter, double tdx, double pbx, double psx);
-
-	OutletMstPlane(double rectLength, double rectWidth, double tdx, double pbx,
-	               double psx);
-
-	OutletMstPlane(double rectLength, double rectWidth, unsigned noInletBoxes,
-	               double tdx, double pbx, double psx);
-};
-
 
 #endif //AMO_TOOLS_SUITE_PLANAR_H

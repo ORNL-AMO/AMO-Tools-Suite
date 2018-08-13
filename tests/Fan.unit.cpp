@@ -1,9 +1,15 @@
 #include "catch.hpp"
-#include <fans/Fan.h>
+#include <fans/Fan203.h>
+#include <fans/FanEnergyIndex.h>
 #include <fans/FanCurve.h>
 
-TEST_CASE( "Fan", "[Fan]") {
-	FanRatedInfo fanRatedInfo(40, 1191, 1191, 1170, 0.05, 26.28, FanRatedInfo::DriveType::DIRECT);
+TEST_CASE( "FanEnergyIndex", "[FanEnergyIndex]") {
+	CHECK(Approx(FanEnergyIndex(129691, -16, 1, 0.07024, 450).calculateEnergyIndex()) == 0.9678686743);
+	CHECK(Approx(FanEnergyIndex(80364, -9, 1, 0.07024, 150).calculateEnergyIndex()) == 1.0776769184);
+}
+
+TEST_CASE( "Fan203", "[Fan203]") {
+	FanRatedInfo fanRatedInfo(1191, 1191, 1170, 0.05, 26.28);
 
 	std::vector< std::vector< double > > traverseHoleData = {
 			{
@@ -17,11 +23,11 @@ TEST_CASE( "Fan", "[Fan]") {
 			}
 	};
 
-	FanInletFlange fanInletFlange(143.63, 32.63, 2, 123, 26.57);
-	FanOrEvaseOutletFlange fanOrEvaseOutletFlange(70, 78, 132.7, 26.57);
+	const double area = (143.63 * 32.63 * 2) / 144.0;
+	FlangePlane fanInletFlange(area, 123, 26.57);
+	FlangePlane fanOrEvaseOutletFlange(70 * 78 / 144.0, 132.7, 26.57);
 
-	FlowTraverse flowTraverse(143.63, 32.63, 123.0, 26.57, -18.1, VelocityPressureTraverseData::TubeType::STYPE,
-	                          std::sqrt(0.762), traverseHoleData);
+	TraversePlane flowTraverse(143.63 * 32.63 / 144.0, 123.0, 26.57, -18.1, std::sqrt(0.762), traverseHoleData);
 
 	traverseHoleData = {
 			{
@@ -35,46 +41,49 @@ TEST_CASE( "Fan", "[Fan]") {
 			}
 	};
 
-	std::vector<AddlTravPlane> addlTravPlanes({
-			                                          {143.63, 32.63, 123.0, 26.57, -17.0, VelocityPressureTraverseData::TubeType::STYPE, std::sqrt(0.762), traverseHoleData}
+	std::vector<TraversePlane> addlTravPlanes({
+			                                          {143.63 * 32.63 / 144.0, 123.0, 26.57, -17.0, std::sqrt(0.762), traverseHoleData}
 	                                          });
 
-	InletMstPlane inletMstPlane(143.63, 32.63, 2, 123.0, 26.57, -17.55);
-	OutletMstPlane outletMstPlane(55.42, 60.49, 132.7, 26.57, 1.8);
+	MstPlane inletMstPlane(area, 123.0, 26.57, -17.55);
+	MstPlane outletMstPlane(55.42 * 60.49 / 144.0, 132.7, 26.57, 1.8);
 
 	auto planeData = PlaneData(fanInletFlange, fanOrEvaseOutletFlange, flowTraverse, addlTravPlanes, inletMstPlane,
-	                           outletMstPlane, false, false, 0, 0.627, true);
+	                           outletMstPlane, 0, 0.627, true);
 
 	BaseGasDensity baseGasDensity(123, -17.6, 26.57, 0.0547, BaseGasDensity::GasType::AIR);
 
-	auto fanShaftPower = FanShaftPower(true, false, 1750, 1200, 4160, 210, 4200, 205, 0.88, 95.0, 100, 100, FanRatedInfo::DriveType::DIRECT, 0);
+	auto const motorShaftPower = FanShaftPower::calculateMotorShaftPower(4200, 205, 0.88) / 746.0;
+	auto fanShaftPower = FanShaftPower(motorShaftPower, 95.0, 100, 100, 0);
 
-	auto fan = Fan(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
+	auto fan = Fan203(fanRatedInfo, planeData, baseGasDensity, fanShaftPower);
 	auto results = fan.calculate();
 
-	auto const fanEfficiencyTp = results["fanEfficiencyTp"];
-	auto const fanEfficiencySp = results["fanEfficiencySp"];
-	auto const fanEfficiencySpr = results["fanEfficiencySpr"];
-	auto const Qc = results["Qc"];
-	auto const Ptc = results["Ptc"];
-	auto const Psc = results["Psc"];
-	auto const SPRc = results["SPRc"];
-	auto const Hc = results["Hc"];
-	auto const Kpc = results["Kpc"];
+	CHECK(results.fanEfficiencyTotalPressure == Approx(53.607386));
+	CHECK(results.fanEfficiencyStaticPressure == Approx(49.206914));
+	CHECK(results.fanEfficiencyStaticPressureRise == Approx(50.768875));
 
-	CHECK(fanEfficiencyTp == Approx(53.607386));
-	CHECK(fanEfficiencySp == Approx(49.206914));
-	CHECK(fanEfficiencySpr == Approx(50.768875));
-	// TODO add checks for other stuff besides efficiency
+	CHECK(results.asTested.flow == Approx(250332.6394178045));
+	CHECK(results.asTested.kpc == Approx(0.9982905074));
+	CHECK(results.asTested.power == Approx(1671.2107816151));
+	CHECK(results.asTested.pressureStatic == Approx(21.2207447999));
+	CHECK(results.asTested.pressureTotal == Approx(23.1184721997));
+	CHECK(results.asTested.staticPressureRise == Approx(21.8943488943));
+
+	CHECK(results.converted.flow == Approx(245498.3175715673));
+	CHECK(results.converted.kpc == Approx(0.986542913));
+	CHECK(results.converted.power == Approx(1445.5400545013));
+	CHECK(results.converted.pressureStatic == Approx(18.6846696404));
+	CHECK(results.converted.pressureTotal == Approx(20.355601074));
+	CHECK(results.converted.staticPressureRise == Approx(19.277771819));
 }
 
-TEST_CASE( "FanCurve", "[Fan][FanCurve]") {
+TEST_CASE( "FanCurve", "[Fan203][FanCurve]") {
 	// using row 2 appendix 1
 	double density = 0.0308, n = 1180, densityC = 0.0332, nC = 1187, pb = 29.36;
 	double pbC = 29.36, pt1F = -0.93736, gamma = 1.4, gammaC = 1.4, a1 = 34, a2 = 12.7;
 	FanCurveType curveType = FanCurveType::FanStaticPressure;
 
-//	BaseCurve(const double flow, const double pressure, const double power)
 	std::vector<FanCurveData::BaseCurve> baseCurveData = {
 			{0, 22.3, 115},
 			{14410, 22.5, 154},

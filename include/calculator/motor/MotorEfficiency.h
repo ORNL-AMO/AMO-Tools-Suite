@@ -12,8 +12,7 @@
 #define AMO_LIBRARY_MOTOREFFICIENCY_H
 
 #include <array>
-#include "psat/Motor.h"
-#include "psat/FieldData.h"
+#include <results/InputData.h>
 #include <exception>
 #include <stdexcept>
 
@@ -44,7 +43,7 @@ public:
      * @param specifiedEfficiency, efficiency of SPECIFIED efficiency class motor (optional)
      * @return double, motor efficiency as %
      */
-    double calculate(double loadFactor, double specifiedEfficiency = 0);
+    double calculate(double loadFactor, double specifiedEfficiency = -1);
 
     /**
      * calculate25intervals(): Calculates the motor efficiency given at 25% intervals of load factor.
@@ -117,22 +116,6 @@ public:
     }
 
     /**
-     * Gets the load estimation method
-     * @return FieldData::LoadEstimationMethod, classification of load estimation method
-     */
-//    FieldData::LoadEstimationMethod getLoadEstimationMethod() const {
-//        return loadEstimationMethod;
-//    }
-
-    /**
-     * Sets the load estimation method
-     * @param loadEstimationMethod FieldData::LoadEstimationMethod, classification of load estimation method
-     */
-//    void setLoadEstimationMethod(FieldData::LoadEstimationMethod loadEstimationMethod) {
-//        this->loadEstimationMethod = loadEstimationMethod;
-//    }
-
-    /**
      * Gets the motor power in kWh
      * @return double, motor power in kWh
      */
@@ -188,22 +171,6 @@ public:
         return kWloss0;
     }
 
-    /**
-     * Gets the load factor
-     * @return double, load factor - unitless
-     */
-//    double getLoadFactor() const {
-//        return loadFactor;
-//    }
-
-    /**
-     * Sets the load factor
-     * @param loadFactor double, load factor - unitless
-     */
-//    void setLoadFactor(double loadFactor) {
-//        this->loadFactor = loadFactor;
-//    }
-
 private:
     const std::array< std::array<double, 4>, 5> determinePartialLoadCoefficients(std::size_t pole) const;
 
@@ -211,16 +178,12 @@ private:
     double motorEff = 0.0;
     double motorRpm;
     Motor::EfficiencyClass efficiencyClass;
-//    double specifiedEfficiency;
     double hp;
-//    FieldData::LoadEstimationMethod loadEstimationMethod;
     double motorKwh;
     double motorAmps;
     double kWloss0 = 0.0;
-    //double ratedVoltage;
     double actualEfficiency;
     double motorRatedPower;
-//    double loadFactor = 0;
 };
 
 
