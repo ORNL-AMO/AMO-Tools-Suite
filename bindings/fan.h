@@ -156,7 +156,7 @@ NAN_METHOD(fanResultsExisting) {
 
 	double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specified_drive_efficiency", inp);
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency", inp);
     }
     else {
         specifiedDriveEfficiency = 1;
@@ -213,7 +213,7 @@ NAN_METHOD(fanResultsModified) {
 
 	double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specified_drive_efficiency", inp);
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency", inp);
     }
     else {
         specifiedDriveEfficiency = 1;
@@ -269,7 +269,7 @@ NAN_METHOD(fanResultsOptimal) {
 
 	double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specified_drive_efficiency", inp);
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency", inp);
     }
     else {
         specifiedDriveEfficiency = 1;

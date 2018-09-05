@@ -262,7 +262,7 @@ TEST_CASE( "PSATResults - specified drive", "[PSAT results]" ) {
 	CHECK(ex.motorPowerFactor * 100 == Approx(83.4292940632));
 	CHECK(ex.motorCurrent == Approx(80.5));
 	CHECK(ex.motorPower == Approx(267.548741554));
-	CHECK(ex.annualEnergy == Approx(2343.7));
+	CHECK(ex.annualEnergy == Approx(2343.7269760207537));
 	CHECK(ex.annualCost * 1000.0 == Approx(91405.352064809));
 }
 

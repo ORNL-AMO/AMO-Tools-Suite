@@ -90,7 +90,7 @@ test('psatExisting2', function (t) {
         'motor_rated_speed': 1185, 'efficiency_class': 0, 'efficiency': 95, 'motor_rated_voltage': 2300,
         'motor_rated_fla': 83, 'margin': 0.15, 'operating_fraction': 1.00, 'cost_kw_hour': 0.039, 'flow_rate': 2800,
         'head': 104.0, 'load_estimation_method': 1, 'motor_field_power': 150.0, 'motor_field_current': 80.5,
-        'motor_field_voltage': 2300, 'baseline_pump_efficiency': 0.382, 'specified_drive_efficiency': 0.95
+        'motor_field_voltage': 2300, 'baseline_pump_efficiency': 0.382, 'specifiedDriveEfficiency': 0.95
     };
 
     var psatResult = bindings.resultsExisting(inp);
@@ -103,7 +103,7 @@ test('psatExisting2', function (t) {
     t.equal(rnd(psatResult.motor_power_factor), rnd(83.4292940632), 'existing motor power factor is ' + psatResult.motor_power_factor);
     t.equal(rnd(psatResult.motor_current), rnd(80.5), 'existing motor current is ' + psatResult.motor_current);
     t.equal(rnd(psatResult.motor_power), rnd(267.548741554), 'existing motor power is ' + psatResult.motor_power);
-    t.equal(rnd(psatResult.annual_energy), rnd(2343.7), 'existing annual energy is ' + psatResult.annual_energy);
+    t.equal(rnd(psatResult.annual_energy), rnd(2343.7269760207537), 'existing annual energy is ' + psatResult.annual_energy);
     t.equal(rnd(psatResult.annual_cost), rnd(91405.352064809), 'existing annual cost is ' + psatResult.annual_cost);
 });
 

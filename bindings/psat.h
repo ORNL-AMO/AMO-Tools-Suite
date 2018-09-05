@@ -148,12 +148,12 @@ NAN_METHOD(resultsExistingAndOptimal) {
     Pump::Style style1 = style();
     Motor::Drive drive1 = drive();
 
-    double specifiedEfficiency;
+    double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedEfficiency = Get("specified_drive_efficiency");
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
     }
     else {
-        specifiedEfficiency = 1;
+        specifiedDriveEfficiency = 1;
     }
 
     double viscosity = Get("kinematic_viscosity");
@@ -182,7 +182,7 @@ NAN_METHOD(resultsExistingAndOptimal) {
     double motor_field_current = Get("motor_field_current");
     double motor_field_voltage = Get("motor_field_voltage");
 
-    Pump::Input pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed, specifiedEfficiency);
+    Pump::Input pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed, specifiedDriveEfficiency);
     Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
     Pump::FieldData fd(flow, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
     PSATResult psat(pump, motor, fd, fraction, cost);
@@ -225,12 +225,12 @@ NAN_METHOD(resultsExisting) {
     Pump::Style style1 = style();
     Motor::Drive drive1 = drive();
 //    Pump::SpecificSpeed fixed_speed = speed();
-    double specifiedEfficiency;
+    double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedEfficiency = Get("specified_drive_efficiency");
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
     }
     else {
-        specifiedEfficiency = 1;
+        specifiedDriveEfficiency = 1;
     }
 
     Motor::LineFrequency lineFrequency = line();
@@ -239,18 +239,7 @@ NAN_METHOD(resultsExisting) {
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
-              Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::SpecificSpeed::FIXED_SPEED, specifiedEfficiency);
-
-
-    // if (drive1 != Motor::Drive::SPECIFIED) {
-    //     pump = Pump::Input(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
-    //           Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::SpecificSpeed::FIXED_SPEED);
-    // }
-    // else {
-    //     pump = Pump::Input(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
-    //           Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::SpecificSpeed::FIXED_SPEED, specifiedEfficiency);
-    // }
-
+              Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::SpecificSpeed::FIXED_SPEED, specifiedDriveEfficiency);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"));
@@ -300,12 +289,12 @@ NAN_METHOD(resultsModified) {
     Motor::Drive drive1 = drive();
     Pump::SpecificSpeed fixed_speed = speed();
 
-    double specifiedEfficiency;
+    double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedEfficiency = Get("specified_drive_efficiency");
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
     }
     else {
-        specifiedEfficiency = 1;
+        specifiedDriveEfficiency = 1;
     }
 
     Motor::LineFrequency lineFrequency = line();
@@ -314,7 +303,7 @@ NAN_METHOD(resultsModified) {
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
-              Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed, specifiedEfficiency);
+              Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed, specifiedDriveEfficiency);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
@@ -362,12 +351,12 @@ NAN_METHOD(resultsOptimal) {
     Motor::Drive drive1 = drive();
     Pump::SpecificSpeed fixed_speed = speed();
 
-    double specifiedEfficiency;
+    double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedEfficiency = Get("specified_drive_efficiency");
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
     }
     else {
-        specifiedEfficiency = 1;
+        specifiedDriveEfficiency = 1;
     }
 
     Motor::LineFrequency lineFrequency = line();
@@ -376,7 +365,7 @@ NAN_METHOD(resultsOptimal) {
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
 
     Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
-              Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed, specifiedEfficiency);
+              Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed, specifiedDriveEfficiency);
 
     Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
                 Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
