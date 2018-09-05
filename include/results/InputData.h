@@ -52,8 +52,8 @@ struct Motor {
 	      const EfficiencyClass efficiencyClass, const double specifiedEfficiency, const double motorRatedVoltage,
 	      const double fullLoadAmps, const double sizeMargin = 1)
 			: lineFrequency(lineFrequency), motorRatedPower(motorRatedPower), motorRpm(motorRpm),
-			  specifiedEfficiency(specifiedEfficiency), motorRatedVoltage(motorRatedVoltage),
-			  fullLoadAmps(fullLoadAmps), sizeMargin(sizeMargin), efficiencyClass(efficiencyClass)
+			  efficiencyClass(efficiencyClass), specifiedEfficiency(specifiedEfficiency), 
+			  motorRatedVoltage(motorRatedVoltage), fullLoadAmps(fullLoadAmps), sizeMargin(sizeMargin)
 	{};
 
 	const LineFrequency lineFrequency;
@@ -63,7 +63,7 @@ struct Motor {
 
 namespace Fan {
 	struct Input {
-		Input(double const fanSpeed, const double airDensity, const Motor::Drive drive)
+		Input(double const fanSpeed, const double airDensity, const Motor::Drive drive, const double specifiedEfficiency)
 				: fanSpeed(fanSpeed), airDensity(airDensity), drive(drive), specifiedEfficiency(specifiedEfficiency)
 		{}
 

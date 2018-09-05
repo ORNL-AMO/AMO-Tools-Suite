@@ -81,6 +81,32 @@ test('psatExisting', function (t) {
     t.equal(psatResult.annual_cost, 35040, 'existing annual cost is ' + psatResult.annual_cost);
 });
 
+test('psatExisting2', function (t) {
+    t.plan(11);
+    t.type(bindings.resultsExisting, 'function');
+    var inp = {
+        'pump_style': 2, 'pump_specified': 90, 'pump_rated_speed':1185, 'drive': 4, 'kinematic_viscosity': 1.0,
+        'specific_gravity': 0.99, 'stages': 1.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 350,
+        'motor_rated_speed': 1185, 'efficiency_class': 0, 'efficiency': 95, 'motor_rated_voltage': 2300,
+        'motor_rated_fla': 83, 'margin': 0.15, 'operating_fraction': 1.00, 'cost_kw_hour': 0.039, 'flow_rate': 2800,
+        'head': 104.0, 'load_estimation_method': 1, 'motor_field_power': 150.0, 'motor_field_current': 80.5,
+        'motor_field_voltage': 2300, 'baseline_pump_efficiency': 0.382, 'specified_drive_efficiency': 0.95
+    };
+
+    var psatResult = bindings.resultsExisting(inp);
+
+    t.equal(rnd(psatResult.pump_efficiency), rnd(22.5984060923), 'existing pump efficiency is ' + psatResult.pump_efficiency);
+    t.equal(psatResult.motor_rated_power, 350, 'existing motor rated power is ' + psatResult.motor_rated_power);
+    t.equal(rnd(psatResult.motor_shaft_power), rnd(338.9835681041), 'existing motor shaft power is ' + psatResult.motor_shaft_power);
+    t.equal(rnd(psatResult.pump_shaft_power), rnd(322.0343896989), 'existing pump shaft power is ' + psatResult.pump_shaft_power);
+    t.equal(rnd(psatResult.motor_efficiency), rnd(94.518008321), 'existing motor efficiency is ' + psatResult.motor_efficiency);
+    t.equal(rnd(psatResult.motor_power_factor), rnd(83.4292940632), 'existing motor power factor is ' + psatResult.motor_power_factor);
+    t.equal(rnd(psatResult.motor_current), rnd(80.5), 'existing motor current is ' + psatResult.motor_current);
+    t.equal(rnd(psatResult.motor_power), rnd(267.548741554), 'existing motor power is ' + psatResult.motor_power);
+    t.equal(rnd(psatResult.annual_energy), rnd(2343.7), 'existing annual energy is ' + psatResult.annual_energy);
+    t.equal(rnd(psatResult.annual_cost), rnd(91405.352064809), 'existing annual cost is ' + psatResult.annual_cost);
+});
+
 test('psatOptimal', function (t) {
     t.plan(11);
     t.type(bindings.resultsOptimal, 'function');

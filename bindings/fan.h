@@ -152,7 +152,17 @@ NAN_METHOD(fanResultsExisting) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
+	Motor::Drive drive1 = GetEnumVal<Motor::Drive>("drive", inp);
+
+	double specifiedDriveEfficiency;
+    if (drive1 == Motor::Drive::SPECIFIED) {
+        specifiedDriveEfficiency = Get("specified_drive_efficiency", inp);
+    }
+    else {
+        specifiedDriveEfficiency = 1;
+    }
+
+	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), drive1, specifiedDriveEfficiency};
 
 	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
 	double const motorRatedPower = Get("motorRatedPower", inp);
@@ -198,8 +208,17 @@ NAN_METHOD(fanResultsExisting) {
 NAN_METHOD(fanResultsModified) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
+    
+	Motor::Drive drive1 = GetEnumVal<Motor::Drive>("drive", inp);
 
-	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
+	double specifiedDriveEfficiency;
+    if (drive1 == Motor::Drive::SPECIFIED) {
+        specifiedDriveEfficiency = Get("specified_drive_efficiency", inp);
+    }
+    else {
+        specifiedDriveEfficiency = 1;
+    }
+	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), drive1, specifiedDriveEfficiency};
 
 	double const measuredVoltage = Get("measuredVoltage", inp);
 	double const measuredAmps = Get("measuredAmps", inp);
@@ -221,7 +240,7 @@ NAN_METHOD(fanResultsModified) {
 
 	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
 
-	FanResult result = {fanInput, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+	FanResult result = {input, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
 
 	const double fanEfficiency = GetBool("isSpecified", inp) ? Get("userInputFanEfficiency", inp) / 100 : Get("fanEfficiency", inp) / 100;
 
@@ -246,7 +265,17 @@ NAN_METHOD(fanResultsOptimal) {
 	inp = info[0]->ToObject();
 	r = Nan::New<Object>();
 
-	Fan::Input fanInput = {Get("fanSpeed", inp), Get("airDensity", inp), GetEnumVal<Motor::Drive>("drive", inp)};
+	Motor::Drive drive1 = GetEnumVal<Motor::Drive>("drive", inp);
+
+	double specifiedDriveEfficiency;
+    if (drive1 == Motor::Drive::SPECIFIED) {
+        specifiedDriveEfficiency = Get("specified_drive_efficiency", inp);
+    }
+    else {
+        specifiedDriveEfficiency = 1;
+    }
+
+	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), drive1, specifiedDriveEfficiency};
 
 	double const measuredVoltage = Get("measuredVoltage", inp);
 	double const measuredAmps = Get("measuredAmps", inp);
@@ -268,7 +297,7 @@ NAN_METHOD(fanResultsOptimal) {
 
 	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
 
-	FanResult result = {fanInput, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+	FanResult result = {input, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
 
 	auto const output = GetBool("isSpecified", inp) ? result.calculateOptimal(fanFieldData, Get("userInputFanEfficiency", inp) / 100)
 	                                                : result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
