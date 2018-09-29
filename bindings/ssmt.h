@@ -23,11 +23,11 @@
 using namespace Nan;
 using namespace v8;
 
-Local<Object> inp;
-Local<Object> r;
+Local <Object> inp;
+Local <Object> r;
 
-double Get(std::string const & nm) {
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+double Get(std::string const &nm) {
+    Local <String> getName = Nan::New<String>(nm).ToLocalChecked();
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
@@ -36,8 +36,8 @@ double Get(std::string const & nm) {
     return rObj->NumberValue();
 }
 
-bool GetBool(std::string const & key) {
-    Local<String> getName = Nan::New<String>(key).ToLocalChecked();
+bool GetBool(std::string const &key) {
+    Local <String> getName = Nan::New<String>(key).ToLocalChecked();
 
     auto rObj = inp->ToObject()->Get(getName);
     if (rObj->IsUndefined()) {
@@ -46,15 +46,15 @@ bool GetBool(std::string const & key) {
     return rObj->BooleanValue();
 }
 
-void SetR(std::string const & nm, double n) {
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    Local<Number> getNum = Nan::New<Number>(n);
+void SetR(std::string const &nm, double n) {
+    Local <String> getName = Nan::New<String>(nm).ToLocalChecked();
+    Local <Number> getNum = Nan::New<Number>(n);
     Nan::Set(r, getName, getNum);
 }
 
-void SetRobject(std::string const & nm, double n, Local<Object> obj) {
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    Local<Number> getNum = Nan::New<Number>(n);
+void SetRobject(std::string const &nm, double n, Local <Object> obj) {
+    Local <String> getName = Nan::New<String>(nm).ToLocalChecked();
+    Local <Number> getNum = Nan::New<Number>(n);
     Nan::Set(obj, getName, getNum);
 }
 
@@ -79,11 +79,11 @@ SteamProperties::ThermodynamicQuantity steamThermodynamicQuantity() {
 }
 
 NAN_METHOD(steamPropertiesData) {
-	inp = info[0]->ToObject();
-	r = Nan::New<Object>();
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
 
 
-	if (GetBool("wantEntropy")) {
+    if (GetBool("wantEntropy")) {
         std::vector<std::array<double, 3>> results;
         auto const pressure = Get("pressure");
 
@@ -108,8 +108,8 @@ NAN_METHOD(steamPropertiesData) {
         Nan::Set(r, Nan::New<String>("results").ToLocalChecked(), data);
         info.GetReturnValue().Set(r);
     } else {
-        std::vector <std::array<double, 4>>  results;
-		double const temperature = Get("temperature");
+        std::vector<std::array<double, 4>> results;
+        double const temperature = Get("temperature");
 
         auto const iterate = [&results, temperature](double pressureStart, double pressureEnd, double pressureStep) {
             const double a = 0.000000001;
@@ -213,7 +213,7 @@ NAN_METHOD(steamProperties) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-	try {
+    try {
         SteamProperties::ThermodynamicQuantity quantity = thermodynamicQuantity();
         auto const results = SteamProperties(Get("pressure"), quantity, Get("quantityValue")).calculate();
         SetR("pressure", results.pressure);
@@ -222,7 +222,7 @@ NAN_METHOD(steamProperties) {
         SetR("specificEntropy", results.specificEntropy);
         SetR("quality", results.quality);
         SetR("specificVolume", results.specificVolume);
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in steamProperties - ssmt.h: " + what).c_str());
     }
@@ -234,7 +234,7 @@ NAN_METHOD(boiler) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-	try {
+    try {
         SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
 
         auto const b = Boiler(Get("deaeratorPressure"), Get("combustionEfficiency"), Get("blowdownRate"),
@@ -268,7 +268,7 @@ NAN_METHOD(boiler) {
         SetR("feedwaterEnergyFlow", results3.energyFlow);
         SetR("boilerEnergy", b.getBoilerEnergy());
         SetR("fuelEnergy", b.getFuelEnergy());
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in boiler - ssmt.h: " + what).c_str());
     }
@@ -303,7 +303,7 @@ NAN_METHOD(heatLoss) {
         SetR("outletMassFlow", results2.massFlow);
         SetR("outletEnergyFlow", results2.energyFlow);
         SetR("heatLoss", hl.getHeatLoss());
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in heatLoss - ssmt.h: " + what).c_str());
     }
@@ -347,7 +347,7 @@ NAN_METHOD(flashTank) {
         SetR("outletLiquidQuality", 0);
         SetR("outletLiquidMassFlow", results3.massFlow);
         SetR("outletLiquidEnergyFlow", results3.energyFlow);
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in flashTank - ssmt.h: " + what).c_str());
     }
@@ -381,7 +381,7 @@ NAN_METHOD(prvWithoutDesuperheating) {
         SetR("outletQuality", results2.quality);
         SetR("outletMassFlow", pwod.getOutletMassFlow());
         SetR("outletEnergyFlow", pwod.getOutletEnergyFlow());
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in prvWithoutDesuperheating - ssmt.h: " + what).c_str());
     }
@@ -429,7 +429,7 @@ NAN_METHOD(prvWithDesuperheating) {
         SetR("feedwaterQuality", results3.quality);
         SetR("feedwaterMassFlow", pwd.getFeedwaterMassFlow());
         SetR("feedwaterEnergyFlow", pwd.getFeedwaterEnergyFlow());
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in prvWithDesuperheating - ssmt.h: " + what).c_str());
     }
@@ -484,7 +484,7 @@ NAN_METHOD(deaerator) {
         SetR("inletSteamQuality", results4.quality);
         SetR("inletSteamMassFlow", results4.massFlow);
         SetR("inletSteamEnergyFlow", results4.energyFlow);
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in deaerator - ssmt.h: " + what).c_str());
     }
@@ -498,30 +498,32 @@ NAN_METHOD(header) {
 
     auto const headerPressure = Get("headerPressure");
 
-    Local<String> arrayStr = Nan::New<String>("inlets").ToLocalChecked();
+    Local <String> arrayStr = Nan::New<String>("inlets").ToLocalChecked();
     auto array = inp->ToObject()->Get(arrayStr);
-    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
+    v8::Local <v8::Array> arr = v8::Local<v8::Array>::Cast(array);
 
     auto pressureStr = Nan::New<String>("pressure").ToLocalChecked();
     auto temperatureStr = Nan::New<String>("temperature").ToLocalChecked();
-	auto qualityStr = Nan::New<String>("quality").ToLocalChecked();
+    auto qualityStr = Nan::New<String>("quality").ToLocalChecked();
     auto massFlowStr = Nan::New<String>("massFlow").ToLocalChecked();
     auto specificEnthalpyStr = Nan::New<String>("specificEnthalpy").ToLocalChecked();
     auto specificEntropyStr = Nan::New<String>("specificEntropy").ToLocalChecked();
     auto energyFlowStr = Nan::New<String>("energyFlow").ToLocalChecked();
 
-	std::vector<Inlet> inlets;
+    std::vector<Inlet> inlets;
 
     for (std::size_t i = 0; i < arr->Length(); i++) {
         auto const pressure = arr->Get(i)->ToObject()->Get(pressureStr)->NumberValue();
-	    unsigned val = static_cast<unsigned>(arr->Get(i)->ToObject()->Get(Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
-	    auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
-        auto const quantityValue = arr->Get(i)->ToObject()->Get(Nan::New<String>("quantityValue").ToLocalChecked())->NumberValue();
+        unsigned val = static_cast<unsigned>(arr->Get(i)->ToObject()->Get(
+                Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
+        auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
+        auto const quantityValue = arr->Get(i)->ToObject()->Get(
+                Nan::New<String>("quantityValue").ToLocalChecked())->NumberValue();
         auto const massFlow = arr->Get(i)->ToObject()->Get(massFlowStr)->NumberValue();
         inlets.emplace_back(Inlet(pressure, quantity, quantityValue, massFlow));
 
-        Local<Object> obj = Nan::New<Object>();
-        Local<String> inletNum = Nan::New<String>("inlet" + std::to_string(i + 1)).ToLocalChecked();
+        Local <Object> obj = Nan::New<Object>();
+        Local <String> inletNum = Nan::New<String>("inlet" + std::to_string(i + 1)).ToLocalChecked();
         auto const inletProps = inlets[i].getInletProperties();
 
         Nan::Set(obj, pressureStr, Nan::New<Number>(inletProps.pressure));
@@ -552,7 +554,7 @@ NAN_METHOD(header) {
         Nan::Set(obj, massFlowStr, Nan::New<Number>(header.getInletMassFlow()));
 
         Nan::Set(r, headerStr, obj);
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in header - ssmt.h: " + what).c_str());
     }
@@ -563,13 +565,16 @@ NAN_METHOD(turbine) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-	unsigned val = static_cast<unsigned>(inp->ToObject()->Get(Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
+    unsigned val = static_cast<unsigned>(inp->ToObject()->Get(
+            Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
     Turbine::Solve solveFor = static_cast<Turbine::Solve>(val);
-    val = static_cast<unsigned>(inp->ToObject()->Get(Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue());
+    val = static_cast<unsigned>(inp->ToObject()->Get(
+            Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue());
     Turbine::TurbineProperty turbineProperty = static_cast<Turbine::TurbineProperty>(val);
-    val = static_cast<unsigned>(inp->ToObject()->Get(Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue());
+    val = static_cast<unsigned>(inp->ToObject()->Get(
+            Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue());
     SteamProperties::ThermodynamicQuantity inletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
-	std::unique_ptr<Turbine> t;
+    std::unique_ptr<Turbine> t;
 
     try {
         if (solveFor == Turbine::Solve::OutletProperties) {
@@ -586,12 +591,12 @@ NAN_METHOD(turbine) {
                                 turbineProperty, Get("generatorEfficiency"), Get("massFlowOrPowerOut"),
                                 Get("outletSteamPressure"), outletQuantity, Get("outletQuantityValue")));
         }
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in turbine - ssmt.h: " + what).c_str());
     }
 
-	auto results = t->getInletProperties();
+    auto results = t->getInletProperties();
     SetR("inletPressure", results.pressure);
     SetR("inletTemperature", results.temperature);
     SetR("inletSpecificEnthalpy", results.specificEnthalpy);
@@ -599,7 +604,7 @@ NAN_METHOD(turbine) {
     SetR("inletQuality", results.quality);
     SetR("inletEnergyFlow", t->getInletEnergyFlow());
 
-	results = t->getOutletProperties();
+    results = t->getOutletProperties();
     SetR("outletPressure", results.pressure);
     SetR("outletTemperature", results.temperature);
     SetR("outletSpecificEnthalpy", results.specificEnthalpy);
@@ -612,7 +617,7 @@ NAN_METHOD(turbine) {
     SetR("energyOut", t->getEnergyOut());
     SetR("powerOut", t->getPowerOut());
     SetR("generatorEfficiency", t->getGeneratorEfficiency());
-	info.GetReturnValue().Set(r);
+    info.GetReturnValue().Set(r);
 }
 
 
