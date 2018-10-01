@@ -5,10 +5,16 @@ AMO Tools Suite is a cross-platform collection of calculations and tools to supp
 See our hosted documentation for the latest release at [ornl-amo.github.io](https://ornl-amo.github.io/)
 
 ### Dependencies
+#### C++
+- make
 - CMake (cmake-curses to use the ccmake gui)
 - GCC 4.8.5 or later
-- Node [https://nodejs.org/en/](https://nodejs.org/en/)
 - Doxygen (only for building documentation)
+
+#### Node
+- Node [https://nodejs.org/en/](https://nodejs.org/en/) v8 or v9 
+- gyp: follow instructions for the OS at [https://github.com/nodejs/node-gyp](node-gyp)
+  - it also installs the correct python version
 
 ### Building
 - Edit the CMakeCache and enable desired build options via the ccmake tool: `ccmake .` and `make` to build
