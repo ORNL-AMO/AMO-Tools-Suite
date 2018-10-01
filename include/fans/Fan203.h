@@ -54,7 +54,7 @@ public:
 		double const satPress = calculateSaturationPressure(tdo);
 		double rh = 0;
 		if (inputType == InputType::RelativeHumidity) {
-			rh = relativeHumidityOrDewPoint;
+			rh = relativeHumidityOrDewPoint / 100;
 		} else if (inputType == InputType::DewPoint) {
 			rh = calculateSaturationPressure(relativeHumidityOrDewPoint) / satPress;
 		} else if (inputType == InputType::WetBulbTemp) {
