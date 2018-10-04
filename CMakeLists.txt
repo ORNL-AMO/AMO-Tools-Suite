@@ -195,7 +195,8 @@ set(INCLUDE_FILES
         include/fans/CompressibilityFactor.h
         include/results/InputData.h
         include/fans/FanEnergyIndex.h
-        include/fans/OptimalFanEfficiency.h)
+        include/fans/OptimalFanEfficiency.h
+        include/ssmt/HeatExchanger.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -243,7 +244,7 @@ set(TEST_FILES
         tests/CompressedAir.unit.cpp
         tests/FluidPower.unit.cpp
         tests/CompressibilityFactor.unit.cpp
-        tests/OptimalFanEfficiency.unit.cpp)
+        tests/OptimalFanEfficiency.unit.cpp tests/HeatExchanger.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
