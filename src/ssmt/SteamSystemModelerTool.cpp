@@ -1,6 +1,7 @@
 #include <ssmt/SteamSystemModelerTool.h>
 #include <array>
 #include <cmath>
+#include <iostream>
 
 // where t is temperature and p is pressure
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(const double t, const double p) {
@@ -248,9 +249,15 @@ double SteamSystemModelerTool::region4(const double t) {
 	return std::pow(2 * c / (-b + sqrt(std::pow(b, 2) - 4 * a * c)), 4);
 }
 
-// where t is temperature in K and p is pressure in MPa
+/**
+ * @param p Pressure in MPa.
+ * @param t Temperature in K.
+ */
 int SteamSystemModelerTool::regionSelect(const double p, const double t) {
+	std::cout << "SteamSystemModelerTool::regionSelect: pressure in MPa=" << p << ", temp in K=" << t << std::endl;
 	const double boundaryPressure = (t >= TEMPERATURE_Tp) ? boundaryByTemperatureRegion3to2(t) : region4(t);
+
+	std::cout << "SteamSystemModelerTool::regionSelect: boundaryPressure=" << boundaryPressure << std::endl;
 
 	if (t >= TEMPERATURE_MIN && t <= TEMPERATURE_Tp) {
 		if (p <= PRESSURE_MAX && p >= boundaryPressure) return 1;
@@ -263,7 +270,10 @@ int SteamSystemModelerTool::regionSelect(const double p, const double t) {
 	}
 
 	if (t > TEMPERATURE_REGION3_MAX && t <= TEMPERATURE_MAX)  return 2;
-	throw std::runtime_error("regionSelect failed - check your input");
+
+	auto message = "regionSelect failed - check your input";
+	std::cout << "SteamSystemModelerTool::regionSelect: " << message << std::endl;
+	throw std::runtime_error(message);
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pressure, const double enthalpy) {
