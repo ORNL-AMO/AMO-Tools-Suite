@@ -3,7 +3,7 @@
 doxygen_log.txt
 cmake-build-*
 *.db
-doc
+docs
 
 ### Vim template
 # swap

@@ -228,7 +228,7 @@ test('getBaseGasDensity', function (t) {
         gasDensity: 0.0547,
         gasType: 'AIR',
         inputType: 'relativeHumidity',
-        relativeHumidity: 0.35,
+        relativeHumidity: 35,
         specificGravity: 1.05
     };
 
