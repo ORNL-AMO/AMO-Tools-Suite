@@ -150,7 +150,7 @@ NAN_METHOD(resultsExistingAndOptimal) {
 
     double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency")/100;
     }
     else {
         specifiedDriveEfficiency = 1;
@@ -227,7 +227,7 @@ NAN_METHOD(resultsExisting) {
 //    Pump::SpecificSpeed fixed_speed = speed();
     double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency") / 100;
     }
     else {
         specifiedDriveEfficiency = 1;
@@ -291,7 +291,7 @@ NAN_METHOD(resultsModified) {
 
     double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency") / 100;
     }
     else {
         specifiedDriveEfficiency = 1;
@@ -353,7 +353,7 @@ NAN_METHOD(resultsOptimal) {
 
     double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency") / 100;
     }
     else {
         specifiedDriveEfficiency = 1;
