@@ -70,7 +70,8 @@ OptimalMotorPower::Output OptimalMotorPower::calculate(bool isOptimal) {
     //double adjCurrent1 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf)) + 1) * current1;
     //double adjCurrent2 = (((fieldVoltage / ratedVoltage) - 1) * (1 - (2 * lf2)) + 1) * current2;
     //current = adjCurrent1 + 100 * (fractionalIndex - lf) * (adjCurrent2 - adjCurrent1);
-    current = current1 + 100 * (fractionalIndex - lf) * (current2 - current1);
+    // current = current1 + 100 * (fractionalIndex - lf) * (current2 - current1);
+    current = (current1 + 100 * (fractionalIndex - lf) * (current2 - current1)) * 460 / ratedVoltage;
     efficiency = eff1 + 100 * (fractionalIndex - lf) * (eff2 - eff1);
     power = powerE1 + 100 * (fractionalIndex - lf) * (powerE2 - powerE1);
     powerFactor = power / (current * fieldVoltage * std::sqrt(3) / 1000);
