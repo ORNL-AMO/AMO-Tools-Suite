@@ -55,30 +55,23 @@ test('psatExistingAndOptimal', function (t) {
     t.equal(psatResult.optimization_rating[0], 0.0, 'optimization rating is ' + psatResult.optimization_rating[0]);
 });
 
-test('psatExisting', function (t) {
-    t.plan(11);
+test('psatExisting2', function (t) {
+    t.plan(5);
     t.type(bindings.resultsExisting, 'function');
     var inp = {
-        'pump_style': 6, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 0, 'kinematic_viscosity': 1.0,
-        'specific_gravity': 1.0, 'stages': 2.0, 'fixed_speed': 1, 'line_frequency': 0, 'motor_rated_power': 200,
-        'motor_rated_speed': 1780, 'efficiency_class': 3, 'efficiency': 95, 'motor_rated_voltage': 460,
-        'motor_rated_fla': 225.0, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.05, 'flow_rate': 1840,
-        'head': 174.85, 'load_estimation_method': 0, 'motor_field_power': 80, 'motor_field_current': 125.857,
-        'motor_field_voltage': 480
+        'pump_style': 2, 'pump_specified': 90, 'pump_rated_speed':1780, 'drive': 4, 'kinematic_viscosity': 1.0,
+        'specific_gravity': 1.0, 'stages': 1.0, 'fixed_speed': 0, 'line_frequency': 0, 'motor_rated_power': 300,
+        'motor_rated_speed': 1780, 'efficiency_class': 0, 'efficiency': 95, 'motor_rated_voltage': 460,
+        'motor_rated_fla': 337.3, 'margin': 0, 'operating_fraction': 1.00, 'cost_kw_hour': 0.06, 'flow_rate': 1840,
+        'head': 277.0, 'load_estimation_method': 0, 'motor_field_power': 150.0, 'motor_field_current': 80.5,
+        'motor_field_voltage': 460, 'baseline_pump_efficiency': 0.69, 'specifiedDriveEfficiency': 95
     };
-
     var psatResult = bindings.resultsExisting(inp);
 
-    t.equal(rnd(psatResult.pump_efficiency), rnd(80.26203812559545), 'existing pump efficiency is ' + psatResult.pump_efficiency);
-    t.equal(psatResult.motor_rated_power, 200, 'existing motor rated power is ' + psatResult.motor_rated_power);
-    t.equal(rnd(psatResult.motor_shaft_power), rnd(101.18747791246317), 'existing motor shaft power is ' + psatResult.motor_shaft_power);
-    t.equal(rnd(psatResult.pump_shaft_power), rnd(101.18747791246317), 'existing pump shaft power is ' + psatResult.pump_shaft_power);
-    t.equal(rnd(psatResult.motor_efficiency), rnd(94.35732315337191), 'existing motor efficiency is ' + psatResult.motor_efficiency);
-    t.equal(rnd(psatResult.motor_power_factor), rnd(76.45602656178534), 'existing motor power factor is ' + psatResult.motor_power_factor);
-    t.equal(rnd(psatResult.motor_current), rnd(125.85671685040634), 'existing motor current is ' + psatResult.motor_current);
-    t.equal(psatResult.motor_power, 80, 'existing motor power is ' + psatResult.motor_power);
-    t.equal(psatResult.annual_energy, 700.8, 'existing annual energy is ' + psatResult.annual_energy);
-    t.equal(psatResult.annual_cost, 35040, 'existing annual cost is ' + psatResult.annual_cost);
+    t.equal(rnd(psatResult.pump_efficiency), rnd(71.5541741283), 'existing pump efficiency is ' + psatResult.pump_efficiency);
+    t.equal(rnd(psatResult.motor_shaft_power), rnd(189.2746748003), 'existing motor shaft power is ' + psatResult.motor_shaft_power);
+    t.equal(rnd(psatResult.pump_shaft_power), rnd(179.8109410603), 'existing pump shaft power is ' + psatResult.pump_shaft_power);
+    t.equal(rnd(psatResult.motor_efficiency), rnd(94.132604934), 'existing motor efficiency is ' + psatResult.motor_efficiency);
 });
 
 test('psatOptimal', function (t) {

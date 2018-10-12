@@ -24,10 +24,12 @@ public:
      */
     OptimalMotorShaftPower(
         double pumpShaftPower,
-        Motor::Drive drive
+        Motor::Drive drive,
+        double specifiedEfficiency
     ) :
         pumpShaftPower(pumpShaftPower),
-        drive(drive)
+        drive(drive),
+        specifiedEfficiency(specifiedEfficiency)
     {}
 
     /**
@@ -68,10 +70,27 @@ public:
         this->drive = drive;
     }
 
+    /**
+     * Gets the specified efficiency
+     * @return double, specifiedEfficiency
+     */
+    double getSpecifiedEfficiency() const {
+        return specifiedEfficiency;
+    }
+
+    /**
+     * Sets the specified efficiency
+     * @param specifiedEfficiency double
+     */
+    void setSpecifiedEfficiency(double specifiedEfficiency) {
+        this->specifiedEfficiency = specifiedEfficiency;
+    }
+
 private:
     double pumpShaftPower;
     Motor::Drive drive;
     double motorShaftPower;
+    double specifiedEfficiency;
 };
 
 

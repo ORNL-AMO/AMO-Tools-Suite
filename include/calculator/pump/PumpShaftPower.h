@@ -22,10 +22,12 @@ public:
      */
     PumpShaftPower(
         double motorShaftPower,
-        Motor::Drive drive
+        Motor::Drive drive,
+        double specifiedEfficiency
     ) :
         motorShaftPower(motorShaftPower),
-        drive(drive)
+        drive(drive),
+        specifiedEfficiency(specifiedEfficiency)
     {}
 
     /**
@@ -66,9 +68,26 @@ public:
         this->drive = drive;
     }
 
+    /**
+     * Gets the specified efficiency
+     * @return double, specifiedEfficiency
+     */
+    double getSpecifiedEfficiency() const {
+        return specifiedEfficiency;
+    }
+
+    /**
+     * Sets the specified efficiency
+     * @param specifiedEfficiency double
+     */
+    void setSpecifiedEfficiency(double specifiedEfficiency) {
+        this->specifiedEfficiency = specifiedEfficiency;
+    }
+
 private:
     double motorShaftPower;
     Motor::Drive drive;
+    double specifiedEfficiency;
 };
 
 #endif //AMO_LIBRARY_PUMPSHAFTPOWER_H

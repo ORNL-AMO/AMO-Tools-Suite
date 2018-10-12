@@ -19,6 +19,11 @@ double PumpShaftPower::calculate() {
         // According to AMO Tip sheet for belt drives, a v-belt drive is on average 93% efficient and a Synchronous-belt drive is 98% efficient
         return motorShaftPower - (BLM * 0.02 / 0.07);
     }
+    else if (drive == Motor::Drive::SPECIFIED) {
+        //Case of SPECIFIED DRIVE
+        return motorShaftPower * specifiedEfficiency;
+    }
+
     const double BLM = motorShaftPower * ((0.68759 * std::exp(motorShaftPower * -0.019791) +
                                            3.7558 * std::exp(motorShaftPower * -0.21507) + 3.9963) / 100);
     return motorShaftPower - BLM;
