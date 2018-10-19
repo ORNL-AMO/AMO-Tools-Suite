@@ -97,13 +97,13 @@ public:
                         const double quality, const double specificVolume, const double density, const double specificEnthalpy,
                         const double specificEntropy, const double internalEnergy = 0):
                 SteamPropertiesOutput(temperature, pressure, quality, specificVolume, density, specificEnthalpy,
-                                        specificEntropy, internalEnergy),
+                                      specificEntropy, internalEnergy),
                 massFlow(massFlow), energyFlow(energyFlow)
         {}
 
         FluidProperties(const double massFlow, const double energyFlow, SteamPropertiesOutput const & sp):
                 SteamPropertiesOutput(sp.temperature, sp.pressure, sp.quality, sp.specificVolume, sp.density,
-                                        sp.specificEnthalpy, sp.specificEntropy, sp.internalEnergy),
+                                      sp.specificEnthalpy, sp.specificEntropy, sp.internalEnergy),
                 massFlow(massFlow), energyFlow(energyFlow)
         {}
 
