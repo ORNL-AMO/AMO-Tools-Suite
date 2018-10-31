@@ -878,3 +878,8 @@ flycheck_*.el
 .dropbox
 .dropbox.attr
 .dropbox.cache
+
+##.vcxproj and .sln
+*.vcxproj
+*.vcxproj/*
+.sln
