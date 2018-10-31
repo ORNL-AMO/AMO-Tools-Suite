@@ -7,6 +7,7 @@
   },
   "gypfile": true,
   "dependencies": {
+    "d3": "^4.13.0",
     "nan": "2.11.0",
     "node-gyp": "3.8.0",
     "utf-8-validate": "^3.0.3"
@@ -20,7 +21,8 @@
     "npm": "^5.0.0"
   },
   "scripts": {
-    "test": "tap debug tests/js/*.js"
+    "test": "tap debug tests/js/*.js",
+    "at": "tap debug tests/at/js/*.js"
   },
   "repository": {
     "type": "git",
