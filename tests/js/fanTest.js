@@ -14,7 +14,7 @@ test('fansExisting', function (t) {
         "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
         "sizeMargin": 1, "measuredPower": 460, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
         "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988, "loadEstimationMethod": 0,
-        "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 1.02
+        "operatingHours": 8760, "unitCost": 0.06, "airDensity": 1.02
     };
 
     var output = bindings.fanResultsExisting(input);
@@ -41,7 +41,7 @@ test('fansModified', function (t) {
         "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
         "sizeMargin": 1, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
         "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988,
-        "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 1.02, "fanEfficiency": 59.5398315, "isSpecified": false,
+        "operatingHours": 8760, "unitCost": 0.06, "airDensity": 1.02, "fanEfficiency": 59.5398315, "isSpecified": false,
     };
 
     var output = bindings.fanResultsModified(input);
@@ -67,7 +67,7 @@ test('fansOptimal', function (t) {
         "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
         "sizeMargin": 1, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
         "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988,
-        "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 0.07024, "fanType": 0, "isSpecified": false
+        "operatingHours": 8760, "unitCost": 0.06, "airDensity": 0.07024, "fanType": 0, "isSpecified": false
     };
 
     var output = bindings.fanResultsOptimal(input);
@@ -93,7 +93,7 @@ test('fansOptimal specified ', function (t) {
         "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
         "sizeMargin": 1, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
         "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988,
-        "operatingFraction": 1.0, "unitCost": 0.06, "airDensity": 0.07024, "fanType": 0, "isSpecified": true, "userInputFanEfficiency": 75.65784493
+        "operatingHours": 8760, "unitCost": 0.06, "airDensity": 0.07024, "fanType": 0, "isSpecified": true, "userInputFanEfficiency": 75.65784493
     };
 
     var output = bindings.fanResultsOptimal(input);

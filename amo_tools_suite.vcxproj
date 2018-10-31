@@ -1,0 +1,430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C42A5964-4A04-32EA-85EF-14CB939A1605}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>amo_tools_suite</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">amo_tools_suite.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">amo_tools_suite</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">amo_tools_suite.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">amo_tools_suite</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">amo_tools_suite.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">amo_tools_suite</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">amo_tools_suite.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">amo_tools_suite</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /RTCsu</AdditionalOptions>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4068;4101;4102;4244;4258;4355;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;WIN32_LEAN_AND_MEAN;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;WIN32_LEAN_AND_MEAN;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4068;4101;4102;4244;4258;4355;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;WIN32_LEAN_AND_MEAN;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;WIN32_LEAN_AND_MEAN;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4068;4101;4102;4244;4258;4355;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;WIN32_LEAN_AND_MEAN;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;WIN32_LEAN_AND_MEAN;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4068;4101;4102;4244;4258;4355;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;WIN32_LEAN_AND_MEAN;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;WIN32_LEAN_AND_MEAN;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\node_modules\nan;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-HC:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite" "-BC:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite" --check-stamp-file "C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\WindowsPaths.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeCCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeCXXCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeRCCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeSystem.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\cmake\CompilerFlags.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\cmake\ProjectMacros.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-HC:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite" "-BC:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite" --check-stamp-file "C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\WindowsPaths.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeCCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeCXXCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeRCCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeSystem.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\cmake\CompilerFlags.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\cmake\ProjectMacros.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-HC:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite" "-BC:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite" --check-stamp-file "C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\WindowsPaths.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeCCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeCXXCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeRCCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeSystem.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\cmake\CompilerFlags.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\cmake\ProjectMacros.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-HC:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite" "-BC:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite" --check-stamp-file "C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/ak1/Documents/Source Code/AMO-Tools-Suite/AMO-Tools-Suite/CMakeLists.txt;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.12\Modules\Platform\WindowsPaths.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeCCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeCXXCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeRCCompiler.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\3.12.2\CMakeSystem.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\cmake\CompilerFlags.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\cmake\ProjectMacros.cmake;C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\results\Results.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\AnnualCost.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\AnnualEnergy.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\CurveFitVal.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\EstimateFLA.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorCurrent.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorEfficiency.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorPower.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorPowerFactor.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorShaftPower.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalDeviationFactor.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\OptimalMotorPower.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\OptimalMotorShaftPower.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\OptimalMotorSize.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalPrePumpEff.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalPumpEfficiency.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalPumpShaftPower.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalSpecificSpeed.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalSpecificSpeedCorrection.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\Poles.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\MoverEfficiency.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\PumpShaftPower.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\Atmosphere.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\FixtureLosses.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\GasCoolingLosses.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\WaterCoolingLosses.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\LiquidCoolingLosses.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\LeakageLosses.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\WallLosses.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\OpeningLosses.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\sqlite\SQLite.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\GasFlueGasMaterial.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\HeadTool.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\EnergyInputEAF.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\SlagOtherMaterialLosses.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\SolidLiquidFlueGasMaterial.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\AuxiliaryPower.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\ExhaustGasEAF.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\EnergyEquivalency.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\EfficiencyImprovement.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\O2Enrichment.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\FlowCalculationsEnergyUse.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\HumidityRatio.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\SaturatedProperties.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\SteamProperties.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\SteamSystemModelerTool.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\Boiler.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\HeatLoss.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\FlashTank.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\PRV.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\Deaerator.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\Header.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\Turbine.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\fans\FanCurve.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\CompressedAir.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\CHP.cpp" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorData.cpp" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\results\Results.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\AnnualCost.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\AnnualEnergy.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\CurveFitVal.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\EstimateFLA.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\FluidPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorCurrent.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorEfficiency.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorPowerFactor.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorShaftPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalDeviationFactor.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\OptimalMotorPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\OptimalMotorShaftPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\OptimalMotorSize.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalPrePumpEff.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalPumpEfficiency.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalPumpShaftPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalSpecificSpeed.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalSpecificSpeedCorrection.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\Poles.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\MoverEfficiency.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\PumpShaftPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\LoadChargeMaterial.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\SolidLoadChargeMaterial.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\LiquidLoadChargeMaterial.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\GasLoadChargeMaterial.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\Atmosphere.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\GasCoolingLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\FixtureLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\WaterCoolingLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\LiquidCoolingLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\LeakageLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\WallLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\OpeningLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\SQLite.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\GasFlueGasMaterial.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\HeadTool.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\SolidLoadChargeMaterialData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\GasLoadChargeMaterialData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\LiquidLoadChargeMaterialData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\SolidLiquidFlueGasMaterialData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\GasFlueGasMaterialData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\EnergyInputEAF.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\SlagOtherMaterialLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\SolidLiquidFlueGasMaterial.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\AuxiliaryPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\ExhaustGasEAF.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\EnergyEquivalency.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\EfficiencyImprovement.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\O2Enrichment.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\FlowCalculationsEnergyUse.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\EnergyInputExhaustGasLosses.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\AtmosphereSpecificHeatData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\WallLossesSurfaceData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\HumidityRatio.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\SaturatedProperties.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\SteamProperties.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\SteamSystemModelerTool.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\Boiler.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\HeatLoss.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\FlashTank.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\PRV.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\Deaerator.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\Header.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\Fan203.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\FanShaftPower.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\Planar.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\Turbine.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\CHP.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\FanCurve.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\CompressedAir.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\MotorData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\CompressibilityFactor.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\results\InputData.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\FanEnergyIndex.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\OptimalFanEfficiency.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\HeatExchanger.h" />
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite\sqlite3.h" />
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite\sqlite3.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">CompileAsC</CompileAs>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\ZERO_CHECK.vcxproj">
+      <Project>{F6F89D71-8236-39EA-AE21-D0F0B2BE7362}</Project>
+      <Name>ZERO_CHECK</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -33,7 +33,7 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const & fa
     double const fanShaftPower = PumpShaftPower(output.shaftPower, fanInput.drive, fanInput.specifiedEfficiency).calculate();
     double const fanEfficiency = MoverEfficiency(fanFieldData.flowRate, fanShaftPower, fanFieldData.inletPressure,
                                                  fanFieldData.outletPressure, fanFieldData.compressibilityFactor).calculate();
-    double const annualEnergy = AnnualEnergy(output.power, operatingFraction).calculate();
+    double const annualEnergy = AnnualEnergy(output.power, operatingHours).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
 
     double const fanEnergyIndex = FanEnergyIndex(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
@@ -55,7 +55,7 @@ FanResult::Output FanResult::calculateModified(Fan::FieldDataModifiedAndOptimal 
                                                                motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
                                                                fanFieldData.measuredVoltage, motorShaftPower).calculate(isOptimal);
 
-    double const annualEnergy = AnnualEnergy(output.power, operatingFraction).calculate();
+    double const annualEnergy = AnnualEnergy(output.power, operatingHours).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
 
     double const fanEnergyIndex = FanEnergyIndex(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
@@ -111,7 +111,7 @@ PSATResult::Result & PSATResult::calculateExisting() {
     existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
     existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
                                               existing.pumpShaftPower).calculate();
-    existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingFraction).calculate();
+    existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingHours).calculate();
     existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
     return existing;
 }
@@ -153,7 +153,7 @@ PSATResult::Result & PSATResult::calculateOptimal() {
     optimal.motorPower = output.power;
     optimal.motorPowerFactor = output.powerFactor;
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(optimal.motorPower, operatingFraction);
+    AnnualEnergy annualEnergy(optimal.motorPower, operatingHours);
     optimal.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost
@@ -208,7 +208,7 @@ PSATResult::Result & PSATResult::calculateModified() {
     modified.motorPowerFactor = output.powerFactor;
 
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(modified.motorPower, operatingFraction);
+    AnnualEnergy annualEnergy(modified.motorPower, operatingHours);
     modified.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost

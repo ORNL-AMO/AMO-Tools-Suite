@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\results\Results.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\AnnualCost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\AnnualEnergy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\CurveFitVal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\EstimateFLA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorCurrent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorEfficiency.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorPower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorPowerFactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorShaftPower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalDeviationFactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\OptimalMotorPower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\OptimalMotorShaftPower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\OptimalMotorSize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalPrePumpEff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalPumpEfficiency.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalPumpShaftPower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalSpecificSpeed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\OptimalSpecificSpeedCorrection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\Poles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\MoverEfficiency.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\PumpShaftPower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\Atmosphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\FixtureLosses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\GasCoolingLosses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\WaterCoolingLosses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\LiquidCoolingLosses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\LeakageLosses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\WallLosses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\OpeningLosses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\sqlite\SQLite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\GasFlueGasMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\pump\HeadTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\EnergyInputEAF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\SlagOtherMaterialLosses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\SolidLiquidFlueGasMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\AuxiliaryPower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\losses\ExhaustGasEAF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\EnergyEquivalency.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\EfficiencyImprovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\O2Enrichment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\FlowCalculationsEnergyUse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\furnace\HumidityRatio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\SaturatedProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\SteamProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\SteamSystemModelerTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\Boiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\HeatLoss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\FlashTank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\PRV.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\Deaerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\Header.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\ssmt\Turbine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\fans\FanCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\CompressedAir.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\util\CHP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\src\calculator\motor\MotorData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite\sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\results\Results.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\AnnualCost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\AnnualEnergy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\CurveFitVal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\EstimateFLA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\FluidPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorCurrent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorEfficiency.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorPowerFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorShaftPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalDeviationFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\OptimalMotorPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\OptimalMotorShaftPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\OptimalMotorSize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalPrePumpEff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalPumpEfficiency.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalPumpShaftPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalSpecificSpeed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\OptimalSpecificSpeedCorrection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\Poles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\MoverEfficiency.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\PumpShaftPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\LoadChargeMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\SolidLoadChargeMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\LiquidLoadChargeMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\GasLoadChargeMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\Atmosphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\GasCoolingLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\FixtureLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\WaterCoolingLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\LiquidCoolingLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\LeakageLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\WallLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\OpeningLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\SQLite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\GasFlueGasMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\pump\HeadTool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\SolidLoadChargeMaterialData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\GasLoadChargeMaterialData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\LiquidLoadChargeMaterialData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\SolidLiquidFlueGasMaterialData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\GasFlueGasMaterialData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\EnergyInputEAF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\SlagOtherMaterialLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\SolidLiquidFlueGasMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\AuxiliaryPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\ExhaustGasEAF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\EnergyEquivalency.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\EfficiencyImprovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\O2Enrichment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\FlowCalculationsEnergyUse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\losses\EnergyInputExhaustGasLosses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\AtmosphereSpecificHeatData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\WallLossesSurfaceData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\furnace\HumidityRatio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\SaturatedProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\SteamProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\SteamSystemModelerTool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\Boiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\HeatLoss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\FlashTank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\PRV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\Deaerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\Fan203.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\FanShaftPower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\Planar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\Turbine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\CHP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\FanCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\util\CompressedAir.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\calculator\motor\MotorData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\sqlite\MotorData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\CompressibilityFactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\results\InputData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\FanEnergyIndex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\fans\OptimalFanEfficiency.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\include\ssmt\HeatExchanger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite\sqlite3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{F2221DB3-E81B-384D-A089-0F93EC1715AE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{74865579-A015-39DB-91F6-B8EEACD8E694}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

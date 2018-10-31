@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite\sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\third_party\sqlite\sqlite3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ak1\Documents\Source Code\AMO-Tools-Suite\AMO-Tools-Suite\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{F2221DB3-E81B-384D-A089-0F93EC1715AE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{74865579-A015-39DB-91F6-B8EEACD8E694}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
