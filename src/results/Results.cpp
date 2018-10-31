@@ -42,7 +42,11 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const & fa
     return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost,
             fanEnergyIndex, output.estimatedFLA};
 }
-
+/**NOTE FOR DIMA 
+ * will no longer need the bool isOptimal
+ * will need fanInput.Efficiency will be an input (replacing fanInput.specifiedEfficiency?)
+ * will not need anything setting motor efficiency class
+ */
 FanResult::Output FanResult::calculateModified(Fan::FieldDataModifiedAndOptimal const & fanFieldData, const double fanEfficiency,
                                                bool isOptimal) {
     double const fanShaftPower = OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure,
@@ -133,6 +137,10 @@ PSATResult::Result & PSATResult::calculateOptimal() {
      *  10.Calculate annual savings potential and optimization rating
      */
 
+    /**NOTE FOR DIMA
+     *This calculator will no longer be necessary 
+     */
+
     OptimalPumpEfficiency optimalPumpEfficiency(pumpInput.style, pumpInput.achievableEfficiency, pumpInput.rpm,
                                                 pumpInput.kviscosity, pumpInput.stageCount, fieldData.flowRate,
                                                 fieldData.head);
@@ -183,7 +191,15 @@ PSATResult::Result & PSATResult::calculateModified() {
      *  10.Calculate annual savings potential and optimization rating
 
      */
-
+/** NOTE FOR DIMA: 
+ * need to make modified.pumpEfficiency an input in Results.h and make a binding for it.
+ * will also need to change unit tests?
+ * It should always be a user input for a modification 
+ * will not need the if statement here
+ * side note: we will need pumpInput.achievableEfficiency to be something that is available to the UI
+ * kind of like how the button "Estimate Full Load Amps" works
+ * 
+ */
     if (pumpInput.style == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
         modified.pumpEfficiency = pumpInput.achievableEfficiency;
     } else {

@@ -15,6 +15,10 @@
 #include "calculator/motor/MotorPowerFactor.h"
 #include "calculator/motor/MotorPower.h"
 
+/**NOTE FOR DIMA
+ * will no longer need the bool isOptimal or the while(true) statement
+ */
+
 OptimalMotorPower::Output OptimalMotorPower::calculate(bool isOptimal) {
     double tempLoadFraction = 0.00;
     double mspkW;
