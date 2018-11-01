@@ -172,7 +172,7 @@ NAN_METHOD(resultsExistingAndOptimal) {
     double motor_rated_fla = Get("motor_rated_fla");
     double margin = Get("margin");
 
-    double fraction = Get("operating_fraction");
+    double fraction = Get("operating_hours");
     double cost = Get("cost_kw_hour");
 
     double flow = Get("flow_rate");
@@ -247,7 +247,7 @@ NAN_METHOD(resultsExisting) {
     Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
-    PSATResult psat(pump, motor, fd, Get("operating_fraction"), Get("cost_kw_hour"));
+    PSATResult psat(pump, motor, fd, Get("operating_hours"), Get("cost_kw_hour"));
 	try {
         auto const & ex = psat.calculateExisting();
 
@@ -311,7 +311,7 @@ NAN_METHOD(resultsModified) {
     Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
-    PSATResult psat(pump, motor, fd, baselinePumpEfficiency, Get("operating_fraction"), Get("cost_kw_hour"));
+    PSATResult psat(pump, motor, fd, baselinePumpEfficiency, Get("operating_hours"), Get("cost_kw_hour"));
     try {
         auto const & mod = psat.calculateModified();
 
@@ -373,7 +373,7 @@ NAN_METHOD(resultsOptimal) {
     Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
-    PSATResult psat(pump, motor, fd, Get("operating_fraction"), Get("cost_kw_hour"));
+    PSATResult psat(pump, motor, fd, Get("operating_hours"), Get("cost_kw_hour"));
 	try {
         auto const & opt = psat.calculateOptimal();
 

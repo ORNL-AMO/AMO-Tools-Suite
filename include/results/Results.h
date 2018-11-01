@@ -45,8 +45,8 @@ public:
         const double motorPower, annualEnergy, annualCost, estimatedFLA, fanEnergyIndex;
     };
 
-    FanResult(Fan::Input & fanInput, Motor & motor, double operatingFraction, double unitCost)
-            : fanInput(fanInput), motor(motor), operatingFraction(operatingFraction), unitCost(unitCost)
+    FanResult(Fan::Input & fanInput, Motor & motor, double operatingHours, double unitCost)
+            : fanInput(fanInput), motor(motor), operatingHours(operatingHours), unitCost(unitCost)
     {}
 
     /**
@@ -86,7 +86,7 @@ private:
     // In values
     Fan::Input fanInput;
     Motor motor;
-    double operatingFraction, unitCost;
+    double operatingHours, unitCost;
 };
 
 /**
@@ -101,11 +101,11 @@ public:
      * @param pumpInput Pump::Input, contains all pump-related data, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
-     * @param operatingFraction double, fraction(%) of calendar hours the equipment is operating
+     * @param operatingHours double, fraction(%) of calendar hours the equipment is operating
      * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
-    PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingFraction, double unitCost)
-            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingFraction(operatingFraction),
+    PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingHours, double unitCost)
+            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
               unitCost(unitCost), baselinePumpEfficiency(0.0)
     {};
 
@@ -115,12 +115,12 @@ public:
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
      * @param baselinePumpEfficiency double, baseline pump efficiency
-     * @param operatingFraction double, fraction(%) of calendar hours the equipment is operating
+     * @param operatingHours double, fraction(%) of calendar hours the equipment is operating
      * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
     PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double baselinePumpEfficiency,
-               double operatingFraction, double unitCost)
-            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingFraction(operatingFraction),
+               double operatingHours, double unitCost)
+            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
               unitCost(unitCost), baselinePumpEfficiency(baselinePumpEfficiency)
     {};
 
@@ -180,7 +180,7 @@ private:
     Pump::Input pumpInput;
     Motor motor;
     Pump::FieldData fieldData;
-    double operatingFraction, unitCost;
+    double operatingHours, unitCost;
     double baselinePumpEfficiency;
 };
 

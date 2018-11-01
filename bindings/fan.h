@@ -187,7 +187,7 @@ NAN_METHOD(fanResultsExisting) {
 	Fan::FieldDataBaseline fanFieldData = {measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure,
 	                                       compressibilityFactor, loadEstimationMethod};
 
-	FanResult result = {input, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+	FanResult result = {input, motor, Get("operatingHours", inp), Get("unitCost", inp)};
 	auto const output = result.calculateExisting(fanFieldData);
 
 	SetR("fanEfficiency", output.fanEfficiency * 100);
@@ -240,7 +240,7 @@ NAN_METHOD(fanResultsModified) {
 
 	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
 
-	FanResult result = {input, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+	FanResult result = {input, motor, Get("operatingHours", inp), Get("unitCost", inp)};
 
 	const double fanEfficiency = GetBool("isSpecified", inp) ? Get("userInputFanEfficiency", inp) / 100 : Get("fanEfficiency", inp) / 100;
 
@@ -297,7 +297,7 @@ NAN_METHOD(fanResultsOptimal) {
 
 	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
 
-	FanResult result = {input, motor, Get("operatingFraction", inp), Get("unitCost", inp)};
+	FanResult result = {input, motor, Get("operatingHours", inp), Get("unitCost", inp)};
 
 	auto const output = GetBool("isSpecified", inp) ? result.calculateOptimal(fanFieldData, Get("userInputFanEfficiency", inp) / 100)
 	                                                : result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));

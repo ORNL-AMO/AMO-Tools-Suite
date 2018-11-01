@@ -18,14 +18,14 @@ public:
     /**
      * Constructor
      * @param fieldPower double, power from field data in hp
-     * @param operatingFraction double, perating fraction(%).
+     * @param operatingHours double, hours per year equipment is at conditions.
      */
     AnnualEnergy(
         double fieldPower,
-        double operatingFraction
+        double operatingHours
     ) :
         fieldPower(fieldPower),
-        operatingFraction(operatingFraction)
+        operatingHours(operatingHours)
     {}
 
     /**
@@ -52,20 +52,20 @@ public:
 
     /**
      * Getter for operating fraction
-     * @return double, operating fraction as %
+     * @return double, operating hours as hour/year
      */
-    double getOperatingFraction() const {
-        return operatingFraction;
+    double getoperatingHours() const {
+        return operatingHours;
     }
 
     /**
      * Setter for operating fraction
      *
-     * @param operatingFraction double, operating fraction as %
+     * @param operatingHours double, operating hours as hour/year
      *
      */
-    void setOperatingFraction(double operatingFraction) {
-        this->operatingFraction = operatingFraction;
+    void setoperatingHours(double operatingHours) {
+        this->operatingHours = operatingHours;
     }
 
 private:
@@ -76,7 +76,7 @@ private:
     /**
      * Operating fraction
      */
-    double operatingFraction;
+    double operatingHours;
     /**
      * Annual energy in MWh/year
      */
