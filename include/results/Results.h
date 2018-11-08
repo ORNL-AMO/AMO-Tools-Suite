@@ -106,7 +106,7 @@ public:
      */
     PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingHours, double unitCost)
             : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
-              unitCost(unitCost), baselinePumpEfficiency(0.0)
+              unitCost(unitCost)
     {};
 
     /**
@@ -114,15 +114,14 @@ public:
      * @param pumpInput Pump::Input, contains all pump-related data, passed by reference
      * @param motor Motor, contains all motor-related calculations, passed by reference
      * @param fieldData FieldData, contains all field data-related calculations, passed by reference
-     * @param baselinePumpEfficiency double, baseline pump efficiency
      * @param operatingHours double, fraction(%) of calendar hours the equipment is operating
      * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
-    PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double baselinePumpEfficiency,
-               double operatingHours, double unitCost)
-            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
-              unitCost(unitCost), baselinePumpEfficiency(baselinePumpEfficiency)
-    {};
+    // PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData,
+    //            double operatingHours, double unitCost)
+    //         : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
+    //           unitCost(unitCost)
+    // {};
 
     /**
      * Result (output) structure captures the same fields for the existing as well as the optimal condition.
@@ -181,7 +180,6 @@ private:
     Motor motor;
     Pump::FieldData fieldData;
     double operatingHours, unitCost;
-    double baselinePumpEfficiency;
 };
 
 

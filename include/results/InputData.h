@@ -159,7 +159,7 @@ namespace Pump {
 		/**
 		 * Constructor
 		 * @param style Style, classification of style of pump being used.
-		 * @param achievableEfficiency double, pump % efficiency at the specified operating conditions
+		 * @param pumpEfficiency double, pump % efficiency at the specified operating conditions
 		 * @param rpm double, pump RPM to define its operating speed
 		 * @param drive Drive, type of drive the pump uses from either direct or belt drive.
 		 * @param kviscosity double, kinematic viscosity of the fluid being pumped in centistokes.
@@ -167,17 +167,17 @@ namespace Pump {
 		 * @param stageCount int, the number of pump stages
 		 * @param speed Speed, type of pump speed from either fixed or not fixed.
 		 */
-		Input(const Style style, const double achievableEfficiency, const double rpm, const Motor::Drive drive,
+		Input(const Style style, const double pumpEfficiency, const double rpm, const Motor::Drive drive,
 		     const double kviscosity,
 		     const double specificGravity, const int stageCount, const SpecificSpeed speed, const double specifiedEfficiency)
-				: style(style), drive(drive), speed(speed), achievableEfficiency(achievableEfficiency), rpm(rpm),
+				: style(style), drive(drive), speed(speed), pumpEfficiency(pumpEfficiency), rpm(rpm),
 				  kviscosity(kviscosity),
 				  specificGravity(specificGravity), stageCount(stageCount), specifiedEfficiency(specifiedEfficiency) {};
 
 		const Style style;
 		const Motor::Drive drive;
 		const SpecificSpeed speed;
-		const double achievableEfficiency, rpm, kviscosity, specificGravity, specifiedEfficiency;
+		const double pumpEfficiency, rpm, kviscosity, specificGravity, specifiedEfficiency;
 		const int stageCount;
 	};
 }

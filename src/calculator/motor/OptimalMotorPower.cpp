@@ -19,52 +19,53 @@
  * will no longer need the bool isOptimal or the while(true) statement
  */
 
-OptimalMotorPower::Output OptimalMotorPower::calculate(bool isOptimal) {
+// OptimalMotorPower::Output OptimalMotorPower::calculate(bool isOptimal) {
+OptimalMotorPower::Output OptimalMotorPower::calculate() {
     double tempLoadFraction = 0.00;
     double mspkW;
     double tempMsp = 0, tempMsp1 = 0, tempMsp2 = 0, powerE1 = 0, powerE2 = 0;
     double eff1 = 0, eff2 = 0, lf = 0, current1 = 0, current2 = 0;
 
     double power, efficiency, current, powerFactor;
-    while (true) {
-        Motor::EfficiencyClass optimalEfficiencyClass = efficiencyClass;
-        if (isOptimal && efficiencyClass != Motor::EfficiencyClass::SPECIFIED) {
-            int const poleCase = Poles(motorRPM, lineFrequency).calculate() / 2 - 1;
-            optimalEfficiencyClass = (poleCase > 2) ? Motor::EfficiencyClass::ENERGY_EFFICIENT : Motor::EfficiencyClass::PREMIUM;
-        }
+    // while (true) {
+    //     Motor::EfficiencyClass optimalEfficiencyClass = efficiencyClass;
+    //     if (isOptimal && efficiencyClass != Motor::EfficiencyClass::SPECIFIED) {
+    //         int const poleCase = Poles(motorRPM, lineFrequency).calculate() / 2 - 1;
+    //         optimalEfficiencyClass = (poleCase > 2) ? Motor::EfficiencyClass::ENERGY_EFFICIENT : Motor::EfficiencyClass::PREMIUM;
+    //     }
 
-        MotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, optimalEfficiencyClass,
-                                         specifiedEfficiency, tempLoadFraction, ratedVoltage);
-        current = optimalMotorCurrent.calculateOptimalCurrent();
-        //Adjustment to current based on measured Voltage
-        current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction))) + 1);
-        MotorEfficiency motorEfficiency(lineFrequency, motorRPM, optimalEfficiencyClass, motorRatedPower);
-        efficiency = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
-        //Similar to motorpowerfactor in existing case instead of ratedVoltage
-        MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
-                                          motorRatedPower, tempLoadFraction, current, efficiency, fieldVoltage);
-        powerFactor = motorPowerFactor.calculate();
+    //     MotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, optimalEfficiencyClass,
+    //                                      specifiedEfficiency, tempLoadFraction, ratedVoltage);
+    //     current = optimalMotorCurrent.calculateOptimalCurrent();
+    //     //Adjustment to current based on measured Voltage
+    //     current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction))) + 1);
+    //     MotorEfficiency motorEfficiency(lineFrequency, motorRPM, optimalEfficiencyClass, motorRatedPower);
+    //     efficiency = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
+    //     //Similar to motorpowerfactor in existing case instead of ratedVoltage
+    //     MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
+    //                                       motorRatedPower, tempLoadFraction, current, efficiency, fieldVoltage);
+    //     powerFactor = motorPowerFactor.calculate();
 
-        power = MotorPower(fieldVoltage, current, powerFactor).calculate();
-        tempMsp = power * efficiency;
-        // Converting to KW for matching purpose.
-        mspkW = optimalMotorShaftPower * 0.746;
+    //     power = MotorPower(fieldVoltage, current, powerFactor).calculate();
+    //     tempMsp = power * efficiency;
+    //     // Converting to KW for matching purpose.
+    //     mspkW = optimalMotorShaftPower * 0.746;
 
-        if (tempMsp > mspkW || tempLoadFraction > 1.5) {
-            powerE2 = power;
-            eff2 = efficiency;
-            current2 = current;
-            tempMsp2 = tempMsp;
-            break;
-        } else {
-            powerE1 = power;
-            lf = tempLoadFraction;
-            eff1 = efficiency;
-            current1 = current;
-            tempMsp1 = tempMsp;
-            tempLoadFraction += 0.01;
-        }
-    }
+    //     if (tempMsp > mspkW || tempLoadFraction > 1.5) {
+    //         powerE2 = power;
+    //         eff2 = efficiency;
+    //         current2 = current;
+    //         tempMsp2 = tempMsp;
+    //         break;
+    //     } else {
+    //         powerE1 = power;
+    //         lf = tempLoadFraction;
+    //         eff1 = efficiency;
+    //         current1 = current;
+    //         tempMsp1 = tempMsp;
+    //         tempLoadFraction += 0.01;
+    //     }
+    // }
     // Calculate Fractional Index
     const double motorMspdiff = tempMsp2 - tempMsp1;
     const double measuredMspdiff = mspkW - tempMsp1;

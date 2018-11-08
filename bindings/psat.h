@@ -311,7 +311,7 @@ NAN_METHOD(resultsModified) {
     Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
-    PSATResult psat(pump, motor, fd, baselinePumpEfficiency, Get("operating_hours"), Get("cost_kw_hour"));
+    PSATResult psat(pump, motor, fd, Get("operating_hours"), Get("cost_kw_hour"));
     try {
         auto const & mod = psat.calculateModified();
 
@@ -454,7 +454,7 @@ NAN_METHOD(pumpEfficiency)  {
     r = Nan::New<Object>();
     Pump::Style s = style();
     double flow = Get("flow_rate");
-    OptimalPrePumpEff pef(s, 0, flow);
+    OptimalPrePumpEff pef(s, flow);
     double v = pef.calculate();
     SetR("average",v);
     double odf = OptimalDeviationFactor(flow).calculate();

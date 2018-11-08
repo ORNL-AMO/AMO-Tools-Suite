@@ -57,7 +57,8 @@ FanResult::Output FanResult::calculateModified(Fan::FieldDataModifiedAndOptimal 
 
     OptimalMotorPower::Output const output = OptimalMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                                                motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
-                                                               fanFieldData.measuredVoltage, motorShaftPower).calculate(isOptimal);
+                                                               fanFieldData.measuredVoltage, motorShaftPower).calculate();
+                                                            //    fanFieldData.measuredVoltage, motorShaftPower).calculate(isOptimal);
 
     double const annualEnergy = AnnualEnergy(output.power, operatingHours).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
@@ -141,7 +142,7 @@ PSATResult::Result & PSATResult::calculateOptimal() {
      *This calculator will no longer be necessary 
      */
 
-    OptimalPumpEfficiency optimalPumpEfficiency(pumpInput.style, pumpInput.achievableEfficiency, pumpInput.rpm,
+    OptimalPumpEfficiency optimalPumpEfficiency(pumpInput.style, pumpInput.pumpEfficiency, pumpInput.rpm,
                                                 pumpInput.kviscosity, pumpInput.stageCount, fieldData.flowRate,
                                                 fieldData.head);
     optimal.pumpEfficiency = optimalPumpEfficiency.calculate();
@@ -155,7 +156,8 @@ PSATResult::Result & PSATResult::calculateOptimal() {
     OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                         motor.efficiencyClass, motor.specifiedEfficiency,
                                         motor.motorRatedVoltage, fieldData.voltage, optimal.motorShaftPower);
-    OptimalMotorPower::Output output = optimalMotorPower.calculate(true);
+    // OptimalMotorPower::Output output = optimalMotorPower.calculate(true);
+    OptimalMotorPower::Output output = optimalMotorPower.calculate();
     optimal.motorCurrent = output.current;
     optimal.motorEfficiency = output.efficiency;
     optimal.motorPower = output.power;
@@ -192,20 +194,16 @@ PSATResult::Result & PSATResult::calculateModified() {
 
      */
 /** NOTE FOR DIMA: 
- * need to make modified.pumpEfficiency an input in Results.h and make a binding for it.
+ * need to make modified.pumpEfficiency an input in Results.h and make a binding for it. 
  * will also need to change unit tests?
  * It should always be a user input for a modification 
- * will not need the if statement here
- * side note: we will need pumpInput.achievableEfficiency to be something that is available to the UI
+ * will not need the if statement here                                                              --done
+ * side note: we will need pumpInput.pumpEfficiency to be something that is available to the UI     --done
  * kind of like how the button "Estimate Full Load Amps" works
  * 
  */
-    if (pumpInput.style == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
-        modified.pumpEfficiency = pumpInput.achievableEfficiency;
-    } else {
-        modified.pumpEfficiency = baselinePumpEfficiency;
-    }
 
+    modified.pumpEfficiency = pumpInput.pumpEfficiency;
     OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
                                                 modified.pumpEfficiency);
     modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
@@ -217,7 +215,8 @@ PSATResult::Result & PSATResult::calculateModified() {
     OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                          motor.efficiencyClass, motor.specifiedEfficiency,
                                          motor.motorRatedVoltage, fieldData.voltage, modified.motorShaftPower);
-    OptimalMotorPower::Output output = modifiedMotorPower.calculate(false);
+    // OptimalMotorPower::Output output = modifiedMotorPower.calculate(false);
+    OptimalMotorPower::Output output = modifiedMotorPower.calculate();
     modified.motorCurrent = output.current;
     modified.motorEfficiency = output.efficiency;
     modified.motorPower = output.power;
