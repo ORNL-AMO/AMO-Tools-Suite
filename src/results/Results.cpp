@@ -4,7 +4,6 @@
  *
  * Contains 2 important functions:
  *          calculateExisting : calculates the values for the existing data.
- *          calculateOptimal : calculates the values for the optimal case.
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
@@ -42,13 +41,8 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const & fa
     return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost,
             fanEnergyIndex, output.estimatedFLA};
 }
-/**NOTE FOR DIMA 
- * will no longer need the bool isOptimal
- * will need fanInput.Efficiency will be an input (replacing fanInput.specifiedEfficiency?)
- * will not need anything setting motor efficiency class
- */
-FanResult::Output FanResult::calculateModified(Fan::FieldDataModifiedAndOptimal const & fanFieldData, const double fanEfficiency,
-                                               bool isOptimal) {
+
+FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const & fanFieldData, const double fanEfficiency) {
     double const fanShaftPower = OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure,
                                                        fanFieldData.outletPressure, fanFieldData.compressibilityFactor,
                                                        fanEfficiency).calculate();
@@ -68,19 +62,6 @@ FanResult::Output FanResult::calculateModified(Fan::FieldDataModifiedAndOptimal 
 
     return {fanEfficiency, motor.motorRatedPower, motorShaftPower, fanShaftPower, output.efficiency, output.powerFactor,
             output.current, output.power, annualEnergy, annualCost, fanEnergyIndex};
-}
-
-FanResult::Output FanResult::calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData,
-                                              OptimalFanEfficiency::FanType const fanType) {
-    const double fanEfficiency = OptimalFanEfficiency(fanType, fanInput.fanSpeed, fanFieldData.flowRate, fanFieldData.inletPressure,
-                                                      fanFieldData.outletPressure, fanFieldData.compressibilityFactor).calculate();
-
-    return calculateModified(fanFieldData, fanEfficiency, true);
-}
-
-FanResult::Output FanResult::calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData,
-                                              const double userInputFanEfficiency) {
-    return calculateModified(fanFieldData, userInputFanEfficiency, true);
 }
 
 PSATResult::Result & PSATResult::calculateExisting() {
@@ -121,62 +102,6 @@ PSATResult::Result & PSATResult::calculateExisting() {
     return existing;
 }
 
-PSATResult::Result & PSATResult::calculateOptimal() {
-    /**
-     * Steps for calculating the optimal values:
-     *  1. Calculate optimal pump efficiency, fluid power and pump shaft power
-     *  2. Calculate Motor shaft power
-     *      a. If a belt drive is specified, calculate the motor shaft power
-     *      b. If direct drive, motor shaft power = pump shaft power
-     *  3. Select motor size based on required motor shaft power
-     *  4. Develop 25% interval motor performance data for EE motor of the selected size
-     *  5. Do curve fitting of current from 25% to 1% intervals
-     *  6. Do curve fitting of efficiency in 1% intervals
-     *  7. Using current and efficiency 1% interval data, calculate balance of motor data in 1% intervals
-     *  8. Calculate required power, motor eff., current, pf from shaft power
-     *  9. Calculate annual energy and energy cost
-     *  10.Calculate annual savings potential and optimization rating
-     */
-
-    /**NOTE FOR DIMA
-     *This calculator will no longer be necessary 
-     */
-
-    OptimalPumpEfficiency optimalPumpEfficiency(pumpInput.style, pumpInput.pumpEfficiency, pumpInput.rpm,
-                                                pumpInput.kviscosity, pumpInput.stageCount, fieldData.flowRate,
-                                                fieldData.head);
-    optimal.pumpEfficiency = optimalPumpEfficiency.calculate();
-    OptimalPumpShaftPower optimalPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
-                                                optimal.pumpEfficiency);
-    optimal.pumpShaftPower = optimalPumpShaftPower.calculate();
-    OptimalMotorShaftPower optimalMotorShaftPower(optimal.pumpShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
-    optimal.motorShaftPower = optimalMotorShaftPower.calculate();
-    OptimalMotorSize optimalMotorSize(optimal.motorShaftPower, motor.sizeMargin);
-    optimal.motorRatedPower = optimalMotorSize.calculate();
-    OptimalMotorPower optimalMotorPower(optimal.motorRatedPower, motor.motorRpm, motor.lineFrequency,
-                                        motor.efficiencyClass, motor.specifiedEfficiency,
-                                        motor.motorRatedVoltage, fieldData.voltage, optimal.motorShaftPower);
-    // OptimalMotorPower::Output output = optimalMotorPower.calculate(true);
-    OptimalMotorPower::Output output = optimalMotorPower.calculate();
-    optimal.motorCurrent = output.current;
-    optimal.motorEfficiency = output.efficiency;
-    optimal.motorPower = output.power;
-    optimal.motorPowerFactor = output.powerFactor;
-    // Calculate Annual Energy
-    AnnualEnergy annualEnergy(optimal.motorPower, operatingHours);
-    optimal.annualEnergy = annualEnergy.calculate();
-
-    // Calculate Annual Cost
-    AnnualCost annualCost(optimal.annualEnergy, unitCost);
-    optimal.annualCost = annualCost.calculate();
-
-    // Annual Savings potential
-//    annualSavingsPotential = existing.annualCost - optimal.annualCost;
-    // Optimization Rating
-//    optimizationRating = optimal.motorPower / existing.motorPower;
-	return optimal;
-}
-
 PSATResult::Result & PSATResult::calculateModified() {
     /**
          * Steps for calculating the modified values:
@@ -193,15 +118,6 @@ PSATResult::Result & PSATResult::calculateModified() {
      *  10.Calculate annual savings potential and optimization rating
 
      */
-/** NOTE FOR DIMA: 
- * need to make modified.pumpEfficiency an input in Results.h and make a binding for it. 
- * will also need to change unit tests?
- * It should always be a user input for a modification 
- * will not need the if statement here                                                              --done
- * side note: we will need pumpInput.pumpEfficiency to be something that is available to the UI     --done
- * kind of like how the button "Estimate Full Load Amps" works
- * 
- */
 
     modified.pumpEfficiency = pumpInput.pumpEfficiency;
     OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
@@ -215,7 +131,6 @@ PSATResult::Result & PSATResult::calculateModified() {
     OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                          motor.efficiencyClass, motor.specifiedEfficiency,
                                          motor.motorRatedVoltage, fieldData.voltage, modified.motorShaftPower);
-    // OptimalMotorPower::Output output = modifiedMotorPower.calculate(false);
     OptimalMotorPower::Output output = modifiedMotorPower.calculate();
     modified.motorCurrent = output.current;
     modified.motorEfficiency = output.efficiency;

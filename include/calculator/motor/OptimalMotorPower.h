@@ -66,10 +66,8 @@ public:
 
     /**
      * Calculates the optimal motor power
-     * @param isOptimal bool, defaults to true so that calculate will use energy efficient or premium depending on motor pole number
      */
     Output calculate();
-    // Output calculate(bool isOptimal = true);
 
     /**
      * Gets the optimal motor shaft power
