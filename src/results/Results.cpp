@@ -106,6 +106,7 @@ PSATResult::Result & PSATResult::calculateExisting() {
     existing.motorEfficiency = output.efficiency;
     existing.motorPower = output.power;
     existing.estimatedFLA = output.estimatedFLA;
+    existing.loadFactor = output.loadFactor;
 
 	existing.motorRatedPower = motor.motorRatedPower;
     existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
