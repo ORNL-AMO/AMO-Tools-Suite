@@ -226,7 +226,7 @@ NAN_METHOD(fanResultsModified) {
 	double const inletPressure = Get("inletPressure", inp);
 	double const outletPressure = Get("outletPressure", inp);
 	double const compressibilityFactor = Get("compressibilityFactor", inp);
-	Fan::FieldDataModifiedAndOptimal fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
+	Fan::FieldDataModified fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
 	                                                 outletPressure, compressibilityFactor};
 
 	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
@@ -242,9 +242,11 @@ NAN_METHOD(fanResultsModified) {
 
 	FanResult result = {input, motor, Get("operatingHours", inp), Get("unitCost", inp)};
 
-	const double fanEfficiency = GetBool("isSpecified", inp) ? Get("userInputFanEfficiency", inp) / 100 : Get("fanEfficiency", inp) / 100;
+	// const double fanEfficiency = GetBool("isSpecified", inp) ? Get("userInputFanEfficiency", inp) / 100 : Get("fanEfficiency", inp) / 100;
+	const double fanEfficiency = Get("fanEfficiency", inp) / 100;
 
-	auto const output = result.calculateModified(fanFieldData, fanEfficiency, false);
+	// auto const output = result.calculateModified(fanFieldData, fanEfficiency, false);
+	auto const output = result.calculateModified(fanFieldData, fanEfficiency);
 
 	SetR("fanEfficiency", output.fanEfficiency * 100);
 	SetR("motorRatedPower", output.motorRatedPower);
@@ -261,61 +263,61 @@ NAN_METHOD(fanResultsModified) {
 	info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(fanResultsOptimal) {
-	inp = info[0]->ToObject();
-	r = Nan::New<Object>();
+// NAN_METHOD(fanResultsOptimal) {
+// 	inp = info[0]->ToObject();
+// 	r = Nan::New<Object>();
 
-	Motor::Drive drive1 = GetEnumVal<Motor::Drive>("drive", inp);
+// 	Motor::Drive drive1 = GetEnumVal<Motor::Drive>("drive", inp);
 
-	double specifiedDriveEfficiency;
-    if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency", inp) / 100;
-    }
-    else {
-        specifiedDriveEfficiency = 1;
-    }
+// 	double specifiedDriveEfficiency;
+//     if (drive1 == Motor::Drive::SPECIFIED) {
+//         specifiedDriveEfficiency = Get("specifiedDriveEfficiency", inp) / 100;
+//     }
+//     else {
+//         specifiedDriveEfficiency = 1;
+//     }
 
-	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), drive1, specifiedDriveEfficiency};
+// 	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), drive1, specifiedDriveEfficiency};
 
-	double const measuredVoltage = Get("measuredVoltage", inp);
-	double const measuredAmps = Get("measuredAmps", inp);
-	double const flowRate = Get("flowRate", inp);
-	double const inletPressure = Get("inletPressure", inp);
-	double const outletPressure = Get("outletPressure", inp);
-	double const compressibilityFactor = Get("compressibilityFactor", inp);
-	Fan::FieldDataModifiedAndOptimal fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
-	                                                 outletPressure, compressibilityFactor};
+// 	double const measuredVoltage = Get("measuredVoltage", inp);
+// 	double const measuredAmps = Get("measuredAmps", inp);
+// 	double const flowRate = Get("flowRate", inp);
+// 	double const inletPressure = Get("inletPressure", inp);
+// 	double const outletPressure = Get("outletPressure", inp);
+// 	double const compressibilityFactor = Get("compressibilityFactor", inp);
+// 	Fan::FieldDataModified fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
+// 	                                                 outletPressure, compressibilityFactor};
 
-	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
-	double const motorRatedPower = Get("motorRatedPower", inp);
-	double const motorRpm = Get("motorRpm", inp);
-	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
-	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
-	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
-	double const fullLoadAmps = Get("fullLoadAmps", inp);
-	double const sizeMargin = Get("sizeMargin", inp);
+// 	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
+// 	double const motorRatedPower = Get("motorRatedPower", inp);
+// 	double const motorRpm = Get("motorRpm", inp);
+// 	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
+// 	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
+// 	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
+// 	double const fullLoadAmps = Get("fullLoadAmps", inp);
+// 	double const sizeMargin = Get("sizeMargin", inp);
 
-	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
+// 	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
 
-	FanResult result = {input, motor, Get("operatingHours", inp), Get("unitCost", inp)};
+// 	FanResult result = {input, motor, Get("operatingHours", inp), Get("unitCost", inp)};
 
-	auto const output = GetBool("isSpecified", inp) ? result.calculateOptimal(fanFieldData, Get("userInputFanEfficiency", inp) / 100)
-	                                                : result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
+// 	auto const output = GetBool("isSpecified", inp) ? result.calculateOptimal(fanFieldData, Get("userInputFanEfficiency", inp) / 100)
+// 	                                                : result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
 
-	SetR("fanEfficiency", output.fanEfficiency * 100);
-	SetR("motorRatedPower", output.motorRatedPower);
-	SetR("motorShaftPower", output.motorShaftPower);
-	SetR("fanShaftPower", output.fanShaftPower);
-	SetR("motorEfficiency", output.motorEfficiency * 100);
-	SetR("motorPowerFactor", output.motorPowerFactor * 100);
-	SetR("motorCurrent", output.motorCurrent);
-	SetR("motorPower", output.motorPower);
-	SetR("annualEnergy", output.annualEnergy);
-	SetR("annualCost", output.annualCost);
-	SetR("estimatedFLA", output.estimatedFLA);
-	SetR("fanEnergyIndex", output.fanEnergyIndex);
-	info.GetReturnValue().Set(r);
-}
+// 	SetR("fanEfficiency", output.fanEfficiency * 100);
+// 	SetR("motorRatedPower", output.motorRatedPower);
+// 	SetR("motorShaftPower", output.motorShaftPower);
+// 	SetR("fanShaftPower", output.fanShaftPower);
+// 	SetR("motorEfficiency", output.motorEfficiency * 100);
+// 	SetR("motorPowerFactor", output.motorPowerFactor * 100);
+// 	SetR("motorCurrent", output.motorCurrent);
+// 	SetR("motorPower", output.motorPower);
+// 	SetR("annualEnergy", output.annualEnergy);
+// 	SetR("annualCost", output.annualCost);
+// 	SetR("estimatedFLA", output.estimatedFLA);
+// 	SetR("fanEnergyIndex", output.fanEnergyIndex);
+// 	info.GetReturnValue().Set(r);
+// }
 
 NAN_METHOD(getBaseGasDensityRelativeHumidity) {
 	inp = info[0]->ToObject();

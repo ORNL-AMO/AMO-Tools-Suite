@@ -56,29 +56,11 @@ public:
     Output calculateExisting(Fan::FieldDataBaseline const & fanFieldData);
 
     /**
-     * @param fanFieldData, Fan::FieldDataModifiedAndOptimal
+     * @param fanFieldData, Fan::FieldDataModified
      * @param fanEfficiency, double
-     * @param isOptimal, bool determines whether or not to optimize motor (use EE or PE) or use existing efficiency class
      * @return FanResult::Output, the results of a fan system assessment
      */
-    Output calculateModified(Fan::FieldDataModifiedAndOptimal const & fanFieldData, double fanEfficiency, bool isOptimal);
-
-    /**
-     *
-     * @param fanFieldData
-     * @param fanType
-     * @return FanResult::Output, the results of a fan system assessment
-     */
-    Output calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData, OptimalFanEfficiency::FanType fanType);
-
-    /**
-     * For when the user defines their fan efficiency, which will skip over the OptimalFanEfficiency::calculate() function
-     * @param fanFieldData
-     * @param userInputFanEfficiency
-     * @return FanResult::Output
-     */
-    Output calculateOptimal(Fan::FieldDataModifiedAndOptimal const & fanFieldData, double userInputFanEfficiency);
-
+    Output calculateModified(Fan::FieldDataModified const & fanFieldData, double fanEfficiency);
 
 private:
     double annualSavingsPotential = 0;
@@ -106,22 +88,7 @@ public:
      */
     PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingHours, double unitCost)
             : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
-              unitCost(unitCost), baselinePumpEfficiency(0.0)
-    {};
-
-    /**
-     * Constructor
-     * @param pumpInput Pump::Input, contains all pump-related data, passed by reference
-     * @param motor Motor, contains all motor-related calculations, passed by reference
-     * @param fieldData FieldData, contains all field data-related calculations, passed by reference
-     * @param baselinePumpEfficiency double, baseline pump efficiency
-     * @param operatingHours double, fraction(%) of calendar hours the equipment is operating
-     * @param unitCost double, per unit energy cost of electricity in $/kwh
-     */
-    PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double baselinePumpEfficiency,
-               double operatingHours, double unitCost)
-            : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
-              unitCost(unitCost), baselinePumpEfficiency(baselinePumpEfficiency)
+              unitCost(unitCost)
     {};
 
     /**
@@ -170,11 +137,10 @@ public:
 
     Result & calculateExisting();
     Result & calculateModified();
-    Result & calculateOptimal();
 
 private:
     // Out values
-    Result existing, optimal, modified;
+    Result existing, modified;
     double annualSavingsPotential = 0.0;
     double optimizationRating = 0.0;
     // In values
@@ -182,7 +148,6 @@ private:
     Motor motor;
     Pump::FieldData fieldData;
     double operatingHours, unitCost;
-    double baselinePumpEfficiency;
 };
 
 

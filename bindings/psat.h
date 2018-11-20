@@ -141,83 +141,6 @@ Pump::SpecificSpeed speed() {
     return static_cast<Pump::SpecificSpeed>(val);
 }
 
-NAN_METHOD(resultsExistingAndOptimal) {
-    inp = info[0]->ToObject();
-    r = Nan::New<Object>();
-
-    Pump::Style style1 = style();
-    Motor::Drive drive1 = drive();
-
-    double specifiedDriveEfficiency;
-    if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency")/100;
-    }
-    else {
-        specifiedDriveEfficiency = 1;
-    }
-
-    double viscosity = Get("kinematic_viscosity");
-    double specifc_gravity = Get("specific_gravity");
-    int stages = static_cast<int>(Get("stages"));
-    Pump::SpecificSpeed fixed_speed = speed();
-    double pump_specified = Get("pump_specified")/100;
-    double pump_rated_speed = Get("pump_rated_speed");
-
-    Motor::LineFrequency lineFrequency = line();
-    double motor_rated_power = Get("motor_rated_power");
-    double motor_rated_speed = Get("motor_rated_speed");
-    Motor::EfficiencyClass efficiencyClass = effCls();
-    double efficiency = Get("efficiency");
-    double motor_rated_voltage = Get("motor_rated_voltage");
-    double motor_rated_fla = Get("motor_rated_fla");
-    double margin = Get("margin");
-
-    double fraction = Get("operating_hours");
-    double cost = Get("cost_kw_hour");
-
-    double flow = Get("flow_rate");
-    double head = Get("head");
-    Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
-    double motor_field_power = Get("motor_field_power");
-    double motor_field_current = Get("motor_field_current");
-    double motor_field_voltage = Get("motor_field_voltage");
-
-    Pump::Input pump(style1, pump_specified, pump_rated_speed, drive1, viscosity, specifc_gravity, stages, fixed_speed, specifiedDriveEfficiency);
-    Motor motor(lineFrequency, motor_rated_power, motor_rated_speed, efficiencyClass, efficiency, motor_rated_voltage, motor_rated_fla, margin);
-    Pump::FieldData fd(flow, head, loadEstimationMethod1, motor_field_power, motor_field_current, motor_field_voltage);
-    PSATResult psat(pump, motor, fd, fraction, cost);
-	try {
-        auto const & ex = psat.calculateExisting();
-        auto const & opt = psat.calculateOptimal();
-        std::map<const char *, std::vector<double>> out = {
-                {"pump_efficiency",          {ex.pumpEfficiency * 100,                 opt.pumpEfficiency * 100}},
-                {"motor_rated_power",        {ex.motorRatedPower,                      opt.motorRatedPower}},
-                {"motor_shaft_power",        {ex.motorShaftPower,                      opt.motorShaftPower}},
-                {"pump_shaft_power",         {ex.pumpShaftPower,                       opt.pumpShaftPower}},
-                {"motor_efficiency",         {ex.motorEfficiency * 100,                opt.motorEfficiency * 100}},
-                {"motor_power_factor",       {ex.motorPowerFactor * 100,               opt.motorPowerFactor * 100}},
-                {"motor_current",            {ex.motorCurrent,                         opt.motorCurrent}},
-                {"motor_power",              {ex.motorPower,                           opt.motorPower}},
-                {"annual_energy",            {ex.annualEnergy,                         opt.annualEnergy}},
-                {"annual_cost",              {ex.annualCost * 1000,                    opt.annualCost * 1000}},
-                {"annual_savings_potential", {psat.getAnnualSavingsPotential() * 1000, -1}},
-                {"optimization_rating",      {psat.getOptimizationRating(),            -1}}
-        };
-        for (auto p: out) {
-            auto a = Nan::New<v8::Array>();
-            a->Set(0, Nan::New<Number>(p.second[0]));
-            a->Set(1, Nan::New<Number>(p.second[1]));
-            Local <String> nm = Nan::New<String>(p.first).ToLocalChecked();
-            Nan::Set(r, nm, a);
-        }
-        info.GetReturnValue().Set(r);
-    } catch (std::runtime_error const & e) {
-        std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in resultsExistingAndOptimal - psat.h: " + what).c_str());
-        info.GetReturnValue().Set(r);
-    }
-}
-
 NAN_METHOD(resultsExisting) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
@@ -283,70 +206,6 @@ NAN_METHOD(resultsModified) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    double baselinePumpEfficiency = Get("baseline_pump_efficiency") / 100;
-
-    Pump::Style style1 = style();
-    Motor::Drive drive1 = drive();
-    Pump::SpecificSpeed fixed_speed = speed();
-
-    double specifiedDriveEfficiency;
-    if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency") / 100;
-    }
-    else {
-        specifiedDriveEfficiency = 1;
-    }
-
-    Motor::LineFrequency lineFrequency = line();
-    Motor::EfficiencyClass efficiencyClass = effCls();
-
-    Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
-
-    Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
-              Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed, specifiedDriveEfficiency);
-
-    Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
-                Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
-
-    Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
-                 Get("motor_field_current"), Get("motor_field_voltage"));
-
-    PSATResult psat(pump, motor, fd, baselinePumpEfficiency, Get("operating_hours"), Get("cost_kw_hour"));
-    try {
-        auto const & mod = psat.calculateModified();
-
-        std::unordered_map<std::string, double> out = {
-                {"pump_efficiency",          mod.pumpEfficiency * 100},
-                {"motor_rated_power",        mod.motorRatedPower},
-                {"motor_shaft_power",        mod.motorShaftPower},
-                {"pump_shaft_power",         mod.pumpShaftPower},
-                {"motor_efficiency",         mod.motorEfficiency * 100},
-                {"motor_power_factor",       mod.motorPowerFactor * 100},
-                {"motor_current",            mod.motorCurrent},
-                {"motor_power",              mod.motorPower},
-                {"annual_energy",            mod.annualEnergy},
-                {"annual_cost",              mod.annualCost * 1000},
-                {"annual_savings_potential", psat.getAnnualSavingsPotential() * 1000},
-                {"optimization_rating",      psat.getOptimizationRating()}
-        };
-
-        for (auto const &p: out) {
-            Local <String> key = Nan::New<String>(p.first).ToLocalChecked();
-            Local <Number> value = Nan::New(p.second);
-            Nan::Set(r, key, value);
-        }
-        info.GetReturnValue().Set(r);
-    } catch (std::runtime_error const & e) {
-        std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in resultsModified - psat.h: " + what).c_str());
-        info.GetReturnValue().Set(r);
-    }
-}
-
-NAN_METHOD(resultsOptimal) {
-    inp = info[0]->ToObject();
-    r = Nan::New<Object>();
-
     Pump::Style style1 = style();
     Motor::Drive drive1 = drive();
     Pump::SpecificSpeed fixed_speed = speed();
@@ -374,20 +233,20 @@ NAN_METHOD(resultsOptimal) {
                  Get("motor_field_current"), Get("motor_field_voltage"));
 
     PSATResult psat(pump, motor, fd, Get("operating_hours"), Get("cost_kw_hour"));
-	try {
-        auto const & opt = psat.calculateOptimal();
+    try {
+        auto const & mod = psat.calculateModified();
 
         std::unordered_map<std::string, double> out = {
-                {"pump_efficiency",          opt.pumpEfficiency * 100},
-                {"motor_rated_power",        opt.motorRatedPower},
-                {"motor_shaft_power",        opt.motorShaftPower},
-                {"pump_shaft_power",         opt.pumpShaftPower},
-                {"motor_efficiency",         opt.motorEfficiency * 100},
-                {"motor_power_factor",       opt.motorPowerFactor * 100},
-                {"motor_current",            opt.motorCurrent},
-                {"motor_power",              opt.motorPower},
-                {"annual_energy",            opt.annualEnergy},
-                {"annual_cost",              opt.annualCost * 1000},
+                {"pump_efficiency",          mod.pumpEfficiency * 100},
+                {"motor_rated_power",        mod.motorRatedPower},
+                {"motor_shaft_power",        mod.motorShaftPower},
+                {"pump_shaft_power",         mod.pumpShaftPower},
+                {"motor_efficiency",         mod.motorEfficiency * 100},
+                {"motor_power_factor",       mod.motorPowerFactor * 100},
+                {"motor_current",            mod.motorCurrent},
+                {"motor_power",              mod.motorPower},
+                {"annual_energy",            mod.annualEnergy},
+                {"annual_cost",              mod.annualCost * 1000},
                 {"annual_savings_potential", psat.getAnnualSavingsPotential() * 1000},
                 {"optimization_rating",      psat.getOptimizationRating()}
         };
@@ -400,7 +259,7 @@ NAN_METHOD(resultsOptimal) {
         info.GetReturnValue().Set(r);
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in resultsOptimal - psat.h: " + what).c_str());
+        ThrowError(std::string("std::runtime_error thrown in resultsModified - psat.h: " + what).c_str());
         info.GetReturnValue().Set(r);
     }
 }
@@ -454,7 +313,7 @@ NAN_METHOD(pumpEfficiency)  {
     r = Nan::New<Object>();
     Pump::Style s = style();
     double flow = Get("flow_rate");
-    OptimalPrePumpEff pef(s, 0, flow);
+    OptimalPrePumpEff pef(s, flow);
     double v = pef.calculate();
     SetR("average",v);
     double odf = OptimalDeviationFactor(flow).calculate();

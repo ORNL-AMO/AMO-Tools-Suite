@@ -71,7 +71,7 @@ namespace Fan {
 		Motor::Drive drive;
 	};
 
-	struct FieldDataModifiedAndOptimal {
+	struct FieldDataModified {
 		/**
 		 * To be used for Modified and Optimal Fan results
 		 * @param measuredVoltage
@@ -81,7 +81,7 @@ namespace Fan {
 		 * @param outletPressure
 		 * @param compressibilityFactor
 		 */
-		FieldDataModifiedAndOptimal(const double measuredVoltage, const double measuredAmps, const double flowRate, const double inletPressure,
+		FieldDataModified(const double measuredVoltage, const double measuredAmps, const double flowRate, const double inletPressure,
 		                            const double outletPressure, const double compressibilityFactor)
 				: measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
 				  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor)
@@ -90,7 +90,7 @@ namespace Fan {
 		double measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor;
 	};
 
-	struct FieldDataBaseline: public FieldDataModifiedAndOptimal {
+	struct FieldDataBaseline: public FieldDataModified {
 		/**
 		 * To be used for Baseline Fan results
 		 * @param measuredPower
@@ -105,7 +105,7 @@ namespace Fan {
 		FieldDataBaseline(const double measuredPower, const double measuredVoltage, const double measuredAmps,
 		                  const double flowRate, const double inletPressure, const double outletPressure,
 		                  const double compressibilityFactor, Motor::LoadEstimationMethod loadEstimationMethod)
-				: FieldDataModifiedAndOptimal(measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor),
+				: FieldDataModified(measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor),
 				  measuredPower(measuredPower), loadEstimationMethod(loadEstimationMethod)
 		{}
 
@@ -159,7 +159,7 @@ namespace Pump {
 		/**
 		 * Constructor
 		 * @param style Style, classification of style of pump being used.
-		 * @param achievableEfficiency double, pump % efficiency at the specified operating conditions
+		 * @param pumpEfficiency double, pump % efficiency at the specified operating conditions
 		 * @param rpm double, pump RPM to define its operating speed
 		 * @param drive Drive, type of drive the pump uses from either direct or belt drive.
 		 * @param kviscosity double, kinematic viscosity of the fluid being pumped in centistokes.
@@ -167,17 +167,17 @@ namespace Pump {
 		 * @param stageCount int, the number of pump stages
 		 * @param speed Speed, type of pump speed from either fixed or not fixed.
 		 */
-		Input(const Style style, const double achievableEfficiency, const double rpm, const Motor::Drive drive,
+		Input(const Style style, const double pumpEfficiency, const double rpm, const Motor::Drive drive,
 		     const double kviscosity,
 		     const double specificGravity, const int stageCount, const SpecificSpeed speed, const double specifiedEfficiency)
-				: style(style), drive(drive), speed(speed), achievableEfficiency(achievableEfficiency), rpm(rpm),
+				: style(style), drive(drive), speed(speed), pumpEfficiency(pumpEfficiency), rpm(rpm),
 				  kviscosity(kviscosity),
 				  specificGravity(specificGravity), stageCount(stageCount), specifiedEfficiency(specifiedEfficiency) {};
 
 		const Style style;
 		const Motor::Drive drive;
 		const SpecificSpeed speed;
-		const double achievableEfficiency, rpm, kviscosity, specificGravity, specifiedEfficiency;
+		const double pumpEfficiency, rpm, kviscosity, specificGravity, specifiedEfficiency;
 		const int stageCount;
 	};
 }

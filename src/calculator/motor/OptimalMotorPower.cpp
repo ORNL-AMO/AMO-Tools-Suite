@@ -15,26 +15,22 @@
 #include "calculator/motor/MotorPowerFactor.h"
 #include "calculator/motor/MotorPower.h"
 
-OptimalMotorPower::Output OptimalMotorPower::calculate(bool isOptimal) {
+
+OptimalMotorPower::Output OptimalMotorPower::calculate() {
     double tempLoadFraction = 0.00;
     double mspkW;
     double tempMsp = 0, tempMsp1 = 0, tempMsp2 = 0, powerE1 = 0, powerE2 = 0;
     double eff1 = 0, eff2 = 0, lf = 0, current1 = 0, current2 = 0;
 
     double power, efficiency, current, powerFactor;
-    while (true) {
-        Motor::EfficiencyClass optimalEfficiencyClass = efficiencyClass;
-        if (isOptimal && efficiencyClass != Motor::EfficiencyClass::SPECIFIED) {
-            int const poleCase = Poles(motorRPM, lineFrequency).calculate() / 2 - 1;
-            optimalEfficiencyClass = (poleCase > 2) ? Motor::EfficiencyClass::ENERGY_EFFICIENT : Motor::EfficiencyClass::PREMIUM;
-        }
 
-        MotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, optimalEfficiencyClass,
+    while (true) {
+        MotorCurrent optimalMotorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass,
                                          specifiedEfficiency, tempLoadFraction, ratedVoltage);
         current = optimalMotorCurrent.calculateOptimalCurrent();
         //Adjustment to current based on measured Voltage
         current = current * ((((fieldVoltage / ratedVoltage) - 1) * (1 + (-2 * tempLoadFraction))) + 1);
-        MotorEfficiency motorEfficiency(lineFrequency, motorRPM, optimalEfficiencyClass, motorRatedPower);
+        MotorEfficiency motorEfficiency(lineFrequency, motorRPM, efficiencyClass, motorRatedPower);
         efficiency = motorEfficiency.calculate(tempLoadFraction, specifiedEfficiency);
         //Similar to motorpowerfactor in existing case instead of ratedVoltage
         MotorPowerFactor motorPowerFactor(lineFrequency, motorRPM, efficiencyClass, specifiedEfficiency,
@@ -61,6 +57,7 @@ OptimalMotorPower::Output OptimalMotorPower::calculate(bool isOptimal) {
             tempLoadFraction += 0.01;
         }
     }
+
     // Calculate Fractional Index
     const double motorMspdiff = tempMsp2 - tempMsp1;
     const double measuredMspdiff = mspkW - tempMsp1;
