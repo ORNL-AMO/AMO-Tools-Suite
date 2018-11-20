@@ -25,11 +25,11 @@ public:
 	     * @param current in amps
 	     * @param powerFactor  unitless
 	     */
-        Output(const double power, const double efficiency, const double current, const double powerFactor)
-                : power(power), efficiency(efficiency), current(current), powerFactor(powerFactor)
+        Output(const double power, const double efficiency, const double current, const double powerFactor, const double loadFactor)
+                : power(power), efficiency(efficiency), current(current), powerFactor(powerFactor), loadFactor(loadFactor)
         {}
 
-        const double power, efficiency, current, powerFactor;
+        const double power, efficiency, current, powerFactor, loadFactor;
     };
 
     /**
