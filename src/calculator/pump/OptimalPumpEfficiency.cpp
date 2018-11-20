@@ -17,8 +17,8 @@
 
 double OptimalPumpEfficiency::calculate() {
 
-    OptimalPrePumpEff optimalPrePumpEff(style, achievableEfficiency, flowRate);
-    pumpEfficiency = optimalPrePumpEff.calculate();
+    OptimalPrePumpEff optimalPrePumpEff(style, flowRate);
+    prePumpEfficiency = optimalPrePumpEff.calculate();
     /*
      * You may have individual functions for each also.
      */
@@ -43,10 +43,7 @@ double OptimalPumpEfficiency::calculate() {
     /*
      * Optimal Efficiency
      */
-    pumpEfficiency = pumpEfficiency / 100;
-    optimalEfficiency = (pumpEfficiency * viscosityCorrectionFactor - speedCorrection) * positiveDeviationFactor;
-    if (style == Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY) {
-        optimalEfficiency = achievableEfficiency;
-    }
+    prePumpEfficiency = prePumpEfficiency / 100;
+    optimalEfficiency = (prePumpEfficiency * viscosityCorrectionFactor - speedCorrection) * positiveDeviationFactor;
     return optimalEfficiency;
 }
