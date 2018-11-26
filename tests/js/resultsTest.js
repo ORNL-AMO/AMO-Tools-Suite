@@ -66,7 +66,7 @@ test('psatModified2', function (t) {
 
     var psatResult = bindings.resultsModified(inp);
 
-   t.equal(psatResult.pump_efficiency, 90, 'modified pump efficiency is ' + psatResult.pump_efficiency);
+    t.equal(psatResult.pump_efficiency, 90, 'modified pump efficiency is ' + psatResult.pump_efficiency);
     t.equal(psatResult.motor_rated_power, 100 , 'modified motor rated power is ' + psatResult.motor_rated_power);
     t.equal(rnd(psatResult.motor_shaft_power), rnd(90.23903566714407), 'modified motor shaft power is ' + psatResult.motor_shaft_power);
     t.equal(rnd(psatResult.pump_shaft_power), rnd(90.23903566714407), 'modified pump power is ' + psatResult.pump_shaft_power);

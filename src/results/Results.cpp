@@ -39,7 +39,7 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const & fa
                                                  fanInput.airDensity, fanFieldData.measuredPower).calculateEnergyIndex();
 
     return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost,
-            fanEnergyIndex, output.estimatedFLA};
+            fanEnergyIndex, output.loadFactor, output.estimatedFLA};
 }
 
 FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const & fanFieldData, const double fanEfficiency) {
@@ -61,7 +61,7 @@ FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const & fa
                                                  fanInput.airDensity, output.power).calculateEnergyIndex();
 
     return {fanEfficiency, motor.motorRatedPower, motorShaftPower, fanShaftPower, output.efficiency, output.powerFactor,
-            output.current, output.power, annualEnergy, annualCost, fanEnergyIndex};
+            output.current, output.power, annualEnergy, annualCost, fanEnergyIndex, output.loadFactor};
 }
 
 PSATResult::Result & PSATResult::calculateExisting() {
@@ -92,6 +92,7 @@ PSATResult::Result & PSATResult::calculateExisting() {
     existing.motorEfficiency = output.efficiency;
     existing.motorPower = output.power;
     existing.estimatedFLA = output.estimatedFLA;
+    existing.loadFactor = output.loadFactor;
 
 	existing.motorRatedPower = motor.motorRatedPower;
     existing.pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
@@ -136,6 +137,8 @@ PSATResult::Result & PSATResult::calculateModified() {
     modified.motorEfficiency = output.efficiency;
     modified.motorPower = output.power;
     modified.motorPowerFactor = output.powerFactor;
+    modified.loadFactor = output.loadFactor;
+
 
     // Calculate Annual Energy
     AnnualEnergy annualEnergy(modified.motorPower, operatingHours);

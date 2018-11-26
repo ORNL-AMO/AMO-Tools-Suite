@@ -198,6 +198,7 @@ NAN_METHOD(fanResultsExisting) {
 	SetR("motorPowerFactor", output.motorPowerFactor * 100);
 	SetR("motorCurrent", output.motorCurrent);
 	SetR("motorPower", output.motorPower);
+	SetR("loadFactor", output.loadFactor);
 	SetR("annualEnergy", output.annualEnergy);
 	SetR("annualCost", output.annualCost);
 	SetR("estimatedFLA", output.estimatedFLA);
@@ -256,6 +257,7 @@ NAN_METHOD(fanResultsModified) {
 	SetR("motorPowerFactor", output.motorPowerFactor * 100);
 	SetR("motorCurrent", output.motorCurrent);
 	SetR("motorPower", output.motorPower);
+	SetR("loadFactor", output.loadFactor);
 	SetR("annualEnergy", output.annualEnergy);
 	SetR("annualCost", output.annualCost);
 	SetR("estimatedFLA", output.estimatedFLA);

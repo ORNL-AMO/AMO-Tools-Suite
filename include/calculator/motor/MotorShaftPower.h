@@ -40,12 +40,12 @@ public:
 		 *
 		 */
 		Output(const double shaftPower, const double current, const double powerFactor, const double efficiency,
-		       const double power, const double estimatedFLA)
+		       const double power, const double estimatedFLA, const double loadFactor)
 				: shaftPower(shaftPower), current(current), powerFactor(powerFactor), efficiency(efficiency),
-				  power(power), estimatedFLA(estimatedFLA)
+				  power(power), estimatedFLA(estimatedFLA), loadFactor(loadFactor)
 		{}
 
-		const double shaftPower, current, powerFactor, efficiency, power, estimatedFLA;
+		const double shaftPower, current, powerFactor, efficiency, power, estimatedFLA, loadFactor;
 	};
 
    /**
