@@ -58,7 +58,7 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
         auto const motorShaftPower = (fieldPower * efficiency) / 0.746;
         /// Electric power is same as Field value when load estimation method is POWER
         power = fieldPower;
-        return {motorShaftPower, current, powerFactor, efficiency, power, estimatedFLA};
+        return {motorShaftPower, current, powerFactor, efficiency, power, estimatedFLA, fractionalIndex};
     } else { /// When the load estimation method is Current.
         double tempLoadFraction = 0.00;
         double powerE1, powerE2, lf1, lf2, eff1, eff2, current1, current2;
@@ -116,6 +116,6 @@ MotorShaftPower::Output MotorShaftPower::calculate() {
         powerFactor = power / (current * fieldVoltage * std::sqrt(3) / 1000);
         /// Output in hp
         double const motorShaftPower = (power * efficiency) / 0.746;
-        return {motorShaftPower, current, powerFactor, efficiency, power, estimatedFLA};
+        return {motorShaftPower, current, powerFactor, efficiency, power, estimatedFLA, fractionalIndex};
     }
 }

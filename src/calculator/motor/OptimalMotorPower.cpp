@@ -73,5 +73,5 @@ OptimalMotorPower::Output OptimalMotorPower::calculate() {
     power = powerE1 + 100 * (fractionalIndex - lf) * (powerE2 - powerE1);
     powerFactor = power / (current * fieldVoltage * std::sqrt(3) / 1000);
 
-    return {power, efficiency, current, powerFactor};
+    return {power, efficiency, current, powerFactor, fractionalIndex};
 }
