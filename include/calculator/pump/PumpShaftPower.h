@@ -15,6 +15,15 @@
 
 class PumpShaftPower {
 public:
+
+    struct Output {
+        Output(const double pumpShaftPower, const double driveEfficiency)
+            : pumpShaftPower(pumpShaftPower), driveEfficiency(driveEfficiency)
+        {}
+
+        const double pumpShaftPower, driveEfficiency;
+    };
+
     /**
      * Constructor
      * @param motorShaftPower double, motor shaft power as defined in hp
@@ -34,7 +43,7 @@ public:
      * Calculates the pump shaft power
      * @return double, pump shaft power in hp
      */
-    double calculate();
+    Output calculate();
 
     /**
      * Gets the motor shaft power

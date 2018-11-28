@@ -118,6 +118,7 @@ public:
         ///< Optimal: This is the annual energy cost based on the product of the optimal annual energy consumption and the unit operating cost (cents/kwhr) input.
         double estimatedFLA;       ///< Existing: The full load amps are either specified (known) or estimated. This field will hold either one. The estimated full load amps are calculated from the motor voltage, hp, and speed.
         double loadFactor;
+        double driveEfficiency;
     };
 
     /**

@@ -17,6 +17,14 @@
 class OptimalMotorShaftPower {
 public:
 
+    struct Output {
+        Output(const double motorShaftPower, const double driveEfficiency)
+            : motorShaftPower(motorShaftPower), driveEfficiency(driveEfficiency)
+        {}
+
+        const double motorShaftPower, driveEfficiency;
+    };
+
     /**
      * Constructor
      * @param pumpShaftPower double, Pump shaft power as defined in hp
@@ -36,7 +44,7 @@ public:
      * Calculates the optimal motor shaft power
      * @return double, optimal motor shaft power in hp
      */
-    double calculate();
+    Output calculate();
 
     /**
      * Gets the pump shaft power
@@ -89,7 +97,8 @@ public:
 private:
     double pumpShaftPower;
     Motor::Drive drive;
-    double motorShaftPower;
+    // double motorShaftPower;
+    // double driveEfficiency;
     double specifiedEfficiency;
 };
 
