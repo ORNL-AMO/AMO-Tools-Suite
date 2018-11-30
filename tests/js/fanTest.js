@@ -18,7 +18,7 @@ test('fansExisting', function (t) {
     };
 
     var output = bindings.fanResultsExisting(input);
-
+    
     t.equal(rnd(output.fanEfficiency), rnd(59.5398315));
     t.equal(rnd(output.motorRatedPower), rnd(600.0));
     t.equal(rnd(output.motorShaftPower), rnd(590.622186263));

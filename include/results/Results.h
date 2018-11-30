@@ -25,25 +25,25 @@ public:
     struct Output {
         Output(const double fanEfficiency, const double motorRatedPower, const double motorShaftPower, const double fanShaftPower,
                const double motorEfficiency, const double motorPowerFactor, const double motorCurrent, const double motorPower,
-               const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double loadFactor, const double estimatedFLA = 0)
+               const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double loadFactor, const double driveEfficiency, const double estimatedFLA = 0)
                 : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower),
                   fanShaftPower(fanShaftPower), motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor),
                   motorCurrent(motorCurrent), motorPower(motorPower), annualEnergy(annualEnergy), annualCost(annualCost),
-                  estimatedFLA(estimatedFLA), fanEnergyIndex(fanEnergyIndex), loadFactor(loadFactor)
+                  estimatedFLA(estimatedFLA), fanEnergyIndex(fanEnergyIndex), loadFactor(loadFactor), driveEfficiency(driveEfficiency)
         {}
 
         Output(const MotorShaftPower::Output output, const double fanEfficiency, const double motorRatedPower,
-               const double fanShaftPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double loadFactor,
+               const double fanShaftPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double loadFactor, const double driveEfficiency,
                const double estimatedFLA = 0)
                 : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
                   fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
                   motorCurrent(output.current), motorPower(output.power), annualEnergy(annualEnergy), annualCost(annualCost),
-                  estimatedFLA(estimatedFLA), fanEnergyIndex(fanEnergyIndex), loadFactor(loadFactor)
+                  estimatedFLA(estimatedFLA), fanEnergyIndex(fanEnergyIndex), loadFactor(loadFactor), driveEfficiency(driveEfficiency)
         {}
 
         const double fanEfficiency, motorRatedPower, motorShaftPower, fanShaftPower, motorEfficiency, motorPowerFactor, motorCurrent;
         const double motorPower, annualEnergy, annualCost, estimatedFLA, fanEnergyIndex;
-        const double loadFactor;
+        const double loadFactor, driveEfficiency;
     };
 
     FanResult(Fan::Input & fanInput, Motor & motor, double operatingHours, double unitCost)
@@ -118,6 +118,7 @@ public:
         ///< Optimal: This is the annual energy cost based on the product of the optimal annual energy consumption and the unit operating cost (cents/kwhr) input.
         double estimatedFLA;       ///< Existing: The full load amps are either specified (known) or estimated. This field will hold either one. The estimated full load amps are calculated from the motor voltage, hp, and speed.
         double loadFactor;
+        double driveEfficiency;
     };
 
     /**
