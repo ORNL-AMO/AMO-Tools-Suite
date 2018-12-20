@@ -1,6 +1,6 @@
 const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../')
-    , bindings = require('bindings')({ module_root: testRoot, bindings: 'ssmt'});
+    , bindings = require('bindings')({module_root: testRoot, bindings: 'ssmt'});
 
 function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
@@ -64,19 +64,19 @@ test('saturatedPropertiesGivenTemperature', function (t) {
 
     t.equal(rnd(res.liquidEnthalpy), rnd(112.57499081240724), 'res.liquidEnthalpy is ' + res.liquidEnthalpy);
 
-    t.equal(rnd(res.gasEnthalpy), rnd(2549.8930083073265), 'res.gasEnthalpy is '+ res.gasEnthalpy);
+    t.equal(rnd(res.gasEnthalpy), rnd(2549.8930083073265), 'res.gasEnthalpy is ' + res.gasEnthalpy);
 
     t.equal(rnd(res.evaporationEnthalpy), rnd(2437.3180174949193), 'res.evaporationEnthalpy is ' + res.evaporationEnthalpy);
 
     t.equal(rnd(res.liquidEntropy), rnd(0.3931236014741), 'res.liquidEntropy is ' + res.liquidEntropy);
 
-    t.equal(rnd(res.gasEntropy), rnd(8.517536685028846), 'res.gasEntropy is '+ res.gasEntropy);
+    t.equal(rnd(res.gasEntropy), rnd(8.517536685028846), 'res.gasEntropy is ' + res.gasEntropy);
 
     t.equal(rnd(res.evaporationEntropy), rnd(8.124413083554746), 'res.evaporationEntropy is ' + res.evaporationEntropy);
 
     t.equal(rnd(res.liquidVolume), rnd(0.0010034979299339492), 'res.liquidVolume is ' + res.liquidVolume);
 
-    t.equal(rnd(res.gasVolume), rnd(39.08205832377987), 'res.gasVolume is '+ res.gasVolume);
+    t.equal(rnd(res.gasVolume), rnd(39.08205832377987), 'res.gasVolume is ' + res.gasVolume);
 
     t.equal(rnd(res.evaporationVolume), rnd(39.08105482584993), 'res.evaporationVolume is ' + res.evaporationVolume);
 
@@ -98,19 +98,19 @@ test('saturatedPropertiesGivenPressure', function (t) {
 
     t.equal(rnd(res.liquidEnthalpy), rnd(1827.1006242178723), 'res.liquidEnthalpy is ' + res.liquidEnthalpy);
 
-    t.equal(rnd(res.gasEnthalpy), rnd(2421.680542687896), 'res.gasEnthalpy is '+ res.gasEnthalpy);
+    t.equal(rnd(res.gasEnthalpy), rnd(2421.680542687896), 'res.gasEnthalpy is ' + res.gasEnthalpy);
 
     t.equal(rnd(res.evaporationEnthalpy), rnd(594.5799184700236), 'res.evaporationEnthalpy is ' + res.evaporationEnthalpy);
 
     t.equal(rnd(res.liquidEntropy), rnd(4.015381593120578), 'res.liquidEntropy is ' + res.liquidEntropy);
 
-    t.equal(rnd(res.gasEntropy), rnd(4.946001326758373), 'res.gasEntropy is '+ res.gasEntropy);
+    t.equal(rnd(res.gasEntropy), rnd(4.946001326758373), 'res.gasEntropy is ' + res.gasEntropy);
 
     t.equal(rnd(res.evaporationEntropy), rnd(0.930619733637795), 'res.evaporationEntropy is ' + res.evaporationEntropy);
 
     t.equal(rnd(res.liquidVolume), rnd(0.0020386472456956663), 'res.liquidVolume is ' + res.liquidVolume);
 
-    t.equal(rnd(res.gasVolume), rnd(0.005936854102266306), 'res.gasVolume is '+ res.gasVolume);
+    t.equal(rnd(res.gasVolume), rnd(0.005936854102266306), 'res.gasVolume is ' + res.gasVolume);
 
     t.equal(rnd(res.evaporationVolume), rnd(0.0038982068565706395), 'res.evaporationVolume is ' + res.evaporationVolume);
 });
@@ -137,7 +137,7 @@ test('steamProperties', function (t) {
 
     t.equal(rnd(res.quality), rnd(0.44940059413065064), 'res.quality is ' + res.quality);
 
-    t.equal(rnd(res.specificVolume), rnd(0.008904111059648875), 'res.specificVolume is '+ res.specificVolume);
+    t.equal(rnd(res.specificVolume), rnd(0.008904111059648875), 'res.specificVolume is ' + res.specificVolume);
 
 });
 
@@ -146,9 +146,9 @@ test('boiler', function (t) {
     t.type(bindings.boiler, 'function');
 
     var inp = {
-        deaeratorPressure : 10, combustionEfficiency : 85, blowdownRate : 2,
-        steamPressure : 20, thermodynamicQuantity : 1, //1 is ENTHALPY
-        quantityValue : 2000, steamMassFlow : 45
+        deaeratorPressure: 10, combustionEfficiency: 85, blowdownRate: 2,
+        steamPressure: 20, thermodynamicQuantity: 1, //1 is ENTHALPY
+        quantityValue: 2000, steamMassFlow: 45
     };
 
     var res = bindings.boiler(inp);
@@ -158,8 +158,8 @@ test('boiler', function (t) {
     t.equal(rnd(res.blowdownEnergyFlow), rnd(1.6779495528531483), 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
     t.equal(rnd(res.feedwaterMassFlow), rnd(45.91836734693878), 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
     t.equal(rnd(res.feedwaterEnergyFlow), rnd(64.64697706690914), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
-    t.equal(rnd(res.boilerEnergy), rnd(47.7843372368242), 'res.boilerEnergy is '+ res.boilerEnergy);
-    t.equal(rnd(res.fuelEnergy), rnd(56.216867337440235), 'res.fuelEnergy is '+ res.fuelEnergy);
+    t.equal(rnd(res.boilerEnergy), rnd(47.7843372368242), 'res.boilerEnergy is ' + res.boilerEnergy);
+    t.equal(rnd(res.fuelEnergy), rnd(56.216867337440235), 'res.fuelEnergy is ' + res.fuelEnergy);
 });
 
 test('heatLoss', function (t) {
@@ -167,11 +167,11 @@ test('heatLoss', function (t) {
     t.type(bindings.heatLoss, 'function');
 
     var inp = {
-        inletPressure : 2.418,
-        thermodynamicQuantity : 0, //0 is TEMPERATURE
-        quantityValue : 521,
-        inletMassFlow : 5434,
-        percentHeatLoss : 2.44
+        inletPressure: 2.418,
+        thermodynamicQuantity: 0, //0 is TEMPERATURE
+        quantityValue: 521,
+        inletMassFlow: 5434,
+        percentHeatLoss: 2.44
     };
 
     var res = bindings.heatLoss(inp);
@@ -187,11 +187,11 @@ test('flashTank', function (t) {
     t.type(bindings.flashTank, 'function');
 
     var inp = {
-        inletWaterPressure : 4.54484,
-        thermodynamicQuantity : 1, //1 is ENTHALPY
-        quantityValue : 2000,
-        inletWaterMassFlow : 36133,
-        tankPressure : 3.3884
+        inletWaterPressure: 4.54484,
+        thermodynamicQuantity: 1, //1 is ENTHALPY
+        quantityValue: 2000,
+        inletWaterMassFlow: 36133,
+        tankPressure: 3.3884
     };
 
     var res = bindings.flashTank(inp);
@@ -208,11 +208,11 @@ test('prvWithoutDesuperheating', function (t) {
     t.type(bindings.prvWithoutDesuperheating, 'function');
 
     var inp = {
-        inletPressure : 4.8794,
-        thermodynamicQuantity : 0, //0 is TEMPERATURE
-        quantityValue : 691.5,
-        inletMassFlow : 37970,
-        outletPressure : 4.0823
+        inletPressure: 4.8794,
+        thermodynamicQuantity: 0, //0 is TEMPERATURE
+        quantityValue: 691.5,
+        inletMassFlow: 37970,
+        outletPressure: 4.0823
     };
 
     var res = bindings.prvWithoutDesuperheating(inp);
@@ -229,15 +229,15 @@ test('prvWithDesuperheating', function (t) {
     t.type(bindings.prvWithDesuperheating, 'function');
 
     var inp = {
-        inletPressure : 2.8937,
-        thermodynamicQuantity : 0, //0 is TEMPERATURE
-        quantityValue : 936.3,
-        inletMassFlow : 17599,
-        outletPressure : 0.8188,
-        feedwaterPressure : 0.2937,
-        feedwaterThermodynamicQuantity : 2, //2 is ENTROPY
-        feedwaterQuantityValue : 5,
-        desuperheatingTemp : 708.3
+        inletPressure: 2.8937,
+        thermodynamicQuantity: 0, //0 is TEMPERATURE
+        quantityValue: 936.3,
+        inletMassFlow: 17599,
+        outletPressure: 0.8188,
+        feedwaterPressure: 0.2937,
+        feedwaterThermodynamicQuantity: 2, //2 is ENTROPY
+        feedwaterQuantityValue: 5,
+        desuperheatingTemp: 708.3
     };
 
     var res = bindings.prvWithDesuperheating(inp);
@@ -254,15 +254,15 @@ test('deaerator', function (t) {
     t.type(bindings.deaerator, 'function');
 
     var inp = {
-        deaeratorPressure : 0.1998,
-        ventRate : 0.4,
-        feedwaterMassFlow : 41685,
-        waterPressure : 0.1235,
-        waterThermodynamicQuantity : 1, //1 is ENTHALPY
-        waterQuantityValue : 100,
-        steamPressure : 0.4777,
-        steamThermodynamicQuantity : 2, //2 is ENTROPY
-        steamQuantityValue : 6
+        deaeratorPressure: 0.1998,
+        ventRate: 0.4,
+        feedwaterMassFlow: 41685,
+        waterPressure: 0.1235,
+        waterThermodynamicQuantity: 1, //1 is ENTHALPY
+        waterQuantityValue: 100,
+        steamPressure: 0.4777,
+        steamThermodynamicQuantity: 2, //2 is ENTROPY
+        steamQuantityValue: 6
     };
 
     var res = bindings.deaerator(inp);
