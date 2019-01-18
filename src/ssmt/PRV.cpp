@@ -7,6 +7,7 @@
  *
  */
 
+#include <iostream>
 #include "ssmt/PRV.h"
 
 PrvWithoutDesuperheating::PrvWithoutDesuperheating(const double inletPressure,
@@ -20,6 +21,8 @@ PrvWithoutDesuperheating::PrvWithoutDesuperheating(const double inletPressure,
 }
 
 void PrvWithoutDesuperheating::calculateProperties() {
+    std::cout << "PrvWithoutDesuperheating::calculateProperties: begin" << std::endl;
+
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
     outletProperties = SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
                                        inletProperties.specificEnthalpy).calculate();
@@ -32,15 +35,17 @@ PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
                                              const double outletPressure, const double feedwaterPressure,
                                              const SteamProperties::ThermodynamicQuantity feedwaterQuantityType,
                                              const double feedwaterQuantityValue, const double desuperheatingTemp)
-        : inletPressure(inletPressure), quantityValue(quantityValue), inletMassFlow(inletMassFlow),
-          outletPressure(outletPressure), feedwaterPressure(feedwaterPressure),
+        : PrvWithoutDesuperheating(inletPressure, quantityType, quantityValue, inletMassFlow, outletPressure),
+          feedwaterPressure(feedwaterPressure),
           feedwaterQuantityValue(feedwaterQuantityValue), desuperheatingTemp(desuperheatingTemp),
-          quantityType(quantityType), feedwaterQuantityType(feedwaterQuantityType)
+          feedwaterQuantityType(feedwaterQuantityType)
 {
     calculateProperties();
 }
 
 void PrvWithDesuperheating::calculateProperties() {
+    std::cout << "PrvWithDesuperheating::calculateProperties: begin" << std::endl;
+
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
 	feedwaterProperties = SteamProperties(feedwaterPressure, feedwaterQuantityType, feedwaterQuantityValue).calculate();
     outletProperties= SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
