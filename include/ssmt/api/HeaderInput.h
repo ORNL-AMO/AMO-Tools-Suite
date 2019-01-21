@@ -64,6 +64,10 @@ public:
                 const std::shared_ptr<HeaderNotHighestPressure> &mediumPressureHeader,
                 const std::shared_ptr<HeaderNotHighestPressure> &lowPressureHeader);
 
+    int getHeaderCount() const;
+
+    double getPressureFromLowestPressureHeader() const;
+
     HeaderWithHighestPressure getHighPressureHeader() const;
 
     std::shared_ptr<HeaderNotHighestPressure> getLowPressureHeader() const;

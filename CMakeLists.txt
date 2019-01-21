@@ -117,6 +117,62 @@ set(SOURCE_FILES
         src/ssmt/api/SteamModelerInput.cpp
         src/ssmt/api/SteamModelerOutput.cpp
         src/ssmt/api/TurbineInput.cpp
+        src/ssmt/domain/BoilerFactory.cpp
+        src/ssmt/domain/DeaeratorFactory.cpp
+        src/ssmt/domain/FlashTankFactory.cpp
+        src/ssmt/domain/FluidPropertiesFactory.cpp
+        src/ssmt/domain/HeaderFactory.cpp
+        src/ssmt/domain/HeatLossFactory.cpp
+        src/ssmt/domain/InletFactory.cpp
+        src/ssmt/domain/PrvWithDesuperheatingFactory.cpp
+        src/ssmt/domain/PrvWithoutDesuperheatingFactory.cpp
+        src/ssmt/domain/SteamModelerOutputFactory.cpp
+        src/ssmt/domain/TurbineFactory.cpp
+        src/ssmt/service/DeaeratorModeler.cpp
+        src/ssmt/service/EnergyFlowCalculator.cpp
+        src/ssmt/service/energy_and_cost/EnergyAndCostCalculator.cpp
+        src/ssmt/service/high_pressure_header/CondensingTurbineCalculator.cpp
+        src/ssmt/service/high_pressure_header/HighPressureCondensateCalculator.cpp
+        src/ssmt/service/high_pressure_header/HighPressureFlashTankCalculator.cpp
+        src/ssmt/service/high_pressure_header/HighPressureHeaderCalculator.cpp
+        src/ssmt/service/high_pressure_header/HighPressureHeaderModeler.cpp
+        src/ssmt/service/high_pressure_header/HighPressureHeatLossCalculator.cpp
+        src/ssmt/service/high_pressure_header/HighToLowSteamTurbineCalculator.cpp
+        src/ssmt/service/high_pressure_header/HighToMediumSteamTurbineCalculator.cpp
+        src/ssmt/service/low_pressure_header/LowPressureCondensateCalculator.cpp
+        src/ssmt/service/low_pressure_header/LowPressureFlashedSteamIntoHeaderCalculator.cpp
+        src/ssmt/service/low_pressure_header/LowPressureHeaderCalculator.cpp
+        src/ssmt/service/low_pressure_header/LowPressureHeaderModeler.cpp
+        src/ssmt/service/low_pressure_header/LowPressureHeatLossCalculator.cpp
+        src/ssmt/service/low_pressure_header/LowPressurePrvCalculator.cpp
+        src/ssmt/service/MassFlowCalculator.cpp
+        src/ssmt/service/medium_pressure_header/HighToMediumPrvCalculator.cpp
+        src/ssmt/service/medium_pressure_header/MediumPressureCondensateCalculator.cpp
+        src/ssmt/service/medium_pressure_header/MediumPressureHeaderCalculator.cpp
+        src/ssmt/service/medium_pressure_header/MediumPressureHeaderModeler.cpp
+        src/ssmt/service/medium_pressure_header/MediumPressureHeatLossCalculator.cpp
+        src/ssmt/service/medium_pressure_header/MediumToLowPressureTurbineCalculator.cpp
+        src/ssmt/service/power_balance/LowPressureVentedSteamCalculator.cpp
+        src/ssmt/service/power_balance/PowerBalanceChecker.cpp
+        src/ssmt/service/power_balance/SteamBalanceCalculator.cpp
+        src/ssmt/service/power_balance/SteamProductionCalculator.cpp
+        src/ssmt/service/power_balance/SteamUseCalculator.cpp
+        src/ssmt/service/process_steam_usage/ProcessSteamUsageModeler.cpp
+        src/ssmt/service/PrvCalculator.cpp
+        src/ssmt/service/Restarter.cpp
+        src/ssmt/service/SteamBalanceException.cpp
+        src/ssmt/service/SteamModelCalculator.cpp
+        src/ssmt/service/SteamModelRunner.cpp
+        src/ssmt/service/SteamReducer.cpp
+        src/ssmt/service/TurbineCalculator.cpp
+        src/ssmt/service/water_and_condensate/CombinedCondensateCalculator.cpp
+        src/ssmt/service/water_and_condensate/HeatExchangerCalculator.cpp
+        src/ssmt/service/water_and_condensate/MakeupWaterAndCondensateHeaderCalculator.cpp
+        src/ssmt/service/water_and_condensate/MakeupWaterAndCondensateHeaderModeler.cpp
+        src/ssmt/service/water_and_condensate/MakeupWaterCalculator.cpp
+        src/ssmt/service/water_and_condensate/MakeupWaterMassFlowCalculator.cpp
+        src/ssmt/service/water_and_condensate/MakeupWaterVolumeFlowCalculator.cpp
+        src/ssmt/service/water_and_condensate/ReturnCondensateCalculator.cpp
         src/fans/FanCurve.cpp
         src/calculator/util/CompressedAir.cpp
         src/calculator/util/CHP.cpp
@@ -198,6 +254,75 @@ set(INCLUDE_FILES
         include/ssmt/api/SteamModelerInput.h
         include/ssmt/api/SteamModelerOutput.h
         include/ssmt/api/TurbineInput.h
+        include/ssmt/domain/BoilerFactory.h
+        include/ssmt/domain/DeaeratorFactory.h
+        include/ssmt/domain/EnergyAndCostCalculationsDomain.h
+        include/ssmt/domain/FlashTankFactory.h
+        include/ssmt/domain/FluidPropertiesFactory.h
+        include/ssmt/domain/HeaderFactory.h
+        include/ssmt/domain/HeatLossFactory.h
+        include/ssmt/domain/HighPressureHeaderCalculationsDomain.h
+        include/ssmt/domain/HighToMediumSteamTurbineCalculationsDomain.h
+        include/ssmt/domain/InletFactory.h
+        include/ssmt/domain/LowPressureFlashedSteamIntoHeaderCalculatorDomain.h
+        include/ssmt/domain/LowPressureHeaderCalculationsDomain.h
+        include/ssmt/domain/LowPressureVentedSteamCalculationsDomain.h
+        include/ssmt/domain/MakeupWaterAndCondensateHeaderCalculationsDomain.h
+        include/ssmt/domain/MakeupWaterVolumeFlowCalculationsDomain.h
+        include/ssmt/domain/MediumPressureHeaderCalculationsDomain.h
+        include/ssmt/domain/PowerBalanceCheckerCalculationsDomain.h
+        include/ssmt/domain/ProcessSteamUsageCalculationsDomain.h
+        include/ssmt/domain/PrvWithDesuperheatingFactory.h
+        include/ssmt/domain/PrvWithoutDesuperheatingFactory.h
+        include/ssmt/domain/ReturnCondensateCalculationsDomain.h
+        include/ssmt/domain/SteamModelCalculationsDomain.h
+        include/ssmt/domain/SteamModelerOutputFactory.h
+        include/ssmt/domain/TurbineFactory.h
+        include/ssmt/service/DeaeratorModeler.h
+        include/ssmt/service/EnergyFlowCalculator.h
+        include/ssmt/service/energy_and_cost/EnergyAndCostCalculator.h
+        include/ssmt/service/high_pressure_header/CondensingTurbineCalculator.h
+        include/ssmt/service/high_pressure_header/HighPressureCondensateCalculator.h
+        include/ssmt/service/high_pressure_header/HighPressureFlashTankCalculator.h
+        include/ssmt/service/high_pressure_header/HighPressureHeaderCalculator.h
+        include/ssmt/service/high_pressure_header/HighPressureHeaderModeler.h
+        include/ssmt/service/high_pressure_header/HighPressureHeatLossCalculator.h
+        include/ssmt/service/high_pressure_header/HighToLowSteamTurbineCalculator.h
+        include/ssmt/service/high_pressure_header/HighToMediumSteamTurbineCalculator.h
+        include/ssmt/service/low_pressure_header/LowPressureCondensateCalculator.h
+        include/ssmt/service/low_pressure_header/LowPressureFlashedSteamIntoHeaderCalculator.h
+        include/ssmt/service/low_pressure_header/LowPressureHeaderCalculator.h
+        include/ssmt/service/low_pressure_header/LowPressureHeaderModeler.h
+        include/ssmt/service/low_pressure_header/LowPressureHeatLossCalculator.h
+        include/ssmt/service/low_pressure_header/LowPressurePrvCalculator.h
+        include/ssmt/service/MassFlowCalculator.h
+        include/ssmt/service/medium_pressure_header/HighToMediumPrvCalculator.h
+        include/ssmt/service/medium_pressure_header/MediumPressureCondensateCalculator.h
+        include/ssmt/service/medium_pressure_header/MediumPressureHeaderCalculator.h
+        include/ssmt/service/medium_pressure_header/MediumPressureHeaderModeler.h
+        include/ssmt/service/medium_pressure_header/MediumPressureHeatLossCalculator.h
+        include/ssmt/service/medium_pressure_header/MediumToLowPressureTurbineCalculator.h
+        include/ssmt/service/power_balance/LowPressureVentedSteamCalculator.h
+        include/ssmt/service/power_balance/PowerBalanceChecker.h
+        include/ssmt/service/power_balance/SteamBalanceCalculator.h
+        include/ssmt/service/power_balance/SteamProductionCalculator.h
+        include/ssmt/service/power_balance/SteamUseCalculator.h
+        include/ssmt/service/process_steam_usage/ProcessSteamUsageModeler.h
+        include/ssmt/service/PrvCalculator.h
+        include/ssmt/service/Restarter.h
+        include/ssmt/service/SteamBalanceException.h
+        include/ssmt/service/SteamModelCalculator.h
+        include/ssmt/service/SteamModelRunner.h
+        include/ssmt/service/SteamReducer.h
+        include/ssmt/service/TurbineCalculator.h
+        include/ssmt/service/water_and_condensate/CombinedCondensateCalculator.h
+        include/ssmt/service/water_and_condensate/HeatExchangerCalculator.h
+        include/ssmt/service/water_and_condensate/MakeupWaterAndCondensateHeaderCalculator.h
+        include/ssmt/service/water_and_condensate/MakeupWaterAndCondensateHeaderModeler.h
+        include/ssmt/service/water_and_condensate/MakeupWaterCalculator.h
+        include/ssmt/service/water_and_condensate/MakeupWaterMassFlowCalculator.h
+        include/ssmt/service/water-and-condensate/MakeupWaterVolumeFlowCalculator.h
+        include/ssmt/service/water_and_condensate/ReturnCondensateCalculator.h
         include/fans/Fan203.h
         include/fans/FanShaftPower.h
         include/fans/Planar.h

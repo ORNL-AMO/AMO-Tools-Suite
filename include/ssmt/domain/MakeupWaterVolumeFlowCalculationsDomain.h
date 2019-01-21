@@ -1,0 +1,10 @@
+#ifndef AMO_TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATIONSDOMAIN_H
+#define AMO_TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATIONSDOMAIN_H
+
+class MakeupWaterVolumeFlowCalculationsDomain {
+public:
+    double makeupWaterVolumeFlow;
+    double makeupWaterVolumeFlowAnnual;
+};
+
+#endif //AMO_TOOLS_SUITE_MAKEUPWATERVOLUMEFLOWCALCULATIONSDOMAIN_H

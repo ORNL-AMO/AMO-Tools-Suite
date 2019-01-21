@@ -120,13 +120,26 @@
         },
         {
             "target_name": "ssmt",
-            'include_dirs': ['include', 'include/ssmt', 'include/ssmt/api',
+            'include_dirs': ['include', 'include/ssmt', 'include/ssmt/api', 'include/ssmt/domain',
+                'include/ssmt/service', 'include/ssmt/service/high_pressure_header',
+                'include/ssmt/service/low_pressure_header', 'include/ssmt/service/medium_pressure_header',
+                'include/ssmt/service/water_and_condensate', 'include/ssmt/service/power_balance',
+                'include/ssmt/service/process_steam_usage', 'include/ssmt/service/energy_and_cost',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources' : [
                 'bindings/ssmt.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/').map(f=>'src/ssmt/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/api/').map(f=>'src/ssmt/api/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/domain/').map(f=>'src/ssmt/domain/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/').map(f=>'src/ssmt/service/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/high_pressure_header/').map(f=>'src/ssmt/service/high_pressure_header/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/low_pressure_header/').map(f=>'src/ssmt/service/low_pressure_header/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/medium_pressure_header/').map(f=>'src/ssmt/service/medium_pressure_header/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/water_and_condensate/').map(f=>'src/ssmt/service/water_and_condensate/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/power_balance/').map(f=>'src/ssmt/service/power_balance/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/process_steam_usage/').map(f=>'src/ssmt/service/process_steam_usage/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/energy_and_cost/').map(f=>'src/ssmt/service/energy_and_cost/'+f).join(' '))\")",
             ],
             "conditions": [
                 [ 'OS=="mac"', {
