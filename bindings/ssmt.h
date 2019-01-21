@@ -15,6 +15,7 @@
 #include "ssmt/Deaerator.h"
 #include "ssmt/Header.h"
 #include "ssmt/Turbine.h"
+#include "ssmt/HeatExchanger.h"
 #include <string>
 #include <stdexcept>
 #include <array>
@@ -622,6 +623,65 @@ NAN_METHOD(turbine) {
     SetR("energyOut", t->getEnergyOut());
     SetR("powerOut", t->getPowerOut());
     SetR("generatorEfficiency", t->getGeneratorEfficiency());
+    info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(heatExchanger) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    const double hotInletMassFlow = GetDouble("hotInletMassFlow");
+    const double hotInletEnergyFlow = GetDouble("hotInletEnergyFlow");
+    const double hotInletTemperature = GetDouble("hotInletTemperature");
+    const double hotInletPressure = GetDouble("hotInletPressure");
+    const double hotInletQuality = GetDouble("hotInletQuality");
+    const double hotInletSpecificVolume = GetDouble("hotInletSpecificVolume");
+    const double hotInletDensity = GetDouble("hotInletDensity");
+    const double hotInletSpecificEnthalpy = GetDouble("hotInletSpecificEnthalpy");
+    const double hotInletSpecificEntropy = GetDouble("hotInletSpecificEntropy");
+
+    const double coldInletMassFlow = GetDouble("coldInletMassFlow");
+    const double coldInletEnergyFlow = GetDouble("coldInletEnergyFlow");
+    const double coldInletTemperature = GetDouble("coldInletTemperature");
+    const double coldInletPressure = GetDouble("coldInletPressure");
+    const double coldInletQuality = GetDouble("coldInletQuality");
+    const double coldInletSpecificVolume = GetDouble("coldInletSpecificVolume");
+    const double coldInletDensity = GetDouble("coldInletDensity");
+    const double coldInletSpecificEnthalpy = GetDouble("coldInletSpecificEnthalpy");
+    const double coldInletSpecificEntropy = GetDouble("coldInletSpecificEntropy");
+
+    const double approachTemp = GetDouble("approachTemp");
+
+    const SteamSystemModelerTool::FluidProperties hotInlet(hotInletMassFlow, hotInletEnergyFlow, hotInletTemperature,
+    hotInletPressure, hotInletQuality, hotInletSpecificVolume, hotInletDensity, hotInletSpecificEnthalpy,
+    hotInletSpecificEntropy);
+
+    const SteamSystemModelerTool::FluidProperties coldInlet(coldInletMassFlow, coldInletEnergyFlow, coldInletTemperature,
+    coldInletPressure, coldInletQuality, coldInletSpecificVolume, coldInletDensity, coldInletSpecificEnthalpy,
+    coldInletSpecificEntropy);
+
+    auto const output = HeatExchanger(hotInlet, coldInlet, approachTemp).calculate();
+
+    SetR("hotOutletMassFlow", output.hotOutlet.massFlow);
+    SetR("hotOutletEnergyFlow", output.hotOutlet.energyFlow);
+    SetR("hotOutletTemperature", output.hotOutlet.temperature);
+    SetR("hotOutletPressure", output.hotOutlet.pressure);
+    SetR("hotOutletQuality", output.hotOutlet.quality);
+    SetR("hotOutletSpecificVolume", output.hotOutlet.specificVolume);
+    SetR("hotOutletDensity", output.hotOutlet.density);
+    SetR("hotOutletSpecificEnthalpy", output.hotOutlet.specificEnthalpy);
+    SetR("hotOutletSpecificEntropy", output.hotOutlet.specificEntropy);
+
+    SetR("coldOutletMassFlow", output.coldOutlet.massFlow);
+    SetR("coldOutletEnergyFlow", output.coldOutlet.energyFlow);
+    SetR("coldOutletTemperature", output.coldOutlet.temperature);
+    SetR("coldOutletPressure", output.coldOutlet.pressure);
+    SetR("coldOutletQuality", output.coldOutlet.quality);
+    SetR("coldOutletSpecificVolume", output.coldOutlet.specificVolume);
+    SetR("coldOutletDensity", output.coldOutlet.density);
+    SetR("coldOutletSpecificEnthalpy", output.coldOutlet.specificEnthalpy);
+    SetR("coldOutletSpecificEntropy", output.coldOutlet.specificEntropy);
+
     info.GetReturnValue().Set(r);
 }
 
