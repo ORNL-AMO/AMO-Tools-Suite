@@ -35,6 +35,7 @@ local.properties
 
 # External tool builders
 .externalToolBuilders/
+.autotools
 
 # Locally stored "Eclipse launch configurations"
 *.launch
@@ -87,12 +88,16 @@ local.properties
 
 # Visio autosave temporary files
 *.~vsdx
+
 ### CMake template
+arch.c
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Makefile
 cmake_install.cmake
+CPackConfig.cmake
+CPackSourceConfig.cmake
 install_manifest.txt
 CTestTestfile.cmake
 ### TortoiseGit template
@@ -175,6 +180,7 @@ _Chutzpah*
 
 # Visual C++ cache files
 ipch/
+*.sln
 *.aps
 *.ncb
 *.opendb
@@ -881,5 +887,6 @@ flycheck_*.el
 
 ##.vcxproj and .sln
 *.vcxproj
+*.vcxproj.filters
 *.vcxproj/*
 .sln
