@@ -78,6 +78,10 @@ public:
 
     friend std::ostream &operator<<(std::ostream &stream, const HeaderInput &headerInput);
 
+    int getHeaderCount() const;
+
+    double getPressureFromLowestPressureHeader() const;
+
     HeaderWithHighestPressure getHighPressureHeader() const;
 
     std::shared_ptr<HeaderNotHighestPressure> getLowPressureHeader() const;

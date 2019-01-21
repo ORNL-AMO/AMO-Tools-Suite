@@ -88,6 +88,20 @@ std::ostream &operator<<(std::ostream &stream, const HeaderInput &headerInput) {
                   << ", lowPressureHeader=" << headerInput.lowPressureHeader << "]";
 }
 
+int HeaderInput::getHeaderCount() const {
+    int headerCount = 1;    // always at least 1 header (the high)
+    if (mediumPressureHeader != nullptr) headerCount++;
+    if (lowPressureHeader != nullptr) headerCount++;
+
+    std::cout << "HeaderInput::getHeaderCount: headerCount=" << headerCount << std::endl;
+
+    return headerCount;
+}
+
+double HeaderInput::getPressureFromLowestPressureHeader() const {
+    return getHeaderCount() == 1 ? highPressureHeader.getPressure() : lowPressureHeader->getPressure();
+}
+
 HeaderWithHighestPressure HeaderInput::getHighPressureHeader() const {
     return highPressureHeader;
 }
