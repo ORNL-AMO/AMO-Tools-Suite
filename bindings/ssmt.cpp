@@ -49,6 +49,8 @@ NAN_MODULE_INIT(InitSsmt) {
     Nan::Set(target, New<String>("heatExchanger").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(heatExchanger)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("steamModeler").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(steamModeler)).ToLocalChecked());
 }
 
 NODE_MODULE(ssmt, InitSsmt)

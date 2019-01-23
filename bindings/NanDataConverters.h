@@ -11,6 +11,8 @@ using namespace v8;
 Local <Object> inp;
 Local <Object> r;
 
+bool isStringEqualCaseInsensitive(const std::string &string1, const std::string &string2);
+
 /**
  * Get the value for the specified name from the specified object.
  * @param name Name (variable name) of the value on the specified object.
@@ -20,7 +22,7 @@ Local <Object> r;
 Local <Value> getValue(std::string const &name, Local <Object> sourceObject) {
     if (sourceObject.IsEmpty()) {
         auto msg = std::string(
-                "getValue: sourceObject is empty/does not exist; trying to get value name=" + name).c_str();
+                "ssmt.h: getValue: sourceObject is empty/does not exist; trying to get value name=" + name).c_str();
         std::cout << msg << std::endl;
 
         ThrowTypeError(msg);
@@ -29,7 +31,7 @@ Local <Value> getValue(std::string const &name, Local <Object> sourceObject) {
     Local <String> localName = Nan::New<String>(name).ToLocalChecked();
     Local <Value> value = sourceObject->Get(localName);
     if (value->IsUndefined()) {
-        auto msg = std::string("getValue method in ssmt.h: " + name + " not present in sourceObject").c_str();
+        auto msg = std::string("ssmt.h: getValue: field '" + name + "' not present in sourceObject").c_str();
         std::cout << "getValue: " << msg << std::endl;
 
         ThrowTypeError(msg);
@@ -55,6 +57,28 @@ Local <Object> getObject(std::string const &name, Local <Object> sourceObject) {
  */
 Local <Object> getObject(std::string const &name) {
     return getObject(name, inp);
+}
+
+/**
+ * Get the string value for the specified name from the specified object.
+ * @param name Name (variable name) of the value.
+ * @param sourceObject The specified object to get the string value from.
+ * @return The value as a string.
+ */
+std::string getString(std::string const &name, Local <Object> sourceObject) {
+    Local <Value> value = getValue(name, sourceObject);
+    Local <String> localString = value->ToString();
+    String::Utf8Value utf8String(localString);
+    return std::string(*utf8String);
+}
+
+/**
+ * Get the string value for the specified name from the root input object (inp).
+ * @param name Name (variable name) of the value.
+ * @return The value as a string.
+ */
+std::string getString(std::string const &name) {
+    return getString(name, inp);
 }
 
 /**
@@ -95,6 +119,22 @@ bool getBool(std::string const &name, Local <Object> sourceObject) {
  */
 bool getBool(std::string const &name) {
     return getBool(name, inp);
+}
+
+bool getBoolFromString(const std::string &name, Local <Object> sourceObject) {
+    const std::string &stringValue = getString(name, sourceObject);
+    const std::string &trueString = "true";
+    const std::string &yesString = "yes";
+    return isStringEqualCaseInsensitive(stringValue, trueString) ||
+           isStringEqualCaseInsensitive(stringValue, yesString);
+}
+
+bool isStringEqualCaseInsensitive(const std::string &string1, const std::string &string2) {
+    return _strcmpi(string1.c_str(), string2.c_str()) == 0;
+}
+
+bool getBoolFromString(const std::string &name) {
+    return getBoolFromString(name, inp);
 }
 
 /**

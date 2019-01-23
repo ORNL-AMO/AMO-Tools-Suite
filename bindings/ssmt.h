@@ -15,6 +15,9 @@
 #include "ssmt/Header.h"
 #include "ssmt/Turbine.h"
 #include "ssmt/HeatExchanger.h"
+#include "ssmt/api/SteamModeler.h"
+#include "steam/SteamModelerInputDataMapper.h"
+#include "steam/SteamModelerOutputDataMapper.h"
 #include <string>
 #include <stdexcept>
 #include <array>
@@ -191,7 +194,6 @@ NAN_METHOD(steamProperties) {
 }
 
 NAN_METHOD(boiler) {
-
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
@@ -642,6 +644,20 @@ NAN_METHOD(heatExchanger) {
     setR("coldOutletSpecificEntropy", output.coldOutlet.specificEntropy);
 
     info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(steamModeler) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    info.GetReturnValue().Set(r);
+
+    SteamModelerInputDataMapper inputDataMapper = SteamModelerInputDataMapper();
+    SteamModeler steamModeler = SteamModeler();
+    SteamModelerOutputDataMapper outputDataMapper = SteamModelerOutputDataMapper();
+
+    SteamModelerInput steamModelerInput = inputDataMapper.map();
+    SteamModelerOutput steamModelerOutput = steamModeler.model(steamModelerInput);
+    outputDataMapper.map(steamModelerOutput);
 }
 
 #endif //AMO_TOOLS_SUITE_SSMT_H
