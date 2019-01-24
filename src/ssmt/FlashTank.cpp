@@ -6,7 +6,7 @@
  * @bug No known bugs.
  *
  */
-
+#include <iostream>
 #include "ssmt/FlashTank.h"
 
 FlashTank::FlashTank(const double inletWaterPressure, const SteamProperties::ThermodynamicQuantity quantityType,
@@ -22,8 +22,17 @@ void FlashTank::calculateProperties() {
     inletWaterProperties = {inletWaterMassFlow, inletWaterMassFlow * sp.specificEnthalpy / 1000, sp};
 
     auto saturatedProperties = SaturatedProperties(tankPressure, SaturatedTemperature(tankPressure).calculate()).calculate();
-	double const liquidMassFlow = inletWaterMassFlow * (inletWaterProperties.specificEnthalpy - saturatedProperties.gasSpecificEnthalpy)
-						  / (saturatedProperties.liquidSpecificEnthalpy - saturatedProperties.gasSpecificEnthalpy);
+	double liquidMassFlow;
+	if (inletWaterProperties.specificEnthalpy > saturatedProperties.gasSpecificEnthalpy) {
+		liquidMassFlow = 0;
+	}
+	else if (inletWaterProperties.specificEnthalpy < saturatedProperties.liquidSpecificEnthalpy) {
+		liquidMassFlow = inletWaterMassFlow;
+	}
+	else {
+		liquidMassFlow = inletWaterMassFlow * (inletWaterProperties.specificEnthalpy - saturatedProperties.gasSpecificEnthalpy) / (saturatedProperties.liquidSpecificEnthalpy - saturatedProperties.gasSpecificEnthalpy);
+	}
+
 	// TODO question density is 0 below bc saturated properties doesn't return density, same with both sp objects here
     sp = {
 			saturatedProperties.temperature, saturatedProperties.pressure, 0,
