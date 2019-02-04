@@ -65,7 +65,7 @@ public:
 
     /**
      * Gets the measured or required pump head
-     * @return double, mesured or required pump head in ft
+     * @return double, measured or required pump head in ft
      */
     double getHead() const {
         return head;

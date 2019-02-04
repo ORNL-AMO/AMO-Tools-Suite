@@ -4,6 +4,7 @@
  * This contains the prototypes of PumpShaftPower calculator including getters and setters for the important fields.
  *
  * @author Gina Accawi (accawigk)
+ * @author Allie Ledbetter (Aeledbetter)
  * @bug No known bugs.
  *
  */
@@ -15,7 +16,11 @@
 
 class PumpShaftPower {
 public:
-
+    /**
+     * @param driveEfficiency, efficiency of the drive defined as a fraction, unitless
+     * 
+     * 
+     */
     struct Output {
         Output(const double pumpShaftPower, const double driveEfficiency)
             : pumpShaftPower(pumpShaftPower), driveEfficiency(driveEfficiency)
