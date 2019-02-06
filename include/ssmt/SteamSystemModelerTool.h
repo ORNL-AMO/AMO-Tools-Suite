@@ -293,6 +293,7 @@ private:
     /**
      * Uses linear interpolation to goal seek  region 3 using pressure and entropy
      * @param pressure double, pressure in MPa
+     * @param enthalpy double, specific enthalpy in kJ/kg
      * @param entropy double, specific entropy in kJ/kg/K
      * @return double, temperature in Kelvins
      */
@@ -363,9 +364,12 @@ private:
 
     // constants
 
+    /**
+     * Minimum Pressure of Water MPa
+     */
     static constexpr double PRESSURE_MIN = 0.01;
     /**
-     * Maximum Temperature of Water K
+     * Minimum Temperature of Water K
      */
     static constexpr double TEMPERATURE_MIN = 273.15;
     /**
@@ -374,7 +378,7 @@ private:
     static constexpr double PRESSURE_Tp = 16.5291643;
 
     /**
-     * Temperature of Water where ALL regions meet K
+     * Temperature of Water where ALL regions meet; K
      */
     static constexpr double TEMPERATURE_Tp = 623.15;
 
@@ -394,7 +398,7 @@ private:
     static constexpr double PRESSURE_MAX = 100;
 
     /**
-     * Maximum Temperature of Water MPa
+     * Maximum Temperature of Water K
      */
     static constexpr double TEMPERATURE_MAX = 1073.15;
 
