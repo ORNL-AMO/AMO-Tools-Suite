@@ -30,31 +30,31 @@ class NameplateData {
 public:
 
     NameplateData(const double ratedMotorPower, const bool variableSpeedMotor, 
-                  const double operationalFrequency, const int lineFrequency,
+                  const double operationalFrequency, const double lineFrequency,
                   const double motorAndDriveEfficiency, const double loadFactor);
 
     double getRatedMotorPower() const { return ratedMotorPower; }
     bool getVariableSpeedMotor() const { return variableSpeedMotor; }
     double getOperationalFrequency() const { return operationalFrequency; }
-    int getLineFrequency() const { return lineFrequency; }
+    double getLineFrequency() const { return lineFrequency; }
     double getMotorAndDriveEfficiency() const { return motorAndDriveEfficiency; }
     double getLoadFactor() const { return loadFactor; }
 
     void setRatedMotorPower(double ratedMotorPower);
     void setVariableSpeedMotor(bool variableSpeedMotor);
     void setOperationalFrequency(double operationalFrequency);
-    void setLineFrequency(int lineFrequency);
+    void setLineFrequency(double lineFrequency);
     void setMotorAndDriveEfficiency(double motorAndDriveEfficiency);
     void setLoadFactor(double loadFactor);
 
 private:
-    int lineFrequency;
+    double lineFrequency;
     bool variableSpeedMotor;
     double ratedMotorPower, operationalFrequency, motorAndDriveEfficiency, loadFactor;
 };
 
 class PowerMeterData {
-    
+public:
     PowerMeterData(const double power);
 
     double getPower() const { return power; }
@@ -65,6 +65,7 @@ private:
 };
 
 class OtherMethodData {
+public:
     OtherMethodData(const double energy);
 
     double getEnergy() const { return energy; }
@@ -98,6 +99,7 @@ public:
     int getMonthsPerYear() const { return monthsPerYear; }
     double getElectricityCost() const { return electricityCost; }
     int getMeasurementMethod() const { return measurementMethod; }
+    int getUnits() const { return units; }
     MultimeterData getMultimeterData() const { return multimeterData; }
     NameplateData getNameplateData() const { return nameplateData; }
     PowerMeterData getPowerMeterData() const { return powerMeterData; }
