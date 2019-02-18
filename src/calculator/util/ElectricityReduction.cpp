@@ -1,13 +1,13 @@
 #include <cmath>
 #include "calculator/util/ElectricityReduction.h"
 
-ElectricityReduction::ElectricityReduction(std::vector<ElectricityReductionInput> & electricityReductionInputVec)
-    : electricityReductionInputVec(std::move(electricityReductionInputVec))
-{
-    calculate();
-}
+// ElectricityReduction::ElectricityReduction(std::vector<ElectricityReductionInput> & electricityReductionInputVec)
+//     : electricityReductionInputVec(std::move(electricityReductionInputVec))
+// {
+//     // calculate();
+// }
 
-void ElectricityReduction::calculate() {
+ElectricityReduction::Output ElectricityReduction::calculate() {
     double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
 
     // loop through all supplied inputs
@@ -59,13 +59,17 @@ void ElectricityReduction::calculate() {
         }
     }
 
-
+    // output = Output(energyUse, energyCost, annualEnergySavings, costSavings);
+    return ElectricityReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings);
 }
-
 
 void ElectricityReduction::setElectricityReductionInputVec(std::vector<ElectricityReductionInput> & electricityReductionInput) {
     this->electricityReductionInputVec = std::move(electricityReductionInputVec);
 }
+
+// void ElectricityReduction::setOutput(ElectricityReduction::Output output) {
+//     this->output = output;
+// }
 
 
 
