@@ -120,24 +120,29 @@ class ElectricityReduction {
 public:
 
     struct Output {
-        Output(const double energyUse, const double energyCost, const double annualEnergySavings, const double costSavings)
+        Output(double energyUse, double energyCost, double annualEnergySavings, double costSavings)
             : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings)
-            {}
+            {
+            }
 
         Output() = default;
 
-        const double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
+        double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
     };
 
     ElectricityReduction(
         std::vector<ElectricityReductionInput> & electricityReductionInputVec
         ) :
             electricityReductionInputVec(electricityReductionInputVec)
-    {}
+    {
+        // calculate();
+    }
 
     void calculate();
 
-    Output getOutput() { return output; }
+    ElectricityReduction::Output getOutput() { return output; }
+
+    // ElectricityReduction::Output getOutput() const { return output; }
 
     std::vector<ElectricityReductionInput> const & getElectricityReductionInputVec() const {
         return electricityReductionInputVec;
@@ -145,11 +150,11 @@ public:
 
     void setElectricityReductionInputVec(std::vector<ElectricityReductionInput> & electricityReductionInputVec);
 
-    void setOutput(Output output);
+    // void setOutput(ElectricityReduction::Output output);
 
 private:
     std::vector<ElectricityReductionInput> electricityReductionInputVec;
-    Output output;
+    ElectricityReduction::Output output;
 };
 
 
