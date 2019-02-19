@@ -9,7 +9,11 @@
 class MultimeterData {
 public:
 
-    MultimeterData(const int numberOfPhases, const double supplyVoltage, const double averageCurrent, const double powerFactor);
+    MultimeterData(const int numberOfPhases, const double supplyVoltage,
+                   const double averageCurrent, const double powerFactor)
+                 : numberOfPhases(numberOfPhases), supplyVoltage(supplyVoltage),
+                   averageCurrent(averageCurrent), powerFactor(powerFactor)
+                   {}
 
     int getNumberOfPhases() const { return numberOfPhases; }
     double getSupplyVoltage() const { return supplyVoltage; }
@@ -31,7 +35,11 @@ public:
 
     NameplateData(const double ratedMotorPower, const bool variableSpeedMotor, 
                   const double operationalFrequency, const double lineFrequency,
-                  const double motorAndDriveEfficiency, const double loadFactor);
+                  const double motorAndDriveEfficiency, const double loadFactor)
+                : ratedMotorPower(ratedMotorPower), variableSpeedMotor(variableSpeedMotor),
+                  operationalFrequency(operationalFrequency), lineFrequency(lineFrequency),
+                  motorAndDriveEfficiency(motorAndDriveEfficiency), loadFactor(loadFactor)
+                  {}
 
     double getRatedMotorPower() const { return ratedMotorPower; }
     bool getVariableSpeedMotor() const { return variableSpeedMotor; }
@@ -55,7 +63,9 @@ private:
 
 class PowerMeterData {
 public:
-    PowerMeterData(const double power);
+    PowerMeterData(const double power)
+                 : power(power) 
+                {}
 
     double getPower() const { return power; }
     void setPower(double power);
@@ -66,7 +76,9 @@ private:
 
 class OtherMethodData {
 public:
-    OtherMethodData(const double energy);
+    OtherMethodData(const double energy)
+                  : energy(energy)
+                  {}
 
     double getEnergy() const { return energy; }
     void setEnergy(double energy);
@@ -92,7 +104,13 @@ public:
     ElectricityReductionInput(const int hoursPerDay, const int daysPerMonth, const int monthsPerYear,
                          const double electricityCost, const int measurementMethod, const MultimeterData multimeterData,
                          const NameplateData nameplateData, const PowerMeterData powerMeterData, const OtherMethodData otherMethodData,
-                         const int units);
+                         const int units)
+                       : hoursPerDay(hoursPerDay), daysPerMonth(daysPerMonth), monthsPerYear(monthsPerYear),
+                         electricityCost(electricityCost), measurementMethod(measurementMethod), multimeterData(multimeterData),
+                         nameplateData(nameplateData), powerMeterData(powerMeterData), otherMethodData(otherMethodData),
+                         units(units)
+                         {}
+                         
 
     int getHoursPerDay() const { return hoursPerDay; }
     int getDaysPerMonth() const { return daysPerMonth; }
@@ -138,7 +156,7 @@ public:
         // calculate();
     }
 
-    void calculate();
+    ElectricityReduction::Output calculate();
 
     ElectricityReduction::Output getOutput() { return output; }
 

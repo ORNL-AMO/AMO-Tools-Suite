@@ -7,7 +7,7 @@
 //     // calculate();
 // }
 
-void ElectricityReduction::calculate() {
+ElectricityReduction::Output ElectricityReduction::calculate() {
     double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
 
     // loop through all supplied inputs
@@ -60,7 +60,7 @@ void ElectricityReduction::calculate() {
     }
 
     // output = Output(energyUse, energyCost, annualEnergySavings, costSavings);
-    ElectricityReduction::Output output(energyUse, energyCost, annualEnergySavings, costSavings);
+    return ElectricityReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings);
 }
 
 void ElectricityReduction::setElectricityReductionInputVec(std::vector<ElectricityReductionInput> & electricityReductionInput) {
