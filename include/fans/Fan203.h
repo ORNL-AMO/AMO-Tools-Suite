@@ -1,9 +1,9 @@
 /**
- * @brief Contains some of the Fan related classes
- *
- * @author Preston Shires (pshires)
+ * @file Fan203.h
+ * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
+ * @brief Contains the calculator for the Fan203
  * @bug No known bugs.
- *
+ * 
  */
 
 #ifndef AMO_TOOLS_SUITE_FAN_H
@@ -26,13 +26,19 @@ class MstPlane;
 
 class BaseGasDensity {
 public:
-
+ /**
+  * enum class for Gas Type
+  * 
+  */
 	enum class GasType {
 		AIR,
 		STANDARDAIR,
 		OTHERGAS
 	};
-
+/**
+ * enum class for Input Type
+ * 
+ */
 	enum class InputType {
 		DewPoint,
 		RelativeHumidity,

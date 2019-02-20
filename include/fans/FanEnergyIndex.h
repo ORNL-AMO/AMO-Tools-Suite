@@ -1,6 +1,12 @@
 #ifndef AMO_TOOLS_SUITE_FANENERGYINDEX_H
 #define AMO_TOOLS_SUITE_FANENERGYINDEX_H
-
+/**
+ * @file FanEnergyIndex.h
+ * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
+ * @brief Contains the calculator for the Fan Energy calculations
+ * @bug No known bugs.
+ * 
+ */
 #include <cmath>
 
 class FanEnergyIndex {
