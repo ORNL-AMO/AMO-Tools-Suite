@@ -1,16 +1,37 @@
 #ifndef AMO_TOOLS_SUITE_FANCURVE_H
 #define AMO_TOOLS_SUITE_FANCURVE_H
-
+/**
+ * @file 
+ * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
+ * @brief Calculator for Fan Curve
+ * Contains the calculator for the Fan Curve
+ * @bug No known bugs.
+ * 
+ */
 #include <vector>
-
+/** 
+ * enum class for Fan curve
+ */
 enum class FanCurveType {
 	FanStaticPressure,
 	FanTotalPressure,
 	StaticPressureRise
 };
-
+/**
+ * Result Data Calculator class
+ * Calculates the result data
+ * 
+ */
 class ResultData {
 public:
+/**
+ * Constructor for the result data calculator
+ * 
+ * @param flow 
+ * @param pressure 
+ * @param power 
+ * @param efficiency 
+ */
 	ResultData(const double flow, const double pressure, const double power, const double efficiency)
 			: flow(flow),
 			  pressure(pressure),
@@ -20,9 +41,23 @@ public:
 
 	const double flow, pressure, power, efficiency;
 };
-
+/**
+ * Fan Curve Data class
+ * Used to calculate the Fan Curve Data
+ * 
+ */
 class FanCurveData {
 public:
+/**
+ * Constructor for the Fan Curve Data class
+ * @param 
+ * 
+ */
+
+/**
+ * enum class for Calculation Type
+ * 
+ */
 	enum class CalculationType {
 		BaseCurve,
 		RatedPoint,

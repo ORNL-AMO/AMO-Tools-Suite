@@ -1,6 +1,12 @@
 #ifndef AMO_TOOLS_SUITE_PLANAR_H
 #define AMO_TOOLS_SUITE_PLANAR_H
-
+/**
+ * @file Planar.h
+ * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
+ * @brief Contains the calculator Planar
+ * @bug No known bugs.
+ * 
+ */
 #include <vector>
 #include <cmath>
 
