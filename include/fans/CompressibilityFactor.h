@@ -1,7 +1,19 @@
 #ifndef AMO_TOOLS_SUITE_COMPRESSIBILITYFACTOR_H
 #define AMO_TOOLS_SUITE_COMPRESSIBILITYFACTOR_H
+/**
+ * @file CompressibilityFactor.h
+ * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
+ * @brief Contains the calculator for compressability factor
+ * @bug No known bugs.
+ * 
+ */
 
 #include <cmath>
+/**
+ * Compressability Factor calculator class
+ * Calculates the compressability factor 
+ * 
+ */
 
 class CompressibilityFactor {
 public:
