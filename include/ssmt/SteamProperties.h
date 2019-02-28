@@ -20,6 +20,7 @@ public:
     /**
      * Constructor for SteamProperties class
      * @param pressure double, pressure in MPa
+     * @param quantityValue, Thermodynamic Property used for calculation- Temperature (K), Enthalpy (kJ/kg), Entropy (kJ/kg-K), or Quality (unitless)
      * @param quantity ThermodynamicQuantity, the value type used to calculate steam properties (TEMPERATURE, ENTHALPY, etc.)
      */
 	SteamProperties(const double pressure, const ThermodynamicQuantity quantity, const double quantityValue)
