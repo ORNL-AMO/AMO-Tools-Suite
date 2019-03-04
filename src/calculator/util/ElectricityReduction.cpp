@@ -1,11 +1,6 @@
+#include <iostream>
 #include <cmath>
 #include "calculator/util/ElectricityReduction.h"
-
-// ElectricityReduction::ElectricityReduction(std::vector<ElectricityReductionInput> & electricityReductionInputVec)
-//     : electricityReductionInputVec(std::move(electricityReductionInputVec))
-// {
-//     // calculate();
-// }
 
 ElectricityReduction::Output ElectricityReduction::calculate() {
     double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
@@ -13,20 +8,19 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
     // loop through all supplied inputs
     for (auto & electricityReductionInput: electricityReductionInputVec) {
         double tmpTotalPower, tmpEnergyUse, tmpEnergyCost, tmpAnnualEnergySavings, tmpCostSavings;
-        
+
         //multimeter data
         if (electricityReductionInput.getMeasurementMethod() == 0) {
             MultimeterData multimeterData = electricityReductionInput.getMultimeterData();
             if (multimeterData.getNumberOfPhases() == 1) {
-                tmpTotalPower = multimeterData.getSupplyVoltage() * multimeterData.getAverageCurrent() * (1 / 1000);
+                tmpTotalPower = multimeterData.getSupplyVoltage() * multimeterData.getAverageCurrent() * multimeterData.getPowerFactor() * 0.001 * electricityReductionInput.getUnits();
             } else {
-                tmpTotalPower = multimeterData.getSupplyVoltage() * multimeterData.getAverageCurrent() * (sqrt(3) / 1000);
+                tmpTotalPower = multimeterData.getSupplyVoltage() * multimeterData.getAverageCurrent() * multimeterData.getPowerFactor() * (sqrt(3) / 1000) * electricityReductionInput.getUnits();
             }
             tmpEnergyUse = tmpTotalPower * electricityReductionInput.getHoursPerDay() * electricityReductionInput.getDaysPerMonth() * electricityReductionInput.getMonthsPerYear();
             tmpEnergyCost = tmpEnergyUse * electricityReductionInput.getElectricityCost();
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
-
 
         // nameplate data
         } else if (electricityReductionInput.getMeasurementMethod() == 1) {
@@ -37,7 +31,6 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
 
-
         // power meter data
         } else if (electricityReductionInput.getMeasurementMethod() == 2) {
             PowerMeterData powerMeterData = electricityReductionInput.getPowerMeterData();
@@ -46,7 +39,6 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
             tmpEnergyCost = tmpEnergyUse * electricityReductionInput.getElectricityCost();
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
-
 
         // other method data
         } else {
@@ -66,14 +58,6 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
 void ElectricityReduction::setElectricityReductionInputVec(std::vector<ElectricityReductionInput> & electricityReductionInput) {
     this->electricityReductionInputVec = std::move(electricityReductionInputVec);
 }
-
-// void ElectricityReduction::setOutput(ElectricityReduction::Output output) {
-//     this->output = output;
-// }
-
-
-
-// ElectricityReductionInput object setters
 
 
 // MultimeterData object setters

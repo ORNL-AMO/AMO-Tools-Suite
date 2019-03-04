@@ -91,16 +91,6 @@ private:
 class ElectricityReductionInput {
 public:
 
-    // struct Output {
-    //     Output(const double energyUse, const double energyCost, const double annualEnergySavings, const double costSavings)
-    //         : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings)
-    //         {}
-
-    //     Output() = default;
-
-    //     const double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
-    // };
-
     ElectricityReductionInput(const int hoursPerDay, const int daysPerMonth, const int monthsPerYear,
                          const double electricityCost, const int measurementMethod, const MultimeterData multimeterData,
                          const NameplateData nameplateData, const PowerMeterData powerMeterData, const OtherMethodData otherMethodData,
