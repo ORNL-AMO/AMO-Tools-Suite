@@ -9,15 +9,15 @@
   "dependencies": {
     "nan": "2.11.0",
     "node-gyp": "3.8.0",
-    "utf-8-validate": "^3.0.3"
+    "utf-8-validate": "5.0.2"
   },
   "devDependencies": {
-    "bindings": "^1.2.1",
-    "tap": "^10.3.1"
+    "bindings": "1.5.0",
+    "tap": "12.6.0"
   },
   "engines": {
-    "node": "9.11.1",
-    "npm": "^5.0.0"
+    "node": "10.11.0",
+    "npm": "6.4.1"
   },
   "scripts": {
     "test": "tap debug tests/js/*.js"
