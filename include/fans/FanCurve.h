@@ -1,3 +1,12 @@
+/**
+ * @brief Contains Fan Curve related calculations
+ * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
+ * @bug No known Bugs.
+ *
+ * 
+ */
+
 #ifndef AMO_TOOLS_SUITE_FANCURVE_H
 #define AMO_TOOLS_SUITE_FANCURVE_H
 /**

@@ -1,7 +1,8 @@
 /**
- * @file Fan203.h
- * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
- * @brief Contains the calculator for the Fan203
+ * @brief Contains some of the Fan related classes
+ *
+ * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
  * @bug No known bugs.
  * 
  */
@@ -23,6 +24,10 @@ class Planar;
 class FlangePlane;
 class TraversePlane;
 class MstPlane;
+/**
+ * Base Gas Density Class
+ * Calculates base gas density
+ */
 
 class BaseGasDensity {
 public:

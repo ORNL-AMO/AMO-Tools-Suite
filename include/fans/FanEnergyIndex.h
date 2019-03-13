@@ -1,3 +1,9 @@
+/**
+ * @brief  Contains calculations for Fan Energy Index
+ * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
+ * @bug No Known Bugs
+ */
 #ifndef AMO_TOOLS_SUITE_FANENERGYINDEX_H
 #define AMO_TOOLS_SUITE_FANENERGYINDEX_H
 /**
@@ -26,7 +32,14 @@ public:
 	{}
 
 	/**
-	 *
+	 * @param pressure, double 
+	 * @param outletPressure, double in inch ws
+	 * @param inletPressure, double in inch ws
+	 * @param referencepower, double 
+	 * @param kWreferencepower, double
+	 * @param efficiency1, double
+	 * @param efficiency2, double
+	 * @param motorPower, double in kW
 	 * @return fan energy index, double
 	 */
 	double calculateEnergyIndex() {
@@ -46,6 +59,14 @@ public:
 	}
 
 private:
+	/**
+	 *
+	 * @param flowRate, double in cfm
+	 * @param inletPressure, double in inch ws
+	 * @param outletPressure, double in inch ws
+	 * @param airDensity, double in lbm/ft
+	 * @param motorPower, double in kW
+	 */
 	const double flowRate, inletPressure, outletPressure, airDensity, motorPower;
 };
 

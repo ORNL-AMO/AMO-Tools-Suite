@@ -1,3 +1,10 @@
+/**
+ * Contains calculations for Planar Data
+ * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
+ * @bug No Known Bugs.
+ * 
+ */
 #ifndef AMO_TOOLS_SUITE_PLANAR_H
 #define AMO_TOOLS_SUITE_PLANAR_H
 /**
