@@ -22,7 +22,7 @@ public:
 
 	/**
 	* Constructor
- 	* @param moverShaftPower double, in horsepower
+ 	* @param moverShaftPower double, in horsepower (hp)
  	* @param inletPressure double, in inches of water column, gauge
  	* @param outletPressure double, in inches of water column, gauge
  	* @param barometricPressure double, in Hg

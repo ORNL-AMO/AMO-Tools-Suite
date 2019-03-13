@@ -1,9 +1,3 @@
-/**
- * @brief  Contains calculations for Fan Energy Index
- * @author Preston Shires (pshires)
- * @author Allie Ledbetter (Aeledbetter)
- * @bug No Known Bugs
- */
 #ifndef AMO_TOOLS_SUITE_FANENERGYINDEX_H
 #define AMO_TOOLS_SUITE_FANENERGYINDEX_H
 /**
@@ -14,16 +8,19 @@
  * 
  */
 #include <cmath>
-
+/**
+ * Constructor for Fan Energy Index
+ * Calculates Fan Energy Index
+ * 
+ */
 class FanEnergyIndex {
 public:
 	/**
-	 *
-	 * @param flowRate, double in cfm
-	 * @param inletPressure, double in inch ws
-	 * @param outletPressure, double in inch ws
-	 * @param airDensity, double in lbm/ft
-	 * @param motorPower, double in kW
+	 * @param flowRate, double, flow rate in cfm
+	 * @param inletPressure, double, pressure of inlet in inch ws
+	 * @param outletPressure, double, pressure of outlet in inch ws
+	 * @param airDensity, double, density of air in lbm/ft
+	 * @param motorPower, double power of motor in kW
 	 */
 	FanEnergyIndex(const double flowRate, const double inletPressure, const double outletPressure, const double airDensity,
 	               const double motorPower)
@@ -32,14 +29,14 @@ public:
 	{}
 
 	/**
-	 * @param pressure, double 
-	 * @param outletPressure, double in inch ws
-	 * @param inletPressure, double in inch ws
-	 * @param referencepower, double 
-	 * @param kWreferencepower, double
-	 * @param efficiency1, double
-	 * @param efficiency2, double
-	 * @param motorPower, double in kW
+	 * @param pressure, double, pressure in inch wc
+	 * @param outletPressure, double, pressure of outlet in inch ws
+	 * @param inletPressure, double, pressure in inlet in inch ws
+	 * @param referencepower, double in hp
+	 * @param kWreferencepower, double in kW
+	 * @param efficiency1, double, as a fraction
+	 * @param efficiency2, double, as a fraction
+	 * @param motorPower, double, power of motor in kW
 	 * @return fan energy index, double
 	 */
 	double calculateEnergyIndex() {
@@ -61,11 +58,11 @@ public:
 private:
 	/**
 	 *
-	 * @param flowRate, double in cfm
-	 * @param inletPressure, double in inch ws
-	 * @param outletPressure, double in inch ws
-	 * @param airDensity, double in lbm/ft
-	 * @param motorPower, double in kW
+	 * @param flowRate, double, flow rate in cfm
+	 * @param inletPressure, double, pressure of inlet in inch ws
+	 * @param outletPressure, double, pressure of outlet in inch ws
+	 * @param airDensity, double, density of air in lbm/ft
+	 * @param motorPower, double, power of motor in kW
 	 */
 	const double flowRate, inletPressure, outletPressure, airDensity, motorPower;
 };
