@@ -26,7 +26,7 @@ public:
      * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param inletMassFlow double, inlet mass flow in kg/hr
-     * @param outletPressure double, houtlet pressure in MPa
+     * @param outletPressure double, outlet pressure in MPa
      */
     PrvWithoutDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
                              double quantityValue, double inletMassFlow, double outletPressure);
