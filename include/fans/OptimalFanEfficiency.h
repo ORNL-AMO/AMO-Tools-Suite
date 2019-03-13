@@ -1,9 +1,19 @@
+/**
+ * Contains calculations for Optimal Fan Efficiency
+ * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
+ * @bug No Known Bugs.
+ * 
+ */
 #ifndef AMO_TOOLS_SUITE_OPTIMALFANEFFICIENCY_H
 #define AMO_TOOLS_SUITE_OPTIMALFANEFFICIENCY_H
 
 #include <functional>
 #include <cfloat>
-
+/**
+ * enum class for Optimal Fan Efficiency
+ * 
+ */
 class OptimalFanEfficiency {
 public:
 	enum class FanType {

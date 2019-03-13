@@ -1,3 +1,10 @@
+/**
+ * Contains calculations for Fan Shaft Power
+ * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
+ * @bug No Known Bugs.
+ * 
+ */
 #ifndef AMO_TOOLS_SUITE_FANSHAFTPOWER_H
 #define AMO_TOOLS_SUITE_FANSHAFTPOWER_H
 
@@ -37,9 +44,17 @@ public:
 	static double calculateMotorShaftPower(const double voltage, const double amps, const double powerFactorAtLoad) {
 		return voltage * amps * powerFactorAtLoad * std::sqrt(3);
 	}
-
+/**
+ * Gets the Fan Power Input 
+ * 
+ * @return double, Fan power input
+ */
 	double getFanPowerInput() const { return fanPowerInput; }
-
+/**
+ * Gets the SEF
+ * 
+ * @return double, Sum SEF 
+ */
 	double getSEF() const { return sumSEF; }
 
 private:
