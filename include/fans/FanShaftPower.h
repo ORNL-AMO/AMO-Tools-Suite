@@ -9,9 +9,20 @@
 #define AMO_TOOLS_SUITE_FANSHAFTPOWER_H
 
 #include <cmath>
-
+/**
+ * Constructor for Fan Rated Info
+ * Calculates Ratings for Fans
+ * 
+ */
 class FanRatedInfo {
 public:
+/**
+ * @param fanSpeed double, const, fan speed in RPM
+ * @param motorSpeed double, const, motor speed in RPM
+ * @param fanSpeedCorrected double, const, fan speed corrected in RPM
+ * @param densityCorrected double const, pounds per sqft, or lb/scf
+ * @param pressureBarometricCorrected double const, pressure in hp
+ */
 	FanRatedInfo(double const fanSpeed, double const motorSpeed, double const fanSpeedCorrected,
 				 double const densityCorrected, double const pressureBarometricCorrected)
 			: fanSpeed(fanSpeed), motorSpeed(motorSpeed), fanSpeedCorrected(fanSpeedCorrected),
@@ -25,6 +36,10 @@ private:
 
 class FanShaftPower {
 public:
+/**
+ * @param motorShaftPower double, motor shaft power in hp
+ *
+ */
 	FanShaftPower(const double motorShaftPower, const double efficiencyMotor, const double efficiencyVFD,
 				  const double efficiencyBelt, const double sumSEF)
 			: efficiencyMotor(efficiencyMotor / 100), efficiencyVFD(efficiencyVFD / 100), efficiencyBelt(efficiencyBelt / 100),
@@ -35,11 +50,11 @@ public:
 	}
 
 	/**
-	 * Calculates and returns motorShaftPower - used to construct a FanShaftPower object
-	 * @param voltage const double
-	 * @param amps const double
-	 * @param powerFactorAtLoad const double
-	 * @return MotorShaftPower, const double
+	 * Calculates and returns motorShaftPower 
+	 * @param voltage const double, the measured bus voltage in volts
+	 * @param amps const double, amps
+	 * @param powerFactorAtLoad const double, unitless
+	 * @return MotorShaftPower, const double, motor shaft power as defined in hp
 	 */
 	static double calculateMotorShaftPower(const double voltage, const double amps, const double powerFactorAtLoad) {
 		return voltage * amps * powerFactorAtLoad * std::sqrt(3);

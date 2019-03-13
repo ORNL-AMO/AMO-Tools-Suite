@@ -72,8 +72,6 @@ private:
 		 * @param transition double, the number at which each fan type transitions to using exponential or polynomial functions
 		 * @param minSpecificSpeed, double min specific speed value allowed per fan type
 		 * @param maxSpecificSpeed, double max specific speed value allowed per fan type
-		 * @param polynomialFunction
-		 * @param exponentialFunction
 		 */
 		FanTypeProperties(const FanType fanType, const double transition, const double minSpecificSpeed, const double maxSpecificSpeed,
 		                  std::function<double (double n)> polynomialFunction,
