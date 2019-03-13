@@ -1,12 +1,3 @@
-/**
- * @brief Contains Fan Curve related calculations
- * @author Preston Shires (pshires)
- * @author Allie Ledbetter (Aeledbetter)
- * @bug No known Bugs.
- *
- * 
- */
-
 #ifndef AMO_TOOLS_SUITE_FANCURVE_H
 #define AMO_TOOLS_SUITE_FANCURVE_H
 /**
@@ -33,14 +24,7 @@ enum class FanCurveType {
  */
 class ResultData {
 public:
-/**
- * Constructor for the result data calculator
- * 
- * @param flow 
- * @param pressure 
- * @param power 
- * @param efficiency 
- */
+
 	ResultData(const double flow, const double pressure, const double power, const double efficiency)
 			: flow(flow),
 			  pressure(pressure),
@@ -57,12 +41,6 @@ public:
  */
 class FanCurveData {
 public:
-/**
- * Constructor for the Fan Curve Data class
- * @param 
- * 
- */
-
 /**
  * enum class for Calculation Type
  * 
