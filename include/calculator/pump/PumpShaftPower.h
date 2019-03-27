@@ -60,7 +60,7 @@ public:
 
     /**
      * Sets the motor shaft power
-     * @param motorShaftPower double, in hp
+     * @param motorShaftPower double, motor shaft power in hp
      */
     void setMotorShaftPower(double motorShaftPower) {
         this->motorShaftPower = motorShaftPower;

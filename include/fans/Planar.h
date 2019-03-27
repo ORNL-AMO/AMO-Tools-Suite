@@ -1,6 +1,12 @@
+/**
+ * Contains calculations for Planar Data
+ * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
+ * @bug No Known Bugs.
+ * 
+ */
 #ifndef AMO_TOOLS_SUITE_PLANAR_H
 #define AMO_TOOLS_SUITE_PLANAR_H
-
 #include <vector>
 #include <cmath>
 
@@ -61,7 +67,14 @@ protected:
 	Planar(const double area, const double tdx, const double pbx, const double psx)
 			: dryBulbTemperature(tdx), barometricPressure(pbx), area(area), staticPressure(psx)
 	{}
-
+	/**
+	 * @param dryBulbTemperature const, double, temperature of the inputted air in °F
+	 * @param barometricPressure, const, double, pressure in Hg
+	 * @param gasDensity, double, density of a gas in pounds per sqft or lb/scf
+	 * @param gasVelocity, double, velocity of a gas in ft/min
+	 * @param gasFlowVolumeRate, double, flow rate in ft3/min
+	 * @param gasVelocityPressure, double, velocity of a gas pressure in 
+	 */
 	const double dryBulbTemperature, barometricPressure, area;
 	double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
 	double staticPressure = 0;

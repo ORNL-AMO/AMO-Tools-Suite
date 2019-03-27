@@ -1,9 +1,19 @@
+/**
+ * Contains calculations for Optimal Fan Efficiency
+ * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
+ * @bug No Known Bugs.
+ * 
+ */
 #ifndef AMO_TOOLS_SUITE_OPTIMALFANEFFICIENCY_H
 #define AMO_TOOLS_SUITE_OPTIMALFANEFFICIENCY_H
 
 #include <functional>
 #include <cfloat>
-
+/**
+ * enum class for Optimal Fan Efficiency
+ * 
+ */
 class OptimalFanEfficiency {
 public:
 	enum class FanType {
@@ -62,8 +72,6 @@ private:
 		 * @param transition double, the number at which each fan type transitions to using exponential or polynomial functions
 		 * @param minSpecificSpeed, double min specific speed value allowed per fan type
 		 * @param maxSpecificSpeed, double max specific speed value allowed per fan type
-		 * @param polynomialFunction
-		 * @param exponentialFunction
 		 */
 		FanTypeProperties(const FanType fanType, const double transition, const double minSpecificSpeed, const double maxSpecificSpeed,
 		                  std::function<double (double n)> polynomialFunction,
