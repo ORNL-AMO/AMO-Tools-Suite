@@ -9,6 +9,27 @@ function rnd(value) {
 test('steamModeler', function (t) {
     t.type(bindings.steamModeler, 'function');
 
+    var steamModelerInput = makeSteamModelerInput();
+    var actual = bindings.steamModeler(steamModelerInput);
+
+    //TODO remove me and assert values when actual results return
+    console.log("================");
+    console.log("JS steamModelerInput=");
+    console.log(JSON.stringify(steamModelerInput));
+    console.log("================");
+    console.log("JS actual=");
+    console.log(JSON.stringify(actual));
+    console.log("================");
+
+    validate(t, actual);
+
+    // not used: validateHeaderOutputObj(t, actual);
+    // not used (part of unused headerOutputObj): validateHeatLossOutput(t, actual);
+
+    t.end();
+});
+
+function makeSteamModelerInput() {
     // Values that work for SteamSystemModelerTool::regionSelect()
     var temperature = 594.65;
 
@@ -131,25 +152,15 @@ test('steamModeler', function (t) {
         turbineInput: turbineInput,
     };
 
-    var actual = bindings.steamModeler(steamModelerInput);
+    return steamModelerInput;
+}
 
-    //TODO remove me and assert values when actual results return
-    console.log("================");
-    console.log("JS steamModelerInput=");
-    console.log(JSON.stringify(steamModelerInput));
-    console.log("================");
-    console.log("JS actual=");
-    console.log(JSON.stringify(actual));
-    console.log("================");
+function validate(t, actual) {
+    validateOperations(t, actual);
+    validateBoiler(t, actual);
+    validateDeaerator(t, actual);
 
-    validateOperationsOutput(t, actual);
-    validateBoilerOutput(t, actual);
-    validateDeaeratorOutput(t, actual);
-
-    validateFeedwaterResponse(t, actual);
     validateHighPressureHeaderSteam(t, actual);
-    validateBlowdown(t, actual);
-    validateCondensate(t, actual);
     validateMakeupWater(t, actual);
     validateMakeupWaterAndCondensate(t, actual);
     validateHighPressureProcessSteamUsage(t, actual);
@@ -171,199 +182,351 @@ test('steamModeler', function (t) {
     validateMediumPressureCondensateFlashTank(t, actual);
 
     validateVentedSteam(t, actual);
+}
 
-    // not used: validateHeaderOutputObj(t, actual);
-    // not used (part of unused headerOutputObj): validateHeatLossOutput(t, actual);
-
-    t.end();
-});
-
-function validateOperationsOutput(t, actual) {
+function validateOperations(t, actual) {
     var actualOperations = actual.operationsOutput;
 
-    t.equal(actualOperations.powerBalanceGeneration, 0);
-    t.equal(actualOperations.powerBalanceDemand, 0);
-    t.equal(actualOperations.powerBalanceImport, 0);
-    t.equal(actualOperations.powerBalanceUnitCost, 0);
-    t.equal(actualOperations.powerBalanceUnitCostPerYear, 0);
-    t.equal(actualOperations.fuelBalanceBoiler, 0);
-    t.equal(actualOperations.fuelBalanceUnitCost, 0);
-    t.equal(actualOperations.fuelBalanceUnitCostPerYear, 0);
-    t.equal(actualOperations.makeupWaterFlow, 0);
-    t.equal(actualOperations.makeupWaterFlowRate, 0);
-    t.equal(actualOperations.makeupWaterUnitCost, 0);
-    t.equal(actualOperations.makeupWaterUnitCostPerYear, 0);
-    t.equal(actualOperations.totalOperatingCostPerYear, 0);
-    t.equal(actualOperations.highPressureCost, 0);
-    t.equal(actualOperations.mediumPressureCost, 0);
-    t.equal(actualOperations.lowPressureCost, 0);
+    t.equal(actualOperations.powerGenerated, 2.679200946487e-312);
+    t.equal(actualOperations.boilerFuelCost, 2.67920095451e-312);
+    t.equal(actualOperations.makeupWaterCost, 2.67920095451e-312);
+    t.equal(actualOperations.totalOperatingCost, 2.679200947514e-312);
+    t.equal(actualOperations.powerGenerationCost, 2.679200947514e-312);
+    t.equal(actualOperations.boilerFuelUsage, 1400.945054970803);
+    t.equal(actualOperations.sitePowerImport, 2.67920095048e-312);
+    t.equal(actualOperations.sitePowerDemand, 6.9530161006562e-310);
 }
 
-function validateBoilerOutput(t, actual) {
+function validateBoiler(t, actual) {
     var actualBoiler = actual.boilerOutput;
 
-    t.equal(actualBoiler.steamPressure, 0);
-    t.equal(actualBoiler.steamTemperature, 0);
-    t.equal(actualBoiler.steamSpecificEnthalpy, 0);
-    t.equal(actualBoiler.steamSpecificEntropy, 0);
-    t.equal(actualBoiler.steamQuality, 0);
-    t.equal(actualBoiler.steamVolume, 0);
-    t.equal(actualBoiler.steamMassFlow, 0);
-    t.equal(actualBoiler.steamEnergyFlow, 0);
+    t.equal(actualBoiler.steamPressure, 1);
+    t.equal(actualBoiler.steamTemperature, 594.65);
+    t.equal(actualBoiler.steamSpecificEnthalpy, 3097.591269286749);
+    t.equal(actualBoiler.steamSpecificEntropy, 7.203311626195247);
+    t.equal(actualBoiler.steamQuality, 1);
+    t.equal(actualBoiler.steamVolume, 0.26858473001463523);
+    t.equal(actualBoiler.steamMassFlow, 6);
+    t.equal(actualBoiler.steamEnergyFlow, 18.585547615720493);
 
-    t.equal(actualBoiler.blowdownPressure, 0);
-    t.equal(actualBoiler.blowdownTemperature, 0);
-    t.equal(actualBoiler.blowdownSpecificEnthalpy, 0);
-    t.equal(actualBoiler.blowdownSpecificEntropy, 0);
+    t.equal(actualBoiler.blowdownPressure, 1);
+    t.equal(actualBoiler.blowdownTemperature, 453.0356323914666);
+    t.equal(actualBoiler.blowdownSpecificEnthalpy, 762.6828443354106);
+    t.equal(actualBoiler.blowdownSpecificEntropy, 2.138431350899127);
     t.equal(actualBoiler.blowdownQuality, 0);
-    t.equal(actualBoiler.blowdownVolume, 0);
-    t.equal(actualBoiler.blowdownMassFlow, 0);
-    t.equal(actualBoiler.blowdownEnergyFlow, 0);
+    t.equal(actualBoiler.blowdownVolume, 0.0011272337454016697);
+    t.equal(actualBoiler.blowdownMassFlow, 0.06060606060606061);
+    t.equal(actualBoiler.blowdownEnergyFlow, 0.046223202686994584);
 
-    t.equal(actualBoiler.feedwaterPressure, 0);
-    t.equal(actualBoiler.feedwaterTemperature, 0);
-    t.equal(actualBoiler.feedwaterSpecificEnthalpy, 0);
-    t.equal(actualBoiler.feedwaterSpecificEntropy, 0);
+    t.equal(actualBoiler.feedwaterPressure, 1);
+    t.equal(actualBoiler.feedwaterTemperature, 453.0356323914666);
+    t.equal(actualBoiler.feedwaterSpecificEnthalpy, 762.6828443354106);
+    t.equal(actualBoiler.feedwaterSpecificEntropy, 2.138431350899127);
     t.equal(actualBoiler.feedwaterQuality, 0);
-    t.equal(actualBoiler.feedwaterVolume, 0);
-    t.equal(actualBoiler.feedwaterMassFlow, 0);
-    t.equal(actualBoiler.feedwaterEnergyFlow, 0);
+    t.equal(actualBoiler.feedwaterVolume, 0.0011272337454016697);
+    t.equal(actualBoiler.feedwaterMassFlow, 6.0606060606060606);
+    t.equal(actualBoiler.feedwaterEnergyFlow, 4.6223202686994584);
 
-    t.equal(actualBoiler.boilerEnergy, 0);
-    t.equal(actualBoiler.fuelEnergy, 0);
-    t.equal(actualBoiler.blowdownRate, 0);
-    t.equal(actualBoiler.combustionEff, 0);
+    t.equal(actualBoiler.boilerEnergy, 14.009450549708031);
+    t.equal(actualBoiler.fuelEnergy, 1400.945054970803);
+    t.equal(actualBoiler.blowdownRate, 1);
+    t.equal(actualBoiler.combustionEff, 1);
 }
 
-function validateSteamPropertiesOutput(t, actual) {
-    t.equal(actual.pressure, 0);
-    t.equal(actual.temperature, 0);
-    t.equal(actual.specificEnthalpy, 0);
-    t.equal(actual.specificEntropy, 0);
-    t.equal(actual.quality, 0);
-    t.equal(actual.specificVolume, 0);
-    t.equal(actual.massFlow, 0);
-    t.equal(actual.energyFlow, 0);
-}
-
-function validateFeedwaterResponse(t, actual) {
-    validateSteamPropertiesOutput(t, actual.feedwater);
+function validateFluidProperties(t, actual, expected) {
+    t.equal(actual.pressure, expected.pressure);
+    t.equal(actual.temperature, expected.temperature);
+    t.equal(actual.specificEnthalpy, expected.specificEnthalpy);
+    t.equal(actual.specificEntropy, expected.specificEntropy);
+    t.equal(actual.quality, expected.quality);
+    t.equal(actual.specificVolume, expected.specificVolume);
+    t.equal(actual.massFlow, expected.massFlow);
+    t.equal(actual.energyFlow, expected.energyFlow);
 }
 
 function validateHighPressureHeaderSteam(t, actual) {
-    validateSteamPropertiesOutput(t, actual.highPressureHeaderSteam);
-}
-
-function validateBlowdown(t, actual) {
-    validateSteamPropertiesOutput(t, actual.blowdown);
-}
-
-function validateCondensate(t, actual) {
-    validateSteamPropertiesOutput(t, actual.condensate);
+    var expected = {
+        pressure: 0,
+        temperature: 0,
+        specificEnthalpy: 0,
+        specificEntropy: 0,
+        quality: 0,
+        specificVolume: 0,
+        massFlow: 0,
+        energyFlow: 0,
+    }
+    validateFluidProperties(t, actual.highPressureHeaderSteam, expected);
 }
 
 function validateMakeupWater(t, actual) {
-    validateSteamPropertiesOutput(t, actual.makeupWater);
+    var expected = {
+        pressure: 0,
+        temperature: 0,
+        specificEnthalpy: 0,
+        specificEntropy: 0,
+        quality: 0,
+        specificVolume: 0,
+        massFlow: 0,
+        energyFlow: 0,
+    }
+    validateFluidProperties(t, actual.makeupWater, expected);
 }
 
 function validateMakeupWaterAndCondensate(t, actual) {
-    validateSteamPropertiesOutput(t, actual.makeupWaterAndCondensate);
+    var expected = {
+        pressure: 0,
+        temperature: 0,
+        specificEnthalpy: 0,
+        specificEntropy: 0,
+        quality: 0,
+        specificVolume: 0,
+        massFlow: 0,
+        energyFlow: 0,
+    }
+    validateFluidProperties(t, actual.makeupWaterAndCondensate, expected);
 }
 
 function validateHighPressureProcessSteamUsage(t, actual) {
-    validateSteamPropertiesOutput(t, actual.highPressureProcessSteamUsage);
+    var expected = {
+        pressure: 0,
+        temperature: 0,
+        specificEnthalpy: 0,
+        specificEntropy: 0,
+        quality: 0,
+        specificVolume: 0,
+        massFlow: 0,
+        energyFlow: 0,
+    }
+    validateFluidProperties(t, actual.highPressureProcessSteamUsage, expected);
 }
 
 function validateMediumPressureHeaderSteam(t, actual) {
-    validateSteamPropertiesOutput(t, actual.mediumPressureHeaderSteam);
+    var expected = {
+        pressure: 0,
+        temperature: 0,
+        specificEnthalpy: 0,
+        specificEntropy: 0,
+        quality: 0,
+        specificVolume: 0,
+        massFlow: 0,
+        energyFlow: 0,
+    }
+    validateFluidProperties(t, actual.mediumPressureHeaderSteam, expected);
 }
 
 function validateLowPressureHeaderSteam(t, actual) {
-    validateSteamPropertiesOutput(t, actual.lowPressureHeaderSteam);
+    var expected = {
+        pressure: 0,
+        temperature: 0,
+        specificEnthalpy: 0,
+        specificEntropy: 0,
+        quality: 0,
+        specificVolume: 0,
+        massFlow: 0,
+        energyFlow: 0,
+    }
+    validateFluidProperties(t, actual.lowPressureHeaderSteam, expected);
 }
 
 function validateVentedSteam(t, actual) {
-    validateSteamPropertiesOutput(t, actual.ventedSteam);
+    var ventedSteam = actual.ventedSteam;
+    if (typeof ventedSteam !== 'undefined') {
+        var expected = {
+            pressure: 0,
+            temperature: 0,
+            specificEnthalpy: 0,
+            specificEntropy: 0,
+            quality: 0,
+            specificVolume: 0,
+            massFlow: 0,
+            energyFlow: 0,
+        }
+        validateFluidProperties(t, ventedSteam, expected);
+    }
 }
 
-function validateDeaeratorOutput(t, actual) {
+function validateDeaerator(t, actual) {
     var actualDeaerator = actual.deaeratorOutput;
 
-    t.equal(actualDeaerator.feedwaterEnergyFlow, 0);
-    t.equal(actualDeaerator.feedwaterMassFlow, 0);
-    t.equal(actualDeaerator.feedwaterPressure, 0);
+    t.equal(actualDeaerator.feedwaterEnergyFlow, 4.6223202686994584);
+    t.equal(actualDeaerator.feedwaterMassFlow, 6.0606060606060606);
+    t.equal(actualDeaerator.feedwaterPressure, 1);
     t.equal(actualDeaerator.feedwaterQuality, 0);
-    t.equal(actualDeaerator.feedwaterSpecificEnthalpy, 0);
-    t.equal(actualDeaerator.feedwaterSpecificEntropy, 0);
-    t.equal(actualDeaerator.feedwaterTemperature, 0);
+    t.equal(actualDeaerator.feedwaterSpecificEnthalpy, +762.6828443354106);
+    t.equal(actualDeaerator.feedwaterSpecificEntropy, 2.138431350899127);
+    t.equal(actualDeaerator.feedwaterTemperature, 453.0356323914666);
     t.equal(actualDeaerator.feedwaterVolume, 0);
-    t.equal(actualDeaerator.inletSteamEnergyFlow, 0);
-    t.equal(actualDeaerator.inletSteamMassFlow, 0);
-    t.equal(actualDeaerator.inletSteamPressure, 0);
-    t.equal(actualDeaerator.inletSteamQuality, 0);
-    t.equal(actualDeaerator.inletSteamSpecificEnthalpy, 0);
-    t.equal(actualDeaerator.inletSteamSpecificEntropy, 0);
-    t.equal(actualDeaerator.inletSteamVolume, 0);
-    t.equal(actualDeaerator.inletSteamTemperature, 0);
-    t.equal(actualDeaerator.inletWaterEnergyFlow, 0);
-    t.equal(actualDeaerator.inletWaterMassFlow, 0);
-    t.equal(actualDeaerator.inletWaterPressure, 0);
-    t.equal(actualDeaerator.inletWaterQuality, 0);
-    t.equal(actualDeaerator.inletWaterSpecificEnthalpy, 0);
-    t.equal(actualDeaerator.inletWaterSpecificEntropy, 0);
-    t.equal(actualDeaerator.inletWaterVolume, 0);
-    t.equal(actualDeaerator.inletWaterTemperature, 0);
-    t.equal(actualDeaerator.ventedSteamEnergyFlow, 0);
-    t.equal(actualDeaerator.ventedSteamMassFlow, 0);
-    t.equal(actualDeaerator.ventedSteamPressure, 0);
-    t.equal(actualDeaerator.ventedSteamQuality, 0);
-    t.equal(actualDeaerator.ventedSteamSpecificEnthalpy, 0);
-    t.equal(actualDeaerator.ventedSteamSpecificEntropy, 0);
+    t.ok(isNaN(actualDeaerator.inletSteamEnergyFlow));
+    t.ok(isNaN(actualDeaerator.inletSteamMassFlow));
+    t.equal(actualDeaerator.inletSteamPressure, 3);
+    t.equal(actualDeaerator.inletSteamQuality, 1);
+    t.ok(isNaN(actualDeaerator.inletSteamSpecificEnthalpy));
+    t.ok(isNaN(actualDeaerator.inletSteamSpecificEntropy));
+    t.ok(isNaN(actualDeaerator.inletSteamVolume));
+    t.ok(isNaN(actualDeaerator.inletSteamTemperature));
+    t.ok(isNaN(actualDeaerator.inletWaterEnergyFlow));
+    t.ok(isNaN(actualDeaerator.inletWaterMassFlow));
+    t.equal(actualDeaerator.inletWaterPressure, 1);
+    t.equal(actualDeaerator.inletWaterQuality, 1);
+    t.ok(isNaN(actualDeaerator.inletWaterSpecificEnthalpy));
+    t.ok(isNaN(actualDeaerator.inletWaterSpecificEntropy));
+    t.ok(isNaN(actualDeaerator.inletWaterVolume));
+    t.ok(isNaN(actualDeaerator.inletWaterTemperature));
+    t.equal(actualDeaerator.ventedSteamEnergyFlow, 0.16831027501119167);
+    t.equal(actualDeaerator.ventedSteamMassFlow, 0.06060606060606061);
+    t.equal(actualDeaerator.ventedSteamPressure, 1);
+    t.equal(actualDeaerator.ventedSteamQuality, 1);
+    t.equal(actualDeaerator.ventedSteamSpecificEnthalpy, 2777.119537684662);
+    t.equal(actualDeaerator.ventedSteamSpecificEntropy, 6.58497899635217);
     t.equal(actualDeaerator.ventedSteamVolume, 0);
-    t.equal(actualDeaerator.ventedSteamTemperature, 0);
+    t.equal(actualDeaerator.ventedSteamTemperature, 453.0356323914666);
 }
 
-function validateFlashTankOutput(t, actual) {
-    t.equal(actual.inletWaterEnergyFlow, 0);
-    t.equal(actual.inletWaterMassFlow, 0);
-    t.equal(actual.inletWaterPressure, 0);
-    t.equal(actual.inletWaterQuality, 0);
-    t.equal(actual.inletWaterVolume, 0);
-    t.equal(actual.inletWaterSpecificEnthalpy, 0);
-    t.equal(actual.inletWaterSpecificEntropy, 0);
-    t.equal(actual.inletWaterTemperature, 0);
-    t.equal(actual.outletGasEnergyFlow, 0);
-    t.equal(actual.outletGasMassFlow, 0);
-    t.equal(actual.outletGasPressure, 0);
-    t.equal(actual.outletGasQuality, 0);
-    t.equal(actual.outletGasVolume, 0);
-    t.equal(actual.outletGasSpecificEnthalpy, 0);
-    t.equal(actual.outletGasSpecificEntropy, 0);
-    t.equal(actual.outletGasTemperature, 0);
-    t.equal(actual.outletLiquidEnergyFlow, 0);
-    t.equal(actual.outletLiquidMassFlow, 0);
-    t.equal(actual.outletLiquidPressure, 0);
-    t.equal(actual.outletLiquidQuality, 0);
-    t.equal(actual.outletLiquidVolume, 0);
-    t.equal(actual.outletLiquidSpecificEnthalpy, 0);
-    t.equal(actual.outletLiquidSpecificEntropy, 0);
-    t.equal(actual.outletLiquidTemperature, 0);
+function validateFlashTank(t, actual, expected) {
+    t.equal(actual.inletWaterEnergyFlow, expected.inletWaterEnergyFlow);
+    t.equal(actual.inletWaterMassFlow, expected.inletWaterMassFlow);
+    t.equal(actual.inletWaterPressure, expected.inletWaterPressure);
+    t.equal(actual.inletWaterQuality, expected.inletWaterQuality);
+    t.equal(actual.inletWaterVolume, expected.inletWaterVolume);
+    t.equal(actual.inletWaterSpecificEnthalpy, expected.inletWaterSpecificEnthalpy);
+    t.equal(actual.inletWaterSpecificEntropy, expected.inletWaterSpecificEntropy);
+    t.equal(actual.inletWaterTemperature, expected.inletWaterTemperature);
+    t.equal(actual.outletGasEnergyFlow, expected.outletGasEnergyFlow);
+    t.equal(actual.outletGasMassFlow, expected.outletGasMassFlow);
+    t.equal(actual.outletGasPressure, expected.outletGasPressure);
+    t.equal(actual.outletGasQuality, expected.outletGasQuality);
+    t.equal(actual.outletGasVolume, expected.outletGasVolume);
+    t.equal(actual.outletGasSpecificEnthalpy, expected.outletGasSpecificEnthalpy);
+    t.equal(actual.outletGasSpecificEntropy, expected.outletGasSpecificEntropy);
+    t.equal(actual.outletGasTemperature, expected.outletGasTemperature);
+    t.equal(actual.outletLiquidEnergyFlow, expected.outletLiquidEnergyFlow);
+    t.equal(actual.outletLiquidMassFlow, expected.outletLiquidMassFlow);
+    t.equal(actual.outletLiquidPressure, expected.outletLiquidPressure);
+    t.equal(actual.outletLiquidQuality, expected.outletLiquidQuality);
+    t.equal(actual.outletLiquidVolume, expected.outletLiquidVolume);
+    t.equal(actual.outletLiquidSpecificEnthalpy, expected.outletLiquidSpecificEnthalpy);
+    t.equal(actual.outletLiquidSpecificEntropy, expected.outletLiquidSpecificEntropy);
+    t.equal(actual.outletLiquidTemperature, expected.outletLiquidTemperature);
 }
 
 function validateBlowdownFlashTank(t, actual) {
-    validateFlashTankOutput(t, actual.blowdownFlashTank);
+    var expected = {
+        inletWaterEnergyFlow: 0.046223202686994584,
+        inletWaterMassFlow: 0.06060606060606061,
+        inletWaterPressure: 1,
+        inletWaterQuality: 0,
+        inletWaterVolume: 0.0011272337454016697,
+        inletWaterSpecificEnthalpy: 762.6828443354106,
+        inletWaterSpecificEntropy: 2.138431350899127,
+        inletWaterTemperature: 453.0356323914666,
+        outletGasEnergyFlow: 0,
+        outletGasMassFlow: 0,
+        outletGasPressure: 3,
+        outletGasQuality: 1,
+        outletGasVolume: 0.06666407913357607,
+        outletGasSpecificEnthalpy: 2803.2647389701606,
+        outletGasSpecificEntropy: 6.185787810829954,
+        outletGasTemperature: 507.0084450062522,
+        outletLiquidEnergyFlow: 0.046223202686994584,
+        outletLiquidMassFlow: 0.06060606060606061,
+        outletLiquidPressure: 1,
+        outletLiquidQuality: 0,
+        outletLiquidVolume: 0.0011272337454016697,
+        outletLiquidSpecificEnthalpy: 762.6828443354106,
+        outletLiquidSpecificEntropy: 2.138431350899127,
+        outletLiquidTemperature: 453.0356323914666,
+    }
+    validateFlashTank(t, actual.blowdownFlashTank, expected);
 }
 
 function validateCondensateFlashTank(t, actual) {
-    validateFlashTankOutput(t, actual.condensateFlashTank);
+    var expected = {
+        inletWaterEnergyFlow: 0,
+        inletWaterMassFlow: 6.9515608029468e-310,
+        inletWaterPressure: 1.069240014688e-311,
+        inletWaterQuality: 6.9515608031658e-310,
+        inletWaterVolume: 1.140068544056e-311,
+        inletWaterSpecificEnthalpy: 1.457898223123e-311,
+        inletWaterSpecificEntropy: 4.07e-321,
+        inletWaterTemperature: 6.9515608908319e-310,
+        outletGasEnergyFlow: 1.5e-323,
+        outletGasMassFlow: 0,
+        outletGasPressure: 1.5831766736227e-311,
+        outletGasQuality: 5.417114295187e-312,
+        outletGasVolume: 1.5831769110667e-311,
+        outletGasSpecificEnthalpy: 4.42284461694e-312,
+        outletGasSpecificEntropy: 4.42284461694e-312,
+        outletGasTemperature: 1e-323,
+        outletLiquidEnergyFlow: 0,
+        outletLiquidMassFlow: 6.9515608898051e-310,
+        outletLiquidPressure: 1.5831769110785e-311,
+        outletLiquidQuality: 1.5831769110904e-311,
+        outletLiquidVolume: 1.5831769110904e-311,
+        outletLiquidSpecificEnthalpy: 0,
+        outletLiquidSpecificEntropy: 0,
+        outletLiquidTemperature: 1.5831769110904e-311,
+    }
+    validateFlashTank(t, actual.condensateFlashTank, expected);
 }
 
 function validateHighPressureCondensateFlashTank(t, actual) {
-    validateFlashTankOutput(t, actual.highPressureCondensateFlashTank);
+    var expected = {
+        inletWaterEnergyFlow: 0.0076268284433541065,
+        inletWaterMassFlow: 0.01,
+        inletWaterPressure: 1,
+        inletWaterQuality: 0,
+        inletWaterVolume: 0.0011272337454016697,
+        inletWaterSpecificEnthalpy: 762.6828443354106,
+        inletWaterSpecificEntropy: 2.138431350899127,
+        inletWaterTemperature: 453.0356323914666,
+        outletGasEnergyFlow: 0,
+        outletGasMassFlow: 0,
+        outletGasPressure: 2,
+        outletGasQuality: 1,
+        outletGasVolume: 0.09958054416889665,
+        outletGasSpecificEnthalpy: 2798.384140241516,
+        outletGasSpecificEntropy: 6.339164377128661,
+        outletGasTemperature: 485.5345353184905,
+        outletLiquidEnergyFlow: 0.0076268284433541065,
+        outletLiquidMassFlow: 0.01,
+        outletLiquidPressure: 1,
+        outletLiquidQuality: 0,
+        outletLiquidVolume: 0.0011272337454016697,
+        outletLiquidSpecificEnthalpy: 762.6828443354106,
+        outletLiquidSpecificEntropy: 2.138431350899127,
+        outletLiquidTemperature: 453.0356323914666,
+    }
+    validateFlashTank(t, actual.highPressureCondensateFlashTank, expected);
 }
 
 function validateMediumPressureCondensateFlashTank(t, actual) {
-    validateFlashTankOutput(t, actual.mediumPressureCondensateFlashTank);
+    var expected = {
+        inletWaterEnergyFlow: 0.0439717024888124,
+        inletWaterMassFlow: 0.05,
+        inletWaterPressure: 3,
+        inletWaterQuality: 0,
+        inletWaterVolume: 0.0011645473179549442,
+        inletWaterSpecificEnthalpy: 879.434049776248,
+        inletWaterSpecificEntropy: 2.3840762829025266,
+        inletWaterTemperature: 479.0276501729469,
+        outletGasEnergyFlow: 0,
+        outletGasMassFlow: 0,
+        outletGasPressure: 3,
+        outletGasQuality: 1,
+        outletGasVolume: 0.06666407913357607,
+        outletGasSpecificEnthalpy: 2803.2647389701606,
+        outletGasSpecificEntropy: 6.185787810829954,
+        outletGasTemperature: 507.0084450062522,
+        outletLiquidEnergyFlow: 0.0439717024888124,
+        outletLiquidMassFlow: 0.05,
+        outletLiquidPressure: 3,
+        outletLiquidQuality: 0,
+        outletLiquidVolume: 0.0011645473179549442,
+        outletLiquidSpecificEnthalpy: 879.434049776248,
+        outletLiquidSpecificEntropy: 2.3840762829025266,
+        outletLiquidTemperature: 479.0276501729469,
+    }
+    validateFlashTank(t, actual.mediumPressureCondensateFlashTank, expected);
 }
 
 function validateHeaderOutputObj(t, actual) {
