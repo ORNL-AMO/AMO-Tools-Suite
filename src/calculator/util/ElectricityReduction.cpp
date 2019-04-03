@@ -9,17 +9,11 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
     for (auto & electricityReductionInput: electricityReductionInputVec) {
         double tmpTotalPower, tmpEnergyUse, tmpEnergyCost, tmpAnnualEnergySavings, tmpCostSavings;
 
-        
         //multimeter data
         if (electricityReductionInput.getMeasurementMethod() == 0) {
             MultimeterData multimeterData = electricityReductionInput.getMultimeterData();
             if (multimeterData.getNumberOfPhases() == 1) {
-                std::cout << "multimeter.getNumberOfPhases = " << multimeterData.getNumberOfPhases() << std::endl;
                 tmpTotalPower = multimeterData.getSupplyVoltage() * multimeterData.getAverageCurrent() * multimeterData.getPowerFactor() * 0.001 * electricityReductionInput.getUnits();
-                std::cout << "supplyVoltage = " << multimeterData.getSupplyVoltage() << std::endl;
-                std::cout << "averageCurrent = " << multimeterData.getAverageCurrent() << std::endl;
-                std::cout << "getPowerFactor = " << multimeterData.getPowerFactor() << std::endl;
-                std::cout << "units = " << electricityReductionInput.getUnits() << std::endl;
             } else {
                 tmpTotalPower = multimeterData.getSupplyVoltage() * multimeterData.getAverageCurrent() * multimeterData.getPowerFactor() * (sqrt(3) / 1000) * electricityReductionInput.getUnits();
             }
@@ -37,7 +31,6 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
 
-
         // power meter data
         } else if (electricityReductionInput.getMeasurementMethod() == 2) {
             PowerMeterData powerMeterData = electricityReductionInput.getPowerMeterData();
@@ -46,7 +39,6 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
             tmpEnergyCost = tmpEnergyUse * electricityReductionInput.getElectricityCost();
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
-
 
         // other method data
         } else {
