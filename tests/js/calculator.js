@@ -19,13 +19,13 @@ test('electricityReduction', function (t) {
                 monthsPerYear: 12,
                 electricityCost: 0.12,
                 measurementMethod: 0,
-                multimeterData: {
+                MultimeterData: {
                     numberOfPhases: 3,
                     supplyVoltage: 800,
                     averageCurrent: 40,
                     powerFactor: 0.85
                 },
-                nameplateData: {
+                NameplateData: {
                     ratedMotorPower: 100,
                     variableSpeedMotor: false,
                     operationalFrequency: 55,
@@ -33,10 +33,10 @@ test('electricityReduction', function (t) {
                     motorAndDriveEfficiency: 100,
                     loadFactor: 1
                 },
-                powerMeterData: {
+                PowerMeterData: {
                     power: 50
                 },
-                otherMethodData: {
+                OtherMethodData: {
                     energy: 432000
                 },
                 units: 1

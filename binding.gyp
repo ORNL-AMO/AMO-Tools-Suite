@@ -119,29 +119,29 @@
             ]
         },
         {
-                 "target_name": "ssmt",
-                 'include_dirs': ['include', 'include/ssmt',
-                     "<!(node -e \"require('nan')\")"
-                  ],
-                 'sources' : [
-                     'bindings/ssmt.cpp',
-                     "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/').map(f=>'src/ssmt/'+f).join(' '))\")",
-                 ],
-                 "conditions": [
-                     [ 'OS=="mac"', {
-                         "xcode_settings": {
-                             'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
-                             'OTHER_LDFLAGS': ['-stdlib=libc++'],
-                             'MACOSX_DEPLOYMENT_TARGET': '10.9',
-                             'CLANG_CXX_LIBRARY': 'libc++',
-                             'GCC_ENABLE_CPP_RTTI': 'YES',
-                             'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
-                         },
-                     }],
-                     [ 'OS=="linux"', {
-                         'cflags_cc': ['-fexceptions']
-                     }]
-                 ]
+            "target_name": "ssmt",
+            'include_dirs': ['include', 'include/ssmt',
+                "<!(node -e \"require('nan')\")"
+            ],
+            'sources' : [
+                'bindings/ssmt.cpp',
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/').map(f=>'src/ssmt/'+f).join(' '))\")",
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
         },
 		{
             "target_name": "db",
@@ -154,6 +154,31 @@
                 'src/calculator/motor/MotorData.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
+        },
+        {
+            "target_name": "calculator",
+            'include_dirs': ['include', 'include/calculator/util', 
+                "<!(node -e \"require('nan')\")"
+            ],
+            'sources': [
+                'bindings/calculator.cpp',
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
             ],
             "conditions": [
                 [ 'OS=="mac"', {
