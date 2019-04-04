@@ -134,7 +134,6 @@ public:
             }
 
         Output() = default;
-
         double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
     };
 
@@ -142,23 +141,14 @@ public:
         std::vector<ElectricityReductionInput> & electricityReductionInputVec
         ) :
             electricityReductionInputVec(electricityReductionInputVec)
-    {
-        // calculate();
-    }
+    {}
 
     ElectricityReduction::Output calculate();
-
     ElectricityReduction::Output getOutput() { return output; }
-
-    // ElectricityReduction::Output getOutput() const { return output; }
-
     std::vector<ElectricityReductionInput> const & getElectricityReductionInputVec() const {
         return electricityReductionInputVec;
     }
-
     void setElectricityReductionInputVec(std::vector<ElectricityReductionInput> & electricityReductionInputVec);
-
-    // void setOutput(ElectricityReduction::Output output);
 
 private:
     std::vector<ElectricityReductionInput> electricityReductionInputVec;
