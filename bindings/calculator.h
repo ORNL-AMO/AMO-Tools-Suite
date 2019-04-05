@@ -112,16 +112,16 @@ ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
 {
     auto test = Get("hoursPerDay", obj);
     return {
-        Get("hoursPerDay", obj),
-        Get("daysPerMonth", obj),
-        Get("monthsPerYear", obj),
+        static_cast<int>(Get("hoursPerDay", obj)),
+        static_cast<int>(Get("daysPerMonth", obj)),
+        static_cast<int>(Get("monthsPerYear", obj)),
         Get("electricityCost", obj),
-        Get("measurementMethod", obj),
+        static_cast<int>(Get("measurementMethod", obj)),
         getMultimeterData(obj),
         getNameplateData(obj),
         getPowerMeterData(obj),
         getOtherMethodData(obj),
-        Get("units", obj)};
+        static_cast<int>(Get("units", obj))};
 }
 
 ElectricityReduction getElectricityReductionInputVector()
