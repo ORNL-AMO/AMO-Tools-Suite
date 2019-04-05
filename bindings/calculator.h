@@ -4,7 +4,6 @@
 // #include "NanDataConverters.h"
 #include <nan.h>
 #include <node.h>
-#include <iostream>
 #include <string>
 #include <stdexcept>
 #include <array>
@@ -151,7 +150,7 @@ NAN_METHOD(electricityReduction)
     catch (std::runtime_error const &e)
     {
         std::string const what = e.what();
-        throwLogicError(std::string("std::runtime_error thrown in electricityReduction - calculator.h: " + what).c_str());
+        ThrowError(std::string("std::runtime_error thrown in electricityReduction - calculator.h: " + what).c_str());
     }
     info.GetReturnValue().Set(r);
 }
