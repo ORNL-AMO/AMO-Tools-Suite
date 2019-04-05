@@ -74,7 +74,7 @@ MultimeterData getMultimeterData(Local<Object> obj)
     auto multimeterDataV8 = obj->Get(Nan::New<String>("multimeterData").ToLocalChecked())->ToObject();
     auto test = Get("numberOfPhases", multimeterDataV8);
     return {
-        Get("numberOfPhases", multimeterDataV8),
+        static_cast<int>(Get("numberOfPhases", multimeterDataV8)),
         Get("supplyVoltage", multimeterDataV8),
         Get("averageCurrent", multimeterDataV8),
         Get("powerFactor", multimeterDataV8)
