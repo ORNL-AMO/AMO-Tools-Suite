@@ -1,14 +1,13 @@
 const d3 = require('d3');
 const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../../')
-    , bindings = require('bindings')({ module_root: testRoot, bindings: 'ssmt' });
+    , bindings = require('bindings')({module_root: testRoot, bindings: 'ssmt'});
 
 function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
 }
 
-
-//converts spreadsheet-format lettered columns to numerical indeces
+//converts spreadsheet-format lettered columns to numerical indices
 function convertColumnToIndex(col) {
     let colIndex = -1;
     let a = "a";
@@ -28,47 +27,48 @@ function convertColumnToIndex(col) {
 }
 
 function checkRangeOverlap(startA, endA, startB, endB) {
-    if (startA == startB) { return true; }
-    if (startA == endB) { return true; }
-    if (endA == startB) { return true; }
+    if (startA == startB) {
+        return true;
+    }
+    if (startA == endB) {
+        return true;
+    }
+    if (endA == startB) {
+        return true;
+    }
     if (startA > startB) {
-        if (startA <= endB) { return true; }
+        if (startA <= endB) {
+            return true;
+        }
     }
     if (startA < startB) {
-        if (endA >= startB) { return true; }
+        if (endA >= startB) {
+            return true;
+        }
     }
 }
 
-
-
-
-// test('csvTester', function (t) {
 function runTest() {
-    d3.csv("file://" + testRoot + "/tests/at/csv/ssmtTestConfig.csv", function (errConfig, configData) {
+    console.log('================================================================');
+    console.log('Running Acceptance Tests');
+
+    var configFile = "file://" + testRoot + "/tests/at/csv/ssmtTestConfig.csv";
+    console.log('Using configuration file=' + configFile);
+
+    d3.csv(configFile, function (errConfig, configData) {
         let testCount = configData.length;
-        let a = "a";
-        let charCodeA = a.charCodeAt(0);
-
-        // let i = 0;
-        // let fileLooper = function () {
-        let summaryAssertionsCorrect = [];
-        let summaryAssertionsTotal = [];
         for (let i = 0; i < testCount; i++) {
-            console.log('i = ' + i);
-            // setTimeout(function () {
+            console.log('================================================');
+            console.log('Running Acceptance Test #' + i);
             let testFileName = configData[i].testDataFileName;
-            console.log('test ' + i + ': ' + testFileName + '.csv');
+            var testDataFile = "file://" + testRoot + "/tests/at/csv/" + testFileName + ".csv";
+            console.log('Using test data file=' + testDataFile);
 
-            d3.csv("file://" + testRoot + "/tests/at/csv/" + testFileName + ".csv", function (err, data) {
+            d3.csv(testDataFile, function (err, data) {
                 if (data.length == 0) {
                     console.log('data.length is 0, throwing error');
-                    throw "ERROR: In file '" + testFileName + ".csv', no data could be found. Either empty file or file is missing.";
-                    // i++;
-                    // if (i < testCount) {
-                    //     fileLooper();
-                    // }
-                }
-                else {
+                    throw "ERROR: No data found in file='" + testFileName + ". It is empty or missing.";
+                } else {
                     console.log('going into data handling');
                     let metaDataStartColumn = configData[i].metaDataStartColumn.toLowerCase();
                     let metaDataEndColumn = configData[i].metaDataEndColumn.toLowerCase();
@@ -115,7 +115,6 @@ function runTest() {
                     let inputDataNames = [];
                     let expectedDataNames = [];
                     let activeData = [];
-                    let metaData = {};
                     let inputData = {};
                     let expectedData = {};
 
@@ -127,7 +126,6 @@ function runTest() {
                         if (metaDataNames[j].toLowerCase() == "enabled") {
                             enabledIndex = j;
                         }
-                        metaData[columns[j]] = null;
                     }
                     for (let j = inputDataStartColumnIndex; j <= inputDataEndColumnIndex; j++) {
                         inputDataNames.push(columns[j]);
@@ -145,21 +143,20 @@ function runTest() {
                                 activeData.push(data[j]);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         //if no enabled flag, just use all rows
                         activeData = data;
                     }
 
+                    let testCount = activeData.length;
+                    for (let testNum = 0; testNum < testCount; testNum++) {
+                        let testData = activeData[testNum];
+                        let testId = testData[metaDataNames[1]];
+                        let testName = testData[metaDataNames[2]];
 
-                    for (let j = 0; j < activeData.length; j++) {
-                        summaryAssertionsCorrect.push(expectedDataNames.length);
-                        summaryAssertionsTotal.push(expectedDataNames.length);
-                        test('====== TEST ' + (j + 1) + ' OF FILE ' + testFileName + '.csv ======', [{ 'diagnostic': 'false' }], function (t) {
+                        test('Running test id=' + testId + ', test name="' + testName + '"', [{'diagnostic': 'false'}], function (t) {
                             t.plan(expectedDataNames.length);
-                            // t.plan(activeData.length);
                             t.type(bindings.steamModeler, 'function');
-                            metaData = {};
                             inputData = {};
                             expectedData = {};
 
@@ -171,12 +168,12 @@ function runTest() {
                             }
 
                             //construct input objects
-                            let boilerInput = getBoilerInput(inputData);
-                            let headerInput = getHeaderInput(inputData);
-                            let operationsInput = getOperationsInput(inputData);
-                            let turbineInput = getTurbineInput(inputData);
+                            let boilerInput = makeBoilerInput(inputData);
+                            let headerInput = makeHeaderInput(inputData);
+                            let operationsInput = makeOperationsInput(inputData);
+                            let turbineInput = makeTurbineInput(inputData);
 
-                            let inp = {
+                            let steamInput = {
                                 boilerInput: boilerInput,
                                 headerInput: headerInput,
                                 operationsInput: operationsInput,
@@ -184,67 +181,35 @@ function runTest() {
                             };
 
                             //call binding and store return object
-                            let resultData = bindings.steamModeler(inp);
+                            let resultData = bindings.steamModeler(steamInput);
                             resultData = normalizeResultData(resultData);
 
 
                             for (let k = 0; k < expectedDataNames.length; k++) {
                                 t.equal(rnd(resultData[expectedDataNames[k]]), rnd(expectedData[expectedDataNames[k]]), expectedDataNames[k] + ': ' + resultData[expectedDataNames[k]] + ' != ' + expectedData[expectedDataNames[k]]);
-                                if (rnd(resultData[expectedDataNames[k]]) !== rnd(expectedData[expectedDataNames[k]])) {
-                                    summaryAssertionsCorrect[j]--;
-                                }
                             }
-                            //output test summary
-                            // console.info('summaryAssertionsCorrect = ');
-                            // console.info(summaryAssertionsCorrect);
-                            // console.info('summaryAssertionsTotal = ');
-                            // console.info(summaryAssertionsTotal);
-                            // t.equal(summaryAssertionsCorrect[j], summaryAssertionsTotal[j]);
-
-                            //display info of current test row after numerical checks complete
-                            console.info('\ntest ' + (j + 1) + ' metadata = ');
-                            for (let k = 0; k < metaDataNames.length; k++) {
-                                //set parameter names and associated value
-                                metaData[metaDataNames[k]] = activeData[j][metaDataNames[k]];
-                                console.info(metaDataNames[k] + ': ' + metaData[metaDataNames[k]]);
-                            }
-
 
                             console.log('--------------------------------');
                             console.log('');
-                            // if (j == activeData.length - 1) {
-                            //     console.log('calling fileLooper');
-                            //     i++
-                            //     fileLooper();
-                            // }
                         });
                     }
                 }
             });
-            // }, 100);
-
-            //output test summary
-            console.info('summaryAssertionsCorrect = ');
-            console.info(summaryAssertionsCorrect);
-            console.info('summaryAssertionsTotal = ');
-            console.info(summaryAssertionsTotal);
         }
-        // fileLooper();
     });
 }
 
-
-function getTurbineInput(inputData) {
+function makeTurbineInput(inputData) {
     let turbineInput = {
-        highToLowTurbine: getHighToLowTurbineObject(inputData),
-        highToMediumTurbine: getHighToMediumTurbineObject(inputData),
-        mediumToLowTurbine: getMediumToLowTurbineObject(inputData),
-        condensingTurbine: getCondensingTurbineObject(inputData)
+        highToLowTurbine: makeHighToLowTurbineObject(inputData),
+        highToMediumTurbine: makeHighToMediumTurbineObject(inputData),
+        mediumToLowTurbine: makeMediumToLowTurbineObject(inputData),
+        condensingTurbine: makeCondensingTurbineObject(inputData)
     };
     return turbineInput;
 }
 
-function getHighToLowTurbineObject(inputData) {
+function makeHighToLowTurbineObject(inputData) {
     let highToLowTurbine = {
         isentropicEfficiency: parseFloat(inputData.highToLowTurbineIsentropicEfficiency),
         generationEfficiency: parseFloat(inputData.highToLowTurbineGenerationEfficiency),
@@ -258,7 +223,7 @@ function getHighToLowTurbineObject(inputData) {
 }
 
 
-function getHighToMediumTurbineObject(inputData) {
+function makeHighToMediumTurbineObject(inputData) {
     let highToMediumTurbine = {
         isentropicEfficiency: parseFloat(inputData.highToMediumTurbineIsentropicEfficiency),
         generationEfficiency: parseFloat(inputData.highToMediumTurbineGenerationEfficiency),
@@ -271,7 +236,7 @@ function getHighToMediumTurbineObject(inputData) {
     return highToMediumTurbine;
 }
 
-function getMediumToLowTurbineObject(inputData) {
+function makeMediumToLowTurbineObject(inputData) {
     let mediumToLowTurbine = {
         isentropicEfficiency: parseFloat(inputData.mediumToLowTurbineIsentropicEfficiency),
         generationEfficiency: parseFloat(inputData.mediumToLowTurbineGenerationEfficiency),
@@ -284,7 +249,7 @@ function getMediumToLowTurbineObject(inputData) {
     return mediumToLowTurbine;
 }
 
-function getCondensingTurbineObject(inputData) {
+function makeCondensingTurbineObject(inputData) {
     let condensingTurbine = {
         isentropicEfficiency: parseFloat(inputData.condensingTurbineIsentropicEfficiency),
         generationEfficiency: parseFloat(inputData.condensingTurbineGenerationEfficiency),
@@ -298,7 +263,7 @@ function getCondensingTurbineObject(inputData) {
 }
 
 
-function getOperationsInput(inputData) {
+function makeOperationsInput(inputData) {
     let operationsInput = {
         sitePowerImport: parseFloat(inputData.sitePowerImport),
         makeUpWaterTemperature: parseFloat(inputData.makeUpWaterTemperature),
@@ -311,17 +276,17 @@ function getOperationsInput(inputData) {
     return operationsInput;
 }
 
-function getHeaderInput(inputData) {
+function makeHeaderInput(inputData) {
     let headerInput = {
-        highPressureHeader: getHighPressureHeaderObject(inputData),
-        mediumPressureHeader: getMediumPressureHeaderObject(inputData),
-        lowPressureHeader: getLowPressureHeaderObject(inputData)
+        highPressureHeader: makeHighPressureHeaderObject(inputData),
+        mediumPressureHeader: makeMediumPressureHeaderObject(inputData),
+        lowPressureHeader: makeLowPressureHeaderObject(inputData)
     };
     return headerInput;
 }
 
 
-function getHighPressureHeaderObject(inputData) {
+function makeHighPressureHeaderObject(inputData) {
     let highPressureHeader = {
         pressure: parseFloat(inputData.highPressureHeaderPressure),
         processSteamUsage: parseFloat(inputData.highPressureHeaderProcessSteamUsage),
@@ -336,7 +301,7 @@ function getHighPressureHeaderObject(inputData) {
     return highPressureHeader;
 }
 
-function getMediumPressureHeaderObject(inputData) {
+function makeMediumPressureHeaderObject(inputData) {
     let mediumPressureHeader = {
         pressure: parseFloat(inputData.mediumPressureHeaderPressure),
         processSteamUsage: parseFloat(inputData.mediumPressureHeaderProcessSteamUsage),
@@ -351,7 +316,7 @@ function getMediumPressureHeaderObject(inputData) {
     return mediumPressureHeader;
 }
 
-function getLowPressureHeaderObject(inputData) {
+function makeLowPressureHeaderObject(inputData) {
     let lowPressureHeader = {
         pressure: parseFloat(inputData.lowPressureHeaderPressure),
         processSteamUsage: parseFloat(inputData.lowPressureHeaderProcessSteamUsage),
@@ -366,7 +331,7 @@ function getLowPressureHeaderObject(inputData) {
     return lowPressureHeader;
 }
 
-function getBoilerInput(inputData) {
+function makeBoilerInput(inputData) {
     let boilerInput = {
         fuelType: parseFloat(inputData.fuelType),
         fuel: parseFloat(inputData.fuel),
