@@ -1,2 +1,2 @@
 testDataFileName,metaDataStartColumn,metaDataEndColumn,inputDataStartColumn,inputDataEndColumn,expectedDataStartColumn,expectedDataEndColumn
-ssmtTestData,a,d,e,bs,bt,qy
+ssmtTestData,a,d,e,bu,bv,ra
