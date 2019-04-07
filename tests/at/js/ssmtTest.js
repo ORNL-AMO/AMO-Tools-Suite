@@ -167,6 +167,12 @@ function runTest() {
                                 expectedData[expectedDataNames[k]] = activeData[j][expectedDataNames[k]];
                             }
 
+                            let isBaselineCalc = inputData.isBaselineCalc;
+                            let baselinePowerDemand = inputData.baselinePowerDemand;
+
+                            console.log("isBaselineCalc=" + isBaselineCalc);
+                            console.log("baselinePowerDemand=" + baselinePowerDemand);
+
                             //construct input objects
                             let boilerInput = makeBoilerInput(inputData);
                             let headerInput = makeHeaderInput(inputData);
@@ -174,6 +180,8 @@ function runTest() {
                             let turbineInput = makeTurbineInput(inputData);
 
                             let steamInput = {
+                                isBaselineCalc: isBaselineCalc,
+                                baselinePowerDemand: baselinePowerDemand ,
                                 boilerInput: boilerInput,
                                 headerInput: headerInput,
                                 operationsInput: operationsInput,
