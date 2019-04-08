@@ -178,6 +178,7 @@
             ],
             'sources': [
                 'bindings/calculator.cpp',
+                'src/calculator/util/ElectricityReduction.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
             ],
             "conditions": [
