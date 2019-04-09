@@ -7,7 +7,7 @@ function rnd(value) {
 }
 
 test('electricityReduction', function (t) {
-    t.plan(3);
+    t.plan(4);
     t.type(bindings.electricityReduction, 'function');
 
     var inp = {
@@ -45,6 +45,7 @@ test('electricityReduction', function (t) {
     var res = bindings.electricityReduction(inp);
     t.equal(rnd(res.energyUse), rnd(407045.796185), 'res.energyUse is ' + res.energyUse);
     t.equal(rnd(res.energyCost), rnd(48845.495542), 'res.energyCost is ' + res.energyCost);
+    t.equal(rnd(res.power), rnd(47.111782), 'res.power is ' + res.power);
 
 });
 
