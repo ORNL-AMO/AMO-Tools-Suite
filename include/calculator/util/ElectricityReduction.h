@@ -128,13 +128,13 @@ class ElectricityReduction {
 public:
 
     struct Output {
-        Output(double energyUse, double energyCost, double annualEnergySavings, double costSavings)
-            : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings)
+        Output(double energyUse, double energyCost, double annualEnergySavings, double costSavings, double power)
+            : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings), power(power)
             {
             }
 
         Output() = default;
-        double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
+        double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, power = 0;
     };
 
     ElectricityReduction(

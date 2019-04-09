@@ -3,7 +3,7 @@
 #include "calculator/util/ElectricityReduction.h"
 
 ElectricityReduction::Output ElectricityReduction::calculate() {
-    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0;
+    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, power = 0;
 
     // loop through all supplied inputs
     for (auto & electricityReductionInput: electricityReductionInputVec) {
@@ -49,10 +49,11 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
         }
+        power = power + tmpTotalPower;
     }
 
     // output = Output(energyUse, energyCost, annualEnergySavings, costSavings);
-    return ElectricityReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings);
+    return ElectricityReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings, power);
 }
 
 void ElectricityReduction::setElectricityReductionInputVec(std::vector<ElectricityReductionInput> & electricityReductionInput) {

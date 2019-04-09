@@ -16,6 +16,7 @@ TEST_CASE("Electricity Reduction Multimeter Reading - 3 Phases", "[ElectricityRe
 
     CHECK(testOutput.energyUse == Approx(407045.796185));
     CHECK(testOutput.energyCost == Approx(48845.495542));
+    CHECK(testOutput.power == Approx(47.111781));
 }
 
 TEST_CASE("Electricity Reduction Multimeter Reading - 1 Phase", "[ElectricityReduction][util]") {
