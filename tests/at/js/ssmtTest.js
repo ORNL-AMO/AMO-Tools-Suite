@@ -1,7 +1,17 @@
+const fs = require('fs');
 const d3 = require('d3');
 const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../../')
     , bindings = require('bindings')({module_root: testRoot, bindings: 'ssmt'});
+
+//TODO extract make input
+//TODO extract make expected
+//TODO extract validate results
+
+function logSectionStart(msg) {
+    console.log("================================================");
+    console.log(msg);
+}
 
 function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
@@ -19,8 +29,8 @@ function convertColumnToIndex(col) {
             throw "ERROR: Invalid column title: '" + col + "' is not a valid column title. Column titles must contain only characters 'a'-'z'.";
         }
 
-        //  use position of the supplied letter within the alphabet 
-        //  to establish a base-26 numerical system
+        // use position of the supplied letter within the alphabet
+        // to establish a base-26 numerical system
         colIndex += charNum * Math.pow(26, exp);
     }
     return colIndex;
@@ -48,163 +58,235 @@ function checkRangeOverlap(startA, endA, startB, endB) {
     }
 }
 
-function runTest() {
-    console.log('================================================================');
-    console.log('Running Acceptance Tests');
+function loadConfigFile() {
+    var configDataFileName = "ssmtTestConfig";
+    let configData = loadDataFile(configDataFileName);
+    validateDataFile(configData, configDataFileName);
+    return configData;
+}
 
-    var configFile = "file://" + testRoot + "/tests/at/csv/ssmtTestConfig.csv";
-    console.log('Using configuration file=' + configFile);
+function loadDataFile(dataFileName) {
+    let file = makeDataFileName(dataFileName);
+    return loadCsvFile(file);
+}
 
-    d3.csv(configFile, function (errConfig, configData) {
-        let testCount = configData.length;
-        for (let i = 0; i < testCount; i++) {
-            console.log('================================================');
-            console.log('Running Acceptance Test #' + i);
-            let testFileName = configData[i].testDataFileName;
-            var testDataFile = "file://" + testRoot + "/tests/at/csv/" + testFileName + ".csv";
-            console.log('Using test data file=' + testDataFile);
+function makeDataFileName(dataFileName) {
+    return testRoot + "/tests/at/csv/" + dataFileName + ".csv";
+}
 
-            d3.csv(testDataFile, function (err, data) {
-                if (data.length == 0) {
-                    console.log('data.length is 0, throwing error');
-                    throw "ERROR: No data found in file='" + testFileName + ". It is empty or missing.";
-                } else {
-                    console.log('going into data handling');
-                    let metaDataStartColumn = configData[i].metaDataStartColumn.toLowerCase();
-                    let metaDataEndColumn = configData[i].metaDataEndColumn.toLowerCase();
-                    let inputDataStartColumn = configData[i].inputDataStartColumn.toLowerCase();
-                    let inputDataEndColumn = configData[i].inputDataEndColumn.toLowerCase();
-                    let expectedDataStartColumn = configData[i].expectedDataStartColumn.toLowerCase();
-                    let expectedDataEndColumn = configData[i].expectedDataEndColumn.toLowerCase();
-                    let metaDataStartColumnIndex = convertColumnToIndex(metaDataStartColumn);
-                    let metaDataEndColumnIndex = convertColumnToIndex(metaDataEndColumn);
-                    let inputDataStartColumnIndex = convertColumnToIndex(inputDataStartColumn);
-                    let inputDataEndColumnIndex = convertColumnToIndex(inputDataEndColumn);
-                    let expectedDataStartColumnIndex = convertColumnToIndex(expectedDataStartColumn);
-                    let expectedDataEndColumnIndex = convertColumnToIndex(expectedDataEndColumn);
-                    //makes sure starting points are not beyond ending points
-                    if (metaDataStartColumnIndex > metaDataEndColumnIndex) {
-                        throw 'ERROR: metaDataStartColumn is greater than the metaDataEndColumn.';
-                    }
-                    if (inputDataStartColumnIndex > inputDataEndColumnIndex) {
-                        throw 'ERROR: inputDataStartColumn is greater than the inputDataEndColumn.';
-                    }
-                    if (expectedDataStartColumnIndex > expectedDataEndColumnIndex) {
-                        throw 'ERROR: expectedDataStartColumn is greater than the expectedDataEndColumn.';
-                    }
-                    //makes sure no overlap between collections of columns
-                    if (checkRangeOverlap(metaDataStartColumnIndex, metaDataEndColumnIndex, inputDataStartColumnIndex, inputDataEndColumnIndex)) {
-                        throw 'ERROR: Meta data and Input data ranges overlap. Start and End columns are INCLUSIVE meaning the column supplied for the start and ending points are included in the range.';
-                    }
-                    if (checkRangeOverlap(metaDataStartColumnIndex, metaDataEndColumnIndex, expectedDataStartColumnIndex, expectedDataEndColumnIndex)) {
-                        throw 'ERROR: Meta data and Expected data ranges overlap. Start and End columns are INCLUSIVE meaning the column supplied for the start and ending points are included in the range.';
-                    }
-                    if (checkRangeOverlap(inputDataStartColumnIndex, inputDataEndColumnIndex, expectedDataStartColumnIndex, expectedDataEndColumnIndex)) {
-                        throw 'ERROR: Input data and Expected data ranges overlap. Start and End columns are INCLUSIVE meaning the column supplied for the start and ending points are included in the range.';
-                    }
+function loadCsvFile(dataFile) {
+    logSectionStart('loading file=' + dataFile);
+    let rawFile = fs.readFileSync(dataFile, "utf8");
+    return d3.csvParse(rawFile);
+}
 
-                    let columns = data.columns;
-                    //  check if number of columns is less than or equal to number of columns
-                    //  described in config file to avoid index out of array error
-                    let maxColumns = Math.max(Math.max(inputDataEndColumnIndex, expectedDataEndColumnIndex), metaDataEndColumnIndex);
-                    if (maxColumns > columns.length - 1) {
-                        throw "ERROR: In file '" + testFileName + ".csv', only found " + columns.length + " columns, expected " + (maxColumns + 1) + " columns. Please check your config file.";
-                    }
+function validateDataFile(data, dataFileName) {
+    if (data.length === 0) {
+        throw "ERROR: empty file='" + dataFileName + "'.";
+    }
+}
 
-                    let metaDataNames = [];
-                    let inputDataNames = [];
-                    let expectedDataNames = [];
-                    let activeData = [];
-                    let inputData = {};
-                    let expectedData = {};
+function validateConfigDataEntry(configDataColumnIndexes) {
+    let metaDataStartColumnIndex = configDataColumnIndexes.metaDataStartColumnIndex;
+    let metaDataEndColumnIndex = configDataColumnIndexes.metaDataEndColumnIndex;
+    let inputDataStartColumnIndex = configDataColumnIndexes.inputDataStartColumnIndex;
+    let inputDataEndColumnIndex = configDataColumnIndexes.inputDataEndColumnIndex;
+    let expectedDataStartColumnIndex = configDataColumnIndexes.expectedDataStartColumnIndex;
+    let expectedDataEndColumnIndex = configDataColumnIndexes.expectedDataEndColumnIndex;
 
-                    let enabledIndex = -1;
-                    //create objects with column titles as parameter names
-                    for (let j = metaDataStartColumnIndex; j <= metaDataEndColumnIndex; j++) {
-                        metaDataNames.push(columns[j]);
-                        //check if there is an enable flag column and grab index
-                        if (metaDataNames[j].toLowerCase() == "enabled") {
-                            enabledIndex = j;
-                        }
-                    }
-                    for (let j = inputDataStartColumnIndex; j <= inputDataEndColumnIndex; j++) {
-                        inputDataNames.push(columns[j]);
-                        inputData[columns[j]] = null;
-                    }
-                    for (let j = expectedDataStartColumnIndex; j <= expectedDataEndColumnIndex; j++) {
-                        expectedDataNames.push(columns[j]);
-                        expectedData[columns[j]] = null;
-                    }
-                    //if there is an enable flag, only check enabled tests
-                    if (enabledIndex >= 0) {
-                        //collect all rows that are enabled
-                        for (let j = 0; j < data.length; j++) {
-                            if (data[j][metaDataNames[enabledIndex]].toLowerCase() == "true") {
-                                activeData.push(data[j]);
-                            }
-                        }
-                    } else {
-                        //if no enabled flag, just use all rows
-                        activeData = data;
-                    }
+    //makes sure starting points are not beyond ending points
+    if (metaDataStartColumnIndex > metaDataEndColumnIndex) {
+        throw 'ERROR: metaDataStartColumn is greater than the metaDataEndColumn.';
+    }
+    if (inputDataStartColumnIndex > inputDataEndColumnIndex) {
+        throw 'ERROR: inputDataStartColumn is greater than the inputDataEndColumn.';
+    }
+    if (expectedDataStartColumnIndex > expectedDataEndColumnIndex) {
+        throw 'ERROR: expectedDataStartColumn is greater than the expectedDataEndColumn.';
+    }
+    //makes sure no overlap between collections of columns
+    if (checkRangeOverlap(metaDataStartColumnIndex, metaDataEndColumnIndex, inputDataStartColumnIndex, inputDataEndColumnIndex)) {
+        throw 'ERROR: Meta data and Input data ranges overlap. Start and End columns are INCLUSIVE meaning the column supplied for the start and ending points are included in the range.';
+    }
+    if (checkRangeOverlap(metaDataStartColumnIndex, metaDataEndColumnIndex, expectedDataStartColumnIndex, expectedDataEndColumnIndex)) {
+        throw 'ERROR: Meta data and Expected data ranges overlap. Start and End columns are INCLUSIVE meaning the column supplied for the start and ending points are included in the range.';
+    }
+    if (checkRangeOverlap(inputDataStartColumnIndex, inputDataEndColumnIndex, expectedDataStartColumnIndex, expectedDataEndColumnIndex)) {
+        throw 'ERROR: Input data and Expected data ranges overlap. Start and End columns are INCLUSIVE meaning the column supplied for the start and ending points are included in the range.';
+    }
+}
 
-                    let testCount = activeData.length;
-                    for (let testNum = 0; testNum < testCount; testNum++) {
-                        let testData = activeData[testNum];
-                        let testId = testData[metaDataNames[1]];
-                        let testName = testData[metaDataNames[2]];
+function validateTestDataEntry(configDataColumnIndexes, testDataFileName, testDataColumnCount, testDataEntry, testIdentification) {
+    let metaDataEndColumnIndex = configDataColumnIndexes.metaDataEndColumnIndex;
+    let inputDataEndColumnIndex = configDataColumnIndexes.inputDataEndColumnIndex;
+    let expectedDataEndColumnIndex = configDataColumnIndexes.expectedDataEndColumnIndex;
 
-                        test('Running test id=' + testId + ', test name="' + testName + '"', [{'diagnostic': 'false'}], function (t) {
-                            t.plan(expectedDataNames.length);
-                            t.type(bindings.steamModeler, 'function');
-                            inputData = {};
-                            expectedData = {};
+    // indexes are 0 based, so add 1
+    let configTestDataColumnCount =
+        Math.max(metaDataEndColumnIndex, inputDataEndColumnIndex, expectedDataEndColumnIndex) + 1;
+    if (configTestDataColumnCount > testDataColumnCount) {
+        throw "ERROR: test " + testIdentification +
+        " in file='" + testDataFileName + ".csv' has " + testDataColumnCount +
+        " columns and config data expected " + configTestDataColumnCount + " columns.";
+    }
+}
 
-                            for (let k = 0; k < inputDataNames.length; k++) {
-                                inputData[inputDataNames[k]] = activeData[j][inputDataNames[k]];
-                            }
-                            for (let k = 0; k < expectedDataNames.length; k++) {
-                                expectedData[expectedDataNames[k]] = activeData[j][expectedDataNames[k]];
-                            }
+function makeColumnIndexList(configDataEntry) {
+    let metaDataStartColumn = configDataEntry.metaDataStartColumn.toLowerCase();
+    let metaDataEndColumn = configDataEntry.metaDataEndColumn.toLowerCase();
+    let inputDataStartColumn = configDataEntry.inputDataStartColumn.toLowerCase();
+    let inputDataEndColumn = configDataEntry.inputDataEndColumn.toLowerCase();
+    let expectedDataStartColumn = configDataEntry.expectedDataStartColumn.toLowerCase();
+    let expectedDataEndColumn = configDataEntry.expectedDataEndColumn.toLowerCase();
 
-                            let isBaselineCalc = inputData.isBaselineCalc;
-                            let baselinePowerDemand = inputData.baselinePowerDemand;
+    let metaDataStartColumnIndex = convertColumnToIndex(metaDataStartColumn);
+    let metaDataEndColumnIndex = convertColumnToIndex(metaDataEndColumn);
+    let inputDataStartColumnIndex = convertColumnToIndex(inputDataStartColumn);
+    let inputDataEndColumnIndex = convertColumnToIndex(inputDataEndColumn);
+    let expectedDataStartColumnIndex = convertColumnToIndex(expectedDataStartColumn);
+    let expectedDataEndColumnIndex = convertColumnToIndex(expectedDataEndColumn);
 
-                            console.log("isBaselineCalc=" + isBaselineCalc);
-                            console.log("baselinePowerDemand=" + baselinePowerDemand);
+    return {
+        metaDataStartColumnIndex: metaDataStartColumnIndex,
+        metaDataEndColumnIndex: metaDataEndColumnIndex,
+        inputDataStartColumnIndex: inputDataStartColumnIndex,
+        inputDataEndColumnIndex: inputDataEndColumnIndex,
+        expectedDataStartColumnIndex: expectedDataStartColumnIndex,
+        expectedDataEndColumnIndex: expectedDataEndColumnIndex,
+    };
+}
 
-                            //construct input objects
-                            let boilerInput = makeBoilerInput(inputData);
-                            let headerInput = makeHeaderInput(inputData);
-                            let operationsInput = makeOperationsInput(inputData);
-                            let turbineInput = makeTurbineInput(inputData);
+function makeTestIdentification(testDataEntry) {
+    return "id='" + testDataEntry.id + "', name='" + testDataEntry.testName + "', description='" + testDataEntry.testDescription + "'";
+}
 
-                            let steamInput = {
-                                isBaselineCalc: isBaselineCalc,
-                                baselinePowerDemand: baselinePowerDemand ,
-                                boilerInput: boilerInput,
-                                headerInput: headerInput,
-                                operationsInput: operationsInput,
-                                turbineInput: turbineInput
-                            };
+function makeSteamInput(testDataEntry) {
+    let isBaselineCalc = testDataEntry.isBaselineCalc;
+    let baselinePowerDemand = testDataEntry.baselinePowerDemand;
 
-                            //call binding and store return object
-                            let resultData = bindings.steamModeler(steamInput);
-                            resultData = normalizeResultData(resultData);
+    let boilerInput = makeBoilerInput(testDataEntry);
+    let headerInput = makeHeaderInput(testDataEntry);
+    let operationsInput = makeOperationsInput(testDataEntry);
+    let turbineInput = makeTurbineInput(testDataEntry);
 
+    return {
+        isBaselineCalc: isBaselineCalc,
+        baselinePowerDemand: baselinePowerDemand,
+        boilerInput: boilerInput,
+        headerInput: headerInput,
+        operationsInput: operationsInput,
+        turbineInput: turbineInput
+    };
+}
 
-                            for (let k = 0; k < expectedDataNames.length; k++) {
-                                t.equal(rnd(resultData[expectedDataNames[k]]), rnd(expectedData[expectedDataNames[k]]), expectedDataNames[k] + ': ' + resultData[expectedDataNames[k]] + ' != ' + expectedData[expectedDataNames[k]]);
-                            }
+function makeExpectedDataNames(configDataColumnIndexes, columnNames) {
+    let expectedDataNames = [];
 
-                            console.log('--------------------------------');
-                            console.log('');
-                        });
-                    }
-                }
-            });
-        }
+    let expectedDataStartColumnIndex = configDataColumnIndexes.expectedDataStartColumnIndex;
+    let expectedDataEndColumnIndex = configDataColumnIndexes.expectedDataEndColumnIndex;
+
+    for (let columnNum = expectedDataStartColumnIndex; columnNum <= expectedDataEndColumnIndex; columnNum++) {
+        expectedDataNames.push(columnNames[columnNum]);
+    }
+
+    return expectedDataNames;
+}
+
+function makeExpectedData(expectedDataNames, testDataEntry) {
+    let expectedData = {};
+
+    for (let nameNum = 0; nameNum < expectedDataNames.length; nameNum++) {
+        let expectedDataName = expectedDataNames[nameNum];
+        expectedData[expectedDataName] = testDataEntry[expectedDataName];
+    }
+
+    return expectedData;
+}
+
+function run() {
+    console.log("================================================================");
+    console.log("Running Acceptance Tests");
+
+    let configData = loadConfigFile();
+
+    let configDataEntryCount = configData.length;
+    console.log("config file has " + configDataEntryCount + " entries to process");
+
+    for (let configDataEntryNum = 0; configDataEntryNum < configDataEntryCount; configDataEntryNum++) {
+        let configDataEntry = configData[configDataEntryNum];
+        processConfigDataEntry(configDataEntry);
+    }
+}
+
+function processConfigDataEntry(configDataEntry) {
+    let configDataColumnIndexes = makeColumnIndexList(configDataEntry);
+    validateConfigDataEntry(configDataColumnIndexes);
+
+    let testDataFileName = configDataEntry.testDataFileName;
+    let testData = loadDataFile(testDataFileName);
+    validateDataFile(testData, testDataFileName);
+
+    let columnNames = testData.columns;
+    let expectedDataNames = makeExpectedDataNames(configDataColumnIndexes, columnNames);
+
+    logSectionStart("Running Acceptance Tests in file=" + testDataFileName);
+
+    let testDataCount = testData.length;
+
+    console.log("test data file has " + testDataCount + " tests to process");
+
+    let testDataColumnCount = columnNames.length;
+    for (let testDataNum = 0; testDataNum < testDataCount; testDataNum++) {
+        let testDataEntry = testData[testDataNum];
+        processTestDataEntry(configDataEntry, configDataColumnIndexes, testDataFileName, testDataColumnCount, expectedDataNames, testDataEntry);
+    }
+}
+
+function processTestDataEntry(configDataEntry, configDataColumnIndexes, testDataFileName, testDataColumnCount, expectedDataNames, testDataEntry) {
+    let testIdentification = makeTestIdentification(testDataEntry);
+    validateTestDataEntry(configDataColumnIndexes, testDataFileName, testDataColumnCount, testDataEntry, testIdentification);
+
+    if (testDataEntry.enabled.toLowerCase() === "true") {
+        runTest(expectedDataNames, testDataEntry, testIdentification);
+    } else {
+        console.log("Skipping disabled test: " + testIdentification)
+    }
+}
+
+function runTest(expectedDataNames, testDataEntry, testIdentification) {
+    test(testIdentification, [{'diagnostic': 'false'}], function (t) {
+        t.plan(expectedDataNames.length);
+        t.type(bindings.steamModeler, 'function');
+
+        let expectedData = makeExpectedData(expectedDataNames, testDataEntry);
+        logSectionStart("expectedData=" + JSON.stringify(expectedData));
+
+        let steamInput = makeSteamInput(testDataEntry);
+        logSectionStart("steamInput=" + JSON.stringify(steamInput));
+
+        let actualSteamModelerOutput = bindings.steamModeler(steamInput);
+        logSectionStart("steamOutput=" + JSON.stringify(actualSteamModelerOutput));
+
+        let actualSteamModelerOutputFlattened = mapSteamModelerOutputToFlatArray(actualSteamModelerOutput);
+
+        validateOutput(expectedDataNames, actualSteamModelerOutputFlattened, expectedData, t);
     });
+}
+
+function validateOutput(expectedDataNames, actualSteamModelerOutputFlattened, expectedData, t) {
+    let expectedColumnCount = expectedDataNames.length;
+    for (let columnNum = 0; columnNum < expectedColumnCount; columnNum++) {
+        let expectedDataName = expectedDataNames[columnNum];
+        let actual = actualSteamModelerOutputFlattened[expectedDataName];
+        let expected = expectedData[expectedDataName];
+
+        let actualRounded = rnd(actual);
+        let expectedRounded = rnd(expected);
+
+        let msg = expectedDataName + ": actual=" + actualRounded + ", expected=" + expectedRounded;
+
+        t.equal(actualRounded, expectedRounded, msg);
+    }
 }
 
 function makeTurbineInput(inputData) {
@@ -355,12 +437,12 @@ function makeBoilerInput(inputData) {
     return boilerInput;
 }
 
-function normalizeResultData(resultData) {
+function mapSteamModelerOutputToFlatArray(resultData) {
     let normalizedResultData = {
         operationsOutput_powerGenerated: resultData.operationsOutput.powerGenerated,
         operationsOutput_boilerFuelCost: resultData.operationsOutput.boilerFuelCost,
-        operationsOutput_makeupWaterVolumeFlowGpm: resultData.operationsOutput.makeupWaterVolumeFlowGpm,
-        operationsOutput_makeupWaterVolumeFlowGpmAnnual: resultData.operationsOutput.makeupWaterVolumeFlowGpmAnnual,
+        operationsOutput_makeupWaterVolumeFlow: resultData.operationsOutput.makeupWaterVolumeFlow,
+        operationsOutput_makeupWaterVolumeFlowAnnual: resultData.operationsOutput.makeupWaterVolumeFlowAnnual,
         operationsOutput_makeupWaterCost: resultData.operationsOutput.makeupWaterCost,
         operationsOutput_totalOperatingCost: resultData.operationsOutput.totalOperatingCost,
         operationsOutput_powerGenerationCost: resultData.operationsOutput.powerGenerationCost,
@@ -746,5 +828,4 @@ function normalizeResultData(resultData) {
     return normalizedResultData;
 }
 
-
-runTest();
+run();
