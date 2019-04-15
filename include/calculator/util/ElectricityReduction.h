@@ -141,12 +141,8 @@ public:
         std::vector<ElectricityReductionInput> & electricityReductionInputVec
         ) :
             electricityReductionInputVec(electricityReductionInputVec)
-    {
-        // calculate();
-    }
-
-    ElectricityReduction::Output calculate();
-
+    {}
+    
     ElectricityReduction::Output calculate();
     ElectricityReduction::Output getOutput() { return output; }
     std::vector<ElectricityReductionInput> const & getElectricityReductionInputVec() const {
