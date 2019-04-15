@@ -140,4 +140,19 @@ void setR(std::string const &name, double number) {
     setRobject(name, number, r);
 }
 
+// Used to set an 'error' property on an object, for handling runtime_errors better than using NAN's ThrowError,
+// works with the often used 'r' NAN object
+void setRerror(std::string const & msg) {
+    Local <String> error = Nan::New<String>("error").ToLocalChecked();
+    Local <String> localMsg = Nan::New<String>(msg).ToLocalChecked();
+    Nan::Set(r, error, localMsg);
+}
+
+// general purpose setRerror function, will work with any NAN object
+void setRerror(std::string const & msg, Local <Object> obj) {
+    Local <String> error = Nan::New<String>("error").ToLocalChecked();
+    Local <String> localMsg = Nan::New<String>(msg).ToLocalChecked();
+    Nan::Set(obj, error, localMsg);
+}
+
 #endif //AMO_TOOLS_SUITE_NANDATACONVERTERS_H

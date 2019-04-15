@@ -185,7 +185,7 @@ NAN_METHOD(steamProperties) {
         setR("specificVolume", results.specificVolume);
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in steamProperties - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in steamProperties - ssmt.h: " + what));
     }
     info.GetReturnValue().Set(r);
 }
@@ -233,7 +233,7 @@ NAN_METHOD(boiler) {
         setR("fuelEnergy", b.getFuelEnergy());
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in boiler - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in boiler - ssmt.h: " + what));
     }
 
     info.GetReturnValue().Set(r);
@@ -269,7 +269,7 @@ NAN_METHOD(heatLoss) {
         setR("heatLoss", hl.getHeatLoss());
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in heatLoss - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in heatLoss - ssmt.h: " + what));
     }
 
     info.GetReturnValue().Set(r);
@@ -313,7 +313,7 @@ NAN_METHOD(flashTank) {
         setR("outletLiquidEnergyFlow", results3.energyFlow);
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in flashTank - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in flashTank - ssmt.h: " + what));
     }
 
     info.GetReturnValue().Set(r);
@@ -347,7 +347,7 @@ NAN_METHOD(prvWithoutDesuperheating) {
         setR("outletEnergyFlow", pwod.getOutletEnergyFlow());
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in prvWithoutDesuperheating - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in prvWithoutDesuperheating - ssmt.h: " + what));
     }
 
     info.GetReturnValue().Set(r);
@@ -395,7 +395,7 @@ NAN_METHOD(prvWithDesuperheating) {
         setR("feedwaterEnergyFlow", pwd.getFeedwaterEnergyFlow());
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in prvWithDesuperheating - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in prvWithDesuperheating - ssmt.h: " + what));
     }
 
     info.GetReturnValue().Set(r);
@@ -451,7 +451,7 @@ NAN_METHOD(deaerator) {
         setR("inletSteamEnergyFlow", results4.energyFlow);
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in deaerator - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in deaerator - ssmt.h: " + what));
     }
 
     info.GetReturnValue().Set(r);
@@ -521,7 +521,7 @@ NAN_METHOD(header) {
         Nan::Set(r, headerStr, obj);
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in header - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in header - ssmt.h: " + what));
     }
     info.GetReturnValue().Set(r);
 }
@@ -558,7 +558,7 @@ NAN_METHOD(turbine) {
         }
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in turbine - ssmt.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in turbine - ssmt.h: " + what));
     }
 
     auto results = t->getInletProperties();

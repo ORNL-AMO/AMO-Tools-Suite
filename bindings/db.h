@@ -16,10 +16,11 @@
 #include <calculator/losses/WallLosses.h>
 #include <calculator/motor/MotorData.h>
 
+#include "NanDataConverters.h"
+
 using namespace Nan;
 using namespace v8;
 
-Local<Object> inp;
 std::unique_ptr<SQLite> sql;
 
 double Get(std::string const & nm) {
@@ -157,7 +158,7 @@ NAN_METHOD(selectSolidLoadChargeMaterialById) {
         Nan::Set(obj, meltingPoint, Nan::New<Number>(slcm.getMeltingPoint()));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in selectSolidLoadChargeMaterialById - db.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in selectSolidLoadChargeMaterialById - db.h: " + what), obj);
     }
 
     info.GetReturnValue().Set(obj);
@@ -269,7 +270,7 @@ NAN_METHOD(selectLiquidLoadChargeMaterialById) {
         Nan::Set(obj, latentHeat, Nan::New<Number>(llcm.getLatentHeat()));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in selectLiquidLoadChargeMaterialById - db.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in selectLiquidLoadChargeMaterialById - db.h: " + what), obj);
     }
 
     info.GetReturnValue().Set(obj);
@@ -332,7 +333,7 @@ NAN_METHOD(selectGasLoadChargeMaterialById) {
         Nan::Set(obj, specificHeatVapor, Nan::New<Number>(glcm.getSpecificHeatVapor()));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in selectGasLoadChargeMaterialById - db.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in selectGasLoadChargeMaterialById - db.h: " + what), obj);
     }
 
     info.GetReturnValue().Set(obj);
@@ -423,7 +424,7 @@ NAN_METHOD(selectSolidLiquidFlueGasMaterialById) {
         Nan::Set(obj, nitrogen, Nan::New<Number>(fgm.getNitrogen()));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in selectSolidLiquidFlueGasMaterialById - db.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in selectSolidLiquidFlueGasMaterialById - db.h: " + what), obj);
     }
 
     info.GetReturnValue().Set(obj);
@@ -485,6 +486,7 @@ NAN_METHOD(insertGasFlueGasMaterial) {
         info.GetReturnValue().Set(success);
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
+        // setRerror(std::string("std::runtime_error thrown in insertGasFlueGasMaterial - db.h: " + what), obj);
         ThrowError(std::string("std::runtime_error thrown in insertGasFlueGasMaterial - db.h: " + what).c_str());
         info.GetReturnValue().Set(false);
     }
@@ -506,6 +508,7 @@ NAN_METHOD(updateGasFlueGasMaterial) {
         info.GetReturnValue().Set(success);
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
+        // setRerror(std::string("std::runtime_error thrown in updateGasFlueGasMaterial - db.h: " + what), obj);
         ThrowError(std::string("std::runtime_error thrown in updateGasFlueGasMaterial - db.h: " + what).c_str());
         info.GetReturnValue().Set(false);
     }
@@ -550,7 +553,7 @@ NAN_METHOD(selectGasFlueGasMaterialById) {
         Nan::Set(obj, specificGravity, Nan::New<Number>(fgm.getSpecificGravity()));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in selectGasFlueGasMaterialById - db.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in selectGasFlueGasMaterialById - db.h: " + what), obj);
     }
 
     info.GetReturnValue().Set(obj);
@@ -613,7 +616,7 @@ NAN_METHOD(selectAtmosphereSpecificHeatById) {
         Nan::Set(obj, specificHeat, Nan::New<Number>(ash.getSpecificHeat()));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in selectAtmosphereSpecificHeatById - db.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in selectAtmosphereSpecificHeatById - db.h: " + what), obj);
     }
 
     info.GetReturnValue().Set(obj);
@@ -675,7 +678,7 @@ NAN_METHOD(selectWallLossesSurfaceById) {
         Nan::Set(obj, conditionFactor, Nan::New<Number>(wls.getConditionFactor()));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in selectWallLossesSurfaceById - db.h: " + what).c_str());
+        setRerror(std::string("std::runtime_error thrown in selectWallLossesSurfaceById - db.h: " + what), obj);
     }
 
     info.GetReturnValue().Set(obj);
