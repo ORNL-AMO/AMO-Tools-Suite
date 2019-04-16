@@ -69,6 +69,8 @@ inline void SetR(const std::string &key, double val)
     Nan::Set(r, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
 }
 
+// ============== Electricity Reduction ==============
+
 MultimeterData getMultimeterData(Local<Object> obj)
 {
     auto multimeterDataV8 = obj->Get(Nan::New<String>("multimeterData").ToLocalChecked())->ToObject();
@@ -157,3 +159,13 @@ NAN_METHOD(electricityReduction)
     }
     info.GetReturnValue().Set(r);
 }
+// ============== END Electricity Reduction ==============
+
+
+// ============== Natural Gas ==============
+
+
+
+
+// ============== END Natural Gas ==============
+
