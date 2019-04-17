@@ -48,7 +48,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
         {
             WaterMassFlowData waterMassFlowData = naturalGasReductionInput.getWaterMassFlowData();
             double tmpHeatFlowRate;
-            tmpHeatFlowRate = (500 * waterMassFlowData.getWaterFlow() * (waterMassFlowData.getOutletTemperature() - waterMassFlowData.getInletTmperature())) / 1000000;
+            tmpHeatFlowRate = (500 * waterMassFlowData.getWaterFlow() * (waterMassFlowData.getOutletTemperature() - waterMassFlowData.getInletTemperature())) / 1000000;
             tmpEnergyUse = (tmpHeatFlowRate * naturalGasReductionInput.getHoursPerDay() * naturalGasReductionInput.getDaysPerMonth() * naturalGasReductionInput.getMonthsPerYear() * naturalGasReductionInput.getUnits()) / waterMassFlowData.getSystemEfficiency();
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
@@ -62,6 +62,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
         energyCost = energyCost + tmpEnergyCost;
         totalFlow = totalFlow + tmpTotalFlow;
     }
+    return NaturalGasReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings, totalFlow);
 }
 
 void FlowMeterMethodData::setFlowRate(const double flowRate)
@@ -134,7 +135,7 @@ void WaterMassFlowData::setOutletTemperature(const double outletTemperature)
     this->outletTemperature = outletTemperature;
 }
 
-void WaterMassFlow::setSystemEfficiency(const double systemEfficiency)
+void WaterMassFlowData::setSystemEfficiency(const double systemEfficiency)
 {
     this->systemEfficiency = systemEfficiency;
 }

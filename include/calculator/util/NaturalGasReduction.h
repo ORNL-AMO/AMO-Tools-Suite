@@ -29,7 +29,7 @@ public:
 
 private:
   double consumption;
-}
+};
 
 class AirMassFlowMeasuredData
 {
@@ -44,7 +44,7 @@ public:
 
 private:
   double areaOfDuct, airVelocity;
-}
+};
 
 class AirMassFlowNameplateData
 {
@@ -57,12 +57,12 @@ public:
 
 private:
   double airFlow;
-}
+};
 
 class AirMassFlowData
 {
 public:
-  AirMassFlowData(const bool isNameplate, const AirMassFlowMeasuredData airMassFlowMeasuredData, const AirMassFlowNameplateData airMassFlowNameplateData, const double inletTemperature, const double outletTemperature, const systemEfficiency)
+  AirMassFlowData(const bool isNameplate, const AirMassFlowMeasuredData airMassFlowMeasuredData, const AirMassFlowNameplateData airMassFlowNameplateData, const double inletTemperature, const double outletTemperature, const double systemEfficiency)
       : isNameplate(isNameplate), airMassFlowMeasuredData(airMassFlowMeasuredData), airMassFlowNameplateData(airMassFlowNameplateData), inletTemperature(inletTemperature), outletTemperature(outletTemperature), systemEfficiency(systemEfficiency) {}
 
   bool getIsNameplate() const { return isNameplate; }
@@ -83,7 +83,7 @@ private:
   AirMassFlowMeasuredData airMassFlowMeasuredData;
   AirMassFlowNameplateData airMassFlowNameplateData;
   double inletTemperature, outletTemperature, systemEfficiency;
-}
+};
 
 class WaterMassFlowData
 {
@@ -100,7 +100,7 @@ public:
 
 private:
   double waterFlow, inletTemperature, outletTemperature, systemEfficiency;
-}
+};
 
 class NaturalGasReductionInput
 {
@@ -109,7 +109,7 @@ public:
                            const double fuelCost, const int measurementMethod, const FlowMeterMethodData flowMeterMethodData,
                            const OtherMethodData otherMethodData, const AirMassFlowData airMassFlowData, const WaterMassFlowData waterMassFlowData, const int units)
       : hoursPerDay(hoursPerDay), daysPerMonth(daysPerMonth), monthsPerYear(monthsPerYear),
-        electricityCost(electricityCost), measurementMethod(measurementMethod), flowMeterMethodData(flowMeterMethodData),
+        fuelCost(fuelCost), measurementMethod(measurementMethod), flowMeterMethodData(flowMeterMethodData),
         otherMethodData(otherMethodData), airMassFlowData(airMassFlowData), waterMassFlowData(waterMassFlowData), units(units) {}
 
   int getHoursPerDay() const { return hoursPerDay; }
@@ -128,17 +128,17 @@ private:
   double fuelCost;
   FlowMeterMethodData flowMeterMethodData;
   OtherMethodData otherMethodData;
-  AirMassFlowMeasuredData airMassFlowMeasuredData;
+  AirMassFlowData airMassFlowData;
   WaterMassFlowData waterMassFlowData;
-}
+};
 
 class NaturalGasReduction
 {
 public:
   struct Output
   {
-    Output(double energyUse, double energyCost, double annualEnergySavings, double costSavings)
-        : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings) {}
+    Output(double energyUse, double energyCost, double annualEnergySavings, double costSavings, double totalFlow)
+        : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings), totalFlow(totalFlow) {}
 
     Output() = default;
     double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, totalFlow = 0;
