@@ -201,3 +201,51 @@ test('electricityReduction all calc types', function (t) {
     t.equal(rnd(res.energyUse), rnd(1945004.716987), 'res.energyUse is ' + res.energyUse);
     t.equal(rnd(res.energyCost), rnd(233400.566038), 'res.energyCost is ' + res.energyCost);
 });
+
+
+test('Natural Gas Reduction test 1', function (t) {
+    t.plan(3);
+    t.type(bindings.electricityReduction, 'function');
+
+    var inp = {
+        naturalGasReductionInputVec: [
+            {
+                hoursPerDay: 24,
+                daysPerMonth: 30,
+                monthsPerYear: 12,
+                fuelCost: 0.12,
+                measurementMethod: 0,
+                flowMeterMethodData: {
+                    flowRate: 5
+                },
+                otherMethodData: {
+                    consumption: 30.00
+                },
+                airMassFlowData: {
+                    isNameplate: false,
+                    airMassFlowMeasuredData: {
+                        areaOfDuct: 3,
+                        airVelocity: 15
+                    },
+                    airMassFlowNameplateData: {
+                        airFlow: 30
+                    },
+                    inletTemperature: 70,
+                    outletTemperature: 800,
+                    systemEfficiency: 80
+                },
+                waterMassFlowData: {
+                    waterFlow: 10,
+                    inletTemperature: 70,
+                    outletTemperature: 100,
+                    systemEfficiency: 80
+                },
+                units: 2
+            }
+        ]
+    };
+
+    var res = bindings.naturalGasReduction(inp);
+    t.equal(rnd(res.energyUse), rnd(88992.00), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(10679.04), 'res.energyCost is ' + res.energyCost);
+});

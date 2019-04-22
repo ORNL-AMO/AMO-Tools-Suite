@@ -4,12 +4,12 @@
 
 NaturalGasReduction::Output NaturalGasReduction::calculate()
 {
-    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, totalFlow = 0, heatFlowRate = 0;
+    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, heatFlow = 0, totalFlow = 0;
 
     // loop through all supplied inputs
     for (auto &naturalGasReductionInput : naturalGasReductionInputVec)
     {
-        double tmpEnergyUse = 0, tmpEnergyCost = 0, tmpAnnualEnergySavings = 0, tmpCostSavings = 0, tmpTotalFlow = 0, tmpHeatFlowRate = 0;
+        double tmpEnergyUse = 0, tmpEnergyCost = 0, tmpAnnualEnergySavings = 0, tmpCostSavings = 0, tmpHeatFlow = 0, tmpTotalFlow = 0;
 
         //flow meter method
         if (naturalGasReductionInput.getMeasurementMethod() == 0)
@@ -23,7 +23,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
         else if (naturalGasReductionInput.getMeasurementMethod() == 1)
         {
             AirMassFlowData airMassFlowData = naturalGasReductionInput.getAirMassFlowData();
-            double tmpAirFlowRate, tmpHeatFlowRate;
+            double tmpAirFlowRate;
             //nameplate
             if (airMassFlowData.getIsNameplate())
             {
@@ -37,32 +37,34 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
                 tmpAirFlowRate = measuredData.getAreaOfDuct() * measuredData.getAirVelocity();
             }
 
-            tmpHeatFlowRate = (1.08 * tmpAirFlowRate * (airMassFlowData.getOutletTemperature() - airMassFlowData.getInletTemperature())) / 1000000;
-            heatFlowRate = heatFlowRate + tmpHeatFlowRate;
+            tmpHeatFlow = (1.08 * tmpAirFlowRate * (airMassFlowData.getOutletTemperature() - airMassFlowData.getInletTemperature())) / 1000000;
+            tmpTotalFlow = tmpAirFlowRate * naturalGasReductionInput.getUnits();
 
-            tmpEnergyUse = (tmpHeatFlowRate * naturalGasReductionInput.getHoursPerDay() * naturalGasReductionInput.getDaysPerMonth() * naturalGasReductionInput.getMonthsPerYear() * naturalGasReductionInput.getUnits()) / airMassFlowData.getSystemEfficiency();
+            tmpEnergyUse = (tmpHeatFlow * naturalGasReductionInput.getHoursPerDay() * naturalGasReductionInput.getDaysPerMonth() * naturalGasReductionInput.getMonthsPerYear() * naturalGasReductionInput.getUnits()) / airMassFlowData.getSystemEfficiency();
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
         //water mass flow method
         else if (naturalGasReductionInput.getMeasurementMethod() == 2)
         {
             WaterMassFlowData waterMassFlowData = naturalGasReductionInput.getWaterMassFlowData();
-            double tmpHeatFlowRate;
-            tmpHeatFlowRate = (500 * waterMassFlowData.getWaterFlow() * (waterMassFlowData.getOutletTemperature() - waterMassFlowData.getInletTemperature())) / 1000000;
-            tmpEnergyUse = (tmpHeatFlowRate * naturalGasReductionInput.getHoursPerDay() * naturalGasReductionInput.getDaysPerMonth() * naturalGasReductionInput.getMonthsPerYear() * naturalGasReductionInput.getUnits()) / waterMassFlowData.getSystemEfficiency();
+            tmpHeatFlow = (500 * waterMassFlowData.getWaterFlow() * (waterMassFlowData.getOutletTemperature() - waterMassFlowData.getInletTemperature())) / 1000000;
+            tmpTotalFlow = waterMassFlowData.getWaterFlow() * naturalGasReductionInput.getUnits();
+            tmpEnergyUse = (tmpHeatFlow * naturalGasReductionInput.getHoursPerDay() * naturalGasReductionInput.getDaysPerMonth() * naturalGasReductionInput.getMonthsPerYear() * naturalGasReductionInput.getUnits()) / waterMassFlowData.getSystemEfficiency();
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
+        //other/off sheet method
         else if (naturalGasReductionInput.getMeasurementMethod() == 3)
         {
-            OtherMethodData otherMethodData = naturalGasReductionInput.getOtherMethodData();
+            NaturalGasOtherMethodData otherMethodData = naturalGasReductionInput.getNaturalGasOtherMethodData();
             tmpEnergyUse = otherMethodData.getConsumption();
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
         energyUse = energyUse + tmpEnergyUse;
         energyCost = energyCost + tmpEnergyCost;
+        heatFlow = heatFlow + tmpHeatFlow;
         totalFlow = totalFlow + tmpTotalFlow;
     }
-    return NaturalGasReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings, totalFlow);
+    return NaturalGasReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings, heatFlow, totalFlow);
 }
 
 void FlowMeterMethodData::setFlowRate(const double flowRate)
@@ -70,7 +72,7 @@ void FlowMeterMethodData::setFlowRate(const double flowRate)
     this->flowRate = flowRate;
 }
 
-void OtherMethodData::setConsumption(const double consumption)
+void NaturalGasOtherMethodData::setConsumption(const double consumption)
 {
     this->consumption = consumption;
 }

@@ -18,10 +18,10 @@ private:
   double flowRate;
 };
 
-class OtherMethodData
+class NaturalGasOtherMethodData
 {
 public:
-  OtherMethodData(const double consumption)
+  NaturalGasOtherMethodData(const double consumption)
       : consumption(consumption) {}
 
   double getConsumption() const { return consumption; }
@@ -107,7 +107,7 @@ class NaturalGasReductionInput
 public:
   NaturalGasReductionInput(const int hoursPerDay, const int daysPerMonth, const int monthsPerYear,
                            const double fuelCost, const int measurementMethod, const FlowMeterMethodData flowMeterMethodData,
-                           const OtherMethodData otherMethodData, const AirMassFlowData airMassFlowData, const WaterMassFlowData waterMassFlowData, const int units)
+                           const NaturalGasOtherMethodData otherMethodData, const AirMassFlowData airMassFlowData, const WaterMassFlowData waterMassFlowData, const int units)
       : hoursPerDay(hoursPerDay), daysPerMonth(daysPerMonth), monthsPerYear(monthsPerYear),
         fuelCost(fuelCost), measurementMethod(measurementMethod), flowMeterMethodData(flowMeterMethodData),
         otherMethodData(otherMethodData), airMassFlowData(airMassFlowData), waterMassFlowData(waterMassFlowData), units(units) {}
@@ -119,7 +119,7 @@ public:
   int getMeasurementMethod() const { return measurementMethod; }
   int getUnits() const { return units; }
   FlowMeterMethodData getFlowMeterMethodData() const { return flowMeterMethodData; }
-  OtherMethodData getOtherMethodData() const { return otherMethodData; }
+  NaturalGasOtherMethodData getNaturalGasOtherMethodData() const { return otherMethodData; }
   AirMassFlowData getAirMassFlowData() const { return airMassFlowData; }
   WaterMassFlowData getWaterMassFlowData() const { return waterMassFlowData; }
 
@@ -127,7 +127,7 @@ private:
   int hoursPerDay, daysPerMonth, monthsPerYear, measurementMethod, units;
   double fuelCost;
   FlowMeterMethodData flowMeterMethodData;
-  OtherMethodData otherMethodData;
+  NaturalGasOtherMethodData otherMethodData;
   AirMassFlowData airMassFlowData;
   WaterMassFlowData waterMassFlowData;
 };
@@ -137,11 +137,11 @@ class NaturalGasReduction
 public:
   struct Output
   {
-    Output(double energyUse, double energyCost, double annualEnergySavings, double costSavings, double totalFlow)
-        : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings), totalFlow(totalFlow) {}
+    Output(double energyUse, double energyCost, double annualEnergySavings, double costSavings, double heatFlow, double totalFlow)
+        : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings), heatFlow(heatFlow), totalFlow(totalFlow) {}
 
     Output() = default;
-    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, totalFlow = 0;
+    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, heatFlow = 0, totalFlow = 0;
   };
 
   NaturalGasReduction(

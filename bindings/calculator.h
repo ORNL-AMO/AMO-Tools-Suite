@@ -10,6 +10,7 @@
 #include <cmath>
 #include <vector>
 #include "calculator/util/ElectricityReduction.h"
+#include "calculator/util/NaturalGasReduction.h"
 
 using namespace Nan;
 using namespace v8;
@@ -112,7 +113,6 @@ OtherMethodData getOtherMethodData(Local<Object> obj)
 
 ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
 {
-    auto test = Get("hoursPerDay", obj);
     return {
         static_cast<int>(Get("hoursPerDay", obj)),
         static_cast<int>(Get("daysPerMonth", obj)),
@@ -164,8 +164,110 @@ NAN_METHOD(electricityReduction)
 
 // ============== Natural Gas ==============
 
+FlowMeterMethodData getFlowMeterMethodData(Local<Object> obj) 
+{
+    auto flowMeterMethodDataV8 = obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("flowRate", flowMeterMethodDataV8)
+    };
+}
 
+AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
+{
+    auto airMassFlowMeasuredDataV8 = obj->Get(Nan::New<String>("airMassFlowMeasuredData").ToLocalChecked())->ToObject();
+    return {
+        Get("areaOfDuct", airMassFlowMeasuredDataV8),
+        Get("airVelocity", airMassFlowMeasuredDataV8)
+    };
+}
 
+AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj) {
+    auto airMassFlowNameplateDataV8 = obj->Get(Nan::New<String>("airMassFlowNameplateData").ToLocalChecked())->ToObject();
+    return {
+        Get("airFlow", airMassFlowNameplateDataV8)
+    };
+}
 
+AirMassFlowData getAirMassFlowData(Local<Object> obj)
+{
+    auto airMassFlowDataV8 = obj->Get(Nan::New<String>("airMassFlowData").ToLocalChecked())->ToObject();
+    return {
+        GetBool("isNameplate", airMassFlowDataV8),
+        getAirMassFlowMeasuredData(airMassFlowDataV8),
+        getAirMassFlowNameplateData(airMassFlowDataV8),
+        Get("inletTemperature", airMassFlowDataV8),
+        Get("outletTemperature", airMassFlowDataV8),
+        Get("systemEfficiency", airMassFlowDataV8) / 100
+    };
+}
+
+WaterMassFlowData getWaterMassFlowData(Local<Object> obj) 
+{
+    auto waterMassFlowDataV8 = obj->Get(Nan::New<String>("waterMassFlowData").ToLocalChecked())->ToObject();
+    return {
+        Get("waterFlow", waterMassFlowDataV8),
+        Get("inletTemperature", waterMassFlowDataV8),
+        Get("outletTemperature", waterMassFlowDataV8),
+        Get("systemEfficiency", waterMassFlowDataV8) / 100
+    };
+}
+
+NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj) 
+{
+    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("consumption", otherMethodDataV8)
+    };
+}
+
+NaturalGasReductionInput constructNaturalGasReductionInput(Local<Object> obj)
+{
+    return {
+        static_cast<int>(Get("hoursPerDay", obj)),
+        static_cast<int>(Get("daysPerMonth", obj)),
+        static_cast<int>(Get("monthsPerYear", obj)),
+        Get("fuelCost", obj),
+        static_cast<int>(Get("measurementMethod", obj)),
+        getFlowMeterMethodData(obj),
+        naturalGasGetOtherMethodData(obj),
+        getAirMassFlowData(obj),
+        getWaterMassFlowData(obj),
+        static_cast<int>(Get("units", obj))
+    };
+}
+
+NaturalGasReduction getNaturalGasReductionInputVector() 
+{
+    auto naturalGasReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("naturalGasReductionInputVec").ToLocalChecked());
+    auto const naturalGasReductionInputVecTemp = inp->ToObject()->Get(Nan::New<String>("naturalGasReductionInputVec").ToLocalChecked());
+    auto const &naturalGasReductionInputArray = v8::Local<v8::Array>::Cast(naturalGasReductionInputVecTemp);
+    std::vector<NaturalGasReductionInput> inputVec;
+    for (std::size_t i = 0; i < naturalGasReductionInputArray->Length(); i++)
+    {
+        inputVec.emplace_back(constructNaturalGasReductionInput(naturalGasReductionInputArray->Get(i)->ToObject()));
+    }
+    return inputVec;
+}
+
+NAN_METHOD(naturalGasReduction)
+{
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    try 
+    {
+        auto rv = NaturalGasReduction(getNaturalGasReductionInputVector()).calculate();
+        SetR("energyUse", rv.energyUse);
+        SetR("energyCost", rv.energyCost);
+        SetR("annualEnergySavings", rv.annualEnergySavings);
+        SetR("costSavings", rv.costSavings);
+        SetR("totalFlow", rv.totalFlow);
+    }
+    catch (std::runtime_error const &e) 
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in electricityReduction - calculator.h: " + what).c_str());
+    }
+    info.GetReturnValue().Set(r);
+}
 // ============== END Natural Gas ==============
 
