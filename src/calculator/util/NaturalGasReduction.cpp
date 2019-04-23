@@ -53,7 +53,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
         //other/off sheet method
-        else if (naturalGasReductionInput.getMeasurementMethod() == 3)
+        else
         {
             NaturalGasOtherMethodData otherMethodData = naturalGasReductionInput.getNaturalGasOtherMethodData();
             tmpEnergyUse = otherMethodData.getConsumption();

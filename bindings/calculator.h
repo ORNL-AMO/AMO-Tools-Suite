@@ -260,6 +260,7 @@ NAN_METHOD(naturalGasReduction)
         SetR("energyCost", rv.energyCost);
         SetR("annualEnergySavings", rv.annualEnergySavings);
         SetR("costSavings", rv.costSavings);
+        SetR("heatFlow", rv.heatFlow);
         SetR("totalFlow", rv.totalFlow);
     }
     catch (std::runtime_error const &e) 
