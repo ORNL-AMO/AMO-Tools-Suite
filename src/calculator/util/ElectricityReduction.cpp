@@ -26,7 +26,7 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
         } else if (electricityReductionInput.getMeasurementMethod() == 1) {
             NameplateData nameplateData = electricityReductionInput.getNameplateData();
             tmpTotalPower = nameplateData.getRatedMotorPower() * nameplateData.getLoadFactor() * pow((nameplateData.getOperationalFrequency() / nameplateData.getLineFrequency()), 2.5) * (1 / nameplateData.getMotorAndDriveEfficiency());
-            tmpEnergyUse = tmpTotalPower * electricityReductionInput.getOperatingHours();
+            tmpEnergyUse = tmpTotalPower * electricityReductionInput.getOperatingHours() * electricityReductionInput.getUnits();
             tmpEnergyCost = tmpEnergyUse * electricityReductionInput.getElectricityCost();
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
