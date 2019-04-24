@@ -17,7 +17,7 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
             } else {
                 tmpTotalPower = multimeterData.getSupplyVoltage() * multimeterData.getAverageCurrent() * multimeterData.getPowerFactor() * (sqrt(3) / 1000) * electricityReductionInput.getUnits();
             }
-            tmpEnergyUse = tmpTotalPower * electricityReductionInput.getHoursPerDay() * electricityReductionInput.getDaysPerMonth() * electricityReductionInput.getMonthsPerYear();
+            tmpEnergyUse = tmpTotalPower * electricityReductionInput.getOperatingHours();
             tmpEnergyCost = tmpEnergyUse * electricityReductionInput.getElectricityCost();
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
@@ -26,7 +26,7 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
         } else if (electricityReductionInput.getMeasurementMethod() == 1) {
             NameplateData nameplateData = electricityReductionInput.getNameplateData();
             tmpTotalPower = nameplateData.getRatedMotorPower() * nameplateData.getLoadFactor() * pow((nameplateData.getOperationalFrequency() / nameplateData.getLineFrequency()), 2.5) * (1 / nameplateData.getMotorAndDriveEfficiency());
-            tmpEnergyUse = tmpTotalPower * electricityReductionInput.getHoursPerDay() * electricityReductionInput.getDaysPerMonth() * electricityReductionInput.getMonthsPerYear();
+            tmpEnergyUse = tmpTotalPower * electricityReductionInput.getOperatingHours();
             tmpEnergyCost = tmpEnergyUse * electricityReductionInput.getElectricityCost();
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;
@@ -35,7 +35,7 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
         } else if (electricityReductionInput.getMeasurementMethod() == 2) {
             PowerMeterData powerMeterData = electricityReductionInput.getPowerMeterData();
             tmpTotalPower = powerMeterData.getPower() * electricityReductionInput.getUnits();
-            tmpEnergyUse = tmpTotalPower * electricityReductionInput.getHoursPerDay() * electricityReductionInput.getDaysPerMonth() * electricityReductionInput.getMonthsPerYear();
+            tmpEnergyUse = tmpTotalPower * electricityReductionInput.getOperatingHours();
             tmpEnergyCost = tmpEnergyUse * electricityReductionInput.getElectricityCost();
             energyUse = energyUse + tmpEnergyUse;
             energyCost = energyCost + tmpEnergyCost;

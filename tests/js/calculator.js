@@ -13,9 +13,7 @@ test('electricityReduction', function (t) {
     var inp = {
         electricityReductionInputVec: [
             {
-                hoursPerDay: 24,
-                daysPerMonth: 30,
-                monthsPerYear: 12,
+                operatingHours: 8640,
                 electricityCost: 0.12,
                 measurementMethod: 0,
                 multimeterData: {
@@ -56,9 +54,7 @@ test('electricityReduction all calc types', function (t) {
     var inp = {
         electricityReductionInputVec: [
             {
-                hoursPerDay: 24,
-                daysPerMonth: 30,
-                monthsPerYear: 12,
+                operatingHours: 8640,
                 electricityCost: 0.12,
                 measurementMethod: 0,
                 multimeterData: {
@@ -84,9 +80,7 @@ test('electricityReduction all calc types', function (t) {
                 units: 1
             },
             {
-                hoursPerDay: 24,
-                daysPerMonth: 30,
-                monthsPerYear: 12,
+                operatingHours: 8640,
                 electricityCost: 0.12,
                 measurementMethod: 0,
                 multimeterData: {
@@ -112,9 +106,7 @@ test('electricityReduction all calc types', function (t) {
                 units: 1
             },
             {
-                hoursPerDay: 24,
-                daysPerMonth: 30,
-                monthsPerYear: 12,
+                operatingHours: 8640,
                 electricityCost: 0.12,
                 measurementMethod: 1,
                 multimeterData: {
@@ -140,9 +132,7 @@ test('electricityReduction all calc types', function (t) {
                 units: 1
             },
             {
-                hoursPerDay: 24,
-                daysPerMonth: 30,
-                monthsPerYear: 12,
+                operatingHours: 8640,
                 electricityCost: 0.12,
                 measurementMethod: 2,
                 multimeterData: {
@@ -168,9 +158,7 @@ test('electricityReduction all calc types', function (t) {
                 units: 2
             },
             {
-                hoursPerDay: 24,
-                daysPerMonth: 30,
-                monthsPerYear: 12,
+                operatingHours: 8640,
                 electricityCost: 0.12,
                 measurementMethod: 3,
                 multimeterData: {
@@ -210,9 +198,7 @@ test('Natural Gas Reduction test 1', function (t) {
     var inp = {
         naturalGasReductionInputVec: [
             {
-                hoursPerDay: 24,
-                daysPerMonth: 30,
-                monthsPerYear: 12,
+                operatingHours: 8640,
                 fuelCost: 0.12,
                 measurementMethod: 0,
                 flowMeterMethodData: {

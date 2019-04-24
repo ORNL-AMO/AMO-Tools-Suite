@@ -105,16 +105,14 @@ private:
 class NaturalGasReductionInput
 {
 public:
-  NaturalGasReductionInput(const int hoursPerDay, const int daysPerMonth, const int monthsPerYear,
-                           const double fuelCost, const int measurementMethod, const FlowMeterMethodData flowMeterMethodData,
-                           const NaturalGasOtherMethodData otherMethodData, const AirMassFlowData airMassFlowData, const WaterMassFlowData waterMassFlowData, const int units)
-      : hoursPerDay(hoursPerDay), daysPerMonth(daysPerMonth), monthsPerYear(monthsPerYear),
-        fuelCost(fuelCost), measurementMethod(measurementMethod), flowMeterMethodData(flowMeterMethodData),
+  NaturalGasReductionInput(const int operatingHours, const double fuelCost, const int measurementMethod, 
+                           const FlowMeterMethodData flowMeterMethodData, const NaturalGasOtherMethodData otherMethodData,
+                           const AirMassFlowData airMassFlowData, const WaterMassFlowData waterMassFlowData, 
+                           const int units)
+      : operatingHours(operatingHours), fuelCost(fuelCost), measurementMethod(measurementMethod), flowMeterMethodData(flowMeterMethodData),
         otherMethodData(otherMethodData), airMassFlowData(airMassFlowData), waterMassFlowData(waterMassFlowData), units(units) {}
 
-  int getHoursPerDay() const { return hoursPerDay; }
-  int getDaysPerMonth() const { return daysPerMonth; }
-  int getMonthsPerYear() const { return monthsPerYear; }
+  int getOperatingHours() const { return operatingHours; }
   double getFuelCost() const { return fuelCost; }
   int getMeasurementMethod() const { return measurementMethod; }
   int getUnits() const { return units; }
@@ -124,7 +122,7 @@ public:
   WaterMassFlowData getWaterMassFlowData() const { return waterMassFlowData; }
 
 private:
-  int hoursPerDay, daysPerMonth, monthsPerYear, measurementMethod, units;
+  int operatingHours, measurementMethod, units;
   double fuelCost;
   FlowMeterMethodData flowMeterMethodData;
   NaturalGasOtherMethodData otherMethodData;

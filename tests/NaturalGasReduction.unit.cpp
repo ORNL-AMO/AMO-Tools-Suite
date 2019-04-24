@@ -5,7 +5,7 @@ TEST_CASE("Natural Gas Reduction Flow Meter Method", "[NaturalGasReduction][Util
 {
 
     std::vector<NaturalGasReductionInput> naturalGasReductionInputVec = {
-        NaturalGasReductionInput(24, 30, 12, 0.12, 0,
+        NaturalGasReductionInput(8640, 0.12, 0,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(200000),
                                  AirMassFlowData(true,
@@ -32,7 +32,7 @@ TEST_CASE("Natural Gas Reduction Flow Meter Method", "[NaturalGasReduction][Util
 TEST_CASE("Natural Gas Reduction Air Mass Flow Nameplate", "[NaturalGasReduction][Util]")
 {
     std::vector<NaturalGasReductionInput> naturalGasReductionInputVec = {
-        NaturalGasReductionInput(24, 30, 12, 0.12, 1,
+        NaturalGasReductionInput(8640, 0.12, 1,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(200000),
                                  AirMassFlowData(true,
@@ -59,7 +59,7 @@ TEST_CASE("Natural Gas Reduction Air Mass Flow Nameplate", "[NaturalGasReduction
 TEST_CASE("Natural Gas Reduction Air Mass Flow Measured", "[NaturalGasReduction][Util]")
 {
     std::vector<NaturalGasReductionInput> naturalGasReductionInputVec = {
-        NaturalGasReductionInput(24, 30, 12, 0.12, 1,
+        NaturalGasReductionInput(8640, 0.12, 1,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(200000),
                                  AirMassFlowData(false,
@@ -86,7 +86,7 @@ TEST_CASE("Natural Gas Reduction Air Mass Flow Measured", "[NaturalGasReduction]
 TEST_CASE("Natural Gas Reduction Water Mass Flow", "[NaturalGasReduction][Util]")
 {
     std::vector<NaturalGasReductionInput> naturalGasReductionInputVec = {
-        NaturalGasReductionInput(24, 30, 12, 0.12, 2,
+        NaturalGasReductionInput(8640, 0.12, 2,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(200000),
                                  AirMassFlowData(false,
@@ -113,7 +113,7 @@ TEST_CASE("Natural Gas Reduction Water Mass Flow", "[NaturalGasReduction][Util]"
 TEST_CASE("Natural Gas Reduction Other/Off Sheet", "[NaturalGasReduction][Util]")
 {
     std::vector<NaturalGasReductionInput> naturalGasReductionInputVec = {
-        NaturalGasReductionInput(24, 30, 12, 0.12, 3,
+        NaturalGasReductionInput(8640, 0.12, 3,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(2000),
                                  AirMassFlowData(false,
@@ -141,7 +141,7 @@ TEST_CASE("Natural Gas Reduction All Methods", "[NaturalGasReduction][Util]")
 {
     std::vector<NaturalGasReductionInput> naturalGasReductionInputVec = {
         //flow meter method
-        NaturalGasReductionInput(24, 30, 12, 0.12, 0,
+        NaturalGasReductionInput(8640, 0.12, 0,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(200000),
                                  AirMassFlowData(true,
@@ -156,7 +156,7 @@ TEST_CASE("Natural Gas Reduction All Methods", "[NaturalGasReduction][Util]")
                                                    100),
                                  2),
         //air mass flow nameplate
-        NaturalGasReductionInput(24, 30, 12, 0.12, 1,
+        NaturalGasReductionInput(8640, 0.12, 1,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(200000),
                                  AirMassFlowData(true,
@@ -171,7 +171,7 @@ TEST_CASE("Natural Gas Reduction All Methods", "[NaturalGasReduction][Util]")
                                                    1),
                                  2),
         //air mass flow measured
-        NaturalGasReductionInput(24, 30, 12, 0.12, 1,
+        NaturalGasReductionInput(8640, 0.12, 1,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(200000),
                                  AirMassFlowData(false,
@@ -186,7 +186,7 @@ TEST_CASE("Natural Gas Reduction All Methods", "[NaturalGasReduction][Util]")
                                                    1),
                                  2),
         //water mass flow method
-        NaturalGasReductionInput(24, 30, 12, 0.12, 2,
+        NaturalGasReductionInput(8640, 0.12, 2,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(200000),
                                  AirMassFlowData(false,
@@ -201,7 +201,7 @@ TEST_CASE("Natural Gas Reduction All Methods", "[NaturalGasReduction][Util]")
                                                    1),
                                  2),
         //other/offsheet method
-        NaturalGasReductionInput(24, 30, 12, 0.12, 3,
+        NaturalGasReductionInput(8640, 0.12, 3,
                                  FlowMeterMethodData(5),
                                  NaturalGasOtherMethodData(2000),
                                  AirMassFlowData(false,

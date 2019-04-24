@@ -87,18 +87,16 @@ class OtherMethodData
 class ElectricityReductionInput
 {
   public:
-    ElectricityReductionInput(const int hoursPerDay, const int daysPerMonth, const int monthsPerYear,
-                              const double electricityCost, const int measurementMethod, const MultimeterData multimeterData,
-                              const NameplateData nameplateData, const PowerMeterData powerMeterData, const OtherMethodData otherMethodData,
+    ElectricityReductionInput(const int operatingHours, const double electricityCost, const int measurementMethod, 
+                              const MultimeterData multimeterData, const NameplateData nameplateData, 
+                              const PowerMeterData powerMeterData, const OtherMethodData otherMethodData,
                               const int units)
-        : hoursPerDay(hoursPerDay), daysPerMonth(daysPerMonth), monthsPerYear(monthsPerYear),
-          electricityCost(electricityCost), measurementMethod(measurementMethod), multimeterData(multimeterData),
-          nameplateData(nameplateData), powerMeterData(powerMeterData), otherMethodData(otherMethodData),
+        : operatingHours(operatingHours), electricityCost(electricityCost), measurementMethod(measurementMethod), 
+          multimeterData(multimeterData), nameplateData(nameplateData), 
+          powerMeterData(powerMeterData), otherMethodData(otherMethodData),
           units(units) {}
 
-    int getHoursPerDay() const { return hoursPerDay; }
-    int getDaysPerMonth() const { return daysPerMonth; }
-    int getMonthsPerYear() const { return monthsPerYear; }
+    int getOperatingHours() const { return operatingHours; }
     double getElectricityCost() const { return electricityCost; }
     int getMeasurementMethod() const { return measurementMethod; }
     int getUnits() const { return units; }
@@ -108,7 +106,7 @@ class ElectricityReductionInput
     OtherMethodData getOtherMethodData() const { return otherMethodData; }
 
   private:
-    int hoursPerDay, daysPerMonth, monthsPerYear, measurementMethod, units;
+    int operatingHours, measurementMethod, units;
     double electricityCost;
     MultimeterData multimeterData;
     NameplateData nameplateData;

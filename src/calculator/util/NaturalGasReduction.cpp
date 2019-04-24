@@ -16,7 +16,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
         {
             FlowMeterMethodData flowMeterMethodData = naturalGasReductionInput.getFlowMeterMethodData();
             tmpTotalFlow = flowMeterMethodData.getFlowRate() * naturalGasReductionInput.getUnits();
-            tmpEnergyUse = tmpTotalFlow * naturalGasReductionInput.getHoursPerDay() * naturalGasReductionInput.getDaysPerMonth() * naturalGasReductionInput.getMonthsPerYear() * 1.03;
+            tmpEnergyUse = tmpTotalFlow * naturalGasReductionInput.getOperatingHours() * 1.03;
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
         //air mass flow method
@@ -40,7 +40,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
             tmpHeatFlow = (1.08 * tmpAirFlowRate * (airMassFlowData.getOutletTemperature() - airMassFlowData.getInletTemperature())) / 1000000;
             tmpTotalFlow = tmpAirFlowRate * naturalGasReductionInput.getUnits();
 
-            tmpEnergyUse = (tmpHeatFlow * naturalGasReductionInput.getHoursPerDay() * naturalGasReductionInput.getDaysPerMonth() * naturalGasReductionInput.getMonthsPerYear() * naturalGasReductionInput.getUnits()) / airMassFlowData.getSystemEfficiency();
+            tmpEnergyUse = (tmpHeatFlow * naturalGasReductionInput.getOperatingHours() * naturalGasReductionInput.getUnits()) / airMassFlowData.getSystemEfficiency();
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
         //water mass flow method
@@ -49,7 +49,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
             WaterMassFlowData waterMassFlowData = naturalGasReductionInput.getWaterMassFlowData();
             tmpHeatFlow = (500 * waterMassFlowData.getWaterFlow() * (waterMassFlowData.getOutletTemperature() - waterMassFlowData.getInletTemperature())) / 1000000;
             tmpTotalFlow = waterMassFlowData.getWaterFlow() * naturalGasReductionInput.getUnits();
-            tmpEnergyUse = (tmpHeatFlow * naturalGasReductionInput.getHoursPerDay() * naturalGasReductionInput.getDaysPerMonth() * naturalGasReductionInput.getMonthsPerYear() * naturalGasReductionInput.getUnits()) / waterMassFlowData.getSystemEfficiency();
+            tmpEnergyUse = (tmpHeatFlow * naturalGasReductionInput.getOperatingHours() * naturalGasReductionInput.getUnits()) / waterMassFlowData.getSystemEfficiency();
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
         //other/off sheet method

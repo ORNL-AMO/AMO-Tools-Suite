@@ -114,9 +114,7 @@ OtherMethodData getOtherMethodData(Local<Object> obj)
 ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
 {
     return {
-        static_cast<int>(Get("hoursPerDay", obj)),
-        static_cast<int>(Get("daysPerMonth", obj)),
-        static_cast<int>(Get("monthsPerYear", obj)),
+        static_cast<int>(Get("operatingHours", obj)),
         Get("electricityCost", obj),
         static_cast<int>(Get("measurementMethod", obj)),
         getMultimeterData(obj),
@@ -223,9 +221,7 @@ NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj)
 NaturalGasReductionInput constructNaturalGasReductionInput(Local<Object> obj)
 {
     return {
-        static_cast<int>(Get("hoursPerDay", obj)),
-        static_cast<int>(Get("daysPerMonth", obj)),
-        static_cast<int>(Get("monthsPerYear", obj)),
+        static_cast<int>(Get("operatingHours", obj)),
         Get("fuelCost", obj),
         static_cast<int>(Get("measurementMethod", obj)),
         getFlowMeterMethodData(obj),
