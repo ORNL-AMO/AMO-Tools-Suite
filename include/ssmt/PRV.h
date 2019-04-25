@@ -282,13 +282,13 @@ public:
      * Gets the outlet mass flow
      * @return double, outlet mass flow in kg/hr
      */
-    double getOutletMassFlow() const { return outletMassFlow; };
+    double getOutletMassFlow() const override { return outletMassFlow; };
 
     /**
      * Gets the outlet energy flow
      * @return double, outlet energy flow in MJ/hr
      */
-    double getOutletEnergyFlow() const { return outletEnergyFlow; };
+    double getOutletEnergyFlow() const override { return outletEnergyFlow; };
 
     /**
      * Gets the feedwater mass flow

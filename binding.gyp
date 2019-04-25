@@ -151,7 +151,6 @@
             'sources' : [
                 'bindings/db.cpp',
                 'third_party/sqlite/sqlite3.c',
-                'src/calculator/motor/MotorData.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
             ],

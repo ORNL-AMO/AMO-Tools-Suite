@@ -21,12 +21,10 @@ PrvWithoutDesuperheating::PrvWithoutDesuperheating(const double inletPressure,
 }
 
 void PrvWithoutDesuperheating::calculateProperties() {
-    std::cout << "PrvWithoutDesuperheating::calculateProperties: begin" << std::endl;
-
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
-    outletProperties = SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-                                       inletProperties.specificEnthalpy).calculate();
-    inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow / 1000;
+  outletProperties = SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
+                                     inletProperties.specificEnthalpy).calculate();
+  inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow / 1000;
 }
 
 PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
@@ -44,16 +42,14 @@ PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
 }
 
 void PrvWithDesuperheating::calculateProperties() {
-    std::cout << "PrvWithDesuperheating::calculateProperties: begin" << std::endl;
-
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
 	feedwaterProperties = SteamProperties(feedwaterPressure, feedwaterQuantityType, feedwaterQuantityValue).calculate();
-    outletProperties= SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
-                                      desuperheatingTemp).calculate();
+  outletProperties= SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
+                                    desuperheatingTemp).calculate();
 
-    inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow / 1000;
-	feedwaterMassFlow = inletMassFlow * (inletProperties.specificEnthalpy - outletProperties.specificEnthalpy)
-						/ (outletProperties.specificEnthalpy - feedwaterProperties.specificEnthalpy);
+  inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow / 1000;
+  feedwaterMassFlow = inletMassFlow * (inletProperties.specificEnthalpy - outletProperties.specificEnthalpy)
+                          / (outletProperties.specificEnthalpy - feedwaterProperties.specificEnthalpy);
 
 	feedwaterEnergyFlow = feedwaterMassFlow * feedwaterProperties.specificEnthalpy / 1000;
     outletMassFlow = inletMassFlow + feedwaterMassFlow;
