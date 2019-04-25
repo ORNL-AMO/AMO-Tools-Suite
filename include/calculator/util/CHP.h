@@ -1,3 +1,10 @@
+/**
+ * @file CHP.h
+ * @author Preston Shires (pshires) & Allie Ledbetter (aeledbetter)
+ * @brief Calculates CHP related operations
+ *
+ * 
+ */
 #ifndef AMO_TOOLS_SUITE_CHP_H
 #define AMO_TOOLS_SUITE_CHP_H
 
@@ -8,6 +15,23 @@
 
 class CHP {
 public:
+/**
+ * Contructor for the CHP class
+ * @param PercentAvgkWhElectricCostAvoided, percent cost saved from CHP electricity, percent
+ * @param StandbyRate,  cost of outage, $/kW
+ * @param annualOperatingHours, double, Time for which the CHP operates in a year - hours
+ * @param annualElectricityConsumption double, kWh
+ * @param annualThermalDemand double, MMBtu
+ * @param boilerThermalFuelCosts double, $/MMBtu
+ * @param avgElectricityCosts double, $/kWh
+ * @param option calculationOption, dropdown enum
+ * @param boilerThermalFuelCostsCHPcase double, $/MMBtu
+ * @param CHPfuelCosts double,  $/MMBtu
+ * @param percentAvgkWhElectricCostAvoidedOrStandbyRate double, percent
+ * @param displacedThermalEfficiency double, percent
+ * @param chpAvailability double, percent
+ * @param thermalUtilization double, percent
+ */
 	enum class Option {
 		PercentAvgkWhElectricCostAvoided,
 		StandbyRate
@@ -20,24 +44,113 @@ public:
 		double thermalUtilization);
 
 	std::unordered_map<std::string, double> const & getCostInfo() const { return costInfo; }
-
+/**
+ *  Gets the Annual Operating Hours
+ * 
+ * @return double const, annual operating hours in hrs/yr
+ */
 	double getAnnualOperatingHours() const { return annualOperatingHours; }
+	/**
+	 * Gets the Annual Electricity Consumption
+	 * 
+	 * @return double const, annual electricity consumption in kWh
+	 */
 	double getAnnualElectricityConsumption() const { return annualElectricityConsumption; }
+	/**
+	 * Gets the Annual Thermal Demand 
+	 * 
+	 * @return double const, annual thermal demand in MMBtu
+	 */
 	double getAnnualThermalDemand() const { return annualThermalDemand; }
+	/**
+	 * Gets the Boiler Thermal Fuel Costs
+	 * 
+	 * @return double const, boiler thermal fuel costs in  $/MMBtu
+	 */
 	double getBoilerThermalFuelCosts() const { return boilerThermalFuelCosts; }
+	/**
+	 * Gets the Chp Fuel Costs
+	 * 
+	 * @return double const, CHP fuel costs  $/MMBtu
+	 */
 	double getChpFuelCosts() const { return chpFuelCosts; }
+	/**
+	 * Gets the Avg Electricity Costs
+	 * 
+	 * @return double const, Average Electricity costs $/kWh
+	 */
 	double getAvgElectricityCosts() const { return avgElectricityCosts; }
+	/**
+	 * Gets the Calculation Option
+	 * 
+	 * @return Option const, Calculation Option, dropdown enum
+	 */
 	Option getCalculationOption() const { return calculationOption; }
+	/**
+	 * Gets the Boiler Thermal Fuel Costs CHP case 
+	 * 
+	 * @return double const, boiler thermal fuel costs CHP case in  $/MMBtu
+	 */
 	double getBoilerThermalFuelCostsCHPcase() const { return boilerThermalFuelCostsCHPcase; }
+	/**
+	 * Gets the Percent Avg kWh Electric Cost Avoided
+	 * 
+	 * @return double const, percent cost saved from CHP electricity, percent
+	 */
 	double getPercentAvgkWhElectricCostAvoided() const { return percentAvgkWhElectricCostAvoided; }
+	/**
+	 * Gets the Standby Rate
+	 * 
+	 * @return double const, cost of outage, $/kW
+	 */
 	double getStandbyRate() const { return standbyRate; }
+	/**
+	 * Gets the Displaced Thermal Efficiency
+	 * 
+	 * @return double const, Displaced Thermal Efficiency as a percent
+	 */
 	double getDisplacedThermalEfficiency() const { return displacedThermalEfficiency; }
+	/**
+	 * Gets the Chp Electric Efficiency
+	 * 
+	 * @return double const, CHP electric efficiency as a percent
+	 */
 	double getChpElectricEfficiency() const { return chpElectricEfficiency; }
+	/**
+	 * Get the Chp Thermal Output
+	 * 
+	 * @return double const, CHP thermal output in  MMBtu
+	 */
 	double getChpThermalOutput() const { return chpThermalOutput; }
+	/**
+	 * Gets the Chp Availability 
+	 * 
+	 * @return double const, CHP availability as a percent
+	 */
 	double getChpAvailability() const { return chpAvailability; }
+	/**
+	 * Gets the Thermal Utilization
+	 * 
+	 * @return double const, Thermal Utilization as a percent
+	 */
 	double getThermalUtilization() const { return thermalUtilization; }
+	/**
+	 * Gets the Avg Power Demand
+	 * 
+	 * @return double const, Average Power Demand in kWh
+	 */
 	double getAvgPowerDemand() const { return avgPowerDemand; }
+	/**
+	 * Gets the Avg Thermal Demand 
+	 * 
+	 * @return double const, Average Thermal Demand in MMBtu
+	 */
 	double getAvgThermalDemand() const { return avgThermalDemand; }
+	/**
+	 * Gets the Net CHP power
+	 * 
+	 * @return double const, Net CHP power in  MMBtu
+	 */
 	double getNetCHPpower() const { return netCHPpower; }
 
 	void setAnnualOperatingHours(double annualOperatingHours);
