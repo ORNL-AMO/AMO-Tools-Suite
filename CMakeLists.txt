@@ -114,8 +114,7 @@ set(SOURCE_FILES
         src/calculator/util/CompressedAir.cpp
         src/calculator/util/CHP.cpp
         src/calculator/util/ElectricityReduction.cpp
-        src/calculator/util/NaturalGasReduction.cpp
-        src/calculator/motor/MotorData.cpp)
+        src/calculator/util/NaturalGasReduction.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -195,7 +194,6 @@ set(INCLUDE_FILES
         include/calculator/util/ElectricityReduction.h
         include/calculator/util/NaturalGasReduction.h
         include/calculator/motor/MotorData.h
-        include/sqlite/MotorData.h
         include/fans/CompressibilityFactor.h
         include/results/InputData.h
         include/fans/FanEnergyIndex.h
