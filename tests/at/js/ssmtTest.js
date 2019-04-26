@@ -13,10 +13,6 @@ function logSectionStart(msg) {
     console.log(msg);
 }
 
-function rnd(value) {
-    return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
-}
-
 //converts spreadsheet-format lettered columns to numerical indices
 function convertColumnToIndex(col) {
     let colIndex = -1;
@@ -280,13 +276,48 @@ function validateOutput(expectedDataNames, actualSteamModelerOutputFlattened, ex
         let actual = actualSteamModelerOutputFlattened[expectedDataName];
         let expected = expectedData[expectedDataName];
 
-        let actualRounded = rnd(actual);
-        let expectedRounded = rnd(expected);
-
-        let msg = expectedDataName + ": actual=" + actualRounded + ", expected=" + expectedRounded;
-
-        t.equal(actualRounded, expectedRounded, msg);
+        compareActualToExpected(expectedDataName, actual, expected, t);
     }
+}
+
+function compareActualToExpected(expectedDataName, actual, expected, t) {
+    let tolerance = 0.01;
+    let result = calcCompareResult(actual, expected);
+
+    let msg =
+        expectedDataName + ": actual=" + actual + ", expected=" + expected +
+        ", compare result=" + result + ", using tolerance=" + tolerance;
+
+    if (Math.abs(result) < tolerance) {
+        t.pass(msg);
+    } else {
+        t.fail(msg);
+    }
+}
+
+function calcCompareResult(actual, expected) {
+    let diff = expected - actual;
+
+    if (isSpecified(expected)) {
+        // prevent divide by 0
+        if (expected == 0) {
+            // diff alone is good decider
+            return diff;
+        } else {
+            // check using percentage diff
+            return diff / expected;
+        }
+    } else {
+        if (isSpecified(actual)) {
+            return NaN;
+        } else {
+            return 0;
+        }
+    }
+}
+
+function isSpecified(value) {
+    return !(value === undefined || value === "");
 }
 
 function makeTurbineInput(inputData) {
