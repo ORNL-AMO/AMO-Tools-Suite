@@ -2,6 +2,7 @@
 #define AMO_TOOLS_SUITE_TURBINEINPUT_H
 
 #include <iostream>
+#include <type_traits>
 
 /**
  * Condensing turbine's operation types.
@@ -21,6 +22,12 @@ enum class PressureTurbineOperation {
     POWER_RANGE = 3,
     STEAM_FLOW = 0
 };
+
+template<typename T>
+std::ostream& operator<<(typename std::enable_if<std::is_enum<T>::value, std::ostream>::type& stream, const T& e)
+{
+    return stream << static_cast<typename std::underlying_type<T>::type>(e);
+}
 
 /**
  * Steam Modeler condensing turbine input data.

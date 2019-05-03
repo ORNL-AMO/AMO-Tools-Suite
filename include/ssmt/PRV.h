@@ -31,6 +31,9 @@ public:
     PrvWithoutDesuperheating(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType,
                              double quantityValue, double inletMassFlow, double outletPressure);
 
+    friend std::ostream &operator<<(std::ostream &stream, const PrvWithoutDesuperheating &prv);
+    friend std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<PrvWithoutDesuperheating> &prv);
+
     /**
      * Gets the inlet pressure
      *
@@ -198,6 +201,9 @@ public:
                           double quantityValue, double inletMassFlow, double outletPressure, double feedwaterPressure,
                           SteamProperties::ThermodynamicQuantity feedwaterQuantityType, double feedwaterQuantityValue,
                           double desuperheatingTemp);
+
+    friend std::ostream &operator<<(std::ostream &stream, const PrvWithDesuperheating &prv);
+    friend std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<PrvWithDesuperheating> &prv);
 
     /**
      * Sets the feedwater pressure
