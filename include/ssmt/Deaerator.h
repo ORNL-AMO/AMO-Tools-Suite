@@ -42,6 +42,8 @@ public:
               double waterQuantityValue, double steamPressure,
               SteamProperties::ThermodynamicQuantity steamQuantityType, double steamQuantityValue);
 
+    friend std::ostream &operator<<(std::ostream &stream, const Deaerator &deaerator);
+
 	/**
      * Gets all of the feedwater properties
      * @return SteamSystemModelerTool::FluidProperties feedwater properties

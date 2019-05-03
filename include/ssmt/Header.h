@@ -24,6 +24,8 @@ public:
 	double getInletEnergyFlow() const { return  inletEnergyFlow; }
 	SteamSystemModelerTool::SteamPropertiesOutput const & getInletProperties() const { return inletProperties; }
 
+    friend std::ostream &operator<<(std::ostream &stream, const Inlet &inlet);
+
 	void setPressure(double pressure);
 	void setQuantityValue(double quantityValue);
 	void setMassFlow(double massFlow);
@@ -48,6 +50,7 @@ public:
 	* */
 	Header(double headerPressure, std::vector<Inlet> & inletVec);
 
+    friend std::ostream &operator<<(std::ostream &stream, const Header &header);
 	/**
      * Gets the header pressure
      * @return double, header pressure in MPa */

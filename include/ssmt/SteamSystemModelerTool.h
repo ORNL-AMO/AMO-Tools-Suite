@@ -40,6 +40,8 @@ public:
                 internalEnergy(internalEnergy)
         {}
 
+        friend std::ostream &operator<<(std::ostream &stream, const SteamPropertiesOutput &props);
+
         SteamPropertiesOutput() = default;
 
         double temperature = 0, pressure = 0, quality = 0, specificVolume = 0, density = 0;
@@ -106,6 +108,8 @@ public:
                                       sp.specificEnthalpy, sp.specificEntropy, sp.internalEnergy),
                 massFlow(massFlow), energyFlow(energyFlow)
         {}
+
+        friend std::ostream &operator<<(std::ostream &stream, const FluidProperties &props);
 
         FluidProperties() = default;
 

@@ -627,3 +627,33 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2CExact(const doubl
 double SteamSystemModelerTool::backwardPressureEntropyRegion2CExact(const double pressure, const double entropy) {
     return backwardExact(2, SteamSystemModelerTool::Key::ENTROPY, SteamSystemModelerTool::Region::REGION2C, pressure, entropy);
 }
+
+std::ostream &operator<<(std::ostream &stream, const SteamSystemModelerTool::SteamPropertiesOutput &props) {
+    stream << "SteamPropertiesOutput: "
+           << "temperature=" << props.temperature
+           << ", pressure=" << props.pressure
+           << ", quality=" << props.quality
+           << ", specificVolume=" << props.specificVolume
+           << ", density=" << props.density
+           << ", specificEnthalpy=" << props.specificEnthalpy
+           << ", specificEntropy=" << props.specificEntropy
+           << ", internalEnergy=" << props.internalEnergy;
+
+    return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const SteamSystemModelerTool::FluidProperties &props) {
+    stream << "FluidProperties: "
+           << "temperature=" << props.temperature
+           << ", pressure=" << props.pressure
+           << ", quality=" << props.quality
+           << ", specificVolume=" << props.specificVolume
+           << ", density=" << props.density
+           << ", specificEnthalpy=" << props.specificEnthalpy
+           << ", specificEntropy=" << props.specificEntropy
+           << ", internalEnergy=" << props.internalEnergy
+           << ", massFlow=" << props.massFlow
+           << ", energyFlow=" << props.energyFlow;
+
+    return stream;
+}
