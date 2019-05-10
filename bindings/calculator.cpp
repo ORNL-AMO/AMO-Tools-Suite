@@ -9,6 +9,9 @@ NAN_MODULE_INIT(InitCalculator) {
 
     Nan::Set(target, New<String>("naturalGasReduction").ToLocalChecked(),
         GetFunction(New<FunctionTemplate>(naturalGasReduction)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("compressedAirReduction").ToLocalChecked(),
+        GetFunction(New<FunctionTemplate>(compressedAirReduction)).ToLocalChecked());
 }
 
 NODE_MODULE(calculator, InitCalculator)

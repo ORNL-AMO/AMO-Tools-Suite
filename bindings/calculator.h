@@ -11,6 +11,7 @@
 #include <vector>
 #include "calculator/util/ElectricityReduction.h"
 #include "calculator/util/NaturalGasReduction.h"
+#include "calculator/util/CompressedAirReduction.h"
 
 using namespace Nan;
 using namespace v8;
@@ -80,8 +81,7 @@ MultimeterData getMultimeterData(Local<Object> obj)
         static_cast<int>(Get("numberOfPhases", multimeterDataV8)),
         Get("supplyVoltage", multimeterDataV8),
         Get("averageCurrent", multimeterDataV8),
-        Get("powerFactor", multimeterDataV8)
-    };
+        Get("powerFactor", multimeterDataV8)};
 }
 
 NameplateData getNameplateData(Local<Object> obj)
@@ -93,8 +93,7 @@ NameplateData getNameplateData(Local<Object> obj)
         Get("operationalFrequency", nameplateDataV8),
         Get("lineFrequency", nameplateDataV8),
         Get("motorAndDriveEfficiency", nameplateDataV8),
-        Get("loadFactor", nameplateDataV8)
-    };
+        Get("loadFactor", nameplateDataV8)};
 }
 
 PowerMeterData getPowerMeterData(Local<Object> obj)
@@ -159,15 +158,13 @@ NAN_METHOD(electricityReduction)
 }
 // ============== END Electricity Reduction ==============
 
-
 // ============== Natural Gas ==============
 
-FlowMeterMethodData getFlowMeterMethodData(Local<Object> obj) 
+FlowMeterMethodData getFlowMeterMethodData(Local<Object> obj)
 {
     auto flowMeterMethodDataV8 = obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())->ToObject();
     return {
-        Get("flowRate", flowMeterMethodDataV8)
-    };
+        Get("flowRate", flowMeterMethodDataV8)};
 }
 
 AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
@@ -175,15 +172,14 @@ AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
     auto airMassFlowMeasuredDataV8 = obj->Get(Nan::New<String>("airMassFlowMeasuredData").ToLocalChecked())->ToObject();
     return {
         Get("areaOfDuct", airMassFlowMeasuredDataV8),
-        Get("airVelocity", airMassFlowMeasuredDataV8)
-    };
+        Get("airVelocity", airMassFlowMeasuredDataV8)};
 }
 
-AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj) {
+AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
+{
     auto airMassFlowNameplateDataV8 = obj->Get(Nan::New<String>("airMassFlowNameplateData").ToLocalChecked())->ToObject();
     return {
-        Get("airFlow", airMassFlowNameplateDataV8)
-    };
+        Get("airFlow", airMassFlowNameplateDataV8)};
 }
 
 AirMassFlowData getAirMassFlowData(Local<Object> obj)
@@ -195,27 +191,24 @@ AirMassFlowData getAirMassFlowData(Local<Object> obj)
         getAirMassFlowNameplateData(airMassFlowDataV8),
         Get("inletTemperature", airMassFlowDataV8),
         Get("outletTemperature", airMassFlowDataV8),
-        Get("systemEfficiency", airMassFlowDataV8) / 100
-    };
+        Get("systemEfficiency", airMassFlowDataV8) / 100};
 }
 
-WaterMassFlowData getWaterMassFlowData(Local<Object> obj) 
+WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
 {
     auto waterMassFlowDataV8 = obj->Get(Nan::New<String>("waterMassFlowData").ToLocalChecked())->ToObject();
     return {
         Get("waterFlow", waterMassFlowDataV8),
         Get("inletTemperature", waterMassFlowDataV8),
         Get("outletTemperature", waterMassFlowDataV8),
-        Get("systemEfficiency", waterMassFlowDataV8) / 100
-    };
+        Get("systemEfficiency", waterMassFlowDataV8) / 100};
 }
 
-NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj) 
+NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj)
 {
     auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
     return {
-        Get("consumption", otherMethodDataV8)
-    };
+        Get("consumption", otherMethodDataV8)};
 }
 
 NaturalGasReductionInput constructNaturalGasReductionInput(Local<Object> obj)
@@ -228,11 +221,10 @@ NaturalGasReductionInput constructNaturalGasReductionInput(Local<Object> obj)
         naturalGasGetOtherMethodData(obj),
         getAirMassFlowData(obj),
         getWaterMassFlowData(obj),
-        static_cast<int>(Get("units", obj))
-    };
+        static_cast<int>(Get("units", obj))};
 }
 
-NaturalGasReduction getNaturalGasReductionInputVector() 
+NaturalGasReduction getNaturalGasReductionInputVector()
 {
     auto naturalGasReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("naturalGasReductionInputVec").ToLocalChecked());
     auto const naturalGasReductionInputVecTemp = inp->ToObject()->Get(Nan::New<String>("naturalGasReductionInputVec").ToLocalChecked());
@@ -249,7 +241,7 @@ NAN_METHOD(naturalGasReduction)
 {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    try 
+    try
     {
         auto rv = NaturalGasReduction(getNaturalGasReductionInputVector()).calculate();
         SetR("energyUse", rv.energyUse);
@@ -259,12 +251,104 @@ NAN_METHOD(naturalGasReduction)
         SetR("heatFlow", rv.heatFlow);
         SetR("totalFlow", rv.totalFlow);
     }
-    catch (std::runtime_error const &e) 
+    catch (std::runtime_error const &e)
     {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in electricityReduction - calculator.h: " + what).c_str());
+        ThrowError(std::string("std::runtime_error thrown in naturalGasReduction - calculator.h: " + what).c_str());
     }
     info.GetReturnValue().Set(r);
 }
 // ============== END Natural Gas ==============
 
+// ============== Compressed Air ==============
+
+CompressedAirFlowMeterMethodData getCompressedAirFlowMeterMethodData(Local<Object> obj)
+{
+    auto flowMeterMethodDataV8 = obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("meterReading", flowMeterMethodDataV8)};
+}
+
+BagMethodData getBagMethodData(Local<Object> obj)
+{
+    auto bagMethodDataV8 = obj->Get(Nan::New<String>("bagMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("height", bagMethodDataV8),
+        Get("diameter", bagMethodDataV8),
+        Get("fillTime", bagMethodDataV8)};
+}
+
+PressureMethodData getPressureMethodData(Local<Object> obj)
+{
+    auto pressureMethodDataV8 = obj->Get(Nan::New<String>("pressureMethodData").ToLocalChecked())->ToObject();
+    return {
+        static_cast<int>(Get("nozzleType", pressureMethodDataV8)),
+        static_cast<int>(Get("numberOfNozzles", pressureMethodDataV8)),
+        Get("supplyPressure", pressureMethodDataV8)};
+}
+
+CompressedAirOtherMethodData getCompressedAirOtherMethodData(Local<Object> obj)
+{
+    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("consumption", otherMethodDataV8)};
+}
+
+CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
+{
+    auto compressorElectricityDataV8 = obj->Get(Nan::New<String>("compressorElectricityData").ToLocalChecked())->ToObject();
+    return {
+        Get("compressorControlAdjustment", compressorElectricityDataV8),
+        Get("compressorSpecificPower", compressorElectricityDataV8)};
+}
+
+CompressedAirReductionInput constructCompressedAirReductionInput(Local<Object> obj)
+{
+    return {
+        static_cast<int>(Get("hoursPerYear", obj)),
+        static_cast<int>(Get("utilityType", obj)),
+        Get("utilityCost", obj),
+        static_cast<int>(Get("measurementMethod", obj)),
+        getCompressedAirFlowMeterMethodData(obj),
+        getBagMethodData(obj),
+        getPressureMethodData(obj),
+        getCompressedAirOtherMethodData(obj),
+        getCompressorElectricityData(obj),
+        static_cast<int>(Get("units", obj))};
+}
+
+CompressedAirReduction getCompressedAirReductionInputVec()
+{
+    auto compressedAirReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("compressedAirReductionInpuptVec").ToLocalChecked());
+    auto const compressedAirReductionInputVecTemp = inp->ToObject()->Get(Nan::New<String>("compressedAirReductionInputVec").ToLocalChecked());
+    auto const &compressedAirReductionInputArray = v8::Local<v8::Array>::Cast(compressedAirReductionInputVecTemp);
+    std::vector<CompressedAirReductionInput> inputVec;
+    for (std::size_t i = 0; i < compressedAirReductionInputArray->Length(); i++)
+    {
+        inputVec.emplace_back(constructCompressedAirReductionInput(compressedAirReductionInputArray->Get(i)->ToObject()));
+    }
+    return inputVec;
+}
+
+NAN_METHOD(compressedAirReduction)
+{
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    try
+    {
+        auto rv = CompressedAirReduction(getCompressedAirReductionInputVec()).calculate();
+        SetR("energyUse", rv.energyUse);
+        SetR("energyCost", rv.energyCost);
+        SetR("flowRate", rv.flowRate);
+        SetR("singleNozzleFlowRate", rv.singleNozzleFlowRate);
+        SetR("consumption", rv.consumption);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in compressedAirReduction - calculator.h: " + what).c_str());
+    }
+    info.GetReturnValue().Set(r);
+}
+
+// ========== END Compressed Air ==============
