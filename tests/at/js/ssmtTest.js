@@ -262,7 +262,10 @@ function processTestDataEntry(testDataFileName, configDataColumnIndexes, testDat
 
 function runTest(expectedDataNames, testDataEntry, testIdentification) {
     test(testIdentification, [{'diagnostic': 'false'}], function (t) {
-        t.plan(expectedDataNames.length);
+        let nonExpectedDataTestCount = 3;   // type, same fields actual diff, same fields expected diff
+        let testCount = expectedDataNames.length + nonExpectedDataTestCount;
+        t.plan(testCount);
+
         t.type(bindings.steamModeler, 'function');
 
         let expectedData = makeExpectedData(expectedDataNames, testDataEntry);
@@ -275,6 +278,8 @@ function runTest(expectedDataNames, testDataEntry, testIdentification) {
         logSectionStart(testIdentification + "\nactual steamOutput=" + JSON.stringify(actualSteamModelerOutput));
 
         let actualSteamModelerOutputFlattened = mapSteamModelerOutputToFlatArray(actualSteamModelerOutput);
+
+        validateActualAndExpectedHaveSameFields(actualSteamModelerOutputFlattened, expectedData, t);
 
         validateOutput(expectedDataNames, actualSteamModelerOutputFlattened, expectedData, t);
     });
@@ -329,6 +334,21 @@ function calcCompareResult(actual, expected) {
 
 function isSpecified(value) {
     return !(value === undefined || value === "");
+}
+
+function validateActualAndExpectedHaveSameFields(actual, expected, t) {
+    let actualKeys = Object.keys(actual);
+    let expectedKeys = Object.keys(expected);
+
+    let actualHasDiff = array1MissingInArray2(actualKeys, expectedKeys);
+    let expectedHasDiff = array1MissingInArray2(expectedKeys, actualKeys);
+
+    t.same(actualHasDiff, [], "actual output has fields that expected does not.");
+    t.same(expectedHasDiff, [], "expected output has fields that actual does not.");
+}
+
+function array1MissingInArray2(array1, array2) {
+    return array1.filter(element => !array2.includes(element));
 }
 
 function makeTurbineInput(inputData) {
