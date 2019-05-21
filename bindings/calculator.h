@@ -298,7 +298,7 @@ CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
 {
     auto compressorElectricityDataV8 = obj->Get(Nan::New<String>("compressorElectricityData").ToLocalChecked())->ToObject();
     return {
-        Get("compressorControlAdjustment", compressorElectricityDataV8),
+        Get("compressorControlAdjustment", compressorElectricityDataV8) / 100,
         Get("compressorSpecificPower", compressorElectricityDataV8)};
 }
 
