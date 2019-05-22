@@ -274,8 +274,8 @@ test('Compressed Air Reduction Basic Test', function (t) {
     };
 
     var res = bindings.compressedAirReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(221184000.0));
-    t.equal(rnd(res.energyCost), rnd(26542080.0));
+    t.equal(rnd(res.energyUse), rnd(2211840.0));
+    t.equal(rnd(res.energyCost), rnd(265420.8));
     t.equal(rnd(res.flowRate), rnd(0.0));
     t.equal(rnd(res.singleNozzleFlowRate), rnd(0.0));
     t.equal(rnd(res.consumption), rnd(103680000000.0));
@@ -419,8 +419,8 @@ test('Compressed Air Reduction Test All', function (t) {
     };
 
     var res = bindings.compressedAirReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(221188196.577851));
-    t.equal(rnd(res.energyCost), rnd(26542583.589342));
+    t.equal(rnd(res.energyUse), rnd(2211881.965779));
+    t.equal(rnd(res.energyCost), rnd(265425.835893));
     t.equal(rnd(res.flowRate), rnd(5.187354));
     t.equal(rnd(res.singleNozzleFlowRate), rnd(1.778508));
     t.equal(rnd(res.consumption), rnd(103682889124.41486));
