@@ -2,7 +2,7 @@
 #include <cmath>
 #include "calculator/util/CompressedAirReduction.h"
 #ifndef M_PI
-    #define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846
 #endif
 
 CompressedAirReduction::Output CompressedAirReduction::calculate()
@@ -42,7 +42,11 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
         }
 
         //electricity calculation
-        if (compressedAirReductionInput.getUtilityType() == 1)
+        if (compressedAirReductionInput.getUtilityType() == 0)
+        {
+            tmpEnergyCost = compressedAirReductionInput.getUtilityCost() * tmpTotalConsumption;
+        }
+        else if (compressedAirReductionInput.getUtilityType() == 1)
         {
             CompressorElectricityData compressorElectricityData = compressedAirReductionInput.getCompressorElectricityData();
             double electricityCalculation = compressorElectricityData.calculate();
