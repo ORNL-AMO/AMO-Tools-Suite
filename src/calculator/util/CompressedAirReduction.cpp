@@ -18,6 +18,7 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
         {
             CompressedAirFlowMeterMethodData flowMeterMethodData = compressedAirReductionInput.getFlowMeterMethodData();
             tmpTotalConsumption = flowMeterMethodData.getMeterReading() * 60.0 * compressedAirReductionInput.getHoursPerYear() * compressedAirReductionInput.getUnits();
+            tmpFlowRate = flowMeterMethodData.getMeterReading();
         }
         // bag method
         else if (compressedAirReductionInput.getMeasurementMethod() == 1)
