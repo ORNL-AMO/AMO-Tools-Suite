@@ -15,10 +15,10 @@ TEST_CASE("Compressed Air Reduction Flow Meter Method", "[CompressedAirReduction
     auto compressedAirReduction = CompressedAirReduction(compressedAirReductionInputVec);
     auto testOutput = compressedAirReduction.calculate();
     CHECK(testOutput.consumption == Approx(103680000));
-    CHECK(testOutput.flowRate == Approx(0.0));
+    CHECK(testOutput.flowRate == Approx(200.0));
     CHECK(testOutput.singleNozzleFlowRate == Approx(0.0));
     CHECK(testOutput.energyUse == Approx(0.0));
-    CHECK(testOutput.energyCost == Approx(0.0));
+    CHECK(testOutput.energyCost == Approx(12441600.0));
 }
 
 TEST_CASE("Compressed Air Reduction Flow Meter Method and Electricity", "[CompressedAirReduction][Util]")
@@ -36,7 +36,7 @@ TEST_CASE("Compressed Air Reduction Flow Meter Method and Electricity", "[Compre
     auto testOutput = compressedAirReduction.calculate();
     CHECK(testOutput.energyUse == Approx(221184000.0));
     CHECK(testOutput.energyCost == Approx(26542080.0));
-    CHECK(testOutput.flowRate == Approx(0.0));
+    CHECK(testOutput.flowRate == Approx(200000.0));
     CHECK(testOutput.singleNozzleFlowRate == Approx(0.0));
     CHECK(testOutput.consumption == Approx(103680000000.0));
 }
