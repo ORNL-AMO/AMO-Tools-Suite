@@ -19,6 +19,13 @@
  */
 class HeadToolBase {
 protected:
+    struct Output {
+        Output(double elevationHead, double pressureHead, double velocityHeadDifferential, double suctionHead, double dischargeHead, double pumpHead)
+                :elevationHead(elevationHead), pressureHead(pressureHead), velocityHeadDifferential(velocityHeadDifferential), suctionHead(suctionHead), dischargeHead(dischargeHead), pumpHead(pumpHead){}
+
+        Output() = default;
+        double elevationHead = 0, pressureHead = 0 , velocityHeadDifferential = 0, suctionHead = 0, dischargeHead = 0 , pumpHead = 0;
+    };
 	/**
     * Constructor for the abstract HeadToolBase class with all inputs specified
     *
@@ -58,7 +65,7 @@ protected:
      *
      * @return unordered map with all its values calculated
      */
-	virtual std::unordered_map<std::string, double> calculate() = 0;
+    virtual HeadToolBase::Output calculate() = 0;
 
 	/**
      * Calculates the velocity
@@ -106,23 +113,6 @@ protected:
  */
 class HeadToolSuctionTank : private HeadToolBase {
 public:
-
-	/**
-    * Constructor for the HeadToolSuctionTank class with all inputs specified
-    *
-    * @param specificGravity double, specific gravity - unitless
-    * @param flowRate double, flow rate in gpm (gallons per minute)
-    * @param suctionPipeDiameter double, diameter of suction pipe in feet
-    * @param suctionTankGasOverPressure double, gas over pressure of suction tank in psig (pounds per square inch gauage)
-    * @param suctionTankFluidSurfaceElevation double, fluid surface elevation of suction tank in feet
-    * @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
-    * @param dischargePipeDiameter double, diameter of discharge pipe in feet
-    * @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch gauge)
-    * @param dischargeGaugeElevation double, gauge elevation of discharge in inches
-    * @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
-	*
- * */
-
 	HeadToolSuctionTank(
 			const double specificGravity,
 			const double flowRate,
@@ -151,35 +141,15 @@ public:
      * Calculates the operating pump head
      * @return unordered map with all the values calculated for operating pump head
      */
-	std::unordered_map<std::string, double> calculate() override;
-
+    HeadToolBase::Output calculate() override;
 private:
 	const double suctionTankGasOverPressure, suctionTankFluidSurfaceElevation;
+    HeadToolBase::Output output;
 };
 
-/**
- * Head Tool class
- * Contains all of the properties of a head tool.
- * Used to calculate all of the values of the returned unordered map.
- */
 class HeadTool : private HeadToolBase {
 public:
 
-/**
-* Constructor for HeadTool with no Suction Tank, all inputs specified
-*
-* @param specificGravity double, specific gravity - unitless
-* @param flowRate double, flow rate in gpm (gallons per minute)
-* @param suctionPipeDiameter double, diameter of suction pipe in feet
-* @param suctionGaugePressure double, gauge pressure of suction in psig (pounds per square inch guage)
-* @param suctionGaugeElevation double, gauge elevation of suction in feet
-* @param suctionLineLossCoefficients double, line loss coefficients of suction - unitless
-* @param dischargePipeDiameter double, diameter of discharge pipe in feet
-* @param dischargeGaugePressure double, gauge pressure of discharge in psig (pounds per square inch guage)
-* @param dischargeGaugeElevation double, gauge elevation of discharge in feet
-* @param dischargeLineLossCoefficients double, line loss coefficients of discharge - unitless
-*
-* */
 
 	HeadTool(
 			const double specificGravity,
@@ -204,14 +174,11 @@ public:
 			suctionGaugePressure(suctionGaugePressure),
 			suctionGaugeElevation(suctionGaugeElevation)
 	{}
-	/**
-     * Calculates the operating pump head
-     * @return unordered_map with internal values calculated
-     */
-	std::unordered_map<std::string, double> calculate() override;
+	HeadTool::Output calculate() override;
 
 private:
 	const double suctionGaugePressure, suctionGaugeElevation;
+	HeadToolBase::Output output;
 };
 
 #endif //AMO_TOOLS_SUITE_HEADTOOL_H
