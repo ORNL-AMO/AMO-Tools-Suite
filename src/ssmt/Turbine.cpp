@@ -79,8 +79,8 @@ void Turbine::calculateTurbineProperties(const double inletSpecificEnthalpy, con
 		massFlow = energyOut / (inletSpecificEnthalpy - outletSpecificEnthalpy);
 		powerOut = massFlowOrPowerOut;
 	} else {
-		massFlow = massFlowOrPowerOut / 1000;
-		energyOut = (inletSpecificEnthalpy - outletSpecificEnthalpy) * massFlow;
+		massFlow = massFlowOrPowerOut;
+		energyOut = (inletSpecificEnthalpy - outletSpecificEnthalpy) * massFlow / 1000;
 		powerOut = energyOut * generatorEfficiency;
 	}
 

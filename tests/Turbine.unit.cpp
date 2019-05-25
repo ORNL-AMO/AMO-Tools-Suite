@@ -8,7 +8,7 @@ TEST_CASE( "Turbine", "[Turbine]") {
 	                 Turbine::TurbineProperty::MassFlow, 40.1, 94.2, 15844, 3.4781);
 	CHECK( t.getInletProperties().specificEnthalpy == Approx(3707.3971175332));
 	CHECK( t.getInletProperties().specificEntropy == Approx(7.384097768));
-	CHECK( t.getInletEnergyFlow() == Approx(58739.99993));
+	CHECK( t.getInletEnergyFlow() == Approx(58739999.9301967993));
 	CHECK( t.getEnergyOut() == Approx(479.1499));
 	CHECK( t.getPowerOut() == Approx(451.35921));
 
@@ -32,12 +32,12 @@ TEST_CASE( "Turbine", "[Turbine]") {
 
 	CHECK( t.getInletProperties().specificEnthalpy == Approx(3551));
 	CHECK( t.getInletProperties().specificEntropy == Approx(7.0935165312));
-	CHECK( t.getInletEnergyFlow() == Approx(101491.776));
+	CHECK( t.getInletEnergyFlow() == Approx(101491776.0236083418));
 
 	CHECK( t.getOutletProperties().specificEnthalpy == Approx(3167.7566746314));
 	CHECK( t.getOutletProperties().specificEntropy == Approx(7.5625702284));
-	CHECK( t.getOutletEnergyFlow() == Approx(90538));
-	CHECK( t.getMassFlow() == Approx(28.581));
+	CHECK( t.getOutletEnergyFlow() == Approx(90537653.5176413357));
+	CHECK( t.getMassFlow() == Approx(28581.0));
 	CHECK( t.getEnergyOut() == Approx(10954.12251));
 	CHECK( t.getPowerOut() == Approx(9650.5819278));
 
