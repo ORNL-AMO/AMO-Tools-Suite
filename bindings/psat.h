@@ -63,14 +63,6 @@ NAN_METHOD(headToolSuctionTank) {
         suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter,
         dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients).calculate();
 
-
-    Local<String> differentialElevationHead = Nan::New<String>("differentialElevationHead").ToLocalChecked();
-    Local<String> differentialPressureHead = Nan::New<String>("differentialPressureHead").ToLocalChecked();
-    Local<String> differentialVelocityHead = Nan::New<String>("differentialVelocityHead").ToLocalChecked();
-    Local<String> estimatedSuctionFrictionHead = Nan::New<String>("estimatedSuctionFrictionHead").ToLocalChecked();
-    Local<String> estimatedDischargeFrictionHead = Nan::New<String>("estimatedDischargeFrictionHead").ToLocalChecked();
-    Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
-
     SetR("differentialElevationHead", rv.elevationHead);
     SetR("differentialPressureHead", rv.pressureHead);
     SetR("differentialVelocityHead", rv.velocityHeadDifferential);
@@ -96,19 +88,9 @@ NAN_METHOD(headTool) {
     const double dischargeGaugeElevation = Get("dischargeGaugeElevation");
     const double dischargeLineLossCoefficients = Get("dischargeLineLossCoefficients");
 
-    ;
-
     auto rv = HeadTool(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure,
         suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter,
         dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients).calculate();
-
-    Local<String> differentialElevationHead = Nan::New<String>("differentialElevationHead").ToLocalChecked();
-    Local<String> differentialPressureHead = Nan::New<String>("differentialPressureHead").ToLocalChecked();
-    Local<String> differentialVelocityHead = Nan::New<String>("differentialVelocityHead").ToLocalChecked();
-    Local<String> estimatedSuctionFrictionHead = Nan::New<String>("estimatedSuctionFrictionHead").ToLocalChecked();
-    Local<String> estimatedDischargeFrictionHead = Nan::New<String>("estimatedDischargeFrictionHead").ToLocalChecked();
-    Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
-
 
     SetR("differentialElevationHead", rv.elevationHead);
     SetR("differentialPressureHead", rv.pressureHead);
