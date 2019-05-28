@@ -37,15 +37,14 @@ double Get(std::string const & nm) {
 	return rObj->NumberValue();
 }
 
-void SetR(const char *nm, double n) {
-	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-	Local<Number> getNum = Nan::New<Number>(n);
-	Nan::Set(r, getName, getNum);
+inline void SetR(const std::string &key, double val)
+{
+    Nan::Set(r, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
 }
 
 NAN_METHOD(headToolSuctionTank) {
     inp = info[0]->ToObject();
-    Local<Object> obj = Nan::New<Object>();
+    r = Nan::New<Object>();
 
     const double specificGravity = Get("specificGravity");
     const double flowRate = Get("flowRate");
@@ -72,7 +71,6 @@ NAN_METHOD(headToolSuctionTank) {
     Local<String> estimatedDischargeFrictionHead = Nan::New<String>("estimatedDischargeFrictionHead").ToLocalChecked();
     Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
 
-
     SetR("differentialElevationHead", rv.elevationHead);
     SetR("differentialPressureHead", rv.pressureHead);
     SetR("differentialVelocityHead", rv.velocityHeadDifferential);
@@ -80,12 +78,12 @@ NAN_METHOD(headToolSuctionTank) {
     SetR("estimatedDischargeFrictionHead", rv.dischargeHead);
     SetR("pumpHead", rv.pumpHead);
 
-    info.GetReturnValue().Set(obj);
+    info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(headTool) {
     inp = info[0]->ToObject();
-    Local<Object> obj = Nan::New<Object>();
+    r = Nan::New<Object>();
 
     const double specificGravity = Get("specificGravity");
     const double flowRate = Get("flowRate");
@@ -111,13 +109,15 @@ NAN_METHOD(headTool) {
     Local<String> estimatedDischargeFrictionHead = Nan::New<String>("estimatedDischargeFrictionHead").ToLocalChecked();
     Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
 
+
     SetR("differentialElevationHead", rv.elevationHead);
     SetR("differentialPressureHead", rv.pressureHead);
     SetR("differentialVelocityHead", rv.velocityHeadDifferential);
     SetR("estimatedSuctionFrictionHead", rv.suctionHead);
     SetR("estimatedDischargeFrictionHead", rv.dischargeHead);
     SetR("pumpHead", rv.pumpHead);
-    info.GetReturnValue().Set(obj);
+
+    info.GetReturnValue().Set(r);
 }
 
 // Fields
