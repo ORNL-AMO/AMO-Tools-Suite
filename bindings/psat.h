@@ -162,28 +162,21 @@ NAN_METHOD(resultsExisting) {
 	try {
         auto const & ex = psat.calculateExisting();
 
-        std::unordered_map<std::string, double> out = {
-                {"pump_efficiency",          ex.pumpEfficiency * 100},
-                {"motor_rated_power",        ex.motorRatedPower},
-                {"motor_shaft_power",        ex.motorShaftPower},
-                {"pump_shaft_power",         ex.pumpShaftPower},
-                {"motor_efficiency",         ex.motorEfficiency * 100},
-                {"motor_power_factor",       ex.motorPowerFactor * 100},
-                {"motor_current",            ex.motorCurrent},
-                {"motor_power",              ex.motorPower},
-                {"load_factor",              ex.loadFactor},
-                {"drive_efficiency",         ex.driveEfficiency * 100},
-                {"annual_energy",            ex.annualEnergy},
-                {"annual_cost",              ex.annualCost * 1000},
-                {"annual_savings_potential", psat.getAnnualSavingsPotential() * 1000},
-                {"optimization_rating",      psat.getOptimizationRating()}
-        };
+        SetR("pump_efficiency",ex.pumpEfficiency * 100);
+        SetR("motor_rated_power",ex.motorRatedPower);
+        SetR("motor_shaft_power",ex.motorShaftPower);
+        SetR("pump_shaft_power",ex.pumpShaftPower);
+        SetR("motor_efficiency",ex.motorEfficiency * 100);
+        SetR("motor_power_factor",ex.motorPowerFactor * 100);
+        SetR("motor_current",ex.motorCurrent);
+        SetR("motor_power",ex.motorPower);
+        SetR("load_factor",ex.loadFactor);
+        SetR("drive_efficiency",ex.driveEfficiency * 100);
+        SetR("annual_energy",ex.annualEnergy);
+        SetR("annual_cost",ex.annualCost * 1000);
+        SetR("annual_savings_potential",psat.getAnnualSavingsPotential() * 1000);
+        SetR("optimization_rating",psat.getOptimizationRating());
 
-        for (auto const &p: out) {
-            Local <String> key = Nan::New<String>(p.first).ToLocalChecked();
-            Local <Number> value = Nan::New(p.second);
-            Nan::Set(r, key, value);
-        }
         info.GetReturnValue().Set(r);
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
@@ -226,28 +219,21 @@ NAN_METHOD(resultsModified) {
     try {
         auto const & mod = psat.calculateModified();
 
-        std::unordered_map<std::string, double> out = {
-                {"pump_efficiency",          mod.pumpEfficiency * 100},
-                {"motor_rated_power",        mod.motorRatedPower},
-                {"motor_shaft_power",        mod.motorShaftPower},
-                {"pump_shaft_power",         mod.pumpShaftPower},
-                {"motor_efficiency",         mod.motorEfficiency * 100},
-                {"motor_power_factor",       mod.motorPowerFactor * 100},
-                {"motor_current",            mod.motorCurrent},
-                {"motor_power",              mod.motorPower},
-                {"load_factor",              mod.loadFactor},
-                {"drive_efficiency",         mod.driveEfficiency * 100},
-                {"annual_energy",            mod.annualEnergy},
-                {"annual_cost",              mod.annualCost * 1000},
-                {"annual_savings_potential", psat.getAnnualSavingsPotential() * 1000},
-                {"optimization_rating",      psat.getOptimizationRating()}
-        };
+        SetR("pump_efficiency",mod.pumpEfficiency * 100);
+        SetR("motor_rated_power",mod.motorRatedPower);
+        SetR("motor_shaft_power",mod.motorShaftPower);
+        SetR("pump_shaft_power",mod.pumpShaftPower);
+        SetR("motor_efficiency",mod.motorEfficiency * 100);
+        SetR("motor_power_factor",mod.motorPowerFactor * 100);
+        SetR("motor_current",mod.motorCurrent);
+        SetR("motor_power",mod.motorPower);
+        SetR("load_factor",mod.loadFactor);
+        SetR("drive_efficiency",mod.driveEfficiency * 100);
+        SetR("annual_energy",mod.annualEnergy);
+        SetR("annual_cost",mod.annualCost * 1000);
+        SetR("annual_savings_potential",psat.getAnnualSavingsPotential() * 1000);
+        SetR("optimization_rating",psat.getOptimizationRating());
 
-        for (auto const &p: out) {
-            Local <String> key = Nan::New<String>(p.first).ToLocalChecked();
-            Local <Number> value = Nan::New(p.second);
-            Nan::Set(r, key, value);
-        }
         info.GetReturnValue().Set(r);
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
