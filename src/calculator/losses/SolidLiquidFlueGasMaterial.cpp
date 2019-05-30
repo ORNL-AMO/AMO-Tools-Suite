@@ -41,7 +41,7 @@ double SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(
 		}
 	}
 
-	return excessAir;
+	return excessAir*100;
 }
 
 double SolidLiquidFlueGasMaterial::calculateFlueGasO2(const double excessAir, const double carbon,
@@ -69,7 +69,7 @@ double SolidLiquidFlueGasMaterial::calculateFlueGasO2(const double excessAir, co
 	const double mO2 = o2sair * excessAir;
 	const double mN2 = n2sair * (1 + excessAir);
 
-	return mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
+	return (mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2))*100;
 }
 
 

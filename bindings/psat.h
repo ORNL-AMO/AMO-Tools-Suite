@@ -162,19 +162,19 @@ NAN_METHOD(resultsExisting) {
 	try {
         auto const & ex = psat.calculateExisting();
 
-        SetR("pump_efficiency",ex.pumpEfficiency * 100);
+        SetR("pump_efficiency",ex.pumpEfficiency);
         SetR("motor_rated_power",ex.motorRatedPower);
         SetR("motor_shaft_power",ex.motorShaftPower);
         SetR("pump_shaft_power",ex.pumpShaftPower);
-        SetR("motor_efficiency",ex.motorEfficiency * 100);
-        SetR("motor_power_factor",ex.motorPowerFactor * 100);
+        SetR("motor_efficiency",ex.motorEfficiency);
+        SetR("motor_power_factor",ex.motorPowerFactor);
         SetR("motor_current",ex.motorCurrent);
         SetR("motor_power",ex.motorPower);
         SetR("load_factor",ex.loadFactor);
-        SetR("drive_efficiency",ex.driveEfficiency * 100);
+        SetR("drive_efficiency",ex.driveEfficiency);
         SetR("annual_energy",ex.annualEnergy);
-        SetR("annual_cost",ex.annualCost * 1000);
-        SetR("annual_savings_potential",psat.getAnnualSavingsPotential() * 1000);
+        SetR("annual_cost",ex.annualCost);
+        SetR("annual_savings_potential",psat.getAnnualSavingsPotential());
         SetR("optimization_rating",psat.getOptimizationRating());
 
         info.GetReturnValue().Set(r);
@@ -219,19 +219,19 @@ NAN_METHOD(resultsModified) {
     try {
         auto const & mod = psat.calculateModified();
 
-        SetR("pump_efficiency",mod.pumpEfficiency * 100);
+        SetR("pump_efficiency",mod.pumpEfficiency);
         SetR("motor_rated_power",mod.motorRatedPower);
         SetR("motor_shaft_power",mod.motorShaftPower);
         SetR("pump_shaft_power",mod.pumpShaftPower);
-        SetR("motor_efficiency",mod.motorEfficiency * 100);
-        SetR("motor_power_factor",mod.motorPowerFactor * 100);
+        SetR("motor_efficiency",mod.motorEfficiency);
+        SetR("motor_power_factor",mod.motorPowerFactor);
         SetR("motor_current",mod.motorCurrent);
         SetR("motor_power",mod.motorPower);
         SetR("load_factor",mod.loadFactor);
-        SetR("drive_efficiency",mod.driveEfficiency * 100);
+        SetR("drive_efficiency",mod.driveEfficiency);
         SetR("annual_energy",mod.annualEnergy);
-        SetR("annual_cost",mod.annualCost * 1000);
-        SetR("annual_savings_potential",psat.getAnnualSavingsPotential() * 1000);
+        SetR("annual_cost",mod.annualCost);
+        SetR("annual_savings_potential",psat.getAnnualSavingsPotential());
         SetR("optimization_rating",psat.getOptimizationRating());
 
         info.GetReturnValue().Set(r);
@@ -267,7 +267,7 @@ NAN_METHOD(motorPerformance) {
 	try {
         MotorEfficiency mef(l, motor_rated_speed, efficiencyClass, motor_rated_power);
         double mefVal = mef.calculate(load_factor, efficiency);
-        SetR("efficiency", mefVal * 100);
+        SetR("efficiency", mefVal);
         double motor_rated_voltage = Get("motor_rated_voltage");
         double fla = Get("motor_rated_fla");
         MotorCurrent mc(motor_rated_power, motor_rated_speed, l, efficiencyClass, efficiency, load_factor,
@@ -276,7 +276,8 @@ NAN_METHOD(motorPerformance) {
         SetR("motor_current", mcVal / fla * 100);
 
         MotorPowerFactor motorPowerFactor(motor_rated_power, load_factor, mcVal, mefVal, motor_rated_voltage);
-        SetR("motor_power_factor", motorPowerFactor.calculate() * 100);
+        double motorPower = motorPowerFactor.calculate();
+        SetR("motor_power_factor", motorPower);
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in motorPerformance - psat.h: " + what).c_str());

@@ -93,8 +93,8 @@ PSATResult::Result & PSATResult::calculateExisting() {
 
     existing.motorShaftPower = output.shaftPower;
     existing.motorCurrent = output.current;
-    existing.motorPowerFactor = output.powerFactor;
-    existing.motorEfficiency = output.efficiency;
+    existing.motorPowerFactor = output.powerFactor*100;
+    existing.motorEfficiency = output.efficiency*100;
     existing.motorPower = output.power;
     existing.estimatedFLA = output.estimatedFLA;
     existing.loadFactor = output.loadFactor;
@@ -105,11 +105,11 @@ PSATResult::Result & PSATResult::calculateExisting() {
     //fix this with proper type and attributes, need to store drive efficiency and get it in return object
     PumpShaftPower::Output const pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
     existing.pumpShaftPower = pumpShaftPower.pumpShaftPower;
-    existing.driveEfficiency = pumpShaftPower.driveEfficiency;
-    existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
-                                              existing.pumpShaftPower).calculate();
+    existing.driveEfficiency = pumpShaftPower.driveEfficiency*100;
+    existing.pumpEfficiency = (MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
+                                              existing.pumpShaftPower).calculate())*100;
     existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingHours).calculate();
-    existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
+    existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate()*1000;
     return existing;
 }
 
@@ -130,7 +130,7 @@ PSATResult::Result & PSATResult::calculateModified() {
 
      */
 
-    modified.pumpEfficiency = pumpInput.pumpEfficiency;
+    modified.pumpEfficiency = pumpInput.pumpEfficiency*100;
     OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
                                                 modified.pumpEfficiency);
     modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
@@ -138,7 +138,7 @@ PSATResult::Result & PSATResult::calculateModified() {
     OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
     OptimalMotorShaftPower::Output const motorShaftPowerOutput = modifiedMotorShaftPower.calculate();
     modified.motorShaftPower = motorShaftPowerOutput.motorShaftPower;
-    modified.driveEfficiency = motorShaftPowerOutput.driveEfficiency;
+    modified.driveEfficiency = motorShaftPowerOutput.driveEfficiency*100;
 
     modified.motorRatedPower = motor.motorRatedPower;
     OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
@@ -146,9 +146,9 @@ PSATResult::Result & PSATResult::calculateModified() {
                                          motor.motorRatedVoltage, fieldData.voltage, modified.motorShaftPower);
     OptimalMotorPower::Output output = modifiedMotorPower.calculate();
     modified.motorCurrent = output.current;
-    modified.motorEfficiency = output.efficiency;
+    modified.motorEfficiency = output.efficiency*100;
     modified.motorPower = output.power;
-    modified.motorPowerFactor = output.powerFactor;
+    modified.motorPowerFactor = output.powerFactor*100;
     modified.loadFactor = output.loadFactor;
 
 
@@ -158,7 +158,7 @@ PSATResult::Result & PSATResult::calculateModified() {
 
     // Calculate Annual Cost
     AnnualCost annualCost(modified.annualEnergy, unitCost);
-    modified.annualCost = annualCost.calculate();
+    modified.annualCost = annualCost.calculate()*1000;
 
     // Annual Savings potential
     //annualSavingsPotential = existing.annualCost - modified.annualCost;

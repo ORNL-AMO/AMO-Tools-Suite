@@ -26,7 +26,7 @@ double MotorPowerFactor::calculate() {
         motorEfficiency.calculate(0.25, specifiedEfficiency);
         motorKwInput = motorEfficiency.getKWloss0();
         motorkVA = 460 * sqrt(3) * motorCurrent / 1000;
-        return motorKwInput / motorkVA;
+        return (motorKwInput / motorkVA)*100;
     }
     /**
 	 *  Make sure the loadfactor comes not in %.

@@ -570,7 +570,7 @@ NAN_METHOD(flueGasCalculateO2) {
     GasCompositions comp("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
-    Local<Number> rv = Nan::New(comp.calculateO2(Get("excessAir") / 100.0) * 100.0);
+    Local<Number> rv = Nan::New(comp.calculateO2(Get("excessAir") / 100.0));
     info.GetReturnValue().Set(rv);
 }
 
@@ -580,7 +580,7 @@ NAN_METHOD(flueGasCalculateExcessAir) {
     GasCompositions comp("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
-    Local<Number> rv = Nan::New(comp.calculateExcessAir(Get("o2InFlueGas") / 100.0) * 100.0);
+    Local<Number> rv = Nan::New(comp.calculateExcessAir(Get("o2InFlueGas") / 100.0));
     info.GetReturnValue().Set(rv);
 }
 
@@ -592,7 +592,7 @@ NAN_METHOD(flueGasByMassCalculateO2) {
                                                                                 Get("moisture") / 100, Get("nitrogen") / 100,
                                                                                 Get("moistureInAirCombustion"));
 
-    Local<Number> rv = Nan::New(v * 100.0);
+    Local<Number> rv = Nan::New(v);
     info.GetReturnValue().Set(rv);
 }
 
@@ -604,7 +604,7 @@ NAN_METHOD(flueGasByMassCalculateExcessAir) {
                                                                                 Get("moisture") / 100, Get("nitrogen") / 100,
                                                                                 Get("moistureInAirCombustion"));
 
-    Local<Number> rv = Nan::New(v * 100.0);
+    Local<Number> rv = Nan::New(v);
     info.GetReturnValue().Set(rv);
 }
 

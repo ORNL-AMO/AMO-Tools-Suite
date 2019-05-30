@@ -101,7 +101,7 @@ double MotorEfficiency::calculate(double loadFactor, double specifiedEfficiency)
         motorEff = cfv.calculate();
     }
 
-    return motorEff;
+    return motorEff*100;
 }
 
 

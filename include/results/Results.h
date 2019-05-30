@@ -78,10 +78,7 @@ private:
  * Used to calculate the existing efficiency of the pump and the optimal efficiency of the pump so they can be compared.
  */
 class PSATResult {
-public:
-    struct Output{
 
-    };
 public:
     PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingHours, double unitCost)
             : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
@@ -122,7 +119,7 @@ public:
      * @return double, annual savings potential in $/year
      */
     double getAnnualSavingsPotential() const {
-        return annualSavingsPotential;
+        return annualSavingsPotential*1000;
     }
 
     /**

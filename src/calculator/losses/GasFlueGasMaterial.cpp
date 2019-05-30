@@ -31,14 +31,14 @@ double GasCompositions::calculateExcessAir(const double flueGasO2) {
             excessAir += (excessAir * 0.01);
         }
     }
-	return excessAir;
+	return excessAir*100;
 }
 
 // used for calculating O2 in flue gas given excess air as a decimal
 double GasCompositions::calculateO2(const double excessAir) {
     calculateCompByWeight();
     calculateMassFlueGasComponents(excessAir);
-    return mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2);
+    return (mO2 / (mH2O + mCO2 + mN2 + mO2 + mSO2))*100;
 }
 
 void GasCompositions::calculateCompByWeight() {
