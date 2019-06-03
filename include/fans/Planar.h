@@ -18,7 +18,7 @@ public:
 	}
 
 	double get75percentRule() const {
-		return percent75Rule;
+		return percent75Rule * 100;
 	}
 protected:
 	// protected constructor to be used only during the construction of its derived classes

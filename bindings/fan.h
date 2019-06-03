@@ -190,16 +190,16 @@ NAN_METHOD(fanResultsExisting) {
 	FanResult result = {input, motor, Get("operatingHours", inp), Get("unitCost", inp)};
 	auto const output = result.calculateExisting(fanFieldData);
 
-	SetR("fanEfficiency", output.fanEfficiency * 100);
+	SetR("fanEfficiency", output.fanEfficiency);
 	SetR("motorRatedPower", output.motorRatedPower);
 	SetR("motorShaftPower", output.motorShaftPower);
 	SetR("fanShaftPower", output.fanShaftPower);
-	SetR("motorEfficiency", output.motorEfficiency * 100);
-	SetR("motorPowerFactor", output.motorPowerFactor * 100);
+	SetR("motorEfficiency", output.motorEfficiency);
+	SetR("motorPowerFactor", output.motorPowerFactor);
 	SetR("motorCurrent", output.motorCurrent);
 	SetR("motorPower", output.motorPower);
 	SetR("loadFactor", output.loadFactor);
-	SetR("driveEfficiency", output.driveEfficiency * 100);
+	SetR("driveEfficiency", output.driveEfficiency);
 	SetR("annualEnergy", output.annualEnergy);
 	SetR("annualCost", output.annualCost);
 	SetR("estimatedFLA", output.estimatedFLA);
@@ -250,16 +250,16 @@ NAN_METHOD(fanResultsModified) {
 	// auto const output = result.calculateModified(fanFieldData, fanEfficiency, false);
 	auto const output = result.calculateModified(fanFieldData, fanEfficiency);
 
-	SetR("fanEfficiency", output.fanEfficiency * 100);
+	SetR("fanEfficiency", output.fanEfficiency);
 	SetR("motorRatedPower", output.motorRatedPower);
 	SetR("motorShaftPower", output.motorShaftPower);
 	SetR("fanShaftPower", output.fanShaftPower);
-	SetR("motorEfficiency", output.motorEfficiency * 100);
-	SetR("motorPowerFactor", output.motorPowerFactor * 100);
+	SetR("motorEfficiency", output.motorEfficiency);
+	SetR("motorPowerFactor", output.motorPowerFactor);
 	SetR("motorCurrent", output.motorCurrent);
 	SetR("motorPower", output.motorPower);
 	SetR("loadFactor", output.loadFactor);
-	SetR("driveEfficiency", output.driveEfficiency * 100);
+	SetR("driveEfficiency", output.driveEfficiency);
 	SetR("annualEnergy", output.annualEnergy);
 	SetR("annualCost", output.annualCost);
 	SetR("estimatedFLA", output.estimatedFLA);
@@ -414,7 +414,7 @@ NAN_METHOD(getVelocityPressureData) {
 	r = Nan::New<Object>();
 	auto const travPlane = constructTraverse(inp->ToObject());
 	SetR("pv3", travPlane.getPv3Value());
-	SetR("percent75Rule", travPlane.get75percentRule() * 100);
+	SetR("percent75Rule", travPlane.get75percentRule());
 	info.GetReturnValue().Set(r);
 }
 
@@ -617,7 +617,7 @@ NAN_METHOD(optimalFanEfficiency) {
 	double const efficiency = OptimalFanEfficiency(fanType, fanSpeed, flowRate, inletPressure, outletPressure,
 												   compressibility).calculate();
 
-	info.GetReturnValue().Set(efficiency * 100);
+	info.GetReturnValue().Set(efficiency);
 }
 
 NAN_METHOD(compressibilityFactor) {

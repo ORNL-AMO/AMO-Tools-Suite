@@ -56,7 +56,7 @@ public:
 		if (isPolynomial) {
 			return currentFan.polynomialFunction(specificSpeed);
 		}
-		return currentFan.exponentialFunction(specificSpeed);
+		return currentFan.exponentialFunction(specificSpeed) * 100;
 	}
 
 private:

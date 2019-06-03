@@ -195,7 +195,7 @@ AirMassFlowData getAirMassFlowData(Local<Object> obj)
         getAirMassFlowNameplateData(airMassFlowDataV8),
         Get("inletTemperature", airMassFlowDataV8),
         Get("outletTemperature", airMassFlowDataV8),
-        Get("systemEfficiency", airMassFlowDataV8) / 100
+        Get("systemEfficiency", airMassFlowDataV8) / 100 //No method is handling the calculations
     };
 }
 
@@ -206,7 +206,7 @@ WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
         Get("waterFlow", waterMassFlowDataV8),
         Get("inletTemperature", waterMassFlowDataV8),
         Get("outletTemperature", waterMassFlowDataV8),
-        Get("systemEfficiency", waterMassFlowDataV8) / 100
+        Get("systemEfficiency", waterMassFlowDataV8) / 100 //No method is handling the calculations
     };
 }
 
