@@ -49,18 +49,18 @@ double SolidLiquidFlueGasMaterial::calculateFlueGasO2(const double excessAir, co
                                                       const double inertAsh, const double o2, const double moisture,
                                                       const double nitrogen, const double moistureInAirCombustion)
 {
-	const double percentTotalFuelComponents = carbon + hydrogen + sulphur + inertAsh + o2 + moisture + nitrogen;
-	const double carbonBar = carbon / percentTotalFuelComponents;
-	const double hydrogenBar = hydrogen / percentTotalFuelComponents;
-	const double sulphurBar = sulphur / percentTotalFuelComponents;
-	const double o2Bar = o2 / percentTotalFuelComponents;
-	const double moistureBar = moisture / percentTotalFuelComponents;
+	const double percentTotalFuelComponents = (carbon/100) + (hydrogen/100) + (sulphur/100) + (inertAsh/100) + (o2/100) + (moisture/100) + (nitrogen/100);
+	const double carbonBar = (carbon/100) / percentTotalFuelComponents;
+	const double hydrogenBar = (hydrogen/100) / percentTotalFuelComponents;
+	const double sulphurBar = (sulphur/100) / percentTotalFuelComponents;
+	const double o2Bar = (o2/100) / percentTotalFuelComponents;
+	const double moistureBar = (moisture/100) / percentTotalFuelComponents;
 
 	// steps 2 and 3
 	const double o2sair = carbonBar * (32.0 / 12) + hydrogenBar * 8 + sulphurBar - o2Bar;
 	const double n2sair = o2sair * (76.85 / 23.15);
 	const double msair = o2sair + n2sair;
-	const double mCombustionAir = msair * (1 + excessAir);
+	const double mCombustionAir = msair * (1 + (excessAir/100));
 
 	// steps 4 and 5
 	const double mCO2 = carbonBar * (44.0 / 12);
@@ -77,10 +77,10 @@ double SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(double carbon, doub
                                                              double inertAsh, double o2, double moisture,
                                                              double nitrogen)
 {
-	const double percentTotalFuelComponents = carbon + hydrogen + sulphur + inertAsh + o2 + moisture + nitrogen;
-	const double carbonBar = carbon / percentTotalFuelComponents;
-	const double hydrogenBar = hydrogen / percentTotalFuelComponents;
-	const double sulphurBar = sulphur / percentTotalFuelComponents;
+	const double percentTotalFuelComponents = (carbon/100) + (hydrogen/100) + (sulphur/100) + (inertAsh/100) + (o2/100) + (moisture/100) + (nitrogen/100);
+	const double carbonBar = (carbon/100) / percentTotalFuelComponents;
+	const double hydrogenBar = (hydrogen/100)/ percentTotalFuelComponents;
+	const double sulphurBar = (sulphur/100) / percentTotalFuelComponents;
 	return carbonBar * 14100 + hydrogenBar * 61100 + sulphurBar * 3980;
 }
 

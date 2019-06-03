@@ -570,7 +570,7 @@ NAN_METHOD(flueGasCalculateO2) {
     GasCompositions comp("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
-    Local<Number> rv = Nan::New(comp.calculateO2(Get("excessAir") / 100.0));
+    Local<Number> rv = Nan::New(comp.calculateO2(Get("excessAir")));
     info.GetReturnValue().Set(rv);
 }
 
@@ -580,16 +580,16 @@ NAN_METHOD(flueGasCalculateExcessAir) {
     GasCompositions comp("", Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
-    Local<Number> rv = Nan::New(comp.calculateExcessAir(Get("o2InFlueGas") / 100.0));
+    Local<Number> rv = Nan::New(comp.calculateExcessAir(Get("o2InFlueGas")));
     info.GetReturnValue().Set(rv);
 }
 
 NAN_METHOD(flueGasByMassCalculateO2) {
     inp = info[0]->ToObject();
-    auto const v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(Get("excessAir") / 100, Get("carbon") / 100,
-                                                                                Get("hydrogen") / 100, Get("sulphur") / 100,
-                                                                                Get("inertAsh") / 100, Get("o2") / 100,
-                                                                                Get("moisture") / 100, Get("nitrogen") / 100,
+    auto const v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(Get("excessAir"), Get("carbon"),
+                                                                                Get("hydrogen"), Get("sulphur"),
+                                                                                Get("inertAsh"), Get("o2"),
+                                                                                Get("moisture"), Get("nitrogen"),
                                                                                 Get("moistureInAirCombustion"));
 
     Local<Number> rv = Nan::New(v);
@@ -598,10 +598,10 @@ NAN_METHOD(flueGasByMassCalculateO2) {
 
 NAN_METHOD(flueGasByMassCalculateExcessAir) {
     inp = info[0]->ToObject();
-    auto const v = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(Get("o2InFlueGas") / 100, Get("carbon") / 100,
-                                                                                Get("hydrogen") / 100, Get("sulphur") / 100,
-                                                                                Get("inertAsh") / 100, Get("o2") / 100,
-                                                                                Get("moisture") / 100, Get("nitrogen") / 100,
+    auto const v = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(Get("o2InFlueGas"), Get("carbon"),
+                                                                                Get("hydrogen"), Get("sulphur"),
+                                                                                Get("inertAsh"), Get("o2"),
+                                                                                Get("moisture"), Get("nitrogen"),
                                                                                 Get("moistureInAirCombustion"));
 
     Local<Number> rv = Nan::New(v);
