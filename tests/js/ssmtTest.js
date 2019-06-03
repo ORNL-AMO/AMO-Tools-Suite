@@ -362,16 +362,16 @@ test('turbine', function (t) {
     t.equal(rnd(res.inletSpecificEnthalpy), rnd(3707.397118));
     t.equal(rnd(res.inletSpecificEntropy), rnd(7.384098));
     t.equal(rnd(res.inletQuality), rnd(1));
-    t.equal(rnd(res.inletEnergyFlow), rnd(58739.99993));
+    t.equal(rnd(res.inletEnergyFlow), rnd(58739999.930197));
 
     t.equal(rnd(res.outletPressure), rnd(3.4781));
     t.equal(rnd(res.outletTemperature), rnd(872.338861));
     t.equal(rnd(res.outletSpecificEnthalpy), rnd(3677.155392));
     t.equal(rnd(res.outletSpecificEntropy), rnd(7.436479));
     t.equal(rnd(res.outletQuality), rnd(1));
-    t.equal(rnd(res.outletEnergyFlow), rnd(58260.850027));
+    t.equal(rnd(res.outletEnergyFlow), rnd(58260850.026976));
 
-    t.equal(rnd(res.massFlow), rnd(15.844));
+    t.equal(rnd(res.massFlow), rnd(15844));
     t.equal(rnd(res.isentropicEfficiency), rnd(40.1));
     t.equal(rnd(res.energyOut), rnd(479.149903));
     t.equal(rnd(res.powerOut), rnd(451.359209));
@@ -409,7 +409,7 @@ test('turbine', function (t) {
 
 });
 
-test('heatExchanger', function(t) { 
+test('heatExchanger', function(t) {
     t.plan(32);
 
     input = {

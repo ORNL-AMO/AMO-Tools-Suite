@@ -23,11 +23,12 @@ Deaerator::Deaerator(const double deaeratorPressure, const double ventRate, cons
 
 void Deaerator::calculateProperties() {
     auto const sp = SaturatedProperties(deaeratorPressure, SaturatedTemperature(deaeratorPressure).calculate()).calculate();
-	SteamSystemModelerTool::SteamPropertiesOutput steamProps = {sp.temperature, sp.pressure, 0, 0, 0, sp.liquidSpecificEnthalpy,
+	SteamSystemModelerTool::SteamPropertiesOutput steamProps = {sp.temperature, sp.pressure, 0, sp.liquidSpecificVolume,
+                                                             1/sp.liquidSpecificVolume, sp.liquidSpecificEnthalpy,
 																sp.liquidSpecificEntropy};
 	feedwaterProperties = {feedwaterMassFlow, steamProps.specificEnthalpy * feedwaterMassFlow / 1000, steamProps};
 
-	steamProps = {sp.temperature, sp.pressure, 1, 0, 0, sp.gasSpecificEnthalpy,
+	steamProps = {sp.temperature, sp.pressure, 1, sp.gasSpecificVolume, 1/sp.gasSpecificVolume, sp.gasSpecificEnthalpy,
 				  sp.gasSpecificEntropy};
 	auto const ventedSteamMassFlow = (ventRate / 100) * feedwaterMassFlow;
 	ventedSteamProperties = {
