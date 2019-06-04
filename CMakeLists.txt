@@ -114,7 +114,8 @@ set(SOURCE_FILES
         src/calculator/util/CompressedAir.cpp
         src/calculator/util/CHP.cpp
         src/calculator/util/ElectricityReduction.cpp
-        src/calculator/util/NaturalGasReduction.cpp)
+        src/calculator/util/NaturalGasReduction.cpp
+        src/calculator/util/CompressedAirReduction.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -193,6 +194,7 @@ set(INCLUDE_FILES
         include/calculator/util/CompressedAir.h
         include/calculator/util/ElectricityReduction.h
         include/calculator/util/NaturalGasReduction.h
+        include/calculator/util/CompressedAirReduction.h
         include/calculator/motor/MotorData.h
         include/fans/CompressibilityFactor.h
         include/results/InputData.h
@@ -227,6 +229,7 @@ set(TEST_FILES
         tests/EfficiencyImprovement.unit.cpp
         tests/ElectricityReduction.unit.cpp
         tests/NaturalGasReduction.unit.cpp
+        tests/CompressedAirReduction.unit.cpp
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp
