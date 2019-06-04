@@ -2,6 +2,7 @@
  * @brief Contains all the implementations of the various components of a compressed air system
  *
  * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (aeledbetter)
  * @bug No known bugs.
  *
  */
@@ -325,9 +326,9 @@ namespace Compressor {
 		PneumaticValve(double inletPressure, double outletPressure);
 		/**
 		 * Constructor for Compressor::PneumaticValve - used for finding the flow coefficient (Cv) when the flow rate is known
-		 * @param inletPressure double,
-		 * @param outletPressure double,
-		 * @param flowRate double,
+		 * @param inletPressure double, psi
+		 * @param outletPressure double, psi
+		 * @param flowRate double, scfm
 		 */
 		PneumaticValve(double inletPressure, double outletPressure, double flowRate);
 

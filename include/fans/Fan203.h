@@ -2,8 +2,9 @@
  * @brief Contains some of the Fan related classes
  *
  * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (Aeledbetter)
  * @bug No known bugs.
- *
+ * 
  */
 
 #ifndef AMO_TOOLS_SUITE_FAN_H
@@ -23,28 +24,53 @@ class Planar;
 class FlangePlane;
 class TraversePlane;
 class MstPlane;
+/**
+ * Base Gas Density Class
+ * Calculates base gas density
+ */
 
 class BaseGasDensity {
 public:
-
+ /**
+  * enum class for Gas Type
+  * 
+  */
 	enum class GasType {
 		AIR,
 		STANDARDAIR,
 		OTHERGAS
 	};
-
+/**
+ * enum class for Input Type
+ * 
+ */
 	enum class InputType {
 		DewPoint,
 		RelativeHumidity,
 		WetBulbTemp
 	};
-
+/**
+ * @param dryBulbTemp double, temperature of inputted air in °F
+ * @param staticPressure const, double, pressure in Hg 
+ * @param barometricPressure,const, double in Hg
+ * @param gasDensity const, double, density of a gas in pounds per sqft,lb/scf
+ * @param gasType, double, gas, type of gas
+ */
 	// used for method 1
 	BaseGasDensity(const double dryBulbTemp, const double staticPressure, const double barometricPressure,
 	               const double gasDensity, const GasType gasType)
 			: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), po(gasDensity), gasType(gasType)
 	{}
-
+/**
+ * @param dryBulbTemp double, const, temperature of inputted air in °F
+ * @param staticPressure double, const, pressure in inches of water (in WC)
+ * @param barometricPressure, double, const,  pressure in Hg
+ * @param relativeHumidityOrDewPoint double, const, relative humidity in % or Dewpoint in °F
+ * @param gasType, double, gas, type of gas, unitless
+ * @param inputType const, type of input, unitless
+ * @param specificGravity, double, const, specific gravity, unitless
+ * @return BaseGasDensity double, density of the gas in pounds per sqft, lb/scf
+ */
 	// TODO ensure correctness
 	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
 	               double const relativeHumidityOrDewPoint, GasType const gasType,
@@ -82,7 +108,11 @@ public:
 	}
 
 private:
-
+/**
+ * @brief Calculates Saturation Pressure
+ * 
+ * @param dryBulbTemp double, temperature of inputted air in °F
+ */
 	double calculateSaturationPressure(double dryBulbTemp) const {
 		double const C1 = -5674.5359, C2 = -0.51523058, C3 = -0.009677843, C4 = 0.00000062215701;
 		double const C5 = 2.0747825 * std::pow(10, -9), C6 = -9.0484024 * std::pow(10, -13), C7 = 4.1635019, C8 = -5800.2206;
@@ -101,14 +131,27 @@ private:
 
 		return p * (29.9216 / 101.325);
 	}
-
+/**
+ * @brief Calculates Relative Humidity Ratio
+ * 
+ * @param dryBulbTemp double, temperature of inputted air in °F 
+ * @param relativeHumidity double, relative humidity as %
+ * @param barometricPressure double, pressure in Hg 
+ * @param specificGravity double, specific gravity, unitless
+ */
 	double calculateRatioRH(const double dryBulbTemp, const double relativeHumidity, const double barometricPressure,
 	                        const double specificGravity) const
 	{
 		auto const pw = (calculateSaturationPressure(dryBulbTemp) * relativeHumidity);
 		return (18.02 / (specificGravity * 28.98)) * pw / (barometricPressure - pw);
 	}
-
+/**
+ * @brief Calculates Relative Humidity from Wet Bulb Temperature
+ * 
+ * @param dryBulbTemp double, temperature of inputted air in °F
+ * @param wetBulbTemp double, wet bulb temperature in °F
+ * @param cpGas double, BTU/lb-degF
+ */
 	double calculateRelativeHumidityFromWetBulb(const double dryBulbTemp, const double wetBulbTemp,
 	                                            const double cpGas) const {
 		double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
@@ -127,6 +170,10 @@ private:
 	const double tdo, pso, pbo;
 
 	// gasDensity, specificGravity
+	/**
+	 * @param po double, GasDensity, density of a gas in pounds per sqft, lb/scf
+	 * @param g double, Specific Gravity, unitless
+	 */
 	double po, g;
 	const GasType gasType;
 
@@ -134,10 +181,22 @@ private:
 	friend class Fan203;
 };
 
-
+/**
+ * Constructor for the Plane Data class
+ * Calculates Plane Data
+ * 
+ */
 class PlaneData {
 public:
+
 	// used to access private stuff from the nan bindings
+	/**
+	 * @param density const, double, density in pounds per sqft, lb/scf
+	 * @param velocity const, double, velocity in ft/min
+	 * @param volumeFlowRate const, double,  ft3/min
+	 * @param velocityPressure const, double, pressure in inches of water (in WC)
+	 * @param totalPressure const, double, pressure in inches of water (in WC)
+	 */
 	struct NodeBinding {
 		struct Data {
 			Data(const double density, const double velocity, const double volumeFlowRate, const double velocityPressure,
@@ -147,6 +206,14 @@ public:
 
 			const double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
 		};
+	/**
+	 * @param density const, double, density in pounds per sqft, lb/scf
+	 * @param velocity const, double, velocity in ft/min
+	 * @param volumeFlowRate const, double, ft3/min
+	 * @param velocityPressure const, double, pressure in inches of water (in WC)
+	 * @param totalPressure const, double, pressure in inches of water (in WC)
+	 * @staticPressure const, double, pressure in inches of water (in WC)
+	 */
 		struct DataFlange : Data {
 			DataFlange(const double density, const double velocity, const double volumeFlowRate, const double velocityPressure,
 				 const double totalPressure, const double staticPressure)
@@ -168,7 +235,6 @@ public:
 			Data flowTraverse, inletMstPlane, outletMstPlane;
 			std::vector<Data> addlTravPlanes;
 		};
-
 		static Output calculate(PlaneData & planeData, BaseGasDensity const & baseGasDensity) {
 			planeData.calculate(baseGasDensity);
 			return Output(planeData);
@@ -289,7 +355,11 @@ private:
 	friend struct NodeBinding;
 };
 
-
+/**
+ * Constructor for Fan203
+ * Calculates Fan203
+ *
+ */
 class Fan203 {
 public:
 	Fan203(FanRatedInfo fanRatedInfo, PlaneData planeData, BaseGasDensity baseGasDensity, FanShaftPower fanShaftPower)
