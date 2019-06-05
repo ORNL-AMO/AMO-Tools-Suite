@@ -26,5 +26,6 @@ script:
   - cmake ./
   - make
   - ./bin/amo_tools_suite_tests
+  - npm i -g npm@10.11
   - npm run test
   - doxygen Doxyfile.in
