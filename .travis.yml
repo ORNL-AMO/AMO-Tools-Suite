@@ -12,12 +12,17 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update;
       brew install doxygen;
-      brew upgrade node;
-
+#      brew upgrade node;
+      brew install node@10.11;
+      npm install;
+      
     else
       sudo apt-get update;
       sudo apt-get install doxygen;
-      sudo apt-get install npm;
+#      sudo apt-get install npm;
+      npm i -g npm@6.4.1;
+      npm i -g node@10.11;
+      npm install;
     fi
 
 install: travis_retry npm install
@@ -26,8 +31,8 @@ script:
   - cmake ./
   - make
   - ./bin/amo_tools_suite_tests
-  - npm i -g npm@6.4.1
-  - npm i -g node@10.11
+#  - npm i -g npm@6.4.1
+#  - npm i -g node@10.11
   - npm install
   - npm run test
   - doxygen Doxyfile.in
