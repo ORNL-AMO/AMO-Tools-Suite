@@ -22,7 +22,7 @@ void Header::calculate() {
 		inletMassFlow += inlet.getMassFlow();
 	}
 
-	specificEnthalpy = inletEnergyFlow / inletMassFlow;
+	specificEnthalpy = (inletMassFlow == 0.0) ? 0.0 : inletEnergyFlow / inletMassFlow;
 	headerProperties = SteamProperties(headerPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
 	                                   specificEnthalpy).calculate();
 }
@@ -62,4 +62,3 @@ void Inlet::setQuantityType(const SteamProperties::ThermodynamicQuantity quantit
 	this->quantityType = quantityType;
 	calculate();
 }
-
