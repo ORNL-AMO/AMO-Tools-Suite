@@ -13,7 +13,7 @@ before_install:
       brew update;
       brew install doxygen;
 #      brew upgrade node;
-      brew install node@10.11;
+#      brew install node@10.11;
 #      npm install;
       
     else
