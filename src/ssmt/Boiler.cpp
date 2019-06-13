@@ -21,16 +21,16 @@ Boiler::Boiler(const double deaeratorPressure, const double combustionEfficiency
 
 void Boiler::calculateProperties() {
 	auto sp = SteamProperties(steamPressure, quantityType, quantityValue).calculate();
-	steamProperties = {steamMassFlow, sp.specificEnthalpy * steamMassFlow / 1000, sp};
+	steamProperties = {steamMassFlow, sp.specificEnthalpy * steamMassFlow, sp};
 	steamProperties.quality = 1; // TODO question tell UI guys that there needs to be a warning
 
 	sp = SteamProperties(deaeratorPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
 	feedwaterProperties = {steamMassFlow / (1 - blowdownRate / 100),
-	                       sp.specificEnthalpy * (steamMassFlow / (1 - blowdownRate / 100)) / 1000, sp};
+	                       sp.specificEnthalpy * (steamMassFlow / (1 - blowdownRate / 100)), sp};
 
 	sp = SteamProperties(steamPressure, SteamProperties::ThermodynamicQuantity::QUALITY, 0).calculate();
 	double const blowdownMassFlow = feedwaterProperties.massFlow * (blowdownRate / 100);
-	blowdownProperties = {blowdownMassFlow, sp.specificEnthalpy * blowdownMassFlow / 1000, sp};
+	blowdownProperties = {blowdownMassFlow, sp.specificEnthalpy * blowdownMassFlow, sp};
 
 	boilerEnergy = steamProperties.energyFlow + blowdownProperties.energyFlow - feedwaterProperties.energyFlow;
 	fuelEnergy = boilerEnergy / (combustionEfficiency / 100);

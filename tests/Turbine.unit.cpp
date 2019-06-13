@@ -9,8 +9,8 @@ TEST_CASE( "Turbine", "[Turbine]") {
 	CHECK( t.getInletProperties().specificEnthalpy == Approx(3707.3971175332));
 	CHECK( t.getInletProperties().specificEntropy == Approx(7.384097768));
 	CHECK( t.getInletEnergyFlow() == Approx(58739999.9301967993));
-	CHECK( t.getEnergyOut() == Approx(479.1499));
-	CHECK( t.getPowerOut() == Approx(451.35921));
+	CHECK( t.getEnergyOut() == Approx(479149.9032));
+	CHECK( t.getPowerOut() == Approx(451359.2088));
 
 	t = Turbine(Turbine::Solve::OutletProperties, 4.2112, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 888,
 	            Turbine::TurbineProperty::PowerOut, 40.1, 94.2, 1000, 3.4781);
@@ -38,8 +38,8 @@ TEST_CASE( "Turbine", "[Turbine]") {
 	CHECK( t.getOutletProperties().specificEntropy == Approx(7.5625702284));
 	CHECK( t.getOutletEnergyFlow() == Approx(90537653.5176413357));
 	CHECK( t.getMassFlow() == Approx(28581.0));
-	CHECK( t.getEnergyOut() == Approx(10954.12251));
-	CHECK( t.getPowerOut() == Approx(9650.5819278));
+	CHECK( t.getEnergyOut() == Approx(10954122.5059));
+	CHECK( t.getPowerOut() == Approx(9650581.9278));
 
 	t = Turbine(Turbine::Solve::IsentropicEfficiency, 5.3511, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
 	            824.7, Turbine::TurbineProperty::PowerOut, 88.1, 1000, 0.5846,
