@@ -10,6 +10,7 @@
 #define AMO_TOOLS_SUITE_INPUT_DATA_H
 
 #include <cmath>
+#include "calculator/util/Conversion.h"
 
 struct Motor {
 	enum class EfficiencyClass {
@@ -63,7 +64,7 @@ struct Motor {
 
 namespace Fan {
 	struct Input {
-		Input(double const fanSpeed, const double airDensity, const Motor::Drive drive, const double specifiedEfficiency)
+		Input(const double fanSpeed, const double airDensity, const Motor::Drive drive, double specifiedEfficiency)
 				: fanSpeed(fanSpeed), airDensity(airDensity), drive(drive), specifiedEfficiency(specifiedEfficiency)
 		{}
 
@@ -167,17 +168,26 @@ namespace Pump {
 		 * @param stageCount int, the number of pump stages
 		 * @param speed Speed, type of pump speed from either fixed or not fixed.
 		 */
-		Input(const Style style, const double pumpEfficiency, const double rpm, const Motor::Drive drive,
+		Input(const Style style, double pumpEfficiency, const double rpm, const Motor::Drive drive,
 		     const double kviscosity,
-		     const double specificGravity, const int stageCount, const SpecificSpeed speed, const double specifiedEfficiency)
+		     const double specificGravity, const int stageCount, const SpecificSpeed speed, double specifiedEfficiency)
 				: style(style), drive(drive), speed(speed), pumpEfficiency(pumpEfficiency), rpm(rpm),
 				  kviscosity(kviscosity),
-				  specificGravity(specificGravity), stageCount(stageCount), specifiedEfficiency(specifiedEfficiency) {};
+				  specificGravity(specificGravity), stageCount(stageCount), specifiedEfficiency(specifiedEfficiency) {
+					  /**
+					   * Convert percent values to fractions for proper calculation  
+					   */
+					//   this->specifiedEfficiency = Conversion(specifiedEfficiency).percentToFraction();
+					//   this->pumpEfficiency = Conversion(pumpEfficiency).percentToFraction();
+					//   this->specifiedEfficiency = specifiedEfficiency / 100.0;
+					//   this->pumpEfficiency = pumpEfficiency / 100.0;
+				  };
 
 		const Style style;
 		const Motor::Drive drive;
 		const SpecificSpeed speed;
-		const double pumpEfficiency, rpm, kviscosity, specificGravity, specifiedEfficiency;
+		const double rpm, kviscosity, specificGravity;
+		double pumpEfficiency, specifiedEfficiency;
 		const int stageCount;
 	};
 }
