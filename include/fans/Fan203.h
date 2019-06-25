@@ -308,11 +308,17 @@ private:
 
 		flowTraverse.gasVelocity = 1096 * std::sqrt(flowTraverse.pv3 / flowTraverse.gasDensity);
 		flowTraverse.gasVolumeFlowRate = flowTraverse.gasVelocity * flowTraverse.area;
+		//MARK ADDITION FOR issue 259
+		flowTraverse.gasVelocityPressure = flowTraverse.gasDensity * std::pow((flowTraverse.gasVelocity / 1096), 2);
+		flowTraverse.gasTotalPressure = flowTraverse.staticPressure + flowTraverse.gasVelocityPressure;
 
 		double mTotal = flowTraverse.gasDensity * flowTraverse.gasVolumeFlowRate;
 		for (auto & plane : addlTravPlanes) {
 			plane.gasVelocity = 1096 * std::sqrt(plane.pv3 / plane.gasDensity);
 			plane.gasVolumeFlowRate = plane.gasVelocity * plane.area;
+		 	//MARK ADDITION FOR issue 259
+			plane.gasVelocityPressure = plane.gasDensity * std::pow((plane.gasVelocity / 1096), 2);
+			plane.gasTotalPressure = plane.staticPressure + plane.gasVelocityPressure;
 			mTotal += plane.gasDensity * plane.gasVolumeFlowRate;
 		}
 
