@@ -23,47 +23,40 @@ Deaerator::Deaerator(const double deaeratorPressure, const double ventRate, cons
 
 void Deaerator::calculateProperties() {
     auto const sp = SaturatedProperties(deaeratorPressure, SaturatedTemperature(deaeratorPressure).calculate()).calculate();
-    feedwaterProperties = {
-            {"temperature", sp.at("temperature")},
-            {"pressure", sp.at("pressure")},
-            {"specificEnthalpy", sp.at("liquidSpecificEnthalpy")},
-            {"specificEntropy", sp.at("liquidSpecificEntropy")},
-            {"quality", 0},
-            {"massFlow", feedwaterMassFlow},
-            {"energyFlow", sp.at("liquidSpecificEnthalpy") * feedwaterMassFlow / 1000}
-    };
+	SteamSystemModelerTool::SteamPropertiesOutput steamProps = {sp.temperature, sp.pressure, 0, sp.liquidSpecificVolume,
+                                                             1/sp.liquidSpecificVolume, sp.liquidSpecificEnthalpy,
+																sp.liquidSpecificEntropy};
+	feedwaterProperties = {feedwaterMassFlow, steamProps.specificEnthalpy * feedwaterMassFlow, steamProps};
 
-    auto const ventedSteamMassFlow = (ventRate / 100) * feedwaterMassFlow;
-    ventedSteamProperties = {
-            {"temperature", sp.at("temperature")},
-            {"pressure", sp.at("pressure")},
-            {"specificEnthalpy", sp.at("gasSpecificEnthalpy")},
-            {"specificEntropy", sp.at("gasSpecificEntropy")},
-            {"quality", 1},
-            {"massFlow", ventedSteamMassFlow},
-            {"energyFlow", sp.at("gasSpecificEnthalpy") * ventedSteamMassFlow / 1000}
-    };
+	steamProps = {sp.temperature, sp.pressure, 1, sp.gasSpecificVolume, 1/sp.gasSpecificVolume, sp.gasSpecificEnthalpy,
+				  sp.gasSpecificEntropy};
+	auto const ventedSteamMassFlow = (ventRate / 100) * feedwaterMassFlow;
+	ventedSteamProperties = {
+			ventedSteamMassFlow, steamProps.specificEnthalpy * ventedSteamMassFlow, steamProps
+	};
 
-    inletWaterProperties = SteamProperties(waterPressure, waterQuantityType, waterQuantityValue).calculate();
-    inletSteamProperties = SteamProperties(steamPressure, steamQuantityType, steamQuantityValue).calculate();
+	auto inletWaterProps = SteamProperties(waterPressure, waterQuantityType, waterQuantityValue).calculate();
+	auto inletSteamProps = SteamProperties(steamPressure, steamQuantityType, steamQuantityValue).calculate();
 
     auto const totalDAMassFlow = ventedSteamMassFlow + feedwaterMassFlow;
-    auto const totalOutletEnergyFlow = (feedwaterProperties.at("specificEnthalpy") * feedwaterMassFlow
-                                        + ventedSteamProperties.at("specificEnthalpy") * ventedSteamMassFlow) / 1000;
-    auto const minEnergyFlow = inletWaterProperties.at("specificEnthalpy") * totalDAMassFlow / 1000;
+    auto const totalOutletEnergyFlow = (feedwaterProperties.specificEnthalpy * feedwaterMassFlow
+                                        + ventedSteamProperties.specificEnthalpy * ventedSteamMassFlow);
+    auto const minEnergyFlow = inletWaterProps.specificEnthalpy * totalDAMassFlow;
     auto const neededEnergyFlow = totalOutletEnergyFlow - minEnergyFlow;
-    auto const inletSteamMassFlow = 1000 * neededEnergyFlow / (inletSteamProperties.at("specificEnthalpy")
-                                                               - inletWaterProperties.at("specificEnthalpy"));
+    auto const inletSteamMassFlow = neededEnergyFlow / (inletSteamProps.specificEnthalpy
+                                                        - inletWaterProps.specificEnthalpy);
 
     auto const inletWaterMassFlow = totalDAMassFlow - inletSteamMassFlow;
-    auto const inletSteamEnergyFlow = inletSteamProperties.at("specificEnthalpy") * inletSteamMassFlow / 1000;
-    auto const inletWaterEnergyFlow = inletWaterProperties.at("specificEnthalpy") * inletWaterMassFlow / 1000;
+    auto const inletSteamEnergyFlow = inletSteamProps.specificEnthalpy * inletSteamMassFlow;
+    auto const inletWaterEnergyFlow = inletWaterProps.specificEnthalpy * inletWaterMassFlow;
 
-    inletWaterProperties["massFlow"] = inletWaterMassFlow;
-    inletWaterProperties["energyFlow"] = inletWaterEnergyFlow;
+	inletWaterProperties = {
+			inletWaterMassFlow, inletWaterEnergyFlow, inletWaterProps
+	};
 
-    inletSteamProperties["massFlow"] = inletSteamMassFlow;
-    inletSteamProperties["energyFlow"] = inletSteamEnergyFlow;
+	inletSteamProperties = {
+			inletSteamMassFlow, inletSteamEnergyFlow, inletSteamProps
+	};
 }
 
 double Deaerator::getDeaeratorPressure() const { return deaeratorPressure; }

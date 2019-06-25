@@ -1,10 +1,52 @@
 const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../')
-    , bindings = require('bindings')({ module_root: testRoot, bindings: 'ssmt'});
+    , bindings = require('bindings')({module_root: testRoot, bindings: 'ssmt'});
 
 function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
 }
+
+test('steamPropertiesData', function (t) {
+    t.plan(10);
+
+    var input = {
+        "pressure": 5,
+        "wantEntropy": true
+    };
+
+    var res = bindings.steamPropertiesData(input);
+
+    var data = res.results;
+
+
+    input.wantEntropy = false;
+    input.temperature = 300;
+
+    res = bindings.steamPropertiesData(input);
+
+    var otherData = res.results;
+
+    t.equal(rnd(data[1].entropy), rnd(0.10000000000005363), 'data[1].entropy is ' + data[1].entropy);
+
+    t.equal(rnd(data[5].entropy), rnd(0.4999999999999979), 'data[5].entropy is ' + data[5].entropy);
+
+    t.equal(rnd(data[10].entropy), rnd(0.9999999999999997), 'data[10].entropy is ' + data[10].entropy);
+
+    t.equal(rnd(data[15].entropy), rnd(1.500000000000002), 'data[15].entropy is ' + data[15].entropy);
+
+    t.equal(rnd(data[20].entropy), rnd(2.0000000000000013), 'data[20].entropy is ' + data[20].entropy);
+
+    t.equal(rnd(data[25].entropy), rnd(2.5000000000000004), 'data[25].entropy is ' + data[25].entropy);
+
+    t.equal(rnd(data[60].entropy), rnd(5.9999999999999964), 'data[60].entropy is ' + data[60].entropy);
+
+    t.equal(rnd(data[65].entropy), rnd(6.499999999999992), 'data[65].entropy is ' + data[65].entropy);
+
+    t.equal(rnd(data[70].entropy), rnd(6.999999999999992), 'data[70].entropy is ' + data[70].entropy);
+
+    t.equal(rnd(data[75].entropy), rnd(7.49999999999999), 'data[75].entropy is ' + data[75].entropy);
+
+});
 
 test('saturatedPropertiesGivenTemperature', function (t) {
     t.plan(12);
@@ -22,19 +64,19 @@ test('saturatedPropertiesGivenTemperature', function (t) {
 
     t.equal(rnd(res.liquidEnthalpy), rnd(112.57499081240724), 'res.liquidEnthalpy is ' + res.liquidEnthalpy);
 
-    t.equal(rnd(res.gasEnthalpy), rnd(2549.8930083073265), 'res.gasEnthalpy is '+ res.gasEnthalpy);
+    t.equal(rnd(res.gasEnthalpy), rnd(2549.8930083073265), 'res.gasEnthalpy is ' + res.gasEnthalpy);
 
     t.equal(rnd(res.evaporationEnthalpy), rnd(2437.3180174949193), 'res.evaporationEnthalpy is ' + res.evaporationEnthalpy);
 
     t.equal(rnd(res.liquidEntropy), rnd(0.3931236014741), 'res.liquidEntropy is ' + res.liquidEntropy);
 
-    t.equal(rnd(res.gasEntropy), rnd(8.517536685028846), 'res.gasEntropy is '+ res.gasEntropy);
+    t.equal(rnd(res.gasEntropy), rnd(8.517536685028846), 'res.gasEntropy is ' + res.gasEntropy);
 
     t.equal(rnd(res.evaporationEntropy), rnd(8.124413083554746), 'res.evaporationEntropy is ' + res.evaporationEntropy);
 
     t.equal(rnd(res.liquidVolume), rnd(0.0010034979299339492), 'res.liquidVolume is ' + res.liquidVolume);
 
-    t.equal(rnd(res.gasVolume), rnd(39.08205832377987), 'res.gasVolume is '+ res.gasVolume);
+    t.equal(rnd(res.gasVolume), rnd(39.08205832377987), 'res.gasVolume is ' + res.gasVolume);
 
     t.equal(rnd(res.evaporationVolume), rnd(39.08105482584993), 'res.evaporationVolume is ' + res.evaporationVolume);
 
@@ -56,19 +98,19 @@ test('saturatedPropertiesGivenPressure', function (t) {
 
     t.equal(rnd(res.liquidEnthalpy), rnd(1827.1006242178723), 'res.liquidEnthalpy is ' + res.liquidEnthalpy);
 
-    t.equal(rnd(res.gasEnthalpy), rnd(2421.680542687896), 'res.gasEnthalpy is '+ res.gasEnthalpy);
+    t.equal(rnd(res.gasEnthalpy), rnd(2421.680542687896), 'res.gasEnthalpy is ' + res.gasEnthalpy);
 
     t.equal(rnd(res.evaporationEnthalpy), rnd(594.5799184700236), 'res.evaporationEnthalpy is ' + res.evaporationEnthalpy);
 
     t.equal(rnd(res.liquidEntropy), rnd(4.015381593120578), 'res.liquidEntropy is ' + res.liquidEntropy);
 
-    t.equal(rnd(res.gasEntropy), rnd(4.946001326758373), 'res.gasEntropy is '+ res.gasEntropy);
+    t.equal(rnd(res.gasEntropy), rnd(4.946001326758373), 'res.gasEntropy is ' + res.gasEntropy);
 
     t.equal(rnd(res.evaporationEntropy), rnd(0.930619733637795), 'res.evaporationEntropy is ' + res.evaporationEntropy);
 
     t.equal(rnd(res.liquidVolume), rnd(0.0020386472456956663), 'res.liquidVolume is ' + res.liquidVolume);
 
-    t.equal(rnd(res.gasVolume), rnd(0.005936854102266306), 'res.gasVolume is '+ res.gasVolume);
+    t.equal(rnd(res.gasVolume), rnd(0.005936854102266306), 'res.gasVolume is ' + res.gasVolume);
 
     t.equal(rnd(res.evaporationVolume), rnd(0.0038982068565706395), 'res.evaporationVolume is ' + res.evaporationVolume);
 });
@@ -95,7 +137,7 @@ test('steamProperties', function (t) {
 
     t.equal(rnd(res.quality), rnd(0.44940059413065064), 'res.quality is ' + res.quality);
 
-    t.equal(rnd(res.specificVolume), rnd(0.008904111059648875), 'res.specificVolume is '+ res.specificVolume);
+    t.equal(rnd(res.specificVolume), rnd(0.008904111059648875), 'res.specificVolume is ' + res.specificVolume);
 
 });
 
@@ -104,20 +146,20 @@ test('boiler', function (t) {
     t.type(bindings.boiler, 'function');
 
     var inp = {
-        deaeratorPressure : 10, combustionEfficiency : 85, blowdownRate : 2,
-        steamPressure : 20, thermodynamicQuantity : 1, //1 is ENTHALPY
-        quantityValue : 2000, steamMassFlow : 45
+        deaeratorPressure: 10, combustionEfficiency: 85, blowdownRate: 2,
+        steamPressure: 20, thermodynamicQuantity: 1, //1 is ENTHALPY
+        quantityValue: 2000, steamMassFlow: 45
     };
 
     var res = bindings.boiler(inp);
 
-    t.equal(rnd(res.steamEnergyFlow), rnd(110.7533647508802), 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
+    t.equal(rnd(res.steamEnergyFlow), rnd(110753.36475088508), 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
     t.equal(rnd(res.blowdownMassFlow), rnd(0.9183673469387756), 'res.blowdownMassFlow is ' + res.blowdownMassFlow);
-    t.equal(rnd(res.blowdownEnergyFlow), rnd(1.6779495528531483), 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
+    t.equal(rnd(res.blowdownEnergyFlow), rnd(1677.949552853158), 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
     t.equal(rnd(res.feedwaterMassFlow), rnd(45.91836734693878), 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
-    t.equal(rnd(res.feedwaterEnergyFlow), rnd(64.64697706690914), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
-    t.equal(rnd(res.boilerEnergy), rnd(47.7843372368242), 'res.boilerEnergy is '+ res.boilerEnergy);
-    t.equal(rnd(res.fuelEnergy), rnd(56.216867337440235), 'res.fuelEnergy is '+ res.fuelEnergy);
+    t.equal(rnd(res.feedwaterEnergyFlow), rnd(64646.977066909145), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(rnd(res.boilerEnergy), rnd(47784.337236829095), 'res.boilerEnergy is ' + res.boilerEnergy);
+    t.equal(rnd(res.fuelEnergy), rnd(56216.867337446), 'res.fuelEnergy is ' + res.fuelEnergy);
 });
 
 test('heatLoss', function (t) {
@@ -125,19 +167,19 @@ test('heatLoss', function (t) {
     t.type(bindings.heatLoss, 'function');
 
     var inp = {
-        inletPressure : 2.418,
-        thermodynamicQuantity : 0, //0 is TEMPERATURE
-        quantityValue : 521,
-        inletMassFlow : 5434,
-        percentHeatLoss : 2.44
+        inletPressure: 2.418,
+        thermodynamicQuantity: 0, //0 is TEMPERATURE
+        quantityValue: 521,
+        inletMassFlow: 5434,
+        percentHeatLoss: 2.44
     };
 
     var res = bindings.heatLoss(inp);
 
-    t.equal(rnd(res.inletEnergyFlow), rnd(15642.967348653074), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(rnd(res.inletEnergyFlow), rnd(15642967.348653074), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
     t.equal(res.outletMassFlow, 5434, 'res.outletMassFlow is ' + res.outletMassFlow);
-    t.equal(rnd(res.outletEnergyFlow), rnd(15261.278945345939), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
-    t.equal(rnd(res.heatLoss), rnd(381.68840330713465), 'res.heatLoss is ' + res.heatLoss);
+    t.equal(rnd(res.outletEnergyFlow), rnd(15261278.94534594), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(rnd(res.heatLoss), rnd(381688.4033071343), 'res.heatLoss is ' + res.heatLoss);
 });
 
 test('flashTank', function (t) {
@@ -145,20 +187,20 @@ test('flashTank', function (t) {
     t.type(bindings.flashTank, 'function');
 
     var inp = {
-        inletWaterPressure : 4.54484,
-        thermodynamicQuantity : 1, //1 is ENTHALPY
-        quantityValue : 2000,
-        inletWaterMassFlow : 36133,
-        tankPressure : 3.3884
+        inletWaterPressure: 4.54484,
+        thermodynamicQuantity: 1, //1 is ENTHALPY
+        quantityValue: 2000,
+        inletWaterMassFlow: 36133,
+        tankPressure: 3.3884
     };
 
     var res = bindings.flashTank(inp);
 
-    t.equal(res.inletWaterEnergyFlow, 72266, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
+    t.equal(res.inletWaterEnergyFlow, 72266000, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
     t.equal(rnd(res.outletGasMassFlow), rnd(19667.16383431122), 'res.outletGasMassFlow is ' + res.outletGasMassFlow);
-    t.equal(rnd(res.outletGasEnergyFlow), rnd(55126.79710787576), 'res.outletGasEnergyFlow is ' + res.outletGasEnergyFlow);
+    t.equal(rnd(res.outletGasEnergyFlow), rnd(55126797.107875764), 'res.outletGasEnergyFlow is ' + res.outletGasEnergyFlow);
     t.equal(rnd(res.outletLiquidMassFlow), rnd(16465.83616568878), 'res.outletLiquidMassFlow is ' + res.outletLiquidMassFlow);
-    t.equal(rnd(res.outletLiquidEnergyFlow), rnd(17139.20289212423), 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
+    t.equal(rnd(res.outletLiquidEnergyFlow), rnd(17139202.892124232), 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
 });
 
 test('prvWithoutDesuperheating', function (t) {
@@ -166,18 +208,18 @@ test('prvWithoutDesuperheating', function (t) {
     t.type(bindings.prvWithoutDesuperheating, 'function');
 
     var inp = {
-        inletPressure : 4.8794,
-        thermodynamicQuantity : 0, //0 is TEMPERATURE
-        quantityValue : 691.5,
-        inletMassFlow : 37970,
-        outletPressure : 4.0823
+        inletPressure: 4.8794,
+        thermodynamicQuantity: 0, //0 is TEMPERATURE
+        quantityValue: 691.5,
+        inletMassFlow: 37970,
+        outletPressure: 4.0823
     };
 
     var res = bindings.prvWithoutDesuperheating(inp);
 
-    t.equal(rnd(res.inletEnergyFlow), rnd(123147.93493161911), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(rnd(res.inletEnergyFlow), rnd(123147934.93161911), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
     t.equal(res.outletMassFlow, 37970, 'res.outletMassFlow is ' + res.outletMassFlow);
-    t.equal(rnd(res.outletEnergyFlow), rnd(123147.93493161911), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(rnd(res.outletEnergyFlow), rnd(123147934.93161911), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
     t.equal(rnd(res.inletSpecificEnthalpy), rnd(3243.29562632655), 'res.inletSpecificEnthalpy is ' + res.inletSpecificEnthalpy);
     t.equal(rnd(res.outletSpecificEnthalpy), rnd(3243.29562632655), 'res.outletSpecificEnthalpy is ' + res.outletSpecificEnthalpy);
 });
@@ -187,24 +229,24 @@ test('prvWithDesuperheating', function (t) {
     t.type(bindings.prvWithDesuperheating, 'function');
 
     var inp = {
-        inletPressure : 2.8937,
-        thermodynamicQuantity : 0, //0 is TEMPERATURE
-        quantityValue : 936.3,
-        inletMassFlow : 17599,
-        outletPressure : 0.8188,
-        feedwaterPressure : 0.2937,
-        feedwaterThermodynamicQuantity : 2, //2 is ENTROPY
-        feedwaterQuantityValue : 5,
-        desuperheatingTemp : 708.3
+        inletPressure: 2.8937,
+        thermodynamicQuantity: 0, //0 is TEMPERATURE
+        quantityValue: 936.3,
+        inletMassFlow: 17599,
+        outletPressure: 0.8188,
+        feedwaterPressure: 0.2937,
+        feedwaterThermodynamicQuantity: 2, //2 is ENTROPY
+        feedwaterQuantityValue: 5,
+        desuperheatingTemp: 708.3
     };
 
     var res = bindings.prvWithDesuperheating(inp);
 
-    t.equal(rnd(res.inletEnergyFlow), rnd(67367.3111113208), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(rnd(res.inletEnergyFlow), rnd(67367311.1113208), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
     t.equal(rnd(res.outletMassFlow), rnd(23583.469367594505), 'res.outletMassFlow is ' + res.outletMassFlow);
-    t.equal(rnd(res.outletEnergyFlow), rnd(78812.94289252072), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(rnd(res.outletEnergyFlow), rnd(78812942.89252071), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
     t.equal(rnd(res.feedwaterMassFlow), rnd(5984.4693675945055), 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
-    t.equal(rnd(res.feedwaterEnergyFlow), rnd(11445.631781199914), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(rnd(res.feedwaterEnergyFlow), rnd(11445631.781199913), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
 });
 
 test('deaerator', function (t) {
@@ -212,26 +254,26 @@ test('deaerator', function (t) {
     t.type(bindings.deaerator, 'function');
 
     var inp = {
-        deaeratorPressure : 0.1998,
-        ventRate : 0.4,
-        feedwaterMassFlow : 41685,
-        waterPressure : 0.1235,
-        waterThermodynamicQuantity : 1, //1 is ENTHALPY
-        waterQuantityValue : 100,
-        steamPressure : 0.4777,
-        steamThermodynamicQuantity : 2, //2 is ENTROPY
-        steamQuantityValue : 6
+        deaeratorPressure: 0.1998,
+        ventRate: 0.4,
+        feedwaterMassFlow: 41685,
+        waterPressure: 0.1235,
+        waterThermodynamicQuantity: 1, //1 is ENTHALPY
+        waterQuantityValue: 100,
+        steamPressure: 0.4777,
+        steamThermodynamicQuantity: 2, //2 is ENTROPY
+        steamQuantityValue: 6
     };
 
     var res = bindings.deaerator(inp);
 
-    t.equal(rnd(res.feedwaterEnergyFlow), rnd(21032.14129813274), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(rnd(res.feedwaterEnergyFlow), rnd(21032141.29813274), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
     t.equal(res.ventedSteamMassFlow, 166.74, 'res.ventedSteamMassFlow is ' + res.ventedSteamMassFlow);
-    t.equal(rnd(res.ventedSteamEnergyFlow), rnd(451.2310290232193), 'res.ventedSteamEnergyFlow is ' + res.ventedSteamEnergyFlow);
+    t.equal(rnd(res.ventedSteamEnergyFlow), rnd(451231.0290232193), 'res.ventedSteamEnergyFlow is ' + res.ventedSteamEnergyFlow);
     t.equal(rnd(res.inletWaterMassFlow), rnd(34305.35779780327), 'res.inletWaterMassFlow is ' + res.inletWaterMassFlow);
-    t.equal(rnd(res.inletWaterEnergyFlow), rnd(3430.535779780379), 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
+    t.equal(rnd(res.inletWaterEnergyFlow), rnd(3430535.779780379), 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
     t.equal(rnd(res.inletSteamMassFlow), rnd(7546.382202196729), 'res.inletSteamMassFlow is ' + res.inletSteamMassFlow);
-    t.equal(rnd(res.inletSteamEnergyFlow), rnd(18052.836547375577), 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
+    t.equal(rnd(res.inletSteamEnergyFlow), rnd(18052836.54737558), 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
 });
 
 test('header', function (t) {
@@ -320,19 +362,19 @@ test('turbine', function (t) {
     t.equal(rnd(res.inletSpecificEnthalpy), rnd(3707.397118));
     t.equal(rnd(res.inletSpecificEntropy), rnd(7.384098));
     t.equal(rnd(res.inletQuality), rnd(1));
-    t.equal(rnd(res.inletEnergyFlow), rnd(58739.99993));
+    t.equal(rnd(res.inletEnergyFlow), rnd(58739999.930197));
 
     t.equal(rnd(res.outletPressure), rnd(3.4781));
     t.equal(rnd(res.outletTemperature), rnd(872.338861));
     t.equal(rnd(res.outletSpecificEnthalpy), rnd(3677.155392));
     t.equal(rnd(res.outletSpecificEntropy), rnd(7.436479));
     t.equal(rnd(res.outletQuality), rnd(1));
-    t.equal(rnd(res.outletEnergyFlow), rnd(58260.850027));
+    t.equal(rnd(res.outletEnergyFlow), rnd(58260850.026976));
 
-    t.equal(rnd(res.massFlow), rnd(15.844));
+    t.equal(rnd(res.massFlow), rnd(15844));
     t.equal(rnd(res.isentropicEfficiency), rnd(40.1));
-    t.equal(rnd(res.energyOut), rnd(479.149903));
-    t.equal(rnd(res.powerOut), rnd(451.359209));
+    t.equal(rnd(res.energyOut), rnd(479149.903221));
+    t.equal(rnd(res.powerOut), rnd(451359.208834));
     t.equal(rnd(res.generatorEfficiency), rnd(94.2));
 
     inp = {
@@ -365,4 +407,97 @@ test('turbine', function (t) {
     t.equal(rnd(res.powerOut), rnd(1000));
     t.equal(rnd(res.generatorEfficiency), rnd(82));
 
+});
+
+test('heatExchanger', function(t) {
+    t.plan(32);
+
+    input = {
+        hotInletMassFlow: 3761,
+        hotInletEnergyFlow: 4153,
+        hotInletTemperature: 527,
+        hotInletPressure: 4.2382,
+        hotInletQuality: 0,
+        hotInletSpecificVolume: 0.001,
+        hotInletDensity: 1 / 0.001,
+        hotInletSpecificEnthalpy: 1104.3,
+        hotInletSpecificEntropy: 2.828,
+
+        coldInletMassFlow: 83327,
+        coldInletEnergyFlow: 3510,
+        coldInletTemperature: 283.2,
+        coldInletPressure: 0.1013,
+        coldInletQuality: 0,
+        coldInletSpecificVolume: 0.001,
+        coldInletDensity: 1 / 0.001,
+        coldInletSpecificEnthalpy: 42.1,
+        coldInletSpecificEntropy: 0.151,
+
+        approachTemp: 11.111111
+    }
+
+    res = bindings.heatExchanger(input);
+
+    t.equal(rnd(res.hotOutletPressure), rnd(4.2382));
+    t.equal(rnd(res.hotOutletTemperature), rnd(294.311111));
+    t.equal(rnd(res.hotOutletSpecificEnthalpy), rnd(92.742848731));
+    t.equal(rnd(res.hotOutletSpecificEntropy), rnd(0.3121054537));
+    t.equal(rnd(res.hotOutletQuality), rnd(0));
+    t.equal(rnd(res.hotOutletSpecificVolume), rnd(0.0010001635));
+    t.equal(rnd(res.hotOutletMassFlow), rnd(3761.0));
+    t.equal(rnd(res.hotOutletEnergyFlow), rnd(348.8058540774));
+
+    t.equal(rnd(res.coldOutletPressure), rnd(0.1013));
+    t.equal(rnd(res.coldOutletTemperature), rnd(294.0495052176));
+    t.equal(rnd(res.coldOutletSpecificEnthalpy), rnd(87.7770008031));
+    t.equal(rnd(res.coldOutletSpecificEntropy), rnd(0.3093027213));
+    t.equal(rnd(res.coldOutletQuality), rnd(0));
+    t.equal(rnd(res.coldOutletSpecificVolume), rnd(0.001002));
+    t.equal(rnd(res.coldOutletMassFlow), rnd(83327));
+    t.equal(rnd(res.coldOutletEnergyFlow), rnd(7314.1941459226));
+
+    // Test 2
+    input = {
+        hotInletMassFlow: 1768,
+        hotInletEnergyFlow: 982,
+        hotInletTemperature: 405.2,
+        hotInletPressure: 0.2875,
+        hotInletQuality: 0,
+        hotInletSpecificVolume: 0.001,
+        hotInletDensity: 1 / 0.001,
+        hotInletSpecificEnthalpy: 555.3,
+        hotInletSpecificEntropy: 1.657,
+
+        coldInletMassFlow: 51922,
+        coldInletEnergyFlow: 1581,
+        coldInletTemperature: 280.4,
+        coldInletPressure: 0.1013,
+        coldInletQuality: 0,
+        coldInletSpecificVolume: 0.001,
+        coldInletDensity: 1 / 0.001,
+        coldInletSpecificEnthalpy: 30.5,
+        coldInletSpecificEntropy: 0.110,
+
+        approachTemp: 27.77777777777778
+    }
+
+    res = bindings.heatExchanger(input);
+
+    t.equal(rnd(res.hotOutletPressure), rnd(0.2875));
+    t.equal(rnd(res.hotOutletTemperature), rnd(308.1777777778));
+    t.equal(rnd(res.hotOutletSpecificEnthalpy), rnd(147.0142483402));
+    t.equal(rnd(res.hotOutletSpecificEntropy), rnd(0.5054463436));
+    t.equal(rnd(res.hotOutletQuality), rnd(0));
+    t.equal(rnd(res.hotOutletSpecificVolume), rnd(0.001006));
+    t.equal(rnd(res.hotOutletMassFlow), rnd(1768));
+    t.equal(rnd(res.hotOutletEnergyFlow), rnd(259.9211910654));
+
+    t.equal(rnd(res.coldOutletPressure), rnd(0.1013));
+    t.equal(rnd(res.coldOutletTemperature), rnd(283.6834425999));
+    t.equal(rnd(res.coldOutletSpecificEnthalpy), rnd(44.3565118627));
+    t.equal(rnd(res.coldOutletSpecificEntropy), rnd(0.158972121));
+    t.equal(rnd(res.coldOutletQuality), rnd(0));
+    t.equal(rnd(res.coldOutletSpecificVolume), rnd(0.001));
+    t.equal(rnd(res.coldOutletMassFlow), rnd(51922));
+    t.equal(rnd(res.coldOutletEnergyFlow), rnd(2303.0788089347));
 });

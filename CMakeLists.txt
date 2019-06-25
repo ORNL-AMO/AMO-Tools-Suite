@@ -4,8 +4,8 @@ project(amo_tools_suite)
 set(CMAKE_MACOSX_RPATH 1)
 
 set( CMAKE_VERSION_MAJOR 0 )
-set( CMAKE_VERSION_MINOR 2 )
-set( CMAKE_VERSION_PATCH 12 )
+set( CMAKE_VERSION_MINOR 3 )
+set( CMAKE_VERSION_PATCH 1 )
 
 set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
 INCLUDE_DIRECTORIES (node_modules/nan)
@@ -20,7 +20,7 @@ option( BUILD_TESTING "Build testing targets" ON )
 
 # Build C++ documentation using Doxygen
 # Requires: doxygen
-option( BUILD_DOCUMENTATION "Build Documentation" ON )
+# option( BUILD_DOCUMENTATION "Build Documentation" ON )
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -38,7 +38,7 @@ include(cmake/CompilerFlags.cmake)
 if (WIN32)
   set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-  set(CMAKE_DATABASE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+#  set(CMAKE_DATABASE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 else (WIN32)
@@ -47,22 +47,21 @@ else (WIN32)
   # ${CMAKE_BINARY_DIR}/src/... or somewhere else random like that.
   set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-  set(CMAKE_DATABASE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/db)
+#  set(CMAKE_DATABASE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/db)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif (WIN32)
 
-set (CMAKE_CXX_FLAGS "-Wall")
+# set (CMAKE_CXX_FLAGS "-Wall")
 
-file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
+#file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
-        src/psat/PSATResult.cpp
+        src/results/Results.cpp
         src/calculator/util/AnnualCost.cpp
         src/calculator/util/AnnualEnergy.cpp
         src/calculator/util/CurveFitVal.cpp
         src/calculator/motor/EstimateFLA.cpp
-        src/calculator/pump/FluidPower.cpp
         src/calculator/motor/MotorCurrent.cpp
         src/calculator/motor/MotorEfficiency.cpp
         src/calculator/motor/MotorPower.cpp
@@ -78,11 +77,8 @@ set(SOURCE_FILES
         src/calculator/pump/OptimalSpecificSpeed.cpp
         src/calculator/pump/OptimalSpecificSpeedCorrection.cpp
         src/calculator/motor/Poles.cpp
-        src/calculator/pump/PumpEfficiency.cpp
+        src/calculator/pump/MoverEfficiency.cpp
         src/calculator/pump/PumpShaftPower.cpp
-        src/calculator/losses/GasLoadChargeMaterial.cpp
-        src/calculator/losses/LiquidLoadChargeMaterial.cpp
-        src/calculator/losses/SolidLoadChargeMaterial.cpp
         src/calculator/losses/Atmosphere.cpp
         src/calculator/losses/FixtureLosses.cpp
         src/calculator/losses/GasCoolingLosses.cpp
@@ -103,7 +99,6 @@ set(SOURCE_FILES
         src/calculator/furnace/EfficiencyImprovement.cpp
         src/calculator/furnace/O2Enrichment.cpp
         src/calculator/furnace/FlowCalculationsEnergyUse.cpp
-        src/calculator/losses/EnergyInputExhaustGasLosses.cpp
         src/calculator/furnace/HumidityRatio.cpp
         src/ssmt/SaturatedProperties.cpp
         src/ssmt/SteamProperties.cpp
@@ -115,18 +110,15 @@ set(SOURCE_FILES
         src/ssmt/Deaerator.cpp
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
-        src/calculator/util/CHP.cpp
-        src/fans/FanShaftPower.cpp
-        src/fans/Planar.cpp
         src/fans/FanCurve.cpp
-        src/calculator/util/CompressedAir.cpp)
+        src/calculator/util/CompressedAir.cpp
+        src/calculator/util/CHP.cpp
+        src/calculator/util/ElectricityReduction.cpp
+        src/calculator/util/NaturalGasReduction.cpp
+        src/calculator/util/CompressedAirReduction.cpp)
 
 set(INCLUDE_FILES
-        include/psat/FieldData.h
-        include/psat/Financial.h
-        include/psat/Motor.h
-        include/psat/PSATResult.h
-        include/psat/Pump.h
+        include/results/Results.h
         include/calculator/util/AnnualCost.h
         include/calculator/util/AnnualEnergy.h
         include/calculator/util/CurveFitVal.h
@@ -147,7 +139,7 @@ set(INCLUDE_FILES
         include/calculator/pump/OptimalSpecificSpeed.h
         include/calculator/pump/OptimalSpecificSpeedCorrection.h
         include/calculator/motor/Poles.h
-        include/calculator/pump/PumpEfficiency.h
+        include/calculator/pump/MoverEfficiency.h
         include/calculator/pump/PumpShaftPower.h
         include/calculator/losses/LoadChargeMaterial.h
         include/calculator/losses/SolidLoadChargeMaterial.h
@@ -193,18 +185,27 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
         include/ssmt/Header.h
-        include/fans/Fan.h
+        include/fans/Fan203.h
         include/fans/FanShaftPower.h
         include/fans/Planar.h
         include/ssmt/Turbine.h
         include/calculator/util/CHP.h
         include/fans/FanCurve.h
-        include/calculator/util/CompressedAir.h)
+        include/calculator/util/CompressedAir.h
+        include/calculator/util/ElectricityReduction.h
+        include/calculator/util/NaturalGasReduction.h
+        include/calculator/util/CompressedAirReduction.h
+        include/calculator/motor/MotorData.h
+        include/fans/CompressibilityFactor.h
+        include/results/InputData.h
+        include/fans/FanEnergyIndex.h
+        include/fans/OptimalFanEfficiency.h
+        include/ssmt/HeatExchanger.h)
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
         tests/MotorEfficiency.unit.cpp
-        tests/PSAT.unit.cpp
+        tests/Results.unit.cpp
         tests/SolidLoadChargeMaterial.unit.cpp
         tests/LiquidLoadChargeMaterial.unit.cpp
         tests/Atmosphere.unit.cpp
@@ -226,6 +227,9 @@ set(TEST_FILES
         tests/ExhaustGasEAF.unit.cpp
         tests/EnergyEquivalency.unit.cpp
         tests/EfficiencyImprovement.unit.cpp
+        tests/ElectricityReduction.unit.cpp
+        tests/NaturalGasReduction.unit.cpp
+        tests/CompressedAirReduction.unit.cpp
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp
@@ -245,7 +249,9 @@ set(TEST_FILES
         tests/CurveFitVal.unit.cpp
         tests/MotorCurrent.unit.cpp
         tests/CompressedAir.unit.cpp
-        )
+        tests/FluidPower.unit.cpp
+        tests/CompressibilityFactor.unit.cpp
+        tests/OptimalFanEfficiency.unit.cpp tests/HeatExchanger.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

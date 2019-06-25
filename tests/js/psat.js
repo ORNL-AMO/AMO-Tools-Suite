@@ -174,7 +174,6 @@ test('achievableEfficiency achievable efficiency', function (t) {
     inp.specific_speed = 1170;
     var res = bindings.achievableEfficiency(inp);
     t.equal(rnd(res), rnd(1.8942771852074485), 'res is ' + res);
-
 });
 
 test('estimateFLA estimate full load amps', function (t) {
@@ -190,5 +189,4 @@ test('estimateFLA estimate full load amps', function (t) {
     inp.motor_rated_voltage = 460;
     var res = bindings.estFLA(inp);
     t.equal(rnd(res), rnd(225.800612262395), 'res is ' + res);
-
 });

@@ -1,9 +1,8 @@
 #ifndef AMO_TOOLS_SUITE_SSMT_H
 #define AMO_TOOLS_SUITE_SSMT_H
 
-#include <nan.h>
-#include <node.h>
-#include <iostream>
+#include "NanDataConverters.h"
+
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 #include "ssmt/SteamProperties.h"
@@ -15,62 +14,108 @@
 #include "ssmt/Deaerator.h"
 #include "ssmt/Header.h"
 #include "ssmt/Turbine.h"
+#include "ssmt/HeatExchanger.h"
 #include <string>
 #include <stdexcept>
-
-
-using namespace Nan;
-using namespace v8;
-
-Local<Object> inp;
-Local<Object> r;
-
-double Get(std::string const & nm) {
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-
-    auto rObj = inp->ToObject()->Get(getName);
-    if (rObj->IsUndefined()) {
-        ThrowTypeError(std::string("Get method in ssmt.h: " + nm + " not present in object").c_str());
-    }
-    return rObj->NumberValue();
-}
-
-void SetR(std::string const & nm, double n) {
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    Local<Number> getNum = Nan::New<Number>(n);
-    Nan::Set(r, getName, getNum);
-}
+#include <array>
+#include <cmath>
 
 SteamProperties::ThermodynamicQuantity thermodynamicQuantity() {
-    unsigned val = static_cast<unsigned>(Get("thermodynamicQuantity"));
+    unsigned val = static_cast<unsigned>(getDouble("thermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
 }
 
 SteamProperties::ThermodynamicQuantity feedwaterThermodynamicQuantity() {
-    unsigned val = static_cast<unsigned>(Get("feedwaterThermodynamicQuantity"));
+    unsigned val = static_cast<unsigned>(getDouble("feedwaterThermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
 }
 
 SteamProperties::ThermodynamicQuantity waterThermodynamicQuantity() {
-    unsigned val = static_cast<unsigned>(Get("waterThermodynamicQuantity"));
+    unsigned val = static_cast<unsigned>(getDouble("waterThermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
 }
 
 SteamProperties::ThermodynamicQuantity steamThermodynamicQuantity() {
-    unsigned val = static_cast<unsigned>(Get("steamThermodynamicQuantity"));
+    unsigned val = static_cast<unsigned>(getDouble("steamThermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
+}
+
+NAN_METHOD(steamPropertiesData) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+
+    if (getBool("wantEntropy")) {
+        std::vector<std::array<double, 3>> results;
+        auto const pressure = getDouble("pressure");
+
+        for (double entropy = 0; entropy < 10.000001; entropy += 0.1) {
+            auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::ENTROPY,
+                                            entropy).calculate();
+            if (std::isnan(sp.pressure) || std::isnan(sp.temperature) || std::isnan(sp.specificEntropy)
+                || sp.pressure < 0 || sp.temperature < 0 || sp.specificEntropy < 0) {
+                continue;
+            }
+            results.push_back({{sp.pressure, sp.temperature, sp.specificEntropy}});
+        }
+
+        Handle <Array> data = Array::New(v8::Isolate::GetCurrent(), results.size());
+        for (std::size_t i = 0; i < results.size(); i++) {
+            auto obj = Nan::New<Object>();
+            setRobject("pressure", results.at(i).at(0), obj);
+            setRobject("temperature", results.at(i).at(1), obj);
+            setRobject("entropy", results.at(i).at(2), obj);
+            data->Set(i, obj);
+        }
+        Nan::Set(r, Nan::New<String>("results").ToLocalChecked(), data);
+        info.GetReturnValue().Set(r);
+    } else {
+        std::vector<std::array<double, 4>> results;
+        double const temperature = getDouble("temperature");
+
+        auto const iterate = [&results, temperature](double pressureStart, double pressureEnd, double pressureStep) {
+            const double a = 0.000000001;
+            for (auto pressure = pressureStart; pressure <= pressureEnd + a; pressure += pressureStep) {
+                auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
+                                                temperature).calculate();
+                if (std::isnan(sp.pressure) || std::isnan(sp.temperature) || std::isnan(sp.specificEnthalpy)
+                    || std::isnan(sp.specificVolume) || sp.pressure < 0 || sp.temperature < 0
+                    || sp.specificEnthalpy < 0 || sp.specificVolume < 0) {
+                    continue;
+                }
+                results.push_back({{sp.pressure, sp.temperature, sp.specificEnthalpy, sp.specificVolume}});
+            }
+        };
+
+        iterate(0.0005, 0.01, 0.0005);
+        iterate(0.015, 0.1, 0.005);
+        iterate(0.11, 0.5, 0.01);
+        iterate(0.55, 1, 0.05);
+        iterate(1.1, 5, 0.1);
+        iterate(5.5, 10, 0.5);
+        iterate(11, 25, 1);
+        iterate(30, 100, 5);
+
+        Handle <Array> data = Array::New(v8::Isolate::GetCurrent(), results.size());
+        for (std::size_t i = 0; i < results.size(); i++) {
+            auto obj = Nan::New<Object>();
+            setRobject("pressure", results.at(i).at(0), obj);
+            setRobject("temperature", results.at(i).at(1), obj);
+            setRobject("enthalpy", results.at(i).at(2), obj);
+            setRobject("volume", results.at(i).at(3), obj);
+            data->Set(i, obj);
+        }
+        Nan::Set(r, Nan::New<String>("results").ToLocalChecked(), data);
+        info.GetReturnValue().Set(r);
+    }
 }
 
 NAN_METHOD(saturatedPressure) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    /**
-     * Constructor for Saturated Pressure class
-     * @param saturatedTemperature double, saturated temperature in K
-     */
-    SaturatedPressure sp(Get("saturatedTemperature"));
-    SetR("saturatedPressure", sp.calculate());
+    SaturatedPressure sp(getDouble("saturatedTemperature"));
+    setR("saturatedPressure", sp.calculate());
     info.GetReturnValue().Set(r);
 }
 
@@ -78,12 +123,8 @@ NAN_METHOD(saturatedTemperature) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    /**
-     * Constructor for the Saturated Temperature class
-     * @param saturatedPressure double, saturatedPressure in MPa
-     */
-    SaturatedTemperature st(Get("saturatedPressure"));
-    SetR("saturatedTemperature", st.calculate());
+    SaturatedTemperature st(getDouble("saturatedPressure"));
+    setR("saturatedTemperature", st.calculate());
     info.GetReturnValue().Set(r);
 }
 
@@ -91,27 +132,20 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    double const pressure = SaturatedPressure(Get("saturatedTemperature")).calculate();
+    double const pressure = SaturatedPressure(getDouble("saturatedTemperature")).calculate();
+    auto const results = SaturatedProperties(pressure, getDouble("saturatedTemperature")).calculate();
 
-    /**
-     * Constructor for Saturated Properties class
-     * @param pressure double, saturated pressure in MPa
-     * @param saturatedTemperature double, saturated temperature in K
-     */
-    SaturatedProperties sp(pressure, Get("saturatedTemperature"));
-    auto const results = sp.calculate();
-
-    SetR("saturatedPressure", results.at("pressure"));
-    SetR("saturatedTemperature", results.at("temperature"));
-    SetR("liquidEnthalpy", results.at("liquidSpecificEnthalpy"));
-    SetR("gasEnthalpy", results.at("gasSpecificEnthalpy"));
-    SetR("evaporationEnthalpy", results.at("evaporationSpecificEnthalpy"));
-    SetR("liquidEntropy", results.at("liquidSpecificEntropy"));
-    SetR("gasEntropy", results.at("gasSpecificEntropy"));
-    SetR("evaporationEntropy", results.at("evaporationSpecificEntropy"));
-    SetR("liquidVolume", results.at("liquidSpecificVolume"));
-    SetR("gasVolume", results.at("gasSpecificVolume"));
-    SetR("evaporationVolume", results.at("evaporationSpecificVolume"));
+    setR("saturatedPressure", results.pressure);
+    setR("saturatedTemperature", results.temperature);
+    setR("liquidEnthalpy", results.liquidSpecificEnthalpy);
+    setR("gasEnthalpy", results.gasSpecificEnthalpy);
+    setR("evaporationEnthalpy", results.evaporationSpecificEnthalpy);
+    setR("liquidEntropy", results.liquidSpecificEntropy);
+    setR("gasEntropy", results.gasSpecificEntropy);
+    setR("evaporationEntropy", results.evaporationSpecificEntropy);
+    setR("liquidVolume", results.liquidSpecificVolume);
+    setR("gasVolume", results.gasSpecificVolume);
+    setR("evaporationVolume", results.evaporationSpecificVolume);
     info.GetReturnValue().Set(r);
 }
 
@@ -120,48 +154,39 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    double const temperature = SaturatedTemperature(Get("saturatedPressure")).calculate();
-
-    /**
-     * Constructor for Saturated Properties class
-     * @param saturatedPressure double, saturated pressure in MPa
-     * @param temperature double, saturated temperature in K
-     */
-    auto const results = SaturatedProperties(Get("saturatedPressure"), temperature).calculate();
-    SetR("saturatedPressure", results.at("pressure"));
-    SetR("saturatedTemperature", results.at("temperature"));
-    SetR("liquidEnthalpy", results.at("liquidSpecificEnthalpy"));
-    SetR("gasEnthalpy", results.at("gasSpecificEnthalpy"));
-    SetR("evaporationEnthalpy", results.at("evaporationSpecificEnthalpy"));
-    SetR("liquidEntropy", results.at("liquidSpecificEntropy"));
-    SetR("gasEntropy", results.at("gasSpecificEntropy"));
-    SetR("evaporationEntropy", results.at("evaporationSpecificEntropy"));
-    SetR("liquidVolume", results.at("liquidSpecificVolume"));
-    SetR("gasVolume", results.at("gasSpecificVolume"));
-    SetR("evaporationVolume", results.at("evaporationSpecificVolume"));
+    double const temperature = SaturatedTemperature(getDouble("saturatedPressure")).calculate();
+    auto const results = SaturatedProperties(getDouble("saturatedPressure"), temperature).calculate();
+    setR("saturatedPressure", results.pressure);
+    setR("saturatedTemperature", results.temperature);
+    setR("liquidEnthalpy", results.liquidSpecificEnthalpy);
+    setR("gasEnthalpy", results.gasSpecificEnthalpy);
+    setR("evaporationEnthalpy", results.evaporationSpecificEnthalpy);
+    setR("liquidEntropy", results.liquidSpecificEntropy);
+    setR("gasEntropy", results.gasSpecificEntropy);
+    setR("evaporationEntropy", results.evaporationSpecificEntropy);
+    setR("liquidVolume", results.liquidSpecificVolume);
+    setR("gasVolume", results.gasSpecificVolume);
+    setR("evaporationVolume", results.evaporationSpecificVolume);
     info.GetReturnValue().Set(r);
 }
-
 
 NAN_METHOD(steamProperties) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SteamProperties::ThermodynamicQuantity quantity = thermodynamicQuantity();
-
-    /**
-     * Constructor for Steam Properties class
-     * @param pressure double, saturated pressure in MPa
-     * @param quantity SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, specific enthalpy in kJ/kg, specific entropy in kJ/kg/K, or saturated quality - unitless)
-     * @param quantityValue double, value of either temperature in K, specific enthalpy in kJ/kg, specific entropy in kJ/kg/K, or saturated quality - unitless
-     */
-    auto const results = SteamProperties(Get("pressure"), quantity, Get("quantityValue")).calculate();
-    SetR("pressure", results.at("pressure"));
-    SetR("temperature", results.at("temperature"));
-    SetR("specificEnthalpy", results.at("specificEnthalpy"));
-    SetR("specificEntropy", results.at("specificEntropy"));
-    SetR("quality", results.at("quality"));
-    SetR("specificVolume", results.at("specificVolume"));
+    try {
+        SteamProperties::ThermodynamicQuantity quantity = thermodynamicQuantity();
+        auto const results = SteamProperties(getDouble("pressure"), quantity, getDouble("quantityValue")).calculate();
+        setR("pressure", results.pressure);
+        setR("temperature", results.temperature);
+        setR("specificEnthalpy", results.specificEnthalpy);
+        setR("specificEntropy", results.specificEntropy);
+        setR("quality", results.quality);
+        setR("specificVolume", results.specificVolume);
+    } catch (std::runtime_error const &e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in steamProperties - ssmt.h: " + what).c_str());
+    }
     info.GetReturnValue().Set(r);
 }
 
@@ -170,38 +195,46 @@ NAN_METHOD(boiler) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+    try {
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
 
-    auto const b = Boiler(Get("deaeratorPressure"), Get("combustionEfficiency"), Get("blowdownRate"), Get("steamPressure"), quantityType, Get("quantityValue"), Get("steamMassFlow"));
+        auto const b = Boiler(getDouble("deaeratorPressure"), getDouble("combustionEfficiency"),
+                              getDouble("blowdownRate"),
+                              getDouble("steamPressure"), quantityType, getDouble("quantityValue"),
+                              getDouble("steamMassFlow"));
 
-    auto const results = b.getSteamProperties();
-    SetR("steamPressure", results.at("pressure"));
-    SetR("steamTemperature", results.at("temperature"));
-    SetR("steamSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("steamSpecificEntropy", results.at("specificEntropy"));
-    SetR("steamQuality", results.at("quality"));
-    SetR("steamMassFlow", results.at("steamMassFlow"));
-    SetR("steamEnergyFlow", results.at("steamEnergyFlow"));
+        auto const results = b.getSteamProperties();
+        setR("steamPressure", results.pressure);
+        setR("steamTemperature", results.temperature);
+        setR("steamSpecificEnthalpy", results.specificEnthalpy);
+        setR("steamSpecificEntropy", results.specificEntropy);
+        setR("steamQuality", results.quality);
+        setR("steamMassFlow", results.massFlow);
+        setR("steamEnergyFlow", results.energyFlow);
 
-    auto const results2 = b.getBlowdownProperties();
-    SetR("blowdownPressure", results2.at("pressure"));
-    SetR("blowdownTemperature", results2.at("temperature"));
-    SetR("blowdownSpecificEnthalpy", results2.at("specificEnthalpy"));
-    SetR("blowdownSpecificEntropy", results2.at("specificEntropy"));
-    SetR("blowdownQuality", results2.at("quality"));
-    SetR("blowdownMassFlow", results2.at("blowdownMassFlow"));
-    SetR("blowdownEnergyFlow", results2.at("blowdownEnergyFlow"));
+        auto const results2 = b.getBlowdownProperties();
+        setR("blowdownPressure", results2.pressure);
+        setR("blowdownTemperature", results2.temperature);
+        setR("blowdownSpecificEnthalpy", results2.specificEnthalpy);
+        setR("blowdownSpecificEntropy", results2.specificEntropy);
+        setR("blowdownQuality", results2.quality);
+        setR("blowdownMassFlow", results2.massFlow);
+        setR("blowdownEnergyFlow", results2.energyFlow);
 
-	auto const results3 = b.getFeedwaterProperties();
-    SetR("feedwaterPressure", results3.at("pressure"));
-    SetR("feedwaterTemperature", results3.at("temperature"));
-    SetR("feedwaterSpecificEnthalpy", results3.at("specificEnthalpy"));
-    SetR("feedwaterSpecificEntropy", results3.at("specificEntropy"));
-    SetR("feedwaterQuality", results3.at("quality"));
-    SetR("feedwaterMassFlow", results3.at("feedwaterMassFlow"));
-    SetR("feedwaterEnergyFlow", results3.at("feedwaterEnergyFlow"));
-    SetR("boilerEnergy", b.getBoilerEnergy());
-    SetR("fuelEnergy", b.getFuelEnergy());
+        auto const results3 = b.getFeedwaterProperties();
+        setR("feedwaterPressure", results3.pressure);
+        setR("feedwaterTemperature", results3.temperature);
+        setR("feedwaterSpecificEnthalpy", results3.specificEnthalpy);
+        setR("feedwaterSpecificEntropy", results3.specificEntropy);
+        setR("feedwaterQuality", results3.quality);
+        setR("feedwaterMassFlow", results3.massFlow);
+        setR("feedwaterEnergyFlow", results3.energyFlow);
+        setR("boilerEnergy", b.getBoilerEnergy());
+        setR("fuelEnergy", b.getFuelEnergy());
+    } catch (std::runtime_error const &e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in boiler - ssmt.h: " + what).c_str());
+    }
 
     info.GetReturnValue().Set(r);
 }
@@ -210,39 +243,34 @@ NAN_METHOD(heatLoss) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
-    /**
- *
- * Constructor for the heat loss calculator
- *
- * @param inletPressure double, inlet pressure in MPa
- * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
- * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
- * @param inletMassFlow double, inlet mass flow in kg/hr
- * @param percentHeatLoss double, heat loss as %
- *
- *
- * */
-    auto hl = HeatLoss(Get("inletPressure"), quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("percentHeatLoss"));
-    auto const results = hl.getInletProperties();
+    try {
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+        auto const hl = HeatLoss(getDouble("inletPressure"), quantityType, getDouble("quantityValue"),
+                                 getDouble("inletMassFlow"),
+                                 getDouble("percentHeatLoss"));
+        auto const results = hl.getInletProperties();
 
-    SetR("inletPressure", results.at("pressure"));
-    SetR("inletTemperature", results.at("temperature"));
-    SetR("inletSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("inletSpecificEntropy", results.at("specificEntropy"));
-    SetR("inletQuality", results.at("quality"));
-    SetR("inletMassFlow", results.at("massFlow"));
-    SetR("inletEnergyFlow", results.at("energyFlow"));
+        setR("inletPressure", results.pressure);
+        setR("inletTemperature", results.temperature);
+        setR("inletSpecificEnthalpy", results.specificEnthalpy);
+        setR("inletSpecificEntropy", results.specificEntropy);
+        setR("inletQuality", results.quality);
+        setR("inletMassFlow", results.massFlow);
+        setR("inletEnergyFlow", results.energyFlow);
 
-    auto const results2 = hl.getOutletProperties();
-    SetR("outletPressure", results2.at("pressure"));
-    SetR("outletTemperature", results2.at("temperature"));
-    SetR("outletSpecificEnthalpy", results2.at("specificEnthalpy"));
-    SetR("outletSpecificEntropy", results2.at("specificEntropy"));
-    SetR("outletQuality", results2.at("quality"));
-    SetR("outletMassFlow", results2.at("massFlow"));
-    SetR("outletEnergyFlow", results2.at("energyFlow"));
-    SetR("heatLoss", hl.getHeatLoss());
+        auto const results2 = hl.getOutletProperties();
+        setR("outletPressure", results2.pressure);
+        setR("outletTemperature", results2.temperature);
+        setR("outletSpecificEnthalpy", results2.specificEnthalpy);
+        setR("outletSpecificEntropy", results2.specificEntropy);
+        setR("outletQuality", results2.quality);
+        setR("outletMassFlow", results2.massFlow);
+        setR("outletEnergyFlow", results2.energyFlow);
+        setR("heatLoss", hl.getHeatLoss());
+    } catch (std::runtime_error const &e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in heatLoss - ssmt.h: " + what).c_str());
+    }
 
     info.GetReturnValue().Set(r);
 }
@@ -251,47 +279,42 @@ NAN_METHOD(flashTank) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+    try {
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
 
-    /**
-	*
-	* Constructor for the flash tank calculator
-	*
-	* @param inletWaterPressure double, inlet water pressure in MPa
-	* @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-	* @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-	* @param inletWaterMassFlow double, inlet water mass flow in kg/hr
-	* @param tankPressure double, pressure of the tank in MPa
-	*
-	*
-	* */
-    auto const ft = FlashTank(Get("inletWaterPressure"), quantityType, Get("quantityValue"), Get("inletWaterMassFlow"), Get("tankPressure"));
+        auto const ft = FlashTank(getDouble("inletWaterPressure"), quantityType, getDouble("quantityValue"),
+                                  getDouble("inletWaterMassFlow"), getDouble("tankPressure"));
 
-    auto const results = ft.getInletWaterProperties();
-    SetR("inletWaterPressure", results.at("pressure"));
-    SetR("inletWaterTemperature", results.at("temperature"));
-    SetR("inletWaterSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("inletWaterSpecificEntropy", results.at("specificEntropy"));
-    SetR("inletWaterQuality", results.at("quality"));
-    SetR("inletWaterMassFlow", results.at("massFlow"));
-    SetR("inletWaterEnergyFlow", results.at("energyFlow"));
+        auto const results = ft.getInletWaterProperties();
+        setR("inletWaterPressure", results.pressure);
+        setR("inletWaterTemperature", results.temperature);
+        setR("inletWaterSpecificEnthalpy", results.specificEnthalpy);
+        setR("inletWaterSpecificEntropy", results.specificEntropy);
+        setR("inletWaterQuality", results.quality);
+        setR("inletWaterMassFlow", results.massFlow);
+        setR("inletWaterEnergyFlow", results.energyFlow);
 
-    auto const results2 = ft.getOutletSaturatedProperties();
-    SetR("outletGasPressure", results2.at("pressure"));
-    SetR("outletGasTemperature", results2.at("temperature"));
-    SetR("outletGasSpecificEnthalpy", results2.at("gasSpecificEnthalpy"));
-    SetR("outletGasSpecificEntropy", results2.at("gasSpecificEntropy"));
-    SetR("outletGasQuality", 1);
-    SetR("outletGasMassFlow", results2.at("gasMassFlow"));
-    SetR("outletGasEnergyFlow", results2.at("gasEnergyFlow"));
+        auto const results2 = ft.getOutletGasSaturatedProperties();
+        setR("outletGasPressure", results2.pressure);
+        setR("outletGasTemperature", results2.temperature);
+        setR("outletGasSpecificEnthalpy", results2.specificEnthalpy);
+        setR("outletGasSpecificEntropy", results2.specificEntropy);
+        setR("outletGasQuality", 1);
+        setR("outletGasMassFlow", results2.massFlow);
+        setR("outletGasEnergyFlow", results2.energyFlow);
 
-    SetR("outletLiquidPressure", results2.at("pressure"));
-    SetR("outletLiquidTemperature", results2.at("temperature"));
-    SetR("outletLiquidSpecificEnthalpy", results2.at("liquidSpecificEnthalpy"));
-    SetR("outletLiquidSpecificEntropy", results2.at("liquidSpecificEntropy"));
-    SetR("outletLiquidQuality", 0);
-    SetR("outletLiquidMassFlow", results2.at("liquidMassFlow"));
-    SetR("outletLiquidEnergyFlow", results2.at("liquidEnergyFlow"));
+        auto const results3 = ft.getOutletLiquidSaturatedProperties();
+        setR("outletLiquidPressure", results3.pressure);
+        setR("outletLiquidTemperature", results3.temperature);
+        setR("outletLiquidSpecificEnthalpy", results3.specificEnthalpy);
+        setR("outletLiquidSpecificEntropy", results3.specificEntropy);
+        setR("outletLiquidQuality", 0);
+        setR("outletLiquidMassFlow", results3.massFlow);
+        setR("outletLiquidEnergyFlow", results3.energyFlow);
+    } catch (std::runtime_error const &e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in flashTank - ssmt.h: " + what).c_str());
+    }
 
     info.GetReturnValue().Set(r);
 }
@@ -300,95 +323,80 @@ NAN_METHOD(prvWithoutDesuperheating) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+    try {
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+        auto const pwod = PrvWithoutDesuperheating(getDouble("inletPressure"), quantityType, getDouble("quantityValue"),
+                                                   getDouble("inletMassFlow"), getDouble("outletPressure"));
 
-   /**
-    *
-    * Constructor for the PRV without desuperheating calculator
-    *
-    * @param inletPressure double, inlet pressure in MPa
-    * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-    * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-    * @param inletMassFlow double, inlet mass flow in kg/hr
-    * @param outletPressure double, houtlet pressure in MPa
-    *
-    *
-    * */
-    auto pwod = PrvWithoutDesuperheating(Get("inletPressure"),quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("outletPressure"));
+        auto const results = pwod.getInletProperties();
+        setR("inletPressure", results.pressure);
+        setR("inletTemperature", results.temperature);
+        setR("inletSpecificEnthalpy", results.specificEnthalpy);
+        setR("inletSpecificEntropy", results.specificEntropy);
+        setR("inletQuality", results.quality);
+        setR("inletMassFlow", pwod.getInletMassFlow());
+        setR("inletEnergyFlow", pwod.getInletEnergyFlow());
 
-    auto results = pwod.getInletProperties();
-    SetR("inletPressure", results.at("pressure"));
-    SetR("inletTemperature", results.at("temperature"));
-    SetR("inletSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("inletSpecificEntropy", results.at("specificEntropy"));
-    SetR("inletQuality", results.at("quality"));
-    SetR("inletMassFlow", pwod.getInletMassFlow());
-    SetR("inletEnergyFlow", pwod.getInletEnergyFlow());
-
-    auto results2= pwod.getOutletProperties();
-    SetR("outletPressure", results2.at("pressure"));
-    SetR("outletTemperature", results2.at("temperature"));
-    SetR("outletSpecificEnthalpy", results2.at("specificEnthalpy"));
-    SetR("outletSpecificEntropy", results2.at("specificEntropy"));
-    SetR("outletQuality", results2.at("quality"));
-    SetR("outletMassFlow", pwod.getOutletMassFlow());
-    SetR("outletEnergyFlow", pwod.getOutletEnergyFlow());
+        auto const results2 = pwod.getOutletProperties();
+        setR("outletPressure", results2.pressure);
+        setR("outletTemperature", results2.temperature);
+        setR("outletSpecificEnthalpy", results2.specificEnthalpy);
+        setR("outletSpecificEntropy", results2.specificEntropy);
+        setR("outletQuality", results2.quality);
+        setR("outletMassFlow", pwod.getOutletMassFlow());
+        setR("outletEnergyFlow", pwod.getOutletEnergyFlow());
+    } catch (std::runtime_error const &e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in prvWithoutDesuperheating - ssmt.h: " + what).c_str());
+    }
 
     info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(prvWithDesuperheating) {
-
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
-    SteamProperties::ThermodynamicQuantity feedwaterQuantityType = feedwaterThermodynamicQuantity();
+    try {
+        SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
+        SteamProperties::ThermodynamicQuantity feedwaterQuantityType = feedwaterThermodynamicQuantity();
 
-    /**
-     *
-     * Constructor for the PRV with desuperheating calculator
-     *
-     * @param inletPressure double, inlet pressure in MPa
-     * @param quantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param inletMassFlow double, inlet mass flow in kg/hr
-     * @param outletPressure double, outlet pressure in MPa
-     * @param feedwaterPressure double, pressure of feedwater in MPa
-     * @param feedwaterQuantityType SteamProperties::ThermodynamicQuantity, type of quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param feedwaterQuantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
-     * @param desuperheatingTemp double, desuperheating temperature in K
-     *
-     *
-     * */
-    auto pwd = PrvWithDesuperheating(Get("inletPressure"), quantityType, Get("quantityValue"), Get("inletMassFlow"), Get("outletPressure"), Get("feedwaterPressure"), feedwaterQuantityType, Get("feedwaterQuantityValue"), Get("desuperheatingTemp"));
+        auto const pwd = PrvWithDesuperheating(getDouble("inletPressure"), quantityType, getDouble("quantityValue"),
+                                               getDouble("inletMassFlow"),
+                                               getDouble("outletPressure"), getDouble("feedwaterPressure"),
+                                               feedwaterQuantityType,
+                                               getDouble("feedwaterQuantityValue"), getDouble("desuperheatingTemp"));
 
-    auto results = pwd.getInletProperties();
-    SetR("inletPressure", results.at("pressure"));
-    SetR("inletTemperature", results.at("temperature"));
-    SetR("inletSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("inletSpecificEntropy", results.at("specificEntropy"));
-    SetR("inletQuality", results.at("quality"));
-    SetR("inletMassFlow", pwd.getInletMassFlow());
-    SetR("inletEnergyFlow", pwd.getInletEnergyFlow());
+        auto const results = pwd.getInletProperties();
+        setR("inletPressure", results.pressure);
+        setR("inletTemperature", results.temperature);
+        setR("inletSpecificEnthalpy", results.specificEnthalpy);
+        setR("inletSpecificEntropy", results.specificEntropy);
+        setR("inletQuality", results.quality);
+        setR("inletMassFlow", pwd.getInletMassFlow());
+        setR("inletEnergyFlow", pwd.getInletEnergyFlow());
 
-    auto results2 = pwd.getOutletProperties();
-    SetR("outletPressure", results2.at("pressure"));
-    SetR("outletTemperature", results2.at("temperature"));
-    SetR("outletSpecificEnthalpy", results2.at("specificEnthalpy"));
-    SetR("outletSpecificEntropy", results2.at("specificEntropy"));
-    SetR("outletQuality", results2.at("quality"));
-    SetR("outletMassFlow", pwd.getOutletMassFlow());
-    SetR("outletEnergyFlow", pwd.getOutletEnergyFlow());
+        auto const results2 = pwd.getOutletProperties();
+        setR("outletPressure", results2.pressure);
+        setR("outletTemperature", results2.temperature);
+        setR("outletSpecificEnthalpy", results2.specificEnthalpy);
+        setR("outletSpecificEntropy", results2.specificEntropy);
+        setR("outletQuality", results2.quality);
+        setR("outletMassFlow", pwd.getOutletMassFlow());
+        setR("outletEnergyFlow", pwd.getOutletEnergyFlow());
 
-    auto results3 = pwd.getFeedwaterProperties();
-    SetR("feedwaterPressure", results3.at("pressure"));
-    SetR("feedwaterTemperature", results3.at("temperature"));
-    SetR("feedwaterSpecificEnthalpy", results3.at("specificEnthalpy"));
-    SetR("feedwaterSpecificEntropy", results3.at("specificEntropy"));
-    SetR("feedwaterQuality", results3.at("quality"));
-    SetR("feedwaterMassFlow", pwd.getFeedwaterMassFlow());
-    SetR("feedwaterEnergyFlow", pwd.getFeedwaterEnergyFlow());
+        auto const results3 = pwd.getFeedwaterProperties();
+        setR("feedwaterPressure", results3.pressure);
+        setR("feedwaterTemperature", results3.temperature);
+        setR("feedwaterSpecificEnthalpy", results3.specificEnthalpy);
+        setR("feedwaterSpecificEntropy", results3.specificEntropy);
+        setR("feedwaterQuality", results3.quality);
+        setR("feedwaterMassFlow", pwd.getFeedwaterMassFlow());
+        setR("feedwaterEnergyFlow", pwd.getFeedwaterEnergyFlow());
+    } catch (std::runtime_error const &e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in prvWithDesuperheating - ssmt.h: " + what).c_str());
+    }
 
     info.GetReturnValue().Set(r);
 }
@@ -397,48 +405,54 @@ NAN_METHOD(deaerator) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SteamProperties::ThermodynamicQuantity waterQuantityType = waterThermodynamicQuantity();
-    SteamProperties::ThermodynamicQuantity steamQuantityType = steamThermodynamicQuantity();
+    try {
+        SteamProperties::ThermodynamicQuantity waterQuantityType = waterThermodynamicQuantity();
+        SteamProperties::ThermodynamicQuantity steamQuantityType = steamThermodynamicQuantity();
 
-    Deaerator d(Get("deaeratorPressure"), Get("ventRate"), Get("feedwaterMassFlow"), Get("waterPressure"),
-                waterQuantityType, Get("waterQuantityValue"), Get("steamPressure"), steamQuantityType,
-                Get("steamQuantityValue"));
+        Deaerator d(getDouble("deaeratorPressure"), getDouble("ventRate"), getDouble("feedwaterMassFlow"),
+                    getDouble("waterPressure"),
+                    waterQuantityType, getDouble("waterQuantityValue"), getDouble("steamPressure"), steamQuantityType,
+                    getDouble("steamQuantityValue"));
 
-    auto const results = d.getFeedwaterProperties();
-    SetR("feedwaterPressure", results.at("pressure"));
-    SetR("feedwaterTemperature", results.at("temperature"));
-    SetR("feedwaterSpecificEnthalpy", results.at("specificEnthalpy"));
-    SetR("feedwaterSpecificEntropy", results.at("specificEntropy"));
-    SetR("feedwaterQuality", results.at("quality"));
-    SetR("feedwaterMassFlow", results.at("massFlow"));
-    SetR("feedwaterEnergyFlow", results.at("energyFlow"));
+        auto const results = d.getFeedwaterProperties();
+        setR("feedwaterPressure", results.pressure);
+        setR("feedwaterTemperature", results.temperature);
+        setR("feedwaterSpecificEnthalpy", results.specificEnthalpy);
+        setR("feedwaterSpecificEntropy", results.specificEntropy);
+        setR("feedwaterQuality", results.quality);
+        setR("feedwaterMassFlow", results.massFlow);
+        setR("feedwaterEnergyFlow", results.energyFlow);
 
-    auto const results2 = d.getVentedSteamProperties();
-    SetR("ventedSteamPressure", results2.at("pressure"));
-    SetR("ventedSteamTemperature", results2.at("temperature"));
-    SetR("ventedSteamSpecificEnthalpy", results2.at("specificEnthalpy"));
-    SetR("ventedSteamSpecificEntropy", results2.at("specificEntropy"));
-    SetR("ventedSteamQuality", results2.at("quality"));
-    SetR("ventedSteamMassFlow", results2.at("massFlow"));
-    SetR("ventedSteamEnergyFlow", results2.at("energyFlow"));
+        auto const results2 = d.getVentedSteamProperties();
+        setR("ventedSteamPressure", results2.pressure);
+        setR("ventedSteamTemperature", results2.temperature);
+        setR("ventedSteamSpecificEnthalpy", results2.specificEnthalpy);
+        setR("ventedSteamSpecificEntropy", results2.specificEntropy);
+        setR("ventedSteamQuality", results2.quality);
+        setR("ventedSteamMassFlow", results2.massFlow);
+        setR("ventedSteamEnergyFlow", results2.energyFlow);
 
-    auto const results3 = d.getInletWaterProperties();
-    SetR("inletWaterPressure", results3.at("pressure"));
-    SetR("inletWaterTemperature", results3.at("temperature"));
-    SetR("inletWaterSpecificEnthalpy", results3.at("specificEnthalpy"));
-    SetR("inletWaterSpecificEntropy", results3.at("specificEntropy"));
-    SetR("inletWaterQuality", results3.at("quality"));
-    SetR("inletWaterMassFlow", results3.at("massFlow"));
-    SetR("inletWaterEnergyFlow", results3.at("energyFlow"));
+        auto const results3 = d.getInletWaterProperties();
+        setR("inletWaterPressure", results3.pressure);
+        setR("inletWaterTemperature", results3.temperature);
+        setR("inletWaterSpecificEnthalpy", results3.specificEnthalpy);
+        setR("inletWaterSpecificEntropy", results3.specificEntropy);
+        setR("inletWaterQuality", results3.quality);
+        setR("inletWaterMassFlow", results3.massFlow);
+        setR("inletWaterEnergyFlow", results3.energyFlow);
 
-    auto const results4 = d.getInletSteamProperties();
-    SetR("inletSteamPressure", results4.at("pressure"));
-    SetR("inletSteamTemperature", results4.at("temperature"));
-    SetR("inletSteamSpecificEnthalpy", results4.at("specificEnthalpy"));
-    SetR("inletSteamSpecificEntropy", results4.at("specificEntropy"));
-    SetR("inletSteamQuality", results4.at("quality"));
-    SetR("inletSteamMassFlow", results4.at("massFlow"));
-    SetR("inletSteamEnergyFlow", results4.at("energyFlow"));
+        auto const results4 = d.getInletSteamProperties();
+        setR("inletSteamPressure", results4.pressure);
+        setR("inletSteamTemperature", results4.temperature);
+        setR("inletSteamSpecificEnthalpy", results4.specificEnthalpy);
+        setR("inletSteamSpecificEntropy", results4.specificEntropy);
+        setR("inletSteamQuality", results4.quality);
+        setR("inletSteamMassFlow", results4.massFlow);
+        setR("inletSteamEnergyFlow", results4.energyFlow);
+    } catch (std::runtime_error const &e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in deaerator - ssmt.h: " + what).c_str());
+    }
 
     info.GetReturnValue().Set(r);
 }
@@ -447,61 +461,68 @@ NAN_METHOD(header) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    auto const headerPressure = Get("headerPressure");
+    auto const headerPressure = getDouble("headerPressure");
 
-    Local<String> arrayStr = Nan::New<String>("inlets").ToLocalChecked();
+    Local <String> arrayStr = Nan::New<String>("inlets").ToLocalChecked();
     auto array = inp->ToObject()->Get(arrayStr);
-    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
+    v8::Local <v8::Array> arr = v8::Local<v8::Array>::Cast(array);
 
     auto pressureStr = Nan::New<String>("pressure").ToLocalChecked();
     auto temperatureStr = Nan::New<String>("temperature").ToLocalChecked();
-	auto qualityStr = Nan::New<String>("quality").ToLocalChecked();
+    auto qualityStr = Nan::New<String>("quality").ToLocalChecked();
     auto massFlowStr = Nan::New<String>("massFlow").ToLocalChecked();
     auto specificEnthalpyStr = Nan::New<String>("specificEnthalpy").ToLocalChecked();
     auto specificEntropyStr = Nan::New<String>("specificEntropy").ToLocalChecked();
     auto energyFlowStr = Nan::New<String>("energyFlow").ToLocalChecked();
 
-	std::vector<Inlet> inlets;
+    std::vector<Inlet> inlets;
 
     for (std::size_t i = 0; i < arr->Length(); i++) {
         auto const pressure = arr->Get(i)->ToObject()->Get(pressureStr)->NumberValue();
-	    unsigned val = static_cast<unsigned>(arr->Get(i)->ToObject()->Get(Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
-	    auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
-        auto const quantityValue = arr->Get(i)->ToObject()->Get(Nan::New<String>("quantityValue").ToLocalChecked())->NumberValue();
+        unsigned val = static_cast<unsigned>(arr->Get(i)->ToObject()->Get(
+                Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
+        auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
+        auto const quantityValue = arr->Get(i)->ToObject()->Get(
+                Nan::New<String>("quantityValue").ToLocalChecked())->NumberValue();
         auto const massFlow = arr->Get(i)->ToObject()->Get(massFlowStr)->NumberValue();
         inlets.emplace_back(Inlet(pressure, quantity, quantityValue, massFlow));
 
-        Local<Object> obj = Nan::New<Object>();
-        Local<String> inletNum = Nan::New<String>("inlet" + std::to_string(i + 1)).ToLocalChecked();
+        Local <Object> obj = Nan::New<Object>();
+        Local <String> inletNum = Nan::New<String>("inlet" + std::to_string(i + 1)).ToLocalChecked();
         auto const inletProps = inlets[i].getInletProperties();
 
-        Nan::Set(obj, pressureStr, Nan::New<Number>(inletProps.at("pressure")));
-        Nan::Set(obj, temperatureStr, Nan::New<Number>(inletProps.at("temperature")));
-        Nan::Set(obj, qualityStr, Nan::New<Number>(inletProps.at("quality")));
-        Nan::Set(obj, specificEnthalpyStr, Nan::New<Number>(inletProps.at("specificEnthalpy")));
-        Nan::Set(obj, specificEntropyStr, Nan::New<Number>(inletProps.at("specificEntropy")));
+        Nan::Set(obj, pressureStr, Nan::New<Number>(inletProps.pressure));
+        Nan::Set(obj, temperatureStr, Nan::New<Number>(inletProps.temperature));
+        Nan::Set(obj, qualityStr, Nan::New<Number>(inletProps.quality));
+        Nan::Set(obj, specificEnthalpyStr, Nan::New<Number>(inletProps.specificEnthalpy));
+        Nan::Set(obj, specificEntropyStr, Nan::New<Number>(inletProps.specificEntropy));
         Nan::Set(obj, energyFlowStr, Nan::New<Number>(inlets[i].getInletEnergyFlow()));
         Nan::Set(obj, massFlowStr, Nan::New<Number>(inlets[i].getMassFlow()));
 
         Nan::Set(r, inletNum, obj);
     }
 
-	auto header = Header(headerPressure, inlets);
-    Local<String> headerStr = Nan::New<String>("header").ToLocalChecked();
+    try {
+        auto header = Header(headerPressure, inlets);
+        Local <String> headerStr = Nan::New<String>("header").ToLocalChecked();
 
-    auto const headerProps = header.getHeaderProperties();
+        auto const headerProps = header.getHeaderProperties();
 
-    Local<Object> obj = Nan::New<Object>();
+        Local <Object> obj = Nan::New<Object>();
 
-    Nan::Set(obj, pressureStr, Nan::New<Number>(header.getHeaderPressure()));
-    Nan::Set(obj, temperatureStr, Nan::New<Number>(headerProps.at("temperature")));
-    Nan::Set(obj, qualityStr, Nan::New<Number>(headerProps.at("quality")));
-    Nan::Set(obj, specificEnthalpyStr, Nan::New<Number>(headerProps.at("specificEnthalpy")));
-    Nan::Set(obj, specificEntropyStr, Nan::New<Number>(headerProps.at("specificEntropy")));
-    Nan::Set(obj, energyFlowStr, Nan::New<Number>(header.getInletEnergyFlow()));
-    Nan::Set(obj, massFlowStr, Nan::New<Number>(header.getInletMassFlow()));
+        Nan::Set(obj, pressureStr, Nan::New<Number>(header.getHeaderPressure()));
+        Nan::Set(obj, temperatureStr, Nan::New<Number>(headerProps.temperature));
+        Nan::Set(obj, qualityStr, Nan::New<Number>(headerProps.quality));
+        Nan::Set(obj, specificEnthalpyStr, Nan::New<Number>(headerProps.specificEnthalpy));
+        Nan::Set(obj, specificEntropyStr, Nan::New<Number>(headerProps.specificEntropy));
+        Nan::Set(obj, energyFlowStr, Nan::New<Number>(header.getInletEnergyFlow()));
+        Nan::Set(obj, massFlowStr, Nan::New<Number>(header.getInletMassFlow()));
 
-    Nan::Set(r, headerStr, obj);
+        Nan::Set(r, headerStr, obj);
+    } catch (std::runtime_error const &e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in header - ssmt.h: " + what).c_str());
+    }
     info.GetReturnValue().Set(r);
 }
 
@@ -509,55 +530,118 @@ NAN_METHOD(turbine) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-	unsigned val = static_cast<unsigned>(inp->ToObject()->Get(Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
+    unsigned val = static_cast<unsigned>(inp->ToObject()->Get(
+            Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
     Turbine::Solve solveFor = static_cast<Turbine::Solve>(val);
-    val = static_cast<unsigned>(inp->ToObject()->Get(Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue());
+    val = static_cast<unsigned>(inp->ToObject()->Get(
+            Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue());
     Turbine::TurbineProperty turbineProperty = static_cast<Turbine::TurbineProperty>(val);
-    val = static_cast<unsigned>(inp->ToObject()->Get(Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue());
+    val = static_cast<unsigned>(inp->ToObject()->Get(
+            Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue());
     SteamProperties::ThermodynamicQuantity inletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
-	std::unique_ptr<Turbine> t;
+    std::shared_ptr<Turbine> t;
 
     try {
         if (solveFor == Turbine::Solve::OutletProperties) {
-            t = std::unique_ptr<Turbine>(
-                    new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
-                                turbineProperty, Get("isentropicEfficiency"), Get("generatorEfficiency"),
-                                Get("massFlowOrPowerOut"), Get("outletSteamPressure")));
+            t = std::shared_ptr<Turbine>(
+                    new Turbine(solveFor, getDouble("inletPressure"), inletQuantity, getDouble("inletQuantityValue"),
+                                turbineProperty, getDouble("isentropicEfficiency"), getDouble("generatorEfficiency"),
+                                getDouble("massFlowOrPowerOut"), getDouble("outletSteamPressure")));
         } else {
             unsigned val = static_cast<unsigned>(inp->ToObject()->Get(
                     Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue());
             auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
-            t = std::unique_ptr<Turbine>(
-                    new Turbine(solveFor, Get("inletPressure"), inletQuantity, Get("inletQuantityValue"),
-                                turbineProperty, Get("generatorEfficiency"), Get("massFlowOrPowerOut"),
-                                Get("outletSteamPressure"), outletQuantity, Get("outletQuantityValue")));
+            t = std::shared_ptr<Turbine>(
+                    new Turbine(solveFor, getDouble("inletPressure"), inletQuantity, getDouble("inletQuantityValue"),
+                                turbineProperty, getDouble("generatorEfficiency"), getDouble("massFlowOrPowerOut"),
+                                getDouble("outletSteamPressure"), outletQuantity, getDouble("outletQuantityValue")));
         }
-    } catch (std::runtime_error const & e) {
+    } catch (std::runtime_error const &e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in turbine - ssmt.h: " + what).c_str());
     }
 
-    SetR("inletPressure", t->getInletProperties().at("pressure"));
-    SetR("inletTemperature", t->getInletProperties().at("temperature"));
-    SetR("inletSpecificEnthalpy", t->getInletProperties().at("specificEnthalpy"));
-    SetR("inletSpecificEntropy", t->getInletProperties().at("specificEntropy"));
-    SetR("inletQuality", t->getInletProperties().at("quality"));
-    SetR("inletEnergyFlow", t->getInletEnergyFlow());
+    auto results = t->getInletProperties();
+    setR("inletPressure", results.pressure);
+    setR("inletTemperature", results.temperature);
+    setR("inletSpecificEnthalpy", results.specificEnthalpy);
+    setR("inletSpecificEntropy", results.specificEntropy);
+    setR("inletQuality", results.quality);
+    setR("inletEnergyFlow", t->getInletEnergyFlow());
 
-    SetR("outletPressure", t->getOutletProperties().at("pressure"));
-    SetR("outletTemperature", t->getOutletProperties().at("temperature"));
-    SetR("outletSpecificEnthalpy", t->getOutletProperties().at("specificEnthalpy"));
-    SetR("outletSpecificEntropy", t->getOutletProperties().at("specificEntropy"));
-    SetR("outletQuality", t->getOutletProperties().at("quality"));
-    SetR("outletEnergyFlow", t->getOutletEnergyFlow());
+    results = t->getOutletProperties();
+    setR("outletPressure", results.pressure);
+    setR("outletTemperature", results.temperature);
+    setR("outletSpecificEnthalpy", results.specificEnthalpy);
+    setR("outletSpecificEntropy", results.specificEntropy);
+    setR("outletQuality", results.quality);
+    setR("outletEnergyFlow", t->getOutletEnergyFlow());
 
-    SetR("massFlow", t->getMassFlow());
-    SetR("isentropicEfficiency", t->getIsentropicEfficiency());
-    SetR("energyOut", t->getEnergyOut());
-    SetR("powerOut", t->getPowerOut());
-    SetR("generatorEfficiency", t->getGeneratorEfficiency());
-	info.GetReturnValue().Set(r);
+    setR("massFlow", t->getMassFlow());
+    setR("isentropicEfficiency", t->getIsentropicEfficiency());
+    setR("energyOut", t->getEnergyOut());
+    setR("powerOut", t->getPowerOut());
+    setR("generatorEfficiency", t->getGeneratorEfficiency());
+    info.GetReturnValue().Set(r);
 }
 
+NAN_METHOD(heatExchanger) {
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    const double hotInletMassFlow = getDouble("hotInletMassFlow");
+    const double hotInletEnergyFlow = getDouble("hotInletEnergyFlow");
+    const double hotInletTemperature = getDouble("hotInletTemperature");
+    const double hotInletPressure = getDouble("hotInletPressure");
+    const double hotInletQuality = getDouble("hotInletQuality");
+    const double hotInletSpecificVolume = getDouble("hotInletSpecificVolume");
+    const double hotInletDensity = getDouble("hotInletDensity");
+    const double hotInletSpecificEnthalpy = getDouble("hotInletSpecificEnthalpy");
+    const double hotInletSpecificEntropy = getDouble("hotInletSpecificEntropy");
+
+    const double coldInletMassFlow = getDouble("coldInletMassFlow");
+    const double coldInletEnergyFlow = getDouble("coldInletEnergyFlow");
+    const double coldInletTemperature = getDouble("coldInletTemperature");
+    const double coldInletPressure = getDouble("coldInletPressure");
+    const double coldInletQuality = getDouble("coldInletQuality");
+    const double coldInletSpecificVolume = getDouble("coldInletSpecificVolume");
+    const double coldInletDensity = getDouble("coldInletDensity");
+    const double coldInletSpecificEnthalpy = getDouble("coldInletSpecificEnthalpy");
+    const double coldInletSpecificEntropy = getDouble("coldInletSpecificEntropy");
+
+    const double approachTemp = getDouble("approachTemp");
+
+    const SteamSystemModelerTool::FluidProperties hotInlet(hotInletMassFlow, hotInletEnergyFlow, hotInletTemperature,
+    hotInletPressure, hotInletQuality, hotInletSpecificVolume, hotInletDensity, hotInletSpecificEnthalpy,
+    hotInletSpecificEntropy);
+
+    const SteamSystemModelerTool::FluidProperties coldInlet(coldInletMassFlow, coldInletEnergyFlow, coldInletTemperature,
+    coldInletPressure, coldInletQuality, coldInletSpecificVolume, coldInletDensity, coldInletSpecificEnthalpy,
+    coldInletSpecificEntropy);
+
+    auto const output = HeatExchanger(hotInlet, coldInlet, approachTemp).calculate();
+
+    setR("hotOutletMassFlow", output.hotOutlet.massFlow);
+    setR("hotOutletEnergyFlow", output.hotOutlet.energyFlow);
+    setR("hotOutletTemperature", output.hotOutlet.temperature);
+    setR("hotOutletPressure", output.hotOutlet.pressure);
+    setR("hotOutletQuality", output.hotOutlet.quality);
+    setR("hotOutletSpecificVolume", output.hotOutlet.specificVolume);
+    setR("hotOutletDensity", output.hotOutlet.density);
+    setR("hotOutletSpecificEnthalpy", output.hotOutlet.specificEnthalpy);
+    setR("hotOutletSpecificEntropy", output.hotOutlet.specificEntropy);
+
+    setR("coldOutletMassFlow", output.coldOutlet.massFlow);
+    setR("coldOutletEnergyFlow", output.coldOutlet.energyFlow);
+    setR("coldOutletTemperature", output.coldOutlet.temperature);
+    setR("coldOutletPressure", output.coldOutlet.pressure);
+    setR("coldOutletQuality", output.coldOutlet.quality);
+    setR("coldOutletSpecificVolume", output.coldOutlet.specificVolume);
+    setR("coldOutletDensity", output.coldOutlet.density);
+    setR("coldOutletSpecificEnthalpy", output.coldOutlet.specificEnthalpy);
+    setR("coldOutletSpecificEntropy", output.coldOutlet.specificEntropy);
+
+    info.GetReturnValue().Set(r);
+}
 
 #endif //AMO_TOOLS_SUITE_SSMT_H

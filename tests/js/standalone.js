@@ -67,6 +67,15 @@ test('PneumaticAirRequirement', function (t) {
     compare(bindings.pneumaticAirRequirement(input), [0.712939, 7.802721, 5.562868]);
 });
 
+test('usableAirCapacity', function (t) {
+    t.plan(5);
+    t.type(bindings.usableAirCapacity, 'function');
+    t.equal(rnd(bindings.usableAirCapacity({tankSize: 660, airPressureIn: 110, airPressureOut: 100})), rnd(60.024009603));
+    t.equal(rnd(bindings.usableAirCapacity({tankSize: 760, airPressureIn: 110, airPressureOut: 100})), rnd(69.1185565135));
+    t.equal(rnd(bindings.usableAirCapacity({tankSize: 760, airPressureIn: 150, airPressureOut: 100})), rnd(345.5927825676));
+    t.equal(rnd(bindings.usableAirCapacity({tankSize: 760, airPressureIn: 150, airPressureOut: 130})), rnd(138.237113027));
+});
+
 test('Receiver Tank Size', function (t) {
     t.plan(9);
     t.type(bindings.receiverTank, 'function');
@@ -150,14 +159,14 @@ test('Air System Capacity', function (t) {
         t.equal(rnd(results.six), expected[11]);
 
         for (var i = 0; i < gallons.length; i++) {
-            t.equal(rnd(results['receiver' + (i + 1)]), gallons[i]);
+            t.equal(rnd(results.receiverCapacities[i]), gallons[i]);
         }
     };
 
     var inp = {
         oneHalf: 3000, threeFourths: 2000, one: 1000, oneAndOneFourth: 200, oneAndOneHalf: 100, two: 500, twoAndOneHalf: 500, three: 300,
         threeAndOneHalf: 0, four: 1000, five: 0, six: 0,
-        gallons: [
+        receiverCapacities: [
             400, 500, 660, 1060
         ]
     };

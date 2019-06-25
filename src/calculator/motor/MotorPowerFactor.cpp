@@ -13,9 +13,7 @@
 #include "calculator/motor/MotorEfficiency.h"
 
 double MotorPowerFactor::calculate() {
-    double motorPowerFactor_ = 0.0;
-
-    if (loadFactor == 0.0 || std::abs(loadFactor - 0.0) < 0.001) {
+    if (std::abs(loadFactor) < 0.001) {
         /**
          * When the loadFactor is 0
          *  The powerFactor is calculated from the Motor KW loss and Motor kW Input development.
@@ -28,15 +26,12 @@ double MotorPowerFactor::calculate() {
         motorEfficiency.calculate(0.25, specifiedEfficiency);
         motorKwInput = motorEfficiency.getKWloss0();
         motorkVA = 460 * sqrt(3) * motorCurrent / 1000;
-        motorPowerFactor_ = motorKwInput / motorkVA;
-    } else {
-        /**
-         *  Make sure the loadfactor comes not in %.
-         *  pf (X) = [(X/100) * rated hp * 0.746] / [Amps (X) * Eff (X) * Rated Voltage * Square root (3) / 1000]
-         */
-        motorPowerFactor_ = (loadFactor * motorRatedPower * 0.746) /
-                            (motorCurrent * motorEfficiency * ratedVoltage * sqrt(3) / 1000);
+        return motorKwInput / motorkVA;
     }
-    return motorPowerFactor_;
-
+    /**
+	 *  Make sure the loadfactor comes not in %.
+	 *  pf (X) = [(X/100) * rated hp * 0.746] / [Amps (X) * Eff (X) * Rated Voltage * Square root (3) / 1000]
+	 */
+    return (loadFactor * motorRatedPower * 0.746) /
+           (motorCurrent * motorEfficiency * ratedVoltage * std::sqrt(3) / 1000);
 }

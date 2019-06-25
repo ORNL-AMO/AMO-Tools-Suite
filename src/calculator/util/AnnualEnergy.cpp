@@ -12,10 +12,10 @@
 
 /**
  * Calculates annual energy
- * Annual energy, MWh/year = kWe * 8760 hrs/year * operating fraction/1000
+ * Annual energy, MWh/year = kWe * operating hours/1000
  * @return Annual Energy
  */
 double AnnualEnergy::calculate() {
-    annualEnergy = fieldPower * 8760 * operatingFraction / 1000;
+    annualEnergy = fieldPower * operatingHours / 1000;
     return annualEnergy;
 }

@@ -7,6 +7,7 @@
  *
  */
 
+#include <iostream>
 #include "ssmt/PRV.h"
 
 PrvWithoutDesuperheating::PrvWithoutDesuperheating(const double inletPressure,
@@ -21,9 +22,9 @@ PrvWithoutDesuperheating::PrvWithoutDesuperheating(const double inletPressure,
 
 void PrvWithoutDesuperheating::calculateProperties() {
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
-    outletProperties = SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-                                       inletProperties.at("specificEnthalpy")).calculate();
-    inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow / 1000;
+  outletProperties = SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
+                                     inletProperties.specificEnthalpy).calculate();
+  inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow;
 }
 
 PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
@@ -32,10 +33,10 @@ PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
                                              const double outletPressure, const double feedwaterPressure,
                                              const SteamProperties::ThermodynamicQuantity feedwaterQuantityType,
                                              const double feedwaterQuantityValue, const double desuperheatingTemp)
-        : inletPressure(inletPressure), quantityValue(quantityValue), inletMassFlow(inletMassFlow),
-          outletPressure(outletPressure), feedwaterPressure(feedwaterPressure),
+        : PrvWithoutDesuperheating(inletPressure, quantityType, quantityValue, inletMassFlow, outletPressure),
+          feedwaterPressure(feedwaterPressure),
           feedwaterQuantityValue(feedwaterQuantityValue), desuperheatingTemp(desuperheatingTemp),
-          quantityType(quantityType), feedwaterQuantityType(feedwaterQuantityType)
+          feedwaterQuantityType(feedwaterQuantityType)
 {
     calculateProperties();
 }
@@ -43,15 +44,14 @@ PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
 void PrvWithDesuperheating::calculateProperties() {
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
 	feedwaterProperties = SteamProperties(feedwaterPressure, feedwaterQuantityType, feedwaterQuantityValue).calculate();
-    outletProperties= SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
-                                      desuperheatingTemp).calculate();
+  outletProperties= SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
+                                    desuperheatingTemp).calculate();
 
-    inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow / 1000;
-    feedwaterMassFlow = inletMassFlow * (inletProperties.at("specificEnthalpy")
-                                         - outletProperties.at("specificEnthalpy"))
-                        / (outletProperties.at("specificEnthalpy") - feedwaterProperties.at("specificEnthalpy"));
+  inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow;
+  feedwaterMassFlow = inletMassFlow * (inletProperties.specificEnthalpy - outletProperties.specificEnthalpy)
+                          / (outletProperties.specificEnthalpy - feedwaterProperties.specificEnthalpy);
 
-	feedwaterEnergyFlow = feedwaterMassFlow * feedwaterProperties.at("specificEnthalpy") / 1000;
+	feedwaterEnergyFlow = feedwaterMassFlow * feedwaterProperties.specificEnthalpy;
     outletMassFlow = inletMassFlow + feedwaterMassFlow;
-	outletEnergyFlow = outletMassFlow * outletProperties.at("specificEnthalpy") / 1000;
+	outletEnergyFlow = outletMassFlow * outletProperties.specificEnthalpy;
 }

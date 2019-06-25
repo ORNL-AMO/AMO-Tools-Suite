@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "ssmt/Turbine.h"
 
 Turbine::Turbine(Solve solveFor, double inletPressure, SteamProperties::ThermodynamicQuantity inletQuantity,
@@ -40,11 +41,11 @@ void Turbine::calculate() {
 
 void Turbine::solveForOutletProperties() {
 	inletProperties = SteamProperties(inletPressure, inletQuantity, inletQuantityValue).calculate();
-	auto const inletSpecificEnthalpy = inletProperties.at("specificEnthalpy");
+	auto const inletSpecificEnthalpy = inletProperties.specificEnthalpy;
 
 	outletProperties = SteamProperties(outletSteamPressure, SteamProperties::ThermodynamicQuantity::ENTROPY,
-	                                   inletProperties.at("specificEntropy")).calculate();
-	auto const idealOutletSpecificEnthalpy = outletProperties.at("specificEnthalpy");
+	                                   inletProperties.specificEntropy).calculate();
+	auto const idealOutletSpecificEnthalpy = outletProperties.specificEnthalpy;
 
 	auto const outletSpecificEnthalpy = inletSpecificEnthalpy
 	                                    - isentropicEfficiency * (inletSpecificEnthalpy - idealOutletSpecificEnthalpy);
@@ -57,19 +58,19 @@ void Turbine::solveForOutletProperties() {
 
 void Turbine::solveForIsentropicEfficiency() {
 	inletProperties = SteamProperties(inletPressure, inletQuantity, inletQuantityValue).calculate();
-	auto const inletSpecificEnthalpy = inletProperties.at("specificEnthalpy");
+	auto const inletSpecificEnthalpy = inletProperties.specificEnthalpy;
 
 	outletProperties = SteamProperties(outletSteamPressure, SteamProperties::ThermodynamicQuantity::ENTROPY,
-	                                   inletProperties.at("specificEntropy")).calculate();
-	auto const idealOutletSpecificEnthalpy = outletProperties.at("specificEnthalpy");
+	                                   inletProperties.specificEntropy).calculate();
+	auto const idealOutletSpecificEnthalpy = outletProperties.specificEnthalpy;
 
 	outletProperties = SteamProperties(outletSteamPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
 	                                   outletQuantityValue).calculate();
 
-	isentropicEfficiency = (inletSpecificEnthalpy - outletProperties.at("specificEnthalpy"))
+	isentropicEfficiency = (inletSpecificEnthalpy - outletProperties.specificEnthalpy)
 	                       / (inletSpecificEnthalpy - idealOutletSpecificEnthalpy);
 
-	calculateTurbineProperties(inletSpecificEnthalpy, outletProperties.at("specificEnthalpy"));
+	calculateTurbineProperties(inletSpecificEnthalpy, outletProperties.specificEnthalpy);
 }
 
 void Turbine::calculateTurbineProperties(const double inletSpecificEnthalpy, const double outletSpecificEnthalpy) {
@@ -78,7 +79,7 @@ void Turbine::calculateTurbineProperties(const double inletSpecificEnthalpy, con
 		massFlow = energyOut / (inletSpecificEnthalpy - outletSpecificEnthalpy);
 		powerOut = massFlowOrPowerOut;
 	} else {
-		massFlow = massFlowOrPowerOut / 1000;
+		massFlow = massFlowOrPowerOut;
 		energyOut = (inletSpecificEnthalpy - outletSpecificEnthalpy) * massFlow;
 		powerOut = energyOut * generatorEfficiency;
 	}

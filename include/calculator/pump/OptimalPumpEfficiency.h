@@ -12,7 +12,7 @@
 #ifndef AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 #define AMO_LIBRARY_OPTIMALPUMPEFFICIENCY_H
 
-#include "psat/Pump.h"
+#include <results/InputData.h>
 
 class OptimalPumpEfficiency {
 
@@ -20,7 +20,7 @@ public:
     /**
      * Constructor
      * @param style Pump::Style, style of pump being used.
-     * @param achievableEfficiency double, pump efficiency at the specified operating conditions as %
+     * @param pumpEfficiency double, pump efficiency at the specified operating conditions as %
      * @param rpm double, pump RPM to define its operating speed
      * @param kinematicViscosity double, kinematic viscosity of the fluid being pumped in centistokes
      * @param stageCount double, the number of pump stages
@@ -29,7 +29,7 @@ public:
      */
     OptimalPumpEfficiency(
         Pump::Style style,
-        double achievableEfficiency,
+        double pumpEfficiency,
         double rpm,
         double kinematicViscosity,
         double stageCount,
@@ -37,7 +37,7 @@ public:
         double head
     ) :
         style(style),
-        achievableEfficiency(achievableEfficiency),
+        pumpEfficiency(pumpEfficiency),
         rpm(rpm),
         kinematicViscosity(kinematicViscosity),
         stageCount(stageCount),
@@ -46,7 +46,7 @@ public:
     {}
 
 //    OptimalPumpEfficiency(double rpm, double kinematicViscosity, double stageCount, double flowRate, double head,
-//                          Pump::Speed speed, double actualEfficiency) : rpm(rpm),
+//                          Pump::SpecificSpeed speed, double actualEfficiency) : rpm(rpm),
 //                                                                        kinematicViscosity(kinematicViscosity),
 //                                                                        stageCount(stageCount), flowRate(flowRate),
 //                                                                        head(head), speed(speed),
@@ -172,7 +172,7 @@ public:
 
 private:
     Pump::Style style;
-    double achievableEfficiency;
+    double pumpEfficiency;
     double rpm;
     double kinematicViscosity;
     double stageCount;
@@ -180,7 +180,7 @@ private:
     double head;
     double actualEfficiency;
     double optimalEfficiency;
-    double pumpEfficiency = 0.0;
+    double prePumpEfficiency = 0.0;
 };
 
 

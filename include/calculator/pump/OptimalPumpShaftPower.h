@@ -16,22 +16,28 @@
 class OptimalPumpShaftPower {
 public:
     /**
-     * Constructor
+     * Constructor used for pumps
      * @param flowRate double, measured or required flow rate in gpm
      * @param head double, measured or required pump head in feet
      * @param specificGravity double, specific gravity - unitless
      * @param pumpEfficiency double, pump efficiency at the specified operating conditions as %
      */
-    OptimalPumpShaftPower(
-        double flowRate,
-        double head,
-        double specificGravity,
-        double pumpEfficiency
-    ) :
-        flowRate(flowRate),
-        head(head),
-        specificGravity(specificGravity),
-        pumpEfficiency(pumpEfficiency)
+    OptimalPumpShaftPower(const double flowRate, const double head, const double specificGravity, const double pumpEfficiency)
+            : flowRate(flowRate), head(head), specificGravity(specificGravity), efficiency(pumpEfficiency), isPump(true)
+    {}
+
+    /**
+     * Construct used for fans
+     * @param flowRate, double in cfm
+     * @param inletPressure, double in
+     * @param outletPressure
+     * @param compressibilityFactor
+     * @param fanEfficiency
+     */
+    OptimalPumpShaftPower(const double flowRate, const double inletPressure, const double outletPressure,
+                          const double compressibilityFactor, const double fanEfficiency)
+            : flowRate(flowRate), efficiency(fanEfficiency), inletPressure(inletPressure), outletPressure(outletPressure),
+              compressibilityFactor(compressibilityFactor), isPump(false)
     {}
 
     /**
@@ -43,7 +49,6 @@ public:
 
     /**
      * Gets the measured or required flow rate
-     *
      * @return double, measured or required flow rate in gpm
      */
     double getFlowRate() const {
@@ -52,9 +57,7 @@ public:
 
     /**
      * Sets the measured or required flow rate
-     *
      * @param flowRate double, measured or required flow rate in gpm
-     *
      */
     void setFlowRate(double flowRate) {
         this->flowRate = flowRate;
@@ -62,8 +65,7 @@ public:
 
     /**
      * Gets the measured or required pump head
-     *
-     * @return double, mesured or required pump head in ft
+     * @return double, measured or required pump head in ft
      */
     double getHead() const {
         return head;
@@ -71,9 +73,7 @@ public:
 
     /**
      * Sets the measured or required pump head
-     *
      * @param head double, measured or required pump head in ft
-     *
      */
     void setHead(double head) {
         this->head = head;
@@ -81,7 +81,6 @@ public:
 
     /**
      * Gets the specific gravity
-     *
      * @return double, specific gravity - unitless
      */
     double getSpecificGravity() const {
@@ -90,9 +89,7 @@ public:
 
     /**
      * Sets the specific gravity
-     *
      * @param specificGravity double, specific gravity - unitless
-     *
      */
     void setSpecificGravity(double specificGravity) {
         this->specificGravity = specificGravity;
@@ -100,28 +97,26 @@ public:
 
     /**
      * Gets the pump efficiency
-     *
      * @return double, pump efficiency as %
      */
     double getPumpEfficiency() const {
-        return pumpEfficiency;
+        return efficiency;
     }
 
     /**
      * Sets the pump efficiency
-     *
      * @param pumpEfficiency double, pump efficiency as %
-     *
      */
     void setPumpEfficiency(double pumpEfficiency) {
-        this->pumpEfficiency = pumpEfficiency;
+        this->efficiency = pumpEfficiency;
     }
 
 private:
-    double flowRate;
-    double head;
-    double specificGravity;
-    double pumpEfficiency;
+    double flowRate, head = 0, specificGravity = 0, efficiency = 0;
+
+    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
+
+    bool isPump;
 };
 
 

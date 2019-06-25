@@ -10,7 +10,7 @@
 #ifndef AMO_LIBRARY_MOTORCURRENT_H
 #define AMO_LIBRARY_MOTORCURRENT_H
 
-#include "psat/Motor.h"
+#include <results/InputData.h>
 
 class MotorCurrent {
 public:

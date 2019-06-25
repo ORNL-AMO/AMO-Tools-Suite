@@ -1,23 +1,23 @@
 {
   "name": "amo-tools-suite",
-  "version": "0.2.12",
+  "version": "0.5.0",
   "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
   "directories": {
     "test": "tests"
   },
   "gypfile": true,
   "dependencies": {
-    "nan": "^2.8.0",
-    "node-gyp": "^3.6.2",
-    "utf-8-validate": "^3.0.3"
+    "nan": "2.14.0",
+    "node-gyp": "4.0.0",
+    "utf-8-validate": "5.0.2"
   },
   "devDependencies": {
-    "bindings": "^1.2.1",
-    "tap": "^10.3.1"
+    "bindings": "1.5.0",
+    "tap": "12.6.0"
   },
   "engines": {
-    "node": "^8.1.0",
-    "npm": "^5.0.0"
+    "node": "10.11.0",
+    "npm": "6.4.1"
   },
   "scripts": {
     "test": "tap debug tests/js/*.js"

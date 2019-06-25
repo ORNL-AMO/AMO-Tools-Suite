@@ -2,6 +2,7 @@
  * @brief Contains all the implementations of the various components of a compressed air system
  *
  * @author Preston Shires (pshires)
+ * @author Allie Ledbetter (aeledbetter)
  * @bug No known bugs.
  *
  */
@@ -140,7 +141,9 @@ public:
 	 * @param airPressureOut double, a.	Pressure of air leaving the Tank - psi
 	 * @return double, Useable air storage capacity - scf
 	 */
-	static double calculateUsableCapacity(double tankSize, double airPressureIn, double airPressureOut);
+	static double calculateUsableCapacity(const double tankSize, const double airPressureIn, const double airPressureOut) {
+		return (tankSize / 7.48) * (airPressureIn - airPressureOut) / 14.7;
+	}
 
 	/**
 	 * Calculates and returns receiver tank useable air capacity
@@ -323,9 +326,9 @@ namespace Compressor {
 		PneumaticValve(double inletPressure, double outletPressure);
 		/**
 		 * Constructor for Compressor::PneumaticValve - used for finding the flow coefficient (Cv) when the flow rate is known
-		 * @param inletPressure double,
-		 * @param outletPressure double,
-		 * @param flowRate double,
+		 * @param inletPressure double, psi
+		 * @param outletPressure double, psi
+		 * @param flowRate double, scfm
 		 */
 		PneumaticValve(double inletPressure, double outletPressure, double flowRate);
 
@@ -338,7 +341,7 @@ namespace Compressor {
 		double inletPressure, outletPressure, flowRate;
 		bool flowRateKnown;
 	};
-};
+}
 
 class BagMethod {
 public:

@@ -12,10 +12,18 @@
 #ifndef AMO_LIBRARY_OPTIMALMOTORSHAFTPOWER_H
 #define AMO_LIBRARY_OPTIMALMOTORSHAFTPOWER_H
 
-#include "psat/Pump.h"
+#include <results/InputData.h>
 
 class OptimalMotorShaftPower {
 public:
+
+    struct Output {
+        Output(const double motorShaftPower, const double driveEfficiency)
+            : motorShaftPower(motorShaftPower), driveEfficiency(driveEfficiency)
+        {}
+
+        const double motorShaftPower, driveEfficiency;
+    };
 
     /**
      * Constructor
@@ -24,17 +32,19 @@ public:
      */
     OptimalMotorShaftPower(
         double pumpShaftPower,
-        Pump::Drive drive
+        Motor::Drive drive,
+        double specifiedEfficiency
     ) :
         pumpShaftPower(pumpShaftPower),
-        drive(drive)
+        drive(drive),
+        specifiedEfficiency(specifiedEfficiency)
     {}
 
     /**
      * Calculates the optimal motor shaft power
      * @return double, optimal motor shaft power in hp
      */
-    double calculate();
+    Output calculate();
 
     /**
      * Gets the pump shaft power
@@ -54,24 +64,42 @@ public:
 
     /**
      * Gets the type of drive the pump uses from either direct or belt drive
-     * @return Pump::Drive, type of drive
+     * @return Motor::Drive, type of drive
      */
-    Pump::Drive getDrive() const {
+    Motor::Drive getDrive() const {
         return drive;
     }
 
     /**
      * Sets the type of drive the pump uses from either direct or belt drive
-     * @param drive Pump::Drive, type of drive
+     * @param drive Motor::Drive, type of drive
      */
-    void setDrive(Pump::Drive drive) {
+    void setDrive(Motor::Drive drive) {
         this->drive = drive;
+    }
+
+    /**
+     * Gets the specified efficiency
+     * @return double, specifiedEfficiency
+     */
+    double getSpecifiedEfficiency() const {
+        return specifiedEfficiency;
+    }
+
+    /**
+     * Sets the specified efficiency
+     * @param specifiedEfficiency double
+     */
+    void setSpecifiedEfficiency(double specifiedEfficiency) {
+        this->specifiedEfficiency = specifiedEfficiency;
     }
 
 private:
     double pumpShaftPower;
-    Pump::Drive drive;
-    double motorShaftPower;
+    Motor::Drive drive;
+    // double motorShaftPower;
+    // double driveEfficiency;
+    double specifiedEfficiency;
 };
 
 

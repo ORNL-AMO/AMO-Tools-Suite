@@ -18,15 +18,17 @@ HeatLoss::HeatLoss(const double inletPressure, const SteamProperties::Thermodyna
 }
 
 void HeatLoss::calculateProperties() {
-	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
-	inletEnergyFlow = inletProperties.at("specificEnthalpy") * inletMassFlow / 1000;
+	auto sp = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
+	inletEnergyFlow = sp.specificEnthalpy * inletMassFlow;
 	outletEnergyFlow = inletEnergyFlow * (1 - percentHeatLoss);
-	outletProperties  = SteamProperties(inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-	                                    outletEnergyFlow / inletMassFlow).calculate();
-	inletProperties["massFlow"] = inletMassFlow;
-	inletProperties["energyFlow"] = inletEnergyFlow;
-	outletProperties["massFlow"] = inletMassFlow;
-	outletProperties["energyFlow"] = outletEnergyFlow;
+
+	inletProperties = {inletMassFlow, inletEnergyFlow, sp};
+
+    const double qtyValueCalc = (inletMassFlow == 0.0) ? sp.specificEnthalpy : outletEnergyFlow / inletMassFlow;
+    sp = SteamProperties(inletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY, qtyValueCalc).calculate();
+
+	outletProperties = {inletMassFlow, outletEnergyFlow, sp};
+
 	heatLoss = inletEnergyFlow - outletEnergyFlow;
 }
 
