@@ -122,8 +122,8 @@ class WaterReduction {
 
 public:
     struct Output {
-        Output(double waterUse, double waterCost, double annualEnergySaving, double costSaving)
-                : waterUse(waterUse), waterCost(waterCost), annualWaterSavings(annualEnergySaving),
+        Output(double waterUse, double waterCost, double annualWaterSavings, double costSaving)
+                : waterUse(waterUse), waterCost(waterCost), annualWaterSavings(annualWaterSavings),
                   costSavings(costSaving) {}
 
         Output() = default;
