@@ -8,9 +8,11 @@
 
 class MeteredFlowData {
     MeteredFlowData(const double meterReading)
-    : meterReading(meterReading){}
+            : meterReading(meterReading) {}
 
     double getMeterReading() const { return meterReading; }
+
+    void setMeterReading(double meterReading);
 
 private:
     double meterReading;
@@ -18,11 +20,20 @@ private:
 
 class VolumeMeterData {
     VolumeMeterData(const double finalMeterReading, const double initialMeterReading, const double elapsedTime)
-    : finalMeterReading(finalMeterReading), initialMeterReading(initialMeterReading), elapsedTime(elapsedTime) {}
+            : finalMeterReading(finalMeterReading), initialMeterReading(initialMeterReading),
+              elapsedTime(elapsedTime) {}
 
     double getFinalMeterReading() const { return finalMeterReading; }
+
     double getInitialMeterReading() const { return initialMeterReading; }
+
     double getElapsedTime() const { return elapsedTime; }
+
+    void setFinalMeterReading(double finalMeterReading);
+
+    void setInitialMeterReading(double initialMeterReading);
+
+    void setElapsedTime(double elapsedTime);
 
 private:
     double finalMeterReading, initialMeterReading, elapsedTime;
@@ -36,6 +47,10 @@ public:
     double getBucketVolume() const { return bucketVolume; }
 
     double getBucketFillTime() const { return bucketFillTime; }
+
+    void setBucketVolume(double bucketVolume);
+
+    void getBucketFillTime(double bucketFillTime);
 
 private:
     double bucketVolume;
@@ -84,6 +99,14 @@ public:
 
     WaterOtherMethodData getWaterOtherMethodData() const { return waterOtherMethodData; }
 
+    void setMeteredFlowData(MeteredFlowData meteredFlowData);
+
+    void setVolumeMeterData(VolumeMeterData volumeMeterData);
+
+    void setucketMethodData(BucketMethodData bucketMethodData);
+
+    void setWaterOtherMethodData(WaterOtherMethodData waterOtherMethodData);
+
 
 private:
     int operatingHours, measurementMethod, units;
@@ -99,13 +122,13 @@ class WaterReduction {
 
 public:
     struct Output {
-        Output(double energyUse, double energyCost, double annualEnergySaving, double costSaving, double power)
-                : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySaving),
-                  costSavings(costSaving), power(power) {}
+        Output(double waterUse, double waterCost, double annualEnergySaving, double costSaving)
+                : waterUse(waterUse), waterCost(waterCost), annualWaterSavings(annualEnergySaving),
+                  costSavings(costSaving) {}
 
         Output() = default;
 
-        double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, power = 0;
+        double waterUse = 0, waterCost = 0, annualWaterSavings = 0, costSavings = 0;
     };
 
     WaterReduction(
