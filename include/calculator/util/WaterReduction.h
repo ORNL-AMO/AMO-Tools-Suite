@@ -60,15 +60,15 @@ private:
 
 class WaterOtherMethodData {
 public:
-    WaterOtherMethodData(const double water)
-            : water(water) {}
+    WaterOtherMethodData(const double consumption)
+            : consumption(consumption) {}
 
-    double getWater() const { return water; }
+    double getConsumption() const { return consumption; }
 
-    void setWater(double water);
+    void seConsumption(double consumption);
 
 private:
-    double water;
+    double consumption;
 };
 
 
