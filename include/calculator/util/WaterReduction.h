@@ -50,7 +50,7 @@ public:
 
     void setBucketVolume(double bucketVolume);
 
-    void getBucketFillTime(double bucketFillTime);
+    void setBucketFillTime(double bucketFillTime);
 
 private:
     double bucketVolume;
@@ -65,7 +65,7 @@ public:
 
     double getConsumption() const { return consumption; }
 
-    void seConsumption(double consumption);
+    void setConsumption(double consumption);
 
 private:
     double consumption;
