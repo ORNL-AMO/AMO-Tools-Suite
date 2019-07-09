@@ -10,6 +10,7 @@ class MeteredFlowData {
     MeteredFlowData(const double meterReading)
             : meterReading(meterReading) {}
 
+public:
     double getMeterReading() const { return meterReading; }
 
     void setMeterReading(double meterReading);
@@ -22,7 +23,7 @@ class VolumeMeterData {
     VolumeMeterData(const double finalMeterReading, const double initialMeterReading, const double elapsedTime)
             : finalMeterReading(finalMeterReading), initialMeterReading(initialMeterReading),
               elapsedTime(elapsedTime) {}
-
+public:
     double getFinalMeterReading() const { return finalMeterReading; }
 
     double getInitialMeterReading() const { return initialMeterReading; }
@@ -122,13 +123,13 @@ class WaterReduction {
 
 public:
     struct Output {
-        Output(double waterUse, double waterCost, double annualWaterSavings, double costSaving)
+        Output(double waterUse, double waterCost, double annualWaterSavings, double costSavings, double consumption)
                 : waterUse(waterUse), waterCost(waterCost), annualWaterSavings(annualWaterSavings),
-                  costSavings(costSaving) {}
+                  costSavings(costSavings), consumption(consumption) {}
 
         Output() = default;
 
-        double waterUse = 0, waterCost = 0, annualWaterSavings = 0, costSavings = 0;
+        double waterUse = 0, waterCost = 0, annualWaterSavings = 0, costSavings = 0, consumption = 0;
     };
 
     WaterReduction(
