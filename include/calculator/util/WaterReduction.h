@@ -42,7 +42,7 @@ private:
 
 class BucketMethodData {
 public:
-    BucketMethodData(const double bucketVolume, const double bucketFillTime, const int operatingHours)
+    BucketMethodData(const double bucketVolume, const double bucketFillTime)
             : bucketVolume(bucketVolume), bucketFillTime(bucketFillTime) {}
 
     double getBucketVolume() const { return bucketVolume; }
