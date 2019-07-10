@@ -7,10 +7,9 @@
 
 
 class MeteredFlowData {
+public:
     MeteredFlowData(const double meterReading)
             : meterReading(meterReading) {}
-
-public:
     double getMeterReading() const { return meterReading; }
 
     void setMeterReading(double meterReading);
@@ -20,10 +19,10 @@ private:
 };
 
 class VolumeMeterData {
+public:
     VolumeMeterData(const double finalMeterReading, const double initialMeterReading, const double elapsedTime)
             : finalMeterReading(finalMeterReading), initialMeterReading(initialMeterReading),
               elapsedTime(elapsedTime) {}
-public:
     double getFinalMeterReading() const { return finalMeterReading; }
 
     double getInitialMeterReading() const { return initialMeterReading; }
