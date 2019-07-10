@@ -232,7 +232,7 @@ set(TEST_FILES
         tests/ElectricityReduction.unit.cpp
         tests/NaturalGasReduction.unit.cpp
         tests/CompressedAirReduction.unit.cpp
-        test/WaterReduction.unit.cpp
+        tests/WaterReduction.unit.cpp
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp
