@@ -13,12 +13,9 @@ TEST_CASE("Electricity Reduction Multimeter Reading - 3 Phases", "[ElectricityRe
     auto electricityReduction = ElectricityReduction(electricityReductionInputVec);
     auto testOutput = electricityReduction.calculate();
 
-    CHECK(testOutput
-              .energyUse == Approx(407045.796185));
-    CHECK(testOutput
-              .energyCost == Approx(48845.495542));
-    CHECK(testOutput
-              .power == Approx(47.111781));
+    CHECK(testOutput.energyUse == Approx(407045.796185));
+    CHECK(testOutput.energyCost == Approx(48845.495542));
+    CHECK(testOutput.power == Approx(47.111781));
 }
 
 TEST_CASE("Electricity Reduction Multimeter Reading - 1 Phase", "[ElectricityReduction][util]")
@@ -33,10 +30,8 @@ TEST_CASE("Electricity Reduction Multimeter Reading - 1 Phase", "[ElectricityRed
     auto electricityReduction = ElectricityReduction(electricityReductionInputVec);
     auto testOutput = electricityReduction.calculate();
 
-    CHECK(testOutput
-              .energyUse == Approx(235008));
-    CHECK(testOutput
-              .energyCost == Approx(28200.96));
+    CHECK(testOutput.energyUse == Approx(235008));
+    CHECK(testOutput.energyCost == Approx(28200.96));
 }
 
 TEST_CASE("Electricity Reduction Nameplate Data", "[ElectricityReduction][util]")
@@ -51,10 +46,8 @@ TEST_CASE("Electricity Reduction Nameplate Data", "[ElectricityReduction][util]"
     auto electricityReduction = ElectricityReduction(electricityReductionInputVec);
     auto testOutput = electricityReduction.calculate();
 
-    CHECK(testOutput
-              .energyUse == Approx(6950.9206));
-    CHECK(testOutput
-              .energyCost == Approx(834.11047));
+    CHECK(testOutput.energyUse == Approx(6950.9206));
+    CHECK(testOutput.energyCost == Approx(834.11047));
 }
 
 TEST_CASE("Electricity Reduction Power Meter Method Test", "[ElectricityReduction][util]")
@@ -69,10 +62,8 @@ TEST_CASE("Electricity Reduction Power Meter Method Test", "[ElectricityReductio
     auto electricityReduction = ElectricityReduction(electricityReductionInputVec);
     auto testOutput = electricityReduction.calculate();
 
-    CHECK(testOutput
-              .energyUse == Approx(864000));
-    CHECK(testOutput
-              .energyCost == Approx(103680));
+    CHECK(testOutput.energyUse == Approx(864000));
+    CHECK(testOutput.energyCost == Approx(103680));
 }
 
 TEST_CASE("Electricity Reduction Other Method Test", "[ElectricityReduction][util]")
@@ -87,10 +78,8 @@ TEST_CASE("Electricity Reduction Other Method Test", "[ElectricityReduction][uti
     auto electricityReduction = ElectricityReduction(electricityReductionInputVec);
     auto testOutput = electricityReduction.calculate();
 
-    CHECK(testOutput
-              .energyUse == Approx(432000));
-    CHECK(testOutput
-              .energyCost == Approx(51840));
+    CHECK(testOutput.energyUse == Approx(432000));
+    CHECK(testOutput.energyCost == Approx(51840));
 }
 
 TEST_CASE("Electricity Reduction Combination", "[ElectricityReduction][util]")
@@ -126,8 +115,6 @@ TEST_CASE("Electricity Reduction Combination", "[ElectricityReduction][util]")
     auto electricityReduction = ElectricityReduction(electricityReductionInputVec);
     auto testOutput = electricityReduction.calculate();
 
-    CHECK(testOutput
-              .energyUse == Approx(1945004.716785));
-    CHECK(testOutput
-              .energyCost == Approx(233400.566012));
+    CHECK(testOutput.energyUse == Approx(1945004.716785));
+    CHECK(testOutput.energyCost == Approx(233400.566012));
 }

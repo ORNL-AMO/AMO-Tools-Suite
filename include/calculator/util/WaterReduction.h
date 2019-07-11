@@ -122,21 +122,18 @@ class WaterReduction {
 
 public:
     struct Output {
-        Output(double waterUse, double waterCost, double annualWaterSavings, double costSavings, double consumption)
+        Output(double waterUse, double waterCost, double annualWaterSavings, double costSavings)
                 : waterUse(waterUse), waterCost(waterCost), annualWaterSavings(annualWaterSavings),
-                  costSavings(costSavings), consumption(consumption) {}
+                  costSavings(costSavings) {}
 
         Output() = default;
 
-        double waterUse = 0, waterCost = 0, annualWaterSavings = 0, costSavings = 0, consumption = 0;
+        double waterUse = 0, waterCost = 0, annualWaterSavings = 0, costSavings = 0;
     };
 
-    WaterReduction(
-            std::vector<WaterReductionInput> &waterReductionInput) : waterReductionInputVec(waterReductionInputVec) {}
+    WaterReduction(std::vector<WaterReductionInput> &waterReductionInputVec) : waterReductionInputVec(waterReductionInputVec) {}
 
     WaterReduction::Output calculate();
-
-    WaterReduction::Output getOutput() { return output; }
 
     std::vector<WaterReductionInput> const &getWaterReductionInputVec() const {
         return waterReductionInputVec;
