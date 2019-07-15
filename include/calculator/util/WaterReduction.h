@@ -6,9 +6,9 @@
 #include <vector>
 
 
-class MeteredFlowData {
+class MeteredFlowMethodData {
 public:
-    MeteredFlowData(const double meterReading)
+    MeteredFlowMethodData(const double meterReading)
             : meterReading(meterReading) {}
     double getMeterReading() const { return meterReading; }
 
@@ -18,9 +18,9 @@ private:
     double meterReading;
 };
 
-class VolumeMeterData {
+class VolumeMeterMethodData {
 public:
-    VolumeMeterData(const double finalMeterReading, const double initialMeterReading, const double elapsedTime)
+    VolumeMeterMethodData(const double finalMeterReading, const double initialMeterReading, const double elapsedTime)
             : finalMeterReading(finalMeterReading), initialMeterReading(initialMeterReading),
               elapsedTime(elapsedTime) {}
     double getFinalMeterReading() const { return finalMeterReading; }
@@ -75,12 +75,12 @@ private:
 class WaterReductionInput {
 public:
     WaterReductionInput(const int operatingHours, const double waterCost, const int measurementMethod,
-                        const MeteredFlowData meteredFlowData, const VolumeMeterData volumeMeterData,
-                        const BucketMethodData bucketMethodData, const WaterOtherMethodData waterOtherMethodData,
+                        const MeteredFlowMethodData meteredFlowMethodData, const VolumeMeterMethodData volumeMeterMethodData,
+                        const BucketMethodData bucketMethodData, const WaterOtherMethodData otherMethodData,
                         const int units)
             : operatingHours(operatingHours), waterCost(waterCost), measurementMethod(measurementMethod),
-              meteredFlowData(meteredFlowData), volumeMeterData(volumeMeterData),
-              bucketMethodData(bucketMethodData), waterOtherMethodData(waterOtherMethodData),
+              meteredFlowMethodData(meteredFlowMethodData), volumeMeterMethodData(volumeMeterMethodData),
+              bucketMethodData(bucketMethodData), otherMethodData(otherMethodData),
               units(units) {}
 
     int getOperatingHours() const { return operatingHours; }
@@ -91,30 +91,30 @@ public:
 
     int getUnits() const { return units; }
 
-    MeteredFlowData getMeteredFlowData() const { return meteredFlowData; }
+    MeteredFlowMethodData getMeteredFlowMethodData() const { return meteredFlowMethodData; }
 
-    VolumeMeterData getVolumeMeterData() const { return volumeMeterData; }
+    VolumeMeterMethodData getVolumeMeterMethodData() const { return volumeMeterMethodData; }
 
     BucketMethodData getBucketMethodData() const { return bucketMethodData; }
 
-    WaterOtherMethodData getWaterOtherMethodData() const { return waterOtherMethodData; }
+    WaterOtherMethodData getOtherMethodData() const { return otherMethodData; }
 
-    void setMeteredFlowData(MeteredFlowData meteredFlowData);
+    void setMeteredFlowMethodData(MeteredFlowMethodData meteredFlowMethodData);
 
-    void setVolumeMeterData(VolumeMeterData volumeMeterData);
+    void setVolumeMeterMethodData(VolumeMeterMethodData volumeMeterMethodData);
 
     void setucketMethodData(BucketMethodData bucketMethodData);
 
-    void setWaterOtherMethodData(WaterOtherMethodData waterOtherMethodData);
+    void setOtherMethodData(WaterOtherMethodData otherMethodData);
 
 
 private:
     int operatingHours, measurementMethod, units;
     double waterCost;
-    MeteredFlowData meteredFlowData;
-    VolumeMeterData volumeMeterData;
+    MeteredFlowMethodData meteredFlowMethodData;
+    VolumeMeterMethodData volumeMeterMethodData;
     BucketMethodData bucketMethodData;
-    WaterOtherMethodData waterOtherMethodData;
+    WaterOtherMethodData otherMethodData;
 };
 
 

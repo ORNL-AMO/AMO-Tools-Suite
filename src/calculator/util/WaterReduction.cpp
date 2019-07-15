@@ -5,38 +5,34 @@ WaterReduction::Output WaterReduction::calculate()
 {
     double waterUse = 0, waterCost = 0, annualWaterSavings = 0, costSavings = 0;
 
-    for (auto &waterReductionInput : waterReductionInputVec)
+    for (auto & waterReductionInput : waterReductionInputVec)
     {
-        double tmpWaterUse, tmpWaterCost, tmpAnnualWaterSavings, tmpCostSavings, tmpConsumption;
+        double tmpWaterUse, tmpWaterCost, tmpAnnualWaterSavings, tmpCostSavings;
 
         if (waterReductionInput.getMeasurementMethod() == 0)
         {
-            MeteredFlowData meteredFlowData = waterReductionInput.getMeteredFlowData();
-            tmpConsumption = meteredFlowData.getMeterReading() * 60 * waterReductionInput.getOperatingHours();
-            tmpWaterUse = tmpConsumption;
+            MeteredFlowMethodData meteredFlowMethodData = waterReductionInput.getMeteredFlowMethodData();
+            tmpWaterUse = meteredFlowMethodData.getMeterReading() * 60.0 * waterReductionInput.getOperatingHours();
             tmpWaterCost = waterReductionInput.getWaterCost() * tmpWaterUse;
         }
         else if (waterReductionInput.getMeasurementMethod() == 1)
         {
-            VolumeMeterData volumeMeterData = waterReductionInput.getVolumeMeterData();
-            tmpConsumption = ((volumeMeterData.getFinalMeterReading() - volumeMeterData.getInitialMeterReading()) /
-                              (volumeMeterData.getElapsedTime() * (1 / 60))) *
+            VolumeMeterMethodData volumeMeterMethodData = waterReductionInput.getVolumeMeterMethodData();
+            tmpWaterUse = ((volumeMeterMethodData.getFinalMeterReading() - volumeMeterMethodData.getInitialMeterReading()) /
+                              (volumeMeterMethodData.getElapsedTime() * (1.0 / 60.0))) *
                              waterReductionInput.getOperatingHours();
-            tmpWaterUse = tmpConsumption;
             tmpWaterCost = waterReductionInput.getWaterCost() * tmpWaterUse;
         }
         else if (waterReductionInput.getMeasurementMethod() == 2)
         {
             BucketMethodData bucketMethodData = waterReductionInput.getBucketMethodData();
-            tmpConsumption = (bucketMethodData.getBucketVolume() / (bucketMethodData.getBucketFillTime() * (1 / 3600))) * waterReductionInput.getOperatingHours();
-            tmpWaterUse = tmpConsumption;
+            tmpWaterUse = (bucketMethodData.getBucketVolume() / (bucketMethodData.getBucketFillTime() * (1.0 / 3600.0))) * waterReductionInput.getOperatingHours();
             tmpWaterCost = waterReductionInput.getWaterCost() * tmpWaterUse;
         }
         else
         {
-            WaterOtherMethodData waterOtherMethodData = waterReductionInput.getWaterOtherMethodData();
-            tmpConsumption = waterOtherMethodData.getConsumption();
-            tmpWaterUse = tmpConsumption;
+            WaterOtherMethodData otherMethodData = waterReductionInput.getOtherMethodData();
+            tmpWaterUse = otherMethodData.getConsumption();
             tmpWaterCost = waterReductionInput.getWaterCost() * tmpWaterUse;
         }
         waterUse = waterUse + tmpWaterUse;
@@ -51,23 +47,23 @@ void WaterReduction::setWaterReductionInputVec(std::vector<WaterReductionInput> 
 }
 
 //Metered Flow Data
-void MeteredFlowData::setMeterReading(double meterReading)
+void MeteredFlowMethodData::setMeterReading(double meterReading)
 {
     this->meterReading = meterReading;
 }
 
 //Volume Meter Data
-void VolumeMeterData::setFinalMeterReading(double finalMeterReading)
+void VolumeMeterMethodData::setFinalMeterReading(double finalMeterReading)
 {
     this->finalMeterReading = finalMeterReading;
 }
 
-void VolumeMeterData::setInitialMeterReading(double initialMeterReading)
+void VolumeMeterMethodData::setInitialMeterReading(double initialMeterReading)
 {
     this->initialMeterReading = initialMeterReading;
 }
 
-void VolumeMeterData::setElapsedTime(double elapsedTime)
+void VolumeMeterMethodData::setElapsedTime(double elapsedTime)
 {
     this->elapsedTime = elapsedTime;
 }

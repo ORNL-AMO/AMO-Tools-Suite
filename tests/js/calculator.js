@@ -425,3 +425,138 @@ test('Compressed Air Reduction Test All', function (t) {
     t.equal(rnd(res.singleNozzleFlowRate), rnd(1.778508));
     t.equal(rnd(res.consumption), rnd(103682889124.41486));
 });
+
+test('Water Reduction - Metered Flow Data', function (t) {
+    t.plan(3);
+    t.type(bindings.waterReduction, 'function');
+
+    var inp = {
+        waterReductionInputVec: [
+            {
+                hoursPerYear: 8640,
+                waterCost: 0.005,
+                measurementMethod: 0,
+                volumeMeterMethodData: {
+                    initialMeterReading: 4235,
+                    finalMeterReading: 5942,
+                    elapsedTime: 15
+                },
+                meteredFlowMethodData: {
+                    meterReading: 100
+                },
+                bucketMethodData: {
+                    bucketVolume: 10,
+                    bucketFillTime: 20
+                },
+                otherMethodData: {
+                    consumption: 15000
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.waterReduction(inp);
+    t.equal(rnd(res.waterUse), rnd(51840000.0));
+    t.equal(rnd(res.waterCost), rnd(259200.0));
+});
+
+test('Water Reduction - All Types', function (t) {
+    t.plan(3);
+    t.type(bindings.waterReduction, 'function');
+
+    var inp = {
+        waterReductionInputVec: [
+            {
+                hoursPerYear: 8640,
+                waterCost: 0.005,
+                measurementMethod: 0,
+                volumeMeterMethodData: {
+                    initialMeterReading: 4235,
+                    finalMeterReading: 5942,
+                    elapsedTime: 15
+                },
+                meteredFlowMethodData: {
+                    meterReading: 100
+                },
+                bucketMethodData: {
+                    bucketVolume: 10,
+                    bucketFillTime: 20
+                },
+                otherMethodData: {
+                    consumption: 15000
+                },
+                units: 1
+            },
+            {
+                hoursPerYear: 8640,
+                waterCost: 0.005,
+                measurementMethod: 1,
+                volumeMeterMethodData: {
+                    initialMeterReading: 4235,
+                    finalMeterReading: 5942,
+                    elapsedTime: 15
+                },
+                meteredFlowMethodData: {
+                    meterReading: 100
+                },
+                bucketMethodData: {
+                    bucketVolume: 10,
+                    bucketFillTime: 20
+                },
+                otherMethodData: {
+                    consumption: 15000
+                },
+                units: 1
+            },
+            {
+                hoursPerYear: 8640,
+                waterCost: 0.005,
+                measurementMethod: 2,
+                volumeMeterMethodData: {
+                    initialMeterReading: 4235,
+                    finalMeterReading: 5942,
+                    elapsedTime: 15
+                },
+                meteredFlowMethodData: {
+                    meterReading: 100
+                },
+                bucketMethodData: {
+                    bucketVolume: 10,
+                    bucketFillTime: 20
+                },
+                otherMethodData: {
+                    consumption: 15000
+                },
+                units: 1
+            },
+            {
+                hoursPerYear: 8640,
+                waterCost: 0.005,
+                measurementMethod: 3,
+                volumeMeterMethodData: {
+                    initialMeterReading: 4235,
+                    finalMeterReading: 5942,
+                    elapsedTime: 15
+                },
+                meteredFlowMethodData: {
+                    meterReading: 100
+                },
+                bucketMethodData: {
+                    bucketVolume: 10,
+                    bucketFillTime: 20
+                },
+                otherMethodData: {
+                    consumption: 15000
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.waterReduction(inp);
+    t.equal(rnd(res.waterUse), rnd(126400920.0));
+    t.equal(rnd(res.waterCost), rnd(632004.6));
+});
+
+
