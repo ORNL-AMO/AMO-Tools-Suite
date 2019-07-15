@@ -450,8 +450,7 @@ test('Water Reduction - Metered Flow Data', function (t) {
                 },
                 otherMethodData: {
                     consumption: 15000
-                },
-                units: 1
+                }
             }
         ]
     };
@@ -485,8 +484,7 @@ test('Water Reduction - All Types', function (t) {
                 },
                 otherMethodData: {
                     consumption: 15000
-                },
-                units: 1
+                }
             },
             {
                 hoursPerYear: 8640,
@@ -506,8 +504,7 @@ test('Water Reduction - All Types', function (t) {
                 },
                 otherMethodData: {
                     consumption: 15000
-                },
-                units: 1
+                }
             },
             {
                 hoursPerYear: 8640,
@@ -527,8 +524,7 @@ test('Water Reduction - All Types', function (t) {
                 },
                 otherMethodData: {
                     consumption: 15000
-                },
-                units: 1
+                }
             },
             {
                 hoursPerYear: 8640,
@@ -548,8 +544,7 @@ test('Water Reduction - All Types', function (t) {
                 },
                 otherMethodData: {
                     consumption: 15000
-                },
-                units: 1
+                }
             }
         ]
     };

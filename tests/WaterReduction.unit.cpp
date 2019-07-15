@@ -9,7 +9,7 @@ TEST_CASE("Water Reduction Metered Flow Data", "[WaterReduction][util]")
                             MeteredFlowMethodData(100),
                             VolumeMeterMethodData(5942, 4235, 15),
                             BucketMethodData(10, 20),
-                            WaterOtherMethodData(15000), 1)};
+                            WaterOtherMethodData(15000))};
 
     auto waterReduction = WaterReduction(waterReductionInputVec);
     auto testOutput = waterReduction.calculate();
@@ -25,7 +25,7 @@ TEST_CASE("Water Reduction VolumeMeterData", "[WaterReduction][util]")
                             MeteredFlowMethodData(100),
                             VolumeMeterMethodData(5942, 4235, 15),
                             BucketMethodData(10, 20),
-                            WaterOtherMethodData(15000), 1)};
+                            WaterOtherMethodData(15000))};
 
     auto waterReduction = WaterReduction(waterReductionInputVec);
     auto testOutput = waterReduction.calculate();
@@ -41,7 +41,7 @@ TEST_CASE("Water Reduction BucketMethodData", "[WaterReduction][util]")
                             MeteredFlowMethodData(100),
                             VolumeMeterMethodData(5942, 4235, 15),
                             BucketMethodData(10, 20),
-                            WaterOtherMethodData(15000), 1)
+                            WaterOtherMethodData(15000))
     };
 
     auto waterReduction = WaterReduction(waterReductionInputVec);
@@ -58,7 +58,7 @@ TEST_CASE("Water Reduction WaterOtherMethodData", "[WaterReduction][util]")
                             MeteredFlowMethodData(100),
                             VolumeMeterMethodData(5942, 4235, 15),
                             BucketMethodData(10, 20),
-                            WaterOtherMethodData(15000), 1)};
+                            WaterOtherMethodData(15000))};
 
     auto waterReduction = WaterReduction(waterReductionInputVec);
     auto testOutput = waterReduction.calculate();

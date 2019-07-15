@@ -398,8 +398,7 @@ WaterReductionInput constructWaterReductionInput(Local<Object> obj)
         getMeteredFlowMethodData(obj),
         getVolumeMeterMethodData(obj),
         getBucketMethodData(obj),
-        getWaterOtherMethodData(obj),
-        static_cast<int>(Get("units", obj))
+        getWaterOtherMethodData(obj)
     };
 }
 

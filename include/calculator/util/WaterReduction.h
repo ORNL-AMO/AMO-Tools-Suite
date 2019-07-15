@@ -76,20 +76,16 @@ class WaterReductionInput {
 public:
     WaterReductionInput(const int operatingHours, const double waterCost, const int measurementMethod,
                         const MeteredFlowMethodData meteredFlowMethodData, const VolumeMeterMethodData volumeMeterMethodData,
-                        const BucketMethodData bucketMethodData, const WaterOtherMethodData otherMethodData,
-                        const int units)
+                        const BucketMethodData bucketMethodData, const WaterOtherMethodData otherMethodData)
             : operatingHours(operatingHours), waterCost(waterCost), measurementMethod(measurementMethod),
               meteredFlowMethodData(meteredFlowMethodData), volumeMeterMethodData(volumeMeterMethodData),
-              bucketMethodData(bucketMethodData), otherMethodData(otherMethodData),
-              units(units) {}
+              bucketMethodData(bucketMethodData), otherMethodData(otherMethodData) {}
 
     int getOperatingHours() const { return operatingHours; }
 
     double getWaterCost() const { return waterCost; }
 
     int getMeasurementMethod() const { return measurementMethod; }
-
-    int getUnits() const { return units; }
 
     MeteredFlowMethodData getMeteredFlowMethodData() const { return meteredFlowMethodData; }
 
@@ -109,7 +105,7 @@ public:
 
 
 private:
-    int operatingHours, measurementMethod, units;
+    int operatingHours, measurementMethod;
     double waterCost;
     MeteredFlowMethodData meteredFlowMethodData;
     VolumeMeterMethodData volumeMeterMethodData;
