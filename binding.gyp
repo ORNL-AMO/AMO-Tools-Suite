@@ -180,6 +180,7 @@
                 'src/calculator/util/ElectricityReduction.cpp',
                 'src/calculator/util/NaturalGasReduction.cpp',
                 'src/calculator/util/CompressedAirReduction.cpp',
+                'src/calculator/util/CompressedAirPressureReduction.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
             ],
             "conditions": [
