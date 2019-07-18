@@ -12,6 +12,8 @@
 #include "calculator/util/ElectricityReduction.h"
 #include "calculator/util/NaturalGasReduction.h"
 #include "calculator/util/CompressedAirReduction.h"
+#include "calculator/util/CompressedAirPressureReduction.h"
+#include "calculator/util/WaterReduction.h"
 
 using namespace Nan;
 using namespace v8;
@@ -76,7 +78,6 @@ inline void SetR(const std::string &key, double val)
 MultimeterData getMultimeterData(Local<Object> obj)
 {
     auto multimeterDataV8 = obj->Get(Nan::New<String>("multimeterData").ToLocalChecked())->ToObject();
-    auto test = Get("numberOfPhases", multimeterDataV8);
     return {
         static_cast<int>(Get("numberOfPhases", multimeterDataV8)),
         Get("supplyVoltage", multimeterDataV8),
@@ -319,7 +320,7 @@ CompressedAirReductionInput constructCompressedAirReductionInput(Local<Object> o
 
 CompressedAirReduction getCompressedAirReductionInputVec()
 {
-    auto compressedAirReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("compressedAirReductionInpuptVec").ToLocalChecked());
+    // auto compressedAirReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("compressedAirReductionInpuptVec").ToLocalChecked());
     auto const compressedAirReductionInputVecTemp = inp->ToObject()->Get(Nan::New<String>("compressedAirReductionInputVec").ToLocalChecked());
     auto const &compressedAirReductionInputArray = v8::Local<v8::Array>::Cast(compressedAirReductionInputVecTemp);
     std::vector<CompressedAirReductionInput> inputVec;
@@ -352,3 +353,123 @@ NAN_METHOD(compressedAirReduction)
 }
 
 // ========== END Compressed Air ==============
+
+// ========== Start Water Reduction ===========
+
+MeteredFlowMethodData getMeteredFlowMethodData(Local<Object> obj)
+{
+    auto meteredFlowMethodDataV8 = obj->Get(Nan::New<String>("meteredFlowMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("meterReading", meteredFlowMethodDataV8)};
+}
+
+VolumeMeterMethodData getVolumeMeterMethodData(Local<Object> obj)
+{
+    auto volumeMeterMethodDataV8 = obj->Get(Nan::New<String>("volumeMeterMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("finalMeterReading", volumeMeterMethodDataV8),
+        Get("initialMeterReading", volumeMeterMethodDataV8),
+        Get("elapsedTime", volumeMeterMethodDataV8)};
+}
+
+BucketMethodData getBucketMethodData(Local<Object> obj)
+{
+    auto bucketMethodDataV8 = obj->Get(Nan::New<String>("bucketMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("bucketVolume", bucketMethodDataV8),
+        Get("bucketFillTime", bucketMethodDataV8)};
+}
+
+WaterOtherMethodData getWaterOtherMethodData(Local<Object> obj)
+{
+    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("consumption", otherMethodDataV8)};
+}
+
+WaterReductionInput constructWaterReductionInput(Local<Object> obj)
+{
+    return {
+        static_cast<int>(Get("hoursPerYear", obj)),
+        Get("waterCost", obj),
+        static_cast<int>(Get("measurementMethod", obj)),
+        getMeteredFlowMethodData(obj),
+        getVolumeMeterMethodData(obj),
+        getBucketMethodData(obj),
+        getWaterOtherMethodData(obj)};
+}
+
+WaterReduction getWaterReductionInputVec()
+{
+    auto waterReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("waterReductionInputVec").ToLocalChecked());
+    auto const &waterReductionInputArray = v8::Local<v8::Array>::Cast(waterReductionInputVecV8);
+    std::vector<WaterReductionInput> inputVec;
+    for (std::size_t i = 0; i < waterReductionInputArray->Length(); i++)
+    {
+        inputVec.emplace_back(constructWaterReductionInput(waterReductionInputArray->Get(i)->ToObject()));
+    }
+    return inputVec;
+}
+
+NAN_METHOD(waterReduction)
+{
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    try
+    {
+        auto rv = WaterReduction(getWaterReductionInputVec()).calculate();
+        SetR("waterUse", rv.waterUse);
+        SetR("waterCost", rv.waterCost);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in waterReduction - calculator.h: " + what).c_str());
+    }
+    info.GetReturnValue().Set(r);
+}
+
+// ========== END water reduction =============
+
+// ========== Start CA Pressure Reduction ===========
+CompressedAirPressureReductionInput constructCompressedAirPressureReductionInput(Local<Object> obj)
+{
+    return {
+        GetBool("isBaseline", obj),
+        static_cast<int>(Get("hoursPerYear", obj)),
+        Get("electricityCost", obj),
+        Get("compressorPower", obj),
+        Get("pressure", obj),
+        Get("proposedPressure", obj)};
+}
+
+CompressedAirPressureReduction getCompressedAirPressureReductionInputVec()
+{
+    auto const compressedAirPressureReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("compressedAirPressureReductionInputVec").ToLocalChecked());
+    auto const &compressedAirPressureReductionInputArray = v8::Local<v8::Array>::Cast(compressedAirPressureReductionInputVecV8);
+    std::vector<CompressedAirPressureReductionInput> inputVec;
+    for (std::size_t i = 0; i < compressedAirPressureReductionInputArray->Length(); i++)
+    {
+        inputVec.emplace_back(constructCompressedAirPressureReductionInput(compressedAirPressureReductionInputArray->Get(i)->ToObject()));
+    }
+    return inputVec;
+}
+
+NAN_METHOD(compressedAirPressureReduction)
+{
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    try
+    {
+        auto rv = CompressedAirPressureReduction(getCompressedAirPressureReductionInputVec()).calculate();
+        SetR("energyUse", rv.energyUse);
+        SetR("energyCost", rv.energyCost);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in compressedAirPressureReduction - calculator.h: " + what).c_str());
+    }
+    info.GetReturnValue().Set(r);
+}
+// ========== END CA Pressure Reduction ===========

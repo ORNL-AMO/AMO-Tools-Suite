@@ -8,13 +8,13 @@
 class CompressedAirPressureReductionInput
 {
   public:
-    CompressedAirPressureReductionInput(const bool isModification, const int hoursPerYear,
+    CompressedAirPressureReductionInput(const bool isBaseline, const int hoursPerYear,
                                         const double electricityCost, const double compressorPower,
                                         const double pressure, const double proposedPressure)
-        : isModification(isModification), hoursPerYear(hoursPerYear), electricityCost(electricityCost),
+        : isBaseline(isBaseline), hoursPerYear(hoursPerYear), electricityCost(electricityCost),
           compressorPower(compressorPower), pressure(pressure), proposedPressure(proposedPressure) {}
 
-    bool getIsModification() const { return isModification; }
+    bool getIsBaseline() const { return isBaseline; }
     int getHoursPerYear() const { return hoursPerYear; }
     double getElectricityCost() const { return electricityCost; }
     double getCompressorPower() const { return compressorPower; }
@@ -22,7 +22,7 @@ class CompressedAirPressureReductionInput
     double getProposedPressure() const { return proposedPressure; }
 
   private:
-    bool isModification;
+    bool isBaseline;
     int hoursPerYear;
     double electricityCost, compressorPower, pressure, proposedPressure;
 };
