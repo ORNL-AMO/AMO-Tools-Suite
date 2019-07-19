@@ -11,7 +11,7 @@ CompressedAirPressureReduction::Output CompressedAirPressureReduction::calculate
         double tmpEnergyUse = 0, tmpEnergyCost = 0;
 
         //modification calculation
-        if (compressedAirPressureReductionInput.getIsBaseline())
+        if (!compressedAirPressureReductionInput.getIsBaseline())
         {
             tmpEnergyUse = compressedAirPressureReductionInput.getHoursPerYear() * compressedAirPressureReductionInput.getCompressorPower() 
                            * (1 - (compressedAirPressureReductionInput.getPressure() - compressedAirPressureReductionInput.getProposedPressure()) * 0.005);
