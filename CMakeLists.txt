@@ -110,6 +110,13 @@ set(SOURCE_FILES
         src/ssmt/Deaerator.cpp
         src/ssmt/Header.cpp
         src/ssmt/Turbine.cpp
+        src/ssmt/api/BoilerInput.cpp
+        src/ssmt/api/HeaderInput.cpp
+        src/ssmt/api/OperationsInput.cpp
+        src/ssmt/api/SteamModeler.cpp
+        src/ssmt/api/SteamModelerInput.cpp
+        src/ssmt/api/SteamModelerOutput.cpp
+        src/ssmt/api/TurbineInput.cpp
         src/fans/FanCurve.cpp
         src/calculator/util/CompressedAir.cpp
         src/calculator/util/CHP.cpp
@@ -188,6 +195,13 @@ set(INCLUDE_FILES
         include/ssmt/FlashTank.h
         include/ssmt/Deaerator.h
         include/ssmt/Header.h
+        include/ssmt/api/BoilerInput.h
+        include/ssmt/api/HeaderInput.h
+        include/ssmt/api/OperationsInput.h
+        include/ssmt/api/SteamModeler.h
+        include/ssmt/api/SteamModelerInput.h
+        include/ssmt/api/SteamModelerOutput.h
+        include/ssmt/api/TurbineInput.h
         include/fans/Fan203.h
         include/fans/FanShaftPower.h
         include/fans/Planar.h
@@ -249,7 +263,6 @@ set(TEST_FILES
         tests/HeatLoss.unit.cpp
         tests/FlashTank.unit.cpp
         tests/PRV.unit.cpp
-        tests/FlashTank.unit.cpp
         tests/Deaerator.unit.cpp
         tests/Header.unit.cpp
         tests/Turbine.unit.cpp
@@ -260,8 +273,13 @@ set(TEST_FILES
         tests/CompressedAir.unit.cpp
         tests/FluidPower.unit.cpp
         tests/CompressibilityFactor.unit.cpp
-        tests/OptimalFanEfficiency.unit.cpp 
-        tests/HeatExchanger.unit.cpp)
+        tests/OptimalFanEfficiency.unit.cpp
+        tests/HeatExchanger.unit.cpp
+        tests/steamapi/BoilerInput.unit.cpp
+        tests/steamapi/HeaderInput.unit.cpp
+        tests/steamapi/OperationsInput.unit.cpp
+        tests/steamapi/SteamModeler.unit.cpp
+        tests/steamapi/TurbineInput.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")

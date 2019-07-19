@@ -15,6 +15,9 @@
 #include "ssmt/Header.h"
 #include "ssmt/Turbine.h"
 #include "ssmt/HeatExchanger.h"
+#include "ssmt/api/SteamModeler.h"
+#include "steam/SteamModelerInputDataMapper.h"
+#include "steam/SteamModelerOutputDataMapper.h"
 #include <string>
 #include <stdexcept>
 #include <array>
@@ -191,7 +194,6 @@ NAN_METHOD(steamProperties) {
 }
 
 NAN_METHOD(boiler) {
-
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
@@ -642,6 +644,45 @@ NAN_METHOD(heatExchanger) {
     setR("coldOutletSpecificEntropy", output.coldOutlet.specificEntropy);
 
     info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(steamModeler) {
+    const std::string methodName = std::string("SteamModeler::") + std::string(__func__) + ": ";
+
+    std::cout << methodName << "begin: steam modeler" << std::endl;
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    info.GetReturnValue().Set(r);
+
+    SteamModelerInputDataMapper inputDataMapper = SteamModelerInputDataMapper();
+    SteamModeler steamModeler = SteamModeler();
+    SteamModelerOutputDataMapper outputDataMapper = SteamModelerOutputDataMapper();
+
+    std::cout << methodName << "begin: input mapping" << std::endl;
+    SteamModelerInput steamModelerInput = inputDataMapper.map();
+
+    // catch C++ error and throw as JS error
+    try {
+        std::cout << methodName << "begin: modeling" << std::endl;
+        SteamModelerOutput steamModelerOutput = steamModeler.model(steamModelerInput);
+        std::cout << methodName << "begin: output mapping" << std::endl;
+        outputDataMapper.map(steamModelerOutput);
+    } catch (const std::runtime_error &e) {
+        const std::string what = e.what();
+
+        const HeaderInput &headerInput = steamModelerInput.getHeaderInput();
+        const int headerCount = headerInput.getHeaderCount();
+
+        const std::string failMsg =
+                "ERROR calling SteamModeler: " + what + "; headerCount=" + std::to_string(headerCount);
+        std::cout << methodName << failMsg << std::endl;
+
+        Local <String> failMsgLocal = Nan::New<String>(failMsg).ToLocalChecked();
+        ThrowError(failMsgLocal);
+    }
+
+    std::cout << methodName << "end: steam modeler" << std::endl;
 }
 
 #endif //AMO_TOOLS_SUITE_SSMT_H

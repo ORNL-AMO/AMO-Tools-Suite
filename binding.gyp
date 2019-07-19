@@ -128,12 +128,13 @@
         },
         {
             "target_name": "ssmt",
-            'include_dirs': ['include', 'include/ssmt',
+            'include_dirs': ['include', 'include/ssmt', 'include/ssmt/api',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources' : [
                 'bindings/ssmt.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/').map(f=>'src/ssmt/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/api/').map(f=>'src/ssmt/api/'+f).join(' '))\")",
             ],
             "conditions": [
                 [ 'OS=="mac"', {
