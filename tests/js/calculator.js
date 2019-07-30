@@ -632,3 +632,60 @@ test('Water Reduction - All Types', function (t) {
     t.equal(rnd(res.waterUse), rnd(126400920.0));
     t.equal(rnd(res.waterCost), rnd(632004.6));
 });
+
+
+
+//Steam Reduction
+test('Steam Reduction - Flow Meter Method Data', function (t) {
+    t.plan(1);
+    t.type(bindings.steamReduction, 'function');
+
+    var inp = {
+        steamReductionInputVec: [
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 5.5,                
+                measurementMethod: 0,
+                systemEfficiency: 100,
+                pressure: 0.790800732,
+                flowMeterMethodData: {
+                    flowRate: 50000
+                },
+                airMassFlowMethodData: {
+                    isNameplate: false,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 100,
+                        airVelocity: 5
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 400
+                    },
+                    inletTemperature: 75,
+                    outletTemperature: 500
+                },
+                waterMassFlowMethodData: {
+                    isNameplate: true,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 50,
+                        airVelocity: 1000
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 40000
+                    },
+                    inletTemperature: 75,
+                    outletTemperature: 500
+                },
+                otherMethodData: {
+                    consumption: 400000
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.steamReduction(inp);
+    t.equal(rnd(res.steamUse), rnd(698117.037), 'res.steamuse is ' + res.steamUse);
+    t.equal(rnd(res.energyUse), rnd(614.950), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(3382.225), 'res.energyCost is ' + res.energyCost);
+});

@@ -19,6 +19,9 @@ NAN_MODULE_INIT(InitCalculator)
 
     Nan::Set(target, New<String>("waterReduction").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(waterReduction)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("steamReduction").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(steamReduction)).ToLocalChecked());
 }
 
 NODE_MODULE(calculator, InitCalculator)
