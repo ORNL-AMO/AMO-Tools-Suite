@@ -33,18 +33,18 @@ public:
         ).calculate();
 
         auto hotOutletTest = SteamSystemModelerTool::FluidProperties(
-                hotInlet.massFlow, hotInlet.massFlow * sp.specificEnthalpy / 1000, sp
+                hotInlet.massFlow, hotInlet.massFlow * sp.specificEnthalpy, sp
         );
 
         double heatExchanged = hotInlet.energyFlow - hotOutletTest.energyFlow;
         // TODO this should be rearranged to not perform a useless calculation
         sp = SteamProperties(
                 coldInlet.pressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-                (coldInlet.energyFlow + heatExchanged) / coldInlet.massFlow * 1000
+                (coldInlet.energyFlow + heatExchanged) / coldInlet.massFlow
         ).calculate();
 
         auto coldOutletTest = SteamSystemModelerTool::FluidProperties(
-                coldInlet.massFlow, coldInlet.massFlow * sp.specificEnthalpy / 1000, sp
+                coldInlet.massFlow, coldInlet.massFlow * sp.specificEnthalpy, sp
         );
 
         if ((hotOutletTest.temperature - coldInlet.temperature) > approachTemp) {
@@ -54,17 +54,17 @@ public:
             ).calculate();
 
             coldOutletTest = SteamSystemModelerTool::FluidProperties(
-                    coldInlet.massFlow, coldInlet.massFlow * sp.specificEnthalpy / 1000, sp
+                    coldInlet.massFlow, coldInlet.massFlow * sp.specificEnthalpy, sp
             );
 
             heatExchanged = coldOutletTest.energyFlow - coldInlet.energyFlow;
             sp = SteamProperties(
                     hotInlet.pressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
-                    (hotInlet.energyFlow - heatExchanged) / hotInlet.massFlow * 1000
+                    (hotInlet.energyFlow - heatExchanged) / hotInlet.massFlow
             ).calculate();
 
             hotOutletTest = SteamSystemModelerTool::FluidProperties(
-                    hotInlet.massFlow, hotInlet.massFlow * sp.specificEnthalpy / 1000, sp
+                    hotInlet.massFlow, hotInlet.massFlow * sp.specificEnthalpy, sp
             );
         }
         return {hotOutletTest, coldOutletTest};
