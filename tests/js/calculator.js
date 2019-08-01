@@ -413,7 +413,7 @@ test('Compressed Air Reduction Test All', function (t) {
                     compressorControlAdjustment: 0.8,
                     compressorSpecificPower: 0.16
                 },
-                units: 1                
+                units: 1
             }
         ]
     };
@@ -425,6 +425,85 @@ test('Compressed Air Reduction Test All', function (t) {
     t.equal(rnd(res.singleNozzleFlowRate), rnd(1.778508));
     t.equal(rnd(res.consumption), rnd(103682889124.41486));
 });
+
+
+test('Compressed Air Pressure Reduction - Baseline', function (t) {
+    t.plan(3);
+    t.type(bindings.compressedAirPressureReduction, 'function');
+
+    var inp = {
+        compressedAirPressureReductionInputVec: [
+            {
+                isBaseline: true,
+                hoursPerYear: 8640,
+                electricityCost: 0.005,
+                compressorPower: 500,
+                pressure: 150,
+                proposedPressure: null
+            },
+            {
+                isBaseline: true,
+                hoursPerYear: 8640,
+                electricityCost: 0.005,
+                compressorPower: 250,
+                pressure: 150,
+                proposedPressure: null
+            },
+            {
+                isBaseline: true,
+                hoursPerYear: 8640,
+                electricityCost: 0.005,
+                compressorPower: 500,
+                pressure: 120,
+                proposedPressure: 120
+            },
+            {
+                isBaseline: true,
+                hoursPerYear: 8640,
+                electricityCost: 0.005,
+                compressorPower: 450,
+                pressure: 170,
+                proposedPressure: 100
+            }
+        ]
+    };
+
+    var res = bindings.compressedAirPressureReduction(inp);
+    t.equal(rnd(res.energyUse), rnd(14688000.0));
+    t.equal(rnd(res.energyCost), rnd(73440.0));
+});
+
+test('Compressed Air Pressure Reduction - Modification', function (t) {
+    t.plan(3);
+    t.type(bindings.compressedAirPressureReduction, 'function');
+
+    var inp = {
+        compressedAirPressureReductionInputVec: [
+            {
+                isBaseline: false,
+                hoursPerYear: 8640,
+                electricityCost: 0.005,
+                compressorPower: 500,
+                pressure: 150,
+                proposedPressure: 50
+            },
+            {
+                isBaseline: false,
+                hoursPerYear: 8640,
+                electricityCost: 0.005,
+                compressorPower: 250,
+                pressure: 150,
+                proposedPressure: 89
+            }
+        ]
+    };
+
+    var res = bindings.compressedAirPressureReduction(inp);
+    t.equal(rnd(res.energyUse), rnd(3661200.0));
+    t.equal(rnd(res.energyCost), rnd(18306.0));
+});
+
+
 
 test('Water Reduction - Metered Flow Data', function (t) {
     t.plan(3);
@@ -553,5 +632,3 @@ test('Water Reduction - All Types', function (t) {
     t.equal(rnd(res.waterUse), rnd(126400920.0));
     t.equal(rnd(res.waterCost), rnd(632004.6));
 });
-
-
