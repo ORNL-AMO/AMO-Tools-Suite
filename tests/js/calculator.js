@@ -637,7 +637,7 @@ test('Water Reduction - All Types', function (t) {
 
 //Steam Reduction
 test('Steam Reduction - Flow Meter Method Data', function (t) {
-    t.plan(1);
+    t.plan(4);
     t.type(bindings.steamReduction, 'function');
 
     var inp = {
@@ -645,7 +645,7 @@ test('Steam Reduction - Flow Meter Method Data', function (t) {
             {
                 hoursPerYear: 8760,
                 utilityType: 1,
-                utilityCost: 5.5,                
+                utilityCost: 5.5,
                 measurementMethod: 0,
                 systemEfficiency: 100,
                 pressure: 0.790800732,
@@ -685,7 +685,7 @@ test('Steam Reduction - Flow Meter Method Data', function (t) {
     };
 
     var res = bindings.steamReduction(inp);
-    t.equal(rnd(res.steamUse), rnd(698117.037), 'res.steamuse is ' + res.steamUse);
-    t.equal(rnd(res.energyUse), rnd(614.950), 'res.energyUse is ' + res.energyUse);
-    t.equal(rnd(res.energyCost), rnd(3382.225), 'res.energyCost is ' + res.energyCost);
+    t.equal(rnd(res.steamUse), rnd(4380000.00), 'res.steamUse is ' + res.steamUse);
+    t.equal(rnd(res.energyUse), rnd(3858.220922), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(21220.215071), 'res.energyCost is ' + res.energyCost);
 });

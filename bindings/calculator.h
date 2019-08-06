@@ -14,7 +14,9 @@
 #include "calculator/util/CompressedAirReduction.h"
 #include "calculator/util/CompressedAirPressureReduction.h"
 #include "calculator/util/WaterReduction.h"
+#include "ssmt/SaturatedProperties.h"
 #include "calculator/util/SteamReduction.h"
+
 
 using namespace Nan;
 using namespace v8;
@@ -478,31 +480,46 @@ NAN_METHOD(compressedAirPressureReduction)
 // ============ Start Steam Reduction =============
 SteamFlowMeterMethodData getSteamFlowMeterMethodData(Local<Object> obj)
 {
+    auto flowMeterMethodDataV8 = obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())->ToObject();
     return {
-        Get("flowRate", obj)};
+        Get("flowRate", flowMeterMethodDataV8)};
 }
 
 SteamMassFlowMeasuredData getSteamMassFlowMeasuredData(Local<Object> obj)
 {
+    auto massFlowMeasuredDataV8 = obj->Get(Nan::New<String>("massFlowMeasuredData").ToLocalChecked())->ToObject();
     return {
-        Get("areaOfDuct", obj),
-        Get("airVelocity", obj)};
+        Get("areaOfDuct", massFlowMeasuredDataV8),
+        Get("airVelocity", massFlowMeasuredDataV8)};
 }
 
 SteamMassFlowNameplateData getSteamMassFlowNameplateData(Local<Object> obj)
 {
+    auto massFlowNameplateDataV8 = obj->Get(Nan::New<String>("massFlowNameplateData").ToLocalChecked())->ToObject();
     return {
-        Get("flowRate", obj)};
+        Get("flowRate", massFlowNameplateDataV8)};
 }
 
-SteamMassFlowMethodData getSteamMassFlowMethodData(Local<Object> obj)
+SteamMassFlowMethodData getSteamAirMassFlowMethodData(Local<Object> obj)
 {
+    auto massFlowMethodDataV8 = obj->Get(Nan::New<String>("airMassFlowMethodData").ToLocalChecked())->ToObject();
     return {
-        GetBool("isNameplate", obj),
-        getSteamMassFlowMeasuredData(obj),
-        getSteamMassFlowNameplateData(obj),
-        Get("inletTemperature", obj),
-        Get("outletTemperature", obj)};
+        GetBool("isNameplate", massFlowMethodDataV8),
+        getSteamMassFlowMeasuredData(massFlowMethodDataV8),
+        getSteamMassFlowNameplateData(massFlowMethodDataV8),
+        Get("inletTemperature", massFlowMethodDataV8),
+        Get("outletTemperature", massFlowMethodDataV8)};
+}
+
+SteamMassFlowMethodData getSteamWaterMassFlowMethodData(Local<Object> obj)
+{
+    auto massFlowMethodDataV8 = obj->Get(Nan::New<String>("waterMassFlowMethodData").ToLocalChecked())->ToObject();
+    return {
+        GetBool("isNameplate", massFlowMethodDataV8),
+        getSteamMassFlowMeasuredData(massFlowMethodDataV8),
+        getSteamMassFlowNameplateData(massFlowMethodDataV8),
+        Get("inletTemperature", massFlowMethodDataV8),
+        Get("outletTemperature", massFlowMethodDataV8)};
 }
 
 SteamOtherMethodData getSteamOtherMethodData(Local<Object> obj)
@@ -522,8 +539,8 @@ SteamReductionInput constructSteamReductionInput(Local<Object> obj)
         Get("systemEfficiency", obj),
         Get("pressure", obj),
         getSteamFlowMeterMethodData(obj),
-        getSteamMassFlowMethodData(obj),
-        getSteamMassFlowMethodData(obj),
+        getSteamAirMassFlowMethodData(obj),
+        getSteamWaterMassFlowMethodData(obj),
         getSteamOtherMethodData(obj),
         static_cast<int>(Get("units", obj))};
 }

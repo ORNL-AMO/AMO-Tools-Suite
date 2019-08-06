@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
-#include "calculator/util/SteamReduction.h"
 #include "ssmt/SaturatedProperties.h"
+#include "calculator/util/SteamReduction.h"
 
 SteamReduction::Output SteamReduction::calculate()
 {
@@ -18,7 +18,11 @@ SteamReduction::Output SteamReduction::calculate()
         {
             SteamFlowMeterMethodData flowMeterMethodData = steamReductionInput.getFlowMeterMethodData();
             tmpSteamUse = flowMeterMethodData.getFlowRate() * steamReductionInput.getHoursPerYear() * (steamReductionInput.getUnits() / steamReductionInput.getSystemEfficiency());
-            double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
+
+            // double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
+            SaturatedTemperature saturatedTemperatureObject = SaturatedTemperature(steamReductionInput.getPressure());
+            const double saturatedTemperature = saturatedTemperatureObject.calculate();
+
             SaturatedProperties saturatedProperties = SaturatedProperties(steamReductionInput.getPressure(), saturatedTemperature);
             auto saturatedPropertiesOutput = saturatedProperties.calculate();
             double evaporationSpecificEnthalpy = saturatedPropertiesOutput.evaporationSpecificEnthalpy;
@@ -42,7 +46,11 @@ SteamReduction::Output SteamReduction::calculate()
             }
             double heatFlowRate = (1.08 * airFlowRate * (massFlowMethodData.getOutletTemperature() - massFlowMethodData.getInletTemperature())) / 1000000.0;
             tmpEnergyUse = (steamReductionInput.getUnits() * heatFlowRate * steamReductionInput.getHoursPerYear()) / steamReductionInput.getSystemEfficiency();
-            double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
+
+            // double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
+            SaturatedTemperature saturatedTemperatureObject = SaturatedTemperature(steamReductionInput.getPressure());
+            const double saturatedTemperature = saturatedTemperatureObject.calculate();
+
             SaturatedProperties saturatedProperties = SaturatedProperties(steamReductionInput.getPressure(), saturatedTemperature);
             auto saturatedPropertiesOutput = saturatedProperties.calculate();
             double evaporationSpecificEnthalpy = saturatedPropertiesOutput.evaporationSpecificEnthalpy;
@@ -57,7 +65,11 @@ SteamReduction::Output SteamReduction::calculate()
             double waterFlowRate = massFlowNameplateData.getFlowRate();
             double heatFlowRate = (500.0 * waterFlowRate * (massFlowMethodData.getOutletTemperature() - massFlowMethodData.getInletTemperature())) / 1000000.0;
             tmpEnergyUse = (steamReductionInput.getUnits() * heatFlowRate * steamReductionInput.getHoursPerYear()) / steamReductionInput.getSystemEfficiency();
-            double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
+
+            // double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
+            SaturatedTemperature saturatedTemperatureObject = SaturatedTemperature(steamReductionInput.getPressure());
+            const double saturatedTemperature = saturatedTemperatureObject.calculate();
+
             SaturatedProperties saturatedProperties = SaturatedProperties(steamReductionInput.getPressure(), saturatedTemperature);
             auto saturatedPropertiesOutput = saturatedProperties.calculate();
             double evaporationSpecificEnthalpy = saturatedPropertiesOutput.evaporationSpecificEnthalpy;
@@ -69,8 +81,11 @@ SteamReduction::Output SteamReduction::calculate()
         {
             SteamOtherMethodData otherMethodData = steamReductionInput.getOtherMethodData();
             tmpEnergyUse = otherMethodData.getConsumption();
-            // tmpEnergyCost = tmpEnergyUse * steamReductionInput.getUtilityCost();
-            double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
+
+            // double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
+            SaturatedTemperature saturatedTemperatureObject = SaturatedTemperature(steamReductionInput.getPressure());
+            const double saturatedTemperature = saturatedTemperatureObject.calculate();
+
             SaturatedProperties saturatedProperties = SaturatedProperties(steamReductionInput.getPressure(), saturatedTemperature);
             auto saturatedPropertiesOutput = saturatedProperties.calculate();
             double evaporationSpecificEnthalpy = saturatedPropertiesOutput.evaporationSpecificEnthalpy;
@@ -80,7 +95,7 @@ SteamReduction::Output SteamReduction::calculate()
 
         //steam
         if (steamReductionInput.getUtilityType() == 0)
-        {            
+        {
             double massResult = tmpEnergyUse * (1.0 / specificEnthalpy);
             tmpEnergyCost = massResult * steamReductionInput.getUtilityCost();
         }
