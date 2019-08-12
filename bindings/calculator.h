@@ -536,7 +536,7 @@ SteamReductionInput constructSteamReductionInput(Local<Object> obj)
         static_cast<int>(Get("utilityType", obj)),
         Get("utilityCost", obj),
         static_cast<int>(Get("measurementMethod", obj)),
-        Get("systemEfficiency", obj),
+        Get("systemEfficiency", obj) / 100.0,
         Get("pressure", obj),
         getSteamFlowMeterMethodData(obj),
         getSteamAirMassFlowMethodData(obj),

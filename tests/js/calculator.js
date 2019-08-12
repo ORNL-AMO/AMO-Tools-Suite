@@ -685,7 +685,223 @@ test('Steam Reduction - Flow Meter Method Data', function (t) {
     };
 
     var res = bindings.steamReduction(inp);
-    t.equal(rnd(res.steamUse), rnd(4380000.00), 'res.steamUse is ' + res.steamUse);
-    t.equal(rnd(res.energyUse), rnd(3858.220922), 'res.energyUse is ' + res.energyUse);
-    t.equal(rnd(res.energyCost), rnd(21220.215071), 'res.energyCost is ' + res.energyCost);
+    t.equal(rnd(res.steamUse), rnd(438000000.00), 'res.steamUse is ' + res.steamUse);
+    t.equal(rnd(res.energyUse), rnd(385822.092201), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(2122021.507107), 'res.energyCost is ' + res.energyCost);
+});
+
+test('Steam Reduction - Air Mass Flow - Measured', function (t) {
+    t.plan(4);
+    t.type(bindings.steamReduction, 'function');
+
+    var inp = {
+        steamReductionInputVec: [
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 5.5,
+                measurementMethod: 1,
+                systemEfficiency: 100,
+                pressure: 0.790800732,
+                flowMeterMethodData: {
+                    flowRate: 50000
+                },
+                airMassFlowMethodData: {
+                    isNameplate: false,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 100,
+                        airVelocity: 5
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 400
+                    },
+                    inletTemperature: 70,
+                    outletTemperature: 200
+                },
+                waterMassFlowMethodData: {
+                    isNameplate: true,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 50,
+                        airVelocity: 1000
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 40000
+                    },
+                    inletTemperature: 75,
+                    outletTemperature: 500
+                },
+                otherMethodData: {
+                    consumption: 400000
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.steamReduction(inp);
+    t.equal(rnd(res.steamUse), rnd(698117.037475), 'res.steamUse is ' + res.steamUse);
+    t.equal(rnd(res.energyUse), rnd(614.952), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(3382.236), 'res.energyCost is ' + res.energyCost);
+});
+
+test('Steam Reduction - Air Mass Flow - Nameplate', function (t) {
+    t.plan(4);
+    t.type(bindings.steamReduction, 'function');
+
+    var inp = {
+        steamReductionInputVec: [
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 5.5,
+                measurementMethod: 1,
+                systemEfficiency: 100,
+                pressure: 0.790800732,
+                flowMeterMethodData: {
+                    flowRate: 50000
+                },
+                airMassFlowMethodData: {
+                    isNameplate: true,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 100,
+                        airVelocity: 5
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 400
+                    },
+                    inletTemperature: 70,
+                    outletTemperature: 200
+                },
+                waterMassFlowMethodData: {
+                    isNameplate: true,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 50,
+                        airVelocity: 1000
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 40000
+                    },
+                    inletTemperature: 75,
+                    outletTemperature: 500
+                },
+                otherMethodData: {
+                    consumption: 400000
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.steamReduction(inp);
+    t.equal(rnd(res.steamUse), rnd(558493.62998), 'res.steamUse is ' + res.steamUse);
+    t.equal(rnd(res.energyUse), rnd(491.9616), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(2705.7888), 'res.energyCost is ' + res.energyCost);
+});
+
+test('Steam Reduction - Water Mass Flow - Nameplate', function (t) {
+    t.plan(4);
+    t.type(bindings.steamReduction, 'function');
+
+    var inp = {
+        steamReductionInputVec: [
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 5.5,
+                measurementMethod: 2,
+                systemEfficiency: 100,
+                pressure: 0.790800732,
+                flowMeterMethodData: {
+                    flowRate: 50000
+                },
+                airMassFlowMethodData: {
+                    isNameplate: true,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 100,
+                        airVelocity: 5
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 400
+                    },
+                    inletTemperature: 70,
+                    outletTemperature: 200
+                },
+                waterMassFlowMethodData: {
+                    isNameplate: true,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 50,
+                        airVelocity: 1000
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 8.0
+                    },
+                    inletTemperature: 70,
+                    outletTemperature: 100
+                },
+                otherMethodData: {
+                    consumption: 400000
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.steamReduction(inp);
+    t.equal(rnd(res.steamUse), rnd(1193362.457222), 'res.steamUse is ' + res.steamUse);
+    t.equal(rnd(res.energyUse), rnd(1051.2), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(5781.6), 'res.energyCost is ' + res.energyCost);
+});
+
+test('Steam Reduction - Other Method', function (t) {
+    t.plan(4);
+    t.type(bindings.steamReduction, 'function');
+
+    var inp = {
+        steamReductionInputVec: [
+            {
+                hoursPerYear: 8760,
+                utilityType: 0,
+                utilityCost: 1.5,
+                measurementMethod: 3,
+                systemEfficiency: 100,
+                pressure: 0.790800732,
+                flowMeterMethodData: {
+                    flowRate: 50000
+                },
+                airMassFlowMethodData: {
+                    isNameplate: true,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 100,
+                        airVelocity: 5
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 400
+                    },
+                    inletTemperature: 70,
+                    outletTemperature: 200
+                },
+                waterMassFlowMethodData: {
+                    isNameplate: true,
+                    massFlowMeasuredData: {
+                        areaOfDuct: 50,
+                        airVelocity: 1000
+                    },
+                    massFlowNameplateData: {
+                        flowRate: 8.0
+                    },
+                    inletTemperature: 70,
+                    outletTemperature: 100
+                },
+                otherMethodData: {
+                    consumption: 400000
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.steamReduction(inp);
+    t.equal(rnd(res.steamUse), rnd(454095303.357088), 'res.steamUse is ' + res.steamUse);
+    t.equal(rnd(res.energyUse), rnd(400000.0), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(681.142955), 'res.energyCost is ' + res.energyCost);
 });
