@@ -15,6 +15,7 @@
 #include "calculator/util/CompressedAirPressureReduction.h"
 #include "calculator/util/WaterReduction.h"
 #include "ssmt/SaturatedProperties.h"
+#include "ssmt/SteamSystemModelerTool.h"
 #include "calculator/util/SteamReduction.h"
 
 

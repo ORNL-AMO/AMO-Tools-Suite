@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <vector>
 #include "ssmt/SaturatedProperties.h"
+#include "ssmt/SteamSystemModelerTool.h"
+
 
 class SteamFlowMeterMethodData
 {
