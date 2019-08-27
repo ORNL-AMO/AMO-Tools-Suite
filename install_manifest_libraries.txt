@@ -1,1 +1,0 @@
-C:/Devroot/ActiveProjects/AMO-Tools-Suite/_CPack_Packages/win32/NSIS/amo_tools_suite--Windows-i386/libraries/amo_tools_suite/lib/amo_tools_suite.lib
