@@ -24,8 +24,7 @@ public:
      * Constructor for the saturated temperature calculator
      * @param saturatedPressure double, saturated pressure in MPa
      * */
-    explicit SaturatedTemperature(double saturatedPressure)
-            : saturatedPressure(saturatedPressure) {}
+    explicit SaturatedTemperature(double saturatedPressure) : saturatedPressure(saturatedPressure) {}
     /**
      * Calculates the saturated temperature
      * @return double, saturated temperature in Kelvin
