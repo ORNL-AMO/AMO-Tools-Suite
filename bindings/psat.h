@@ -1,6 +1,8 @@
 #ifndef AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 #define AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 
+#include <iostream>
+
 #include <map>
 #include <unordered_map>
 #include <nan.h>
@@ -17,6 +19,7 @@
 #include "calculator/pump/OptimalSpecificSpeedCorrection.h"
 #include "calculator/pump/OptimalDeviationFactor.h"
 #include "calculator/pump/HeadTool.h"
+#include "calculator/util/Conversion.h"
 
 using namespace Nan;
 using namespace v8;
@@ -28,23 +31,31 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const & nm) {
-	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-	auto rObj = inp->ToObject()->Get(getName);
-	if (rObj->IsUndefined()) {
-		ThrowTypeError(std::string("Get method in psat.h: " + nm + " not present in object").c_str());
-	}
-	return rObj->NumberValue();
+//NAN function for fetching value associated with provided key
+double Get(std::string const &nm)
+{
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    auto rObj = inp->ToObject()->Get(getName);
+    if (rObj->IsUndefined())
+    {
+        ThrowTypeError(std::string("Get method in psat.h: " + nm + " not present in object").c_str());
+    }
+    return rObj->NumberValue();
 }
 
-void SetR(const char *nm, double n) {
-	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-	Local<Number> getNum = Nan::New<Number>(n);
-	Nan::Set(r, getName, getNum);
+//NAN function for binding data to anonymous object
+void SetR(const char *nm, double n)
+{
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    Local<Number> getNum = Nan::New<Number>(n);
+    Nan::Set(r, getName, getNum);
 }
 
-NAN_METHOD(headToolSuctionTank) {
+NAN_METHOD(headToolSuctionTank)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
+    r = Nan::New<Object>();
     const double specificGravity = Get("specificGravity");
     const double flowRate = Get("flowRate");
     const double suctionPipeDiameter = Get("suctionPipeDiameter");
@@ -56,31 +67,27 @@ NAN_METHOD(headToolSuctionTank) {
     const double dischargeGaugeElevation = Get("dischargeGaugeElevation");
     const double dischargeLineLossCoefficients = Get("dischargeLineLossCoefficients");
 
-    HeadToolSuctionTank htst(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure,
-                             suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter,
-                             dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+    //Calculation procedure
+    auto rv = HeadToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure,
+                                  suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter,
+                                  dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients)
+                  .calculate();
 
-    auto rv = htst.calculate();
-    Local<String> differentialElevationHead = Nan::New<String>("differentialElevationHead").ToLocalChecked();
-    Local<String> differentialPressureHead = Nan::New<String>("differentialPressureHead").ToLocalChecked();
-    Local<String> differentialVelocityHead = Nan::New<String>("differentialVelocityHead").ToLocalChecked();
-    Local<String> estimatedSuctionFrictionHead = Nan::New<String>("estimatedSuctionFrictionHead").ToLocalChecked();
-    Local<String> estimatedDischargeFrictionHead = Nan::New<String>("estimatedDischargeFrictionHead").ToLocalChecked();
-    Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
-	
-    Local<Object> obj = Nan::New<Object>();
-    Nan::Set(obj, differentialElevationHead, Nan::New<Number>(rv["elevationHead"]));
-    Nan::Set(obj, differentialPressureHead, Nan::New<Number>(rv["pressureHead"]));
-    Nan::Set(obj, differentialVelocityHead, Nan::New<Number>(rv["velocityHeadDifferential"]));
-    Nan::Set(obj, estimatedSuctionFrictionHead, Nan::New<Number>(rv["suctionHead"]));
-    Nan::Set(obj, estimatedDischargeFrictionHead, Nan::New<Number>(rv["dischargeHead"]));
-    Nan::Set(obj, pumpHead, Nan::New<Number>(rv["pumpHead"]));
-
-    info.GetReturnValue().Set(obj);
+    //NAN return data
+    SetR("differentialElevationHead", rv.elevationHead);
+    SetR("differentialPressureHead", rv.pressureHead);
+    SetR("differentialVelocityHead", rv.velocityHeadDifferential);
+    SetR("estimatedSuctionFrictionHead", rv.suctionHead);
+    SetR("estimatedDischargeFrictionHead", rv.dischargeHead);
+    SetR("pumpHead", rv.pumpHead);
+    info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(headTool) {
+NAN_METHOD(headTool)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
+    r = Nan::New<Object>();
     const double specificGravity = Get("specificGravity");
     const double flowRate = Get("flowRate");
     const double suctionPipeDiameter = Get("suctionPipeDiameter");
@@ -92,183 +99,230 @@ NAN_METHOD(headTool) {
     const double dischargeGaugeElevation = Get("dischargeGaugeElevation");
     const double dischargeLineLossCoefficients = Get("dischargeLineLossCoefficients");
 
-    HeadTool ht(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure,
-                suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter,
-                dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+    //Calculation procedure
+    auto rv = HeadTool(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure,
+                       suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter,
+                       dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients)
+                  .calculate();
 
-    auto rv = ht.calculate();
-    Local<String> differentialElevationHead = Nan::New<String>("differentialElevationHead").ToLocalChecked();
-    Local<String> differentialPressureHead = Nan::New<String>("differentialPressureHead").ToLocalChecked();
-    Local<String> differentialVelocityHead = Nan::New<String>("differentialVelocityHead").ToLocalChecked();
-    Local<String> estimatedSuctionFrictionHead = Nan::New<String>("estimatedSuctionFrictionHead").ToLocalChecked();
-    Local<String> estimatedDischargeFrictionHead = Nan::New<String>("estimatedDischargeFrictionHead").ToLocalChecked();
-    Local<String> pumpHead = Nan::New<String>("pumpHead").ToLocalChecked();
-    Local<Object> obj = Nan::New<Object>();
-
-    Nan::Set(obj, differentialElevationHead, Nan::New<Number>(rv["elevationHead"]));
-    Nan::Set(obj, differentialPressureHead, Nan::New<Number>(rv["pressureHead"]));
-    Nan::Set(obj, differentialVelocityHead, Nan::New<Number>(rv["velocityHeadDifferential"]));
-    Nan::Set(obj, estimatedSuctionFrictionHead, Nan::New<Number>(rv["suctionHead"]));
-    Nan::Set(obj, estimatedDischargeFrictionHead, Nan::New<Number>(rv["dischargeHead"]));
-    Nan::Set(obj, pumpHead, Nan::New<Number>(rv["pumpHead"]));
-    info.GetReturnValue().Set(obj);
+    //NAN return data
+    SetR("differentialElevationHead", rv.elevationHead);
+    SetR("differentialPressureHead", rv.pressureHead);
+    SetR("differentialVelocityHead", rv.velocityHeadDifferential);
+    SetR("estimatedSuctionFrictionHead", rv.suctionHead);
+    SetR("estimatedDischargeFrictionHead", rv.dischargeHead);
+    SetR("pumpHead", rv.pumpHead);
+    info.GetReturnValue().Set(r);
 }
 
 // Fields
 
-Motor::LineFrequency line() {
+Motor::LineFrequency line()
+{
     unsigned val = static_cast<unsigned>(Get("line_frequency"));
     return static_cast<Motor::LineFrequency>(val);
 }
-Motor::EfficiencyClass effCls() {
-	unsigned val = static_cast<unsigned>(Get("efficiency_class"));
+Motor::EfficiencyClass effCls()
+{
+    unsigned val = static_cast<unsigned>(Get("efficiency_class"));
     return static_cast<Motor::EfficiencyClass>(val);
 }
-Motor::Drive drive() {
+Motor::Drive drive()
+{
     unsigned val = static_cast<unsigned>(Get("drive"));
     return static_cast<Motor::Drive>(val);
 }
-Pump::Style style() {
+Pump::Style style()
+{
     unsigned val = static_cast<unsigned>(Get("pump_style"));
     return static_cast<Pump::Style>(val);
 }
-Motor::LoadEstimationMethod  loadEstimationMethod() {
+Motor::LoadEstimationMethod loadEstimationMethod()
+{
     unsigned val = static_cast<unsigned>(Get("load_estimation_method"));
     return static_cast<Motor::LoadEstimationMethod>(val);
 }
-Pump::SpecificSpeed speed() {
+Pump::SpecificSpeed speed()
+{
     unsigned val = static_cast<unsigned>(Get("fixed_speed"));
     return static_cast<Pump::SpecificSpeed>(val);
 }
 
-NAN_METHOD(resultsExisting) {
+NAN_METHOD(resultsExisting)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-
     Pump::Style style1 = style();
+    double pumpSpecified = Get("pump_specified");
+    double pumpRatedSpeed = Get("pump_rated_speed");
     Motor::Drive drive1 = drive();
-//    Pump::SpecificSpeed fixed_speed = speed();
+    double kinematicViscosity = 0;
+    double specificGravity = Get("specific_gravity");
+    int stages = static_cast<int>(Get("stages"));
     double specifiedDriveEfficiency;
-    if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency") / 100;
+    if (drive1 == Motor::Drive::SPECIFIED)
+    {
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
     }
-    else {
-        specifiedDriveEfficiency = 1;
+    else
+    {
+        specifiedDriveEfficiency = 100.0;
     }
-
     Motor::LineFrequency lineFrequency = line();
+    double motorRatedPower = Get("motor_rated_power");
+    double motorRatedSpeed = Get("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
-
+    double specifiedMotorEfficiency = Get("efficiency");
+    double motorRatedVoltage = Get("motor_rated_voltage");
+    double motorRatedFLA = Get("motor_rated_fla");
+    double flowRate = Get("flow_rate");
+    double head = Get("head");
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+    double motorFieldPower = Get("motor_field_power");
+    double motorFieldCurrent = Get("motor_field_current");
+    double motorFieldVoltage = Get("motor_field_voltage");
+    double operatingHours = Get("operating_hours");
+    double costKwHour = Get("cost_kw_hour");
 
-    Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, 0,
-              Get("specific_gravity"), static_cast<int>(Get("stages")), Pump::SpecificSpeed::FIXED_SPEED, specifiedDriveEfficiency);
+    //Calculation procedure
+    pumpSpecified = Conversion(pumpSpecified).percentToFraction();
+    specifiedDriveEfficiency = Conversion(specifiedDriveEfficiency).percentToFraction();
+    Pump::Input pump(style1, pumpSpecified, pumpRatedSpeed, drive1, kinematicViscosity,
+                     specificGravity, stages, Pump::SpecificSpeed::FIXED_SPEED, specifiedDriveEfficiency);
+    Motor motor(lineFrequency, motorRatedPower, motorRatedSpeed, efficiencyClass, specifiedMotorEfficiency,
+                motorRatedVoltage, motorRatedFLA);
+    Pump::FieldData fd(flowRate, head, loadEstimationMethod1, motorFieldPower,
+                       motorFieldCurrent, motorFieldVoltage);
+    PSATResult psat(pump, motor, fd, operatingHours, costKwHour);
 
-    Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
-                Get("motor_rated_voltage"), Get("motor_rated_fla"));
+    try
+    {
+        auto ex = psat.calculateExisting();
+        //perform conversions for return object
+        ex.pumpEfficiency = Conversion(ex.pumpEfficiency).fractionToPercent();
+        ex.motorEfficiency = Conversion(ex.motorEfficiency).fractionToPercent();
+        ex.motorPowerFactor = Conversion(ex.motorPowerFactor).fractionToPercent();
+        ex.driveEfficiency = Conversion(ex.driveEfficiency).fractionToPercent();
+        ex.annualCost = Conversion(ex.annualCost).manualConversion(1000.0);
+        double annualSavingsPotentialResult = Conversion(psat.getAnnualSavingsPotential()).manualConversion(1000.0);
 
-    Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
-                 Get("motor_field_current"), Get("motor_field_voltage"));
-
-    PSATResult psat(pump, motor, fd, Get("operating_hours"), Get("cost_kw_hour"));
-	try {
-        auto const & ex = psat.calculateExisting();
-
-        std::unordered_map<std::string, double> out = {
-                {"pump_efficiency",          ex.pumpEfficiency * 100},
-                {"motor_rated_power",        ex.motorRatedPower},
-                {"motor_shaft_power",        ex.motorShaftPower},
-                {"pump_shaft_power",         ex.pumpShaftPower},
-                {"motor_efficiency",         ex.motorEfficiency * 100},
-                {"motor_power_factor",       ex.motorPowerFactor * 100},
-                {"motor_current",            ex.motorCurrent},
-                {"motor_power",              ex.motorPower},
-                {"load_factor",              ex.loadFactor},
-                {"drive_efficiency",         ex.driveEfficiency * 100},
-                {"annual_energy",            ex.annualEnergy},
-                {"annual_cost",              ex.annualCost * 1000},
-                {"annual_savings_potential", psat.getAnnualSavingsPotential() * 1000},
-                {"optimization_rating",      psat.getOptimizationRating()}
-        };
-
-        for (auto const &p: out) {
-            Local <String> key = Nan::New<String>(p.first).ToLocalChecked();
-            Local <Number> value = Nan::New(p.second);
-            Nan::Set(r, key, value);
-        }
+        //NAN return data
+        SetR("pump_efficiency", ex.pumpEfficiency);
+        SetR("motor_rated_power", ex.motorRatedPower);
+        SetR("motor_shaft_power", ex.motorShaftPower);
+        SetR("pump_shaft_power", ex.pumpShaftPower);
+        SetR("motor_efficiency", ex.motorEfficiency);
+        SetR("motor_power_factor", ex.motorPowerFactor);
+        SetR("motor_current", ex.motorCurrent);
+        SetR("motor_power", ex.motorPower);
+        SetR("load_factor", ex.loadFactor);
+        SetR("drive_efficiency", ex.driveEfficiency);
+        SetR("annual_energy", ex.annualEnergy);
+        SetR("annual_cost", ex.annualCost);
+        SetR("annual_savings_potential", annualSavingsPotentialResult);
+        SetR("optimization_rating", psat.getOptimizationRating());
         info.GetReturnValue().Set(r);
-    } catch (std::runtime_error const & e) {
+    }
+    catch (std::runtime_error const &e)
+    {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in resultsExisting - psat.h: " + what).c_str());
         info.GetReturnValue().Set(r);
     }
 }
 
-NAN_METHOD(resultsModified) {
+NAN_METHOD(resultsModified)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-
+    Pump::SpecificSpeed fixedSpeed = speed();
     Pump::Style style1 = style();
+    double pumpSpecified = Get("pump_specified");
+    double pumpRatedSpeed = Get("pump_rated_speed");
     Motor::Drive drive1 = drive();
-    Pump::SpecificSpeed fixed_speed = speed();
-
+    double kinematicViscosity = Get("kinematic_viscosity");
+    double specificGravity = Get("specific_gravity");
+    int stages = static_cast<int>(Get("stages"));
     double specifiedDriveEfficiency;
-    if (drive1 == Motor::Drive::SPECIFIED) {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency") / 100;
+    if (drive1 == Motor::Drive::SPECIFIED)
+    {
+        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
     }
-    else {
-        specifiedDriveEfficiency = 1;
+    else
+    {
+        specifiedDriveEfficiency = 100.0;
     }
-
     Motor::LineFrequency lineFrequency = line();
+    double motorRatedPower = Get("motor_rated_power");
+    double motorRatedSpeed = Get("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
-
+    double specifiedMotorEfficiency = Get("efficiency");
+    double motorRatedVoltage = Get("motor_rated_voltage");
+    double motorRatedFLA = Get("motor_rated_fla");
+    double margin = Get("margin");
+    double flowRate = Get("flow_rate");
+    double head = Get("head");
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
+    double motorFieldPower = Get("motor_field_power");
+    double motorFieldCurrent = Get("motor_field_current");
+    double motorFieldVoltage = Get("motor_field_voltage");
+    double operatingHours = Get("operating_hours");
+    double costKwHour = Get("cost_kw_hour");
 
-    Pump::Input pump(style1, Get("pump_specified") / 100.0, Get("pump_rated_speed"), drive1, Get("kinematic_viscosity"),
-              Get("specific_gravity"), static_cast<int>(Get("stages")), fixed_speed, specifiedDriveEfficiency);
+    //Calculation procedure
+    specifiedDriveEfficiency = Conversion(specifiedDriveEfficiency).percentToFraction();
+    pumpSpecified = Conversion(pumpSpecified).percentToFraction();
+    Pump::Input pump(style1, pumpSpecified, pumpRatedSpeed, drive1, kinematicViscosity,
+                     specificGravity, stages, fixedSpeed, specifiedDriveEfficiency);
 
-    Motor motor(lineFrequency, Get("motor_rated_power"), Get("motor_rated_speed"), efficiencyClass, Get("efficiency"),
-                Get("motor_rated_voltage"), Get("motor_rated_fla"), Get("margin"));
+    Motor motor(lineFrequency, motorRatedPower, motorRatedSpeed, efficiencyClass, specifiedMotorEfficiency,
+                motorRatedVoltage, motorRatedFLA, margin);
 
-    Pump::FieldData fd(Get("flow_rate"), Get("head"), loadEstimationMethod1, Get("motor_field_power"),
-                 Get("motor_field_current"), Get("motor_field_voltage"));
+    Pump::FieldData fd(flowRate, head, loadEstimationMethod1, motorFieldPower,
+                       motorFieldCurrent, motorFieldVoltage);
 
-    PSATResult psat(pump, motor, fd, Get("operating_hours"), Get("cost_kw_hour"));
-    try {
-        auto const & mod = psat.calculateModified();
+    PSATResult psat(pump, motor, fd, operatingHours, costKwHour);
+    try
+    {
+        auto mod = psat.calculateModified();
+        //perform conversions for return object
+        mod.pumpEfficiency = Conversion(mod.pumpEfficiency).fractionToPercent();
+        mod.motorEfficiency = Conversion(mod.motorEfficiency).fractionToPercent();
+        mod.motorPowerFactor = Conversion(mod.motorPowerFactor).fractionToPercent();
+        mod.driveEfficiency = Conversion(mod.driveEfficiency).fractionToPercent();
+        mod.annualCost = Conversion(mod.annualCost).manualConversion(1000.0);
+        double annualSavingsPotential = Conversion(psat.getAnnualSavingsPotential()).manualConversion(1000.0);
 
-        std::unordered_map<std::string, double> out = {
-                {"pump_efficiency",          mod.pumpEfficiency * 100},
-                {"motor_rated_power",        mod.motorRatedPower},
-                {"motor_shaft_power",        mod.motorShaftPower},
-                {"pump_shaft_power",         mod.pumpShaftPower},
-                {"motor_efficiency",         mod.motorEfficiency * 100},
-                {"motor_power_factor",       mod.motorPowerFactor * 100},
-                {"motor_current",            mod.motorCurrent},
-                {"motor_power",              mod.motorPower},
-                {"load_factor",              mod.loadFactor},
-                {"drive_efficiency",         mod.driveEfficiency * 100},
-                {"annual_energy",            mod.annualEnergy},
-                {"annual_cost",              mod.annualCost * 1000},
-                {"annual_savings_potential", psat.getAnnualSavingsPotential() * 1000},
-                {"optimization_rating",      psat.getOptimizationRating()}
-        };
-
-        for (auto const &p: out) {
-            Local <String> key = Nan::New<String>(p.first).ToLocalChecked();
-            Local <Number> value = Nan::New(p.second);
-            Nan::Set(r, key, value);
-        }
+        //NAN return data
+        SetR("pump_efficiency", mod.pumpEfficiency);
+        SetR("motor_rated_power", mod.motorRatedPower);
+        SetR("motor_shaft_power", mod.motorShaftPower);
+        SetR("pump_shaft_power", mod.pumpShaftPower);
+        SetR("motor_efficiency", mod.motorEfficiency);
+        SetR("motor_power_factor", mod.motorPowerFactor);
+        SetR("motor_current", mod.motorCurrent);
+        SetR("motor_power", mod.motorPower);
+        SetR("load_factor", mod.loadFactor);
+        SetR("drive_efficiency", mod.driveEfficiency);
+        SetR("annual_energy", mod.annualEnergy);
+        SetR("annual_cost", mod.annualCost);
+        SetR("annual_savings_potential", annualSavingsPotential);
+        SetR("optimization_rating", psat.getOptimizationRating());
         info.GetReturnValue().Set(r);
-    } catch (std::runtime_error const & e) {
+    }
+    catch (std::runtime_error const &e)
+    {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in resultsModified - psat.h: " + what).c_str());
         info.GetReturnValue().Set(r);
     }
 }
 
-NAN_METHOD(estFLA) {
+NAN_METHOD(estFLA)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
     double motor_rated_power = Get("motor_rated_power");
     double motor_rated_speed = Get("motor_rated_speed");
@@ -276,34 +330,50 @@ NAN_METHOD(estFLA) {
     Motor::EfficiencyClass e = effCls();
     double efficiency = Get("efficiency");
     double motor_rated_voltage = Get("motor_rated_voltage");
+
+    //Calculation procedure
     EstimateFLA fla(motor_rated_power, motor_rated_speed, l, e, efficiency, motor_rated_voltage);
     fla.calculate();
+
+    //NAN return data
     info.GetReturnValue().Set(fla.getEstimatedFLA());
 }
 
-NAN_METHOD(motorPerformance) {
+NAN_METHOD(motorPerformance)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
     Motor::LineFrequency l = line();
-    double motor_rated_speed = Get("motor_rated_speed");
+    double motorRatedSpeed = Get("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
     double efficiency = Get("efficiency");
-    double motor_rated_power = Get("motor_rated_power");
-    double load_factor = Get("load_factor");
-	try {
-        MotorEfficiency mef(l, motor_rated_speed, efficiencyClass, motor_rated_power);
-        double mefVal = mef.calculate(load_factor, efficiency);
-        SetR("efficiency", mefVal * 100);
-        double motor_rated_voltage = Get("motor_rated_voltage");
-        double fla = Get("motor_rated_fla");
-        MotorCurrent mc(motor_rated_power, motor_rated_speed, l, efficiencyClass, efficiency, load_factor,
-                        motor_rated_voltage);
-        double mcVal = mc.calculateCurrent(fla);
-        SetR("motor_current", mcVal / fla * 100);
+    double motorRatedPower = Get("motor_rated_power");
+    double loadFactor = Get("load_factor");
+    double motorRatedVoltage = Get("motor_rated_voltage");
+    double motorRatedFLA = Get("motor_rated_fla");
 
-        MotorPowerFactor motorPowerFactor(motor_rated_power, load_factor, mcVal, mefVal, motor_rated_voltage);
-        SetR("motor_power_factor", motorPowerFactor.calculate() * 100);
-    } catch (std::runtime_error const & e) {
+    try
+    {
+        //Calculation procedure
+        MotorEfficiency mef(l, motorRatedSpeed, efficiencyClass, motorRatedPower);
+        double motorEfficiencyVal = mef.calculate(loadFactor, efficiency);
+        double motorEfficiencyResult = Conversion(motorEfficiencyVal).fractionToPercent();
+        MotorCurrent mc(motorRatedPower, motorRatedSpeed, l, efficiencyClass, efficiency, loadFactor,
+                        motorRatedVoltage);
+        double motorCurrentVal = mc.calculateCurrent(motorRatedFLA);
+        double motorCurrentResult = Conversion(motorCurrentVal / motorRatedFLA).fractionToPercent();
+        MotorPowerFactor motorPowerFactor(motorRatedPower, loadFactor, motorCurrentVal, motorEfficiencyVal, motorRatedVoltage);
+        double motorPowerFactorVal = motorPowerFactor.calculate();
+        double motorPowerFactorResult = Conversion(motorPowerFactorVal).fractionToPercent();
+
+        //NAN return data
+        SetR("efficiency", motorEfficiencyResult);
+        SetR("motor_current", motorCurrentResult);
+        SetR("motor_power_factor", motorPowerFactorResult);
+    }
+    catch (std::runtime_error const &e)
+    {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in motorPerformance - psat.h: " + what).c_str());
         info.GetReturnValue().Set(0);
@@ -312,42 +382,66 @@ NAN_METHOD(motorPerformance) {
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(pumpEfficiency)  {
+NAN_METHOD(pumpEfficiency)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
     Pump::Style s = style();
     double flow = Get("flow_rate");
+
+    //Calculation procedure
     OptimalPrePumpEff pef(s, flow);
     double v = pef.calculate();
-    SetR("average",v);
     double odf = OptimalDeviationFactor(flow).calculate();
-    SetR("max",v*odf);
+    double max = v * odf;
+
+    //NAN return data
+    SetR("average", v);
+    SetR("max", max);
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(achievableEfficiency) {
+NAN_METHOD(achievableEfficiency)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
-    double specific_speed = Get("specific_speed");
+    double specificSpeed = Get("specific_speed");
     Pump::Style s = style();
-    info.GetReturnValue().Set(OptimalSpecificSpeedCorrection(s, specific_speed).calculate()*100);
+
+    //Calculation procedure
+    double optimalSpecificSpeedCorrectionVal = OptimalSpecificSpeedCorrection(s, specificSpeed).calculate();
+    double optimalSpecificSpeedCorrectionResult = Conversion(optimalSpecificSpeedCorrectionVal).fractionToPercent();
+
+    //NAN return data
+    info.GetReturnValue().Set(optimalSpecificSpeedCorrectionResult);
 }
 
-NAN_METHOD(nema) {
+NAN_METHOD(nema)
+{
+    //NAN initialize data
     inp = info[0]->ToObject();
     Motor::LineFrequency l = line();
-    double motor_rated_speed = Get("motor_rated_speed");
+    double motorRatedSpeed = Get("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
     double efficiency = Get("efficiency");
-    double motor_rated_power = Get("motor_rated_power");
-    double load_factor = Get("load_factor");
-    try {
-        info.GetReturnValue().Set(MotorEfficiency(l, motor_rated_speed, efficiencyClass, motor_rated_power).calculate(load_factor, efficiency) * 100);
-    } catch (std::runtime_error const & e) {
+    double motorRatedPower = Get("motor_rated_power");
+    double loadFactor = Get("load_factor");
+    try
+    {
+        //Calculation procedure
+        double motorEfficiencyVal = MotorEfficiency(l, motorRatedSpeed, efficiencyClass, motorRatedPower).calculate(loadFactor, efficiency);
+        double motorEfficiencyResult = Conversion(motorEfficiencyVal).fractionToPercent();
+
+        //NAN return data
+        info.GetReturnValue().Set(motorEfficiencyResult);
+    }
+    catch (std::runtime_error const &e)
+    {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in nema - psat.h: " + what).c_str());
         info.GetReturnValue().Set(0);
     }
 }
-
 
 #endif //AMO_TOOLS_SUITE_PSAT_BRIDGE_H
