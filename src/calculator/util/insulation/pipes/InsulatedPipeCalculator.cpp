@@ -65,6 +65,53 @@ InsulatedPipeOutput calculateInsulation(InsulatedPipeInput input)
 
 double insulationRecursive(InsulatedPipeInput input, double innerPipeDiameter, double insulationOuterDiameter, double surfaceTemperature, double interfaceTemperature, double heatLength, int i)
 {
+    double filmTemperature;
+    filmTemperature = (surfaceTemperature + input.getAmbientTemperature()) / 2.0;
+    //step 1: establish air properties
+    AirProperties airProperties = calculateAirProperties(filmTemperature);
+
+    //step 2: air film resistance
+    double insReynolds = ReynoldsNumber(insulationOuterDiameter, input.getWindVelocity(), airProperties.getKinViscosity()).calculate();
+    double insRayleigh = RayleighNumber(airProperties.getExpansionCoefficient(), surfaceTemperature, input.getAmbientTemperature(), insulationOuterDiameter, airProperties.getKinViscosity(), airProperties.getAlpha()).calculate();
+    double insHeatRadiation = RadiativeHeatTransferCoefficient(input.getJacketEmissivity(), surfaceTemperature, input.getAmbientTemperature()).calculate();
+    double insNusseltForced = NusseltNumber(insReynolds, airProperties.getPrandtl()).calculateForcedConvection();
+    double insConvectionForced = ConvectiveHeatTransferCoefficient(insNusseltForced, airProperties.getPrandtl()).calculate();
+    double insNusseltFree = NusseltNumber(insRayleigh, airProperties.getPrandtl()).calculateFreeConvection();
+    double insConvectionFree = ConvectiveHeatTransferCoefficient(insNusseltFree, airProperties.getConductivity(), insulationOuterDiameter).calculate();
+    double insNusseltCombined = NusseltNumber(insNusseltForced, insNusseltFree).calculate();
+    double insConvectionCombined = ConvectiveHeatTransferCoefficient(insNusseltCombined, airProperties.getConductivity(), insulationOuterDiameter);
+    double insHeatAir = insHeatRadiation + insConvectionCombined;
+
+    //step 3: pipe resistance
+    double kPipe = propertyFit(input.getPipeMaterialCoefficients(), input.getPipeTemperature());
+    double pipeResistance = ThermalResistance(insulationOuterDiameter, input.getPipeDiameter(), innerPipeDiameter, kPipe).calculate();
+
+    //step 4: insulation resistance
+    double insulationTemperature = (surfaceTemperature + interfaceTemperature) / 2.0;
+    double kInsulation = propertyFit(input.getInsulationMaterialCoefficients(), insulationTemperature);
+    double insulationResistance = ThermalResistance(insulationOuterDiameter, input.getPipeDiameter(), innerPipeDiameter, kInsulation).calculate();
+
+    //step 5: overall resistance
+    double overallResistance = insulationResistance + pipeResistance + (1.0 / insHeatAir);
+    double heatFlow = (input.getPipeTemperature() - input.getAmbientTemperature()) / overallResistance;
+
+    //step 6: rewriting interfaceTemp & surfaceTemp
+    interfaceTemperature = input.getPipeTemperature() - heatFlow * pipeResistance;
+    surfaceTemperature = interfaceTemperature - heatFlow * insulationResistance;
+    double heatLengthNew = heatFlow * M_PI * insulationOuterDiameter;
+
+    if (std::abs(heatLengthNew - heatLength) < 0.0001)
+    {
+        return (heatLength + heatLengthNew) / 2.0;
+    }
+    else if (i > 30)
+    {
+        throw "ERROR: No Insulation - recursion limit exceeded";
+    }
+    else
+    {
+        return insulationRecursive(input, innerPipeDiameter, insulationOuterDiameter, surfaceTemperature, interfaceTemperature, heatLengthNew, i++);
+    }
 }
 
 InsulatedPipeOutput calculateNoInsulation(InsulatedPipeInput input)
@@ -130,7 +177,7 @@ double noInsulationRecursive(InsulatedPipeInput input, double innerPipeDiameter,
     }
     else
     {
-        return noInsulationRecursive(input, innerPipeDiameter, insulationOuterDiameter, surfaceTemperature, interfaceTemperature, heatLengthNew);
+        return noInsulationRecursive(input, innerPipeDiameter, insulationOuterDiameter, surfaceTemperature, interfaceTemperature, heatLengthNew, i++);
     }
 }
 
@@ -143,7 +190,7 @@ AirProperties calculateAirProperties(double temp)
     double airExpansionCoefficient = 1.0 / temp;
     double airDensity = 29.0 / 0.0820575 / temp;
     double airKinViscosity = propertyFit(this->_airProperties[2], temp) / 10e6;
-    double airSpecificHeat = propertyFit(this->_airProperties[5], temp);
+    double airSpecificHeat = propertyFit(this->_airProperties[0], temp);
     double airAlpha = propertyFit(this->_airProperties[4], temp) / 10e6;
     airProperties.setConductivity(airConductivity);
     airProperties.setViscosity(airViscosity);

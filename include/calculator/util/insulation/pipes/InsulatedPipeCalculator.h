@@ -12,15 +12,11 @@
 
 class InsulatedPipeCalculator
 {
-protected:
-    const double PI = 3.141592653589793238463;
-
 public:
     InsulatedPipeCalculator();
     InsulatedPipeCalculator(InsulatedPipeInput insulatedPipeInput) : _insulatedPipeInput(insulatedPipeInput) {}
 
     InsulatedPipeOutput calculate();
-
 
 private:
     InsulatedPipeInput _insulatedPipeInput;
