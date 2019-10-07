@@ -28,7 +28,7 @@ public:
         double insulationThickness,
         const double pipeMaterialCoefficients[5],
         const double insulationMaterialCoefficients[5],
-        AirProperties airProperties,
+        // AirProperties airProperties,
         double pipeEmissivity = 0,
         double insulationEmissivity = 0,
         double jacketEmissivity = 0,
@@ -44,7 +44,7 @@ public:
           _insulationThickness(insulationThickness),
           _pipeMaterialCoefficients(pipeMaterialCoefficients),
           _insulationMaterialCoefficients(insulationMaterialCoefficients),
-          _airProperties(airProperties),
+        //   _airProperties(airProperties),
           _pipeEmissivity(pipeEmissivity),
           _insulationEmissivity(insulationEmissivity),
           _jacketEmissivity(jacketEmissivity) {}

@@ -117,7 +117,10 @@ set(SOURCE_FILES
         src/calculator/util/NaturalGasReduction.cpp
         src/calculator/util/CompressedAirReduction.cpp
         src/calculator/util/CompressedAirPressureReduction.cpp
-        src/calculator/util/WaterReduction.cpp)
+        src/calculator/util/WaterReduction.cpp
+        src/calculator/util/insulation/pipes/InsulatedPipeInput.cpp
+        src/calculator/util/insulation/pipes/InsulatedPipeCalculator.cpp
+        src/calculator/util/insulation/pipes/InsulatedPipeOutput.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -199,6 +202,9 @@ set(INCLUDE_FILES
         include/calculator/util/CompressedAirReduction.h
         include/calculator/util/CompressedAirPressureReduction.h
         include/calculator/util/WaterReduction.h
+        include/calculator/util/insulation/pipes/InsulatedPipeInput.h
+        include/calculator/util/insulation/pipes/InsulatedPipeCalculator.h
+        include/calculator/util/insulation/pipes/InsulatedPipeOutput.h
         include/calculator/motor/MotorData.h
         include/fans/CompressibilityFactor.h
         include/results/InputData.h
@@ -236,6 +242,7 @@ set(TEST_FILES
         tests/CompressedAirReduction.unit.cpp
         tests/CompressedAirPressureReduction.unit.cpp
         tests/WaterReduction.unit.cpp
+        tests/InsulatedPipeReduction.unit.cpp
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp

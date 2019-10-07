@@ -154,8 +154,6 @@ double noInsulationRecursive(InsulatedPipeInput input, double innerPipeDiameter,
 
     //step 3: pipe resistance
     double kPipe = propertyFit(input.getPipeMaterialCoefficients(), input.getPipeTemperature());
-
-    //      awaiting clarification
     double pipeResistance = ThermalResistance(input.getPipeDiameter(), input.getPipeDiameter(), innerPipeDiameter, kPipe);
 
     //step 4: overall resistance
