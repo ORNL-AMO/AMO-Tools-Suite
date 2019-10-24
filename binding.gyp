@@ -5,11 +5,14 @@
             "target_name": "standalone",
             'include_dirs': [
                 "include",
+                "include/ssmt",
                 "include/calculator/util",
                 "<!(node -e \"require('nan')\")",
             ],
             'sources' : [
                 'bindings/standalone.cpp',
+                'src/ssmt/SteamSystemModelerTool.cpp',
+                'src/ssmt/SaturatedProperties.cpp',
                 'src/calculator/util/CHP.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")"
             ],
@@ -37,11 +40,14 @@
                 "include/results/",
                 "include/calculator/motor/",
                 "include/calculator/pump/",
+                'include/ssmt',
                 "include/calculator/util/",
                 "<!(node -e \"require('nan')\")",
             ],
             'sources' : [
                 'bindings/fan.cpp',
+                'src/ssmt/SteamSystemModelerTool.cpp',
+                'src/ssmt/SaturatedProperties.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/fans/').map(f=>'src/fans/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/pump/').map(f=>'src/calculator/pump/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/motor/').map(f=>'src/calculator/motor/'+f).join(' '))\")",
@@ -92,11 +98,13 @@
         },
         {
             "target_name": "psat",
-            'include_dirs': ['include', 'include/results', 'include/calculator/pump', 'include/calculator/motor', 'include/calculator/util',
+            'include_dirs': ['include', 'include/results', 'include/ssmt', 'include/calculator/pump', 'include/calculator/motor', 'include/calculator/util',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
                 'bindings/psat.cpp',
+                'src/ssmt/SteamSystemModelerTool.cpp',
+                'src/ssmt/SaturatedProperties.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/pump/').map(f=>'src/calculator/pump/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/motor/').map(f=>'src/calculator/motor/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
@@ -172,7 +180,10 @@
         },
         {
             "target_name": "calculator",
-            'include_dirs': ['include', 'include/calculator/util', 
+            'include_dirs': [
+                'include',
+                'include/ssmt',
+                'include/calculator/util',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources': [
@@ -180,6 +191,11 @@
                 'src/calculator/util/ElectricityReduction.cpp',
                 'src/calculator/util/NaturalGasReduction.cpp',
                 'src/calculator/util/CompressedAirReduction.cpp',
+                'src/calculator/util/CompressedAirPressureReduction.cpp',
+                'src/calculator/util/WaterReduction.cpp',
+                'src/ssmt/SteamSystemModelerTool.cpp',
+                'src/ssmt/SaturatedProperties.cpp',
+                'src/calculator/util/SteamReduction.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
             ],
             "conditions": [
