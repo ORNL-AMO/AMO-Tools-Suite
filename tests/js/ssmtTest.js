@@ -27,7 +27,6 @@ test('steamPropertiesData', function (t) {
     var otherData = res.results;
 
     t.equal(rnd(data[1].entropy), rnd(0.10000000000005363), 'data[1].entropy is ' + data[1].entropy);
-
     t.equal(rnd(data[5].entropy), rnd(0.4999999999999979), 'data[5].entropy is ' + data[5].entropy);
 
     t.equal(rnd(data[10].entropy), rnd(0.9999999999999997), 'data[10].entropy is ' + data[10].entropy);
