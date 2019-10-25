@@ -1,22 +1,22 @@
 
 
-# Ensure that we have a C++11 compiler.
-set( CMAKE_CXX_STANDARD 11 )
+# Ensure that we have a C++17 compiler.
+set( CMAKE_CXX_STANDARD 17 )
 set( CXX_STANDARD_REQUIRED ON )
 #include(CheckCXXCompilerFlag)
 #IF ( CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
 #    (UNIX AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel") ) # g++/Clang/Intel
-#  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+#  CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX17)
 #  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
 #ELSEIF ( WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" )
-#  CHECK_CXX_COMPILER_FLAG("/Qstd=c++11" COMPILER_SUPPORTS_CXX11)
+#  CHECK_CXX_COMPILER_FLAG("/Qstd=c++17" COMPILER_SUPPORTS_CXX17)
 #  CHECK_CXX_COMPILER_FLAG("/Qstd=c++0x" COMPILER_SUPPORTS_CXX0X)
 #ELSE()
-#  SET(COMPILER_SUPPORTS_CXX11 True)
+#  SET(COMPILER_SUPPORTS_CXX17 True)
 #  SET(COMPILER_SUPPORTS_CXX0X True)
 #ENDIF()
-#if(NOT (COMPILER_SUPPORTS_CXX11 OR COMPILER_SUPPORTS_CXX0X))
-#  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+#if(NOT (COMPILER_SUPPORTS_CXX17 OR COMPILER_SUPPORTS_CXX0X))
+#  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++17 support. Please use a different C++ compiler.")
 #endif()
 
 # If using clang, we have to link against libstdc++ or libc++ depending on the
@@ -24,7 +24,7 @@ set( CXX_STANDARD_REQUIRED ON )
 # math.h functions, making -lm unnecessary with gcc, but it may still be
 # necessary with clang.
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  CHECK_CXX_COMPILER_FLAG("-std=c++11 -stdlib=libc++" HAS_LIBCXX11)
+  CHECK_CXX_COMPILER_FLAG("-std=c++17 -stdlib=libc++" HAS_LIBCXX11)
   # Linking against libc++ instead of the GNU libstdc++.
   if (HAS_LIBCXX11)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
@@ -117,7 +117,7 @@ ELSEIF ( CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
 
   # COMPILER FLAGS
   ADD_CXX_DEFINITIONS("-pipe") # Faster compiler processing
-  ADD_CXX_DEFINITIONS("-std=c++11") # Enable C++11 features in g++
+  ADD_CXX_DEFINITIONS("-std=c++17") # Enable C++17 features in g++
   ADD_CXX_DEFINITIONS("-pedantic") # Turn on warnings about constructs/situations that may be non-portable or outside of the standard
   ADD_CXX_DEFINITIONS("-ffor-scope")
   ADD_CXX_DEFINITIONS("-Wall -Wextra") # Turn on warnings
@@ -150,7 +150,7 @@ ELSEIF ( WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" )
 
   # COMPILER FLAGS
   ADD_CXX_DEFINITIONS("/nologo") # Skip banner text
-  ADD_CXX_DEFINITIONS("/Qstd=c++11") # Specify C++11 language
+  ADD_CXX_DEFINITIONS("/Qstd=c++17") # Specify C++17 language
   ADD_CXX_DEFINITIONS("/Qcxx-features") # Enables standard C++ features without disabling Microsoft extensions
   ADD_CXX_DEFINITIONS("/Wall") # Enable "all" warnings
   ADD_CXX_DEFINITIONS("/Qdiag-disable:161,177,488,809,869,1786,2259,3280,10382,11074,11075") # Disable warnings listed above
@@ -194,7 +194,7 @@ ELSEIF ( UNIX AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" )
   # 11075 Inlining inhibited
 
   # COMPILER FLAGS
-  ADD_CXX_DEFINITIONS("-std=c++11") # Specify C++11 language
+  ADD_CXX_DEFINITIONS("-std=c++17") # Specify C++17 language
   ADD_CXX_DEFINITIONS("-Wall") # Enable "all" warnings
   ADD_CXX_DEFINITIONS("-diag-disable:161,177,488,809,869,1786,2259,3280,10382,11074,11075") # Disable warnings listed above
 
