@@ -1,23 +1,14 @@
 language: cpp
-matrix:
-  include:
-    # works on Precise and Trusty
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-os:
-  - linux
-  - osx
-
 compiler:
   - gcc
-#  - clang
+os: 
+  - linux
+  - osx
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - g++-7
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
@@ -25,7 +16,6 @@ before_install:
     brew install doxygen;
 
     else
-    - eval "${MATRIX_EVAL}"
     sudo apt-get update;
     sudo apt-get install doxygen;
     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -;
@@ -35,10 +25,12 @@ before_install:
 install: travis_retry npm install
 
 script:
+  - export CC=gcc-7
+  - export CXX=g++-7
+  - cmake --version
   - cmake ./
   - make
   - ./bin/amo_tools_suite_tests
   - npm install
   - npm run test
   - doxygen Doxyfile.in
-
