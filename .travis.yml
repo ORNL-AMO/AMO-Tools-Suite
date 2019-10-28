@@ -10,6 +10,7 @@ os:
         - g++-7
   env:
     - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+  dist: bionic
   - osx
 
 compiler:
