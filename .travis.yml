@@ -12,7 +12,6 @@ os:
     - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
   dist: bionic
     - osx
-
 compiler:
   - gcc
 #  - clang
