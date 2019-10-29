@@ -645,7 +645,7 @@ NAN_METHOD(energyEquivalencyElectric) {
      const double fuelFiredHeatInput = Get("fuelFiredHeatInput");
      
      r = Nan::New<Object>();
-     ElectricalEnergyEquivalency eee(fuelFiredEfficiency), electricallyHeatedEfficiency, fuelFiredHeatInput);
+     ElectricalEnergyEquivalency eee(fuelFiredEfficiency, electricallyHeatedEfficiency, fuelFiredHeatInput);
 
      double electricalHeatInput = eee.getElectricalHeatInput();
      SetR("electricalHeatInput", electricalHeatInput);
