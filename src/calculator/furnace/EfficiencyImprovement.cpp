@@ -42,28 +42,28 @@ double EfficiencyImprovement::getNewAirSpecificHeat(){
 double EfficiencyImprovement::getCurrentAirCorrection(){
     double currentExcessAir = getCurrentExcessAir();
     double currentAirSpecificHeat = getCurrentAirSpecificHeat();
-    this->currentAirCorrection_ = -(-1.07891327 + currentAirSpecificHeat * (this->currentFlueGasTemp_) * (currentExcessAir/100));
+    this->currentAirCorrection_ = -(-1.07891327 + currentAirSpecificHeat * (this->currentFlueGasTemp_)) * (currentExcessAir/100);
     return this->currentAirCorrection_;
 }
 
 double EfficiencyImprovement::getNewAirCorrection(){
     double newExcessAir = getNewExcessAir();
     double newAirSpecificHeat = getNewAirSpecificHeat();
-    this->newAirCorrection_ = -(-1.07891327 + newAirSpecificHeat * (this->newFlueGasTemp_) * (newExcessAir/100));
+    this->newAirCorrection_ = -(-1.07891327 + newAirSpecificHeat * (this->newFlueGasTemp_)) * (newExcessAir/100);
     return this->newAirCorrection_;
 }
 
 double EfficiencyImprovement::getCurrentCombustionAirCorrection() {
     double currentAirSpecificHeat = getCurrentAirSpecificHeat();
     double currentExcessAir = getCurrentExcessAir();
-    this->currentCombustionAirCorrection_ = (-1.078913827 + currentAirSpecificHeat * (this->currentCombustionAirTemp_) * (1 + (currentExcessAir/100)));
+    this->currentCombustionAirCorrection_ = (-1.078913827 + currentAirSpecificHeat * (this->currentCombustionAirTemp_)) * (1 + (currentExcessAir/100));
     return this->currentCombustionAirCorrection_;
 }
 
 double EfficiencyImprovement::getNewCombustionAirCorrection() {
     double newAirSpecificHeat = getNewAirSpecificHeat();
     double newExcessAir = getNewExcessAir();
-    this->newCombustionAirCorrection_ = (-1.078913827 + newAirSpecificHeat * (this->newCombustionAirTemp_) * (1 + (newExcessAir/100)));
+    this->newCombustionAirCorrection_ = (-1.078913827 + newAirSpecificHeat * (this->newCombustionAirTemp_)) * (1 + (newExcessAir/100));
     return this->newCombustionAirCorrection_;
 }
 

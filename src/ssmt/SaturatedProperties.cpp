@@ -42,7 +42,7 @@ double SaturatedPressure::calculate() const {
 }
 
 SteamSystemModelerTool::SaturatedPropertiesOutput SaturatedProperties::calculate() {
-    auto const gasProperties = SteamSystemModelerTool::region2(saturatedTemperature, saturatedPressure);
+    auto gasProperties = SteamSystemModelerTool::region2(saturatedTemperature, saturatedPressure);
     SteamSystemModelerTool::SteamPropertiesOutput liquidProperties;
 
     if ((saturatedTemperature >= SteamSystemModelerTool::TEMPERATURE_MIN)

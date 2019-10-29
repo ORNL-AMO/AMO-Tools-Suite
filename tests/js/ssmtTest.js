@@ -153,13 +153,13 @@ test('boiler', function (t) {
 
     var res = bindings.boiler(inp);
 
-    t.equal(rnd(res.steamEnergyFlow), rnd(110.7533647508802), 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
+    t.equal(rnd(res.steamEnergyFlow), rnd(110753.36475088508), 'res.steamEnergyFlow is ' + res.steamEnergyFlow);
     t.equal(rnd(res.blowdownMassFlow), rnd(0.9183673469387756), 'res.blowdownMassFlow is ' + res.blowdownMassFlow);
-    t.equal(rnd(res.blowdownEnergyFlow), rnd(1.6779495528531483), 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
+    t.equal(rnd(res.blowdownEnergyFlow), rnd(1677.949552853158), 'res.blowdownEnergyFlow is ' + res.blowdownEnergyFlow);
     t.equal(rnd(res.feedwaterMassFlow), rnd(45.91836734693878), 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
-    t.equal(rnd(res.feedwaterEnergyFlow), rnd(64.64697706690914), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
-    t.equal(rnd(res.boilerEnergy), rnd(47.7843372368242), 'res.boilerEnergy is ' + res.boilerEnergy);
-    t.equal(rnd(res.fuelEnergy), rnd(56.216867337440235), 'res.fuelEnergy is ' + res.fuelEnergy);
+    t.equal(rnd(res.feedwaterEnergyFlow), rnd(64646.977066909145), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(rnd(res.boilerEnergy), rnd(47784.337236829095), 'res.boilerEnergy is ' + res.boilerEnergy);
+    t.equal(rnd(res.fuelEnergy), rnd(56216.867337446), 'res.fuelEnergy is ' + res.fuelEnergy);
 });
 
 test('heatLoss', function (t) {
@@ -176,10 +176,10 @@ test('heatLoss', function (t) {
 
     var res = bindings.heatLoss(inp);
 
-    t.equal(rnd(res.inletEnergyFlow), rnd(15642.967348653074), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(rnd(res.inletEnergyFlow), rnd(15642967.348653074), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
     t.equal(res.outletMassFlow, 5434, 'res.outletMassFlow is ' + res.outletMassFlow);
-    t.equal(rnd(res.outletEnergyFlow), rnd(15261.278945345939), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
-    t.equal(rnd(res.heatLoss), rnd(381.68840330713465), 'res.heatLoss is ' + res.heatLoss);
+    t.equal(rnd(res.outletEnergyFlow), rnd(15261278.94534594), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(rnd(res.heatLoss), rnd(381688.4033071343), 'res.heatLoss is ' + res.heatLoss);
 });
 
 test('flashTank', function (t) {
@@ -196,11 +196,11 @@ test('flashTank', function (t) {
 
     var res = bindings.flashTank(inp);
 
-    t.equal(res.inletWaterEnergyFlow, 72266, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
+    t.equal(res.inletWaterEnergyFlow, 72266000, 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
     t.equal(rnd(res.outletGasMassFlow), rnd(19667.16383431122), 'res.outletGasMassFlow is ' + res.outletGasMassFlow);
-    t.equal(rnd(res.outletGasEnergyFlow), rnd(55126.79710787576), 'res.outletGasEnergyFlow is ' + res.outletGasEnergyFlow);
+    t.equal(rnd(res.outletGasEnergyFlow), rnd(55126797.107875764), 'res.outletGasEnergyFlow is ' + res.outletGasEnergyFlow);
     t.equal(rnd(res.outletLiquidMassFlow), rnd(16465.83616568878), 'res.outletLiquidMassFlow is ' + res.outletLiquidMassFlow);
-    t.equal(rnd(res.outletLiquidEnergyFlow), rnd(17139.20289212423), 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
+    t.equal(rnd(res.outletLiquidEnergyFlow), rnd(17139202.892124232), 'res.outletLiquidEnergyFlow is ' + res.outletLiquidEnergyFlow);
 });
 
 test('prvWithoutDesuperheating', function (t) {
@@ -217,9 +217,9 @@ test('prvWithoutDesuperheating', function (t) {
 
     var res = bindings.prvWithoutDesuperheating(inp);
 
-    t.equal(rnd(res.inletEnergyFlow), rnd(123147.93493161911), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(rnd(res.inletEnergyFlow), rnd(123147934.93161911), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
     t.equal(res.outletMassFlow, 37970, 'res.outletMassFlow is ' + res.outletMassFlow);
-    t.equal(rnd(res.outletEnergyFlow), rnd(123147.93493161911), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(rnd(res.outletEnergyFlow), rnd(123147934.93161911), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
     t.equal(rnd(res.inletSpecificEnthalpy), rnd(3243.29562632655), 'res.inletSpecificEnthalpy is ' + res.inletSpecificEnthalpy);
     t.equal(rnd(res.outletSpecificEnthalpy), rnd(3243.29562632655), 'res.outletSpecificEnthalpy is ' + res.outletSpecificEnthalpy);
 });
@@ -242,11 +242,11 @@ test('prvWithDesuperheating', function (t) {
 
     var res = bindings.prvWithDesuperheating(inp);
 
-    t.equal(rnd(res.inletEnergyFlow), rnd(67367.3111113208), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
+    t.equal(rnd(res.inletEnergyFlow), rnd(67367311.1113208), 'res.inletEnergyFlow is ' + res.inletEnergyFlow);
     t.equal(rnd(res.outletMassFlow), rnd(23583.469367594505), 'res.outletMassFlow is ' + res.outletMassFlow);
-    t.equal(rnd(res.outletEnergyFlow), rnd(78812.94289252072), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
+    t.equal(rnd(res.outletEnergyFlow), rnd(78812942.89252071), 'res.outletEnergyFlow is ' + res.outletEnergyFlow);
     t.equal(rnd(res.feedwaterMassFlow), rnd(5984.4693675945055), 'res.feedwaterMassFlow is ' + res.feedwaterMassFlow);
-    t.equal(rnd(res.feedwaterEnergyFlow), rnd(11445.631781199914), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(rnd(res.feedwaterEnergyFlow), rnd(11445631.781199913), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
 });
 
 test('deaerator', function (t) {
@@ -267,13 +267,13 @@ test('deaerator', function (t) {
 
     var res = bindings.deaerator(inp);
 
-    t.equal(rnd(res.feedwaterEnergyFlow), rnd(21032.14129813274), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
+    t.equal(rnd(res.feedwaterEnergyFlow), rnd(21032141.29813274), 'res.feedwaterEnergyFlow is ' + res.feedwaterEnergyFlow);
     t.equal(res.ventedSteamMassFlow, 166.74, 'res.ventedSteamMassFlow is ' + res.ventedSteamMassFlow);
-    t.equal(rnd(res.ventedSteamEnergyFlow), rnd(451.2310290232193), 'res.ventedSteamEnergyFlow is ' + res.ventedSteamEnergyFlow);
+    t.equal(rnd(res.ventedSteamEnergyFlow), rnd(451231.0290232193), 'res.ventedSteamEnergyFlow is ' + res.ventedSteamEnergyFlow);
     t.equal(rnd(res.inletWaterMassFlow), rnd(34305.35779780327), 'res.inletWaterMassFlow is ' + res.inletWaterMassFlow);
-    t.equal(rnd(res.inletWaterEnergyFlow), rnd(3430.535779780379), 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
+    t.equal(rnd(res.inletWaterEnergyFlow), rnd(3430535.779780379), 'res.inletWaterEnergyFlow is ' + res.inletWaterEnergyFlow);
     t.equal(rnd(res.inletSteamMassFlow), rnd(7546.382202196729), 'res.inletSteamMassFlow is ' + res.inletSteamMassFlow);
-    t.equal(rnd(res.inletSteamEnergyFlow), rnd(18052.836547375577), 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
+    t.equal(rnd(res.inletSteamEnergyFlow), rnd(18052836.54737558), 'res.inletSteamEnergyFlow is ' + res.inletSteamEnergyFlow);
 });
 
 test('header', function (t) {
@@ -362,19 +362,19 @@ test('turbine', function (t) {
     t.equal(rnd(res.inletSpecificEnthalpy), rnd(3707.397118));
     t.equal(rnd(res.inletSpecificEntropy), rnd(7.384098));
     t.equal(rnd(res.inletQuality), rnd(1));
-    t.equal(rnd(res.inletEnergyFlow), rnd(58739.99993));
+    t.equal(rnd(res.inletEnergyFlow), rnd(58739999.930197));
 
     t.equal(rnd(res.outletPressure), rnd(3.4781));
     t.equal(rnd(res.outletTemperature), rnd(872.338861));
     t.equal(rnd(res.outletSpecificEnthalpy), rnd(3677.155392));
     t.equal(rnd(res.outletSpecificEntropy), rnd(7.436479));
     t.equal(rnd(res.outletQuality), rnd(1));
-    t.equal(rnd(res.outletEnergyFlow), rnd(58260.850027));
+    t.equal(rnd(res.outletEnergyFlow), rnd(58260850.026976));
 
-    t.equal(rnd(res.massFlow), rnd(15.844));
+    t.equal(rnd(res.massFlow), rnd(15844));
     t.equal(rnd(res.isentropicEfficiency), rnd(40.1));
-    t.equal(rnd(res.energyOut), rnd(479.149903));
-    t.equal(rnd(res.powerOut), rnd(451.359209));
+    t.equal(rnd(res.energyOut), rnd(479149.903221));
+    t.equal(rnd(res.powerOut), rnd(451359.208834));
     t.equal(rnd(res.generatorEfficiency), rnd(94.2));
 
     inp = {
@@ -409,95 +409,90 @@ test('turbine', function (t) {
 
 });
 
-test('heatExchanger', function(t) { 
+test('heatExchanger', function(t) {
     t.plan(32);
-
     input = {
-        hotInletMassFlow: 3761,
-        hotInletEnergyFlow: 4153,
-        hotInletTemperature: 527,
-        hotInletPressure: 4.2382,
-        hotInletQuality: 0,
-        hotInletSpecificVolume: 0.001,
-        hotInletDensity: 1 / 0.001,
-        hotInletSpecificEnthalpy: 1104.3,
-        hotInletSpecificEntropy: 2.828,
-
-        coldInletMassFlow: 83327,
-        coldInletEnergyFlow: 3510,
-        coldInletTemperature: 283.2,
-        coldInletPressure: 0.1013,
+        approachTemp: 10,
+        coldInletDensity: 999.7015401695024,
+        coldInletEnergyFlow: 262530220.6437767,
+        coldInletMassFlow: 6233100.275643423,
+        coldInletPressure: 0.101325,
         coldInletQuality: 0,
-        coldInletSpecificVolume: 0.001,
-        coldInletDensity: 1 / 0.001,
-        coldInletSpecificEnthalpy: 42.1,
-        coldInletSpecificEntropy: 0.151,
-
-        approachTemp: 11.111111
+        coldInletSpecificEnthalpy: 42.11872247100606,
+        coldInletSpecificEntropy: 0.15107627374941596,
+        coldInletSpecificVolume: 0.0010002985489353622,
+        coldInletTemperature: 283.15,
+        hotInletDensity: 866.6499783621422,
+        hotInletEnergyFlow: 81817968.94625004,
+        hotInletMassFlow: 96858.44750370324,
+        hotInletPressure: 1.5,
+        hotInletQuality: 0,
+        hotInletSpecificEnthalpy: 844.716914785588,
+        hotInletSpecificEntropy: 2.314681630438997,
+        hotInletSpecificVolume: 0.0011538683724309003,
+        hotInletTemperature: 471.4452428824141,
     }
 
     res = bindings.heatExchanger(input);
 
-    t.equal(rnd(res.hotOutletPressure), rnd(4.2382));
-    t.equal(rnd(res.hotOutletTemperature), rnd(294.311111));
-    t.equal(rnd(res.hotOutletSpecificEnthalpy), rnd(92.742848731));
-    t.equal(rnd(res.hotOutletSpecificEntropy), rnd(0.3121054537));
+    t.equal(rnd(res.hotOutletPressure), rnd(1.5));
+    t.equal(rnd(res.hotOutletTemperature), rnd(293.15));
+    t.equal(rnd(res.hotOutletSpecificEnthalpy), rnd(85.328522053958));
+    t.equal(rnd(res.hotOutletSpecificEntropy), rnd(0.2961917501711791));
     t.equal(rnd(res.hotOutletQuality), rnd(0));
-    t.equal(rnd(res.hotOutletSpecificVolume), rnd(0.0010001635));
-    t.equal(rnd(res.hotOutletMassFlow), rnd(3761.0));
-    t.equal(rnd(res.hotOutletEnergyFlow), rnd(348.8058540774));
+    t.equal(rnd(res.hotOutletSpecificVolume), rnd(0.0010011563539881817));
+    t.equal(rnd(res.hotOutletMassFlow), rnd(96858.44750370324));
+    t.equal(rnd(res.hotOutletEnergyFlow), rnd(8264788.173931874));
 
-    t.equal(rnd(res.coldOutletPressure), rnd(0.1013));
-    t.equal(rnd(res.coldOutletTemperature), rnd(294.0495052176));
-    t.equal(rnd(res.coldOutletSpecificEnthalpy), rnd(87.7770008031));
-    t.equal(rnd(res.coldOutletSpecificEntropy), rnd(0.3093027213));
+    t.equal(rnd(res.coldOutletPressure), rnd(0.101325));
+    t.equal(rnd(res.coldOutletTemperature), rnd(285.9640221738703));
+    t.equal(rnd(res.coldOutletSpecificEnthalpy), rnd(53.91913920098477));
+    t.equal(rnd(res.coldOutletSpecificEntropy), rnd(0.19254607216780856));
     t.equal(rnd(res.coldOutletQuality), rnd(0));
-    t.equal(rnd(res.coldOutletSpecificVolume), rnd(0.001002));
-    t.equal(rnd(res.coldOutletMassFlow), rnd(83327));
-    t.equal(rnd(res.coldOutletEnergyFlow), rnd(7314.1941459226));
+    t.equal(rnd(res.coldOutletSpecificVolume), rnd(0.0010005983512689238));
+    t.equal(rnd(res.coldOutletMassFlow), rnd(6233100.275643423));
+    t.equal(rnd(res.coldOutletEnergyFlow), rnd(336083401.4161143));
 
     // Test 2
     input = {
-        hotInletMassFlow: 1768,
-        hotInletEnergyFlow: 982,
-        hotInletTemperature: 405.2,
-        hotInletPressure: 0.2875,
-        hotInletQuality: 0,
-        hotInletSpecificVolume: 0.001,
-        hotInletDensity: 1 / 0.001,
-        hotInletSpecificEnthalpy: 555.3,
-        hotInletSpecificEntropy: 1.657,
-
-        coldInletMassFlow: 51922,
-        coldInletEnergyFlow: 1581,
-        coldInletTemperature: 280.4,
-        coldInletPressure: 0.1013,
+        approachTemp: 10,
+        coldInletDensity: 999.7015401695024,
+        coldInletEnergyFlow: 662268.2787552822,
+        coldInletMassFlow: 15723.845356686172,
+        coldInletPressure: 0.101325,
         coldInletQuality: 0,
-        coldInletSpecificVolume: 0.001,
-        coldInletDensity: 1 / 0.001,
-        coldInletSpecificEnthalpy: 30.5,
-        coldInletSpecificEntropy: 0.110,
-
-        approachTemp: 27.77777777777778
+        coldInletSpecificEnthalpy: 42.11872247100606,
+        coldInletSpecificEntropy: 0.15107627374941596,
+        coldInletSpecificVolume: 0.0010002985489353622,
+        coldInletTemperature: 283.15,
+        hotInletDensity: 798.3582064389988,
+        hotInletEnergyFlow: 749645.9791564117,
+        hotInletMassFlow: 689.376530177306,
+        hotInletPressure: 4,
+        hotInletQuality: 0,
+        hotInletSpecificEnthalpy: 1087.4260238647878,
+        hotInletSpecificEntropy: 2.7966534294996848,
+        hotInletSpecificVolume: 0.0012525705778868427,
+        hotInletTemperature: 523.5075191240655
     }
 
     res = bindings.heatExchanger(input);
 
-    t.equal(rnd(res.hotOutletPressure), rnd(0.2875));
-    t.equal(rnd(res.hotOutletTemperature), rnd(308.1777777778));
-    t.equal(rnd(res.hotOutletSpecificEnthalpy), rnd(147.0142483402));
-    t.equal(rnd(res.hotOutletSpecificEntropy), rnd(0.5054463436));
+    t.equal(rnd(res.hotOutletPressure), rnd(4));
+    t.equal(rnd(res.hotOutletTemperature), rnd(293.15));
+    t.equal(rnd(res.hotOutletSpecificEnthalpy), rnd(87.6755402690778));
+    t.equal(rnd(res.hotOutletSpecificEntropy), rnd(0.2956648955932186));
     t.equal(rnd(res.hotOutletQuality), rnd(0));
-    t.equal(rnd(res.hotOutletSpecificVolume), rnd(0.001006));
-    t.equal(rnd(res.hotOutletMassFlow), rnd(1768));
-    t.equal(rnd(res.hotOutletEnergyFlow), rnd(259.9211910654));
+    t.equal(rnd(res.hotOutletSpecificVolume), rnd(0.0010000175423266124));
+    t.equal(rnd(res.hotOutletMassFlow), rnd(689.376530177306));
+    t.equal(rnd(res.hotOutletEnergyFlow), rnd(60441.45973211752));
 
-    t.equal(rnd(res.coldOutletPressure), rnd(0.1013));
-    t.equal(rnd(res.coldOutletTemperature), rnd(283.6834425999));
-    t.equal(rnd(res.coldOutletSpecificEnthalpy), rnd(44.3565118627));
-    t.equal(rnd(res.coldOutletSpecificEntropy), rnd(0.158972121));
+    t.equal(rnd(res.coldOutletPressure), rnd(0.101325));
+    t.equal(rnd(res.coldOutletTemperature), rnd(293.6129961502827));
+    t.equal(rnd(res.coldOutletSpecificEnthalpy), rnd(85.95052721024926));
+    t.equal(rnd(res.coldOutletSpecificEntropy), rnd(0.30308657179435106));
     t.equal(rnd(res.coldOutletQuality), rnd(0));
-    t.equal(rnd(res.coldOutletSpecificVolume), rnd(0.001));
-    t.equal(rnd(res.coldOutletMassFlow), rnd(51922));
-    t.equal(rnd(res.coldOutletEnergyFlow), rnd(2303.0788089347));
+    t.equal(rnd(res.coldOutletSpecificVolume), rnd(0.0010018940982539372));
+    t.equal(rnd(res.coldOutletMassFlow), rnd(15723.845356686172));
+    t.equal(rnd(res.coldOutletEnergyFlow), rnd(1351472.7981796062));
 });

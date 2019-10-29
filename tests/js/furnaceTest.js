@@ -26,13 +26,13 @@ test('efficiencyImprovement', function (t) {
 
     t.equal(rnd(res.newExcessAir), rnd(9.421053207479227), 'res.newExcessAir is ' + res.newExcessAir);
 
-    t.equal(rnd(res.currentAvailableHeat), rnd(46.62980234686012), 'res.currentAvailableHeat is ' + res.currentAvailableHeat);
+    t.equal(rnd(res.currentAvailableHeat), rnd(45.550889), 'res.currentAvailableHeat is ' + res.currentAvailableHeat);
 
-    t.equal(rnd(res.newAvailableHeat), rnd(78.97203185240743), 'res.newAvailableHeat is '+ res.newAvailableHeat);
+    t.equal(rnd(res.newAvailableHeat), rnd(77.893119), 'res.newAvailableHeat is '+ res.newAvailableHeat);
 
-    t.equal(rnd(res.newFuelSavings), rnd(40.954029859574106), 'res.newFuelSavings is ' + res.newFuelSavings);
+    t.equal(rnd(res.newFuelSavings), rnd(41.521293), 'res.newFuelSavings is ' + res.newFuelSavings);
 
-    t.equal(rnd(res.newEnergyInput), rnd(5.90459701404259), 'res.newEnergyInput is ' + res.newEnergyInput);
+    t.equal(rnd(res.newEnergyInput), rnd(5.847870740975683), 'res.newEnergyInput is ' + res.newEnergyInput);
 
 });
 
