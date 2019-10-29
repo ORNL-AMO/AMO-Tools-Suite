@@ -2,6 +2,15 @@ language: cpp
 
 os:
   - linux
+  addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      packages:
+        - g++-7
+  env:
+    - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+  dist: bionic
   - osx
 
 compiler:
@@ -12,12 +21,13 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update;
       brew install doxygen;
-      brew upgrade node;
-
+      
     else
+      - eval "${MATRIX_EVAL}"
       sudo apt-get update;
       sudo apt-get install doxygen;
-      sudo apt-get install npm;
+      curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -;
+      sudo apt-get install -y nodejs;
     fi
 
 install: travis_retry npm install
@@ -26,5 +36,6 @@ script:
   - cmake ./
   - make
   - ./bin/amo_tools_suite_tests
+  - npm install
   - npm run test
   - doxygen Doxyfile.in

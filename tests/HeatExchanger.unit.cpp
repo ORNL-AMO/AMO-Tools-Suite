@@ -15,16 +15,16 @@ TEST_CASE( "Test HeatExchanger 1", "[HeatExchanger]" ) {
     CHECK(output.hotOutlet.quality == Approx(0));
     CHECK(output.hotOutlet.specificVolume == Approx(0.0010001635));
     CHECK(output.hotOutlet.massFlow == Approx(3761.0));
-    CHECK(output.hotOutlet.energyFlow == Approx(348.8058540774));
+    CHECK(output.hotOutlet.energyFlow == Approx(348805.8540774423));
 
     CHECK(output.coldOutlet.pressure == Approx(0.1013));
-    CHECK(output.coldOutlet.temperature == Approx(294.0495052176));
-    CHECK(output.coldOutlet.specificEnthalpy == Approx(87.7770008031));
-    CHECK(output.coldOutlet.specificEntropy == Approx(0.3093027213));
+    CHECK(output.coldOutlet.temperature == Approx(272.1656892144));
+    CHECK(output.coldOutlet.specificEnthalpy == Approx(-4.0940253949));
+    CHECK(output.coldOutlet.specificEntropy == Approx(-0.015386657));
     CHECK(output.coldOutlet.quality == Approx(0));
     CHECK(output.coldOutlet.specificVolume == Approx(0.001));
     CHECK(output.coldOutlet.massFlow == Approx(83327));
-    CHECK(output.coldOutlet.energyFlow == Approx(7314.1941459226));
+    CHECK(output.coldOutlet.energyFlow == Approx(-341142.8540839599));
 }
 
 TEST_CASE( "Test HeatExchanger 2", "[HeatExchanger]" ) {
@@ -41,14 +41,14 @@ TEST_CASE( "Test HeatExchanger 2", "[HeatExchanger]" ) {
     CHECK(output.hotOutlet.quality == Approx(0));
     CHECK(output.hotOutlet.specificVolume == Approx(0.001));
     CHECK(output.hotOutlet.massFlow == Approx(1768));
-    CHECK(output.hotOutlet.energyFlow == Approx(259.9211910654));
+    CHECK(output.hotOutlet.energyFlow == Approx(259921.1910654366));
 
     CHECK(output.coldOutlet.pressure == Approx(0.1013));
-    CHECK(output.coldOutlet.temperature == Approx(283.6834425999));
-    CHECK(output.coldOutlet.specificEnthalpy == Approx(44.3565118627));
-    CHECK(output.coldOutlet.specificEntropy == Approx(0.158972121));
+    CHECK(output.coldOutlet.temperature == Approx(271.9614498404));
+    CHECK(output.coldOutlet.specificEnthalpy == Approx(-4.9566309285));
+    CHECK(output.coldOutlet.specificEntropy == Approx(-0.0185572601));
     CHECK(output.coldOutlet.quality == Approx(0));
     CHECK(output.coldOutlet.specificVolume == Approx(0.001));
     CHECK(output.coldOutlet.massFlow == Approx(51922));
-    CHECK(output.coldOutlet.energyFlow == Approx(2303.0788089347));
+    CHECK(output.coldOutlet.energyFlow == Approx(-257358.1910703886));
 }

@@ -368,8 +368,8 @@ test('getPlaneResults', function (t) {
         "gasDensity": 0.0546206208926391,
         "gasVolumeFlowRate": 132250.42933608184,
         "gasVelocity": 4063.47271956754,
-        "gasVelocityPressure": 0,
-        "gasTotalPressure": 0
+        "gasVelocityPressure": .75081,
+        "gasTotalPressure": -17.34919
     }, false);
     testEq(res.InletMstPlane, {
         "gasDensity": 0.054707937910736096,
@@ -390,15 +390,15 @@ test('getPlaneResults', function (t) {
             "gasDensity": 0.054795254928833075,
             "gasVolumeFlowRate": 118104.78734062292,
             "gasVelocity": 3628.839496538495,
-            "gasVelocityPressure": 0,
-            "gasTotalPressure": 0
+            "gasVelocityPressure": 0.6007,
+            "gasTotalPressure": -16.3993
         },
         {
             "gasDensity": 0.054780670621748434,
             "gasVolumeFlowRate": 117995.19024728928,
             "gasVelocity": 3625.472060975973,
-            "gasVelocityPressure": 0,
-            "gasTotalPressure": 0
+            "gasVelocityPressure": 0.599426,
+            "gasTotalPressure": -15.900574 
         }
     ];
     for (var i = 0; i < res.AddlTraversePlanes.length; i++) {
