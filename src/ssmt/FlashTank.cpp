@@ -20,7 +20,7 @@ FlashTank::FlashTank(const double inletWaterPressure, const SteamProperties::The
 void FlashTank::calculateProperties()
 {
 	auto sp = SteamProperties(inletWaterPressure, quantityType, quantityValue).calculate();
-	inletWaterProperties = {inletWaterMassFlow, inletWaterMassFlow * sp.specificEnthalpy / 1000, sp};
+	inletWaterProperties = {inletWaterMassFlow, inletWaterMassFlow * sp.specificEnthalpy, sp};
 
 	auto saturatedProperties = SaturatedProperties(tankPressure, SaturatedTemperature(tankPressure).calculate()).calculate();
 	double liquidMassFlow;
@@ -34,7 +34,7 @@ void FlashTank::calculateProperties()
 			saturatedProperties.liquidSpecificEnthalpy, saturatedProperties.liquidSpecificEntropy};
 		outletLiquidSaturatedProperties = {
 			liquidMassFlow,
-			liquidMassFlow * saturatedProperties.liquidSpecificEnthalpy / 1000,
+			liquidMassFlow * saturatedProperties.liquidSpecificEnthalpy,
 			sp};
 	}
 	else if (inletWaterProperties.specificEnthalpy < saturatedProperties.liquidSpecificEnthalpy)
@@ -53,7 +53,7 @@ void FlashTank::calculateProperties()
 
 		outletLiquidSaturatedProperties = {
 			liquidMassFlow,
-			liquidMassFlow * saturatedProperties.liquidSpecificEnthalpy / 1000,
+			liquidMassFlow * saturatedProperties.liquidSpecificEnthalpy,
 			sp};
 	}
 
@@ -63,7 +63,7 @@ void FlashTank::calculateProperties()
 		saturatedProperties.gasSpecificEnthalpy, saturatedProperties.gasSpecificEntropy};
 
 	double const gasMassFlow = inletWaterMassFlow - outletLiquidSaturatedProperties.massFlow;
-	outletGasSaturatedProperties = {gasMassFlow, gasMassFlow * sp.specificEnthalpy / 1000, sp};
+	outletGasSaturatedProperties = {gasMassFlow, gasMassFlow * sp.specificEnthalpy, sp};
 }
 
 double FlashTank::getInletWaterPressure() const { return inletWaterPressure; }

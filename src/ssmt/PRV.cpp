@@ -24,7 +24,7 @@ void PrvWithoutDesuperheating::calculateProperties() {
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
   outletProperties = SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
                                      inletProperties.specificEnthalpy).calculate();
-  inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow / 1000;
+  inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow;
 }
 
 PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
@@ -47,11 +47,11 @@ void PrvWithDesuperheating::calculateProperties() {
   outletProperties= SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
                                     desuperheatingTemp).calculate();
 
-  inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow / 1000;
+  inletEnergyFlow = inletProperties.specificEnthalpy * inletMassFlow;
   feedwaterMassFlow = inletMassFlow * (inletProperties.specificEnthalpy - outletProperties.specificEnthalpy)
                           / (outletProperties.specificEnthalpy - feedwaterProperties.specificEnthalpy);
 
-	feedwaterEnergyFlow = feedwaterMassFlow * feedwaterProperties.specificEnthalpy / 1000;
+	feedwaterEnergyFlow = feedwaterMassFlow * feedwaterProperties.specificEnthalpy;
     outletMassFlow = inletMassFlow + feedwaterMassFlow;
-	outletEnergyFlow = outletMassFlow * outletProperties.specificEnthalpy / 1000;
+	outletEnergyFlow = outletMassFlow * outletProperties.specificEnthalpy;
 }
