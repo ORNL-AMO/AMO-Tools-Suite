@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "bindings": "1.5.0",
-    "tap": "12.6.0"
+    "tap": "^14.8.2"
   },
   "engines": {
     "node": "10.11.0",
