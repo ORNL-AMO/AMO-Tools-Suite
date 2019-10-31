@@ -16,8 +16,8 @@ os:
   - osx
 
 compiler:
-  - gcc
-#  - clang
+#  - gcc
+  - clang
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
