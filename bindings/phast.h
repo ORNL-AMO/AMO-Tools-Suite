@@ -29,7 +29,7 @@
 #include "calculator/losses/WallLosses.h"
 #include "calculator/losses/WaterCoolingLosses.h"
 #include "calculator/furnace/HumidityRatio.h"
-
+#include "calculator/util/Conversion.h"
 
 using namespace Nan;
 using namespace v8;
@@ -101,13 +101,14 @@ NAN_METHOD(auxiliaryPowerLoss) {
  */
     inp = info[0]->ToObject();
 
-    const double inletTemperature = Get("inletTemperature");
-    const double outletTemperature = Get("outletTemperature");
-    const double flowrate = Get("flowRate");
-    const double correctionFactor = Get("correctionFactor");
-    const double specificHeat = Get("specificHeat");
+    const double motorPhase = Get("motorPhase");
+    const double supplyVoltage = Get("supplyVoltage");
+    const double avgCurrent = Get("avgCurrent");
+    const double powerFactor = Get("powerFactor");
+    const double operatingTime = Get("operatingTime");
 
-    Atmosphere a(inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat);
+    auto const ap = AuxiliaryPower(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
+
     
     const double powerUsed = ap.getPowerUsed();
     Local<Number> retval = Nan::New(powerUsed);
@@ -144,7 +145,7 @@ NAN_METHOD(energyInputEAF) {
     const double electricityInput = Get("electricityInput");
 
     EnergyInputEAF eaf(naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse, 
-		       electrodeHeatingValue, otherFuels, electricityInp);
+		       electrodeHeatingValue, otherFuels, electricityInput);
 
     const double heatDelivered = eaf.getHeatDelivered();
     const double totalChemicalEnergyInput = eaf.getTotalChemicalEnergyInput();
@@ -166,7 +167,7 @@ NAN_METHOD(exhaustGasEAF) {
  
     ExhaustGasEAF eg(offGasTemp, CO, H2, combustibleGases, vfr, dustLoading);
 
-	const double totalHeatExhaust = eg.getTotalHeatExhaust();
+    const double totalHeatExhaust = eg.getTotalHeatExhaust();
     Local<Number> retval = Nan::New(totalHeatExhaust);
     info.GetReturnValue().Set(retval);
 }
@@ -247,7 +248,6 @@ NAN_METHOD(gasLoadChargeMaterial) {
  * */
     inp = info[0]->ToObject();
     
-    const double thermicReactionType = Get("thermicReactionType");
     const double specificHeatGas = Get("specificHeatGas");
     const double feedRate = Get("feedRate");
     const double percentVapor = Get("percentVapor");
@@ -259,7 +259,7 @@ NAN_METHOD(gasLoadChargeMaterial) {
     const double additionalHeat = Get("additionalHeat");
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
-    if (thermicReactionType == 0) {
+    if (Get("thermicReactionType") == 0) {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
@@ -288,12 +288,12 @@ NAN_METHOD(leakageLosses) {
     const double draftPressure = Get("draftPressure");
     const double openingArea = Get("openingArea");
     const double leakageGasTemperature = Get("leakageGasTemperature");
-    const double ambientTemperature = ("ambientTemperature");
+    const double ambientTemperature = Get("ambientTemperature");
     const double coefficient = Get("coefficient");
     const double specificGravity = Get("specificGravity");
     const double correctionFactor = Get("correctionFactor");
 
-    LeakageLosses ll(draftPressure, openingArea, leakageGasTemperatur, ambientTemperature,
+    LeakageLosses ll(draftPressure, openingArea, leakageGasTemperature, ambientTemperature,
                      coefficient, specificGravity, correctionFactor);
 
     double heatLoss = ll.getExfiltratedGasesHeatContent();
@@ -350,7 +350,6 @@ NAN_METHOD(liquidLoadChargeMaterial) {
 
     inp = info[0]->ToObject();
 
-    const double thermicReactionType = Get("thermicReactionType");
     const double specificHeatLiquid = Get("specificHeatLiquid");
     const double vaporizingTemperature = Get("vaporizingTemperature");
     const double latentHeat = Get("latentHeat");
@@ -364,7 +363,7 @@ NAN_METHOD(liquidLoadChargeMaterial) {
     const double additionalHeat = Get("additionalHeat");
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
-    if (thermicReactionType == 0) {
+    if (Get("thermicReactionType") == 0) {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
@@ -393,7 +392,7 @@ NAN_METHOD(openingLossesCircular) {
          */
     inp = info[0]->ToObject();
 
-    const double emissivity = Get("emissivity")
+    const double emissivity = Get("emissivity");
     const double diameter = Get("diameter");
     const double thickness =  Get("thickness");
     const double ratio = Get("ratio"); 
@@ -518,10 +517,8 @@ NAN_METHOD(solidLoadChargeMaterial) {
  * @param additionalHeat double, additional heat required in Btu/hr
  *
  * */
-
     inp = info[0]->ToObject();
 
-    const double thermicReactionType = Get("thermicReactionType");
     const double specificHeatSolid = Get("specificHeatSolid");
     const double latentHeat = Get("latentHeat");
     const double specificHeatLiquid = Get("specificHeatLiquid");
@@ -538,7 +535,8 @@ NAN_METHOD(solidLoadChargeMaterial) {
     const double additionalHeat = Get("additionalHeat");
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
-    if (thermicReactionType == 0) {
+
+    if (Get("thermicReactionType") == 0) {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
@@ -592,7 +590,7 @@ NAN_METHOD(waterCoolingLosses) {
      */
     inp = info[0]->ToObject();
 
-    const double flowRate = (Get("flowRate"); 
+    const double flowRate = Get("flowRate"); 
     const double initialTemperature = Get("initialTemperature");
     const double outletTemperature = Get("outletTemperature");
     const double correctionFactor = Get("correctionFactor");
@@ -627,6 +625,7 @@ NAN_METHOD(efficiencyImprovement) {
     double newAvailableHeat = ei.getNewAvailableHeat();
     double newFuelSavings = ei.getNewFuelSavings();
     double newEnergyInput = ei.getNewEnergyInput();
+
     SetR("currentExcessAir", currentExcessAir);
     SetR("newExcessAir", newExcessAir);
     SetR("currentAvailableHeat", currentAvailableHeat);
@@ -842,14 +841,14 @@ NAN_METHOD(flueGasCalculateO2) {
     const double CO2 = Get("CO2");
     const double SO2 = Get("SO2");
     const double O2 = Get("O2");
-    const double excessAir = Get("excessAir");
+    double excessAir = Get("excessAir");
 
     GasCompositions comp("", CH4, C2H6, N2, H2, C3H8,
                          C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
 
-    excessAir = Conversion.percentToFraction(excessAir); 
+    excessAir = Conversion(excessAir).percentToFraction(); 
     double result = comp.calculateO2(excessAir);
-    result = Conversion.fractionToPercent(result);
+    result = Conversion(result).fractionToPercent();
     Local<Number> rv = Nan::New(result);
     info.GetReturnValue().Set(rv);
 }
@@ -868,14 +867,14 @@ NAN_METHOD(flueGasCalculateExcessAir) {
     const double CO2 = Get("CO2");
     const double SO2 = Get("SO2");
     const double O2 = Get("O2");
-    const double o2InFlueGas = Get("o2InFlueGas");
+    double o2InFlueGas = Get("o2InFlueGas");
 
     GasCompositions comp("", CH4, C2H6, N2, H2, C3H8,
                          C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
 
     o2InFlueGas = Conversion(o2InFlueGas).percentToFraction();
     double result = comp.calculateExcessAir(o2InFlueGas);
-    result = Conversion.fractionToPercent(result);
+    result = Conversion(result).fractionToPercent();
     Local<Number> rv = Nan::New(result);
     info.GetReturnValue().Set(rv);
 }
@@ -883,37 +882,37 @@ NAN_METHOD(flueGasCalculateExcessAir) {
 NAN_METHOD(flueGasByMassCalculateO2) {
     inp = info[0]->ToObject();
 
-    const double excessAir = Get("excessAir");
-    excessAir = Conversion.percentToFraction(excessAir);
+    double excessAir = Get("excessAir");
+    excessAir = Conversion(excessAir).percentToFraction();
 
-    const double carbon =  Get("carbon");
-    carbon = Conversion.percentToFraction(carbon);
+    double carbon =  Get("carbon");
+    carbon = Conversion(carbon).percentToFraction();
 
-    const double hydrogen = Get("hydrogen");
-    hydrogen = Conversion.percentToFraction(hydrogen);
+    double hydrogen = Get("hydrogen");
+    hydrogen = Conversion(hydrogen).percentToFraction();
 
-    const double sulphur = Get("sulphur");
-    sulphur = Conversion.percentToFraction(sulphur);
+    double sulphur = Get("sulphur");
+    sulphur = Conversion(sulphur).percentToFraction();
 
-    const double inertAsh =  Get("inertAsh");
-    inertAsh = Conversion.percentToFraction(inertAsh);
+    double inertAsh =  Get("inertAsh");
+    inertAsh = Conversion(inertAsh).percentToFraction();
 
-    const double o2 = Get("o2");
-    o2 =  Conversion.percentToFraction(o2);
+    double o2 = Get("o2");
+    o2 =  Conversion(o2).percentToFraction();
 
-    const double moisture = Get("moisture");
-    moisture = Conversion.percentToFraction(moisture);
+    double moisture = Get("moisture");
+    moisture = Conversion(moisture).percentToFraction();
 
-    const double nitrogen = Get("nitrogen");
-    nitrogen = Conversion.percentToFraction(nitrogen);
+    double nitrogen = Get("nitrogen");
+    nitrogen = Conversion(nitrogen).percentToFraction();
 
     const double moistureInAirCombustion = Get("moistureInAirCombustion");
 
-    auto const v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(excessAir,carbon,
+    auto v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(excessAir,carbon,
                                                                   hydrogen, sulphur,
                                                                   inertAsh, o2, moisture, 
 								  nitrogen, moistureInAirCombustion);
-    v = Conversion.fractionToPercent(v);
+    v = Conversion(v).fractionToPercent();
 
     Local<Number> rv = Nan::New(v);
     info.GetReturnValue().Set(rv);
@@ -922,38 +921,38 @@ NAN_METHOD(flueGasByMassCalculateO2) {
 NAN_METHOD(flueGasByMassCalculateExcessAir) {
     inp = info[0]->ToObject();
 
-    const double o2InFlueGas = Get("o2InFlueGas");
-    o2InFlueGas = Conversion.percentToFraction(o2InFlueGas);
+    double o2InFlueGas = Get("o2InFlueGas");
+    o2InFlueGas = Conversion(o2InFlueGas).percentToFraction();
 
-    const double carbon =  Get("carbon");
-    carbon = Conversion.percentToFraction(carbon);
+    double carbon =  Get("carbon");
+    carbon = Conversion(carbon).percentToFraction();
 
-    const double hydrogen = Get("hydrogen");
-    hydrogen = Conversion.percentToFraction(hydrogen);
+    double hydrogen = Get("hydrogen");
+    hydrogen = Conversion(hydrogen).percentToFraction();
 
-    const double sulphur = Get("sulphur");
-    sulphur = Conversion.percentToFraction(sulphur);
+    double sulphur = Get("sulphur");
+    sulphur = Conversion(sulphur).percentToFraction();
 
-    const double inertAsh =  Get("inertAsh");
-    inertAsh = Conversion.percentToFraction(inertAsh);
+    double inertAsh =  Get("inertAsh");
+    inertAsh = Conversion(inertAsh).percentToFraction();
 
-    const double o2 = Get("o2");
-    o2 =  Conversion.percentToFraction(o2);
+    double o2 = Get("o2");
+    o2 =  Conversion(o2).percentToFraction();
 
-    const double moisture = Get("moisture");
-    moisture = Conversion.percentToFraction(moisture);
+    double moisture = Get("moisture");
+    moisture = Conversion(moisture).percentToFraction();
 
-    const double nitrogen = Get("nitrogen");
-    nitrogen = Conversion.percentToFraction(nitrogen);
+    double nitrogen = Get("nitrogen");
+    nitrogen = Conversion(nitrogen).percentToFraction();
 
     const double moistureInAirCombustion = Get("moistureInAirCombustion");
 
 
-    auto const v = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(o2InFlueGas, carbon,
+    auto v = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(o2InFlueGas, carbon,
                                                                                hydrogen, sulphur, inertAsh,
 									       o2, moisture, nitrogen,
                                                                                moistureInAirCombustion);
-    v = Conversion.fractionToPercent(v);
+    v = Conversion (v).fractionToPercent();
     Local<Number> rv = Nan::New(v);
     info.GetReturnValue().Set(rv);
 }
