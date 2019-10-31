@@ -4,6 +4,7 @@
 class InsulatedPipeOutput
 {
 public:
+    InsulatedPipeOutput();
     InsulatedPipeOutput(double annualHeatLoss) : _annualHeatLoss(annualHeatLoss) {}
 
     double getAnnualHeatLoss();

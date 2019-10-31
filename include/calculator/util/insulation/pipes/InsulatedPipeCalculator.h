@@ -1,14 +1,14 @@
 #ifndef AMO_LIBRARY_INSULATEDPIPECALCULATOR_H
 #define AMO_LIBRARY_INSULATEDPIPECALCULATOR_H
 
-#include "InsulatedPipeInput.h"
-#include "InsulatedPipeOutput.h"
-#include "../services/ConvectiveHeatTransferCoefficient.h"
-#include "../services/NusseltNumber.h"
-#include "../services/RadiativeHeatTransferCoefficient.h"
-#include "../services/RayleighNumber.h"
-#include "../services/ReynoldsNumber.h"
-#include "../services/ThermalResistance.h"
+#include "calculator/util/insulation/pipes/InsulatedPipeInput.h"
+#include "calculator/util/insulation/pipes/InsulatedPipeOutput.h"
+#include "calculator/util/insulation/services/ConvectiveHeatTransferCoefficient.h"
+#include "calculator/util/insulation/services/NusseltNumber.h"
+#include "calculator/util/insulation/services/RadiativeHeatTransferCoefficient.h"
+#include "calculator/util/insulation/services/RayleighNumber.h"
+#include "calculator/util/insulation/services/ReynoldsNumber.h"
+#include "calculator/util/insulation/services/ThermalResistance.h"
 
 class InsulatedPipeCalculator
 {
@@ -19,7 +19,12 @@ public:
     InsulatedPipeOutput calculate();
 
 private:
+    void sanatizeInput(InsulatedPipeInput input);
+    InsulatedPipeOutput calculateNoInsulation(InsulatedPipeInput input);
+    InsulatedPipeOutput calculateInsulation(InsulatedPipeInput input);
+
     InsulatedPipeInput _insulatedPipeInput;
+    static double _airPropertiesArray[6][5];
 };
 
 #endif

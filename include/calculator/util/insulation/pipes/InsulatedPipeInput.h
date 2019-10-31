@@ -1,7 +1,7 @@
 #ifndef AMO_LIBRARY_INSULATEDPIPEINPUT_H
 #define AMO_LIBRARY_INSULATEDPIPEINPUT_H
 
-#include "calculator/util/insulation/objects/AirProperties.h
+#include "calculator/util/insulation/objects/AirProperties.h"
 
 class InsulatedPipeInput
 {
@@ -26,9 +26,9 @@ public:
         double windVelocity,
         double naturalGasSystemEfficiency,
         double insulationThickness,
-        const double pipeMaterialCoefficients[5],
-        const double insulationMaterialCoefficients[5],
-        // AirProperties airProperties,
+        const double* pipeMaterialCoefficients,
+        const double* insulationMaterialCoefficients,
+        AirProperties airProperties,
         double pipeEmissivity = 0,
         double insulationEmissivity = 0,
         double jacketEmissivity = 0,
@@ -44,7 +44,7 @@ public:
           _insulationThickness(insulationThickness),
           _pipeMaterialCoefficients(pipeMaterialCoefficients),
           _insulationMaterialCoefficients(insulationMaterialCoefficients),
-        //   _airProperties(airProperties),
+          _airProperties(airProperties),
           _pipeEmissivity(pipeEmissivity),
           _insulationEmissivity(insulationEmissivity),
           _jacketEmissivity(jacketEmissivity) {}
@@ -61,13 +61,13 @@ public:
     double getPipeEmissivity();
     double getInsulationEmissivity();
     double getJacketEmissivity();
-    const double[] getPipeMaterialCoefficients();
-    const double[] getInsulationMaterialCoefficients();
+    const double* getPipeMaterialCoefficients();
+    const double* getInsulationMaterialCoefficients();
     AirProperties getAirProperties();
 
-    double lookupAirProperty(int x, int y);
-    double lookupPipeProperty(int x, int y);
-    double lookupInsulationProperty(int x, int y);
+    // double lookupAirPropertyArray(int x, int y);
+    // double lookupPipePropertyArray(int x, int y);
+    // double lookupInsulationPropertyArray(int x, int y);
 
 private:
     int _operatingHours;
@@ -82,13 +82,13 @@ private:
     double _pipeEmissivity;
     double _insulationEmissivity;
     double _jacketEmissivity;
-    const double _pipeMaterialCoefficients[5];
-    const double _insulationMaterialCoefficients[5];
+    const double* _pipeMaterialCoefficients;
+    const double* _insulationMaterialCoefficients;
     AirProperties _airProperties;
 
-    const double _airProperties[5][6];
-    // const double _pipeProperties[5][3];
-    // const double _insulationProperties[5][8];
+    // const double _airPropertiesArray[5][6];
+    // const double _pipePropertiesArray[5][3];
+    // const double _insulationPropertiesArray[5][8];
 };
 
 #endif

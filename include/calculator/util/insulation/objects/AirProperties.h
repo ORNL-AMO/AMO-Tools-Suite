@@ -4,7 +4,7 @@
 class AirProperties
 {
 public:
-    AirProperties();
+    // AirProperties();
     AirProperties(double conductivity = 0,
                   double viscosity = 0,
                   double prandtl = 0,

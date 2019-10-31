@@ -13,6 +13,6 @@ private:
     double _diameter;
     double _windVelocity;
     double _kinematicViscosity;
-}
+};
 
 #endif //AMO_LIBRARY_REYNOLDSNUMBER_H

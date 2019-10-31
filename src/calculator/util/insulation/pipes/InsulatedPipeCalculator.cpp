@@ -58,7 +58,7 @@ InsulatedPipeOutput calculateInsulation(InsulatedPipeInput input)
     surfaceTemperature = input.getAmbientTemperature() + 1.0;
     interfaceTemperature = input.getPipeTemperature() - 1.0;
 
-    heatLength = insulationRecursive(input, innerPipeDiameter, outerInsulationDiameter, surfaceTemperature, interfaceTemperature, 0, 0, 0);
+    heatLength = insulationRecursive(input, innerPipeDiameter, outerInsulationDiameter, surfaceTemperature, interfaceTemperature, 0, 0);
     annualHeatLoss = heatLength * input.getLength() * input.getOperatingHours() / input.getNaturalGasSystemEfficiency();
     return InsulatedPipeOutput(annualHeatLoss);
 }
@@ -75,11 +75,11 @@ double insulationRecursive(InsulatedPipeInput input, double innerPipeDiameter, d
     double insRayleigh = RayleighNumber(airProperties.getExpansionCoefficient(), surfaceTemperature, input.getAmbientTemperature(), insulationOuterDiameter, airProperties.getKinViscosity(), airProperties.getAlpha()).calculate();
     double insHeatRadiation = RadiativeHeatTransferCoefficient(input.getJacketEmissivity(), surfaceTemperature, input.getAmbientTemperature()).calculate();
     double insNusseltForced = NusseltNumber(insReynolds, airProperties.getPrandtl()).calculateForcedConvection();
-    double insConvectionForced = ConvectiveHeatTransferCoefficient(insNusseltForced, airProperties.getPrandtl()).calculate();
+    double insConvectionForced = ConvectiveHeatTransferCoefficient(insNusseltForced, airProperties.getPrandtl(), insulationOuterDiameter).calculate();
     double insNusseltFree = NusseltNumber(insRayleigh, airProperties.getPrandtl()).calculateFreeConvection();
     double insConvectionFree = ConvectiveHeatTransferCoefficient(insNusseltFree, airProperties.getConductivity(), insulationOuterDiameter).calculate();
     double insNusseltCombined = NusseltNumber(insNusseltForced, insNusseltFree).calculate();
-    double insConvectionCombined = ConvectiveHeatTransferCoefficient(insNusseltCombined, airProperties.getConductivity(), insulationOuterDiameter);
+    double insConvectionCombined = ConvectiveHeatTransferCoefficient(insNusseltCombined, airProperties.getConductivity(), insulationOuterDiameter).calculate();
     double insHeatAir = insHeatRadiation + insConvectionCombined;
 
     //step 3: pipe resistance
@@ -154,7 +154,7 @@ double noInsulationRecursive(InsulatedPipeInput input, double innerPipeDiameter,
 
     //step 3: pipe resistance
     double kPipe = propertyFit(input.getPipeMaterialCoefficients(), input.getPipeTemperature());
-    double pipeResistance = ThermalResistance(input.getPipeDiameter(), input.getPipeDiameter(), innerPipeDiameter, kPipe);
+    double pipeResistance = ThermalResistance(input.getPipeDiameter(), input.getPipeDiameter(), innerPipeDiameter, kPipe).calculate();
 
     //step 4: overall resistance
     double overallResistance = pipeResistance + 1 / bareHeatTransferAir;
@@ -162,7 +162,7 @@ double noInsulationRecursive(InsulatedPipeInput input, double innerPipeDiameter,
 
     //step 5: rewriting interfaceTemperature && surfaceTemperature;
     interfaceTemperature = input.getPipeTemperature() - heatFlow * pipeResistance;
-    surfaceTemperature = interfaceTemperature - (heatFlow * insulationResistance);
+    surfaceTemperature = interfaceTemperature - (heatFlow * 0);
     double heatLengthNew = heatFlow * M_PI * input.getPipeDiameter();
 
     if (std::abs(heatLengthNew - heatLength) < 0.0001)
@@ -181,15 +181,15 @@ double noInsulationRecursive(InsulatedPipeInput input, double innerPipeDiameter,
 
 AirProperties calculateAirProperties(double temp)
 {
-    AirProperties airProperties = new AirProperties();
-    double airConductivity = propertyFit(this->_airProperties[3], temp) / 10e3;
-    double airViscosity = propertyFit(this->_airProperties[1], temp) / 10e7;
-    double airPrandtl = propertyFit(this->_airProperties[5], temp);
+    AirProperties airProperties = AirProperties();
+    double airConductivity = propertyFit(_airPropertiesArray[3], temp) / 10e3;
+    double airViscosity = propertyFit(_airPropertiesArray[1], temp) / 10e7;
+    double airPrandtl = propertyFit(_airPropertiesArray[5], temp);
     double airExpansionCoefficient = 1.0 / temp;
     double airDensity = 29.0 / 0.0820575 / temp;
-    double airKinViscosity = propertyFit(this->_airProperties[2], temp) / 10e6;
-    double airSpecificHeat = propertyFit(this->_airProperties[0], temp);
-    double airAlpha = propertyFit(this->_airProperties[4], temp) / 10e6;
+    double airKinViscosity = propertyFit(_airPropertiesArray[2], temp) / 10e6;
+    double airSpecificHeat = propertyFit(_airPropertiesArray[0], temp);
+    double airAlpha = propertyFit(_airPropertiesArray[4], temp) / 10e6;
     airProperties.setConductivity(airConductivity);
     airProperties.setViscosity(airViscosity);
     airProperties.setPrandtl(airPrandtl);
@@ -212,7 +212,7 @@ double calculateAirProperty(int property, double temp)
     return propertyFit(coefficients, temp);
 }
 
-double propertyFit(double coefficients[5], double temp)
+double propertyFit(const double coefficients[5], double temp)
 {
     double property;
     double order4 = coefficients[4] * std::pow(temp, 4);
@@ -226,10 +226,10 @@ double propertyFit(double coefficients[5], double temp)
 
 double lookupAirProperty(int property, int n)
 {
-    return this->_airProperties[property][n];
+    return _airPropertiesArray[property][n];
 }
 
-const double InsulatedPipeCalculator::_airProperties[][] = {
+const double _airPropertiesArray[6][5] = {
 
     {3.03724e-13, -1.1132e-9, 1.44382e-6, -0.000565339, 1.07223839},     // specificHeat
     {-1.586e-10, 5.115e-7, -7.246e-4, 7.978e-1, -1.850},                 // viscosity

@@ -14,6 +14,6 @@ private:
     double _diameterB;
     double _diameterC;
     double _thermalConductivity;
-}
+};
 
 #endif //AMO_LIBRARY_THERMALRESISTANCE_H

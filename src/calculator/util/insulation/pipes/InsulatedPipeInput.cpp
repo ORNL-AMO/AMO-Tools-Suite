@@ -61,12 +61,12 @@ double InsulatedPipeInput::getJacketEmissivity()
     return this->_jacketEmissivity;
 }
 
-const double[] getPipeMaterialCoefficients()
+const double* InsulatedPipeInput::getPipeMaterialCoefficients()
 {
     return this->_pipeMaterialCoefficients;
 }
 
-const double[] getInsulationMaterialCoefficients()
+const double* InsulatedPipeInput::getInsulationMaterialCoefficients()
 {
     return this->_insulationMaterialCoefficients;
 }
@@ -76,20 +76,20 @@ AirProperties InsulatedPipeInput::getAirProperties()
     return this->_airProperties;
 }
 
-double InsulatedPipeInput::lookupAirProperty(int property, int n)
-{
-    return this->_airProperties[property][n];
-}
+// double InsulatedPipeInput::lookupAirPropertyArray(int property, int n)
+// {
+//     return this->_airPropertiesArray[property][n];
+// }
 
-double InsulatedPipeInput::lookupPipeProperty(int x, int y)
-{
-    return this->_pipeProperties[x][y];
-}
+// double InsulatedPipeInput::lookupPipePropertyArray(int x, int y)
+// {
+//     return this->_pipePropertiesArray[x][y];
+// }
 
-double InsulatedPipeInput::lookupInsulationProperty(int x, int y)
-{
-    return this->_insulationProperties[x][y];
-}
+// double InsulatedPipeInput::lookupInsulationPropertyArray(int x, int y)
+// {
+//     return this->_insulationPropertiesArray[x][y];
+// }
 
 /*
     air properties array [x][y]
@@ -97,16 +97,16 @@ double InsulatedPipeInput::lookupInsulationProperty(int x, int y)
     [specificHeat_air, viscosity, kinematic viscosity, thermCond, Alpha, Prandtl]
     y = order of equation (T^0, T^1, T^2, etc.)
 */
-const double InsulatedPipeInput::_airProperties[][] = {
+// const double InsulatedPipeInput::_airPropertiesArray[][] = {
 
-    {3.03724e-13, -1.1132e-9, 1.44382e-6, -0.000565339, 1.07223839},     // specificHeat
-    {-1.586e-10, 5.115e-7, -7.246e-4, 7.978e-1, -1.850},                 // viscosity
-    {2.25852e-11, -8.32093e-8, 0.000172673, 0.01063728, -0.76108359},    // kinViscosity
-    {3.17176E-11, -5.90229E-08, 4.58531E-06, 0.088867888, 0.520072239},  // thermCond
-    {1.35569E-10, -3.80588E-07, 0.000446483, -0.035935528, 2.254489164}, // Alpha
-    {-2.08438E-13, -1.72787E-11, 8.00624E-07, -0.000694606, 0.845781218} // Prandtl
+//     {3.03724e-13, -1.1132e-9, 1.44382e-6, -0.000565339, 1.07223839},     // specificHeat
+//     {-1.586e-10, 5.115e-7, -7.246e-4, 7.978e-1, -1.850},                 // viscosity
+//     {2.25852e-11, -8.32093e-8, 0.000172673, 0.01063728, -0.76108359},    // kinViscosity
+//     {3.17176E-11, -5.90229E-08, 4.58531E-06, 0.088867888, 0.520072239},  // thermCond
+//     {1.35569E-10, -3.80588E-07, 0.000446483, -0.035935528, 2.254489164}, // Alpha
+//     {-2.08438E-13, -1.72787E-11, 8.00624E-07, -0.000694606, 0.845781218} // Prandtl
 
-};
+// };
 
 /*
     pipe properties array [x][y]

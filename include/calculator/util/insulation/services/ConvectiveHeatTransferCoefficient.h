@@ -13,6 +13,6 @@ private:
     double _nusselt;
     double _airConductivity;
     double _diameter;
-}
+};
 
 #endif //AMO_LIBRARY_CONVECTIVEHEATTRANSFERCOEFFICIENT_H

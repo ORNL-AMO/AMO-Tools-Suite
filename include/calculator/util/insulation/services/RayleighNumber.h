@@ -16,8 +16,9 @@ private:
     double _expCoefficient;
     double _surfaceTemperature;
     double _ambientTemperature;
+    double _diameter;
     double _kinematicViscosity;
     double _alpha;
-}
+};
 
 #endif //AMO_LIBRARY_RAYLEIGHNUMBER_H

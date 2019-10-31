@@ -14,6 +14,6 @@ public:
 private:
     double _a;
     double _b;
-}
+};
 
 #endif //AMO_LIBRARY_NUSSELTNUMBER_H

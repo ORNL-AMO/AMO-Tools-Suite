@@ -14,6 +14,6 @@ private:
     double _emissivity;
     double _surfaceTemperature;
     double _ambientTemperature;
-}
+};
 
 #endif //AMO_LIBRARY_RADIATIVEHEATTRANSFERCOEFFICIENT_H
