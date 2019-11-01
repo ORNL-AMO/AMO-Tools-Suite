@@ -28,4 +28,5 @@ script:
   - ./bin/amo_tools_suite_tests
   - npm install
   - npm run test
+  - npm run at
   - doxygen Doxyfile.in
