@@ -160,7 +160,7 @@ SteamReducer::reducePowerRange(const double additionalSteamNeeded,
 
         //if excess amount of steam was taken than needed when reducing, put excess steam taken back into turbine
         if (newSteamNeed < 0) {
-            const double massFlow = highToLowPressureTurbineMassFlow + std::abs(newSteamNeed);
+            const double massFlow = highToLowPressureTurbineMassFlow + fabs(newSteamNeed);
             std::cout << methodName
                       << "calculating highToLowPressureTurbine, returning excess steam amount, with mass flow="
                       << massFlow << std::endl;
@@ -239,7 +239,7 @@ SteamReducer::reduceFlowRange(const double additionalSteamNeeded,
 
         //if more steam taken than needed when reducing, put excess steam taken back into turbine
         if (newSteamNeed < 0) {
-            const double massFlow = highToLowPressureTurbineUpdated->getMassFlow() + std::abs(newSteamNeed);
+            const double massFlow = highToLowPressureTurbineUpdated->getMassFlow() + fabs(newSteamNeed);
             std::cout << methodName
                       << "calculating highToLowPressureTurbine, returning excess steam amount, with mass flow="
                       << massFlow << std::endl;

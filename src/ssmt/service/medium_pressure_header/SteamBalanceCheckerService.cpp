@@ -12,7 +12,7 @@ SteamBalanceCheckerService::check(const std::string &itemName, const PressureTur
 
     //calculate additional steam needed to meet minimum requirement
     const double additionalSteamNeeded = neededMassFlow - availableMassFlow;
-    const double absAdditionalSteamNeeded = std::abs(additionalSteamNeeded);
+    const double absAdditionalSteamNeeded = fabs(additionalSteamNeeded);
 
     //if need more than .0001
     if (absAdditionalSteamNeeded > 1e-3) {
@@ -55,7 +55,7 @@ SteamBalanceCheckerService::check(const std::string &itemName, const PressureTur
 
     //calculate additional steam needed to meet minimum requirement
     const double additionalSteamNeeded = highToMediumPressureTurbine->getMassFlow() - availableMassFlow;
-    const double absAdditionalSteamNeeded = abs(additionalSteamNeeded);
+    const double absAdditionalSteamNeeded = fabs(additionalSteamNeeded);
 
     //if need more than .0001
     if (absAdditionalSteamNeeded > 1e-3) {

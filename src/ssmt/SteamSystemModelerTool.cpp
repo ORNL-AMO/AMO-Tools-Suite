@@ -156,7 +156,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3(co
 
 	// Uses Linear Interpolation
 	std::size_t counter = 0;
-	while ((std::abs(pressureNew - p) > 1e-10) && (counter++ < 50) && (testPressureA != testPressureB)) {
+	while ((fabs(pressureNew - p) > 1e-10) && (counter++ < 50) && (testPressureA != testPressureB)) {
 		auto const densityNew = p * (densityA - densityB) / (testPressureA - testPressureB) + densityA - testPressureA * (densityA - densityB) / (testPressureA - testPressureB);
 		region3propNew = region3Density(densityNew, t);
 		pressureNew = region3propNew.pressure;
@@ -229,7 +229,7 @@ double SteamSystemModelerTool::backwardRegion3Exact(const double pressure, const
     double temperatureB = SteamSystemModelerTool::linearTestPoint(X, pointA, pointB);
     int counter = 0;
 
-    while((std::abs(temperature - temperatureB) > 1e-6) && (counter++ < 15)) {
+    while((fabs(temperature - temperatureB) > 1e-6) && (counter++ < 15)) {
         pointA = pointB;
         pointB = SteamSystemModelerTool::generatePoint(3, key, pressure, temperatureB);
         temperature = temperatureB;

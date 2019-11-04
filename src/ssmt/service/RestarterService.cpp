@@ -28,7 +28,7 @@ void RestarterService::restartIfNotEnoughSteam(const double additionalSteamNeede
         throw std::runtime_error(msg);
     }
 
-    const double absAdditionalSteamNeeded = abs(additionalSteamNeeded);
+    const double absAdditionalSteamNeeded = fabs(additionalSteamNeeded);
 
     const double tolerance = 1e-3;
 

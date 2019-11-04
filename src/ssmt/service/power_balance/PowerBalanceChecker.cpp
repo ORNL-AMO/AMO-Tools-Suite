@@ -68,7 +68,7 @@ PowerBalanceChecker::check(const int headerCountInput, const HeaderWithHighestPr
 
         //Steam balance will be positive, vented steam amount ends up negative.
         //If it gets it close enough to zero then venting the steam will result in a balanced system.
-        const double absSteamBalance = abs(steamBalance);
+        const double absSteamBalance = fabs(steamBalance);
         if (absSteamBalance < 1e-2) {
             std::cout << methodName << "steamBalance < " << 1e-2 << " so calculating lowPressureVentedSteam again"
                       << " with recalcMakeupWaterAndMassFlow" << std::endl;
