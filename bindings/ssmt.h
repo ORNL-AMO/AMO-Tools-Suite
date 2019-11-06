@@ -15,6 +15,9 @@
 #include "ssmt/Header.h"
 #include "ssmt/Turbine.h"
 #include "ssmt/HeatExchanger.h"
+#include "ssmt/api/SteamModeler.h"
+#include "steam/SteamModelerInputDataMapper.h"
+#include "steam/SteamModelerOutputDataMapper.h"
 #include <string>
 #include <stdexcept>
 #include <array>
@@ -38,76 +41,6 @@ SteamProperties::ThermodynamicQuantity waterThermodynamicQuantity() {
 SteamProperties::ThermodynamicQuantity steamThermodynamicQuantity() {
     unsigned val = static_cast<unsigned>(getDouble("steamThermodynamicQuantity"));
     return static_cast<SteamProperties::ThermodynamicQuantity>(val);
-}
-
-NAN_METHOD(steamPropertiesData) {
-    inp = info[0]->ToObject();
-    r = Nan::New<Object>();
-
-
-    if (getBool("wantEntropy")) {
-        std::vector<std::array<double, 3>> results;
-        auto const pressure = getDouble("pressure");
-
-        for (double entropy = 0; entropy < 10.000001; entropy += 0.1) {
-            auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::ENTROPY,
-                                            entropy).calculate();
-            if (std::isnan(sp.pressure) || std::isnan(sp.temperature) || std::isnan(sp.specificEntropy)
-                || sp.pressure < 0 || sp.temperature < 0 || sp.specificEntropy < 0) {
-                continue;
-            }
-            results.push_back({{sp.pressure, sp.temperature, sp.specificEntropy}});
-        }
-
-        Handle <Array> data = Array::New(v8::Isolate::GetCurrent(), results.size());
-        for (std::size_t i = 0; i < results.size(); i++) {
-            auto obj = Nan::New<Object>();
-            setRobject("pressure", results.at(i).at(0), obj);
-            setRobject("temperature", results.at(i).at(1), obj);
-            setRobject("entropy", results.at(i).at(2), obj);
-            data->Set(i, obj);
-        }
-        Nan::Set(r, Nan::New<String>("results").ToLocalChecked(), data);
-        info.GetReturnValue().Set(r);
-    } else {
-        std::vector<std::array<double, 4>> results;
-        double const temperature = getDouble("temperature");
-
-        auto const iterate = [&results, temperature](double pressureStart, double pressureEnd, double pressureStep) {
-            const double a = 0.000000001;
-            for (auto pressure = pressureStart; pressure <= pressureEnd + a; pressure += pressureStep) {
-                auto const sp = SteamProperties(pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
-                                                temperature).calculate();
-                if (std::isnan(sp.pressure) || std::isnan(sp.temperature) || std::isnan(sp.specificEnthalpy)
-                    || std::isnan(sp.specificVolume) || sp.pressure < 0 || sp.temperature < 0
-                    || sp.specificEnthalpy < 0 || sp.specificVolume < 0) {
-                    continue;
-                }
-                results.push_back({{sp.pressure, sp.temperature, sp.specificEnthalpy, sp.specificVolume}});
-            }
-        };
-
-        iterate(0.0005, 0.01, 0.0005);
-        iterate(0.015, 0.1, 0.005);
-        iterate(0.11, 0.5, 0.01);
-        iterate(0.55, 1, 0.05);
-        iterate(1.1, 5, 0.1);
-        iterate(5.5, 10, 0.5);
-        iterate(11, 25, 1);
-        iterate(30, 100, 5);
-
-        Handle <Array> data = Array::New(v8::Isolate::GetCurrent(), results.size());
-        for (std::size_t i = 0; i < results.size(); i++) {
-            auto obj = Nan::New<Object>();
-            setRobject("pressure", results.at(i).at(0), obj);
-            setRobject("temperature", results.at(i).at(1), obj);
-            setRobject("enthalpy", results.at(i).at(2), obj);
-            setRobject("volume", results.at(i).at(3), obj);
-            data->Set(i, obj);
-        }
-        Nan::Set(r, Nan::New<String>("results").ToLocalChecked(), data);
-        info.GetReturnValue().Set(r);
-    }
 }
 
 NAN_METHOD(saturatedPressure) {
@@ -191,7 +124,6 @@ NAN_METHOD(steamProperties) {
 }
 
 NAN_METHOD(boiler) {
-
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
@@ -642,6 +574,45 @@ NAN_METHOD(heatExchanger) {
     setR("coldOutletSpecificEntropy", output.coldOutlet.specificEntropy);
 
     info.GetReturnValue().Set(r);
+}
+
+NAN_METHOD(steamModeler) {
+    const std::string methodName = std::string("SteamModeler::") + std::string(__func__) + ": ";
+
+    std::cout << methodName << "begin: steam modeler" << std::endl;
+
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    info.GetReturnValue().Set(r);
+
+    SteamModelerInputDataMapper inputDataMapper = SteamModelerInputDataMapper();
+    SteamModeler steamModeler = SteamModeler();
+    SteamModelerOutputDataMapper outputDataMapper = SteamModelerOutputDataMapper();
+
+    std::cout << methodName << "begin: input mapping" << std::endl;
+    SteamModelerInput steamModelerInput = inputDataMapper.map();
+
+    // catch C++ error and throw as JS error
+    try {
+        std::cout << methodName << "begin: modeling" << std::endl;
+        SteamModelerOutput steamModelerOutput = steamModeler.model(steamModelerInput);
+        std::cout << methodName << "begin: output mapping" << std::endl;
+        outputDataMapper.map(steamModelerOutput);
+    } catch (const std::runtime_error &e) {
+        const std::string what = e.what();
+
+        const HeaderInput &headerInput = steamModelerInput.getHeaderInput();
+        const int headerCount = headerInput.getHeaderCount();
+
+        const std::string failMsg =
+                "ERROR calling SteamModeler: " + what + "; headerCount=" + std::to_string(headerCount);
+        std::cout << methodName << failMsg << std::endl;
+
+        Local <String> failMsgLocal = Nan::New<String>(failMsg).ToLocalChecked();
+        ThrowError(failMsgLocal);
+    }
+
+    std::cout << methodName << "end: steam modeler" << std::endl;
 }
 
 #endif //AMO_TOOLS_SUITE_SSMT_H

@@ -9,6 +9,7 @@
  *
  */
 
+#include <iostream>
 #include "SteamProperties.h"
 #include "SaturatedProperties.h"
 
@@ -41,6 +42,8 @@ public:
               double waterPressure, SteamProperties::ThermodynamicQuantity waterQuantityType,
               double waterQuantityValue, double steamPressure,
               SteamProperties::ThermodynamicQuantity steamQuantityType, double steamQuantityValue);
+
+    friend std::ostream &operator<<(std::ostream &stream, const Deaerator &deaerator);
 
 	/**
      * Gets all of the feedwater properties

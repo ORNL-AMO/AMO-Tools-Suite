@@ -17,6 +17,31 @@ FlashTank::FlashTank(const double inletWaterPressure, const SteamProperties::The
 	calculateProperties();
 }
 
+std::ostream &operator<<(std::ostream &stream, const FlashTank &flashTank) {
+    stream << "FlashTank["
+           << "inletWaterPressure=" << flashTank.inletWaterPressure
+           << ", inletWaterMassFlow=" << flashTank.inletWaterMassFlow
+           << ", tankPressure=" << flashTank.tankPressure
+           << ", quantityType=" << static_cast< int >(flashTank.quantityType)
+           << ", quantityValue=" << flashTank.quantityValue
+           << ", inletWaterProperties=" << flashTank.inletWaterProperties
+           << ", outletLiquidSaturatedProperties=" << flashTank.outletLiquidSaturatedProperties
+           << ", outletGasSaturatedProperties=" << flashTank.outletGasSaturatedProperties
+           << "]";
+
+    return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<FlashTank> &flashTank) {
+    if (flashTank == nullptr) {
+        stream << "FlashTank[nullptr]";
+    } else {
+        stream << *flashTank;
+    }
+
+    return stream;
+}
+
 void FlashTank::calculateProperties()
 {
 	auto sp = SteamProperties(inletWaterPressure, quantityType, quantityValue).calculate();
