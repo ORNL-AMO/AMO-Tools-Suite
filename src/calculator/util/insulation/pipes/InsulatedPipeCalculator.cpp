@@ -58,7 +58,7 @@ InsulatedPipeOutput InsulatedPipeCalculator::calculateInsulation(InsulatedPipeIn
 
     //start iteration
     heatLength = InsulatedPipeCalculator::insulationRecursive(input, innerPipeDiameter, outerInsulationDiameter, surfaceTemperature, interfaceTemperature, 0, 0);
-    annualHeatLoss = heatLength * input.getLength() * input.getOperatingHours() / input.getSystemEfficiency();
+    annualHeatLoss = heatLength * input.getPipeLength() * input.getOperatingHours() / input.getSystemEfficiency();
     return InsulatedPipeOutput(heatLength, annualHeatLoss);
 }
 
@@ -128,7 +128,7 @@ InsulatedPipeOutput InsulatedPipeCalculator::calculateNoInsulation(InsulatedPipe
 
     //start iteration
     heatLength = InsulatedPipeCalculator::noInsulationRecursive(input, innerPipeDiameter, insulationOuterDiameter, surfaceTemperature, interfaceTemperature, 0.0, 0);
-    annualHeatLoss = heatLength * input.getLength() * input.getOperatingHours() / input.getSystemEfficiency();
+    annualHeatLoss = heatLength * input.getPipeLength() * input.getOperatingHours() / input.getSystemEfficiency();
     return InsulatedPipeOutput(heatLength, annualHeatLoss);
 }
 

@@ -639,7 +639,7 @@ test('Pipe Insulation Reduction - With Insulation', function (t) {
 
     var inp = {
         operatingHours: 8640,
-        length: 15.24,
+        pipeLength: 15.24,
         pipeDiameter: 0.025399,
         pipeThickness: 0.0033782,
         pipeTemperature: 422.039,
@@ -663,7 +663,7 @@ test('Pipe Insulation Reduction - No Insulation', function (t) {
 
     var inp = {
         operatingHours: 8640,
-        length: 15.24,
+        pipeLength: 15.24,
         pipeDiameter: 0.025399,
         pipeThickness: 0.0033782,
         pipeTemperature: 422.039,

@@ -9,7 +9,7 @@
 TEST_CASE("Insulated Pipe", "[InsulatedPipeReduction][util]")
 {
     int operatingHours = 8640;        //hrs
-    double length = 15.24;            //m
+    double pipeLength = 15.24;            //m
     double pipeDiameter = .025399;    //m
     double pipeThickness = 0.0033782; //m
     double pipeTemperature = 422.039;
@@ -24,7 +24,7 @@ TEST_CASE("Insulated Pipe", "[InsulatedPipeReduction][util]")
 
     InsulatedPipeInput input(
         operatingHours,
-        length,
+        pipeLength,
         pipeDiameter,
         pipeThickness,
         pipeTemperature,
@@ -46,7 +46,7 @@ TEST_CASE("Insulated Pipe", "[InsulatedPipeReduction][util]")
 TEST_CASE("Non-Insulated Pipe", "[InsulatedPipeReduction][util]")
 {
     int operatingHours = 8640;        //hrs
-    double length = 15.24;            //m
+    double pipeLength = 15.24;            //m
     double diameter = .025399;        //m
     double pipeThickness = 0.0033782; //m
     double pipeTemperature = 422.039;
@@ -61,7 +61,7 @@ TEST_CASE("Non-Insulated Pipe", "[InsulatedPipeReduction][util]")
 
     InsulatedPipeInput input(
         operatingHours,
-        length,
+        pipeLength,
         diameter,
         pipeThickness,
         pipeTemperature,

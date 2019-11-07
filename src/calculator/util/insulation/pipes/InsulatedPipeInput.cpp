@@ -6,9 +6,9 @@ int InsulatedPipeInput::getOperatingHours()
     return this->_operatingHours;
 }
 
-double InsulatedPipeInput::getLength()
+double InsulatedPipeInput::getPipeLength()
 {
-    return this->_length;
+    return this->_pipeLength;
 }
 
 double InsulatedPipeInput::getPipeDiameter()

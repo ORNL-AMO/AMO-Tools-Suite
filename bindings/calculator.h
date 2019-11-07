@@ -499,7 +499,7 @@ NAN_METHOD(pipeInsulationReduction)
     r = Nan::New<Object>();
 
     int operatingHours = static_cast<int>(Get("operatingHours", inp));
-    double length = Get("length", inp);
+    double pipeLength = Get("pipeLength", inp);
     double pipeDiameter = Get("pipeDiameter", inp);
     double pipeThickness = Get("pipeThickness", inp);
     double pipeTemperature = Get("pipeTemperature", inp);
@@ -514,7 +514,7 @@ NAN_METHOD(pipeInsulationReduction)
 
     InsulatedPipeInput input(
         operatingHours,
-        length,
+        pipeLength,
         pipeDiameter,
         pipeThickness,
         pipeTemperature,

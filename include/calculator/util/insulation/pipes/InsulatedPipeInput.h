@@ -9,7 +9,7 @@ class InsulatedPipeInput
 public:
     /*
         Outline of expected input units: 
-            length: meters (m)
+            pipeLength: meters (m)
             diameter: millimeters (mm)
             pipeTemperature: Kelvin (K)
             ambientTemperature: Kelvin (K)
@@ -19,7 +19,7 @@ public:
     */
     InsulatedPipeInput(
         int operatingHours,
-        double length,
+        double pipeLength,
         double pipeDiameter,
         double pipeThickness,
         double pipeTemperature,
@@ -32,7 +32,7 @@ public:
         std::vector<double> pipeMaterialCoefficients,
         std::vector<double> insulationMaterialCoefficients)
         : _operatingHours(operatingHours),
-          _length(length),
+          _pipeLength(pipeLength),
           _pipeDiameter(pipeDiameter),
           _pipeThickness(pipeThickness),
           _pipeTemperature(pipeTemperature),
@@ -46,7 +46,7 @@ public:
           _insulationMaterialCoefficients(insulationMaterialCoefficients) {}
 
     int getOperatingHours();
-    double getLength();
+    double getPipeLength();
     double getPipeDiameter();
     double getPipeThickness();
     double getPipeTemperature();
@@ -62,7 +62,7 @@ public:
 private:
     AirProperties _airProperties;
     int _operatingHours;
-    double _length;
+    double _pipeLength;
     double _pipeDiameter;
     double _pipeThickness;
     double _pipeTemperature;
