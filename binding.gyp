@@ -172,7 +172,13 @@
         },
         {
             "target_name": "calculator",
-            'include_dirs': ['include', 'include/calculator/util', 
+            'include_dirs': [
+                'include',
+                'include/calculator/util', 
+                'include/calculator/util/insulation', 
+                'include/calculator/util/insulation/pipes',
+                'include/calculator/util/insulation/objects',
+                'include/calculator/util/insulation/services',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources': [
@@ -183,6 +189,9 @@
                 'src/calculator/util/CompressedAirPressureReduction.cpp',
                 'src/calculator/util/WaterReduction.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/pipes/').map(f=>'src/calculator/util/insulation/pipes/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/objects/').map(f=>'src/calculator/util/insulation/objects/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/services/').map(f=>'src/calculator/util/insulation/services/'+f).join(' '))\")"
             ],
             "conditions": [
                 [ 'OS=="mac"', {

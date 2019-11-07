@@ -120,7 +120,14 @@ set(SOURCE_FILES
         src/calculator/util/WaterReduction.cpp
         src/calculator/util/insulation/pipes/InsulatedPipeInput.cpp
         src/calculator/util/insulation/pipes/InsulatedPipeCalculator.cpp
-        src/calculator/util/insulation/pipes/InsulatedPipeOutput.cpp)
+        src/calculator/util/insulation/pipes/InsulatedPipeOutput.cpp
+        src/calculator/util/insulation/objects/AirProperties.cpp
+        src/calculator/util/insulation/services/ConvectiveHeatTransferCoefficient.cpp
+        src/calculator/util/insulation/services/NusseltNumber.cpp
+        src/calculator/util/insulation/services/RadiativeHeatTransferCoefficient.cpp
+        src/calculator/util/insulation/services/RayleighNumber.cpp
+        src/calculator/util/insulation/services/ReynoldsNumber.cpp
+        src/calculator/util/insulation/services/ThermalResistance.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -205,12 +212,20 @@ set(INCLUDE_FILES
         include/calculator/util/insulation/pipes/InsulatedPipeInput.h
         include/calculator/util/insulation/pipes/InsulatedPipeCalculator.h
         include/calculator/util/insulation/pipes/InsulatedPipeOutput.h
+        include/calculator/util/insulation/objects/AirProperties.h
+        include/calculator/util/insulation/services/ConvectiveHeatTransferCoefficient.h
+        include/calculator/util/insulation/services/NusseltNumber.h
+        include/calculator/util/insulation/services/RadiativeHeatTransferCoefficient.h
+        include/calculator/util/insulation/services/RayleighNumber.h
+        include/calculator/util/insulation/services/ReynoldsNumber.h
+        include/calculator/util/insulation/services/ThermalResistance.h
         include/calculator/motor/MotorData.h
         include/fans/CompressibilityFactor.h
         include/results/InputData.h
         include/fans/FanEnergyIndex.h
         include/fans/OptimalFanEfficiency.h
-        include/ssmt/HeatExchanger.h)
+        include/ssmt/HeatExchanger.h
+        )
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
@@ -243,6 +258,7 @@ set(TEST_FILES
         tests/CompressedAirPressureReduction.unit.cpp
         tests/WaterReduction.unit.cpp
         tests/InsulatedPipeReduction.unit.cpp
+        tests/InsulationServices.unit.cpp
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp

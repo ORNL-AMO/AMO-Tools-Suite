@@ -2,6 +2,7 @@
 #define AMO_LIBRARY_INSULATEDPIPEINPUT_H
 
 #include "calculator/util/insulation/objects/AirProperties.h"
+#include <vector>
 
 class InsulatedPipeInput
 {
@@ -13,7 +14,7 @@ public:
             pipeTemperature: Kelvin (K)
             ambientTemperature: Kelvin (K)
             windVelocity: meters/second (m/s)
-            naturalGasSystemEfficiency: fraction (0-1.0)
+            systemEfficiency: fraction (0-1.0)
             insulationThickness: meters (m)
     */
     InsulatedPipeInput(
@@ -24,15 +25,12 @@ public:
         double pipeTemperature,
         double ambientTemperature,
         double windVelocity,
-        double naturalGasSystemEfficiency,
+        double systemEfficiency,
         double insulationThickness,
-        const double* pipeMaterialCoefficients,
-        const double* insulationMaterialCoefficients,
-        AirProperties airProperties,
-        double pipeEmissivity = 0,
-        double insulationEmissivity = 0,
-        double jacketEmissivity = 0,
-        double pipeBaseMaterialEmissivity = 0)
+        double pipeEmissivity,
+        double jacketEmissivity,
+        std::vector<double> pipeMaterialCoefficients,
+        std::vector<double> insulationMaterialCoefficients)
         : _operatingHours(operatingHours),
           _length(length),
           _pipeDiameter(pipeDiameter),
@@ -40,14 +38,12 @@ public:
           _pipeTemperature(pipeTemperature),
           _ambientTemperature(ambientTemperature),
           _windVelocity(windVelocity),
-          _naturalGasSystemEfficiency(naturalGasSystemEfficiency),
+          _systemEfficiency(systemEfficiency),
           _insulationThickness(insulationThickness),
-          _pipeMaterialCoefficients(pipeMaterialCoefficients),
-          _insulationMaterialCoefficients(insulationMaterialCoefficients),
-          _airProperties(airProperties),
           _pipeEmissivity(pipeEmissivity),
-          _insulationEmissivity(insulationEmissivity),
-          _jacketEmissivity(jacketEmissivity) {}
+          _jacketEmissivity(jacketEmissivity),
+          _pipeMaterialCoefficients(pipeMaterialCoefficients),
+          _insulationMaterialCoefficients(insulationMaterialCoefficients) {}
 
     int getOperatingHours();
     double getLength();
@@ -56,20 +52,15 @@ public:
     double getPipeTemperature();
     double getAmbientTemperature();
     double getWindVelocity();
-    double getNaturalGasSystemEfficiency();
+    double getSystemEfficiency();
     double getInsulationThickness();
     double getPipeEmissivity();
-    double getInsulationEmissivity();
     double getJacketEmissivity();
-    const double* getPipeMaterialCoefficients();
-    const double* getInsulationMaterialCoefficients();
-    AirProperties getAirProperties();
-
-    // double lookupAirPropertyArray(int x, int y);
-    // double lookupPipePropertyArray(int x, int y);
-    // double lookupInsulationPropertyArray(int x, int y);
+    std::vector<double> getPipeMaterialCoefficients();
+    std::vector<double> getInsulationMaterialCoefficients();
 
 private:
+    AirProperties _airProperties;
     int _operatingHours;
     double _length;
     double _pipeDiameter;
@@ -77,18 +68,12 @@ private:
     double _pipeTemperature;
     double _ambientTemperature;
     double _windVelocity;
-    double _naturalGasSystemEfficiency;
+    double _systemEfficiency;
     double _insulationThickness;
     double _pipeEmissivity;
-    double _insulationEmissivity;
     double _jacketEmissivity;
-    const double* _pipeMaterialCoefficients;
-    const double* _insulationMaterialCoefficients;
-    AirProperties _airProperties;
-
-    // const double _airPropertiesArray[5][6];
-    // const double _pipePropertiesArray[5][3];
-    // const double _insulationPropertiesArray[5][8];
+    std::vector<double> _pipeMaterialCoefficients;
+    std::vector<double> _insulationMaterialCoefficients;
 };
 
 #endif

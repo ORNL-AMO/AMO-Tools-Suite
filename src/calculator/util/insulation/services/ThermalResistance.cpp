@@ -3,5 +3,5 @@
 
 double ThermalResistance::calculate()
 {
-    return this->_diameterA * std::log(this->_diameterB / this->_diameterC) / (2 * this->_thermalConductivity);
+    return this->_diameterA * std::log(this->_diameterB / this->_diameterC) / (2.0 * this->_thermalConductivity);
 }

@@ -51,52 +51,52 @@ double AirProperties::getRayleigh()
     return this->_rayleigh;
 }
 
-double AirProperties::setConductivity(double conductivity)
+void AirProperties::setConductivity(double conductivity)
 {
     this->_conductivity = conductivity;
 }
 
-double AirProperties::setViscosity(double viscosity)
+void AirProperties::setViscosity(double viscosity)
 {
     this->_viscosity = viscosity;
 }
 
-double AirProperties::setPrandtl(double prandtl)
+void AirProperties::setPrandtl(double prandtl)
 {
     this->_prandtl = prandtl;
 }
 
-double AirProperties::setExpansionCoefficient(double expansionCoefficient)
+void AirProperties::setExpansionCoefficient(double expansionCoefficient)
 {
     this->_expansionCoefficient = expansionCoefficient;
 }
 
-double AirProperties::setDensity(double density)
+void AirProperties::setDensity(double density)
 {
-    this->_desnity = density;
+    this->_density = density;
 }
 
-double AirProperties::setKinViscosity(double kinViscosity)
+void AirProperties::setKinViscosity(double kinViscosity)
 {
-    this->_kinViscosity = kinViscosity
+    this->_kinViscosity = kinViscosity;
 }
 
-double AirProperties::setSpecificHeat(double specificHeat)
+void AirProperties::setSpecificHeat(double specificHeat)
 {
     this->_specificHeat = specificHeat;
 }
 
-double AirProperties::setAlpha(double alpha)
+void AirProperties::setAlpha(double alpha)
 {
     this->_alpha = alpha;
 }
 
-double AirProperties::setReynolds(double reynolds)
+void AirProperties::setReynolds(double reynolds)
 {
     this->_reynolds = reynolds;
 }
 
-double AirProperties::setRayleigh(double rayleigh)
+void AirProperties::setRayleigh(double rayleigh)
 {
     this->_rayleigh = rayleigh;
 }

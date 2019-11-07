@@ -21,19 +21,12 @@ test('efficiencyImprovement', function (t) {
     inp.newFlueGasTemp = 1200;
 
     var res = bindings.efficiencyImprovement(inp);
-
     t.equal(rnd(res.currentExcessAir), rnd(35.80000271600005), 'res.currentExcessAir is ' + res.currentExcessAir);
-
     t.equal(rnd(res.newExcessAir), rnd(9.421053207479227), 'res.newExcessAir is ' + res.newExcessAir);
-
     t.equal(rnd(res.currentAvailableHeat), rnd(45.550889), 'res.currentAvailableHeat is ' + res.currentAvailableHeat);
-
     t.equal(rnd(res.newAvailableHeat), rnd(77.893119), 'res.newAvailableHeat is '+ res.newAvailableHeat);
-
     t.equal(rnd(res.newFuelSavings), rnd(41.521293), 'res.newFuelSavings is ' + res.newFuelSavings);
-
     t.equal(rnd(res.newEnergyInput), rnd(5.847870740975683), 'res.newEnergyInput is ' + res.newEnergyInput);
-
 });
 
 test('energyEquivalencyElectric', function (t) {
@@ -47,8 +40,6 @@ test('energyEquivalencyElectric', function (t) {
 
     var res = bindings.energyEquivalencyElectric(inp);
     t.equal(rnd(res.electricalHeatInput), rnd(3371.268678581893), 'res.electricalHeatInput is ' + res.electricalHeatInput);
-
-
 });
 
 test('energyEquivalencyFuel', function (t) {
@@ -123,14 +114,9 @@ test('flowCalculations', function (t) {
     inp.orificePressureDrop = 26;
     inp.operatingTime = 16;
     
-    console.log(inp);
-
     var res = bindings.flowCalculations(inp);
-
     t.equal(rnd(res.flow), rnd(647312.3211663722), 'res.flow is ' + res.flow);
-
     t.equal(rnd(res.heatInput), rnd(75865.00404069883), 'res.heatInput is ' + res.heatInput);
-
     t.equal(rnd(res.totalFlow), rnd(10356997.138661955), 'res.totalFlow is ' + res.totalFlow);
 
 });
@@ -145,12 +131,8 @@ test('humidityRatio', function (t) {
     inp.relativeHumidity = 30;
     inp.wetBulbTemp = 85;
 
-    console.log(inp);
-
     var res = bindings.humidityRatio(inp);
-
     t.equal(rnd(res.humidityRatioUsingRH), rnd(0.028113628942036617), 'res.humidityRatioUsingRH is ' + res.humidityRatioUsingRH);
-
     t.equal(rnd(res.humidityRatioUsingWBT), rnd(0.024579434176341366), 'res.humidityRatioUsingWBT is ' + res.humidityRatioUsingWBT);
 
 });

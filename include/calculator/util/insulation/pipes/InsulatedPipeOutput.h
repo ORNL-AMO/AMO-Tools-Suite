@@ -5,11 +5,15 @@ class InsulatedPipeOutput
 {
 public:
     InsulatedPipeOutput();
-    InsulatedPipeOutput(double annualHeatLoss) : _annualHeatLoss(annualHeatLoss) {}
+    InsulatedPipeOutput(double heatLength, double annualHeatLoss) : _heatLength(heatLength), _annualHeatLoss(annualHeatLoss) {}
 
+    double getHeatLength();
     double getAnnualHeatLoss();
+    void setHeatLength(double heatLength);
+    void setAnnualHeatLoss(double annualHeatLoss);
 
 private:
+    double _heatLength;
     double _annualHeatLoss;
 };
 

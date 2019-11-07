@@ -18,9 +18,6 @@ test('psatExisting2', function (t) {
         'motor_field_voltage': 460, 'baseline_pump_efficiency': 0.69, 'specifiedDriveEfficiency': 95
     };
     var psatResult = bindings.resultsExisting(inp);
-    console.log('psatExisting, results = ');
-    console.log(psatResult);
-
     t.equal(rnd(psatResult.pump_efficiency), rnd(71.5541741283), 'existing pump efficiency is ' + psatResult.pump_efficiency);
     t.equal(rnd(psatResult.motor_shaft_power), rnd(189.2746748003), 'existing motor shaft power is ' + psatResult.motor_shaft_power);
     t.equal(rnd(psatResult.pump_shaft_power), rnd(179.8109410603), 'existing pump shaft power is ' + psatResult.pump_shaft_power);

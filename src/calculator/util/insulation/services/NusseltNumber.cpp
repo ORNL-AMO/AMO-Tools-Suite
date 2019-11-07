@@ -3,10 +3,14 @@
 
 double NusseltNumber::calculate()
 {
-    return std::pow(std::pow(this->_a, 4) + std::pow(this->_b, 4), 1 / 4);
+    double pow_a = std::pow(this->_a, 4);
+    double pow_b = std::pow(this->_b, 4);
+    double sum = pow_a + pow_b;
+    double result = std::pow(sum, 1.0 / 4.0);
+    return result;
 }
 
-double NusseltNumber::calculatedForcedConvection()
+double NusseltNumber::calculateForcedConvection()
 {
     double step1 = std::pow(this->_a, 1.0 / 2.0);
     double step2 = step1 * 0.62;
@@ -30,7 +34,7 @@ double NusseltNumber::calculateFreeConvection()
 {
     double step1 = std::pow(this->_a, 1.0 / 6.0);
     double step2 = step1 * 0.387;
-    
+
     double step3 = std::pow(0.559 / this->_b, 9.0 / 16.0);
     double step4 = step3 + 1.0;
     double step5 = std::pow(step4, 8.0 / 27.0);

@@ -14,6 +14,10 @@
 #include "calculator/util/CompressedAirReduction.h"
 #include "calculator/util/CompressedAirPressureReduction.h"
 #include "calculator/util/WaterReduction.h"
+#include "calculator/util/insulation/pipes/InsulatedPipeInput.h"
+#include "calculator/util/insulation/pipes/InsulatedPipeCalculator.h"
+#include "calculator/util/insulation/pipes/InsulatedPipeOutput.h"
+#include <iostream>
 
 using namespace Nan;
 using namespace v8;
@@ -29,6 +33,20 @@ double Get(std::string const &key, Local<Object> obj)
         ThrowTypeError(std::string("Get method in calculator.h: " + key + " not present in object").c_str());
     }
     return rObj->NumberValue();
+}
+
+std::vector<double> GetVector(const std::string &key, Local<Object> obj)
+{
+    auto const &arrayTmp = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+    auto const &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    std::vector<double> array;
+    for (int i = 0; i < jsArray->Length(); i++)
+    {
+        v8::Local<v8::Value> jsElement = jsArray->Get(i);
+        double val = jsElement->NumberValue();
+        array.push_back(val);
+    }
+    return array;
 }
 
 template <typename T>
@@ -473,3 +491,44 @@ NAN_METHOD(compressedAirPressureReduction)
     info.GetReturnValue().Set(r);
 }
 // ========== END CA Pressure Reduction ===========
+
+// ========== Start Pipe Insulation Reduction ===========
+NAN_METHOD(pipeInsulationReduction)
+{
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    int operatingHours = static_cast<int>(Get("operatingHours", inp));
+    double length = Get("length", inp);
+    double pipeDiameter = Get("pipeDiameter", inp);
+    double pipeThickness = Get("pipeThickness", inp);
+    double pipeTemperature = Get("pipeTemperature", inp);
+    double ambientTemperature = Get("ambientTemperature", inp);
+    double windVelocity = Get("windVelocity", inp);
+    double systemEfficiency = Get("systemEfficiency", inp);
+    double insulationThickness = Get("insulationThickness", inp);
+    double pipeEmissivity = Get("pipeEmissivity", inp);
+    double jacketEmissivity = Get("jacketEmissivity", inp);
+    std::vector<double> pipeMaterialCoefficients = GetVector("pipeMaterialCoefficients", inp);
+    std::vector<double> insulationMaterialCoefficients = GetVector("insulationMaterialCoefficients", inp);
+
+    InsulatedPipeInput input(
+        operatingHours,
+        length,
+        pipeDiameter,
+        pipeThickness,
+        pipeTemperature,
+        ambientTemperature,
+        windVelocity,
+        systemEfficiency,
+        insulationThickness,
+        pipeEmissivity,
+        jacketEmissivity,
+        pipeMaterialCoefficients,
+        insulationMaterialCoefficients);
+    InsulatedPipeCalculator calculator(input);
+    InsulatedPipeOutput output = calculator.calculate();
+    SetR("heatLength", output.getHeatLength());
+    SetR("annualHeatLoss", output.getAnnualHeatLoss());
+    info.GetReturnValue().Set(r);
+}
