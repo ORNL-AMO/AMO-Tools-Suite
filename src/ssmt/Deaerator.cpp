@@ -21,6 +21,26 @@ Deaerator::Deaerator(const double deaeratorPressure, const double ventRate, cons
     calculateProperties();
 }
 
+
+std::ostream &operator<<(std::ostream &stream, const Deaerator &deaerator) {
+    stream << "Deaerator["
+           << "deaeratorPressure=" << deaerator.deaeratorPressure
+           << ", ventRate=" << deaerator.ventRate
+           << ", feedwaterMassFlow=" << deaerator.feedwaterMassFlow
+           << ", waterPressure=" << deaerator.waterPressure
+           << ", waterQuantityValue=" << deaerator.waterQuantityValue
+           << ", waterQuantityType=" << static_cast< int >(deaerator.waterQuantityType)
+           << ", steamPressure=" << deaerator.steamPressure
+           << ", steamQuantityValue=" << deaerator.steamQuantityValue
+           << ", steamQuantityType=" << static_cast< int >(deaerator.steamQuantityType)
+           << ", feedwaterProperties=" << deaerator.feedwaterProperties
+           << ", ventedSteamProperties=" << deaerator.ventedSteamProperties
+           << ", inletWaterProperties=" << deaerator.inletWaterProperties
+           << ", inletSteamProperties=" << deaerator.inletSteamProperties << "]";
+
+    return stream;
+}
+
 void Deaerator::calculateProperties() {
     auto const sp = SaturatedProperties(deaeratorPressure, SaturatedTemperature(deaeratorPressure).calculate()).calculate();
 	SteamSystemModelerTool::SteamPropertiesOutput steamProps = {sp.temperature, sp.pressure, 0, sp.liquidSpecificVolume,

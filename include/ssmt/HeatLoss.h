@@ -9,6 +9,7 @@
  *
  */
 
+#include <iostream>
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
@@ -29,10 +30,11 @@ public:
      * @param quantityValue double, value of the quantity (either temperature in K, enthalpy in kJ/kg, entropy in kJ/kg/K, or quality - unitless)
      * @param inletMassFlow double, inlet mass flow in kg/hr
      * @param percentHeatLoss double, heat loss as %
-     *
-     * */
+     */
     HeatLoss(double inletPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,
              double inletMassFlow, double percentHeatLoss);
+
+    friend std::ostream &operator<<(std::ostream &stream, const HeatLoss &heatLoss);
 
     /**
      * Gets all of the inlet properties

@@ -18,6 +18,10 @@
 #include "calculator/util/insulation/pipes/InsulatedPipeCalculator.h"
 #include "calculator/util/insulation/pipes/InsulatedPipeOutput.h"
 #include <iostream>
+#include "ssmt/SaturatedProperties.h"
+#include "ssmt/SteamSystemModelerTool.h"
+#include "calculator/util/SteamReduction.h"
+
 
 using namespace Nan;
 using namespace v8;
@@ -532,3 +536,105 @@ NAN_METHOD(pipeInsulationReduction)
     SetR("annualHeatLoss", output.getAnnualHeatLoss());
     info.GetReturnValue().Set(r);
 }
+// ========== END Pipe Insulation Reduction ===========
+
+
+// ============ Start Steam Reduction =============
+SteamFlowMeterMethodData getSteamFlowMeterMethodData(Local<Object> obj)
+{
+    auto flowMeterMethodDataV8 = obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("flowRate", flowMeterMethodDataV8)};
+}
+
+SteamMassFlowMeasuredData getSteamMassFlowMeasuredData(Local<Object> obj)
+{
+    auto massFlowMeasuredDataV8 = obj->Get(Nan::New<String>("massFlowMeasuredData").ToLocalChecked())->ToObject();
+    return {
+        Get("areaOfDuct", massFlowMeasuredDataV8),
+        Get("airVelocity", massFlowMeasuredDataV8)};
+}
+
+SteamMassFlowNameplateData getSteamMassFlowNameplateData(Local<Object> obj)
+{
+    auto massFlowNameplateDataV8 = obj->Get(Nan::New<String>("massFlowNameplateData").ToLocalChecked())->ToObject();
+    return {
+        Get("flowRate", massFlowNameplateDataV8)};
+}
+
+SteamMassFlowMethodData getSteamAirMassFlowMethodData(Local<Object> obj)
+{
+    auto massFlowMethodDataV8 = obj->Get(Nan::New<String>("airMassFlowMethodData").ToLocalChecked())->ToObject();
+    return {
+        GetBool("isNameplate", massFlowMethodDataV8),
+        getSteamMassFlowMeasuredData(massFlowMethodDataV8),
+        getSteamMassFlowNameplateData(massFlowMethodDataV8),
+        Get("inletTemperature", massFlowMethodDataV8),
+        Get("outletTemperature", massFlowMethodDataV8)};
+}
+
+SteamMassFlowMethodData getSteamWaterMassFlowMethodData(Local<Object> obj)
+{
+    auto massFlowMethodDataV8 = obj->Get(Nan::New<String>("waterMassFlowMethodData").ToLocalChecked())->ToObject();
+    return {
+        GetBool("isNameplate", massFlowMethodDataV8),
+        getSteamMassFlowMeasuredData(massFlowMethodDataV8),
+        getSteamMassFlowNameplateData(massFlowMethodDataV8),
+        Get("inletTemperature", massFlowMethodDataV8),
+        Get("outletTemperature", massFlowMethodDataV8)};
+}
+
+SteamOtherMethodData getSteamOtherMethodData(Local<Object> obj)
+{
+    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    return {
+        Get("consumption", otherMethodDataV8)};
+}
+
+SteamReductionInput constructSteamReductionInput(Local<Object> obj)
+{
+    return {
+        static_cast<int>(Get("hoursPerYear", obj)),
+        static_cast<int>(Get("utilityType", obj)),
+        Get("utilityCost", obj),
+        static_cast<int>(Get("measurementMethod", obj)),
+        Get("systemEfficiency", obj) / 100.0,
+        Get("pressure", obj),
+        getSteamFlowMeterMethodData(obj),
+        getSteamAirMassFlowMethodData(obj),
+        getSteamWaterMassFlowMethodData(obj),
+        getSteamOtherMethodData(obj),
+        static_cast<int>(Get("units", obj))};
+}
+
+SteamReduction getSteamReductionInputVec()
+{
+    auto const steamReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("steamReductionInputVec").ToLocalChecked());
+    auto const &steamReductionInputArray = v8::Local<v8::Array>::Cast(steamReductionInputVecV8);
+    std::vector<SteamReductionInput> inputVec;
+    for (std::size_t i = 0; i < steamReductionInputArray->Length(); i++)
+    {
+        inputVec.emplace_back(constructSteamReductionInput(steamReductionInputArray->Get(i)->ToObject()));
+    }
+    return inputVec;
+}
+
+NAN_METHOD(steamReduction)
+{
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+    try
+    {
+        auto rv = SteamReduction(getSteamReductionInputVec()).calculate();
+        SetR("steamUse", rv.steamUse);
+        SetR("energyUse", rv.energyUse);
+        SetR("energyCost", rv.energyCost);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in steamReduction - calculator.h: " + what).c_str());
+    }
+    info.GetReturnValue().Set(r);
+}
+// ============ END Steam Reduction =============

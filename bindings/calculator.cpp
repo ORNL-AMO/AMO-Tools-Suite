@@ -22,6 +22,9 @@ NAN_MODULE_INIT(InitCalculator)
 
     Nan::Set(target, New<String>("pipeInsulationReduction").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(pipeInsulationReduction)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("steamReduction").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(steamReduction)).ToLocalChecked());
 }
 
 NODE_MODULE(calculator, InitCalculator)

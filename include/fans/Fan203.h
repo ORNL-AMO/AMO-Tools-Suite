@@ -305,7 +305,7 @@ private:
 			double fanInletOrOutletGasDensity = calcDensity(plane, fanInletOrOutletStaticPressure);
 
 			calculatedDensity = fanInletOrOutletGasDensity;
-			if (std::abs(fanInletOrOutletGasDensity - plane.gasDensity) < 0.0001)
+			if (fabs(fanInletOrOutletGasDensity - plane.gasDensity) < 0.0001)
 			{
 				plane.gasDensity = fanInletOrOutletGasDensity;
 				plane.staticPressure = fanInletOrOutletStaticPressure;
@@ -501,7 +501,7 @@ private:
 			double const xc = std::exp(ln1xc) - 1;
 
 			double const kpOverKpc = (z / zc) * (xc / x) * (isentropic / (isentropic - 1)) * ((isentropic - 1) / isentropic);
-			if (std::abs(kpOverKpc - assumedKpOverKpc) < 0.0000001)
+			if (fabs(kpOverKpc - assumedKpOverKpc) < 0.0000001)
 			{
 				return kpOverKpc;
 			}

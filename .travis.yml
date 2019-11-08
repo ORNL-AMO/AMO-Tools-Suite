@@ -10,14 +10,14 @@ compiler:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      brew update;
-      brew install doxygen;
-      
+    brew update;
+    brew install doxygen;
+
     else
-      sudo apt-get update;
-      sudo apt-get install doxygen;
-      curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -;
-      sudo apt-get install -y nodejs;
+    sudo apt-get update;
+    sudo apt-get install doxygen;
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -;
+    sudo apt-get install -y nodejs;
     fi
 
 install: travis_retry npm install
@@ -28,4 +28,5 @@ script:
   - ./bin/amo_tools_suite_tests
   - npm install
   - npm run test
+  - npm run at
   - doxygen Doxyfile.in
