@@ -678,5 +678,5 @@ test('Pipe Insulation Reduction - No Insulation', function (t) {
     };
     var res = bindings.pipeInsulationReduction(inp);
     t.equal(rnd(res.heatLength), rnd(278.8984025085), 'res.heatLength is ' + res.heatLength);
-    t.equal(rnd(res.annualHeatLoss), rnd(40803938.64), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+    t.equal(rnd(res.annualHeatLoss), rnd(40803951.880608), 'res.annualHeatLoss is ' + res.annualHeatLoss);
 });
