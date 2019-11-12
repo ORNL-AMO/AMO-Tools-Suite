@@ -509,7 +509,7 @@ NAN_METHOD(pipeInsulationReduction)
     double pipeTemperature = Get("pipeTemperature", inp);
     double ambientTemperature = Get("ambientTemperature", inp);
     double windVelocity = Get("windVelocity", inp);
-    double systemEfficiency = Get("systemEfficiency", inp);
+    double systemEfficiency = Get("systemEfficiency", inp) / 100.0;
     double insulationThickness = Get("insulationThickness", inp);
     double pipeEmissivity = Get("pipeEmissivity", inp);
     double jacketEmissivity = Get("jacketEmissivity", inp);
