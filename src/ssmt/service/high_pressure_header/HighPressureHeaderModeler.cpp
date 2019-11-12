@@ -33,8 +33,8 @@ HighPressureHeaderModeler::model(const int headerCountInput, const HeaderWithHig
     //2D. Calculate High Pressure Flash Tank if 3 header and on
 //     std::cout << methodName << "calculating high pressure flash tank" << std::endl;
     const std::shared_ptr<FlashTank> &highPressureCondensateFlashTank =
-            highPressureFlashTankCalculator.calc(headerCountInput, mediumPressureHeaderInput, highPressureCondensate);
-//     std::cout << methodName << "highPressureCondensateFlashTank=" << highPressureCondensateFlashTank << std::endl;
+            highPressureFlashTankCalculator.calc(headerCountInput, mediumPressureHeaderInput, lowPressureHeaderInput, highPressureCondensate);
+   // std::cout << methodName << "highPressureCondensateFlashTank=" << highPressureCondensateFlashTank << std::endl;
 
     //2E. Calculate condensing turbine
 //     std::cout << methodName << "calculating condensing turbine" << std::endl;

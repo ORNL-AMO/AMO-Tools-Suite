@@ -6,10 +6,12 @@
 #include <ssmt/api/HeaderInput.h>
 #include <ssmt/domain/FlashTankFactory.h>
 
-class HighPressureFlashTankCalculator {
+class HighPressureFlashTankCalculator
+{
 public:
     const std::shared_ptr<FlashTank>
     calc(const int headerCountInput, const std::shared_ptr<HeaderNotHighestPressure> &mediumPressureHeaderInput,
+         const std::shared_ptr<HeaderNotHighestPressure> &lowPressureHeaderInput,
          const SteamSystemModelerTool::FluidProperties &highPressureCondensate) const;
 
 private:

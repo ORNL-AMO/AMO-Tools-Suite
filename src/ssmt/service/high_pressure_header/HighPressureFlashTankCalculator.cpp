@@ -2,6 +2,7 @@
 
 const std::shared_ptr<FlashTank> HighPressureFlashTankCalculator::calc(const int headerCountInput,
                                                                        const std::shared_ptr<HeaderNotHighestPressure> &mediumPressureHeaderInput,
+                                                                       const std::shared_ptr<HeaderNotHighestPressure> &lowPressureHeaderInput,
                                                                        const SteamSystemModelerTool::FluidProperties &highPressureCondensate) const {
     const std::string methodName = std::string("HighPressureFlashTankCalculator::") + std::string(__func__) + ": ";
 
@@ -10,6 +11,12 @@ const std::shared_ptr<FlashTank> HighPressureFlashTankCalculator::calc(const int
         // std::cout << methodName << "mediumPressureHeaderInput isUseTurbine, calculating highPressureCondensateFlashTank"
         //           << std::endl;
         const double pressure = mediumPressureHeaderInput->getPressure();
+        const FlashTank &flashTank = flashTankFactory.make(pressure, highPressureCondensate);
+        highPressureCondensateFlashTank = std::make_shared<FlashTank>(flashTank);
+    } else if(headerCountInput == 2 && lowPressureHeaderInput->isFlashCondensate()){
+        std::cout << methodName << "lowPressureHeaderInput isFlashed, calculating highPressureCondensateFlashTank"
+                  << std::endl;
+        const double pressure = lowPressureHeaderInput->getPressure();
         const FlashTank &flashTank = flashTankFactory.make(pressure, highPressureCondensate);
         highPressureCondensateFlashTank = std::make_shared<FlashTank>(flashTank);
     } else {
