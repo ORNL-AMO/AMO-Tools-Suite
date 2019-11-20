@@ -12,7 +12,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - Doxygen (only for building documentation)
 
 #### Node
-- Node [https://nodejs.org/en/](https://nodejs.org/en/) v8 or v9
+- Node [https://nodejs.org/en/](https://nodejs.org/en/) v8, v9 or v10
 - gyp: follow instructions for the OS at [https://github.com/nodejs/node-gyp](node-gyp)
   - depending on platform and instructions, it states the correct python version to install or installs it
 
