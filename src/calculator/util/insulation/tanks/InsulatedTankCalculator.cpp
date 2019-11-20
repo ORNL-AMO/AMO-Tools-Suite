@@ -44,6 +44,71 @@ void InsulatedTankCalculator::validateInput(InsulatedTankInput input)
 
 InsulatedTankInput InsulatedTankCalculator::calculateInsulation(InsulatedTankInput input)
 {
+    double thermalDiffusivity;
+    double thermalExpansionCoefficient;
+    double naturalConvectionCoefficient;
+    double airRayleigh;
+    double innerTankRadius;
+    double outerTankRadius;
+    double outerInsulationRadius;
+    double tankArea;
+    double insulationOverallCoefficient;
+    AirProperties airProperties = InsulatedTankCalculator::calculateAirProperties(input.getAmbientTemperature());
+    thermalDiffusivity = airProperties.getConductivity() / (airProperties.getDensity() * airProperties.getSpecificHeat());
+    thermalExpansionCoefficient = 1.0 / input.getAmbientTemperature();
+    airRayleigh = (32.174 * thermalExpansionCoefficient * (input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(airProperties.getSpecificHeat(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
+    naturalConvectionCoefficient = 0.125 * std::pow(airRayleigh, 1/3) * airProperties.getConductivity() / airProperties.getSpecificHeat();
+    innerTankRadius = input.getTankDiameter() / 2.0;
+    outerTankRadius = innerTankRadius + input.getTankThickness();
+    outerInsulationRadius = outerTankRadius + input.getTankThickness();
+    tankArea = input.getTankDiameter() * input.getTankHeight() * M_PI;
+
+
+    
+
+
+
+
+}
+
+AirProperties InsulatedTankCalculator::calculateAirProperties(double temp)
+{
+    double airSpecificHeat = calculateAirProperty(0, temp);
+    double airDensity = calculateAirProperty(1, temp) * 1e-2;
+    double airKinViscosity = calculateAirProperty(2, temp) * 1e-4 / 3600;
+    double airConductivity = calculateAirProperty(3, temp);
     // double 
-    // return InsulatedTankOutput(0, 0);
+}
+
+double InsulatedTankCalculator::calculateAirProperty(int property, double temp)
+{
+    std::vector<double> coefficients = {
+        InsulatedTankCalculator::lookupAirPropertyCoefficient(property, 0),
+        InsulatedTankCalculator::lookupAirPropertyCoefficient(property, 1),
+        InsulatedTankCalculator::lookupAirPropertyCoefficient(property, 2),
+        InsulatedTankCalculator::lookupAirPropertyCoefficient(property, 3),
+        InsulatedTankCalculator::lookupAirPropertyCoefficient(property, 4)};
+    return this->propertyFit(coefficients, temp);
+}
+
+double InsulatedTankCalculator::propertyFit(std::vector<double> coefficients, double temp)
+{
+    double property;
+    double order4 = coefficients.at(0) * std::pow(temp, 4);
+    double order3 = coefficients.at(1) * std::pow(temp, 3);
+    double order2 = coefficients.at(2) * std::pow(temp, 2);
+    double order1 = coefficients.at(3) * temp;
+    double order0 = coefficients.at(4);
+    property = order4 + order3 + order2 + order1 + order0;
+    return property;
+}
+
+double InsulatedTankCalculator::lookupAirPropertyCoefficient(int property, int n)
+{
+    return this->_airPropertiesArray[property][n];
+}
+
+const double *InsulatedTankCalculator::lookupAirProperty(int property)
+{
+    return this->_airPropertiesArray[property];
 }

@@ -6,16 +6,19 @@
 
 class InsulatedTankInput
 {
-    public:
+public:
     InsulatedTankInput(
         int operatingHours,
         double tankHeight,
         double tankDiameter,
         double tankThickness,
+        double tankEmissivity,
+        double tankConductivity,
+        double tankTemperature,
         double ambientTemperature,
         double systemEfficiency,
         double insulationThickness,
-        double tankEmissivity,
+        double insulationConductivity,
         double jacketEmissivity,
         std::vector<double> tankMaterialCoefficients,
         std::vector<double> insulationMaterialCoefficients)
@@ -23,22 +26,30 @@ class InsulatedTankInput
           _tankHeight(tankHeight),
           _tankDiameter(tankDiameter),
           _tankThickness(tankThickness),
+          _tankEmissivity(tankEmissivity),
+          _tankConductivity(tankConductivity),
+          _tankTemperature(tankTemperature),
           _ambientTemperature(ambientTemperature),
           _systemEfficiency(systemEfficiency),
           _insulationThickness(insulationThickness),
-          _tankEmissivity(tankEmissivity),
+          _insulationConductivity(insulationConductivity),
           _jacketEmissivity(jacketEmissivity),
           _tankMaterialCoefficients(tankMaterialCoefficients),
-          _insulationMaterialCoefficients(insulationMaterialCoefficients) {}
+          _insulationMaterialCoefficients(insulationMaterialCoefficients)
+    {
+    }
 
     int getOperatingHours();
     double getTankHeight();
     double getTankDiameter();
     double getTankThickness();
+    double getTankEmissivity();
+    double getTankConductivity();
+    double getTankTemperature();
     double getAmbientTemperature();
     double getSystemEfficiency();
     double getInsulationThickness();
-    double getTankEmissivity();
+    double getInsulationConductivity();
     double getJacketEmissivity();
     std::vector<double> getTankMaterialCoefficients();
     std::vector<double> getInsulationMaterialCoefficients();
@@ -49,14 +60,16 @@ private:
     double _tankHeight;
     double _tankDiameter;
     double _tankThickness;
+    double _tankEmissivity;
+    double _tankConductivity;
+    double _tankTemperature;
     double _ambientTemperature;
     double _systemEfficiency;
     double _insulationThickness;
-    double _tankEmissivity;
+    double _insulationConductivity;
     double _jacketEmissivity;
     std::vector<double> _tankMaterialCoefficients;
     std::vector<double> _insulationMaterialCoefficients;
 };
-
 
 #endif
