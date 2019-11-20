@@ -65,7 +65,7 @@ public:
                 coldInlet.massFlow, coldInlet.massFlow * sp.specificEnthalpy, sp
         );
 
-        if ((hotOutletTest.temperature - coldInlet.temperature) > approachTemp) {
+        if (fabs((hotOutletTest.temperature - coldInlet.temperature) - approachTemp) > .0001) {
             sp = SteamProperties(
                     coldInlet.pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
                     hotInlet.temperature - approachTemp
