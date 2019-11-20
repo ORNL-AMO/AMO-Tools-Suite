@@ -5,15 +5,15 @@ class InsulatedTankOutput
 {
 public:
     InsulatedTankOutput();
-    InsulatedTankOutput(double heatLength, double annualHeatLoss) : _heatLength(heatLength), _annualHeatLoss(annualHeatLoss) {}
+    InsulatedTankOutput(double heatLoss, double annualHeatLoss) : _heatLoss(heatLoss), _annualHeatLoss(annualHeatLoss) {}
 
-    double getHeatLength();
+    double getHeatLoss();
     double getAnnualHeatLoss();
-    void setHeatLength(double heatLength);
+    void setHeatLoss(double heatLoss);
     void setAnnualHeatLoss(double annualHeatLoss);
 
 private:
-    double _heatLength;
+    double _heatLoss;
     double _annualHeatLoss;
 };
 

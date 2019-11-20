@@ -184,6 +184,9 @@ set(SOURCE_FILES
         src/calculator/util/insulation/pipes/InsulatedPipeInput.cpp
         src/calculator/util/insulation/pipes/InsulatedPipeCalculator.cpp
         src/calculator/util/insulation/pipes/InsulatedPipeOutput.cpp
+        src/calculator/util/insulation/tanks/InsulatedTankInput.cpp
+        src/calculator/util/insulation/tanks/InsulatedTankCalculator.cpp
+        src/calculator/util/insulation/tanks/InsulatedTankOutput.cpp
         src/calculator/util/insulation/objects/AirProperties.cpp
         src/calculator/util/insulation/services/ConvectiveHeatTransferCoefficient.cpp
         src/calculator/util/insulation/services/NusseltNumber.cpp
@@ -352,6 +355,9 @@ set(INCLUDE_FILES
         include/calculator/util/insulation/pipes/InsulatedPipeInput.h
         include/calculator/util/insulation/pipes/InsulatedPipeCalculator.h
         include/calculator/util/insulation/pipes/InsulatedPipeOutput.h
+        include/calculator/util/insulation/tanks/InsulatedTankInput.h
+        include/calculator/util/insulation/tanks/InsulatedTankCalculator.h
+        include/calculator/util/insulation/tanks/InsulatedTankOutput.h
         include/calculator/util/insulation/objects/AirProperties.h
         include/calculator/util/insulation/services/ConvectiveHeatTransferCoefficient.h
         include/calculator/util/insulation/services/NusseltNumber.h
@@ -399,6 +405,7 @@ set(TEST_FILES
         tests/CompressedAirPressureReduction.unit.cpp
         tests/WaterReduction.unit.cpp
         tests/InsulatedPipeReduction.unit.cpp
+        tests/InsulatedTankReduction.unit.cpp
         tests/InsulationServices.unit.cpp
         tests/SteamReduction.unit.cpp
         tests/O2Enrichment.unit.cpp

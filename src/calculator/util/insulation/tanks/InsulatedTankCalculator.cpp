@@ -32,52 +32,85 @@ void InsulatedTankCalculator::validateInput(InsulatedTankInput input)
     {
         throw "ERROR : Tank - jacket emissivity out of acceptable range";
     }
-    if (input.getTankMaterialCoefficients().size() != 5)
-    {
-        throw "ERROR : Tank - expected exactly 5 tank material coefficients, received " + input.getTankMaterialCoefficients().size();
-    }
-    if (input.getInsulationMaterialCoefficients().size() != 5)
-    {
-        throw "ERROR : Tank - expected exactly 5 insulation material coefficients, received " + input.getInsulationMaterialCoefficients().size();
-    }
 }
 
-InsulatedTankInput InsulatedTankCalculator::calculateInsulation(InsulatedTankInput input)
+InsulatedTankOutput InsulatedTankCalculator::calculateInsulation(InsulatedTankInput input)
 {
     double thermalDiffusivity;
     double thermalExpansionCoefficient;
-    double naturalConvectionCoefficient;
     double airRayleigh;
+    double naturalConvectionCoefficient;
     double innerTankRadius;
     double outerTankRadius;
     double outerInsulationRadius;
     double tankArea;
     double insulationOverallCoefficient;
+    double insulationConvCondHeatLoss;
+    double insulationRadiativeHeatLoss;
+    double insulationHeatLoss;
+    double annualHeatLoss;
     AirProperties airProperties = InsulatedTankCalculator::calculateAirProperties(input.getAmbientTemperature());
     thermalDiffusivity = airProperties.getConductivity() / (airProperties.getDensity() * airProperties.getSpecificHeat());
     thermalExpansionCoefficient = 1.0 / input.getAmbientTemperature();
     airRayleigh = (32.174 * thermalExpansionCoefficient * (input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(airProperties.getSpecificHeat(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
-    naturalConvectionCoefficient = 0.125 * std::pow(airRayleigh, 1/3) * airProperties.getConductivity() / airProperties.getSpecificHeat();
+    airProperties.setRayleigh(airRayleigh);
+    naturalConvectionCoefficient = 0.125 * std::pow(airProperties.getRayleigh(), 1 / 3) * airProperties.getConductivity() / airProperties.getSpecificHeat();
     innerTankRadius = input.getTankDiameter() / 2.0;
     outerTankRadius = innerTankRadius + input.getTankThickness();
     outerInsulationRadius = outerTankRadius + input.getTankThickness();
     tankArea = input.getTankDiameter() * input.getTankHeight() * M_PI;
+    insulationOverallCoefficient = 1.0 / (innerTankRadius / outerInsulationRadius * 1.0 / naturalConvectionCoefficient + innerTankRadius / input.getInsulationConductivity() * std::log(outerInsulationRadius / outerTankRadius) + innerTankRadius / input.getTankConductivity() * std::log(outerTankRadius / innerTankRadius) + 1.0 / 10.0);
+    insulationConvCondHeatLoss = insulationOverallCoefficient * tankArea * (input.getTankTemperature() - input.getAmbientTemperature()) / 1e5;
+    insulationRadiativeHeatLoss = 0.1713e-8 * input.getJacketEmissivity() * (std::pow(input.getTankTemperature(), 4) - std::pow(input.getAmbientTemperature(), 4)) / 1e5;
+    insulationHeatLoss = insulationConvCondHeatLoss + insulationRadiativeHeatLoss;
+    annualHeatLoss = insulationHeatLoss * (double)input.getOperatingHours();
+    return InsulatedTankOutput(insulationHeatLoss, annualHeatLoss);
+}
 
-
-    
-
-
-
-
+InsulatedTankOutput InsulatedTankCalculator::calculateNoInsulation(InsulatedTankInput input)
+{
+    double thermalDiffusivity;
+    double thermalExpansionCoefficient;
+    double airRayleigh;
+    double naturalConvectionCoefficient;
+    double innerTankRadius;
+    double outerTankRadius;
+    double tankArea;
+    double bareOverallCoefficient;
+    double bareConvCondHeatLoss;
+    double bareRadiativeHeatLoss;
+    double bareHeatLoss;
+    double annualHeatLoss;
+    AirProperties airProperties = InsulatedTankCalculator::calculateAirProperties(input.getAmbientTemperature());
+    thermalDiffusivity = airProperties.getConductivity() / (airProperties.getDensity() * airProperties.getSpecificHeat());
+    thermalExpansionCoefficient = 1.0 / input.getAmbientTemperature();
+    airRayleigh = (32.174 * thermalExpansionCoefficient * (input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(airProperties.getSpecificHeat(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
+    airProperties.setRayleigh(airRayleigh);
+    naturalConvectionCoefficient = 0.125 * std::pow(airProperties.getRayleigh(), 1/3) * airProperties.getConductivity() / airProperties.getSpecificHeat();
+    innerTankRadius = input.getTankDiameter() / 2.0;
+    outerTankRadius = innerTankRadius + input.getTankThickness();
+    tankArea = input.getTankDiameter() * input.getTankHeight() * M_PI;
+    bareOverallCoefficient = 1.0 / (innerTankRadius / outerTankRadius * 1.0 / naturalConvectionCoefficient + innerTankRadius / input.getTankConductivity() * std::log(outerTankRadius / innerTankRadius) + 1.0 / 10.0);
+    bareConvCondHeatLoss = bareOverallCoefficient * tankArea * (input.getTankTemperature() - input.getAmbientTemperature()) / 1e5;
+    bareRadiativeHeatLoss = 0.1713e-8 * input.getTankEmissivity() * (std::pow(input.getTankTemperature(), 4) - std::pow(input.getAmbientTemperature(), 4)) / 1e5;
+    bareHeatLoss = bareConvCondHeatLoss + bareRadiativeHeatLoss;
+    annualHeatLoss = bareHeatLoss * (double)input.getOperatingHours();
+    return InsulatedTankOutput(bareHeatLoss, annualHeatLoss);
 }
 
 AirProperties InsulatedTankCalculator::calculateAirProperties(double temp)
 {
-    double airSpecificHeat = calculateAirProperty(0, temp);
-    double airDensity = calculateAirProperty(1, temp) * 1e-2;
-    double airKinViscosity = calculateAirProperty(2, temp) * 1e-4 / 3600;
     double airConductivity = calculateAirProperty(3, temp);
-    // double 
+    double viscosity = 0;
+    double prandtl = 0;
+    double expansionCoefficient = 0;
+    double airDensity = calculateAirProperty(1, temp) * 1e-2;
+    double airKinViscosity = calculateAirProperty(2, temp) * 1e-4 / 3600.0;
+    double airSpecificHeat = calculateAirProperty(0, temp);
+    double alpha = 0;
+    double reynolds = 0;
+    double rayleigh = 0;
+    return AirProperties(airConductivity, viscosity, prandtl, expansionCoefficient, airDensity, airKinViscosity, airSpecificHeat, alpha, reynolds, rayleigh);
 }
 
 double InsulatedTankCalculator::calculateAirProperty(int property, double temp)
@@ -106,9 +139,4 @@ double InsulatedTankCalculator::propertyFit(std::vector<double> coefficients, do
 double InsulatedTankCalculator::lookupAirPropertyCoefficient(int property, int n)
 {
     return this->_airPropertiesArray[property][n];
-}
-
-const double *InsulatedTankCalculator::lookupAirProperty(int property)
-{
-    return this->_airPropertiesArray[property];
 }

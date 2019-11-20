@@ -23,6 +23,9 @@ NAN_MODULE_INIT(InitCalculator)
     Nan::Set(target, New<String>("pipeInsulationReduction").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(pipeInsulationReduction)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("tankInsulationReduction").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(tankInsulationReduction)).ToLocalChecked());
+
     Nan::Set(target, New<String>("steamReduction").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(steamReduction)).ToLocalChecked());
 }

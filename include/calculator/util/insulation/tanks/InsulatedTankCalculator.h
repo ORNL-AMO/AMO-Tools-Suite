@@ -18,7 +18,6 @@ public:
     double noInsulationRecursive();
     double calculateAirProperty(int property, double temp);
     double lookupAirPropertyCoefficient(int property, int n);
-    const double *lookupAirProperty(int property);
 
 private:
     void validateInput(InsulatedTankInput input);

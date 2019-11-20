@@ -2,7 +2,6 @@
 #define AMO_LIBRARY_INSULATEDTANKINPUT_H
 
 #include "calculator/util/insulation/objects/AirProperties.h"
-#include <vector>
 
 class InsulatedTankInput
 {
@@ -19,9 +18,7 @@ public:
         double systemEfficiency,
         double insulationThickness,
         double insulationConductivity,
-        double jacketEmissivity,
-        std::vector<double> tankMaterialCoefficients,
-        std::vector<double> insulationMaterialCoefficients)
+        double jacketEmissivity)
         : _operatingHours(operatingHours),
           _tankHeight(tankHeight),
           _tankDiameter(tankDiameter),
@@ -33,9 +30,7 @@ public:
           _systemEfficiency(systemEfficiency),
           _insulationThickness(insulationThickness),
           _insulationConductivity(insulationConductivity),
-          _jacketEmissivity(jacketEmissivity),
-          _tankMaterialCoefficients(tankMaterialCoefficients),
-          _insulationMaterialCoefficients(insulationMaterialCoefficients)
+          _jacketEmissivity(jacketEmissivity)
     {
     }
 
@@ -51,8 +46,6 @@ public:
     double getInsulationThickness();
     double getInsulationConductivity();
     double getJacketEmissivity();
-    std::vector<double> getTankMaterialCoefficients();
-    std::vector<double> getInsulationMaterialCoefficients();
 
 private:
     // AirProperties _airProperties;
@@ -68,8 +61,6 @@ private:
     double _insulationThickness;
     double _insulationConductivity;
     double _jacketEmissivity;
-    std::vector<double> _tankMaterialCoefficients;
-    std::vector<double> _insulationMaterialCoefficients;
 };
 
 #endif
