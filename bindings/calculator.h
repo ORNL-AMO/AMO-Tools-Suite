@@ -559,8 +559,6 @@ NAN_METHOD(tankInsulationReduction)
     double insulationThickness = Get("insulationThickness", inp);
     double insulationConductivity = Get("insulationConductivity", inp);
     double jacketEmissivity = Get("jacketEmissivity", inp);
-    std::vector<double> tankMaterialCoefficients = GetVector("tankMaterialCoefficients", inp);
-    std::vector<double> insulationMaterialCoefficients = GetVector("insulationMaterialCoefficients", inp);
 
     InsulatedTankInput input(
         operatingHours,
@@ -574,9 +572,7 @@ NAN_METHOD(tankInsulationReduction)
         systemEfficiency,
         insulationThickness,
         insulationConductivity,
-        jacketEmissivity,
-        tankMaterialCoefficients,
-        insulationMaterialCoefficients);
+        jacketEmissivity);
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
     SetR("heatLoss", output.getHeatLoss());

@@ -3,6 +3,7 @@
 
 #include "calculator/util/insulation/tanks/InsulatedTankInput.h"
 #include "calculator/util/insulation/tanks/InsulatedTankOutput.h"
+#include <vector>
 
 class InsulatedTankCalculator
 {
@@ -25,10 +26,10 @@ private:
 
     InsulatedTankInput _insulatedTankInput;
     const double _airPropertiesArray[4][5] = {
-        {-1.82110e-14, 1.93117e-11, 1.74898e-8, 4.82437e-6, 2.39515e-1},  // specificHeat
-        {5.53241e-12, -1.95375e-8, 2.56753e-5, -1.76282e-2, 8.63177},     // density
-        {-6.67800e-13, 1.20068e-9, 2.57451e-6, 4.90742e-3, 1.27551},      // kinViscosity
-        {-1.63899e-15, 4.97038e-12, -9.15319e-9, 2.63935e-5, 1.31274e-2}, // thermCond
+        {-1.82109557e-14, 5.27958269e-11, -3.22287031e-8, 8.06185737e-6, 2.38303755e-1},  // specificHeat
+        {5.53240532e-12, -2.97098117e-8, 5.96315645e-5, -5.57665211e-2, 2.43046430e1},     // density
+        {-6.67800412e-13, 2.42855319e-9, 7.21312269e-8, 3.56111381e-3, -5.82727939e-1},      // kinViscosity
+        {-1.63898601e-15, 7.98394765e-12, -1.80852621e-8, 3.85957991e-5, -1.49489778e-3}, // thermCond
     };
 };
 
