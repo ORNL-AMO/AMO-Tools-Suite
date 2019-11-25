@@ -2,7 +2,6 @@
 #include "calculator/util/insulation/objects/AirProperties.h"
 #include <cmath>
 #include <vector>
-#include <iostream>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -87,7 +86,7 @@ InsulatedTankOutput InsulatedTankCalculator::calculateNoInsulation(InsulatedTank
     thermalExpansionCoefficient = 1.0 / input.getAmbientTemperature();
     airRayleigh = (32.174 * thermalExpansionCoefficient * (input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(input.getTankDiameter(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
     airProperties.setRayleigh(airRayleigh);
-    naturalConvectionCoefficient = 0.125 * std::pow(airProperties.getRayleigh(), 1 / 3) * airProperties.getConductivity() / airProperties.getSpecificHeat();
+    naturalConvectionCoefficient = 0.125 * std::pow(airProperties.getRayleigh(), 1.0 / 3.0) * airProperties.getConductivity() / input.getTankDiameter();
     innerTankRadius = input.getTankDiameter() / 2.0;
     outerTankRadius = innerTankRadius + input.getTankThickness();
     tankArea = input.getTankDiameter() * input.getTankHeight() * M_PI;
@@ -96,22 +95,6 @@ InsulatedTankOutput InsulatedTankCalculator::calculateNoInsulation(InsulatedTank
     bareRadiativeHeatLoss = 0.1713e-8 * input.getTankEmissivity() * (std::pow(input.getTankTemperature(), 4) - std::pow(input.getAmbientTemperature(), 4)) / 1e5;
     bareHeatLoss = bareConvCondHeatLoss + bareRadiativeHeatLoss;
     annualHeatLoss = bareHeatLoss * (double)input.getOperatingHours();
-    std::cout << "conductivity = " << airProperties.getConductivity() << std::endl;
-    std::cout << "density = " << airProperties.getDensity() << std::endl;
-    std::cout << "specificHeat = " << airProperties.getSpecificHeat() << std::endl;
-    std::cout << "kinViscosity = " << airProperties.getKinViscosity() << std::endl;
-    std::cout << "thermalDiffusivity = " << thermalDiffusivity << std::endl;
-    std::cout << "thermalExpansionCoefficient = " << thermalExpansionCoefficient << std::endl;
-    std::cout << "rayleigh = " << airProperties.getRayleigh() << std::endl;
-    std::cout << "naturalConvectionCoefficient = " << naturalConvectionCoefficient << std::endl;
-    std::cout << "innerTankRadius = " << innerTankRadius << std::endl;
-    std::cout << "outerTankRadius = " << outerTankRadius << std::endl;
-    std::cout << "tankArea = " << tankArea << std::endl;
-    std::cout << "bareOverallCoefficient = " << bareOverallCoefficient << std::endl;
-    std::cout << "bareConvCondHeatLoss = " << bareConvCondHeatLoss << std::endl;
-    std::cout << "bareRadiativeHeatLoss = " << bareRadiativeHeatLoss << std::endl;
-    std::cout << "bareHeatLoss = " << bareHeatLoss << std::endl;
-    std::cout << "annualHeatLoss = " << annualHeatLoss << std::endl;
     return InsulatedTankOutput(bareHeatLoss, annualHeatLoss);
 }
 

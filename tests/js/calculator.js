@@ -682,6 +682,54 @@ test('Pipe Insulation Reduction - No Insulation', function (t) {
 });
 
 
+//Tank Insulation Reduction
+test('Tank Insulation Reduction - Insulated', function (t) {
+    t.plan(3);
+    t.type(bindings.tankInsulationReduction, 'function');
+
+    var inp = {
+        operatingHours: 8760,
+        tankHeight: 10,
+        tankDiameter: 5,
+        tankThickness: 0.5,
+        tankEmissivity: 0.8,
+        tankConductivity: 46.2320,
+        tankTemperature: 959.67,
+        ambientTemperature: 529.67,
+        systemEfficiency: 90,
+        insulationThickness: 0.5,
+        insulationConductivity: 0.0190707,
+        jacketEmissivity: 0.9,
+    };
+    var res = bindings.tankInsulationReduction(inp);
+    t.equal(rnd(res.heatLoss), rnd(0.0444151747), 'res.heatLength is ' + res.heatLength);
+    t.equal(rnd(res.annualHeatLoss), rnd(389.0769300822), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+});
+
+test('Tank Insulation Reduction - No Insulation', function (t) {
+    t.plan(3);
+    t.type(bindings.tankInsulationReduction, 'function');
+
+    var inp = {
+        operatingHours: 8760,
+        tankHeight: 10,
+        tankDiameter: 5,
+        tankThickness: 0.5,
+        tankEmissivity: 0.8,
+        tankConductivity: 46.2320,
+        tankTemperature: 959.67,
+        ambientTemperature: 529.67,
+        systemEfficiency: 90,
+        insulationThickness: 0,
+        insulationConductivity: 0,
+        jacketEmissivity: 0.9,
+    };
+    var res = bindings.tankInsulationReduction(inp);
+    t.equal(rnd(res.heatLoss), rnd(1.1112001223), 'res.heatLength is ' + res.heatLength);
+    t.equal(rnd(res.annualHeatLoss), rnd(9734.113072), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+});
+
+
 //Steam Reduction
 test('Steam Reduction - Flow Meter Method Data', function (t) {
     t.plan(4);

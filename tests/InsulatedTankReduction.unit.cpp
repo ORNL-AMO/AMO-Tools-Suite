@@ -73,6 +73,6 @@ TEST_CASE("No Insulation Tank", "[InsulatedTankReduction][util]")
 
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
-    CHECK(output.getHeatLoss() == Approx(1.10815628));
-    CHECK(output.getAnnualHeatLoss() == Approx(9707.4490128));
+    CHECK(output.getHeatLoss() == Approx(1.1112001223));
+    CHECK(output.getAnnualHeatLoss() == Approx(9734.11));
 }
