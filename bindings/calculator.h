@@ -17,11 +17,14 @@
 #include "calculator/util/insulation/pipes/InsulatedPipeInput.h"
 #include "calculator/util/insulation/pipes/InsulatedPipeCalculator.h"
 #include "calculator/util/insulation/pipes/InsulatedPipeOutput.h"
+#include "calculator/util/insulation/tanks/InsulatedTankInput.h"
+#include "calculator/util/insulation/tanks/InsulatedTankCalculator.h"
+#include "calculator/util/insulation/tanks/InsulatedTankOutput.h"
+
 #include <iostream>
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 #include "calculator/util/SteamReduction.h"
-
 
 using namespace Nan;
 using namespace v8;
@@ -538,6 +541,45 @@ NAN_METHOD(pipeInsulationReduction)
 }
 // ========== END Pipe Insulation Reduction ===========
 
+// ========== Start Tank Insulation Reduction ===========
+NAN_METHOD(tankInsulationReduction)
+{
+    inp = info[0]->ToObject();
+    r = Nan::New<Object>();
+
+    int operatingHours = static_cast<int>(Get("operatingHours", inp));
+    double tankHeight = Get("tankHeight", inp);
+    double tankDiameter = Get("tankDiameter", inp);
+    double tankThickness = Get("tankThickness", inp);
+    double tankEmissivity = Get("tankEmissivity", inp);
+    double tankConductivity = Get("tankConductivity", inp);
+    double tankTemperature = Get("tankTemperature", inp);
+    double ambientTemperature = Get("ambientTemperature", inp);
+    double systemEfficiency = Get("systemEfficiency", inp) / 100.0;
+    double insulationThickness = Get("insulationThickness", inp);
+    double insulationConductivity = Get("insulationConductivity", inp);
+    double jacketEmissivity = Get("jacketEmissivity", inp);
+
+    InsulatedTankInput input(
+        operatingHours,
+        tankHeight,
+        tankDiameter,
+        tankThickness,
+        tankEmissivity,
+        tankConductivity,
+        tankTemperature,
+        ambientTemperature,
+        systemEfficiency,
+        insulationThickness,
+        insulationConductivity,
+        jacketEmissivity);
+    InsulatedTankCalculator calculator(input);
+    InsulatedTankOutput output = calculator.calculate();
+    SetR("heatLoss", output.getHeatLoss());
+    SetR("annualHeatLoss", output.getAnnualHeatLoss());
+    info.GetReturnValue().Set(r);
+}
+// ========== END Tank Insulation Reduction ===========
 
 // ============ Start Steam Reduction =============
 SteamFlowMeterMethodData getSteamFlowMeterMethodData(Local<Object> obj)
