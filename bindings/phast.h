@@ -257,9 +257,10 @@ NAN_METHOD(gasLoadChargeMaterial) {
     const double percentReacted =  Get("percentReacted");
     const double reactionHeat = Get("reactionHeat");
     const double additionalHeat = Get("additionalHeat");
+    const double thermicReactionTypeInput = Get("thermicReactionType");
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
-    if (Get("thermicReactionType") == 0) {
+    if (thermicReactionTypeInput == 0) {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
@@ -361,9 +362,10 @@ NAN_METHOD(liquidLoadChargeMaterial) {
     const double percentReacted = Get("percentReacted");
     const double reactionHeat = Get("reactionHeat");
     const double additionalHeat = Get("additionalHeat");
+    const double thermicReactionTypeInput = Get("thermicReactionType");
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
-    if (Get("thermicReactionType") == 0) {
+    if (thermicReactionTypeInput == 0) {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
@@ -533,10 +535,11 @@ NAN_METHOD(solidLoadChargeMaterial) {
     const double chargeReacted = Get("chargeReacted");
     const double reactionHeat = Get("reactionHeat");
     const double additionalHeat = Get("additionalHeat");
+    const double thermicReactionTypeInput = Get("thermicReactionType");
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
 
-    if (Get("thermicReactionType") == 0) {
+    if (thermicReactionTypeInput == 0) {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
     } else {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
