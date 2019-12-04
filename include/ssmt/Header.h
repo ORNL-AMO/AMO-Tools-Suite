@@ -1,6 +1,7 @@
 #ifndef AMO_TOOLS_SUITE_HEADER_H
 #define AMO_TOOLS_SUITE_HEADER_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include "SteamProperties.h"
@@ -23,6 +24,8 @@ public:
 	SteamProperties::ThermodynamicQuantity getQuantityType() const { return quantityType; }
 	double getInletEnergyFlow() const { return  inletEnergyFlow; }
 	SteamSystemModelerTool::SteamPropertiesOutput const & getInletProperties() const { return inletProperties; }
+
+    friend std::ostream &operator<<(std::ostream &stream, const Inlet &inlet);
 
 	void setPressure(double pressure);
 	void setQuantityValue(double quantityValue);
@@ -48,6 +51,7 @@ public:
 	* */
 	Header(double headerPressure, std::vector<Inlet> & inletVec);
 
+    friend std::ostream &operator<<(std::ostream &stream, const Header &header);
 	/**
      * Gets the header pressure
      * @return double, header pressure in MPa */

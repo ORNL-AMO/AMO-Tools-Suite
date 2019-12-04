@@ -20,6 +20,29 @@ PrvWithoutDesuperheating::PrvWithoutDesuperheating(const double inletPressure,
 	calculateProperties();
 }
 
+std::ostream &operator<<(std::ostream &stream, const PrvWithoutDesuperheating &prv) {
+    stream << "PrvWithoutDesuperheating["
+           << "inletPressure=" << prv.inletPressure
+           << ", inletMassFlow=" << prv.inletMassFlow
+           << ", inletEnergyFlow=" << prv.inletEnergyFlow
+           << ", quantityValue=" << prv.quantityValue
+           << ", quantityType=" << static_cast< int >(prv.quantityType)
+           << ", inletProperties=" << prv.inletProperties
+           << ", outletPressure=" << prv.outletPressure
+           << ", outletProperties=" << prv.outletProperties
+           << "]";
+    return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<PrvWithoutDesuperheating> &prv) {
+    if (prv == nullptr) {
+        stream << "PrvWithoutDesuperheating[nullptr]";
+    } else {
+        stream << *prv;
+    }
+    return stream;
+}
+
 void PrvWithoutDesuperheating::calculateProperties() {
 	inletProperties = SteamProperties(inletPressure, quantityType, quantityValue).calculate();
   outletProperties = SteamProperties(outletPressure, SteamProperties::ThermodynamicQuantity::ENTHALPY,
@@ -39,6 +62,41 @@ PrvWithDesuperheating::PrvWithDesuperheating(const double inletPressure,
           feedwaterQuantityType(feedwaterQuantityType)
 {
     calculateProperties();
+}
+
+
+std::ostream &operator<<(std::ostream &stream, const PrvWithDesuperheating &prv) {
+    stream << "PrvWithDesuperheating["
+           << "inletPressure=" << prv.inletPressure
+           << ", inletMassFlow=" << prv.inletMassFlow
+           << ", inletEnergyFlow=" << prv.inletEnergyFlow
+           << ", quantityValue=" << prv.quantityValue
+           << ", quantityType=" << static_cast< int >(prv.quantityType)
+           << ", inletProperties=" << prv.inletProperties
+           << ", outletPressure=" << prv.outletPressure
+           << ", outletProperties=" << prv.outletProperties
+
+           << ", feedwaterPressure=" << prv.feedwaterPressure
+           << ", feedwaterQuantityValue=" << prv.feedwaterQuantityValue
+           << ", desuperheatingTemp=" << prv.desuperheatingTemp
+           << ", feedwaterQuantityType=" << static_cast< int >(prv.feedwaterQuantityType)
+           << ", feedwaterProperties=" << prv.feedwaterProperties
+           << ", inletEnergyFlow=" << prv.inletEnergyFlow
+           << ", outletMassFlow=" << prv.outletMassFlow
+           << ", outletEnergyFlow=" << prv.outletEnergyFlow
+           << ", feedwaterMassFlow=" << prv.feedwaterMassFlow
+           << ", feedwaterEnergyFlow=" << prv.feedwaterEnergyFlow
+           << "]";
+    return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<PrvWithDesuperheating> &prv) {
+    if (prv == nullptr) {
+        stream << "PrvWithDesuperheating[nullptr]";
+    } else {
+        stream << *prv;
+    }
+    return stream;
 }
 
 void PrvWithDesuperheating::calculateProperties() {

@@ -32,6 +32,23 @@ void HeatLoss::calculateProperties() {
 	heatLoss = inletEnergyFlow - outletEnergyFlow;
 }
 
+std::ostream &operator<<(std::ostream &stream, const HeatLoss &heatLoss) {
+    stream << "HeatLoss["
+           << "inletPressure=" << heatLoss.inletPressure
+           << ", quantityValue=" << heatLoss.quantityValue
+           << ", inletMassFlow=" << heatLoss.inletMassFlow
+           << ", percentHeatLoss=" << heatLoss.percentHeatLoss
+           << ", inletProperties=" << heatLoss.inletProperties
+           << ", inletEnergyFlow=" << heatLoss.inletEnergyFlow
+           << ", outletEnergyFlow=" << heatLoss.outletEnergyFlow
+           << ", outletProperties=" << heatLoss.outletProperties
+           << ", heatLoss=" << heatLoss.heatLoss
+           << ", quantityType=" << static_cast< int >(heatLoss.quantityType)
+           << "]";
+
+    return stream;
+}
+
 void HeatLoss::setInletPressure(double inletPressure) {
 	this->inletPressure = inletPressure;
 	calculateProperties();
