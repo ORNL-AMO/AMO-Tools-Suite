@@ -4,12 +4,15 @@
 #include <nan.h>
 #include <node.h>
 #include <iostream>
+#include <cctype>
 
 using namespace Nan;
 using namespace v8;
 
 Local <Object> inp;
 Local <Object> r;
+
+bool isStringEqualCaseInsensitive(const std::string &string1, const std::string &string2);
 
 /**
  * Get the value for the specified name from the specified object.
@@ -20,7 +23,7 @@ Local <Object> r;
 Local <Value> getValue(std::string const &name, Local <Object> sourceObject) {
     if (sourceObject.IsEmpty()) {
         auto msg = std::string(
-                "getValue: sourceObject is empty/does not exist; trying to get value name=" + name).c_str();
+                "NanDataConverters: getValue: sourceObject is empty/does not exist; trying to get value name=" + name).c_str();
         std::cout << msg << std::endl;
 
         ThrowTypeError(msg);
@@ -29,7 +32,7 @@ Local <Value> getValue(std::string const &name, Local <Object> sourceObject) {
     Local <String> localName = Nan::New<String>(name).ToLocalChecked();
     Local <Value> value = sourceObject->Get(localName);
     if (value->IsUndefined()) {
-        auto msg = std::string("getValue method in ssmt.h: " + name + " not present in sourceObject").c_str();
+        auto msg = std::string("NanDataConverters: getValue: field '" + name + "' not present in sourceObject").c_str();
         std::cout << "getValue: " << msg << std::endl;
 
         ThrowTypeError(msg);
@@ -45,7 +48,8 @@ Local <Value> getValue(std::string const &name, Local <Object> sourceObject) {
  */
 Local <Object> getObject(std::string const &name, Local <Object> sourceObject) {
     Local <Value> value = getValue(name, sourceObject);
-    return value->ToObject();
+
+    return value->IsNull() ? Local<Object>() : value->ToObject();
 }
 
 /**
@@ -55,6 +59,28 @@ Local <Object> getObject(std::string const &name, Local <Object> sourceObject) {
  */
 Local <Object> getObject(std::string const &name) {
     return getObject(name, inp);
+}
+
+/**
+ * Get the string value for the specified name from the specified object.
+ * @param name Name (variable name) of the value.
+ * @param sourceObject The specified object to get the string value from.
+ * @return The value as a string.
+ */
+std::string getString(std::string const &name, Local <Object> sourceObject) {
+    Local <Value> value = getValue(name, sourceObject);
+    Local <String> localString = value->ToString();
+    String::Utf8Value utf8String(localString);
+    return std::string(*utf8String);
+}
+
+/**
+ * Get the string value for the specified name from the root input object (inp).
+ * @param name Name (variable name) of the value.
+ * @return The value as a string.
+ */
+std::string getString(std::string const &name) {
+    return getString(name, inp);
 }
 
 /**
@@ -95,6 +121,46 @@ bool getBool(std::string const &name, Local <Object> sourceObject) {
  */
 bool getBool(std::string const &name) {
     return getBool(name, inp);
+}
+
+bool getBoolFromString(const std::string &name, Local <Object> sourceObject) {
+    const std::string &stringValue = getString(name, sourceObject);
+    const std::string &trueString = "true";
+    const std::string &yesString = "yes";
+    return isStringEqualCaseInsensitive(stringValue, trueString) ||
+           isStringEqualCaseInsensitive(stringValue, yesString);
+}
+
+bool isCharEqualCaseInsensitive(const char &char1, const char &char2) {
+    if (char1 == char2) {
+        return true;
+    } else {
+        return std::toupper(char1) == std::toupper(char2);
+    }
+}
+
+// C++11 compatible; better options require C++14 or greater
+bool isStringEqualCaseInsensitive(const std::string &string1, const std::string &string2) {
+    //shortcut/fast and avoid one is too short
+    if(string1.length() != string2.length()) {
+        return false;
+    }
+
+    const char *const string1Array = string1.c_str();
+    const char *const string2Array = string2.c_str();
+
+    for (unsigned int i = 0; i < string1.length(); ++i) {
+        const char char1 = string1Array[i];
+        const char char2 = string2Array[i];
+        const bool isEqualChar = isCharEqualCaseInsensitive(char1, char2);
+        if (!isEqualChar) return false;
+    }
+
+    return true;
+}
+
+bool getBoolFromString(const std::string &name) {
+    return getBoolFromString(name, inp);
 }
 
 /**

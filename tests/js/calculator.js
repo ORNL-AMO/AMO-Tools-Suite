@@ -633,6 +633,101 @@ test('Water Reduction - All Types', function (t) {
     t.equal(rnd(res.waterCost), rnd(632004.6));
 });
 
+test('Pipe Insulation Reduction - With Insulation', function (t) {
+    t.plan(3);
+    t.type(bindings.pipeInsulationReduction, 'function');
+
+    var inp = {
+        operatingHours: 8640,
+        pipeLength: 15.24,
+        pipeDiameter: 0.025399,
+        pipeThickness: 0.0033782,
+        pipeTemperature: 422.039,
+        ambientTemperature: 299.817,
+        windVelocity: 0.89408,
+        systemEfficiency: 90,
+        insulationThickness: 0.0762,
+        pipeEmissivity: 0.8000,
+        jacketEmissivity: 0.1,
+        pipeMaterialCoefficients: [0, 2.08333e-9, 3.67044e-19, -5.10833e-2, 7.90000e1],
+        insulationMaterialCoefficients: [1.57526e-12, -2.02822e-9, 8.6328e-7, 0, 0.006729488]
+    };
+    var res = bindings.pipeInsulationReduction(inp);
+    t.equal(rnd(res.heatLength), rnd(19.385877), 'res.heatLength is ' + res.heatLength);
+    t.equal(rnd(res.annualHeatLoss), rnd(2836231.3687633672), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+});
+
+test('Pipe Insulation Reduction - No Insulation', function (t) {
+    t.plan(3);
+    t.type(bindings.pipeInsulationReduction, 'function');
+
+    var inp = {
+        operatingHours: 8640,
+        pipeLength: 15.24,
+        pipeDiameter: 0.025399,
+        pipeThickness: 0.0033782,
+        pipeTemperature: 422.039,
+        ambientTemperature: 299.817,
+        windVelocity: 0.89408,
+        systemEfficiency: 90,
+        insulationThickness: -1,
+        pipeEmissivity: 0.8000,
+        jacketEmissivity: 0.1,
+        pipeMaterialCoefficients: [0, 2.08333e-9, 3.67044e-19, -5.10833e-2, 7.90000e1],
+        insulationMaterialCoefficients: [1.57526e-12, -2.02822e-9, 8.6328e-7, 0, 0.006729488]
+    };
+    var res = bindings.pipeInsulationReduction(inp);
+    t.equal(rnd(res.heatLength), rnd(278.8984025085), 'res.heatLength is ' + res.heatLength);
+    t.equal(rnd(res.annualHeatLoss), rnd(40803951.880608), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+});
+
+
+//Tank Insulation Reduction
+test('Tank Insulation Reduction - Insulated', function (t) {
+    t.plan(3);
+    t.type(bindings.tankInsulationReduction, 'function');
+
+    var inp = {
+        operatingHours: 8760,
+        tankHeight: 10,
+        tankDiameter: 5,
+        tankThickness: 0.5,
+        tankEmissivity: 0.8,
+        tankConductivity: 46.2320,
+        tankTemperature: 959.67,
+        ambientTemperature: 529.67,
+        systemEfficiency: 90,
+        insulationThickness: 0.5,
+        insulationConductivity: 0.0190707,
+        jacketEmissivity: 0.9,
+    };
+    var res = bindings.tankInsulationReduction(inp);
+    t.equal(rnd(res.heatLoss), rnd(0.0444151747), 'res.heatLength is ' + res.heatLength);
+    t.equal(rnd(res.annualHeatLoss), rnd(389.0769300822), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+});
+
+test('Tank Insulation Reduction - No Insulation', function (t) {
+    t.plan(3);
+    t.type(bindings.tankInsulationReduction, 'function');
+
+    var inp = {
+        operatingHours: 8760,
+        tankHeight: 10,
+        tankDiameter: 5,
+        tankThickness: 0.5,
+        tankEmissivity: 0.8,
+        tankConductivity: 46.2320,
+        tankTemperature: 959.67,
+        ambientTemperature: 529.67,
+        systemEfficiency: 90,
+        insulationThickness: 0,
+        insulationConductivity: 0,
+        jacketEmissivity: 0.9,
+    };
+    var res = bindings.tankInsulationReduction(inp);
+    t.equal(rnd(res.heatLoss), rnd(1.1112001223), 'res.heatLength is ' + res.heatLength);
+    t.equal(rnd(res.annualHeatLoss), rnd(9734.113072), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+});
 
 
 //Steam Reduction
