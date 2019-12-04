@@ -5,6 +5,7 @@
 #include "calculator/util/insulation/tanks/InsulatedTankOutput.h"
 #include <vector>
 
+//Insulated Tank Calculator class responsible for handling calculation - main driver
 class InsulatedTankCalculator
 {
 public:
