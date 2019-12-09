@@ -88,6 +88,39 @@ void Turbine::calculateTurbineProperties(const double inletSpecificEnthalpy, con
 	outletEnergyFlow = outletSpecificEnthalpy * massFlow;
 }
 
+std::ostream &operator<<(std::ostream &stream, const Turbine &turbine) {
+    stream << "Turbine["
+           << "solveFor=" << static_cast< int >(turbine.solveFor)
+           << ", inletPressure=" << turbine.inletPressure
+           << ", inletQuantity=" << static_cast< int >(turbine.inletQuantity)
+           << ", inletQuantityValue=" << turbine.inletQuantityValue
+           << ", turbineProperty=" << static_cast< int >(turbine.turbineProperty)
+           << ", isentropicEfficiency=" << turbine.isentropicEfficiency
+           << ", generatorEfficiency=" << turbine.generatorEfficiency
+           << ", massFlowOrPowerOut=" << turbine.massFlowOrPowerOut
+           << ", outletSteamPressure=" << turbine.outletSteamPressure
+           << ", outletQuantity=" << static_cast< int >(turbine.outletQuantity)
+           << ", outletQuantityValue=" << turbine.outletQuantityValue
+           << ", inletProperties=" << turbine.inletProperties
+           << ", outletProperties=" << turbine.outletProperties
+           << ", inletEnergyFlow=" << turbine.inletEnergyFlow
+           << ", outletEnergyFlow=" << turbine.outletEnergyFlow
+           << ", energyOut=" << turbine.energyOut
+           << ", powerOut=" << turbine.powerOut
+           << ", massFlow=" << turbine.massFlow
+           << "]";
+    return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<Turbine> &turbine) {
+    if (turbine == nullptr) {
+        stream << "Turbine[nullptr]";
+    } else {
+        stream << *turbine;
+    }
+    return stream;
+}
+
 void Turbine::setSolveFor(Turbine::Solve solveFor) {
 	this->solveFor = solveFor;
 	calculate();
