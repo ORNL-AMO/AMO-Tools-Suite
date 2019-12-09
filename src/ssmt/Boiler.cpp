@@ -19,6 +19,24 @@ Boiler::Boiler(const double deaeratorPressure, const double combustionEfficiency
 	calculateProperties();
 }
 
+std::ostream &operator<<(std::ostream &stream, const Boiler &boiler) {
+    stream << "Boiler["
+           << "deaeratorPressure=" << boiler.deaeratorPressure
+           << ", combustionEfficiency=" << boiler.combustionEfficiency
+           << ", blowdownRate=" << boiler.blowdownRate
+           << ", steamPressure=" << boiler.steamPressure
+            << ", quantityType=" << static_cast< int >(boiler.quantityType)
+           << ", quantityValue=" << boiler.quantityValue
+           << ", steamMassFlow=" << boiler.steamMassFlow
+           << ", steamProperties=" << boiler.steamProperties
+           << ", blowdownProperties=" << boiler.blowdownProperties
+           << ", feedwaterProperties=" << boiler.feedwaterProperties
+           << ", boilerEnergy=" << boiler.boilerEnergy
+           << ", fuelEnergy=" << boiler.fuelEnergy
+           << "]";
+    return stream;
+}
+
 void Boiler::calculateProperties() {
 	auto sp = SteamProperties(steamPressure, quantityType, quantityValue).calculate();
 	steamProperties = {steamMassFlow, sp.specificEnthalpy * steamMassFlow, sp};

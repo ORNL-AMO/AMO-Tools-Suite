@@ -13,6 +13,24 @@ public:
         {}
         SteamSystemModelerTool::FluidProperties hotOutlet, coldOutlet;
     };
+
+    friend std::ostream &operator<<(std::ostream &stream, const HeatExchanger::Output &output) {
+        stream << "HeatExchanger::Output["
+               << "hotOutlet=" << output.hotOutlet
+               << ", coldOutlet=" << output.coldOutlet
+               << "]";
+        return stream;
+    }
+
+    friend std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<HeatExchanger::Output> &turbine) {
+        if (turbine == nullptr) {
+            stream << "HeatExchanger::Output[nullptr]";
+        } else {
+            stream << *turbine;
+        }
+        return stream;
+    }
+
     /**
      * Constructor for the HeatExchanger calculator
      * @param hotInlet const Inlet, must be thermodynamic quantity of temperature or else exception will be thrown
@@ -47,7 +65,7 @@ public:
                 coldInlet.massFlow, coldInlet.massFlow * sp.specificEnthalpy, sp
         );
 
-        if ((hotOutletTest.temperature - coldInlet.temperature) > approachTemp) {
+        if (fabs((hotOutletTest.temperature - coldInlet.temperature) - approachTemp) > .0001) {
             sp = SteamProperties(
                     coldInlet.pressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
                     hotInlet.temperature - approachTemp

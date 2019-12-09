@@ -9,6 +9,7 @@
  *
  */
 
+#include <iostream>
 #include "SteamProperties.h"
 #include "SteamSystemModelerTool.h"
 
@@ -37,6 +38,8 @@ public:
      * */
     Boiler(double deaeratorPressure, double combustionEfficiency, double blowdownRate, double steamPressure,
            SteamProperties::ThermodynamicQuantity quantityType, double quantityValue, double steamMassFlow);
+
+    friend std::ostream &operator<<(std::ostream &stream, const Boiler &boiler);
 
     SteamSystemModelerTool::FluidProperties const & getSteamProperties() const { return steamProperties; }
 

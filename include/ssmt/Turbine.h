@@ -11,6 +11,7 @@
 #ifndef AMO_TOOLS_SUITE_TURBINE_H
 #define AMO_TOOLS_SUITE_TURBINE_H
 
+#include <iostream>
 #include "SteamProperties.h"
 /**
      *
@@ -79,6 +80,9 @@ public:
 	 * 
 	 * @return unknown value
 	 */
+
+    friend std::ostream &operator<<(std::ostream &stream, const Turbine &turbine);
+    friend std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<Turbine> &turbine);
 
 	Solve getSolveFor() const { return solveFor; }
 	/**

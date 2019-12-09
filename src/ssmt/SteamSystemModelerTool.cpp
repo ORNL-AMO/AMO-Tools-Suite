@@ -1,6 +1,7 @@
 #include <ssmt/SteamSystemModelerTool.h>
 #include <array>
 #include <cmath>
+#include <iostream>
 
 // where t is temperature and p is pressure
 SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region1(const double t, const double p) {
@@ -155,7 +156,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamSystemModelerTool::region3(co
 
 	// Uses Linear Interpolation
 	std::size_t counter = 0;
-	while ((std::abs(pressureNew - p) > 1e-10) && (counter++ < 50) && (testPressureA != testPressureB)) {
+	while ((fabs(pressureNew - p) > 1e-10) && (counter++ < 50) && (testPressureA != testPressureB)) {
 		auto const densityNew = p * (densityA - densityB) / (testPressureA - testPressureB) + densityA - testPressureA * (densityA - densityB) / (testPressureA - testPressureB);
 		region3propNew = region3Density(densityNew, t);
 		pressureNew = region3propNew.pressure;
@@ -228,7 +229,7 @@ double SteamSystemModelerTool::backwardRegion3Exact(const double pressure, const
     double temperatureB = SteamSystemModelerTool::linearTestPoint(X, pointA, pointB);
     int counter = 0;
 
-    while((std::abs(temperature - temperatureB) > 1e-6) && (counter++ < 15)) {
+    while((fabs(temperature - temperatureB) > 1e-6) && (counter++ < 15)) {
         pointA = pointB;
         pointB = SteamSystemModelerTool::generatePoint(3, key, pressure, temperatureB);
         temperature = temperatureB;
@@ -248,9 +249,17 @@ double SteamSystemModelerTool::region4(const double t) {
 	return std::pow(2 * c / (-b + sqrt(std::pow(b, 2) - 4 * a * c)), 4);
 }
 
-// where t is temperature in K and p is pressure in MPa
+/**
+ * @param p Pressure in MPa.
+ * @param t Temperature in K.
+ */
 int SteamSystemModelerTool::regionSelect(const double p, const double t) {
+    const std::string methodName = std::string("SteamSystemModelerTool::") + std::string(__func__) + ": ";
+
+    // std::cout << methodName << "pressure in MPa=" << p << ", temp in K=" << t << std::endl;
+
 	const double boundaryPressure = (t >= TEMPERATURE_Tp) ? boundaryByTemperatureRegion3to2(t) : region4(t);
+	// std::cout << methodName << "boundaryPressure=" << boundaryPressure << std::endl;
 
 	if (t >= TEMPERATURE_MIN && t <= TEMPERATURE_Tp) {
 		if (p <= PRESSURE_MAX && p >= boundaryPressure) return 1;
@@ -263,7 +272,15 @@ int SteamSystemModelerTool::regionSelect(const double p, const double t) {
 	}
 
 	if (t > TEMPERATURE_REGION3_MAX && t <= TEMPERATURE_MAX)  return 2;
-	throw std::runtime_error("regionSelect failed - check your input");
+
+	auto message =
+	        "regionSelect failed for combination of values: temp in K=" + std::to_string(t) +
+	        ", pressure in MPa=" + std::to_string(p) +
+	        ", boundaryPressure=" + std::to_string(boundaryPressure) +
+	        "; valid temp range=" + std::to_string(TEMPERATURE_MIN) + " - " + std::to_string(TEMPERATURE_MAX) +
+	        "; max pressure=" + std::to_string(PRESSURE_MAX);
+	// std::cout << methodName << message << std::endl;
+	throw std::runtime_error(message);
 }
 
 double SteamSystemModelerTool::backwardPressureEnthalpyRegion1(const double pressure, const double enthalpy) {
@@ -616,4 +633,41 @@ double SteamSystemModelerTool::backwardPressureEnthalpyRegion2CExact(const doubl
 
 double SteamSystemModelerTool::backwardPressureEntropyRegion2CExact(const double pressure, const double entropy) {
     return backwardExact(2, SteamSystemModelerTool::Key::ENTROPY, SteamSystemModelerTool::Region::REGION2C, pressure, entropy);
+}
+
+std::ostream &operator<<(std::ostream &stream, const SteamSystemModelerTool::SteamPropertiesOutput &props) {
+    stream << "SteamPropertiesOutput["
+           << "temperature=" << props.temperature
+           << ", pressure=" << props.pressure
+           << ", quality=" << props.quality
+           << ", specificVolume=" << props.specificVolume
+           << ", density=" << props.density
+           << ", specificEnthalpy=" << props.specificEnthalpy
+           << ", specificEntropy=" << props.specificEntropy
+           << ", internalEnergy=" << props.internalEnergy << "]";
+    return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const SteamSystemModelerTool::FluidProperties &props) {
+    stream << "FluidProperties["
+           << "temperature=" << props.temperature
+           << ", pressure=" << props.pressure
+           << ", quality=" << props.quality
+           << ", specificVolume=" << props.specificVolume
+           << ", density=" << props.density
+           << ", specificEnthalpy=" << props.specificEnthalpy
+           << ", specificEntropy=" << props.specificEntropy
+           << ", internalEnergy=" << props.internalEnergy
+           << ", massFlow=" << props.massFlow
+           << ", energyFlow=" << props.energyFlow << "]";
+    return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<SteamSystemModelerTool::FluidProperties> &props) {
+    if (props == nullptr) {
+        stream << "FluidProperties[nullptr]";
+    } else {
+        stream << *props;
+    }
+    return stream;
 }
