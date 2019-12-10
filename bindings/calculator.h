@@ -171,8 +171,6 @@ NAN_METHOD(electricityReduction)
         auto rv = ElectricityReduction(getElectricityReductionInputVector()).calculate();
         SetR("energyUse", rv.energyUse);
         SetR("energyCost", rv.energyCost);
-        SetR("annualEnergySavings", rv.annualEnergySavings);
-        SetR("costSavings", rv.costSavings);
         SetR("power", rv.power);
     }
     catch (std::runtime_error const &e)
@@ -272,8 +270,6 @@ NAN_METHOD(naturalGasReduction)
         auto rv = NaturalGasReduction(getNaturalGasReductionInputVector()).calculate();
         SetR("energyUse", rv.energyUse);
         SetR("energyCost", rv.energyCost);
-        SetR("annualEnergySavings", rv.annualEnergySavings);
-        SetR("costSavings", rv.costSavings);
         SetR("heatFlow", rv.heatFlow);
         SetR("totalFlow", rv.totalFlow);
     }
