@@ -37,31 +37,37 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const & nm) {
+double Get(std::string const &nm)
+{
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
 
     auto rObj = inp->ToObject()->Get(getName);
-    if (rObj->IsUndefined()) {
+    if (rObj->IsUndefined())
+    {
         ThrowTypeError(std::string("Get method in phast.h: " + nm + " not present in object").c_str());
     }
     return rObj->NumberValue();
 }
 
-void SetR(std::string const & nm, double n) {
+void SetR(std::string const &nm, double n)
+{
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     Local<Number> getNum = Nan::New<Number>(n);
     Nan::Set(r, getName, getNum);
 }
 
-FlowCalculationsEnergyUse::Gas gas() {
+FlowCalculationsEnergyUse::Gas gas()
+{
     return (FlowCalculationsEnergyUse::Gas)(int)Get("gasType");
 }
 
-FlowCalculationsEnergyUse::Section section() {
+FlowCalculationsEnergyUse::Section section()
+{
     return (FlowCalculationsEnergyUse::Section)(int)Get("sectionType");
 }
 
-NAN_METHOD(atmosphere) {
+NAN_METHOD(atmosphere)
+{
 
     /**
      * Constructor for the atmospheric heat loss with all inputs specified
@@ -80,7 +86,7 @@ NAN_METHOD(atmosphere) {
     const double outletTemperature = Get("outletTemperature");
     const double flowRate = Get("flowRate");
     const double correctionFactor = Get("correctionFactor");
-    const double specificHeat =  Get("specificHeat");
+    const double specificHeat = Get("specificHeat");
 
     Atmosphere a(inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat);
     double heatLoss = a.getTotalHeat();
@@ -88,8 +94,9 @@ NAN_METHOD(atmosphere) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(auxiliaryPowerLoss) {
-/**
+NAN_METHOD(auxiliaryPowerLoss)
+{
+    /**
  * Constructor
 :q
 
@@ -109,16 +116,15 @@ NAN_METHOD(auxiliaryPowerLoss) {
 
     auto const ap = AuxiliaryPower(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
 
-    
     const double powerUsed = ap.getPowerUsed();
     Local<Number> retval = Nan::New(powerUsed);
     info.GetReturnValue().Set(retval);
 }
 
+NAN_METHOD(energyInputEAF)
+{
 
-NAN_METHOD(energyInputEAF) {
-
-/**
+    /**
      * Constructor for the Electric Arc Furnace (EAF) heat loss with all inputs specified
      *
      * @param naturalGasHeatInput double, value of total heat input to the heating system (furn:ace/oven) from all
@@ -135,7 +141,7 @@ NAN_METHOD(energyInputEAF) {
      * */
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
-    
+
     const double naturalGasHeatInput = Get("naturalGasHeatInput");
     const double coalCarbonInjection = Get("coalCarbonInjection");
     const double coalHeatingValue = Get("coalHeatingValue");
@@ -144,8 +150,8 @@ NAN_METHOD(energyInputEAF) {
     const double otherFuels = Get("otherFuels");
     const double electricityInput = Get("electricityInput");
 
-    EnergyInputEAF eaf(naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse, 
-		       electrodeHeatingValue, otherFuels, electricityInput);
+    EnergyInputEAF eaf(naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse,
+                       electrodeHeatingValue, otherFuels, electricityInput);
 
     const double heatDelivered = eaf.getHeatDelivered();
     const double totalChemicalEnergyInput = eaf.getTotalChemicalEnergyInput();
@@ -155,16 +161,17 @@ NAN_METHOD(energyInputEAF) {
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(exhaustGasEAF) {
+NAN_METHOD(exhaustGasEAF)
+{
     inp = info[0]->ToObject();
-    
+
     const double offGasTemp = Get("offGasTemp");
     const double CO = Get("CO");
     const double H2 = Get("H2");
     const double combustibleGases = Get("combustibleGases");
     const double vfr = Get("vfr");
     const double dustLoading = Get("dustLoading");
- 
+
     ExhaustGasEAF eg(offGasTemp, CO, H2, combustibleGases, vfr, dustLoading);
 
     const double totalHeatExhaust = eg.getTotalHeatExhaust();
@@ -172,9 +179,10 @@ NAN_METHOD(exhaustGasEAF) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(fixtureLosses) {
+NAN_METHOD(fixtureLosses)
+{
 
-/**
+    /**
     * Constructor for Fixture Losses
     * @param specificHeat double, specific heat in btu/(lb*°F)
     * @param feedRate double, feed rate for gas mixture in lb/hr
@@ -185,7 +193,7 @@ NAN_METHOD(fixtureLosses) {
     * @return double, heat loss in btu/cycle
     */
     inp = info[0]->ToObject();
-  
+
     const double specificHeat = Get("specificHeat");
     const double feedRate = Get("feedRate");
     const double initialTemperature = Get("initialTemperature");
@@ -199,8 +207,9 @@ NAN_METHOD(fixtureLosses) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(gasCoolingLosses) {
-/**
+NAN_METHOD(gasCoolingLosses)
+{
+    /**
   * Constructor for the gas cooling losses (including air) with all inputs specified
   *
   * @param flowRate double, air or gas volumetric flow rate in SCFM (ft³/min)
@@ -220,7 +229,7 @@ NAN_METHOD(gasCoolingLosses) {
     const double correctionFactor = Get("correctionFactor");
     const double gasDensity = Get("gasDensity");
 
-    GasCoolingLosses gcl(flowRate, initialTemperature, finalTemperature,specificHeat,correctionFactor,
+    GasCoolingLosses gcl(flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor,
                          gasDensity);
 
     const double heatLoss = gcl.getHeatLoss();
@@ -228,8 +237,9 @@ NAN_METHOD(gasCoolingLosses) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(gasLoadChargeMaterial) {
-        /**
+NAN_METHOD(gasLoadChargeMaterial)
+{
+    /**
  * Constructor for the gas load/charge material with all inputs specified
  *
  * @param thermicReactionType ThermicReactionType, enumerated value for either endothermic or exothermic reactions 0 = Endo, else = Exo Int
@@ -247,25 +257,28 @@ NAN_METHOD(gasLoadChargeMaterial) {
  *
  * */
     inp = info[0]->ToObject();
-    
+
     const double specificHeatGas = Get("specificHeatGas");
     const double feedRate = Get("feedRate");
     const double percentVapor = Get("percentVapor");
     const double initialTemperature = Get("initialTemperature");
-    const double dischargeTemperature =  Get("dischargeTemperature");
+    const double dischargeTemperature = Get("dischargeTemperature");
     const double specificHeatVapor = Get("specificHeatVapor");
-    const double percentReacted =  Get("percentReacted");
+    const double percentReacted = Get("percentReacted");
     const double reactionHeat = Get("reactionHeat");
     const double additionalHeat = Get("additionalHeat");
     const double thermicReactionTypeInput = Get("thermicReactionType");
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
-    if (thermicReactionTypeInput == 0) {
+    if (thermicReactionTypeInput == 0)
+    {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
-    } else {
+    }
+    else
+    {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
     }
-    GasLoadChargeMaterial glcm(thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, 
+    GasLoadChargeMaterial glcm(thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature,
                                dischargeTemperature, specificHeatVapor, percentReacted, reactionHeat, additionalHeat);
 
     double heatLoss = glcm.getTotalHeat();
@@ -273,7 +286,8 @@ NAN_METHOD(gasLoadChargeMaterial) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(leakageLosses) {
+NAN_METHOD(leakageLosses)
+{
     /**
      * Constructor
      * @param draftPressure double, furnace draft pressure in inch W.C.
@@ -285,7 +299,7 @@ NAN_METHOD(leakageLosses) {
      * @param correctionFactor double, correction factor - unitless
      */
     inp = info[0]->ToObject();
-    
+
     const double draftPressure = Get("draftPressure");
     const double openingArea = Get("openingArea");
     const double leakageGasTemperature = Get("leakageGasTemperature");
@@ -302,8 +316,9 @@ NAN_METHOD(leakageLosses) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(liquidCoolingLosses) {
-        /**
+NAN_METHOD(liquidCoolingLosses)
+{
+    /**
  * Constructor
  * @param flowRate double, rate of flow in gpm.
  * @param density double, density in lb/cu.ft
@@ -314,7 +329,7 @@ NAN_METHOD(liquidCoolingLosses) {
  * @return double, heat loss in btu/hr
  */
     inp = info[0]->ToObject();
-  
+
     const double flowRate = Get("flowRate");
     const double density = Get("density");
     const double initialTemperature = Get("initialTemperature");
@@ -330,8 +345,9 @@ NAN_METHOD(liquidCoolingLosses) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(liquidLoadChargeMaterial) {
-        /**
+NAN_METHOD(liquidLoadChargeMaterial)
+{
+    /**
          * Constructor for liquid load/charge material with all inputs specified
          *
          * @param thermicReactionType ThermicReactionType, enumerated value for either endothermic or exothermic reactions
@@ -365,9 +381,12 @@ NAN_METHOD(liquidLoadChargeMaterial) {
     const double thermicReactionTypeInput = Get("thermicReactionType");
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
-    if (thermicReactionTypeInput == 0) {
+    if (thermicReactionTypeInput == 0)
+    {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
-    } else {
+    }
+    else
+    {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
     }
     LiquidLoadChargeMaterial llcm(thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat,
@@ -379,9 +398,10 @@ NAN_METHOD(liquidLoadChargeMaterial) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(openingLossesCircular) {
+NAN_METHOD(openingLossesCircular)
+{
 
-        /**
+    /**
          * Constructor for a circular opening
          * @param emissivity double, emissivity - unitless
          * @param diameter double, length of opening in inches
@@ -396,8 +416,8 @@ NAN_METHOD(openingLossesCircular) {
 
     const double emissivity = Get("emissivity");
     const double diameter = Get("diameter");
-    const double thickness =  Get("thickness");
-    const double ratio = Get("ratio"); 
+    const double thickness = Get("thickness");
+    const double ratio = Get("ratio");
     const double ambientTemperature = Get("ambientTemperature");
     const double insideTemperature = Get("insideTemperature");
     const double percentTimeOpen = Get("percentTimeOpen");
@@ -409,11 +429,11 @@ NAN_METHOD(openingLossesCircular) {
     double heatLoss = ol.getHeatLoss();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
-
 }
-NAN_METHOD(openingLossesQuad) {
+NAN_METHOD(openingLossesQuad)
+{
 
-        /**
+    /**
          * Constructor for a rectangular opening
          * @param emissivity double, emissivity - unitless
          * @param length double, length of openings in inches
@@ -427,7 +447,7 @@ NAN_METHOD(openingLossesQuad) {
          * @return double, heatLoss in btu/cycle
          */
     inp = info[0]->ToObject();
-    
+
     const double emissivity = Get("emissivity");
     const double length = Get("length");
     const double width = Get("width");
@@ -446,34 +466,40 @@ NAN_METHOD(openingLossesQuad) {
     info.GetReturnValue().Set(retval);
 }
 
-OpeningLosses::OpeningShape getOpeningShape() {
+OpeningLosses::OpeningShape getOpeningShape()
+{
     unsigned val = static_cast<unsigned>(Get("openingShape"));
     return static_cast<OpeningLosses::OpeningShape>(val);
 }
 
-NAN_METHOD(viewFactorCalculation) {
+NAN_METHOD(viewFactorCalculation)
+{
 
     inp = info[0]->ToObject();
 
     const double thickness = Get("thickness");
-    const double diameter = Get("diameter");
-    const double length = Get("length");
-    const double width = Get("width");
 
-	OpeningLosses opening;
+    OpeningLosses opening;
     OpeningLosses::OpeningShape shape = getOpeningShape();
-	if (shape == OpeningLosses::OpeningShape::CIRCULAR) {
+    if (shape == OpeningLosses::OpeningShape::CIRCULAR)
+    {
+        const double diameter = Get("diameter");
         Local<Number> rv = Nan::New(opening.calculateViewFactor(thickness, diameter));
         info.GetReturnValue().Set(rv);
-    } else {
+    }
+    else
+    {
+        const double length = Get("length");
+        const double width = Get("width");
         Local<Number> rv = Nan::New(opening.calculateViewFactor(thickness, length, width));
         info.GetReturnValue().Set(rv);
     }
 }
 
-NAN_METHOD(slagOtherMaterialLosses) {
+NAN_METHOD(slagOtherMaterialLosses)
+{
 
-/**     * Constructor for the slag - other material heat loss with all inputs specified
+    /**     * Constructor for the slag - other material heat loss with all inputs specified
         *
         * @param weight double, weight in lb/cycle
         * @param inletTemperature double, inlet temperature of gasses in °F
@@ -498,7 +524,8 @@ NAN_METHOD(slagOtherMaterialLosses) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(solidLoadChargeMaterial) {
+NAN_METHOD(solidLoadChargeMaterial)
+{
     /**
  * Constructor for the solid load/charge material with all inputs specified.
  *
@@ -539,22 +566,25 @@ NAN_METHOD(solidLoadChargeMaterial) {
 
     LoadChargeMaterial::ThermicReactionType thermicReactionType;
 
-    if (thermicReactionTypeInput == 0) {
+    if (thermicReactionTypeInput == 0)
+    {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::ENDOTHERMIC;
-    } else {
+    }
+    else
+    {
         thermicReactionType = LoadChargeMaterial::ThermicReactionType::EXOTHERMIC;
     }
-    SolidLoadChargeMaterial slcm(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, 
+    SolidLoadChargeMaterial slcm(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged,
                                  initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargeReacted, reactionHeat, additionalHeat);
 
     double heatLoss = slcm.getTotalHeat();
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
-
 }
 
-NAN_METHOD(wallLosses) {
-/**
+NAN_METHOD(wallLosses)
+{
+    /**
   * Wall Losses Arguments
   * @param surfaceArea double, total outside surface area in ft^2
   * @param ambientTemperature double, ambient temperature in °F
@@ -566,15 +596,15 @@ NAN_METHOD(wallLosses) {
   * @return double, heat loss in btu/cycle
   */
     inp = info[0]->ToObject();
- 
-    const double surfaceArea = Get("surfaceArea"); 
+
+    const double surfaceArea = Get("surfaceArea");
     const double ambientTemperature = Get("ambientTemperature");
     const double surfaceTemperature = Get("surfaceTemperature");
     const double windVelocity = Get("windVelocity");
     const double surfaceEmissivity = Get("surfaceEmissivity");
     const double conditionFactor = Get("conditionFactor");
     const double correctionFactor = Get("correctionFactor");
- 
+
     WallLosses wl(surfaceArea, ambientTemperature, surfaceTemperature, windVelocity,
                   surfaceEmissivity, conditionFactor, correctionFactor);
 
@@ -583,7 +613,8 @@ NAN_METHOD(wallLosses) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(waterCoolingLosses) {
+NAN_METHOD(waterCoolingLosses)
+{
     /**
      * Constructor
      * @param flowRate double, rate of flow in gpm
@@ -593,11 +624,11 @@ NAN_METHOD(waterCoolingLosses) {
      */
     inp = info[0]->ToObject();
 
-    const double flowRate = Get("flowRate"); 
+    const double flowRate = Get("flowRate");
     const double initialTemperature = Get("initialTemperature");
     const double outletTemperature = Get("outletTemperature");
     const double correctionFactor = Get("correctionFactor");
-    
+
     WaterCoolingLosses wcl(flowRate, initialTemperature, outletTemperature, correctionFactor);
 
     double heatLoss = wcl.getHeatLoss();
@@ -607,7 +638,8 @@ NAN_METHOD(waterCoolingLosses) {
 
 // Furnace calculators
 
-NAN_METHOD(efficiencyImprovement) {
+NAN_METHOD(efficiencyImprovement)
+{
 
     inp = info[0]->ToObject();
 
@@ -619,8 +651,8 @@ NAN_METHOD(efficiencyImprovement) {
     const double newCombustionAirTemp = Get("newCombustionAirTemp");
     const double currentEnergyInput = Get("currentEnergyInput");
     r = Nan::New<Object>();
-    EfficiencyImprovement ei(currentFlueGasOxygen, newFlueGasOxygen, currentFlueGasTemp, newFlueGasTemp, 
-			     currentCombustionAirTemp, newCombustionAirTemp, currentEnergyInput);
+    EfficiencyImprovement ei(currentFlueGasOxygen, newFlueGasOxygen, currentFlueGasTemp, newFlueGasTemp,
+                             currentCombustionAirTemp, newCombustionAirTemp, currentEnergyInput);
 
     double currentExcessAir = ei.getCurrentExcessAir();
     double newExcessAir = ei.getNewExcessAir();
@@ -638,23 +670,25 @@ NAN_METHOD(efficiencyImprovement) {
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(energyEquivalencyElectric) {
+NAN_METHOD(energyEquivalencyElectric)
+{
 
-     inp = info[0]->ToObject();
+    inp = info[0]->ToObject();
 
-     const double fuelFiredEfficiency = Get("fuelFiredEfficiency");
-     const double electricallyHeatedEfficiency = Get("electricallyHeatedEfficiency");
-     const double fuelFiredHeatInput = Get("fuelFiredHeatInput");
-     
-     r = Nan::New<Object>();
-     ElectricalEnergyEquivalency eee(fuelFiredEfficiency, electricallyHeatedEfficiency, fuelFiredHeatInput);
+    const double fuelFiredEfficiency = Get("fuelFiredEfficiency");
+    const double electricallyHeatedEfficiency = Get("electricallyHeatedEfficiency");
+    const double fuelFiredHeatInput = Get("fuelFiredHeatInput");
 
-     double electricalHeatInput = eee.getElectricalHeatInput();
-     SetR("electricalHeatInput", electricalHeatInput);
-     info.GetReturnValue().Set(r);
+    r = Nan::New<Object>();
+    ElectricalEnergyEquivalency eee(fuelFiredEfficiency, electricallyHeatedEfficiency, fuelFiredHeatInput);
+
+    double electricalHeatInput = eee.getElectricalHeatInput();
+    SetR("electricalHeatInput", electricalHeatInput);
+    info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(energyEquivalencyFuel) {
+NAN_METHOD(energyEquivalencyFuel)
+{
 
     inp = info[0]->ToObject();
 
@@ -670,8 +704,8 @@ NAN_METHOD(energyEquivalencyFuel) {
     info.GetReturnValue().Set(r);
 }
 
-
-NAN_METHOD(flowCalculations) {
+NAN_METHOD(flowCalculations)
+{
 
     inp = info[0]->ToObject();
 
@@ -689,8 +723,8 @@ NAN_METHOD(flowCalculations) {
     FlowCalculationsEnergyUse::Gas gas1 = gas();
     FlowCalculationsEnergyUse::Section section1 = section();
 
-    FlowCalculationsEnergyUse fceu(gas1, specificGravity, orificeDiameter, insidePipeDiameter, section1, dischargeCoefficient, 
-				   gasHeatingValue, gasTemperature, gasPressure, orificePressureDrop, operatingTime);
+    FlowCalculationsEnergyUse fceu(gas1, specificGravity, orificeDiameter, insidePipeDiameter, section1, dischargeCoefficient,
+                                   gasHeatingValue, gasTemperature, gasPressure, orificePressureDrop, operatingTime);
 
     double flow = fceu.getFlow();
     double heatInput = fceu.getHeatInput();
@@ -701,8 +735,9 @@ NAN_METHOD(flowCalculations) {
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(flueGasLossesByVolume) {
-	/**
+NAN_METHOD(flueGasLossesByVolume)
+{
+    /**
 	 * Constructor for the flue gas losses by volume with all inputs specified
 	 *
 	 * @param flueGasTemperature double, temperature of flue gas in °F
@@ -713,37 +748,38 @@ NAN_METHOD(flueGasLossesByVolume) {
 	 *
 	 * */
 
-   inp = info[0]->ToObject();
+    inp = info[0]->ToObject();
 
-   const double CH4 = Get("CH4");
-   const double C2H6 = Get("C2H6");
-   const double N2 = Get("N2");
-   const double H2 = Get("H2");
-   const double C3H8 = Get("C3H8");
-   const double C4H10_CnH2n = Get("C4H10_CnH2n");
-   const double H2O = Get("H2O");
-   const double CO = Get("CO");
-   const double CO2 = Get("CO2");
-   const double SO2 = Get("SO2");
-   const double O2 = Get("O2");
+    const double CH4 = Get("CH4");
+    const double C2H6 = Get("C2H6");
+    const double N2 = Get("N2");
+    const double H2 = Get("H2");
+    const double C3H8 = Get("C3H8");
+    const double C4H10_CnH2n = Get("C4H10_CnH2n");
+    const double H2O = Get("H2O");
+    const double CO = Get("CO");
+    const double CO2 = Get("CO2");
+    const double SO2 = Get("SO2");
+    const double O2 = Get("O2");
 
-   const double flueGasTemperature = Get("flueGasTemperature");
-   const double excessAirPercentage = Get("excessAirPercentage");
-   const double combustionAirTemperature = Get("combustionAirTemperature");
-   const double fuelTemperature = Get("fuelTemperature");
+    const double flueGasTemperature = Get("flueGasTemperature");
+    const double excessAirPercentage = Get("excessAirPercentage");
+    const double combustionAirTemperature = Get("combustionAirTemperature");
+    const double fuelTemperature = Get("fuelTemperature");
 
-   GasCompositions comps("", CH4, C2H6, N2, H2, C3H8,
-	                 C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+    GasCompositions comps("", CH4, C2H6, N2, H2, C3H8,
+                          C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
 
-   GasFlueGasMaterial fg(flueGasTemperature, excessAirPercentage, combustionAirTemperature,
-                         comps, fuelTemperature);
+    GasFlueGasMaterial fg(flueGasTemperature, excessAirPercentage, combustionAirTemperature,
+                          comps, fuelTemperature);
 
-   double heatLoss = fg.getHeatLoss();
-   Local<Number> retval = Nan::New(heatLoss);
-   info.GetReturnValue().Set(retval);
+    double heatLoss = fg.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(flueGasByVolumeCalculateHeatingValue) {
+NAN_METHOD(flueGasByVolumeCalculateHeatingValue)
+{
     inp = info[0]->ToObject();
 
     const double CH4 = Get("CH4");
@@ -768,8 +804,9 @@ NAN_METHOD(flueGasByVolumeCalculateHeatingValue) {
     info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(flueGasLossesByMass) {
-	/**
+NAN_METHOD(flueGasLossesByMass)
+{
+    /**
 	 * Constructor for the flue gas losses by weight with all inputs specified
 	 *
 	 * @param flueGasTemperature double, flue gas temperature in °F
@@ -784,44 +821,45 @@ NAN_METHOD(flueGasLossesByMass) {
 	 *
 	 * */
 
-	inp = info[0]->ToObject();
-	
-	const double flueGasTemperature = Get("flueGasTemperature");
-	const double excessAirPercentage = Get("excessAirPercentage");
-	const double combustionAirTemperature = Get("combustionAirTemperature");
-	const double fuelTemperature = Get("fuelTemperature");
-	const double moistureInAirComposition = Get("moistureInAirComposition");
-	const double ashDischargeTemperature = Get("ashDischargeTemperature");
-	const double unburnedCarbonInAsh = Get("unburnedCarbonInAsh");
-	const double carbon = Get("carbon");
-	const double hydrogen = Get("hydrogen");
-	const double sulphur = Get("sulphur");
-	const double inertAsh = Get("inertAsh");
-	const double o2 = Get("o2");
-	const double moisture = Get("moisture");
-	const double nitrogen =  Get("nitrogen");
-	
-	SolidLiquidFlueGasMaterial slfgm(flueGasTemperature, excessAirPercentage, combustionAirTemperature,
-	                                 fuelTemperature, moistureInAirComposition, ashDischargeTemperature,
-	                                 unburnedCarbonInAsh, carbon, hydrogen, sulphur, inertAsh, o2, moisture,
-					 nitrogen);
-
-	double heatLoss = slfgm.getHeatLoss();
-	Local<Number> retval = Nan::New(heatLoss);
-	info.GetReturnValue().Set(retval);
-}
-
-NAN_METHOD(flueGasByMassCalculateHeatingValue) {
     inp = info[0]->ToObject();
 
-    const double carbon = Get("carbon"); 
+    const double flueGasTemperature = Get("flueGasTemperature");
+    const double excessAirPercentage = Get("excessAirPercentage");
+    const double combustionAirTemperature = Get("combustionAirTemperature");
+    const double fuelTemperature = Get("fuelTemperature");
+    const double moistureInAirComposition = Get("moistureInAirComposition");
+    const double ashDischargeTemperature = Get("ashDischargeTemperature");
+    const double unburnedCarbonInAsh = Get("unburnedCarbonInAsh");
+    const double carbon = Get("carbon");
     const double hydrogen = Get("hydrogen");
     const double sulphur = Get("sulphur");
     const double inertAsh = Get("inertAsh");
     const double o2 = Get("o2");
     const double moisture = Get("moisture");
     const double nitrogen = Get("nitrogen");
- 
+
+    SolidLiquidFlueGasMaterial slfgm(flueGasTemperature, excessAirPercentage, combustionAirTemperature,
+                                     fuelTemperature, moistureInAirComposition, ashDischargeTemperature,
+                                     unburnedCarbonInAsh, carbon, hydrogen, sulphur, inertAsh, o2, moisture,
+                                     nitrogen);
+
+    double heatLoss = slfgm.getHeatLoss();
+    Local<Number> retval = Nan::New(heatLoss);
+    info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(flueGasByMassCalculateHeatingValue)
+{
+    inp = info[0]->ToObject();
+
+    const double carbon = Get("carbon");
+    const double hydrogen = Get("hydrogen");
+    const double sulphur = Get("sulphur");
+    const double inertAsh = Get("inertAsh");
+    const double o2 = Get("o2");
+    const double moisture = Get("moisture");
+    const double nitrogen = Get("nitrogen");
+
     auto const hv = SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(carbon, hydrogen,
                                                                           sulphur, inertAsh, o2,
                                                                           moisture, nitrogen);
@@ -830,7 +868,8 @@ NAN_METHOD(flueGasByMassCalculateHeatingValue) {
     info.GetReturnValue().Set(retval);
 }
 
-NAN_METHOD(flueGasCalculateO2) {
+NAN_METHOD(flueGasCalculateO2)
+{
     inp = info[0]->ToObject();
 
     const double CH4 = Get("CH4");
@@ -849,14 +888,15 @@ NAN_METHOD(flueGasCalculateO2) {
     GasCompositions comp("", CH4, C2H6, N2, H2, C3H8,
                          C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
 
-    excessAir = Conversion(excessAir).percentToFraction(); 
+    excessAir = Conversion(excessAir).percentToFraction();
     double result = comp.calculateO2(excessAir);
     result = Conversion(result).fractionToPercent();
     Local<Number> rv = Nan::New(result);
     info.GetReturnValue().Set(rv);
 }
 
-NAN_METHOD(flueGasCalculateExcessAir) {
+NAN_METHOD(flueGasCalculateExcessAir)
+{
     inp = info[0]->ToObject();
 
     const double CH4 = Get("CH4");
@@ -866,7 +906,7 @@ NAN_METHOD(flueGasCalculateExcessAir) {
     const double C3H8 = Get("C3H8");
     const double C4H10_CnH2n = Get("C4H10_CnH2n");
     const double H2O = Get("H2O");
-    const double CO =  Get("CO");
+    const double CO = Get("CO");
     const double CO2 = Get("CO2");
     const double SO2 = Get("SO2");
     const double O2 = Get("O2");
@@ -882,13 +922,14 @@ NAN_METHOD(flueGasCalculateExcessAir) {
     info.GetReturnValue().Set(rv);
 }
 
-NAN_METHOD(flueGasByMassCalculateO2) {
+NAN_METHOD(flueGasByMassCalculateO2)
+{
     inp = info[0]->ToObject();
 
     double excessAir = Get("excessAir");
     excessAir = Conversion(excessAir).percentToFraction();
 
-    double carbon =  Get("carbon");
+    double carbon = Get("carbon");
     carbon = Conversion(carbon).percentToFraction();
 
     double hydrogen = Get("hydrogen");
@@ -897,11 +938,11 @@ NAN_METHOD(flueGasByMassCalculateO2) {
     double sulphur = Get("sulphur");
     sulphur = Conversion(sulphur).percentToFraction();
 
-    double inertAsh =  Get("inertAsh");
+    double inertAsh = Get("inertAsh");
     inertAsh = Conversion(inertAsh).percentToFraction();
 
     double o2 = Get("o2");
-    o2 =  Conversion(o2).percentToFraction();
+    o2 = Conversion(o2).percentToFraction();
 
     double moisture = Get("moisture");
     moisture = Conversion(moisture).percentToFraction();
@@ -911,23 +952,24 @@ NAN_METHOD(flueGasByMassCalculateO2) {
 
     const double moistureInAirCombustion = Get("moistureInAirCombustion");
 
-    auto v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(excessAir,carbon,
-                                                                  hydrogen, sulphur,
-                                                                  inertAsh, o2, moisture, 
-								  nitrogen, moistureInAirCombustion);
+    auto v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(excessAir, carbon,
+                                                            hydrogen, sulphur,
+                                                            inertAsh, o2, moisture,
+                                                            nitrogen, moistureInAirCombustion);
     v = Conversion(v).fractionToPercent();
 
     Local<Number> rv = Nan::New(v);
     info.GetReturnValue().Set(rv);
 }
 
-NAN_METHOD(flueGasByMassCalculateExcessAir) {
+NAN_METHOD(flueGasByMassCalculateExcessAir)
+{
     inp = info[0]->ToObject();
 
     double o2InFlueGas = Get("o2InFlueGas");
     o2InFlueGas = Conversion(o2InFlueGas).percentToFraction();
 
-    double carbon =  Get("carbon");
+    double carbon = Get("carbon");
     carbon = Conversion(carbon).percentToFraction();
 
     double hydrogen = Get("hydrogen");
@@ -936,11 +978,11 @@ NAN_METHOD(flueGasByMassCalculateExcessAir) {
     double sulphur = Get("sulphur");
     sulphur = Conversion(sulphur).percentToFraction();
 
-    double inertAsh =  Get("inertAsh");
+    double inertAsh = Get("inertAsh");
     inertAsh = Conversion(inertAsh).percentToFraction();
 
     double o2 = Get("o2");
-    o2 =  Conversion(o2).percentToFraction();
+    o2 = Conversion(o2).percentToFraction();
 
     double moisture = Get("moisture");
     moisture = Conversion(moisture).percentToFraction();
@@ -950,63 +992,65 @@ NAN_METHOD(flueGasByMassCalculateExcessAir) {
 
     const double moistureInAirCombustion = Get("moistureInAirCombustion");
 
-
     auto v = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(o2InFlueGas, carbon,
-                                                                               hydrogen, sulphur, inertAsh,
-									       o2, moisture, nitrogen,
-                                                                               moistureInAirCombustion);
-    v = Conversion (v).fractionToPercent();
+                                                                         hydrogen, sulphur, inertAsh,
+                                                                         o2, moisture, nitrogen,
+                                                                         moistureInAirCombustion);
+    v = Conversion(v).fractionToPercent();
     Local<Number> rv = Nan::New(v);
     info.GetReturnValue().Set(rv);
 }
 
-NAN_METHOD(o2Enrichment) {
+NAN_METHOD(o2Enrichment)
+{
 
-        inp = info[0]->ToObject();
-        
-      	const double o2CombAir = Get("o2CombAir");
-	const double o2CombAirEnriched = Get("o2CombAirEnriched");
-	const double flueGasTemp = Get("flueGasTemp");
-	const double flueGasTempEnriched = Get("flueGasTempEnriched");
-	const double o2FlueGas = Get("o2FlueGas");
-	const double o2FlueGasEnriched = Get("o2FlueGasEnriched");
-	const double combAirTemp = Get("combAirTemp");
-	const double combAirTempEnriched = Get("combAirTempEnriched");
-	const double fuelConsumption = Get("fuelConsumption");
+    inp = info[0]->ToObject();
 
-        r = Nan::New<Object>();
-        O2Enrichment oe(o2CombAir, o2CombAirEnriched, flueGasTemp, flueGasTempEnriched, o2FlueGas, 
-			o2FlueGasEnriched, combAirTemp, combAirTempEnriched, fuelConsumption);
+    const double o2CombAir = Get("o2CombAir");
+    const double o2CombAirEnriched = Get("o2CombAirEnriched");
+    const double flueGasTemp = Get("flueGasTemp");
+    const double flueGasTempEnriched = Get("flueGasTempEnriched");
+    const double o2FlueGas = Get("o2FlueGas");
+    const double o2FlueGasEnriched = Get("o2FlueGasEnriched");
+    const double combAirTemp = Get("combAirTemp");
+    const double combAirTempEnriched = Get("combAirTempEnriched");
+    const double fuelConsumption = Get("fuelConsumption");
 
-        double availableHeatInput = oe.getAvailableHeat();
-        double availableHeatEnriched = oe.getAvailableHeatEnriched();
-        double fuelSavingsEnriched = oe.getFuelSavingsEnriched();
-        double fuelConsumptionEnriched = oe.getFuelConsumptionEnriched();
-        SetR("availableHeatInput", availableHeatInput);
-        SetR("availableHeatEnriched", availableHeatEnriched);
-        SetR("fuelSavingsEnriched", fuelSavingsEnriched);
-        SetR("fuelConsumptionEnriched", fuelConsumptionEnriched);
-        info.GetReturnValue().Set(r);
+    r = Nan::New<Object>();
+    O2Enrichment oe(o2CombAir, o2CombAirEnriched, flueGasTemp, flueGasTempEnriched, o2FlueGas,
+                    o2FlueGasEnriched, combAirTemp, combAirTempEnriched, fuelConsumption);
+
+    double availableHeatInput = oe.getAvailableHeat();
+    double availableHeatEnriched = oe.getAvailableHeatEnriched();
+    double fuelSavingsEnriched = oe.getFuelSavingsEnriched();
+    double fuelConsumptionEnriched = oe.getFuelConsumptionEnriched();
+    SetR("availableHeatInput", availableHeatInput);
+    SetR("availableHeatEnriched", availableHeatEnriched);
+    SetR("fuelSavingsEnriched", fuelSavingsEnriched);
+    SetR("fuelConsumptionEnriched", fuelConsumptionEnriched);
+    info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(energyInputExhaustGasLosses) {
+NAN_METHOD(energyInputExhaustGasLosses)
+{
     inp = info[0]->ToObject();
 
     const double excessAir = Get("excessAir");
     const double combustionAirTemp = Get("combustionAirTemp");
-    const double exhaustGasTemp =  Get("exhaustGasTemp");
+    const double exhaustGasTemp = Get("exhaustGasTemp");
     const double totalHeatInput = Get("totalHeatInput");
-    
+
     r = Nan::New<Object>();
     EnergyInputExhaustGasLosses e(excessAir, combustionAirTemp, exhaustGasTemp, totalHeatInput);
 
     SetR("heatDelivered", e.getHeatDelivered());
     SetR("exhaustGasLosses", e.getExhaustGasLosses());
     SetR("availableHeat", e.getAvailableHeat());
-	info.GetReturnValue().Set(r);
+    info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(humidityRatio) {
+NAN_METHOD(humidityRatio)
+{
 
     inp = info[0]->ToObject();
 
@@ -1025,7 +1069,4 @@ NAN_METHOD(humidityRatio) {
     info.GetReturnValue().Set(r);
 }
 
-
-
 #endif //AMO_TOOLS_SUITE_LOSSES_H
-
