@@ -72,11 +72,12 @@
         },
         {
             "target_name": "phast",
-            'include_dirs': ['include', 'include/calculator/losses', 'include/phast', 'include/calculator/furnace' ,
+            'include_dirs': ['include', 'include/calculator/losses', 'include/phast', 'include/calculator/furnace', 'include/calculator/util',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
                 'bindings/phast.cpp',
+                'src/calculator/util/Conversion.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/furnace/').map(f=>'src/calculator/furnace/'+f).join(' '))\")"
             ],
