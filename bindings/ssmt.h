@@ -46,8 +46,10 @@ SteamProperties::ThermodynamicQuantity steamThermodynamicQuantity() {
 NAN_METHOD(saturatedPressure) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
+    
+    const double saturatedTemperature = getDouble("saturatedTemperature");
 
-    SaturatedPressure sp(getDouble("saturatedTemperature"));
+    SaturatedPressure sp(saturatedTemperature);
     setR("saturatedPressure", sp.calculate());
     info.GetReturnValue().Set(r);
 }
@@ -56,7 +58,9 @@ NAN_METHOD(saturatedTemperature) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    SaturatedTemperature st(getDouble("saturatedPressure"));
+    const double saturatedPressure = getDouble("saturatedPressure");
+
+    SaturatedTemperature st(saturatedPressure);
     setR("saturatedTemperature", st.calculate());
     info.GetReturnValue().Set(r);
 }
@@ -65,8 +69,10 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    double const pressure = SaturatedPressure(getDouble("saturatedTemperature")).calculate();
-    auto const results = SaturatedProperties(pressure, getDouble("saturatedTemperature")).calculate();
+    const double saturatedTemperature = getDouble("saturatedTemperature");
+
+    double const pressure = SaturatedPressure(saturatedTemperature).calculate();
+    auto const results = SaturatedProperties(pressure, saturatedTemperature).calculate();
 
     setR("saturatedPressure", results.pressure);
     setR("saturatedTemperature", results.temperature);
@@ -87,8 +93,10 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
-    double const temperature = SaturatedTemperature(getDouble("saturatedPressure")).calculate();
-    auto const results = SaturatedProperties(getDouble("saturatedPressure"), temperature).calculate();
+    const double saturatedPressure = getDouble("saturatedPressure");
+
+    double const temperature = SaturatedTemperature(saturatedPressure).calculate();
+    auto const results = SaturatedProperties(saturatedPressure, temperature).calculate();
     setR("saturatedPressure", results.pressure);
     setR("saturatedTemperature", results.temperature);
     setR("liquidEnthalpy", results.liquidSpecificEnthalpy);
@@ -107,9 +115,12 @@ NAN_METHOD(steamProperties) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
+    const double pressure = getDouble("pressure");
+    const double quantityValue = getDouble("quantityValue");
+
     try {
         SteamProperties::ThermodynamicQuantity quantity = thermodynamicQuantity();
-        auto const results = SteamProperties(getDouble("pressure"), quantity, getDouble("quantityValue")).calculate();
+        auto const results = SteamProperties(pressure, quantity, quantityValue).calculate();
         setR("pressure", results.pressure);
         setR("temperature", results.temperature);
         setR("specificEnthalpy", results.specificEnthalpy);
@@ -127,13 +138,18 @@ NAN_METHOD(boiler) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
+    const double deaeratorPressure = getDouble("deaeratorPressure");
+    const double combustionEfficiency = getDouble("combustionEfficiency");
+    const double blowdownRate = getDouble("blowdownRate");
+    const double steamPressure = getDouble("steamPressure");
+    const double quantityValue = getDouble("quantityValue");
+    const double steamMassFlow = getDouble("steamMassFlow");
     try {
         SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
 
-        auto const b = Boiler(getDouble("deaeratorPressure"), getDouble("combustionEfficiency"),
-                              getDouble("blowdownRate"),
-                              getDouble("steamPressure"), quantityType, getDouble("quantityValue"),
-                              getDouble("steamMassFlow"));
+        auto const b = Boiler(deaeratorPressure, combustionEfficiency,
+                              blowdownRate, steamPressure, quantityType, quantityValue,
+                              steamMassFlow);
 
         auto const results = b.getSteamProperties();
         setR("steamPressure", results.pressure);
@@ -175,11 +191,15 @@ NAN_METHOD(heatLoss) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
+   const double inletPressure = getDouble("inletPressure");
+   const double quantityValue = getDouble("quantityValue");
+   const double inletMassFlow = getDouble("inletMassFlow");
+   const double percentHeatLoss = getDouble("percentHeatLoss");
     try {
         SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
-        auto const hl = HeatLoss(getDouble("inletPressure"), quantityType, getDouble("quantityValue"),
-                                 getDouble("inletMassFlow"),
-                                 getDouble("percentHeatLoss"));
+        auto const hl = HeatLoss(inletPressure, quantityType, quantityValue,
+                                 inletMassFlow, percentHeatLoss);
+
         auto const results = hl.getInletProperties();
 
         setR("inletPressure", results.pressure);
@@ -210,12 +230,17 @@ NAN_METHOD(heatLoss) {
 NAN_METHOD(flashTank) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
+  
+    const double inletWaterPressure = getDouble("inletWaterPressure");
+    const double quantityValue = getDouble("quantityValue");
+    const double inletWaterMassFlow = getDouble("inletWaterMassFlow");
+    const double tankPressure = getDouble("tankPressure");
 
     try {
         SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
 
-        auto const ft = FlashTank(getDouble("inletWaterPressure"), quantityType, getDouble("quantityValue"),
-                                  getDouble("inletWaterMassFlow"), getDouble("tankPressure"));
+        auto const ft = FlashTank(inletWaterPressure, quantityType, quantityValue,
+                                  inletWaterMassFlow, tankPressure);
 
         auto const results = ft.getInletWaterProperties();
         setR("inletWaterPressure", results.pressure);
@@ -255,10 +280,15 @@ NAN_METHOD(prvWithoutDesuperheating) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
+    const double inletPressure = getDouble("inletPressure");
+    const double quantityValue = getDouble("quantityValue");
+    const double inletMassFlow = getDouble("inletMassFlow");
+    const double outletPressure = getDouble("outletPressure");
+
     try {
         SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
-        auto const pwod = PrvWithoutDesuperheating(getDouble("inletPressure"), quantityType, getDouble("quantityValue"),
-                                                   getDouble("inletMassFlow"), getDouble("outletPressure"));
+        auto const pwod = PrvWithoutDesuperheating(inletPressure, quantityType, quantityValue,
+                                                   inletMassFlow, outletPressure);
 
         auto const results = pwod.getInletProperties();
         setR("inletPressure", results.pressure);
@@ -289,15 +319,21 @@ NAN_METHOD(prvWithDesuperheating) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
+    const double inletPressure = getDouble("inletPressure");
+    const double quantityValue = getDouble("quantityValue");
+    const double inletMassFlow = getDouble("inletMassFlow");
+    const double outletPressure = getDouble("outletPressure");
+    const double feedwaterPressure = getDouble("feedwaterPressure");
+    const double feedwaterQuantityValue = getDouble("feedwaterQuantityValue");
+    const double desuperheatingTemp = getDouble("desuperheatingTemp");
+
     try {
         SteamProperties::ThermodynamicQuantity quantityType = thermodynamicQuantity();
         SteamProperties::ThermodynamicQuantity feedwaterQuantityType = feedwaterThermodynamicQuantity();
 
-        auto const pwd = PrvWithDesuperheating(getDouble("inletPressure"), quantityType, getDouble("quantityValue"),
-                                               getDouble("inletMassFlow"),
-                                               getDouble("outletPressure"), getDouble("feedwaterPressure"),
-                                               feedwaterQuantityType,
-                                               getDouble("feedwaterQuantityValue"), getDouble("desuperheatingTemp"));
+        auto const pwd = PrvWithDesuperheating(inletPressure, quantityType, quantityValue,
+                                               inletMassFlow, outletPressure, feedwaterPressure,
+                                               feedwaterQuantityType, feedwaterQuantityValue, desuperheatingTemp);
 
         auto const results = pwd.getInletProperties();
         setR("inletPressure", results.pressure);
@@ -337,14 +373,21 @@ NAN_METHOD(deaerator) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
+    const double deaeratorPressure = getDouble("deaeratorPressure");
+    const double ventRate = getDouble("ventRate");
+    const double feedwaterMassFlow =  getDouble("feedwaterMassFlow");
+    const double waterPressure = getDouble("waterPressure");
+    const double waterQuantityValue = getDouble("waterQuantityValue");
+    const double steamPressure = getDouble("steamPressure");
+    const double steamQuantityValue = getDouble("steamQuantityValue");
     try {
         SteamProperties::ThermodynamicQuantity waterQuantityType = waterThermodynamicQuantity();
         SteamProperties::ThermodynamicQuantity steamQuantityType = steamThermodynamicQuantity();
 
-        Deaerator d(getDouble("deaeratorPressure"), getDouble("ventRate"), getDouble("feedwaterMassFlow"),
-                    getDouble("waterPressure"),
-                    waterQuantityType, getDouble("waterQuantityValue"), getDouble("steamPressure"), steamQuantityType,
-                    getDouble("steamQuantityValue"));
+        Deaerator d(deaeratorPressure, ventRate, feedwaterMassFlow,
+                    waterPressure, waterQuantityType, waterQuantityValue,
+                    steamPressure, steamQuantityType,
+                    steamQuantityValue);
 
         auto const results = d.getFeedwaterProperties();
         setR("feedwaterPressure", results.pressure);
@@ -462,6 +505,12 @@ NAN_METHOD(turbine) {
     inp = info[0]->ToObject();
     r = Nan::New<Object>();
 
+    const double inletPressure = getDouble("inletPressure");
+    const double inletQuantityValue = getDouble("inletQuantityValue");
+    const double generatorEfficiency = getDouble("generatorEfficiency");
+    const double massFlowOrPowerOut = getDouble("massFlowOrPowerOut");
+    const double outletSteamPressure = getDouble("outletSteamPressure");
+
     unsigned val = static_cast<unsigned>(inp->ToObject()->Get(
             Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
     Turbine::Solve solveFor = static_cast<Turbine::Solve>(val);
@@ -475,18 +524,24 @@ NAN_METHOD(turbine) {
 
     try {
         if (solveFor == Turbine::Solve::OutletProperties) {
+
+	    const double isentropicEfficiency = getDouble("isentropicEfficiency");
+
             t = std::shared_ptr<Turbine>(
-                    new Turbine(solveFor, getDouble("inletPressure"), inletQuantity, getDouble("inletQuantityValue"),
-                                turbineProperty, getDouble("isentropicEfficiency"), getDouble("generatorEfficiency"),
-                                getDouble("massFlowOrPowerOut"), getDouble("outletSteamPressure")));
+                    new Turbine(solveFor, inletPressure, inletQuantity, inletQuantityValue,
+                                turbineProperty, isentropicEfficiency, generatorEfficiency,
+                                massFlowOrPowerOut, outletSteamPressure));
         } else {
+
+	const double outletQuantityValue = getDouble("outletQuantityValue");
+
             unsigned val = static_cast<unsigned>(inp->ToObject()->Get(
                     Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue());
             auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
             t = std::shared_ptr<Turbine>(
-                    new Turbine(solveFor, getDouble("inletPressure"), inletQuantity, getDouble("inletQuantityValue"),
-                                turbineProperty, getDouble("generatorEfficiency"), getDouble("massFlowOrPowerOut"),
-                                getDouble("outletSteamPressure"), outletQuantity, getDouble("outletQuantityValue")));
+                    new Turbine(solveFor, inletPressure, inletQuantity, inletQuantityValue,
+                                turbineProperty, generatorEfficiency, massFlowOrPowerOut,
+                                outletSteamPressure, outletQuantity, outletQuantityValue));
         }
     } catch (std::runtime_error const &e) {
         std::string const what = e.what();
