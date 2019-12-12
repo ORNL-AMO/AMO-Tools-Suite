@@ -86,12 +86,13 @@ NAN_METHOD(pneumaticAirRequirement) {
 	const double cylinderStroke = Get("cylinderStroke");
 	const double airPressure =  Get("airPressure");
 	const double cyclesPerMinute = Get("cyclesPerMinute");
-	const double pistonRodDiameter = Get("pistonRodDiameter");	
+	
 
 	PneumaticAirRequirement airRequirement;
 	if (pistonType == PneumaticAirRequirement::PistonType::SingleActing) {
 		airRequirement = PneumaticAirRequirement(pistonType, cylinderDiameter, cylinderStroke, airPressure, cyclesPerMinute);
 	} else {
+		const double pistonRodDiameter = Get("pistonRodDiameter");
 		airRequirement = PneumaticAirRequirement(pistonType, cylinderDiameter, cylinderStroke, pistonRodDiameter, airPressure, cyclesPerMinute);
 	}
 
@@ -108,27 +109,45 @@ NAN_METHOD(receiverTank) {
 	ReceiverTank tank;
 	ReceiverTank::Method method = static_cast<ReceiverTank::Method>(static_cast<unsigned>(Get("method")));
 
-	const double airDemand = Get("airDemand");
-	const double allowablePressureDrop = Get("allowablePressureDrop");
-	const double atmosphericPressure = Get("atmosphericPressure");
-	const double lengthOfDemand =  Get("lengthOfDemand");
-	const double airFlowRequirement = Get("airFlowRequirement");
-	const double initialTankPressure = Get("initialTankPressure");
-	const double finalTankPressure = Get("finalTankPressure");
-	const double distanceToCompressorRoom = Get("distanceToCompressorRoom");
-	const double speedOfAir = Get("speedOfAir");
-	const double meteredControl = Get("meteredControl");
-
+	
 	if (method == ReceiverTank::Method::General) {
+
+		const double airDemand = Get("airDemand");
+		const double allowablePressureDrop = Get("allowablePressureDrop");
+		const double atmosphericPressure = Get("atmosphericPressure");
+
 		tank = {ReceiverTank::Method::General, airDemand, allowablePressureDrop, atmosphericPressure};
+
 	} else if (method == ReceiverTank::Method::DedicatedStorage) {
+
+		const double finalTankPressure = Get("finalTankPressure");
+		const double initialTankPressure = Get("initialTankPressure");
+		const double lengthOfDemand =  Get("lengthOfDemand");
+		const double airFlowRequirement = Get("airFlowRequirement");
+		const double atmosphericPressure = Get("atmosphericPressure");
+
 		tank = {ReceiverTank::Method::DedicatedStorage, lengthOfDemand, airFlowRequirement, atmosphericPressure, initialTankPressure, finalTankPressure};
+
 	} else if (method == ReceiverTank::Method::BridgingCompressorReactionDelay) {
+
+		const double speedOfAir = Get("speedOfAir");
+		const double distanceToCompressorRoom = Get("distanceToCompressorRoom");
+		const double atmosphericPressure = Get("atmosphericPressure");
+		const double airDemand = Get("airDemand");
+		const double allowablePressureDrop = Get("allowablePressureDrop");
+
 		tank = {ReceiverTank::Method::BridgingCompressorReactionDelay, distanceToCompressorRoom, speedOfAir, atmosphericPressure, airDemand, allowablePressureDrop};
+
 	} else {
+		const double lengthOfDemand =  Get("lengthOfDemand");
+		const double airFlowRequirement = Get("airFlowRequirement");
+		const double atmosphericPressure = Get("atmosphericPressure");
+		const double initialTankPressure = Get("initialTankPressure");
+		const double finalTankPressure = Get("finalTankPressure");
+		const double meteredControl = Get("meteredControl");
+		
 		tank = {ReceiverTank::Method::MeteredStorage, lengthOfDemand, airFlowRequirement, atmosphericPressure, initialTankPressure, finalTankPressure, meteredControl};
 	}
-
 	Local<Number> size = Nan::New(tank.calculateSize());
 	info.GetReturnValue().Set(size);
 }
@@ -268,13 +287,13 @@ NAN_METHOD(pneumaticValve) {
 
 	const double inletPressure = Get("inletPressure");
 	const double outletPressure = Get("outletPressure");
-	const double flowRateInput = Get("flowRate");	
 
 	auto flowRate = inp->ToObject()->Get(flowRateStr);
 	if (flowRate->IsUndefined()) {
 		auto output = Compressor::PneumaticValve(inletPressure, outletPressure).calculate();
 		SetR("flowRate", output);
 	} else {
+		const double flowRateInput = Get("flowRate");
 		auto output = Compressor::PneumaticValve(inletPressure, outletPressure, flowRateInput).calculate();
 		SetR("flowCoefficient", output);
 	}
