@@ -24,30 +24,30 @@ Local<Object> r;
 //NAN function for fetching DOUBLE value associated with provided key
 double Get(std::string const &key, Local<Object> obj)
 {
-	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (rObj->IsUndefined())
 	{
 		ThrowTypeError(std::string("Get method in fan.h: " + key + " not present in object").c_str());
 	}
-	return rObj->NumberValue();
+	return Nan::To<double>(rObj).FromJust();
 }
 
 //NAN function for fetching ENUM value associated with provided key
 template <typename T>
 T GetEnumVal(std::string const &key, Local<Object> obj)
 {
-	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (rObj->IsUndefined())
 	{
 		ThrowTypeError(std::string("GetEnumVal method in fan.h: " + key + " not present in object").c_str());
 	}
-	return static_cast<T>(rObj->IntegerValue());
+	return static_cast<T>(Nan::To<int32_t>(rObj).FromJust());
 }
 
 //NAN function for fetching BOOLEAN value associated with provided key
 bool GetBool(std::string const &key, Local<Object> obj)
 {
-	auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (rObj->IsUndefined())
 	{
 		ThrowTypeError(std::string("GetBool method in fan.h: Boolean value " + key + " not present in object").c_str());
@@ -58,12 +58,13 @@ bool GetBool(std::string const &key, Local<Object> obj)
 //NAN function for fetching STRING value associated with provided key
 std::string GetStr(std::string const &key, Local<Object> obj)
 {
-	auto const &rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+	auto const &rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
 	if (rObj->IsUndefined())
 	{
 		ThrowTypeError(std::string("GetStr method in fan.h: String " + key + " not present in object").c_str());
 	}
-	v8::String::Utf8Value s(rObj);
+	v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::String::Utf8Value s(isolate, rObj);
 	return std::string(*s);
 }
 
@@ -88,11 +89,11 @@ std::vector<std::vector<double>> getTraverseInputData(Local<Object> obj)
 	std::vector<std::vector<double>> traverseData(array->Length());
 	for (std::size_t i = 0; i < array->Length(); i++)
 	{
-		auto const &innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
+		auto const &innerArray = v8::Local<v8::Array>::Cast(Nan::To<Object>(array->Get(i)).ToLocalChecked());
 		traverseData.at(i).resize(innerArray->Length());
 		for (std::size_t j = 0; j < innerArray->Length(); j++)
 		{
-			traverseData.at(i).at(j) = innerArray->Get(j)->NumberValue();
+			traverseData.at(i).at(j) = Nan::To<double>(innerArray->Get(j)).FromJust();
 		}
 	}
 	return traverseData;
@@ -141,7 +142,7 @@ TraversePlane constructTraverse(Local<Object> obj)
 FanRatedInfo getFanRatedInfo()
 {
 	//NAN init data
-	auto fanRatedInfoV8 = inp->ToObject()->Get(Nan::New<String>("FanRatedInfo").ToLocalChecked())->ToObject();
+	auto fanRatedInfoV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("FanRatedInfo").ToLocalChecked())).ToLocalChecked();
 	const double fanSpeed = Get("fanSpeed", fanRatedInfoV8);
 	const double motorSpeed = Get("motorSpeed", fanRatedInfoV8);
 	const double fanSpeedCorrected = Get("fanSpeedCorrected", fanRatedInfoV8);
@@ -156,20 +157,20 @@ FanRatedInfo getFanRatedInfo()
 PlaneData getPlaneData()
 {
 	//NAN init data
-	auto planeDataV8 = inp->ToObject()->Get(Nan::New<String>("PlaneData").ToLocalChecked())->ToObject();
+	auto planeDataV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("PlaneData").ToLocalChecked())).ToLocalChecked();
 	auto const addlTravTmp = planeDataV8->Get(Nan::New<String>("AddlTraversePlanes").ToLocalChecked());
 	auto const &addlTravArray = v8::Local<v8::Array>::Cast(addlTravTmp);
 	std::vector<TraversePlane> addlTravPlanes;
 	//loop to construct array of traverse planes
 	for (std::size_t i = 0; i < addlTravArray->Length(); i++)
 	{
-		addlTravPlanes.emplace_back(constructTraverse(addlTravArray->Get(i)->ToObject()));
+		addlTravPlanes.emplace_back(constructTraverse(Nan::To<Object>(addlTravArray->Get(i)).ToLocalChecked()));
 	}
-	FlangePlane fanInletFlange = constructFlange(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())->ToObject());
-	FlangePlane fanEvaseOrOutletFlange = constructFlange(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())->ToObject());
-	TraversePlane flowTraverse = constructTraverse(planeDataV8->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())->ToObject());
-	MstPlane inletMstPlane = constructMst(planeDataV8->Get(Nan::New<String>("InletMstPlane").ToLocalChecked())->ToObject());
-	MstPlane outletMstPlane = constructMst(planeDataV8->Get(Nan::New<String>("OutletMstPlane").ToLocalChecked())->ToObject());
+	FlangePlane fanInletFlange = constructFlange(Nan::To<Object>(planeDataV8->Get(Nan::New<String>("FanInletFlange").ToLocalChecked())).ToLocalChecked());
+	FlangePlane fanEvaseOrOutletFlange = constructFlange(Nan::To<Object>(planeDataV8->Get(Nan::New<String>("FanEvaseOrOutletFlange").ToLocalChecked())).ToLocalChecked());
+	TraversePlane flowTraverse = constructTraverse(Nan::To<Object>(planeDataV8->Get(Nan::New<String>("FlowTraverse").ToLocalChecked())).ToLocalChecked());
+	MstPlane inletMstPlane = constructMst(Nan::To<Object>(planeDataV8->Get(Nan::New<String>("InletMstPlane").ToLocalChecked())).ToLocalChecked());
+	MstPlane outletMstPlane = constructMst(Nan::To<Object>(planeDataV8->Get(Nan::New<String>("OutletMstPlane").ToLocalChecked())).ToLocalChecked());
 	const double totalPressureLossBtwnPlanes1and4 = Get("totalPressureLossBtwnPlanes1and4", planeDataV8);
 	const double totalPressureLossBtwnPlanes2and5 = Get("totalPressureLossBtwnPlanes2and5", planeDataV8);
 	const bool plane5upstreamOfPlane2 = GetBool("plane5upstreamOfPlane2", planeDataV8);
@@ -216,7 +217,7 @@ BaseGasDensity::InputType getInputType(Local<Object> obj)
 NAN_METHOD(fanResultsExisting)
 {
 	//NAN initialize data
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 	const double fanSpeed = Get("fanSpeed", inp);
 	const double airDensity = Get("airDensity", inp);
@@ -284,7 +285,7 @@ NAN_METHOD(fanResultsExisting)
 
 NAN_METHOD(fanResultsModified)
 {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 	//NAN init data
 	const double fanSpeed = Get("fanSpeed", inp);
@@ -352,7 +353,7 @@ NAN_METHOD(fanResultsModified)
 }
 
 // NAN_METHOD(fanResultsOptimal) {
-// 	inp = info[0]->ToObject();
+// 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 // 	r = Nan::New<Object>();
 
 // 	Motor::Drive drive1 = GetEnumVal<Motor::Drive>("drive", inp);
@@ -409,7 +410,7 @@ NAN_METHOD(fanResultsModified)
 
 NAN_METHOD(getBaseGasDensityRelativeHumidity)
 {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 	try
 	{
@@ -446,7 +447,7 @@ NAN_METHOD(getBaseGasDensityRelativeHumidity)
 
 NAN_METHOD(getBaseGasDensityDewPoint)
 {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 	try
 	{
@@ -483,7 +484,7 @@ NAN_METHOD(getBaseGasDensityDewPoint)
 
 NAN_METHOD(getBaseGasDensityWetBulb)
 {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 	try
 	{
@@ -523,7 +524,7 @@ NAN_METHOD(getBaseGasDensityWetBulb)
 BaseGasDensity getBaseGasDensity()
 {
 	//NAN data init
-	auto baseGasDensityV8 = inp->ToObject()->Get(Nan::New<String>("BaseGasDensity").ToLocalChecked())->ToObject();
+	auto baseGasDensityV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("BaseGasDensity").ToLocalChecked())).ToLocalChecked();
 	const double dryBulbTemp = Get("dryBulbTemp", baseGasDensityV8);
 	const double staticPressure = Get("staticPressure", baseGasDensityV8);
 	const double barometricPressure = Get("barometricPressure", baseGasDensityV8);
@@ -538,7 +539,7 @@ BaseGasDensity getBaseGasDensity()
 FanShaftPower getFanShaftPower()
 {
 	//NAN data init
-	auto fanShaftPowerV8 = inp->ToObject()->Get(Nan::New<String>("FanShaftPower").ToLocalChecked())->ToObject();
+	auto fanShaftPowerV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("FanShaftPower").ToLocalChecked())).ToLocalChecked();
 	const double motorShaftPower = Get("motorShaftPower", fanShaftPowerV8);
 	const double efficiencyMotor = Get("efficiencyMotor", fanShaftPowerV8);
 	const double efficiencyVFD = Get("efficiencyVFD", fanShaftPowerV8);
@@ -553,9 +554,9 @@ FanShaftPower getFanShaftPower()
 NAN_METHOD(getVelocityPressureData)
 {
 	//NAN init data
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
-	auto const travPlane = constructTraverse(inp->ToObject());
+	auto const travPlane = constructTraverse(Nan::To<Object>(inp).ToLocalChecked());
 
 	//Calculation procedure
 	double pv3 = travPlane.getPv3Value();
@@ -573,7 +574,7 @@ NAN_METHOD(getVelocityPressureData)
 NAN_METHOD(getPlaneResults)
 {
 	Local<Object> rv = Nan::New<Object>();
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
 	try
 	{
@@ -635,7 +636,7 @@ NAN_METHOD(getPlaneResults)
 
 NAN_METHOD(fan203)
 {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 	try
 	{
@@ -695,16 +696,16 @@ FanCurveType getFanCurveType()
 FanCurveData getFanBaseCurveData()
 {
 
-	auto const &arrayTmp = inp->ToObject()->Get(Nan::New<String>("BaseCurveData").ToLocalChecked());
+	auto const &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("BaseCurveData").ToLocalChecked());
 	auto const &array = v8::Local<v8::Array>::Cast(arrayTmp);
 
 	std::vector<FanCurveData::BaseCurve> curveData;
 	for (std::size_t i = 0; i < array->Length(); i++)
 	{
-		auto const &innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
-		curveData.emplace_back(FanCurveData::BaseCurve(innerArray->Get(0)->NumberValue(),
-													   innerArray->Get(1)->NumberValue(),
-													   innerArray->Get(2)->NumberValue()));
+		auto const &innerArray = v8::Local<v8::Array>::Cast(Nan::To<Object>(array->Get(i)).ToLocalChecked());
+		curveData.emplace_back(FanCurveData::BaseCurve(Nan::To<double>(innerArray->Get(0)).FromJust(),
+													   Nan::To<double>(innerArray->Get(1)).FromJust(),
+													   Nan::To<double>(innerArray->Get(2)).FromJust()));
 	}
 	FanCurveType fanCurveType = getFanCurveType();
 
@@ -715,19 +716,19 @@ FanCurveData getFanBaseCurveData()
 }
 FanCurveData getFanRatedPointCurveData()
 {
-	auto const &arrayTmp = inp->ToObject()->Get(Nan::New<String>("RatedPointCurveData").ToLocalChecked());
+	auto const &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("RatedPointCurveData").ToLocalChecked());
 	auto const &array = v8::Local<v8::Array>::Cast(arrayTmp);
 
 	std::vector<FanCurveData::RatedPoint> curveData;
 	for (std::size_t i = 0; i < array->Length(); i++)
 	{
-		auto const &innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
-		curveData.emplace_back(FanCurveData::RatedPoint(innerArray->Get(0)->NumberValue(),
-														innerArray->Get(1)->NumberValue(),
-														innerArray->Get(2)->NumberValue(),
-														innerArray->Get(3)->NumberValue(),
-														innerArray->Get(4)->NumberValue(),
-														innerArray->Get(5)->NumberValue()));
+		auto const &innerArray = v8::Local<v8::Array>::Cast(Nan::To<Object>(array->Get(i)).ToLocalChecked());
+		curveData.emplace_back(FanCurveData::RatedPoint(Nan::To<double>(innerArray->Get(0)).FromJust(),
+														Nan::To<double>(innerArray->Get(1)).FromJust(),
+														Nan::To<double>(innerArray->Get(2)).FromJust(),
+														Nan::To<double>(innerArray->Get(3)).FromJust(),
+														Nan::To<double>(innerArray->Get(4)).FromJust(),
+														Nan::To<double>(innerArray->Get(5)).FromJust()));
 	}
 
 	FanCurveType fanCurveType = getFanCurveType();
@@ -739,22 +740,22 @@ FanCurveData getFanRatedPointCurveData()
 }
 FanCurveData getFanBaseOperatingPointCurveData()
 {
-	auto const &arrayTmp = inp->ToObject()->Get(Nan::New<String>("BaseOperatingPointCurveData").ToLocalChecked());
+	auto const &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("BaseOperatingPointCurveData").ToLocalChecked());
 	auto const &array = v8::Local<v8::Array>::Cast(arrayTmp);
 
 	std::vector<FanCurveData::BaseOperatingPoint> curveData;
 	for (std::size_t i = 0; i < array->Length(); i++)
 	{
-		auto const &innerArray = v8::Local<v8::Array>::Cast(array->Get(i)->ToObject());
-		curveData.emplace_back(FanCurveData::BaseOperatingPoint(innerArray->Get(0)->NumberValue(),
-																innerArray->Get(1)->NumberValue(),
-																innerArray->Get(2)->NumberValue(),
-																innerArray->Get(3)->NumberValue(),
-																innerArray->Get(4)->NumberValue(),
-																innerArray->Get(5)->NumberValue(),
-																innerArray->Get(6)->NumberValue(),
-																innerArray->Get(7)->NumberValue(),
-																innerArray->Get(8)->NumberValue()));
+		auto const &innerArray = v8::Local<v8::Array>::Cast(Nan::To<Object>(array->Get(i)).ToLocalChecked());
+		curveData.emplace_back(FanCurveData::BaseOperatingPoint(Nan::To<double>(innerArray->Get(0)).FromJust(),
+																Nan::To<double>(innerArray->Get(1)).FromJust(),
+																Nan::To<double>(innerArray->Get(2)).FromJust(),
+																Nan::To<double>(innerArray->Get(3)).FromJust(),
+																Nan::To<double>(innerArray->Get(4)).FromJust(),
+																Nan::To<double>(innerArray->Get(5)).FromJust(),
+																Nan::To<double>(innerArray->Get(6)).FromJust(),
+																Nan::To<double>(innerArray->Get(7)).FromJust(),
+																Nan::To<double>(innerArray->Get(8)).FromJust()));
 	}
 	FanCurveType fanCurveType = getFanCurveType();
 
@@ -785,7 +786,7 @@ void returnResultData(std::vector<ResultData> const &results)
 NAN_METHOD(fanCurve)
 {
 	//NAN init data
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 	//fetch bool values to check if defined objects were supplied
 	const bool baseCurveDataDefined = isDefined(inp, "BaseCurveData");
@@ -850,7 +851,7 @@ NAN_METHOD(fanCurve)
 NAN_METHOD(optimalFanEfficiency)
 {
 	//NAN init data
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	auto const fanType = GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp);
 	double const fanSpeed = Get("fanSpeed", inp);
 	double const flowRate = Get("flowRate", inp);
@@ -871,7 +872,7 @@ NAN_METHOD(optimalFanEfficiency)
 NAN_METHOD(compressibilityFactor)
 {
 	//NAN init data
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	const double moverShaftPower = Get("moverShaftPower", inp);
 	const double inletPressure = Get("inletPressure", inp);
 	const double outletPressure = Get("outletPressure", inp);

@@ -24,20 +24,21 @@ std::unique_ptr<SQLite> sql;
 double Get(std::string const & nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
 
-    auto rObj = inp->ToObject()->Get(getName);
+    auto rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(getName);
     if (rObj->IsUndefined()) {
         ThrowTypeError(std::string("Get method in db.h: " + nm + " not present in object").c_str());
     }
-    return rObj->NumberValue();
+    return Nan::To<double>(rObj).FromJust();
 }
 
 std::string GetStr(std::string const & nm) {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    auto obj = inp->ToObject()->Get(getName);
+    auto obj = Nan::To<Object>(inp).ToLocalChecked()->Get(getName);
     if (obj->IsUndefined()) {
         ThrowTypeError(std::string("GetStr method in db.h: " + nm + " not present in object").c_str());
     }
-    v8::String::Utf8Value s(obj);
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::String::Utf8Value s(isolate, obj);
     return std::string(*s);
 }
 
@@ -102,7 +103,7 @@ NAN_METHOD(selectSolidLoadChargeMaterialById) {
 
     Local<Object> obj = Nan::New<Object>();
     try {
-        auto const slcm = sql->getSolidLoadChargeMaterialById(static_cast<int>(info[0]->NumberValue()));
+        auto const slcm = sql->getSolidLoadChargeMaterialById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
         Nan::Set(obj, id, Nan::New<Number>(slcm.getID()));
         Nan::Set(obj, substance, Nan::New<String>(slcm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, specificHeatSolid, Nan::New<Number>(slcm.getSpecificHeatSolid()));
@@ -118,7 +119,7 @@ NAN_METHOD(selectSolidLoadChargeMaterialById) {
 }
 
 NAN_METHOD(insertSolidLoadChargeMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     SolidLoadChargeMaterial slcm;
     slcm.setSubstance(GetStr("substance"));
     slcm.setSpecificHeatSolid(Get("specificHeatSolid"));
@@ -130,13 +131,13 @@ NAN_METHOD(insertSolidLoadChargeMaterial) {
 }
 
 NAN_METHOD(deleteSolidLoadChargeMaterial) {
-    bool success = sql->deleteSolidLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteSolidLoadChargeMaterial(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 }
 
 
 NAN_METHOD(updateSolidLoadChargeMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     SolidLoadChargeMaterial slcm;
     slcm.setSubstance(GetStr("substance"));
     slcm.setSpecificHeatSolid(Get("specificHeatSolid"));
@@ -175,7 +176,7 @@ NAN_METHOD(selectLiquidLoadChargeMaterials) {
 }
 
 NAN_METHOD(insertLiquidLoadChargeMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     LiquidLoadChargeMaterial llcm;
     llcm.setSubstance(GetStr("substance"));
     llcm.setSpecificHeatLiquid(Get("specificHeatLiquid"));
@@ -187,12 +188,12 @@ NAN_METHOD(insertLiquidLoadChargeMaterial) {
 }
 
 NAN_METHOD(deleteLiquidLoadChargeMaterial) {
-    bool success = sql->deleteLiquidLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteLiquidLoadChargeMaterial(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 }
 
 NAN_METHOD(updateLiquidLoadChargeMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     LiquidLoadChargeMaterial llcm;
     llcm.setSubstance(GetStr("substance"));
     llcm.setSpecificHeatLiquid(Get("specificHeatLiquid"));
@@ -214,7 +215,7 @@ NAN_METHOD(selectLiquidLoadChargeMaterialById) {
 
     Local<Object> obj = Nan::New<Object>();
     try {
-        auto const llcm = sql->getLiquidLoadChargeMaterialById(static_cast<int>(info[0]->NumberValue()));
+        auto const llcm = sql->getLiquidLoadChargeMaterialById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
         Nan::Set(obj, id, Nan::New<Number>(llcm.getID()));
         Nan::Set(obj, substance, Nan::New<String>(llcm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, specificHeatLiquid, Nan::New<Number>(llcm.getSpecificHeatLiquid()));
@@ -250,7 +251,7 @@ NAN_METHOD(selectGasLoadChargeMaterials) {
 }
 
 NAN_METHOD(insertGasLoadChargeMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     GasLoadChargeMaterial glcm;
     glcm.setSubstance(GetStr("substance"));
 	glcm.setSpecificHeatVapor(Get("specificHeatVapor"));
@@ -259,12 +260,12 @@ NAN_METHOD(insertGasLoadChargeMaterial) {
 }
 
 NAN_METHOD(deleteGasLoadChargeMaterial) {
-    bool success = sql->deleteGasLoadChargeMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteGasLoadChargeMaterial(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 }
 
 NAN_METHOD(updateGasLoadChargeMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     GasLoadChargeMaterial glcm;
     glcm.setSubstance(GetStr("substance"));
     glcm.setSpecificHeatVapor(Get("specificHeatVapor"));
@@ -280,7 +281,7 @@ NAN_METHOD(selectGasLoadChargeMaterialById) {
 
     Local<Object> obj = Nan::New<Object>();
     try {
-        auto const glcm = sql->getGasLoadChargeMaterialById(static_cast<int>(info[0]->NumberValue()));
+        auto const glcm = sql->getGasLoadChargeMaterialById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
         Nan::Set(obj, id, Nan::New<Number>(glcm.getID()));
         Nan::Set(obj, substance, Nan::New<String>(glcm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, specificHeatVapor, Nan::New<Number>(glcm.getSpecificHeatVapor()));
@@ -325,7 +326,7 @@ NAN_METHOD(selectSolidLiquidFlueGasMaterials) {
 };
 
 NAN_METHOD(insertSolidLiquidFlueGasMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, Get("carbon") * 100, Get("hydrogen") * 100,
                                      Get("sulphur") * 100, Get("inertAsh") * 100, Get("o2") * 100,
                                      Get("moisture") * 100, Get("nitrogen") * 100);
@@ -336,12 +337,12 @@ NAN_METHOD(insertSolidLiquidFlueGasMaterial) {
 };
 
 NAN_METHOD(deleteSolidLiquidFlueGasMaterial) {
-    bool success = sql->deleteSolidLiquidFlueGasMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteSolidLiquidFlueGasMaterial(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(updateSolidLiquidFlueGasMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, Get("carbon") * 100, Get("hydrogen") * 100,
                                      Get("sulphur") * 100, Get("inertAsh") * 100, Get("o2") * 100,
                                      Get("moisture") * 100, Get("nitrogen") * 100);
@@ -365,7 +366,7 @@ NAN_METHOD(selectSolidLiquidFlueGasMaterialById) {
 
     Local<Object> obj = Nan::New<Object>();
     try {
-        auto const fgm = sql->getSolidLiquidFlueGasMaterialById(static_cast<int>(info[0]->NumberValue()));
+        auto const fgm = sql->getSolidLiquidFlueGasMaterialById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
         Nan::Set(obj, id, Nan::New<Number>(fgm.getID()));
         Nan::Set(obj, substance, Nan::New<String>(fgm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, carbon, Nan::New<Number>(fgm.getCarbon()));
@@ -430,7 +431,7 @@ NAN_METHOD(selectGasFlueGasMaterials) {
 };
 
 NAN_METHOD(insertGasFlueGasMaterial) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	GasCompositions comp(GetStr("substance"), Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
 	                     Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
 
@@ -445,12 +446,12 @@ NAN_METHOD(insertGasFlueGasMaterial) {
 }
 
 NAN_METHOD(deleteGasFlueGasMaterial) {
-    bool success = sql->deleteGasFlueGasMaterial(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteGasFlueGasMaterial(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 }
 
 NAN_METHOD(updateGasFlueGasMaterial) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     GasCompositions comp(GetStr("substance"), Get("CH4"), Get("C2H6"), Get("N2"), Get("H2"), Get("C3H8"),
                          Get("C4H10_CnH2n"), Get("H2O"), Get("CO"), Get("CO2"), Get("SO2"), Get("O2"));
     comp.setID(Get("id"));
@@ -485,7 +486,7 @@ NAN_METHOD(selectGasFlueGasMaterialById) {
 
     Local<Object> obj = Nan::New<Object>();
     try {
-        auto const fgm = sql->getGasFlueGasMaterialById(static_cast<int>(info[0]->NumberValue()));
+        auto const fgm = sql->getGasFlueGasMaterialById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
         Nan::Set(obj, id, Nan::New<Number>(fgm.getID()));
         Nan::Set(obj, substance, Nan::New<String>(fgm.getSubstance()).ToLocalChecked());
         Nan::Set(obj, CH4, Nan::New<Number>(fgm.getGasByVol("CH4")));
@@ -531,7 +532,7 @@ NAN_METHOD(selectAtmosphereSpecificHeat) {
 };
 
 NAN_METHOD(insertAtmosphereSpecificHeat) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	Atmosphere atmos;
     atmos.setSubstance(GetStr("substance"));
 	atmos.setSpecificHeat(Get("specificHeat"));
@@ -540,12 +541,12 @@ NAN_METHOD(insertAtmosphereSpecificHeat) {
 };
 
 NAN_METHOD(deleteAtmosphereSpecificHeat) {
-    bool success = sql->deleteAtmosphereSpecificHeat(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteAtmosphereSpecificHeat(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(updateAtmosphereSpecificHeat) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     Atmosphere atmos;
     atmos.setSubstance(GetStr("substance"));
     atmos.setSpecificHeat(Get("specificHeat"));
@@ -561,7 +562,7 @@ NAN_METHOD(selectAtmosphereSpecificHeatById) {
 
     Local<Object> obj = Nan::New<Object>();
     try {
-        auto const ash = sql->getAtmosphereSpecificHeatById(static_cast<int>(info[0]->NumberValue()));
+        auto const ash = sql->getAtmosphereSpecificHeatById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
         Nan::Set(obj, id, Nan::New<Number>(ash.getID()));
         Nan::Set(obj, substance, Nan::New<String>(ash.getSubstance()).ToLocalChecked());
         Nan::Set(obj, specificHeat, Nan::New<Number>(ash.getSpecificHeat()));
@@ -593,7 +594,7 @@ NAN_METHOD(selectWallLossesSurface) {
 };
 
 NAN_METHOD(insertWallLossesSurface) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     WallLosses wl;
     wl.setSurface(GetStr("surface"));
     wl.setConditionFactor(Get("conditionFactor"));
@@ -602,12 +603,12 @@ NAN_METHOD(insertWallLossesSurface) {
 };
 
 NAN_METHOD(deleteWallLossesSurface) {
-    bool success = sql->deleteWallLossesSurface(static_cast<int>(info[0]->NumberValue()));
+    bool success = sql->deleteWallLossesSurface(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(updateWallLossesSurface) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     WallLosses wl;
     wl.setSurface(GetStr("surface"));
     wl.setConditionFactor(Get("conditionFactor"));
@@ -623,7 +624,7 @@ NAN_METHOD(selectWallLossesSurfaceById) {
 
     Local<Object> obj = Nan::New<Object>();
     try {
-        auto const wls = sql->getWallLossesSurfaceById(static_cast<int>(info[0]->NumberValue()));
+        auto const wls = sql->getWallLossesSurfaceById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
         Nan::Set(obj, id, Nan::New<Number>(wls.getID()));
         Nan::Set(obj, surface, Nan::New<String>(wls.getSurface()).ToLocalChecked());
         Nan::Set(obj, conditionFactor, Nan::New<Number>(wls.getConditionFactor()));

@@ -35,12 +35,14 @@ Local<Object> r;
 double Get(std::string const &nm)
 {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    auto rObj = inp->ToObject()->Get(getName);
+    // auto rObj = inp->ToObject()->Get(getName);
+    auto rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(getName);
     if (rObj->IsUndefined())
     {
         ThrowTypeError(std::string("Get method in psat.h: " + nm + " not present in object").c_str());
     }
-    return rObj->NumberValue();
+    // return rObj->NumberValue();
+    return Nan::To<double>(rObj).FromJust();
 }
 
 //NAN function for binding data to anonymous object
@@ -54,7 +56,7 @@ void SetR(const char *nm, double n)
 NAN_METHOD(headToolSuctionTank)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     const double specificGravity = Get("specificGravity");
     const double flowRate = Get("flowRate");
@@ -86,7 +88,7 @@ NAN_METHOD(headToolSuctionTank)
 NAN_METHOD(headTool)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     const double specificGravity = Get("specificGravity");
     const double flowRate = Get("flowRate");
@@ -151,7 +153,7 @@ Pump::SpecificSpeed speed()
 NAN_METHOD(resultsExisting)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     Pump::Style style1 = style();
     double pumpSpecified = Get("pump_specified");
@@ -235,7 +237,7 @@ NAN_METHOD(resultsExisting)
 NAN_METHOD(resultsModified)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     Pump::SpecificSpeed fixedSpeed = speed();
     Pump::Style style1 = style();
@@ -323,7 +325,7 @@ NAN_METHOD(resultsModified)
 NAN_METHOD(estFLA)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     double motor_rated_power = Get("motor_rated_power");
     double motor_rated_speed = Get("motor_rated_speed");
     Motor::LineFrequency l = line();
@@ -342,7 +344,7 @@ NAN_METHOD(estFLA)
 NAN_METHOD(motorPerformance)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     Motor::LineFrequency l = line();
     double motorRatedSpeed = Get("motor_rated_speed");
@@ -385,7 +387,7 @@ NAN_METHOD(motorPerformance)
 NAN_METHOD(pumpEfficiency)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     Pump::Style s = style();
     double flow = Get("flow_rate");
@@ -405,7 +407,7 @@ NAN_METHOD(pumpEfficiency)
 NAN_METHOD(achievableEfficiency)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     double specificSpeed = Get("specific_speed");
     Pump::Style s = style();
 
@@ -420,7 +422,8 @@ NAN_METHOD(achievableEfficiency)
 NAN_METHOD(nema)
 {
     //NAN initialize data
-    inp = info[0]->ToObject();
+    // inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     Motor::LineFrequency l = line();
     double motorRatedSpeed = Get("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();

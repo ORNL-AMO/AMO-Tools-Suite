@@ -44,7 +44,7 @@ SteamProperties::ThermodynamicQuantity steamThermodynamicQuantity() {
 }
 
 NAN_METHOD(saturatedPressure) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     SaturatedPressure sp(getDouble("saturatedTemperature"));
@@ -53,7 +53,7 @@ NAN_METHOD(saturatedPressure) {
 }
 
 NAN_METHOD(saturatedTemperature) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     SaturatedTemperature st(getDouble("saturatedPressure"));
@@ -62,7 +62,7 @@ NAN_METHOD(saturatedTemperature) {
 }
 
 NAN_METHOD(saturatedPropertiesGivenTemperature) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     double const pressure = SaturatedPressure(getDouble("saturatedTemperature")).calculate();
@@ -84,7 +84,7 @@ NAN_METHOD(saturatedPropertiesGivenTemperature) {
 
 NAN_METHOD(saturatedPropertiesGivenPressure) {
 
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     double const temperature = SaturatedTemperature(getDouble("saturatedPressure")).calculate();
@@ -104,7 +104,7 @@ NAN_METHOD(saturatedPropertiesGivenPressure) {
 }
 
 NAN_METHOD(steamProperties) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     try {
@@ -124,7 +124,7 @@ NAN_METHOD(steamProperties) {
 }
 
 NAN_METHOD(boiler) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     try {
@@ -172,7 +172,7 @@ NAN_METHOD(boiler) {
 }
 
 NAN_METHOD(heatLoss) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     try {
@@ -208,7 +208,7 @@ NAN_METHOD(heatLoss) {
 }
 
 NAN_METHOD(flashTank) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     try {
@@ -252,7 +252,7 @@ NAN_METHOD(flashTank) {
 }
 
 NAN_METHOD(prvWithoutDesuperheating) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     try {
@@ -286,7 +286,7 @@ NAN_METHOD(prvWithoutDesuperheating) {
 }
 
 NAN_METHOD(prvWithDesuperheating) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     try {
@@ -334,7 +334,7 @@ NAN_METHOD(prvWithDesuperheating) {
 }
 
 NAN_METHOD(deaerator) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     try {
@@ -390,14 +390,14 @@ NAN_METHOD(deaerator) {
 }
 
 NAN_METHOD(header) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     auto const headerPressure = getDouble("headerPressure");
 
     Local <String> arrayStr = Nan::New<String>("inlets").ToLocalChecked();
-    auto array = inp->ToObject()->Get(arrayStr);
-    v8::Local <v8::Array> arr = v8::Local<v8::Array>::Cast(array);
+    auto array = Nan::To<Object>(inp).ToLocalChecked()->Get(arrayStr);
+    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
 
     auto pressureStr = Nan::New<String>("pressure").ToLocalChecked();
     auto temperatureStr = Nan::New<String>("temperature").ToLocalChecked();
@@ -409,14 +409,13 @@ NAN_METHOD(header) {
 
     std::vector<Inlet> inlets;
 
-    for (std::size_t i = 0; i < arr->Length(); i++) {
-        auto const pressure = arr->Get(i)->ToObject()->Get(pressureStr)->NumberValue();
-        unsigned val = static_cast<unsigned>(arr->Get(i)->ToObject()->Get(
-                Nan::New<String>("thermodynamicQuantity").ToLocalChecked())->NumberValue());
+    for (std::size_t i = 0; i < arr->Length(); i++) {    
+        auto const pressure = Nan::To<double>(Nan::To<Object>(arr->Get(i)).ToLocalChecked()->Get(pressureStr)).FromJust();
+        unsigned val = static_cast<unsigned>(Nan::To<double>(Nan::To<Object>(arr->Get(i)).ToLocalChecked()->Get(Nan::New<String>("thermodynamicQuantity").ToLocalChecked())).FromJust());
         auto const quantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
-        auto const quantityValue = arr->Get(i)->ToObject()->Get(
-                Nan::New<String>("quantityValue").ToLocalChecked())->NumberValue();
-        auto const massFlow = arr->Get(i)->ToObject()->Get(massFlowStr)->NumberValue();
+        auto const quantityValue = Nan::To<double>(Nan::To<Object>(arr->Get(i)).ToLocalChecked()->Get(Nan::New<String>("quantityValue").ToLocalChecked())).FromJust();
+        auto const massFlow = Nan::To<double>(Nan::To<Object>(arr->Get(i)).ToLocalChecked()->Get(massFlowStr)).FromJust();
+
         inlets.emplace_back(Inlet(pressure, quantity, quantityValue, massFlow));
 
         Local <Object> obj = Nan::New<Object>();
@@ -459,17 +458,17 @@ NAN_METHOD(header) {
 }
 
 NAN_METHOD(turbine) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
-    unsigned val = static_cast<unsigned>(inp->ToObject()->Get(
-            Nan::New<String>("solveFor").ToLocalChecked())->NumberValue());
+    unsigned val = static_cast<unsigned>(Nan::To<double>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("solveFor").ToLocalChecked())).FromJust());
+
     Turbine::Solve solveFor = static_cast<Turbine::Solve>(val);
-    val = static_cast<unsigned>(inp->ToObject()->Get(
-            Nan::New<String>("turbineProperty").ToLocalChecked())->NumberValue());
+    val = static_cast<unsigned>(Nan::To<double>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("turbineProperty").ToLocalChecked())).FromJust());
+
     Turbine::TurbineProperty turbineProperty = static_cast<Turbine::TurbineProperty>(val);
-    val = static_cast<unsigned>(inp->ToObject()->Get(
-            Nan::New<String>("inletQuantity").ToLocalChecked())->NumberValue());
+    val = static_cast<unsigned>(Nan::To<double>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("inletQuantity").ToLocalChecked())).FromJust());
+
     SteamProperties::ThermodynamicQuantity inletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
     std::shared_ptr<Turbine> t;
 
@@ -480,8 +479,7 @@ NAN_METHOD(turbine) {
                                 turbineProperty, getDouble("isentropicEfficiency"), getDouble("generatorEfficiency"),
                                 getDouble("massFlowOrPowerOut"), getDouble("outletSteamPressure")));
         } else {
-            unsigned val = static_cast<unsigned>(inp->ToObject()->Get(
-                    Nan::New<String>("outletQuantity").ToLocalChecked())->NumberValue());
+            unsigned val = static_cast<unsigned>(Nan::To<double>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("outletQuantity").ToLocalChecked())).FromJust());
             auto const outletQuantity = static_cast<SteamProperties::ThermodynamicQuantity>(val);
             t = std::shared_ptr<Turbine>(
                     new Turbine(solveFor, getDouble("inletPressure"), inletQuantity, getDouble("inletQuantityValue"),
@@ -518,7 +516,7 @@ NAN_METHOD(turbine) {
 }
 
 NAN_METHOD(heatExchanger) {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     const double hotInletMassFlow = getDouble("hotInletMassFlow");
@@ -581,7 +579,7 @@ NAN_METHOD(steamModeler) {
 
     // std::cout << methodName << "begin: steam modeler" << std::endl;
 
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     info.GetReturnValue().Set(r);
 
