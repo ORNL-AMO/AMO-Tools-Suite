@@ -16,13 +16,10 @@ Local<Object> r;
 
 double Get(std::string const & nm) {
 	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-
-	// auto rObj = inp->ToObject()->Get(getName);
 	auto rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(getName);
 	if (rObj->IsUndefined()) {
 		ThrowTypeError(std::string("Get method in standalone.h: " + nm + " not present in object").c_str());
 	}
-	// return rObj->NumberValue();
 	return Nan::To<double>(rObj).FromJust();
 }
 
@@ -122,13 +119,10 @@ NAN_METHOD(airSystemCapacity) {
 	r = Nan::New<Object>();
 
 	Local<String> gallonsStr = Nan::New<String>("receiverCapacities").ToLocalChecked();
-	// auto array = inp->ToObject()->Get(gallonsStr);
 	auto array = Nan::To<Object>(inp).ToLocalChecked()->Get(gallonsStr);
 	v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
 	std::vector<double> receiverCapacitiesGallons(arr->Length());
 	for (std::size_t i = 0; i < arr->Length(); i++) {
-		// receiverCapacitiesGallons[i] = arr->Get(i)->NumberValue();
-		// receiverCapacitiesGallons[i] = arr->Get(i)->NumberValue(Nan::GetCurrentContext())->Value();
 		receiverCapacitiesGallons[i] = Nan::To<double>(arr->Get(i)).FromJust();
 	}
 

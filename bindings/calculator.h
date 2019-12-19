@@ -34,23 +34,23 @@ Local<Object> r;
 
 double Get(std::string const &key, Local<Object> obj)
 {
-    auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+    auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
     if (rObj->IsUndefined())
     {
         ThrowTypeError(std::string("Get method in calculator.h: " + key + " not present in object").c_str());
     }
-    return rObj->NumberValue();
+    return Nan::To<double>(rObj).FromJust();
 }
 
 std::vector<double> GetVector(const std::string &key, Local<Object> obj)
 {
-    auto const &arrayTmp = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+    auto const &arrayTmp = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
     auto const &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<double> array;
-    for (int i = 0; i < jsArray->Length(); i++)
+    for (unsigned int i = 0; i < jsArray->Length(); i++)
     {
         v8::Local<v8::Value> jsElement = jsArray->Get(i);
-        double val = jsElement->NumberValue();
+        double val = Nan::To<double>(jsElement).FromJust();
         array.push_back(val);
     }
     return array;
@@ -59,17 +59,17 @@ std::vector<double> GetVector(const std::string &key, Local<Object> obj)
 template <typename T>
 T GetEnumVal(std::string const &key, Local<Object> obj)
 {
-    auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+    auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
     if (rObj->IsUndefined())
     {
         ThrowTypeError(std::string("GetEnumVal method in calculator.h: " + key + " not present in object").c_str());
     }
-    return static_cast<T>(rObj->IntegerValue());
+    return static_cast<T>(Nan::To<double>(rObj).FromJust());
 }
 
 bool GetBool(std::string const &key, Local<Object> obj)
 {
-    auto rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+    auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
     if (rObj->IsUndefined())
     {
         ThrowTypeError(std::string("GetBool method in calculator.h: Boolean value " + key + " not present in object").c_str());
@@ -79,12 +79,13 @@ bool GetBool(std::string const &key, Local<Object> obj)
 
 std::string GetStr(std::string const &key, Local<Object> obj)
 {
-    auto const &rObj = obj->ToObject()->Get(Nan::New<String>(key).ToLocalChecked());
+    auto const &rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
     if (rObj->IsUndefined())
     {
         ThrowTypeError(std::string("GetStr method in calculator.h: String " + key + " not present in object").c_str());
     }
-    v8::String::Utf8Value s(rObj);
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::String::Utf8Value s(isolate, rObj);
     return std::string(*s);
 }
 
@@ -102,7 +103,7 @@ inline void SetR(const std::string &key, double val)
 
 MultimeterData getMultimeterData(Local<Object> obj)
 {
-    auto multimeterDataV8 = obj->Get(Nan::New<String>("multimeterData").ToLocalChecked())->ToObject();
+    auto multimeterDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("multimeterData").ToLocalChecked())).ToLocalChecked();
     return {
         static_cast<int>(Get("numberOfPhases", multimeterDataV8)),
         Get("supplyVoltage", multimeterDataV8),
@@ -112,7 +113,7 @@ MultimeterData getMultimeterData(Local<Object> obj)
 
 NameplateData getNameplateData(Local<Object> obj)
 {
-    auto nameplateDataV8 = obj->Get(Nan::New<String>("nameplateData").ToLocalChecked())->ToObject();
+    auto nameplateDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("nameplateData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("ratedMotorPower", nameplateDataV8),
         GetBool("variableSpeedMotor", nameplateDataV8),
@@ -124,14 +125,14 @@ NameplateData getNameplateData(Local<Object> obj)
 
 PowerMeterData getPowerMeterData(Local<Object> obj)
 {
-    auto powerMeterDataV8 = obj->Get(Nan::New<String>("powerMeterData").ToLocalChecked())->ToObject();
+    auto powerMeterDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("powerMeterData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("power", powerMeterDataV8)};
 }
 
 OtherMethodData getOtherMethodData(Local<Object> obj)
 {
-    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("energy", otherMethodDataV8)};
 }
@@ -151,20 +152,19 @@ ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
 
 ElectricityReduction getElectricityReductionInputVector()
 {
-    auto electricityReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("electricityReductionInputVec").ToLocalChecked());
-    auto const electricityReductionInputVecTemp = inp->ToObject()->Get(Nan::New<String>("electricityReductionInputVec").ToLocalChecked());
+    auto const electricityReductionInputVecTemp = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("electricityReductionInputVec").ToLocalChecked());
     auto const &electricityReductionInputArray = v8::Local<v8::Array>::Cast(electricityReductionInputVecTemp);
     std::vector<ElectricityReductionInput> inputVec;
     for (std::size_t i = 0; i < electricityReductionInputArray->Length(); i++)
     {
-        inputVec.emplace_back(constructElectricityReductionInput(electricityReductionInputArray->Get(i)->ToObject()));
+        inputVec.emplace_back(constructElectricityReductionInput(Nan::To<Object>(electricityReductionInputArray->Get(i)).ToLocalChecked()));
     }
     return inputVec;
 }
 
 NAN_METHOD(electricityReduction)
 {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     try
     {
@@ -186,14 +186,14 @@ NAN_METHOD(electricityReduction)
 
 FlowMeterMethodData getFlowMeterMethodData(Local<Object> obj)
 {
-    auto flowMeterMethodDataV8 = obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())->ToObject();
+    auto flowMeterMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("flowRate", flowMeterMethodDataV8)};
 }
 
 AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
 {
-    auto airMassFlowMeasuredDataV8 = obj->Get(Nan::New<String>("airMassFlowMeasuredData").ToLocalChecked())->ToObject();
+    auto airMassFlowMeasuredDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("airMassFlowMeasuredData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("areaOfDuct", airMassFlowMeasuredDataV8),
         Get("airVelocity", airMassFlowMeasuredDataV8)};
@@ -201,14 +201,14 @@ AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
 
 AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
 {
-    auto airMassFlowNameplateDataV8 = obj->Get(Nan::New<String>("airMassFlowNameplateData").ToLocalChecked())->ToObject();
+    auto airMassFlowNameplateDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("airMassFlowNameplateData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("airFlow", airMassFlowNameplateDataV8)};
 }
 
 AirMassFlowData getAirMassFlowData(Local<Object> obj)
 {
-    auto airMassFlowDataV8 = obj->Get(Nan::New<String>("airMassFlowData").ToLocalChecked())->ToObject();
+    auto airMassFlowDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("airMassFlowData").ToLocalChecked())).ToLocalChecked();
     return {
         GetBool("isNameplate", airMassFlowDataV8),
         getAirMassFlowMeasuredData(airMassFlowDataV8),
@@ -220,7 +220,7 @@ AirMassFlowData getAirMassFlowData(Local<Object> obj)
 
 WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
 {
-    auto waterMassFlowDataV8 = obj->Get(Nan::New<String>("waterMassFlowData").ToLocalChecked())->ToObject();
+    auto waterMassFlowDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("waterMassFlowData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("waterFlow", waterMassFlowDataV8),
         Get("inletTemperature", waterMassFlowDataV8),
@@ -230,7 +230,7 @@ WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
 
 NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj)
 {
-    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("consumption", otherMethodDataV8)};
 }
@@ -250,20 +250,19 @@ NaturalGasReductionInput constructNaturalGasReductionInput(Local<Object> obj)
 
 NaturalGasReduction getNaturalGasReductionInputVector()
 {
-    auto naturalGasReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("naturalGasReductionInputVec").ToLocalChecked());
-    auto const naturalGasReductionInputVecTemp = inp->ToObject()->Get(Nan::New<String>("naturalGasReductionInputVec").ToLocalChecked());
+    auto const naturalGasReductionInputVecTemp = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("naturalGasReductionInputVec").ToLocalChecked());
     auto const &naturalGasReductionInputArray = v8::Local<v8::Array>::Cast(naturalGasReductionInputVecTemp);
     std::vector<NaturalGasReductionInput> inputVec;
     for (std::size_t i = 0; i < naturalGasReductionInputArray->Length(); i++)
     {
-        inputVec.emplace_back(constructNaturalGasReductionInput(naturalGasReductionInputArray->Get(i)->ToObject()));
+        inputVec.emplace_back(constructNaturalGasReductionInput(Nan::To<Object>(naturalGasReductionInputArray->Get(i)).ToLocalChecked()));
     }
     return inputVec;
 }
 
 NAN_METHOD(naturalGasReduction)
 {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     try
     {
@@ -286,14 +285,14 @@ NAN_METHOD(naturalGasReduction)
 
 CompressedAirFlowMeterMethodData getCompressedAirFlowMeterMethodData(Local<Object> obj)
 {
-    auto flowMeterMethodDataV8 = obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())->ToObject();
+    auto flowMeterMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("meterReading", flowMeterMethodDataV8)};
 }
 
 BagMethodData getBagMethodData(Local<Object> obj)
 {
-    auto bagMethodDataV8 = obj->Get(Nan::New<String>("bagMethodData").ToLocalChecked())->ToObject();
+    auto bagMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("bagMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("height", bagMethodDataV8),
         Get("diameter", bagMethodDataV8),
@@ -302,7 +301,7 @@ BagMethodData getBagMethodData(Local<Object> obj)
 
 PressureMethodData getPressureMethodData(Local<Object> obj)
 {
-    auto pressureMethodDataV8 = obj->Get(Nan::New<String>("pressureMethodData").ToLocalChecked())->ToObject();
+    auto pressureMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("pressureMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         static_cast<int>(Get("nozzleType", pressureMethodDataV8)),
         static_cast<int>(Get("numberOfNozzles", pressureMethodDataV8)),
@@ -311,14 +310,14 @@ PressureMethodData getPressureMethodData(Local<Object> obj)
 
 CompressedAirOtherMethodData getCompressedAirOtherMethodData(Local<Object> obj)
 {
-    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("consumption", otherMethodDataV8)};
 }
 
 CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
 {
-    auto compressorElectricityDataV8 = obj->Get(Nan::New<String>("compressorElectricityData").ToLocalChecked())->ToObject();
+    auto compressorElectricityDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("compressorElectricityData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("compressorControlAdjustment", compressorElectricityDataV8) / 100,
         Get("compressorSpecificPower", compressorElectricityDataV8)};
@@ -341,20 +340,19 @@ CompressedAirReductionInput constructCompressedAirReductionInput(Local<Object> o
 
 CompressedAirReduction getCompressedAirReductionInputVec()
 {
-    // auto compressedAirReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("compressedAirReductionInpuptVec").ToLocalChecked());
-    auto const compressedAirReductionInputVecTemp = inp->ToObject()->Get(Nan::New<String>("compressedAirReductionInputVec").ToLocalChecked());
+    auto const compressedAirReductionInputVecTemp = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("compressedAirReductionInputVec").ToLocalChecked());
     auto const &compressedAirReductionInputArray = v8::Local<v8::Array>::Cast(compressedAirReductionInputVecTemp);
     std::vector<CompressedAirReductionInput> inputVec;
     for (std::size_t i = 0; i < compressedAirReductionInputArray->Length(); i++)
     {
-        inputVec.emplace_back(constructCompressedAirReductionInput(compressedAirReductionInputArray->Get(i)->ToObject()));
+        inputVec.emplace_back(constructCompressedAirReductionInput(Nan::To<Object>(compressedAirReductionInputArray->Get(i)).ToLocalChecked()));
     }
     return inputVec;
 }
 
 NAN_METHOD(compressedAirReduction)
 {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     try
     {
@@ -379,14 +377,14 @@ NAN_METHOD(compressedAirReduction)
 
 MeteredFlowMethodData getMeteredFlowMethodData(Local<Object> obj)
 {
-    auto meteredFlowMethodDataV8 = obj->Get(Nan::New<String>("meteredFlowMethodData").ToLocalChecked())->ToObject();
+    auto meteredFlowMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("meteredFlowMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("meterReading", meteredFlowMethodDataV8)};
 }
 
 VolumeMeterMethodData getVolumeMeterMethodData(Local<Object> obj)
 {
-    auto volumeMeterMethodDataV8 = obj->Get(Nan::New<String>("volumeMeterMethodData").ToLocalChecked())->ToObject();
+    auto volumeMeterMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("volumeMeterMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("finalMeterReading", volumeMeterMethodDataV8),
         Get("initialMeterReading", volumeMeterMethodDataV8),
@@ -395,7 +393,7 @@ VolumeMeterMethodData getVolumeMeterMethodData(Local<Object> obj)
 
 BucketMethodData getBucketMethodData(Local<Object> obj)
 {
-    auto bucketMethodDataV8 = obj->Get(Nan::New<String>("bucketMethodData").ToLocalChecked())->ToObject();
+    auto bucketMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("bucketMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("bucketVolume", bucketMethodDataV8),
         Get("bucketFillTime", bucketMethodDataV8)};
@@ -403,7 +401,7 @@ BucketMethodData getBucketMethodData(Local<Object> obj)
 
 WaterOtherMethodData getWaterOtherMethodData(Local<Object> obj)
 {
-    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("consumption", otherMethodDataV8)};
 }
@@ -422,19 +420,19 @@ WaterReductionInput constructWaterReductionInput(Local<Object> obj)
 
 WaterReduction getWaterReductionInputVec()
 {
-    auto waterReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("waterReductionInputVec").ToLocalChecked());
+    auto waterReductionInputVecV8 = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("waterReductionInputVec").ToLocalChecked());
     auto const &waterReductionInputArray = v8::Local<v8::Array>::Cast(waterReductionInputVecV8);
     std::vector<WaterReductionInput> inputVec;
     for (std::size_t i = 0; i < waterReductionInputArray->Length(); i++)
     {
-        inputVec.emplace_back(constructWaterReductionInput(waterReductionInputArray->Get(i)->ToObject()));
+        inputVec.emplace_back(constructWaterReductionInput(Nan::To<Object>(waterReductionInputArray->Get(i)).ToLocalChecked()));
     }
     return inputVec;
 }
 
 NAN_METHOD(waterReduction)
 {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     try
     {
@@ -466,19 +464,19 @@ CompressedAirPressureReductionInput constructCompressedAirPressureReductionInput
 
 CompressedAirPressureReduction getCompressedAirPressureReductionInputVec()
 {
-    auto const compressedAirPressureReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("compressedAirPressureReductionInputVec").ToLocalChecked());
+    auto const compressedAirPressureReductionInputVecV8 = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("compressedAirPressureReductionInputVec").ToLocalChecked());
     auto const &compressedAirPressureReductionInputArray = v8::Local<v8::Array>::Cast(compressedAirPressureReductionInputVecV8);
     std::vector<CompressedAirPressureReductionInput> inputVec;
     for (std::size_t i = 0; i < compressedAirPressureReductionInputArray->Length(); i++)
     {
-        inputVec.emplace_back(constructCompressedAirPressureReductionInput(compressedAirPressureReductionInputArray->Get(i)->ToObject()));
+        inputVec.emplace_back(constructCompressedAirPressureReductionInput(Nan::To<Object>(compressedAirPressureReductionInputArray->Get(i)).ToLocalChecked()));
     }
     return inputVec;
 }
 
 NAN_METHOD(compressedAirPressureReduction)
 {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     try
     {
@@ -498,7 +496,7 @@ NAN_METHOD(compressedAirPressureReduction)
 // ========== Start Pipe Insulation Reduction ===========
 NAN_METHOD(pipeInsulationReduction)
 {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     int operatingHours = static_cast<int>(Get("operatingHours", inp));
@@ -540,7 +538,7 @@ NAN_METHOD(pipeInsulationReduction)
 // ========== Start Tank Insulation Reduction ===========
 NAN_METHOD(tankInsulationReduction)
 {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
     int operatingHours = static_cast<int>(Get("operatingHours", inp));
@@ -580,14 +578,14 @@ NAN_METHOD(tankInsulationReduction)
 // ============ Start Steam Reduction =============
 SteamFlowMeterMethodData getSteamFlowMeterMethodData(Local<Object> obj)
 {
-    auto flowMeterMethodDataV8 = obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())->ToObject();
+    auto flowMeterMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("flowRate", flowMeterMethodDataV8)};
 }
 
 SteamMassFlowMeasuredData getSteamMassFlowMeasuredData(Local<Object> obj)
 {
-    auto massFlowMeasuredDataV8 = obj->Get(Nan::New<String>("massFlowMeasuredData").ToLocalChecked())->ToObject();
+    auto massFlowMeasuredDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("massFlowMeasuredData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("areaOfDuct", massFlowMeasuredDataV8),
         Get("airVelocity", massFlowMeasuredDataV8)};
@@ -595,14 +593,14 @@ SteamMassFlowMeasuredData getSteamMassFlowMeasuredData(Local<Object> obj)
 
 SteamMassFlowNameplateData getSteamMassFlowNameplateData(Local<Object> obj)
 {
-    auto massFlowNameplateDataV8 = obj->Get(Nan::New<String>("massFlowNameplateData").ToLocalChecked())->ToObject();
+    auto massFlowNameplateDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("massFlowNameplateData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("flowRate", massFlowNameplateDataV8)};
 }
 
 SteamMassFlowMethodData getSteamAirMassFlowMethodData(Local<Object> obj)
 {
-    auto massFlowMethodDataV8 = obj->Get(Nan::New<String>("airMassFlowMethodData").ToLocalChecked())->ToObject();
+    auto massFlowMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("airMassFlowMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         GetBool("isNameplate", massFlowMethodDataV8),
         getSteamMassFlowMeasuredData(massFlowMethodDataV8),
@@ -613,7 +611,7 @@ SteamMassFlowMethodData getSteamAirMassFlowMethodData(Local<Object> obj)
 
 SteamMassFlowMethodData getSteamWaterMassFlowMethodData(Local<Object> obj)
 {
-    auto massFlowMethodDataV8 = obj->Get(Nan::New<String>("waterMassFlowMethodData").ToLocalChecked())->ToObject();
+    auto massFlowMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("waterMassFlowMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         GetBool("isNameplate", massFlowMethodDataV8),
         getSteamMassFlowMeasuredData(massFlowMethodDataV8),
@@ -624,7 +622,7 @@ SteamMassFlowMethodData getSteamWaterMassFlowMethodData(Local<Object> obj)
 
 SteamOtherMethodData getSteamOtherMethodData(Local<Object> obj)
 {
-    auto otherMethodDataV8 = obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())->ToObject();
+    auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
         Get("consumption", otherMethodDataV8)};
 }
@@ -647,19 +645,19 @@ SteamReductionInput constructSteamReductionInput(Local<Object> obj)
 
 SteamReduction getSteamReductionInputVec()
 {
-    auto const steamReductionInputVecV8 = inp->ToObject()->Get(Nan::New<String>("steamReductionInputVec").ToLocalChecked());
+    auto const steamReductionInputVecV8 = Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("steamReductionInputVec").ToLocalChecked());
     auto const &steamReductionInputArray = v8::Local<v8::Array>::Cast(steamReductionInputVecV8);
     std::vector<SteamReductionInput> inputVec;
     for (std::size_t i = 0; i < steamReductionInputArray->Length(); i++)
     {
-        inputVec.emplace_back(constructSteamReductionInput(steamReductionInputArray->Get(i)->ToObject()));
+        inputVec.emplace_back(constructSteamReductionInput(Nan::To<Object>(steamReductionInputArray->Get(i)).ToLocalChecked()));
     }
     return inputVec;
 }
 
 NAN_METHOD(steamReduction)
 {
-    inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     try
     {
