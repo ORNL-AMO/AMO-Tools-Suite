@@ -32,12 +32,13 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const &key, Local<Object> obj)
+double Get(std::string const &nm, Local<Object> obj)
 {
-    auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(getName);
     if (rObj->IsUndefined())
     {
-        ThrowTypeError(std::string("Get method in calculator.h: " + key + " not present in object").c_str());
+        ThrowTypeError(std::string("Get method in calculator.h: " + nm + " not present in object").c_str());
     }
     return Nan::To<double>(rObj).FromJust();
 }
