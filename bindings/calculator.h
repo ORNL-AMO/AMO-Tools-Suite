@@ -32,18 +32,18 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const &nm)
-{
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    auto rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(getName);
-    if (rObj->IsUndefined())
-    {
-        ThrowTypeError(std::string("Get method in standalone.h: " + nm + " not present in object").c_str());
-    }
-    return Nan::To<double>(rObj).FromJust();
-}
+// double Get(std::string const &nm)
+// {
+//     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+//     auto rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(GetCurrent(), getName);
+//     if (rObj->IsUndefined())
+//     {
+//         ThrowTypeError(std::string("Get method in calculator.h: " + nm + " not present in object").c_str());
+//     }
+//     return Nan::To<double>(rObj).FromJust();
+// }
 
-double Get(std::string const &nm, Local<Object> obj)
+double GetDouble(std::string const &nm, Local<Object> obj)
 {
     Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
     auto rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(getName);
@@ -117,49 +117,49 @@ MultimeterData getMultimeterData(Local<Object> obj)
 {
     auto multimeterDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("multimeterData").ToLocalChecked())).ToLocalChecked();
     return {
-        static_cast<int>(Get("numberOfPhases", multimeterDataV8)),
-        Get("supplyVoltage", multimeterDataV8),
-        Get("averageCurrent", multimeterDataV8),
-        Get("powerFactor", multimeterDataV8)};
+        static_cast<int>(GetDouble("numberOfPhases", multimeterDataV8)),
+        GetDouble("supplyVoltage", multimeterDataV8),
+        GetDouble("averageCurrent", multimeterDataV8),
+        GetDouble("powerFactor", multimeterDataV8)};
 }
 
 NameplateData getNameplateData(Local<Object> obj)
 {
     auto nameplateDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("nameplateData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("ratedMotorPower", nameplateDataV8),
+        GetDouble("ratedMotorPower", nameplateDataV8),
         GetBool("variableSpeedMotor", nameplateDataV8),
-        Get("operationalFrequency", nameplateDataV8),
-        Get("lineFrequency", nameplateDataV8),
-        Get("motorAndDriveEfficiency", nameplateDataV8),
-        Get("loadFactor", nameplateDataV8)};
+        GetDouble("operationalFrequency", nameplateDataV8),
+        GetDouble("lineFrequency", nameplateDataV8),
+        GetDouble("motorAndDriveEfficiency", nameplateDataV8),
+        GetDouble("loadFactor", nameplateDataV8)};
 }
 
 PowerMeterData getPowerMeterData(Local<Object> obj)
 {
     auto powerMeterDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("powerMeterData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("power", powerMeterDataV8)};
+        GetDouble("power", powerMeterDataV8)};
 }
 
 OtherMethodData getOtherMethodData(Local<Object> obj)
 {
     auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("energy", otherMethodDataV8)};
+        GetDouble("energy", otherMethodDataV8)};
 }
 
 ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
 {
     return {
-        static_cast<int>(Get("operatingHours", obj)),
-        Get("electricityCost", obj),
-        static_cast<int>(Get("measurementMethod", obj)),
+        static_cast<int>(GetDouble("operatingHours", obj)),
+        GetDouble("electricityCost", obj),
+        static_cast<int>(GetDouble("measurementMethod", obj)),
         getMultimeterData(obj),
         getNameplateData(obj),
         getPowerMeterData(obj),
         getOtherMethodData(obj),
-        static_cast<int>(Get("units", obj))};
+        static_cast<int>(GetDouble("units", obj))};
 }
 
 ElectricityReduction getElectricityReductionInputVector()
@@ -200,22 +200,22 @@ FlowMeterMethodData getFlowMeterMethodData(Local<Object> obj)
 {
     auto flowMeterMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("flowRate", flowMeterMethodDataV8)};
+        GetDouble("flowRate", flowMeterMethodDataV8)};
 }
 
 AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
 {
     auto airMassFlowMeasuredDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("airMassFlowMeasuredData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("areaOfDuct", airMassFlowMeasuredDataV8),
-        Get("airVelocity", airMassFlowMeasuredDataV8)};
+        GetDouble("areaOfDuct", airMassFlowMeasuredDataV8),
+        GetDouble("airVelocity", airMassFlowMeasuredDataV8)};
 }
 
 AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
 {
     auto airMassFlowNameplateDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("airMassFlowNameplateData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("airFlow", airMassFlowNameplateDataV8)};
+        GetDouble("airFlow", airMassFlowNameplateDataV8)};
 }
 
 AirMassFlowData getAirMassFlowData(Local<Object> obj)
@@ -225,39 +225,39 @@ AirMassFlowData getAirMassFlowData(Local<Object> obj)
         GetBool("isNameplate", airMassFlowDataV8),
         getAirMassFlowMeasuredData(airMassFlowDataV8),
         getAirMassFlowNameplateData(airMassFlowDataV8),
-        Get("inletTemperature", airMassFlowDataV8),
-        Get("outletTemperature", airMassFlowDataV8),
-        Get("systemEfficiency", airMassFlowDataV8) / 100};
+        GetDouble("inletTemperature", airMassFlowDataV8),
+        GetDouble("outletTemperature", airMassFlowDataV8),
+        GetDouble("systemEfficiency", airMassFlowDataV8) / 100};
 }
 
 WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
 {
     auto waterMassFlowDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("waterMassFlowData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("waterFlow", waterMassFlowDataV8),
-        Get("inletTemperature", waterMassFlowDataV8),
-        Get("outletTemperature", waterMassFlowDataV8),
-        Get("systemEfficiency", waterMassFlowDataV8) / 100};
+        GetDouble("waterFlow", waterMassFlowDataV8),
+        GetDouble("inletTemperature", waterMassFlowDataV8),
+        GetDouble("outletTemperature", waterMassFlowDataV8),
+        GetDouble("systemEfficiency", waterMassFlowDataV8) / 100};
 }
 
 NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj)
 {
     auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("consumption", otherMethodDataV8)};
+        GetDouble("consumption", otherMethodDataV8)};
 }
 
 NaturalGasReductionInput constructNaturalGasReductionInput(Local<Object> obj)
 {
     return {
-        static_cast<int>(Get("operatingHours", obj)),
-        Get("fuelCost", obj),
-        static_cast<int>(Get("measurementMethod", obj)),
+        static_cast<int>(GetDouble("operatingHours", obj)),
+        GetDouble("fuelCost", obj),
+        static_cast<int>(GetDouble("measurementMethod", obj)),
         getFlowMeterMethodData(obj),
         naturalGasGetOtherMethodData(obj),
         getAirMassFlowData(obj),
         getWaterMassFlowData(obj),
-        static_cast<int>(Get("units", obj))};
+        static_cast<int>(GetDouble("units", obj))};
 }
 
 NaturalGasReduction getNaturalGasReductionInputVector()
@@ -299,55 +299,55 @@ CompressedAirFlowMeterMethodData getCompressedAirFlowMeterMethodData(Local<Objec
 {
     auto flowMeterMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("meterReading", flowMeterMethodDataV8)};
+        GetDouble("meterReading", flowMeterMethodDataV8)};
 }
 
 BagMethodData getBagMethodData(Local<Object> obj)
 {
     auto bagMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("bagMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("height", bagMethodDataV8),
-        Get("diameter", bagMethodDataV8),
-        Get("fillTime", bagMethodDataV8)};
+        GetDouble("height", bagMethodDataV8),
+        GetDouble("diameter", bagMethodDataV8),
+        GetDouble("fillTime", bagMethodDataV8)};
 }
 
 PressureMethodData getPressureMethodData(Local<Object> obj)
 {
     auto pressureMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("pressureMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        static_cast<int>(Get("nozzleType", pressureMethodDataV8)),
-        static_cast<int>(Get("numberOfNozzles", pressureMethodDataV8)),
-        Get("supplyPressure", pressureMethodDataV8)};
+        static_cast<int>(GetDouble("nozzleType", pressureMethodDataV8)),
+        static_cast<int>(GetDouble("numberOfNozzles", pressureMethodDataV8)),
+        GetDouble("supplyPressure", pressureMethodDataV8)};
 }
 
 CompressedAirOtherMethodData getCompressedAirOtherMethodData(Local<Object> obj)
 {
     auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("consumption", otherMethodDataV8)};
+        GetDouble("consumption", otherMethodDataV8)};
 }
 
 CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
 {
     auto compressorElectricityDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("compressorElectricityData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("compressorControlAdjustment", compressorElectricityDataV8) / 100,
-        Get("compressorSpecificPower", compressorElectricityDataV8)};
+        GetDouble("compressorControlAdjustment", compressorElectricityDataV8) / 100,
+        GetDouble("compressorSpecificPower", compressorElectricityDataV8)};
 }
 
 CompressedAirReductionInput constructCompressedAirReductionInput(Local<Object> obj)
 {
     return {
-        static_cast<int>(Get("hoursPerYear", obj)),
-        static_cast<int>(Get("utilityType", obj)),
-        Get("utilityCost", obj),
-        static_cast<int>(Get("measurementMethod", obj)),
+        static_cast<int>(GetDouble("hoursPerYear", obj)),
+        static_cast<int>(GetDouble("utilityType", obj)),
+        GetDouble("utilityCost", obj),
+        static_cast<int>(GetDouble("measurementMethod", obj)),
         getCompressedAirFlowMeterMethodData(obj),
         getBagMethodData(obj),
         getPressureMethodData(obj),
         getCompressedAirOtherMethodData(obj),
         getCompressorElectricityData(obj),
-        static_cast<int>(Get("units", obj))};
+        static_cast<int>(GetDouble("units", obj))};
 }
 
 CompressedAirReduction getCompressedAirReductionInputVec()
@@ -391,39 +391,39 @@ MeteredFlowMethodData getMeteredFlowMethodData(Local<Object> obj)
 {
     auto meteredFlowMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("meteredFlowMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("meterReading", meteredFlowMethodDataV8)};
+        GetDouble("meterReading", meteredFlowMethodDataV8)};
 }
 
 VolumeMeterMethodData getVolumeMeterMethodData(Local<Object> obj)
 {
     auto volumeMeterMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("volumeMeterMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("finalMeterReading", volumeMeterMethodDataV8),
-        Get("initialMeterReading", volumeMeterMethodDataV8),
-        Get("elapsedTime", volumeMeterMethodDataV8)};
+        GetDouble("finalMeterReading", volumeMeterMethodDataV8),
+        GetDouble("initialMeterReading", volumeMeterMethodDataV8),
+        GetDouble("elapsedTime", volumeMeterMethodDataV8)};
 }
 
 BucketMethodData getBucketMethodData(Local<Object> obj)
 {
     auto bucketMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("bucketMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("bucketVolume", bucketMethodDataV8),
-        Get("bucketFillTime", bucketMethodDataV8)};
+        GetDouble("bucketVolume", bucketMethodDataV8),
+        GetDouble("bucketFillTime", bucketMethodDataV8)};
 }
 
 WaterOtherMethodData getWaterOtherMethodData(Local<Object> obj)
 {
     auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("consumption", otherMethodDataV8)};
+        GetDouble("consumption", otherMethodDataV8)};
 }
 
 WaterReductionInput constructWaterReductionInput(Local<Object> obj)
 {
     return {
-        static_cast<int>(Get("hoursPerYear", obj)),
-        Get("waterCost", obj),
-        static_cast<int>(Get("measurementMethod", obj)),
+        static_cast<int>(GetDouble("hoursPerYear", obj)),
+        GetDouble("waterCost", obj),
+        static_cast<int>(GetDouble("measurementMethod", obj)),
         getMeteredFlowMethodData(obj),
         getVolumeMeterMethodData(obj),
         getBucketMethodData(obj),
@@ -467,11 +467,11 @@ CompressedAirPressureReductionInput constructCompressedAirPressureReductionInput
 {
     return {
         GetBool("isBaseline", obj),
-        static_cast<int>(Get("hoursPerYear", obj)),
-        Get("electricityCost", obj),
-        Get("compressorPower", obj),
-        Get("pressure", obj),
-        Get("proposedPressure", obj)};
+        static_cast<int>(GetDouble("hoursPerYear", obj)),
+        GetDouble("electricityCost", obj),
+        GetDouble("compressorPower", obj),
+        GetDouble("pressure", obj),
+        GetDouble("proposedPressure", obj)};
 }
 
 CompressedAirPressureReduction getCompressedAirPressureReductionInputVec()
@@ -511,17 +511,17 @@ NAN_METHOD(pipeInsulationReduction)
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
-    int operatingHours = static_cast<int>(Get("operatingHours", inp));
-    double pipeLength = Get("pipeLength", inp);
-    double pipeDiameter = Get("pipeDiameter", inp);
-    double pipeThickness = Get("pipeThickness", inp);
-    double pipeTemperature = Get("pipeTemperature", inp);
-    double ambientTemperature = Get("ambientTemperature", inp);
-    double windVelocity = Get("windVelocity", inp);
-    double systemEfficiency = Get("systemEfficiency", inp) / 100.0;
-    double insulationThickness = Get("insulationThickness", inp);
-    double pipeEmissivity = Get("pipeEmissivity", inp);
-    double jacketEmissivity = Get("jacketEmissivity", inp);
+    int operatingHours = static_cast<int>(GetDouble("operatingHours", inp));
+    double pipeLength = GetDouble("pipeLength", inp);
+    double pipeDiameter = GetDouble("pipeDiameter", inp);
+    double pipeThickness = GetDouble("pipeThickness", inp);
+    double pipeTemperature = GetDouble("pipeTemperature", inp);
+    double ambientTemperature = GetDouble("ambientTemperature", inp);
+    double windVelocity = GetDouble("windVelocity", inp);
+    double systemEfficiency = GetDouble("systemEfficiency", inp) / 100.0;
+    double insulationThickness = GetDouble("insulationThickness", inp);
+    double pipeEmissivity = GetDouble("pipeEmissivity", inp);
+    double jacketEmissivity = GetDouble("jacketEmissivity", inp);
     std::vector<double> pipeMaterialCoefficients = GetVector("pipeMaterialCoefficients", inp);
     std::vector<double> insulationMaterialCoefficients = GetVector("insulationMaterialCoefficients", inp);
 
@@ -553,18 +553,18 @@ NAN_METHOD(tankInsulationReduction)
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
 
-    int operatingHours = static_cast<int>(Get("operatingHours", inp));
-    double tankHeight = Get("tankHeight", inp);
-    double tankDiameter = Get("tankDiameter", inp);
-    double tankThickness = Get("tankThickness", inp);
-    double tankEmissivity = Get("tankEmissivity", inp);
-    double tankConductivity = Get("tankConductivity", inp);
-    double tankTemperature = Get("tankTemperature", inp);
-    double ambientTemperature = Get("ambientTemperature", inp);
-    double systemEfficiency = Get("systemEfficiency", inp) / 100.0;
-    double insulationThickness = Get("insulationThickness", inp);
-    double insulationConductivity = Get("insulationConductivity", inp);
-    double jacketEmissivity = Get("jacketEmissivity", inp);
+    int operatingHours = static_cast<int>(GetDouble("operatingHours", inp));
+    double tankHeight = GetDouble("tankHeight", inp);
+    double tankDiameter = GetDouble("tankDiameter", inp);
+    double tankThickness = GetDouble("tankThickness", inp);
+    double tankEmissivity = GetDouble("tankEmissivity", inp);
+    double tankConductivity = GetDouble("tankConductivity", inp);
+    double tankTemperature = GetDouble("tankTemperature", inp);
+    double ambientTemperature = GetDouble("ambientTemperature", inp);
+    double systemEfficiency = GetDouble("systemEfficiency", inp) / 100.0;
+    double insulationThickness = GetDouble("insulationThickness", inp);
+    double insulationConductivity = GetDouble("insulationConductivity", inp);
+    double jacketEmissivity = GetDouble("jacketEmissivity", inp);
 
     InsulatedTankInput input(
         operatingHours,
@@ -592,22 +592,22 @@ SteamFlowMeterMethodData getSteamFlowMeterMethodData(Local<Object> obj)
 {
     auto flowMeterMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("flowMeterMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("flowRate", flowMeterMethodDataV8)};
+        GetDouble("flowRate", flowMeterMethodDataV8)};
 }
 
 SteamMassFlowMeasuredData getSteamMassFlowMeasuredData(Local<Object> obj)
 {
     auto massFlowMeasuredDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("massFlowMeasuredData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("areaOfDuct", massFlowMeasuredDataV8),
-        Get("airVelocity", massFlowMeasuredDataV8)};
+        GetDouble("areaOfDuct", massFlowMeasuredDataV8),
+        GetDouble("airVelocity", massFlowMeasuredDataV8)};
 }
 
 SteamMassFlowNameplateData getSteamMassFlowNameplateData(Local<Object> obj)
 {
     auto massFlowNameplateDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("massFlowNameplateData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("flowRate", massFlowNameplateDataV8)};
+        GetDouble("flowRate", massFlowNameplateDataV8)};
 }
 
 SteamMassFlowMethodData getSteamAirMassFlowMethodData(Local<Object> obj)
@@ -617,8 +617,8 @@ SteamMassFlowMethodData getSteamAirMassFlowMethodData(Local<Object> obj)
         GetBool("isNameplate", massFlowMethodDataV8),
         getSteamMassFlowMeasuredData(massFlowMethodDataV8),
         getSteamMassFlowNameplateData(massFlowMethodDataV8),
-        Get("inletTemperature", massFlowMethodDataV8),
-        Get("outletTemperature", massFlowMethodDataV8)};
+        GetDouble("inletTemperature", massFlowMethodDataV8),
+        GetDouble("outletTemperature", massFlowMethodDataV8)};
 }
 
 SteamMassFlowMethodData getSteamWaterMassFlowMethodData(Local<Object> obj)
@@ -628,31 +628,31 @@ SteamMassFlowMethodData getSteamWaterMassFlowMethodData(Local<Object> obj)
         GetBool("isNameplate", massFlowMethodDataV8),
         getSteamMassFlowMeasuredData(massFlowMethodDataV8),
         getSteamMassFlowNameplateData(massFlowMethodDataV8),
-        Get("inletTemperature", massFlowMethodDataV8),
-        Get("outletTemperature", massFlowMethodDataV8)};
+        GetDouble("inletTemperature", massFlowMethodDataV8),
+        GetDouble("outletTemperature", massFlowMethodDataV8)};
 }
 
 SteamOtherMethodData getSteamOtherMethodData(Local<Object> obj)
 {
     auto otherMethodDataV8 = Nan::To<Object>(obj->Get(Nan::New<String>("otherMethodData").ToLocalChecked())).ToLocalChecked();
     return {
-        Get("consumption", otherMethodDataV8)};
+        GetDouble("consumption", otherMethodDataV8)};
 }
 
 SteamReductionInput constructSteamReductionInput(Local<Object> obj)
 {
     return {
-        static_cast<int>(Get("hoursPerYear", obj)),
-        static_cast<int>(Get("utilityType", obj)),
-        Get("utilityCost", obj),
-        static_cast<int>(Get("measurementMethod", obj)),
-        Get("systemEfficiency", obj) / 100.0,
-        Get("pressure", obj),
+        static_cast<int>(GetDouble("hoursPerYear", obj)),
+        static_cast<int>(GetDouble("utilityType", obj)),
+        GetDouble("utilityCost", obj),
+        static_cast<int>(GetDouble("measurementMethod", obj)),
+        GetDouble("systemEfficiency", obj) / 100.0,
+        GetDouble("pressure", obj),
         getSteamFlowMeterMethodData(obj),
         getSteamAirMassFlowMethodData(obj),
         getSteamWaterMassFlowMethodData(obj),
         getSteamOtherMethodData(obj),
-        static_cast<int>(Get("units", obj))};
+        static_cast<int>(GetDouble("units", obj))};
 }
 
 SteamReduction getSteamReductionInputVec()
