@@ -16,7 +16,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
         {
             FlowMeterMethodData flowMeterMethodData = naturalGasReductionInput.getFlowMeterMethodData();
             tmpTotalFlow = flowMeterMethodData.getFlowRate() * naturalGasReductionInput.getUnits();
-            tmpEnergyUse = tmpTotalFlow * naturalGasReductionInput.getOperatingHours() * 1.03;
+            tmpEnergyUse = tmpTotalFlow * naturalGasReductionInput.getOperatingHours() * 1.03 * 1000.0;
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
         //air mass flow method
