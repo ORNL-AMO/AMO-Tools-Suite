@@ -30,7 +30,9 @@ Local <Value> getValue(std::string const &name, Local <Object> sourceObject) {
     }
 
     Local <String> localName = Nan::New<String>(name).ToLocalChecked();
-    Local <Value> value = sourceObject->Get(localName);
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local <Value> value = sourceObject->Get(context, localName).ToLocalChecked();
     if (value->IsUndefined()) {
         auto msg = std::string("NanDataConverters: getValue: field '" + name + "' not present in sourceObject").c_str();
         std::cout << "getValue: " << msg << std::endl;
@@ -112,7 +114,8 @@ double getDouble(std::string const &name) {
  */
 bool getBool(std::string const &name, Local <Object> sourceObject) {
     Local <Value> value = getValue(name, sourceObject);
-    return value->BooleanValue();
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    return value->BooleanValue(isolate);
 }
 
 /**

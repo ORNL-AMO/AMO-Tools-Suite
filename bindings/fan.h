@@ -538,8 +538,12 @@ BaseGasDensity getBaseGasDensity()
 
 FanShaftPower getFanShaftPower()
 {
+	// v8::Isolate* isolate = v8::Isolate::GetCurrent();
+	// Local<Context> context = isolate->GetCurrentContext();
+	// Local<Object> fanShaftPowerV8 = Object::New(isolate);
 	//NAN data init
-	auto fanShaftPowerV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("FanShaftPower").ToLocalChecked())).ToLocalChecked();
+	Local<Object> fanShaftPowerV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(Nan::New<String>("FanShaftPower").ToLocalChecked())).ToLocalChecked();
+	// fanShaftPowerV8->Set(context,)
 	const double motorShaftPower = Get("motorShaftPower", fanShaftPowerV8);
 	const double efficiencyMotor = Get("efficiencyMotor", fanShaftPowerV8);
 	const double efficiencyVFD = Get("efficiencyVFD", fanShaftPowerV8);

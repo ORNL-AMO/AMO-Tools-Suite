@@ -54,14 +54,30 @@ double GetDouble(std::string const &nm, Local<Object> obj)
     return Nan::To<double>(rObj).FromJust();
 }
 
+// std::vector<double> GetVector(const std::string &key, Local<Object> obj)
+// {
+//     auto const &arrayTmp = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
+//     auto const &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+//     std::vector<double> array;
+//     for (unsigned int i = 0; i < jsArray->Length(); i++)
+//     {
+//         v8::Local<v8::Value> jsElement = jsArray->Get(i);
+//         double val = Nan::To<double>(jsElement).FromJust();
+//         array.push_back(val);
+//     }
+//     return array;
+// }
+
 std::vector<double> GetVector(const std::string &key, Local<Object> obj)
 {
-    auto const &arrayTmp = Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New<String>(key).ToLocalChecked());
-    auto const &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+	v8::Local<v8::Value> &arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>(key).ToLocalChecked()).ToLocalChecked();
+    Local<Array> &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<double> array;
+	v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext();
     for (unsigned int i = 0; i < jsArray->Length(); i++)
     {
-        v8::Local<v8::Value> jsElement = jsArray->Get(i);
+        v8::Local<v8::Value> jsElement = jsArray->Get(context, i).ToLocalChecked();
         double val = Nan::To<double>(jsElement).FromJust();
         array.push_back(val);
     }
