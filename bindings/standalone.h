@@ -8,6 +8,8 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <exception>
+#include <iostream>
 
 
 using namespace Nan;
@@ -29,11 +31,13 @@ double Get(std::string const & nm) {
 
 std::vector<double> GetVector(const std::string &key, Local<Object> obj)
 {
-	v8::Local<v8::Value> &arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>(key).ToLocalChecked()).ToLocalChecked();
-    Local<Array> &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
-    std::vector<double> array;
 	v8::Isolate *isolate = v8::Isolate::GetCurrent();
 	v8::Local<v8::Context> context = isolate->GetCurrentContext();
+
+	Local<Value> &arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>(key).ToLocalChecked()).ToLocalChecked();
+    Local<Array> &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    std::vector<double> array;
+
     for (unsigned int i = 0; i < jsArray->Length(); i++)
     {
         v8::Local<v8::Value> jsElement = jsArray->Get(context, i).ToLocalChecked();
@@ -211,9 +215,12 @@ NAN_METHOD(pipeSizing) {
 NAN_METHOD(pneumaticValve) {
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
 
-	double flowRate = Get("flowRate");
-	if (std::isnan(flowRate)) {
+
+	Local<Value> flowRate = inp->Get(context, Nan::New<String>("flowRate").ToLocalChecked()).ToLocalChecked();
+	if (flowRate->IsUndefined()) {
 		double output = Compressor::PneumaticValve(Get("inletPressure"), Get("outletPressure")).calculate();
 		SetR("flowRate", output);
 	} else {

@@ -37,16 +37,15 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const &nm)
-{
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    auto rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(getName);
-    if (rObj->IsUndefined())
-    {
-        ThrowTypeError(std::string("Get method in phast.h: " + nm + " not present in object").c_str());
-    }
-    return Nan::To<double>(rObj).FromJust();
-
+double Get(std::string const & nm) {
+	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+	v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext();
+	Local<Value> rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+	if (rObj->IsUndefined()) {
+		ThrowTypeError(std::string("Get method in phast.h: " + nm + " not present in object").c_str());
+	}
+	return Nan::To<double>(rObj).FromJust();
 }
 
 void SetR(std::string const &nm, double n)

@@ -32,17 +32,15 @@ Local<Object> inp;
 Local<Object> r;
 
 //NAN function for fetching value associated with provided key
-double Get(std::string const &nm)
-{
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    // auto rObj = inp->ToObject()->Get(getName);
-    auto rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(getName);
-    if (rObj->IsUndefined())
-    {
-        ThrowTypeError(std::string("Get method in psat.h: " + nm + " not present in object").c_str());
-    }
-    // return rObj->NumberValue();
-    return Nan::To<double>(rObj).FromJust();
+double Get(std::string const & nm) {
+	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+	v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext();
+	Local<Value> rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+	if (rObj->IsUndefined()) {
+		ThrowTypeError(std::string("Get method in psat.h: " + nm + " not present in object").c_str());
+	}
+	return Nan::To<double>(rObj).FromJust();
 }
 
 //NAN function for binding data to anonymous object
