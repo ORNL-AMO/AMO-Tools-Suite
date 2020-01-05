@@ -396,8 +396,8 @@ NAN_METHOD(header) {
     double const headerPressure = getDouble("headerPressure");
 
     Local<String> arrayStr = Nan::New<String>("inlets").ToLocalChecked();
-    v8::Local<v8::Value> &arrayTmp = Nan::Get(Nan::To<v8::Object>(inp).ToLocalChecked(), arrayStr).ToLocalChecked();
-    v8::Local<v8::Array> &arr = v8::Local<v8::Array>::Cast(arrayTmp);
+    v8::Local<v8::Value> arrayTmp = Nan::Get(Nan::To<v8::Object>(inp).ToLocalChecked(), arrayStr).ToLocalChecked();
+    v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(arrayTmp);
 
     Local<String> pressureStr = Nan::New<String>("pressure").ToLocalChecked();
     Local<String> temperatureStr = Nan::New<String>("temperature").ToLocalChecked();

@@ -34,8 +34,8 @@ std::vector<double> GetVector(const std::string &key, Local<Object> obj)
 	v8::Isolate *isolate = v8::Isolate::GetCurrent();
 	v8::Local<v8::Context> context = isolate->GetCurrentContext();
 
-	Local<Value> &arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>(key).ToLocalChecked()).ToLocalChecked();
-    Local<Array> &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+	Local<Value> arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>(key).ToLocalChecked()).ToLocalChecked();
+    Local<Array> jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<double> array;
 
     for (unsigned int i = 0; i < jsArray->Length(); i++)

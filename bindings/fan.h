@@ -61,7 +61,7 @@ bool GetBool(std::string const &key, Local<Object> obj)
 	{
 		ThrowTypeError(std::string("GetBool method in fan.h: Boolean value " + key + " not present in object").c_str());
 	}
-	return rObj->BooleanValue(isolate);
+	return rObj->BooleanValue(context).ToChecked();
 }
 
 //NAN function for fetching STRING value associated with provided key
@@ -101,13 +101,13 @@ std::vector<std::vector<double>> getTraverseInputData(Local<Object> obj)
 	v8::Isolate *isolate = v8::Isolate::GetCurrent();
 	v8::Local<v8::Context> context = isolate->GetCurrentContext();
 
-	v8::Local<v8::Value> &arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>("traverseData").ToLocalChecked()).ToLocalChecked();
-	Local<Array> &array = v8::Local<v8::Array>::Cast(arrayTmp);
+	v8::Local<v8::Value> arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>("traverseData").ToLocalChecked()).ToLocalChecked();
+	Local<Array> array = v8::Local<v8::Array>::Cast(arrayTmp);
 	std::vector<std::vector<double>> traverseData(array->Length());
 
 	for (std::size_t i = 0; i < array->Length(); i++)
 	{
-		Local<Array> const &innerArray = v8::Local<v8::Array>::Cast(Nan::To<Object>(array->Get(context, i).ToLocalChecked()).ToLocalChecked());
+		Local<Array> const innerArray = v8::Local<v8::Array>::Cast(Nan::To<Object>(array->Get(context, i).ToLocalChecked()).ToLocalChecked());
 		traverseData.at(i).resize(innerArray->Length());
 		for (std::size_t j = 0; j < innerArray->Length(); j++)
 		{

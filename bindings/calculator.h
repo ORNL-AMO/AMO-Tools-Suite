@@ -61,12 +61,12 @@ std::vector<double> GetVector(std::string const &key, Local<Object> obj)
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     Local<String> getName = Nan::New<String>(key).ToLocalChecked();
-    Local<Value> &arrayTmp = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
     if (arrayTmp->IsUndefined())
     {
         ThrowTypeError(std::string("GetVector method in calculator.h: " + key + " not present in object").c_str());
     }
-    Local<Array> &jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    Local<Array> jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<double> array;
     for (unsigned int i = 0; i < jsArray->Length(); i++)
     {
@@ -101,7 +101,7 @@ bool GetBool(std::string const &key, Local<Object> obj)
     {
         ThrowTypeError(std::string("GetBool method in calculator.h: Boolean value " + key + " not present in object").c_str());
     }
-    return rObj->BooleanValue(isolate);
+    return rObj->BooleanValue(context).ToChecked();
 }
 
 std::string GetStr(std::string const &key, Local<Object> obj)
@@ -213,17 +213,17 @@ ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
         static_cast<int>(GetDouble("units", obj))};
 }
 
-std::vector<ElectricityReductionInput> getElectricityReductionInputVector()
+std::vector<ElectricityReductionInput> getElectricityReductionInputVec()
 {
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     Local<String> getName = Nan::New<String>("electricityReductionInputVec").ToLocalChecked();
-    Local<Value> &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
     if (arrayTmp->IsUndefined())
     {
         ThrowTypeError(std::string("ElectricityReduction: getElectricityReductionInputVector method in calculator.h: electricityReductionInputVec not present in object").c_str());
     }
-    Local<Array> &electricityReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    Local<Array> electricityReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<ElectricityReductionInput> inputVec;
     for (std::size_t i = 0; i < electricityReductionInputArray->Length(); i++)
     {
@@ -238,7 +238,8 @@ NAN_METHOD(electricityReduction)
     r = Nan::New<Object>();
     try
     {
-        ElectricityReduction::Output rv = ElectricityReduction(getElectricityReductionInputVector()).calculate();
+        std::vector<ElectricityReductionInput> inputVec = getElectricityReductionInputVec();
+        ElectricityReduction::Output rv = ElectricityReduction(inputVec).calculate();
         SetR("energyUse", rv.energyUse);
         SetR("energyCost", rv.energyCost);
         SetR("power", rv.power);
@@ -360,17 +361,17 @@ NaturalGasReductionInput constructNaturalGasReductionInput(Local<Object> obj)
         static_cast<int>(GetDouble("units", obj))};
 }
 
-std::vector<NaturalGasReductionInput> getNaturalGasReductionInputVector()
+std::vector<NaturalGasReductionInput> getNaturalGasReductionInputVec()
 {
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     Local<String> getName = Nan::New<String>("naturalGasReductionInputVec").ToLocalChecked();
-    Local<Value> &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
     if (arrayTmp->IsUndefined())
     {
         ThrowTypeError(std::string("NaturalGasReduction: getNaturalGasReductionInputVector method in calculator.h: naturalGasReductionInputVec not present in object").c_str());
     }
-    Local<Array> &naturalGasReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    Local<Array> naturalGasReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<NaturalGasReductionInput> inputVec;
     for (std::size_t i = 0; i < naturalGasReductionInputArray->Length(); i++)
     {
@@ -385,7 +386,8 @@ NAN_METHOD(naturalGasReduction)
     r = Nan::New<Object>();
     try
     {
-        NaturalGasReduction::Output rv = NaturalGasReduction(getNaturalGasReductionInputVector()).calculate();
+        std::vector<NaturalGasReductionInput> inputVec = getNaturalGasReductionInputVec();
+        NaturalGasReduction::Output rv = NaturalGasReduction(inputVec).calculate();
         SetR("energyUse", rv.energyUse);
         SetR("energyCost", rv.energyCost);
         SetR("heatFlow", rv.heatFlow);
@@ -497,12 +499,12 @@ std::vector<CompressedAirReductionInput> getCompressedAirReductionInputVec()
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     Local<String> getName = Nan::New<String>("compressedAirReductionInputVec").ToLocalChecked();
-    Local<Value> &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
     if (arrayTmp->IsUndefined())
     {
         ThrowTypeError(std::string("CompressedAirReduction: getCompressedAirReductionInputVec method in calculator.h: compressedAirReductionInputVec not present in object").c_str());
     }
-    Local<Array> &compressedAirReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    Local<Array> compressedAirReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<CompressedAirReductionInput> inputVec;
     for (std::size_t i = 0; i < compressedAirReductionInputArray->Length(); i++)
     {
@@ -517,7 +519,8 @@ NAN_METHOD(compressedAirReduction)
     r = Nan::New<Object>();
     try
     {
-        CompressedAirReduction::Output rv = CompressedAirReduction(getCompressedAirReductionInputVec()).calculate();
+        std::vector<CompressedAirReductionInput> inputVec = getCompressedAirReductionInputVec();
+        CompressedAirReduction::Output rv = CompressedAirReduction(inputVec).calculate();
         SetR("energyUse", rv.energyUse);
         SetR("energyCost", rv.energyCost);
         SetR("flowRate", rv.flowRate);
@@ -612,12 +615,12 @@ std::vector<WaterReductionInput> getWaterReductionInputVec()
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     Local<String> getName = Nan::New<String>("waterReductionInputVec").ToLocalChecked();
-    Local<Value> &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
     if (arrayTmp->IsUndefined())
     {
         ThrowTypeError(std::string("WaterReduction: getWaterReductionInputVec method in calculator.h: waterReductionInputVec not present in object").c_str());
     }
-    Local<Array> &waterReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    Local<Array> waterReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<WaterReductionInput> inputVec;
     for (std::size_t i = 0; i < waterReductionInputArray->Length(); i++)
     {
@@ -632,7 +635,8 @@ NAN_METHOD(waterReduction)
     r = Nan::New<Object>();
     try
     {
-        WaterReduction::Output rv = WaterReduction(getWaterReductionInputVec()).calculate();
+        std::vector<WaterReductionInput> inputVec = getWaterReductionInputVec();
+        WaterReduction::Output rv = WaterReduction(inputVec).calculate();
         SetR("waterUse", rv.waterUse);
         SetR("waterCost", rv.waterCost);
     }
@@ -663,12 +667,12 @@ std::vector<CompressedAirPressureReductionInput> getCompressedAirPressureReducti
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     Local<String> getName = Nan::New<String>("compressedAirPressureReductionInputVec").ToLocalChecked();
-    Local<Value> &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
     if (arrayTmp->IsUndefined())
     {
         ThrowTypeError(std::string("CompressedAirPressureReduction: getCompressedAirPressureReductionInputVec method in calculator.h: compressedAirPressureReductionInputVec not present in object").c_str());
     }
-    Local<Array> &compressedAirPressureReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    Local<Array> compressedAirPressureReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<CompressedAirPressureReductionInput> inputVec;
     for (std::size_t i = 0; i < compressedAirPressureReductionInputArray->Length(); i++)
     {
@@ -683,7 +687,8 @@ NAN_METHOD(compressedAirPressureReduction)
     r = Nan::New<Object>();
     try
     {
-        CompressedAirPressureReduction::Output rv = CompressedAirPressureReduction(getCompressedAirPressureReductionInputVec()).calculate();
+        std::vector<CompressedAirPressureReductionInput> inputVec = getCompressedAirPressureReductionInputVec();
+        CompressedAirPressureReduction::Output rv = CompressedAirPressureReduction(inputVec).calculate();
         SetR("energyUse", rv.energyUse);
         SetR("energyCost", rv.energyCost);
     }
@@ -893,12 +898,12 @@ std::vector<SteamReductionInput> getSteamReductionInputVec()
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     Local<String> getName = Nan::New<String>("steamReductionInputVec").ToLocalChecked();
-    Local<Value> &arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
     if (arrayTmp->IsUndefined())
     {
         ThrowTypeError(std::string("SteamReduction: getSteamReductionInputVec method in calculator.h: steamReductionInputVec not present in object").c_str());
     }
-    Local<Array> &steamReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    Local<Array> steamReductionInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
     std::vector<SteamReductionInput> inputVec;
     for (std::size_t i = 0; i < steamReductionInputArray->Length(); i++)
     {
@@ -913,7 +918,8 @@ NAN_METHOD(steamReduction)
     r = Nan::New<Object>();
     try
     {
-        SteamReduction::Output rv = SteamReduction(getSteamReductionInputVec()).calculate();
+        std::vector<SteamReductionInput> inputVec = getSteamReductionInputVec();
+        SteamReduction::Output rv = SteamReduction(inputVec).calculate();
         SetR("steamUse", rv.steamUse);
         SetR("energyUse", rv.energyUse);
         SetR("energyCost", rv.energyCost);
