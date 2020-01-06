@@ -12,7 +12,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update;
     brew install doxygen;
-    brew install node@12.8.0;
+    brew install node@12;
 
     else
     sudo apt-get update;
@@ -24,6 +24,7 @@ before_install:
 install: travis_retry npm install
 
 script:
+  - node --version
   - cmake ./
   - make
   - ./bin/amo_tools_suite_tests
