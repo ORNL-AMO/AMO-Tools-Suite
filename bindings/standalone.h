@@ -6,6 +6,10 @@
 #include "calculator/util/CHP.h"
 #include "calculator/util/CompressedAir.h"
 #include <string>
+#include <array>
+#include <vector>
+#include <exception>
+#include <iostream>
 
 
 using namespace Nan;
@@ -16,12 +20,31 @@ Local<Object> r;
 
 double Get(std::string const & nm) {
 	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-
-	auto rObj = inp->ToObject()->Get(getName);
+	v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext();
+	Local<Value> rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
 	if (rObj->IsUndefined()) {
 		ThrowTypeError(std::string("Get method in standalone.h: " + nm + " not present in object").c_str());
 	}
-	return rObj->NumberValue();
+	return Nan::To<double>(rObj).FromJust();
+}
+
+std::vector<double> GetVector(const std::string &key, Local<Object> obj)
+{
+	v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext();
+
+	Local<Value> arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>(key).ToLocalChecked()).ToLocalChecked();
+    Local<Array> jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    std::vector<double> array;
+
+    for (unsigned int i = 0; i < jsArray->Length(); i++)
+    {
+        v8::Local<v8::Value> jsElement = jsArray->Get(context, i).ToLocalChecked();
+        double val = Nan::To<double>(jsElement).FromJust();
+        array.push_back(val);
+    }
+    return array;
 }
 
 void SetR(std::string const & nm, double n) {
@@ -31,7 +54,7 @@ void SetR(std::string const & nm, double n) {
 }
 
 NAN_METHOD(CHPcalculator) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
 	unsigned val = static_cast<unsigned>(Get("option"));
@@ -55,12 +78,12 @@ NAN_METHOD(CHPcalculator) {
 }
 
 NAN_METHOD(usableAirCapacity) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	info.GetReturnValue().Set(ReceiverTank::calculateUsableCapacity(Get("tankSize"), Get("airPressureIn"), Get("airPressureOut")));
 }
 
 NAN_METHOD(pneumaticAirRequirement) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
 	int val = Get("pistonType");
@@ -81,7 +104,7 @@ NAN_METHOD(pneumaticAirRequirement) {
 }
 
 NAN_METHOD(receiverTank) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
 	ReceiverTank tank;
 	ReceiverTank::Method method = static_cast<ReceiverTank::Method>(static_cast<unsigned>(Get("method")));
@@ -101,7 +124,7 @@ NAN_METHOD(receiverTank) {
 }
 
 NAN_METHOD(operatingCost) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
 	auto output = Compressor::OperatingCost(Get("motorBhp"), Get("bhpUnloaded"), Get("annualOperatingHours"),
@@ -116,18 +139,11 @@ NAN_METHOD(operatingCost) {
 }
 
 NAN_METHOD(airSystemCapacity) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
-	Local<String> gallonsStr = Nan::New<String>("receiverCapacities").ToLocalChecked();
-	auto array = inp->ToObject()->Get(gallonsStr);
-	v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(array);
-	std::vector<double> receiverCapacitiesGallons(arr->Length());
-	for (std::size_t i = 0; i < arr->Length(); i++) {
-		receiverCapacitiesGallons[i] = arr->Get(i)->NumberValue();
-	}
-
-	auto output = Compressor::AirSystemCapacity
+	std::vector<double> receiverCapacitiesGallons = GetVector("receiverCapacities", inp);
+	Compressor::AirSystemCapacity::Output output = Compressor::AirSystemCapacity
 			(
 					{
 							Get("oneHalf"), Get("threeFourths"), Get("one"), Get("oneAndOneFourth"),
@@ -141,9 +157,9 @@ NAN_METHOD(airSystemCapacity) {
 	SetR("totalReceiverVolume", output.totalReceiverVol);
 	SetR("totalCapacityOfCompressedAirSystem", output.totalCapacityOfCompressedAirSystem);
 
-	Handle<Array> receiverCapacities = Array::New(v8::Isolate::GetCurrent(), output.receiverCapacities.size());
+	v8::Local<v8::Array> receiverCapacities = Nan::New<v8::Array>(output.receiverCapacities.size());
 	for (std::size_t i = 0; i < output.receiverCapacities.size(); i++) {
-		receiverCapacities->Set(i, Nan::New<Number>(output.receiverCapacities[i]));
+		Nan::Set(receiverCapacities, i, Nan::New<Number>(output.receiverCapacities[i]));
 	}
 	Nan::Set(r, Nan::New<String>("receiverCapacities").ToLocalChecked(), receiverCapacities);
 
@@ -159,15 +175,14 @@ NAN_METHOD(airSystemCapacity) {
 	SetR("four", output.pipeLengths.four);
 	SetR("five", output.pipeLengths.five);
 	SetR("six", output.pipeLengths.six);
-
 	info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(airVelocity) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
-	auto output = Compressor::AirVelocity(Get("airFlow"), Get("pipePressure"), Get("atmosphericPressure")).calculate();
+	Compressor::PipeData output = Compressor::AirVelocity(Get("airFlow"), Get("pipePressure"), Get("atmosphericPressure")).calculate();
 
 	SetR("oneHalf", output.oneHalf);
 	SetR("threeFourths", output.threeFourths);
@@ -186,7 +201,7 @@ NAN_METHOD(airVelocity) {
 }
 
 NAN_METHOD(pipeSizing) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
 	auto output = Compressor::PipeSizing(Get("airFlow"), Get("airlinePressure"), Get("designVelocity"), Get("atmosphericPressure")).calculate();
@@ -198,17 +213,18 @@ NAN_METHOD(pipeSizing) {
 }
 
 NAN_METHOD(pneumaticValve) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
 
-	Local<String> flowRateStr = Nan::New<String>("flowRate").ToLocalChecked();
 
-	auto flowRate = inp->ToObject()->Get(flowRateStr);
+	Local<Value> flowRate = inp->Get(context, Nan::New<String>("flowRate").ToLocalChecked()).ToLocalChecked();
 	if (flowRate->IsUndefined()) {
-		auto output = Compressor::PneumaticValve(Get("inletPressure"), Get("outletPressure")).calculate();
+		double output = Compressor::PneumaticValve(Get("inletPressure"), Get("outletPressure")).calculate();
 		SetR("flowRate", output);
 	} else {
-		auto output = Compressor::PneumaticValve(Get("inletPressure"), Get("outletPressure"), Get("flowRate")).calculate();
+		double output = Compressor::PneumaticValve(Get("inletPressure"), Get("outletPressure"), Get("flowRate")).calculate();
 		SetR("flowCoefficient", output);
 	}
 
@@ -216,7 +232,7 @@ NAN_METHOD(pneumaticValve) {
 }
 
 NAN_METHOD(bagMethod) {
-	inp = info[0]->ToObject();
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
 	auto output = BagMethod(Get("operatingTime"), Get("bagFillTime"), Get("heightOfBag"), Get("diameterOfBag"), Get("numberOfUnits")).calculate();

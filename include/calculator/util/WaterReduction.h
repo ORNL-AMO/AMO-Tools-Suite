@@ -105,8 +105,9 @@ public:
 
 
 private:
-    int operatingHours, measurementMethod;
+    int operatingHours;
     double waterCost;
+    int measurementMethod;
     MeteredFlowMethodData meteredFlowMethodData;
     VolumeMeterMethodData volumeMeterMethodData;
     BucketMethodData bucketMethodData;

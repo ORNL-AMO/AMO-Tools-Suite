@@ -58,8 +58,9 @@ struct Motor {
 	{};
 
 	const LineFrequency lineFrequency;
-	const double motorRatedPower, motorRpm, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin;
+	const double motorRatedPower, motorRpm;
 	const Motor::EfficiencyClass efficiencyClass;
+	const double specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin;
 };
 
 namespace Fan {
@@ -68,8 +69,9 @@ namespace Fan {
 				: fanSpeed(fanSpeed), airDensity(airDensity), drive(drive), specifiedEfficiency(specifiedEfficiency)
 		{}
 
-		double fanSpeed, airDensity, specifiedEfficiency;
+		double fanSpeed, airDensity;
 		Motor::Drive drive;
+		double specifiedEfficiency;
 	};
 
 	struct FieldDataModified {
@@ -148,12 +150,13 @@ namespace Pump {
 		 */
 		FieldData(const double flowRate, const double head, const Motor::LoadEstimationMethod loadEstimationMethod, const double motorPower,
 		          const double motorAmps, const double voltage)
-				: loadEstimationMethod(loadEstimationMethod), flowRate(flowRate), head(head), motorPower(motorPower),
+				: flowRate(flowRate), head(head), loadEstimationMethod(loadEstimationMethod),  motorPower(motorPower),
 				  motorAmps(motorAmps), voltage(voltage)
 		{}
 
+		const double flowRate, head;
 		const Motor::LoadEstimationMethod loadEstimationMethod;
-		const double flowRate, head, motorPower, motorAmps, voltage;
+		const double motorPower, motorAmps, voltage;
 	};
 
 	struct Input {
@@ -171,9 +174,9 @@ namespace Pump {
 		Input(const Style style, double pumpEfficiency, const double rpm, const Motor::Drive drive,
 		     const double kviscosity,
 		     const double specificGravity, const int stageCount, const SpecificSpeed speed, double specifiedEfficiency)
-				: style(style), drive(drive), speed(speed), pumpEfficiency(pumpEfficiency), rpm(rpm),
+				: style(style), pumpEfficiency(pumpEfficiency), rpm(rpm), drive(drive),  
 				  kviscosity(kviscosity),
-				  specificGravity(specificGravity), stageCount(stageCount), specifiedEfficiency(specifiedEfficiency) {
+				  specificGravity(specificGravity), stageCount(stageCount), speed(speed), specifiedEfficiency(specifiedEfficiency) {
 					  /**
 					   * Convert percent values to fractions for proper calculation  
 					   */
@@ -184,11 +187,13 @@ namespace Pump {
 				  };
 
 		const Style style;
+		double pumpEfficiency, rpm;
 		const Motor::Drive drive;
-		const SpecificSpeed speed;
-		const double rpm, kviscosity, specificGravity;
-		double pumpEfficiency, specifiedEfficiency;
+		const double kviscosity, specificGravity;
 		const int stageCount;
+		const SpecificSpeed speed;
+		double specifiedEfficiency;
+	
 	};
 }
 

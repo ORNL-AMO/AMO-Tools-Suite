@@ -78,10 +78,11 @@ double CurveFitVal::calculate() const {
      * Array to store the coefficients of the curve.
      */
     std::vector<double> coeff(pdegree + 1, 0);
-    for (auto i = static_cast<int>(pdegreeplus - 1); i >= 0; i--) {
+    for (int i = static_cast<int>(pdegreeplus - 1); i >= 0; i--) {
         coeff[i] = augMatrix[i][pdegreeplus];
         for (std::size_t j = 0; j < pdegreeplus; j++) {
-            if (j == i) continue;
+            int k = static_cast<int>(j);
+            if (k == i) continue;
             coeff[i] = coeff[i] - augMatrix[i][j] * coeff[j];
         }
         coeff[i] = coeff[i] / augMatrix[i][i];
@@ -91,7 +92,7 @@ double CurveFitVal::calculate() const {
      * Returning the value instead of the coefficients
      */
     double curveFitVal = 0;
-    for (int i = 0; i < pdegreeplus; ++i) {
+    for (std::size_t i = 0; i < pdegreeplus; ++i) {
         curveFitVal += coeff[i] * std::pow(loadFactor, i);
     }
     return curveFitVal;

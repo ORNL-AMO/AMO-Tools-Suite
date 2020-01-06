@@ -30,7 +30,9 @@ Local <Value> getValue(std::string const &name, Local <Object> sourceObject) {
     }
 
     Local <String> localName = Nan::New<String>(name).ToLocalChecked();
-    Local <Value> value = sourceObject->Get(localName);
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local <Value> value = sourceObject->Get(context, localName).ToLocalChecked();
     if (value->IsUndefined()) {
         auto msg = std::string("NanDataConverters: getValue: field '" + name + "' not present in sourceObject").c_str();
         std::cout << "getValue: " << msg << std::endl;
@@ -49,7 +51,7 @@ Local <Value> getValue(std::string const &name, Local <Object> sourceObject) {
 Local <Object> getObject(std::string const &name, Local <Object> sourceObject) {
     Local <Value> value = getValue(name, sourceObject);
 
-    return value->IsNull() ? Local<Object>() : value->ToObject();
+    return value->IsNull() ? Local<Object>() : Nan::To<Object>(value).ToLocalChecked();
 }
 
 /**
@@ -68,9 +70,10 @@ Local <Object> getObject(std::string const &name) {
  * @return The value as a string.
  */
 std::string getString(std::string const &name, Local <Object> sourceObject) {
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
     Local <Value> value = getValue(name, sourceObject);
-    Local <String> localString = value->ToString();
-    String::Utf8Value utf8String(localString);
+    Local <String> localString = value->ToString(Nan::GetCurrentContext()).FromMaybe(v8::Local<v8::String>());
+    String::Utf8Value utf8String(isolate, localString);
     return std::string(*utf8String);
 }
 
@@ -91,7 +94,7 @@ std::string getString(std::string const &name) {
  */
 double getDouble(std::string const &name, Local <Object> sourceObject) {
     Local <Value> value = getValue(name, sourceObject);
-    return value->NumberValue();
+    return Nan::To<double>(value).FromJust();
 }
 
 /**
@@ -111,7 +114,9 @@ double getDouble(std::string const &name) {
  */
 bool getBool(std::string const &name, Local <Object> sourceObject) {
     Local <Value> value = getValue(name, sourceObject);
-    return value->BooleanValue();
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+   	v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    return value->BooleanValue(context).ToChecked();
 }
 
 /**
@@ -171,7 +176,7 @@ bool getBoolFromString(const std::string &name) {
  */
 int getInteger(std::string const &name, Local <Object> sourceObject) {
     Local <Value> value = getValue(name, sourceObject);
-    return value->IntegerValue();
+    return Nan::To<int>(value).FromJust();
 }
 
 /**

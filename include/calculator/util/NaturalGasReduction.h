@@ -122,12 +122,14 @@ public:
   WaterMassFlowData getWaterMassFlowData() const { return waterMassFlowData; }
 
 private:
-  int operatingHours, measurementMethod, units;
+  int operatingHours;
   double fuelCost;
+  int measurementMethod;
   FlowMeterMethodData flowMeterMethodData;
   NaturalGasOtherMethodData otherMethodData;
   AirMassFlowData airMassFlowData;
   WaterMassFlowData waterMassFlowData;
+  int units;
 };
 
 class NaturalGasReduction
@@ -135,11 +137,11 @@ class NaturalGasReduction
 public:
   struct Output
   {
-    Output(double energyUse, double energyCost, double annualEnergySavings, double costSavings, double heatFlow, double totalFlow)
-        : energyUse(energyUse), energyCost(energyCost), annualEnergySavings(annualEnergySavings), costSavings(costSavings), heatFlow(heatFlow), totalFlow(totalFlow) {}
+    Output(double energyUse, double energyCost, double heatFlow, double totalFlow)
+        : energyUse(energyUse), energyCost(energyCost), heatFlow(heatFlow), totalFlow(totalFlow) {}
 
     Output() = default;
-    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, heatFlow = 0, totalFlow = 0;
+    double energyUse = 0, energyCost = 0, heatFlow = 0, totalFlow = 0;
   };
 
   NaturalGasReduction(
