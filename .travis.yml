@@ -12,7 +12,9 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update;
     brew install doxygen;
+    brew unlink node;
     brew install node@12;
+    brew link node@12;
 
     else
     sudo apt-get update;
