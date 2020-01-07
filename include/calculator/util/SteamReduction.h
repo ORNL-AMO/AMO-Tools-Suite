@@ -7,7 +7,6 @@
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 
-
 class SteamFlowMeterMethodData
 {
 public:
@@ -60,9 +59,9 @@ public:
 
 private:
   bool isNameplate;
-  double inletTemperature, outletTemperature;
   SteamMassFlowMeasuredData massFlowMeasuredData;
   SteamMassFlowNameplateData massFlowNameplateData;
+  double inletTemperature, outletTemperature;
 };
 
 class SteamOtherMethodData
@@ -99,12 +98,15 @@ public:
   SteamOtherMethodData getOtherMethodData() const { return otherMethodData; }
 
 private:
-  int hoursPerYear, utilityType, measurementMethod, units;
-  double utilityCost, systemEfficiency, pressure;
+  int hoursPerYear, utilityType;
+  double utilityCost;
+  int measurementMethod;
+  double systemEfficiency, pressure;
   SteamFlowMeterMethodData flowMeterMethodData;
   SteamMassFlowMethodData airMassFlowMethodData;
   SteamMassFlowMethodData waterMassFlowMethodData;
   SteamOtherMethodData otherMethodData;
+  int units;
 };
 
 class SteamReduction

@@ -32,7 +32,7 @@ class BagMethodData
     void setFillTime(double fillTime);
 
   private:
-    double height, fillTime, diameter;
+    double height, diameter, fillTime;
 };
 
 class PressureMethodData
@@ -105,13 +105,15 @@ class CompressedAirReductionInput
     CompressorElectricityData getCompressorElectricityData() const { return compressorElectricityData; }
 
   private:
-    int hoursPerYear, utilityType, measurementMethod, units;
+    int hoursPerYear, utilityType;
     double utilityCost;
+    int measurementMethod;
     CompressedAirFlowMeterMethodData flowMeterMethodData;
     BagMethodData bagMethodData;
     PressureMethodData pressureMethodData;
     CompressedAirOtherMethodData otherMethodData;
     CompressorElectricityData compressorElectricityData;
+    int units;
 };
 
 class CompressedAirReduction

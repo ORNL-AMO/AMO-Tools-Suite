@@ -3,11 +3,11 @@
 #include "calculator/util/ElectricityReduction.h"
 
 ElectricityReduction::Output ElectricityReduction::calculate() {
-    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, power = 0;
+    double energyUse = 0, energyCost = 0, power = 0;
 
     // loop through all supplied inputs
     for (auto & electricityReductionInput: electricityReductionInputVec) {
-        double tmpTotalPower, tmpEnergyUse, tmpEnergyCost, tmpAnnualEnergySavings, tmpCostSavings;
+        double tmpTotalPower, tmpEnergyUse, tmpEnergyCost;
 
         //multimeter data
         if (electricityReductionInput.getMeasurementMethod() == 0) {
@@ -53,11 +53,11 @@ ElectricityReduction::Output ElectricityReduction::calculate() {
     }
 
     // output = Output(energyUse, energyCost, annualEnergySavings, costSavings);
-    return ElectricityReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings, power);
+    return ElectricityReduction::Output(energyUse, energyCost, power);
 }
 
 void ElectricityReduction::setElectricityReductionInputVec(std::vector<ElectricityReductionInput> & electricityReductionInput) {
-    this->electricityReductionInputVec = std::move(electricityReductionInputVec);
+    this->electricityReductionInputVec = std::move(electricityReductionInput);
 }
 
 
