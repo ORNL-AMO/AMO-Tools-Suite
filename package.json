@@ -23,7 +23,8 @@
   },
   "scripts": {
     "test": "tap debug tests/js/*.js",
-    "at": "tap debug tests/at/js/*.js"
+    "at": "tap debug tests/at/js/*.js",
+    "install": "node-gyp rebuild"
   },
   "repository": {
     "type": "git",
@@ -34,5 +35,6 @@
   "bugs": {
     "url": "https://github.com/ORNL-AMO/AMO-Tools-Suite/issues"
   },
-  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme"
+  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme",
+  "main": "index.js"
 }
