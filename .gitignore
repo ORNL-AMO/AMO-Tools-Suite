@@ -894,3 +894,11 @@ flycheck_*.el
 
 ## CPack Packages
 _CPack_Packages/
+
+## Win32
+Win32/
+
+## Windows Build Artifacts
+amo_tools_suite_main.dir/
+amo_tools_suite_tests.dir/
+amo_tools_suite.dir/
