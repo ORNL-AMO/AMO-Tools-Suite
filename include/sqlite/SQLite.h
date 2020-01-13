@@ -1,6 +1,6 @@
 #ifndef AMO_LIBRARY_SQLITEWRAPPER_H
 #define AMO_LIBRARY_SQLITEWRAPPER_H
-
+ 
 #include <sqlite3.h>
 #include <memory>
 #include <string>
