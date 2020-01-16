@@ -194,7 +194,8 @@ set(SOURCE_FILES
         src/calculator/util/insulation/services/RayleighNumber.cpp
         src/calculator/util/insulation/services/ReynoldsNumber.cpp
         src/calculator/util/insulation/services/ThermalResistance.cpp
-        src/calculator/util/SteamReduction.cpp)
+        src/calculator/util/SteamReduction.cpp
+        src/calculator/pump/PumpData.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -372,7 +373,11 @@ set(INCLUDE_FILES
         include/fans/FanEnergyIndex.h
         include/fans/OptimalFanEfficiency.h
         include/ssmt/HeatExchanger.h
+        include/calculator/pump/PumpData.h
+        include/sqlite/PumpData.h
         )
+
+# TODO: Add unit test for Pump Table
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
