@@ -710,26 +710,6 @@ test('Tank Insulation Reduction - Insulated 2', function (t) {
     t.plan(3);
     t.type(bindings.tankInsulationReduction, 'function');
 
-    // var inp = {
-    //     operatingHours: 8760,
-    //     tankHeight: 50,
-    //     tankDiameter: 1,
-    //     tankThickness: 0.25,
-    //     tankEmissivity: 0.3,
-    //     tankConductivity: 9.25,
-    //     tankTemperature: 300,
-    //     ambientTemperature: 80,
-    //     systemEfficiency: 90,
-    //     insulationThickness: 0.5,
-    //     insulationConductivity: 0.0231,
-    //     jacketEmissivity: 0.1,
-    // };
-    // var res = bindings.tankInsulationReduction(inp);
-    // t.equal(rnd(res.heatLoss), rnd(29.7), 'res.heatLoss is ' + res.heatLoss);
-    // t.equal(rnd(res.annualHeatLoss), rnd(532.5), 'res.annualHeatLoss is ' + res.annualHeatLoss);
-
-
-
     var inp = {
         operatingHours: 8760,
         tankHeight: 10,
