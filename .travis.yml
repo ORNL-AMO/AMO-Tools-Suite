@@ -23,6 +23,7 @@ before_install:
 install: travis_retry npm install
 
 script:
+  - node -v
   - cmake ./
   - make
   - ./bin/amo_tools_suite_tests
