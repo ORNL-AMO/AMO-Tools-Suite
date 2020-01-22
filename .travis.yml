@@ -12,6 +12,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update;
     brew install doxygen;
+    nvm install 10.11.0;
     nvm use 10.11.0;
 
     else
