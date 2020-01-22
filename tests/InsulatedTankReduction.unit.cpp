@@ -18,7 +18,7 @@ TEST_CASE("Insulated Tank", "[InsulatedTankReduction][util]")
     double ambientTemperature = 529.67;
     double systemEfficiency = 0.9;
     double insulationThickness = 0.5;
-    double insulationConductivity = 0.0190707;
+    double insulationConductivity = 0.0191;
     double jacketEmissivity = 0.9;
 
     InsulatedTankInput input(
@@ -38,7 +38,7 @@ TEST_CASE("Insulated Tank", "[InsulatedTankReduction][util]")
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
     CHECK(output.getHeatLoss() == Approx(0.0444151747));
-    CHECK(output.getAnnualHeatLoss() == Approx(389.0769300822));
+    CHECK(output.getAnnualHeatLoss() == Approx(43.278176));
 }
 
 TEST_CASE("Insulated Tank 2", "[InsulatedTankReduction][util]")
@@ -72,8 +72,8 @@ TEST_CASE("Insulated Tank 2", "[InsulatedTankReduction][util]")
 
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
-    CHECK(output.getHeatLoss() == Approx(0.0444151747));
-    CHECK(output.getAnnualHeatLoss() == Approx(389.0769300822));
+    CHECK(output.getHeatLoss() == Approx(29.7));
+    CHECK(output.getAnnualHeatLoss() == Approx(532.5));
 }
 
 
