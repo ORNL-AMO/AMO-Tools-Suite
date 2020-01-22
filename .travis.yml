@@ -13,6 +13,7 @@ before_install:
     brew update;
     brew install doxygen;
     brew install node@10;
+    brew unlink node;
     brew link node@10;
 
     else
