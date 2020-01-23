@@ -12,7 +12,7 @@ InsulatedTankOutput InsulatedTankCalculator::calculate()
     this->validateInput(input);
 
     // if -1 or 0, then no insulation was provided
-    if (this->_insulatedTankInput.getInsulationThickness() == -1 || this->_insulatedTankInput.getInsulationThickness() == 0)
+    if (this->_insulatedTankInput.getInsulationThickness() == -1 || this->_insulatedTankInput.getInsulationThickness() <= (double)0)
     {
         return InsulatedTankCalculator::calculateNoInsulation(input);
     }
@@ -57,13 +57,13 @@ InsulatedTankOutput InsulatedTankCalculator::calculateInsulation(InsulatedTankIn
     naturalConvectionCoefficient = 0.125 * std::pow(airProperties.getRayleigh(), 1.0 / 3.0) * airProperties.getConductivity() / input.getTankDiameter();
     innerTankRadius = input.getTankDiameter() / 2.0;
     outerTankRadius = innerTankRadius + input.getTankThickness();
-    outerInsulationRadius = outerTankRadius + input.getTankThickness();
+    outerInsulationRadius = outerTankRadius + input.getInsulationThickness();
     tankArea = input.getTankDiameter() * input.getTankHeight() * M_PI;
     insulationOverallCoefficient = 1.0 / (innerTankRadius / outerInsulationRadius * 1.0 / naturalConvectionCoefficient + innerTankRadius / input.getInsulationConductivity() * std::log(outerInsulationRadius / outerTankRadius) + innerTankRadius / input.getTankConductivity() * std::log(outerTankRadius / innerTankRadius) + 1.0 / 10.0);
     insulationConvCondHeatLoss = insulationOverallCoefficient * tankArea * (input.getTankTemperature() - input.getAmbientTemperature()) / 1e5;
     insulationRadiativeHeatLoss = 0.1713e-8 * input.getJacketEmissivity() * (std::pow(input.getTankTemperature(), 4) - std::pow(input.getAmbientTemperature(), 4)) / 1e5;
     insulationHeatLoss = insulationConvCondHeatLoss + insulationRadiativeHeatLoss;
-    annualHeatLoss = insulationHeatLoss * (double)input.getOperatingHours();
+    annualHeatLoss = (insulationHeatLoss * (double)input.getOperatingHours() / 10.0) / input.getSystemEfficiency();
     return InsulatedTankOutput(insulationHeatLoss, annualHeatLoss);
 }
 
@@ -94,7 +94,7 @@ InsulatedTankOutput InsulatedTankCalculator::calculateNoInsulation(InsulatedTank
     bareConvCondHeatLoss = bareOverallCoefficient * tankArea * (input.getTankTemperature() - input.getAmbientTemperature()) / 1e5;
     bareRadiativeHeatLoss = 0.1713e-8 * input.getTankEmissivity() * (std::pow(input.getTankTemperature(), 4) - std::pow(input.getAmbientTemperature(), 4)) / 1e5;
     bareHeatLoss = bareConvCondHeatLoss + bareRadiativeHeatLoss;
-    annualHeatLoss = bareHeatLoss * (double)input.getOperatingHours();
+    annualHeatLoss = (bareHeatLoss * (double)input.getOperatingHours() / 10.0) / input.getSystemEfficiency();
     return InsulatedTankOutput(bareHeatLoss, annualHeatLoss);
 }
 

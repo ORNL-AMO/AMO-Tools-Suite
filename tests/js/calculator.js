@@ -698,12 +698,35 @@ test('Tank Insulation Reduction - Insulated', function (t) {
         ambientTemperature: 529.67,
         systemEfficiency: 90,
         insulationThickness: 0.5,
-        insulationConductivity: 0.0190707,
-        jacketEmissivity: 0.9,
+        insulationConductivity: 0.0191,
+        jacketEmissivity: 0.9
     };
     var res = bindings.tankInsulationReduction(inp);
-    t.equal(rnd(res.heatLoss), rnd(0.0444151747), 'res.heatLength is ' + res.heatLength);
-    t.equal(rnd(res.annualHeatLoss), rnd(389.0769300822), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+    t.equal(rnd(res.heatLoss), rnd(0.044464), 'res.heatLoss is ' + res.heatLoss);
+    t.equal(rnd(res.annualHeatLoss), rnd(43.278176), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+});
+
+test('Tank Insulation Reduction - Insulated 2', function (t) {
+    t.plan(3);
+    t.type(bindings.tankInsulationReduction, 'function');
+
+    var inp = {
+        operatingHours: 8760,
+        tankHeight: 50,
+        tankDiameter: 1,
+        tankThickness: 0.25,
+        tankEmissivity: 0.3,
+        tankConductivity: 9.25,
+        tankTemperature: 759.67,
+        ambientTemperature: 539.67,
+        systemEfficiency: 90,
+        insulationThickness: 0.5,
+        insulationConductivity: 0.0231,
+        jacketEmissivity: 0.1
+    };
+    var res = bindings.tankInsulationReduction(inp);
+    t.equal(rnd(res.heatLoss), rnd(0.030515), 'res.heatLoss is ' + res.heatLoss);
+    t.equal(rnd(res.annualHeatLoss), rnd(29.701354), 'res.annualHeatLoss is ' + res.annualHeatLoss);
 });
 
 test('Tank Insulation Reduction - No Insulation', function (t) {
@@ -725,8 +748,8 @@ test('Tank Insulation Reduction - No Insulation', function (t) {
         jacketEmissivity: 0.9,
     };
     var res = bindings.tankInsulationReduction(inp);
-    t.equal(rnd(res.heatLoss), rnd(1.1112001223), 'res.heatLength is ' + res.heatLength);
-    t.equal(rnd(res.annualHeatLoss), rnd(9734.113072), 'res.annualHeatLoss is ' + res.annualHeatLoss);
+    t.equal(rnd(res.heatLoss), rnd(1.1112001223), 'res.heatLoss is ' + res.heatLoss);
+    t.equal(rnd(res.annualHeatLoss), rnd(1081.568119), 'res.annualHeatLoss is ' + res.annualHeatLoss);
 });
 
 
