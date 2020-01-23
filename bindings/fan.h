@@ -10,6 +10,7 @@
 #include "results/Results.h"
 #include "results/InputData.h"
 #include "fans/CompressibilityFactor.h"
+#include "calculator/util/Conversion.h"
 
 #include "calculator/pump/OptimalPumpShaftPower.h"
 #include "calculator/motor/OptimalMotorShaftPower.h"
