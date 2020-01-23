@@ -23,8 +23,8 @@ TEST_CASE("Natural Gas Reduction Flow Meter Method", "[NaturalGasReduction][Util
     auto naturalGasReduction = NaturalGasReduction(naturalGasReductionInputVec);
     auto testOutput = naturalGasReduction.calculate();
 
-    CHECK(testOutput.energyUse == Approx(88992.00));
-    CHECK(testOutput.energyCost == Approx(10679.04));
+    CHECK(testOutput.energyUse == Approx(88992000.00));
+    CHECK(testOutput.energyCost == Approx(10679040.00));
     CHECK(testOutput.heatFlow == Approx(0));
     CHECK(testOutput.totalFlow == Approx(10.0));
 }
@@ -221,8 +221,8 @@ TEST_CASE("Natural Gas Reduction All Methods", "[NaturalGasReduction][Util]")
     auto naturalGasReduction = NaturalGasReduction(naturalGasReductionInputVec);
     auto testOutput = naturalGasReduction.calculate();
 
-    CHECK(testOutput.energyUse == Approx(382446.70976));
-    CHECK(testOutput.energyCost == Approx(45893.60517));
+    CHECK(testOutput.energyUse == Approx(89285454.70976));
+    CHECK(testOutput.energyCost == Approx(10714254.56517));
     CHECK(testOutput.heatFlow == Approx(16.866592));
     CHECK(testOutput.totalFlow == Approx(20870));
 }
