@@ -229,7 +229,8 @@ ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
         multimeterData,
         nameplateData,
         powerMeterData,
-        otherMethodData
+        otherMethodData,
+        units
     };
 }
 
