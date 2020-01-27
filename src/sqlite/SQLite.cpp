@@ -828,6 +828,47 @@ void SQLite::create_select_stmt()
            WHERE sid = 1)";
 
     prepare_statement(m_wall_losses_surface_select_custom_stmt, select_custom_wall_losses_surface);
+
+    std::string const select_pump_data =
+            R"(SELECT id, sid, manufacturer, model, type, serialNumber, status, pumpType, radialBearingType, thrustBearingType,
+                      shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass,
+                      flangeConnectionSize, numShafts, speed, numStages, yearlyOperatingHours, yearInstalled,
+                      finalMotorRpm, inletDiameter, weight, outletDiameter, percentageOfSchedule, dailyPumpCapacity,
+                      measuredPumpCapacity, pumpPerformance, staticSuctionHead, staticDischargeHead, fluidDensity,
+                      lengthOfDischargePipe, pipeDesignFrictionLosses, maxWorkingPressure, maxAmbientTemperature,
+                      maxSuctionLift, displacement, startingTorque, ratedSpeed, shaftDiameter, impellerDiameter,
+                      efficiency, output60Hz, minFlowSize, pumpSize, outOfService
+            FROM pump_data)";
+
+    prepare_statement(m_pump_data_select_stmt, select_pump_data);
+
+    std::string const select_single_pump_data =
+            R"(SELECT id, sid, manufacturer, model, type, serialNumber, status, pumpType, radialBearingType, thrustBearingType,
+                      shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass,
+                      flangeConnectionSize, numShafts, speed, numStages, yearlyOperatingHours, yearInstalled,
+                      finalMotorRpm, inletDiameter, weight, outletDiameter, percentageOfSchedule, dailyPumpCapacity,
+                      measuredPumpCapacity, pumpPerformance, staticSuctionHead, staticDischargeHead, fluidDensity,
+                      lengthOfDischargePipe, pipeDesignFrictionLosses, maxWorkingPressure, maxAmbientTemperature,
+                      maxSuctionLift, displacement, startingTorque, ratedSpeed, shaftDiameter, impellerDiameter,
+                      efficiency, output60Hz, minFlowSize, pumpSize, outOfService
+            FROM pump_data
+            WHERE id = ?)";
+
+    prepare_statement(m_pump_data_select_single_stmt, select_single_pump_data);
+
+    std::string const select_custom_pump_data =
+            R"(SELECT id, sid, manufacturer, model, type, serialNumber, status, pumpType, radialBearingType, thrustBearingType,
+                      shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass,
+                      flangeConnectionSize, numShafts, speed, numStages, yearlyOperatingHours, yearInstalled,
+                      finalMotorRpm, inletDiameter, weight, outletDiameter, percentageOfSchedule, dailyPumpCapacity,
+                      measuredPumpCapacity, pumpPerformance, staticSuctionHead, staticDischargeHead, fluidDensity,
+                      lengthOfDischargePipe, pipeDesignFrictionLosses, maxWorkingPressure, maxAmbientTemperature,
+                      maxSuctionLift, displacement, startingTorque, ratedSpeed, shaftDiameter, impellerDiameter,
+                      efficiency, output60Hz, minFlowSize, pumpSize, outOfService
+            FROM pump_data
+            WHERE sid = 1)";
+
+    prepare_statement(m_pump_data_select_custom_stmt, select_custom_pump_data);
 }
 
 void SQLite::create_update_and_delete_stmt() {
@@ -916,6 +957,25 @@ void SQLite::create_update_and_delete_stmt() {
                WHERE id=? AND sid = 1)";
 
     prepare_statement(m_wall_losses_surface_update_stmt, update_wall_losses_surface);
+
+    std::string const delete_pump_data =
+            R"(DELETE from pump_data where id=? and sid=1)";
+
+    prepare_statement(m_pump_data_delete_stmt, delete_pump_data);
+
+    std::string const update_pump_data =
+            R"(UPDATE pump_data
+               SET manufacturer=?, model=?, type=?, serialNumber=?, status=?, pumpType=?, radialBearingType=?, thrustBearingType=?,
+               shaftOrientation=?, shaftSealType=?, fluidType=?, priority=?, driveType=?, flangeConnectionClass=?,
+               flangeConnectionSize=?, numShafts=?, speed=?, numStages=?, yearlyOperatingHours=?, yearInstalled=?,
+               finalMotorRpm=?, inletDiameter=?, weight=?, outletDiameter=?, percentageOfSchedule=?, dailyPumpCapacity=?,
+               measuredPumpCapacity=?, pumpPerformance=?, staticSuctionHead=?, staticDischargeHead=?, fluidDensity=?,
+               lengthOfDischargePipe=?, pipeDesignFrictionLosses=?, maxWorkingPressure=?, maxAmbientTemperature=?,
+               maxSuctionLift=?, displacement=?, startingTorque=?, ratedSpeed=?, shaftDiameter=?, impellerDiameter=?,
+               efficiency=?, output60Hz=?, minFlowSize=?, pumpSize=?, outOfService=?
+               WHERE id=? AND sid = 1)";
+
+    prepare_statement(m_pump_data_update_stmt, update_pump_data);
 }
 
 void SQLite::create_insert_stmt() {
@@ -964,6 +1024,21 @@ void SQLite::create_insert_stmt() {
            VALUES (?,?,?))";
 
     prepare_statement(m_wall_losses_surface_insert_stmt, wall_losses_surface_insert_sql);
+
+    const std::string pump_data_insert_sql =
+            R"(INSERT INTO pump_data(sid, manufacturer, model, type, serialNumber, status, pumpType, radialBearingType, thrustBearingType,
+                     shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass,
+                     flangeConnectionSize, numShafts, speed, numStages, yearlyOperatingHours, yearInstalled,
+                     finalMotorRpm, inletDiameter, weight, outletDiameter, percentageOfSchedule, dailyPumpCapacity,
+                     measuredPumpCapacity, pumpPerformance, staticSuctionHead, staticDischargeHead, fluidDensity,
+                     lengthOfDischargePipe, pipeDesignFrictionLosses, maxWorkingPressure, maxAmbientTemperature,
+                     maxSuctionLift, displacement, startingTorque, ratedSpeed, shaftDiameter, impellerDiameter,
+                     efficiency, output60Hz, minFlowSize, pumpSize, outOfService)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
+
+    // 47 entries
+
+    prepare_statement(m_pump_data_insert_stmt, pump_data_insert_sql);
 }
 
 
@@ -1073,6 +1148,68 @@ void SQLite::create_tables()
       );)";
 
     execute_command(wall_losses_surface_table_sql);
+
+    const std::string pump_table_sql =
+            R"(CREATE TABLE IF NOT EXISTS pump_data (
+             id integer PRIMARY KEY AUTOINCREMENT,
+             sid integer NOT NULL,
+             manufacturer text NOT NULL,
+             model text NOT NULL,
+             type text NOT NULL,
+             serialNumber text NOT NULL,
+             status text NOT NULL,
+             pumpType text NOT NULL,
+             radialBearingType text NOT NULL,
+             thrustBearingType text NOT NULL,
+             shaftOrientation text NOT NULL,
+             shaftSealType text NOT NULL,
+             fluidType text NOT NULL,
+             priority text NOT NULL,
+             driveType text NOT NULL,
+             flangeConnectionClass text NOT NULL,
+             flangeConnectionSize text NOT NULL,
+             numShafts integer NOT NULL,
+             speed integer NOT NULL,
+             numStages integer NOT NULL,
+             yearlyOperatingHours integer NOT NULL,
+             yearInstalled integer NOT NULL,
+             finalMotorRpm integer NOT NULL,
+             inletDiameter real NOT NULL,
+             weight real NOT NULL,
+             outletDiameter real NOT NULL,
+             percentageOfSchedule real NOT NULL,
+             dailyPumpCapacity real NOT NULL,
+             measuredPumpCapacity real NOT NULL,
+             pumpPerformance real NOT NULL,
+             staticSuctionHead real NOT NULL,
+             staticDischargeHead real NOT NULL,
+             fluidDensity real NOT NULL,
+             lengthOfDischargePipe real NOT NULL,
+             pipeDesignFrictionLosses real NOT NULL,
+             maxWorkingPressure real NOT NULL,
+             maxAmbientTemperature real NOT NULL,
+             maxSuctionLift real NOT NULL,
+             displacement real NOT NULL,
+             startingTorque real NOT NULL,
+             ratedSpeed real NOT NULL,
+             shaftDiameter real NOT NULL,
+             impellerDiameter real NOT NULL,
+             efficiency real NOT NULL,
+             output60Hz real NOT NULL,
+             minFlowSize real NOT NULL,
+             pumpSize real NOT NULL,
+             outOfService integer NOT NULL,
+             UNIQUE (manufacturer, model, type, serialNumber, status, pumpType, radialBearingType, thrustBearingType,
+                     shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass,
+                     flangeConnectionSize, numShafts, speed, numStages, yearlyOperatingHours, yearInstalled,
+                     finalMotorRpm, inletDiameter, weight, outletDiameter, percentageOfSchedule, dailyPumpCapacity,
+                     measuredPumpCapacity, pumpPerformance, staticSuctionHead, staticDischargeHead, fluidDensity,
+                     lengthOfDischargePipe, pipeDesignFrictionLosses, maxWorkingPressure, maxAmbientTemperature,
+                     maxSuctionLift, displacement, startingTorque, ratedSpeed, shaftDiameter, impellerDiameter,
+                     efficiency, output60Hz, minFlowSize, pumpSize, outOfService)
+      );)";
+
+    execute_command(pump_table_sql);
 }
 
 void SQLite::insert_default_data()
@@ -1098,6 +1235,15 @@ void SQLite::insert_default_data()
     for( auto const & surface : get_default_wall_losses_surface() ) {
         insert_wall_losses_surface(surface);
     }
+    /*
+    for( auto const & pump : get_default_pump_data() ) {
+        insert_pump_data(pump);
+        //auto testing = getPumpDataById(1);
+        //auto hello = 0;
+
+    }
+    */
+
 }
 
 bool SQLite::insert_solid_load_charge_materials(SolidLoadChargeMaterial const & material)
