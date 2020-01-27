@@ -17,6 +17,8 @@
 #include <stdexcept>
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <sqlite/SolidLiquidFlueGasMaterialData.h>
+//#include <sqlite/MotorData.h>
+//#include <sqlite/PumpData.h>
 
 SQLite::SQLite(std::string const & db_name, bool init_db)
         :

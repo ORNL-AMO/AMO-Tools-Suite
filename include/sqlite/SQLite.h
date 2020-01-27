@@ -7,6 +7,8 @@
 #include <vector>
 #include <functional>
 #include <calculator/losses/GasFlueGasMaterial.h>
+#include <calculator/motor/MotorData.h>
+#include <calculator/pump/PumpData.h>
 
 class SolidLoadChargeMaterial;
 class LiquidLoadChargeMaterial;
@@ -16,6 +18,7 @@ class SolidLiquidFlueGasMaterial;
 class Atmosphere;
 class WallLosses;
 class MotorData;
+class PumpData;
 
 class SQLiteWrapper
 {
