@@ -11,6 +11,7 @@
 #include <sqlite/GasFlueGasMaterialData.h>
 #include <sqlite/AtmosphereSpecificHeatData.h>
 #include <sqlite/WallLossesSurfaceData.h>
+#include <calculator/motor/MotorData.h>
 
 #include <fstream>
 #include <iostream>
