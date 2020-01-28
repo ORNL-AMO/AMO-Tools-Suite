@@ -1,7 +1,6 @@
 // #ifndef AMO_TOOLS_SUITE_CALCULATOR_H
 // #define AMO_TOOLS_SUITE_CALCULATOR_H
 
-// #include "NanDataConverters.h"
 #include <nan.h>
 #include <node.h>
 #include <string>
@@ -9,6 +8,7 @@
 #include <array>
 #include <cmath>
 #include <vector>
+#include <iostream>
 #include "calculator/util/ElectricityReduction.h"
 #include "calculator/util/NaturalGasReduction.h"
 #include "calculator/util/CompressedAirReduction.h"
@@ -21,10 +21,10 @@
 #include "calculator/util/insulation/tanks/InsulatedTankCalculator.h"
 #include "calculator/util/insulation/tanks/InsulatedTankOutput.h"
 
-#include <iostream>
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 #include "calculator/util/SteamReduction.h"
+#include "calculator/util/Conversion.h"
 
 using namespace Nan;
 using namespace v8;
@@ -146,11 +146,16 @@ MultimeterData getMultimeterData(Local<Object> obj)
     {
         ThrowTypeError(std::string("ElectricityReduction: getMultimeterData method in calculator.h: multimeterData not present in object").c_str());
     }
+    int numberOfPhases = static_cast<int>(GetDouble("numberOfPhases", multimeterDataV8));
+    double supplyVoltage = GetDouble("supplyVoltage", multimeterDataV8);
+    double averageCurrent = GetDouble("averageCurrent", multimeterDataV8);
+    double powerFactor = GetDouble("powerFactor", multimeterDataV8);
     return {
-        static_cast<int>(GetDouble("numberOfPhases", multimeterDataV8)),
-        GetDouble("supplyVoltage", multimeterDataV8),
-        GetDouble("averageCurrent", multimeterDataV8),
-        GetDouble("powerFactor", multimeterDataV8)};
+        numberOfPhases,
+        supplyVoltage,
+        averageCurrent,
+        powerFactor
+    };
 }
 
 NameplateData getNameplateData(Local<Object> obj)
@@ -163,13 +168,20 @@ NameplateData getNameplateData(Local<Object> obj)
     {
         ThrowTypeError(std::string("ElectricityReduction: getNameplateData method in calculator.h: nameplateData not present in object").c_str());
     }
+    double ratedMotorPower = GetDouble("ratedMotorPower", nameplateDataV8);
+    bool variableSpeedMotor = GetBool("variableSpeedMotor", nameplateDataV8);
+    double operationalFrequency = GetDouble("operationalFrequency", nameplateDataV8);
+    double lineFrequency = GetDouble("lineFrequency", nameplateDataV8);
+    double motorAndDriveEfficiency = GetDouble("motorAndDriveEfficiency", nameplateDataV8);
+    double loadFactor = GetDouble("loadFactor", nameplateDataV8);
     return {
-        GetDouble("ratedMotorPower", nameplateDataV8),
-        GetBool("variableSpeedMotor", nameplateDataV8),
-        GetDouble("operationalFrequency", nameplateDataV8),
-        GetDouble("lineFrequency", nameplateDataV8),
-        GetDouble("motorAndDriveEfficiency", nameplateDataV8),
-        GetDouble("loadFactor", nameplateDataV8)};
+        ratedMotorPower,
+        variableSpeedMotor,
+        operationalFrequency,
+        lineFrequency,
+        motorAndDriveEfficiency,
+        loadFactor
+    };
 }
 
 PowerMeterData getPowerMeterData(Local<Object> obj)
@@ -182,8 +194,8 @@ PowerMeterData getPowerMeterData(Local<Object> obj)
     {
         ThrowTypeError(std::string("ElectricityReduction: getPowerMeterData method in calculator.h: powerMeterData not present in object").c_str());
     }
-    return {
-        GetDouble("power", powerMeterDataV8)};
+    double power = GetDouble("power", powerMeterDataV8);
+    return {power};
 }
 
 OtherMethodData getOtherMethodData(Local<Object> obj)
@@ -196,21 +208,30 @@ OtherMethodData getOtherMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("ElectricityReduction: getOtherMethodData method in calculator.h: otherMethodData not present in object").c_str());
     }
-    return {
-        GetDouble("energy", otherMethodDataV8)};
+    double energy = GetDouble("energy", otherMethodDataV8);
+    return {energy};
 }
 
 ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
 {
+    int operatingHours = static_cast<int>(GetDouble("operatingHours", obj));
+    double electricityCost = GetDouble("electricityCost", obj);
+    int measurementMethod = static_cast<int>(GetDouble("measurementMethod", obj));
+    MultimeterData multimeterData = getMultimeterData(obj);
+    NameplateData nameplateData = getNameplateData(obj);
+    PowerMeterData powerMeterData = getPowerMeterData(obj);
+    OtherMethodData otherMethodData = getOtherMethodData(obj);
+    int units = static_cast<int>(GetDouble("units", obj));
     return {
-        static_cast<int>(GetDouble("operatingHours", obj)),
-        GetDouble("electricityCost", obj),
-        static_cast<int>(GetDouble("measurementMethod", obj)),
-        getMultimeterData(obj),
-        getNameplateData(obj),
-        getPowerMeterData(obj),
-        getOtherMethodData(obj),
-        static_cast<int>(GetDouble("units", obj))};
+        operatingHours,
+        electricityCost,
+        measurementMethod,
+        multimeterData,
+        nameplateData,
+        powerMeterData,
+        otherMethodData,
+        units
+    };
 }
 
 std::vector<ElectricityReductionInput> getElectricityReductionInputVec()
@@ -265,8 +286,8 @@ FlowMeterMethodData getFlowMeterMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("NaturalGasReduction: getFlowMeterMethodData method in calculator.h: flowMeterMethodData not present in object").c_str());
     }
-    return {
-        GetDouble("flowRate", flowMeterMethodDataV8)};
+    double flowRate = GetDouble("flowRate", flowMeterMethodDataV8);
+    return {flowRate};
 }
 
 AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
@@ -279,9 +300,12 @@ AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
     {
         ThrowTypeError(std::string("NaturalGasReduction: getAirMassFlowMeasuredData method in calculator.h: airMassFlowMeasuredData not present in object").c_str());
     }
+    double areaOfDuct = GetDouble("areaOfDuct", airMassFlowMeasuredDataV8);
+    double airVelocity = GetDouble("airVelocity", airMassFlowMeasuredDataV8);
     return {
-        GetDouble("areaOfDuct", airMassFlowMeasuredDataV8),
-        GetDouble("airVelocity", airMassFlowMeasuredDataV8)};
+        areaOfDuct,
+        airVelocity
+    };
 }
 
 AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
@@ -294,8 +318,10 @@ AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
     {
         ThrowTypeError(std::string("NaturalGasReduction: getAirMassFlowNameplateData method in calculator.h: airMassFlowNameplateData not present in object").c_str());
     }
+    double airFlow = GetDouble("airFlow", airMassFlowNameplateDataV8);
     return {
-        GetDouble("airFlow", airMassFlowNameplateDataV8)};
+        airFlow
+    };
 }
 
 AirMassFlowData getAirMassFlowData(Local<Object> obj)
@@ -308,13 +334,20 @@ AirMassFlowData getAirMassFlowData(Local<Object> obj)
     {
         ThrowTypeError(std::string("NaturalGasReduction: getAirMassFlowData method in calculator.h: airMassFlowData not present in object").c_str());
     }
+    bool isNameplate = GetBool("isNameplate", airMassFlowDataV8);
+    AirMassFlowMeasuredData measuredData = getAirMassFlowMeasuredData(airMassFlowDataV8);
+    AirMassFlowNameplateData nameplateData = getAirMassFlowNameplateData(airMassFlowDataV8);
+    double inletTemperature = GetDouble("inletTemperature", airMassFlowDataV8);
+    double outletTemperature = GetDouble("outletTemperature", airMassFlowDataV8);
+    double systemEfficiency = Conversion(GetDouble("systemEfficiency", airMassFlowDataV8)).percentToFraction();
     return {
-        GetBool("isNameplate", airMassFlowDataV8),
-        getAirMassFlowMeasuredData(airMassFlowDataV8),
-        getAirMassFlowNameplateData(airMassFlowDataV8),
-        GetDouble("inletTemperature", airMassFlowDataV8),
-        GetDouble("outletTemperature", airMassFlowDataV8),
-        GetDouble("systemEfficiency", airMassFlowDataV8) / 100};
+        isNameplate,
+        measuredData,
+        nameplateData,
+        inletTemperature,
+        outletTemperature,
+        systemEfficiency
+    };
 }
 
 WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
@@ -327,11 +360,16 @@ WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
     {
         ThrowTypeError(std::string("NaturalGasReduction: getWaterMassFlowData method in calculator.h: waterMassFlowData not present in object").c_str());
     }
+    double waterFlow = GetDouble("waterFlow", waterMassFlowDataV8);
+    double inletTemperature = GetDouble("inletTemperature", waterMassFlowDataV8);
+    double outletTemperature = GetDouble("outletTemperature", waterMassFlowDataV8);
+    double systemEfficiency = Conversion(GetDouble("systemEfficiency", waterMassFlowDataV8)).percentToFraction();
     return {
-        GetDouble("waterFlow", waterMassFlowDataV8),
-        GetDouble("inletTemperature", waterMassFlowDataV8),
-        GetDouble("outletTemperature", waterMassFlowDataV8),
-        GetDouble("systemEfficiency", waterMassFlowDataV8) / 100};
+        waterFlow,
+        inletTemperature,
+        outletTemperature,
+        systemEfficiency
+    };
 }
 
 NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj)
@@ -344,21 +382,30 @@ NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("NaturalGasReduction: naturalGasGetOtherMethodData method in calculator.h: otherMethodData not present in object").c_str());
     }
+    double consumption = GetDouble("consumption", otherMethodDataV8);
     return {
-        GetDouble("consumption", otherMethodDataV8)};
+        consumption};
 }
 
 NaturalGasReductionInput constructNaturalGasReductionInput(Local<Object> obj)
 {
+    int operatingHours = static_cast<int>(GetDouble("operatingHours", obj));
+    double fuelCost = GetDouble("fuelCost", obj);
+    int measurementMethod = static_cast<int>(GetDouble("measurementMethod", obj));
+    FlowMeterMethodData flowMeterMethodData = getFlowMeterMethodData(obj);
+    NaturalGasOtherMethodData otherMethodData = naturalGasGetOtherMethodData(obj);
+    AirMassFlowData airMassFlowData = getAirMassFlowData(obj);
+    WaterMassFlowData waterMassFlowData = getWaterMassFlowData(obj);
+    int units = static_cast<int>(GetDouble("units", obj));
     return {
-        static_cast<int>(GetDouble("operatingHours", obj)),
-        GetDouble("fuelCost", obj),
-        static_cast<int>(GetDouble("measurementMethod", obj)),
-        getFlowMeterMethodData(obj),
-        naturalGasGetOtherMethodData(obj),
-        getAirMassFlowData(obj),
-        getWaterMassFlowData(obj),
-        static_cast<int>(GetDouble("units", obj))};
+        operatingHours,
+        fuelCost,
+        measurementMethod,
+        flowMeterMethodData,
+        otherMethodData,
+        airMassFlowData,
+        waterMassFlowData,
+        units};
 }
 
 std::vector<NaturalGasReductionInput> getNaturalGasReductionInputVec()
@@ -414,8 +461,8 @@ CompressedAirFlowMeterMethodData getCompressedAirFlowMeterMethodData(Local<Objec
     {
         ThrowTypeError(std::string("CompressedAirReduction: getCompressedAirFlowMeterMethodData method in calculator.h: flowMeterMethodData not present in object").c_str());
     }
-    return {
-        GetDouble("meterReading", flowMeterMethodDataV8)};
+    double meterReading = GetDouble("meterReading", flowMeterMethodDataV8);
+    return {meterReading};
 }
 
 BagMethodData getBagMethodData(Local<Object> obj)
@@ -428,10 +475,13 @@ BagMethodData getBagMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("CompressedAirReduction: getBagMethodData method in calculator.h: bagMethodData not present in object").c_str());
     }
+    double height = GetDouble("height", bagMethodDataV8);
+    double diameter = GetDouble("diameter", bagMethodDataV8);
+    double fillTime = GetDouble("fillTime", bagMethodDataV8);
     return {
-        GetDouble("height", bagMethodDataV8),
-        GetDouble("diameter", bagMethodDataV8),
-        GetDouble("fillTime", bagMethodDataV8)};
+        height,
+        diameter,
+        fillTime};
 }
 
 PressureMethodData getPressureMethodData(Local<Object> obj)
@@ -444,10 +494,13 @@ PressureMethodData getPressureMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("CompressedAirReduction: getPressureMethodData method in calculator.h: pressureMethodData not present in object").c_str());
     }
+    int nozzleType = static_cast<int>(GetDouble("nozzleType", pressureMethodDataV8));
+    int numberOfNozzles = static_cast<int>(GetDouble("numberOfNozzles", pressureMethodDataV8));
+    double supplyPressure = GetDouble("supplyPressure", pressureMethodDataV8);
     return {
-        static_cast<int>(GetDouble("nozzleType", pressureMethodDataV8)),
-        static_cast<int>(GetDouble("numberOfNozzles", pressureMethodDataV8)),
-        GetDouble("supplyPressure", pressureMethodDataV8)};
+        nozzleType,
+        numberOfNozzles,
+        supplyPressure};
 }
 
 CompressedAirOtherMethodData getCompressedAirOtherMethodData(Local<Object> obj)
@@ -460,8 +513,8 @@ CompressedAirOtherMethodData getCompressedAirOtherMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("CompressedAirReduction: getCompressedAirOtherMethodData method in calculator.h: otherMethodData not present in object").c_str());
     }
-    return {
-        GetDouble("consumption", otherMethodDataV8)};
+    double consumption = GetDouble("consumption", otherMethodDataV8);
+    return {consumption};
 }
 
 CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
@@ -474,24 +527,36 @@ CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
     {
         ThrowTypeError(std::string("CompressedAirReduction: getCompressorElectricityData method in calculator.h: compressorElectricityData not present in object").c_str());
     }
+    double compressorControlAdjustment = Conversion(GetDouble("compressorControlAdjustment", compressorElectricityDataV8)).percentToFraction();
+    double compressorSpecificPower = GetDouble("compressorSpecificPower", compressorElectricityDataV8);
     return {
-        GetDouble("compressorControlAdjustment", compressorElectricityDataV8) / 100,
-        GetDouble("compressorSpecificPower", compressorElectricityDataV8)};
+        compressorControlAdjustment,
+        compressorSpecificPower};
 }
 
 CompressedAirReductionInput constructCompressedAirReductionInput(Local<Object> obj)
 {
+    int hoursPerYear = static_cast<int>(GetDouble("hoursPerYear", obj));
+    int utilityType = static_cast<int>(GetDouble("utilityType", obj));
+    double utilityCost = GetDouble("utilityCost", obj);
+    int measurementMethod = static_cast<int>(GetDouble("measurementMethod", obj));
+    CompressedAirFlowMeterMethodData airFlowData = getCompressedAirFlowMeterMethodData(obj);
+    BagMethodData bagMethodData = getBagMethodData(obj);
+    PressureMethodData pressureMethodData = getPressureMethodData(obj);
+    CompressedAirOtherMethodData otherMethodData = getCompressedAirOtherMethodData(obj);
+    CompressorElectricityData electricityData = getCompressorElectricityData(obj);
+    int units = static_cast<int>(GetDouble("units", obj));
     return {
-        static_cast<int>(GetDouble("hoursPerYear", obj)),
-        static_cast<int>(GetDouble("utilityType", obj)),
-        GetDouble("utilityCost", obj),
-        static_cast<int>(GetDouble("measurementMethod", obj)),
-        getCompressedAirFlowMeterMethodData(obj),
-        getBagMethodData(obj),
-        getPressureMethodData(obj),
-        getCompressedAirOtherMethodData(obj),
-        getCompressorElectricityData(obj),
-        static_cast<int>(GetDouble("units", obj))};
+        hoursPerYear,
+        utilityType,
+        utilityCost,
+        measurementMethod,
+        airFlowData,
+        bagMethodData,
+        pressureMethodData,
+        otherMethodData,
+        electricityData,
+        units};
 }
 
 std::vector<CompressedAirReductionInput> getCompressedAirReductionInputVec()
@@ -549,8 +614,8 @@ MeteredFlowMethodData getMeteredFlowMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("WaterReduction: getMeteredFlowMethodData method in calculator.h: meteredFlowMethodData not present in object").c_str());
     }
-    return {
-        GetDouble("meterReading", meteredFlowMethodDataV8)};
+    double meterReading = GetDouble("meterReading", meteredFlowMethodDataV8);
+    return {meterReading};
 }
 
 VolumeMeterMethodData getVolumeMeterMethodData(Local<Object> obj)
@@ -563,10 +628,13 @@ VolumeMeterMethodData getVolumeMeterMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("WaterReduction: getVolumeMeterMethodData method in calculator.h: volumeMeterMethodData not present in object").c_str());
     }
+    double finalMeterReading = GetDouble("finalMeterReading", volumeMeterMethodDataV8);
+    double initialMeterReading = GetDouble("initialMeterReading", volumeMeterMethodDataV8);
+    double elapsedTime = GetDouble("elapsedTime", volumeMeterMethodDataV8);
     return {
-        GetDouble("finalMeterReading", volumeMeterMethodDataV8),
-        GetDouble("initialMeterReading", volumeMeterMethodDataV8),
-        GetDouble("elapsedTime", volumeMeterMethodDataV8)};
+        finalMeterReading,
+        initialMeterReading,
+        elapsedTime};
 }
 
 BucketMethodData getBucketMethodData(Local<Object> obj)
@@ -579,9 +647,11 @@ BucketMethodData getBucketMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("WaterReduction: getBucketMethodData method in calculator.h: bucketMethodData not present in object").c_str());
     }
+    double bucketVolume = GetDouble("bucketVolume", bucketMethodDataV8);
+    double bucketFillTime = GetDouble("bucketFillTime", bucketMethodDataV8);
     return {
-        GetDouble("bucketVolume", bucketMethodDataV8),
-        GetDouble("bucketFillTime", bucketMethodDataV8)};
+        bucketVolume,
+        bucketFillTime};
 }
 
 WaterOtherMethodData getWaterOtherMethodData(Local<Object> obj)
@@ -594,20 +664,28 @@ WaterOtherMethodData getWaterOtherMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("WaterReduction: getWaterOtherMethodData method in calculator.h: otherMethodData not present in object").c_str());
     }
+    double consumption = GetDouble("consumption", otherMethodDataV8);
     return {
-        GetDouble("consumption", otherMethodDataV8)};
+        consumption};
 }
 
 WaterReductionInput constructWaterReductionInput(Local<Object> obj)
 {
+    int hoursPerYear = static_cast<int>(GetDouble("hoursPerYear", obj));
+    double waterCost = GetDouble("waterCost", obj);
+    int measurementMethod = static_cast<int>(GetDouble("measurementMethod", obj));
+    MeteredFlowMethodData meteredFlowMethodData = getMeteredFlowMethodData(obj);
+    VolumeMeterMethodData volumeMeterMethodData = getVolumeMeterMethodData(obj);
+    BucketMethodData bucketMethodData = getBucketMethodData(obj);
+    WaterOtherMethodData otherMethodData = getWaterOtherMethodData(obj);
     return {
-        static_cast<int>(GetDouble("hoursPerYear", obj)),
-        GetDouble("waterCost", obj),
-        static_cast<int>(GetDouble("measurementMethod", obj)),
-        getMeteredFlowMethodData(obj),
-        getVolumeMeterMethodData(obj),
-        getBucketMethodData(obj),
-        getWaterOtherMethodData(obj)};
+        hoursPerYear,
+        waterCost,
+        measurementMethod,
+        meteredFlowMethodData,
+        volumeMeterMethodData,
+        bucketMethodData,
+        otherMethodData};
 }
 
 std::vector<WaterReductionInput> getWaterReductionInputVec()
@@ -653,13 +731,19 @@ NAN_METHOD(waterReduction)
 // ========== Start CA Pressure Reduction ===========
 CompressedAirPressureReductionInput constructCompressedAirPressureReductionInput(Local<Object> obj)
 {
+    bool isBaseline = GetBool("isBaseline", obj);
+    int hoursPerYear = static_cast<int>(GetDouble("hoursPerYear", obj));
+    double electricityCost = GetDouble("electricityCost", obj);
+    double compressorPower = GetDouble("compressorPower", obj);
+    double pressure = GetDouble("pressure", obj);
+    double proposedPressure = GetDouble("proposedPressure", obj);
     return {
-        GetBool("isBaseline", obj),
-        static_cast<int>(GetDouble("hoursPerYear", obj)),
-        GetDouble("electricityCost", obj),
-        GetDouble("compressorPower", obj),
-        GetDouble("pressure", obj),
-        GetDouble("proposedPressure", obj)};
+        isBaseline,
+        hoursPerYear,
+        electricityCost,
+        compressorPower,
+        pressure,
+        proposedPressure};
 }
 
 std::vector<CompressedAirPressureReductionInput> getCompressedAirPressureReductionInputVec()
@@ -714,7 +798,7 @@ NAN_METHOD(pipeInsulationReduction)
     double pipeTemperature = GetDouble("pipeTemperature", inp);
     double ambientTemperature = GetDouble("ambientTemperature", inp);
     double windVelocity = GetDouble("windVelocity", inp);
-    double systemEfficiency = GetDouble("systemEfficiency", inp) / 100.0;
+    double systemEfficiency = Conversion(GetDouble("systemEfficiency", inp)).percentToFraction();
     double insulationThickness = GetDouble("insulationThickness", inp);
     double pipeEmissivity = GetDouble("pipeEmissivity", inp);
     double jacketEmissivity = GetDouble("jacketEmissivity", inp);
@@ -737,6 +821,7 @@ NAN_METHOD(pipeInsulationReduction)
         insulationMaterialCoefficients);
     InsulatedPipeCalculator calculator(input);
     InsulatedPipeOutput output = calculator.calculate();
+
     SetR("heatLength", output.getHeatLength());
     SetR("annualHeatLoss", output.getAnnualHeatLoss());
     info.GetReturnValue().Set(r);
@@ -757,7 +842,7 @@ NAN_METHOD(tankInsulationReduction)
     double tankConductivity = GetDouble("tankConductivity", inp);
     double tankTemperature = GetDouble("tankTemperature", inp);
     double ambientTemperature = GetDouble("ambientTemperature", inp);
-    double systemEfficiency = GetDouble("systemEfficiency", inp) / 100.0;
+    double systemEfficiency = Conversion(GetDouble("systemEfficiency", inp)).percentToFraction();
     double insulationThickness = GetDouble("insulationThickness", inp);
     double insulationConductivity = GetDouble("insulationConductivity", inp);
     double jacketEmissivity = GetDouble("jacketEmissivity", inp);
@@ -777,6 +862,7 @@ NAN_METHOD(tankInsulationReduction)
         jacketEmissivity);
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
+
     SetR("heatLoss", output.getHeatLoss());
     SetR("annualHeatLoss", output.getAnnualHeatLoss());
     info.GetReturnValue().Set(r);
@@ -794,8 +880,8 @@ SteamFlowMeterMethodData getSteamFlowMeterMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("SteamReduction: getSteamFlowMeterMethodData method in calculator.h: flowMeterMethodData not present in object").c_str());
     }
-    return {
-        GetDouble("flowRate", flowMeterMethodDataV8)};
+    double flowRate = GetDouble("flowRate", flowMeterMethodDataV8);
+    return {flowRate};
 }
 
 SteamMassFlowMeasuredData getSteamMassFlowMeasuredData(Local<Object> obj)
@@ -808,9 +894,11 @@ SteamMassFlowMeasuredData getSteamMassFlowMeasuredData(Local<Object> obj)
     {
         ThrowTypeError(std::string("SteamReduction: getSteamMassFlowMeasuredData method in calculator.h: massFlowMeasuredData not present in object").c_str());
     }
+    double areaOfDuct = GetDouble("areaOfDuct", massFlowMeasuredDataV8);
+    double airVelocity = GetDouble("airVelocity", massFlowMeasuredDataV8);
     return {
-        GetDouble("areaOfDuct", massFlowMeasuredDataV8),
-        GetDouble("airVelocity", massFlowMeasuredDataV8)};
+        areaOfDuct,
+        airVelocity};
 }
 
 SteamMassFlowNameplateData getSteamMassFlowNameplateData(Local<Object> obj)
@@ -823,8 +911,8 @@ SteamMassFlowNameplateData getSteamMassFlowNameplateData(Local<Object> obj)
     {
         ThrowTypeError(std::string("SteamReduction: getSteamMassFlowNameplateData method in calculator.h: massFlowNameplateData not present in object").c_str());
     }
-    return {
-        GetDouble("flowRate", massFlowNameplateDataV8)};
+    double flowRate = GetDouble("flowRate", massFlowNameplateDataV8);
+    return {flowRate};
 }
 
 SteamMassFlowMethodData getSteamAirMassFlowMethodData(Local<Object> obj)
@@ -837,12 +925,17 @@ SteamMassFlowMethodData getSteamAirMassFlowMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("SteamReduction: getSteamAirMassFlowMethodData method in calculator.h: airMassFlowMethodData not present in object").c_str());
     }
+    bool isNameplate = GetBool("isNameplate", massFlowMethodDataV8);
+    SteamMassFlowMeasuredData measuredData = getSteamMassFlowMeasuredData(massFlowMethodDataV8);
+    SteamMassFlowNameplateData nameplateData = getSteamMassFlowNameplateData(massFlowMethodDataV8);
+    double inletTemperature = GetDouble("inletTemperature", massFlowMethodDataV8);
+    double outletTemperature = GetDouble("outletTemperature", massFlowMethodDataV8);
     return {
-        GetBool("isNameplate", massFlowMethodDataV8),
-        getSteamMassFlowMeasuredData(massFlowMethodDataV8),
-        getSteamMassFlowNameplateData(massFlowMethodDataV8),
-        GetDouble("inletTemperature", massFlowMethodDataV8),
-        GetDouble("outletTemperature", massFlowMethodDataV8)};
+        isNameplate,
+        measuredData,
+        nameplateData,
+        inletTemperature,
+        outletTemperature};
 }
 
 SteamMassFlowMethodData getSteamWaterMassFlowMethodData(Local<Object> obj)
@@ -855,12 +948,17 @@ SteamMassFlowMethodData getSteamWaterMassFlowMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("SteamReduction: getSteamWaterMassFlowMethodData method in calculator.h: waterMassFlowMethodData not present in object").c_str());
     }
+    bool isNameplate = GetBool("isNameplate", massFlowMethodDataV8);
+    SteamMassFlowMeasuredData measuredData = getSteamMassFlowMeasuredData(massFlowMethodDataV8);
+    SteamMassFlowNameplateData nameplateData = getSteamMassFlowNameplateData(massFlowMethodDataV8);
+    double inletTemperature = GetDouble("inletTemperature", massFlowMethodDataV8);
+    double outletTemperature = GetDouble("outletTemperature", massFlowMethodDataV8);
     return {
-        GetBool("isNameplate", massFlowMethodDataV8),
-        getSteamMassFlowMeasuredData(massFlowMethodDataV8),
-        getSteamMassFlowNameplateData(massFlowMethodDataV8),
-        GetDouble("inletTemperature", massFlowMethodDataV8),
-        GetDouble("outletTemperature", massFlowMethodDataV8)};
+        isNameplate,
+        measuredData,
+        nameplateData,
+        inletTemperature,
+        outletTemperature};
 }
 
 SteamOtherMethodData getSteamOtherMethodData(Local<Object> obj)
@@ -873,24 +971,35 @@ SteamOtherMethodData getSteamOtherMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("SteamReduction: getSteamOtherMethodData method in calculator.h: otherMethodData not present in object").c_str());
     }
-    return {
-        GetDouble("consumption", otherMethodDataV8)};
+    double consumption = GetDouble("consumption", otherMethodDataV8);
+    return {consumption};
 }
 
 SteamReductionInput constructSteamReductionInput(Local<Object> obj)
 {
+    int hoursPerYear = static_cast<int>(GetDouble("hoursPerYear", obj));
+    int utilityType = static_cast<int>(GetDouble("utilityType", obj));
+    double utilityCost = GetDouble("utilityCost", obj);
+    int measurementMethod = static_cast<int>(GetDouble("measurementMethod", obj));
+    double systemEfficiency = Conversion(GetDouble("systemEfficiency", obj)).percentToFraction();
+    double pressure = GetDouble("pressure", obj);
+    SteamFlowMeterMethodData steamFlowMeterMethodData = getSteamFlowMeterMethodData(obj);
+    SteamMassFlowMethodData steamAirMassFlowMethodData = getSteamAirMassFlowMethodData(obj);
+    SteamMassFlowMethodData steamWaterMassFlowMethodData = getSteamWaterMassFlowMethodData(obj);
+    SteamOtherMethodData otherMethodData = getSteamOtherMethodData(obj);
+    int units = static_cast<int>(GetDouble("units", obj));
     return {
-        static_cast<int>(GetDouble("hoursPerYear", obj)),
-        static_cast<int>(GetDouble("utilityType", obj)),
-        GetDouble("utilityCost", obj),
-        static_cast<int>(GetDouble("measurementMethod", obj)),
-        GetDouble("systemEfficiency", obj) / 100.0,
-        GetDouble("pressure", obj),
-        getSteamFlowMeterMethodData(obj),
-        getSteamAirMassFlowMethodData(obj),
-        getSteamWaterMassFlowMethodData(obj),
-        getSteamOtherMethodData(obj),
-        static_cast<int>(GetDouble("units", obj))};
+        hoursPerYear,
+        utilityType,
+        utilityCost,
+        measurementMethod,
+        systemEfficiency,
+        pressure,
+        steamFlowMeterMethodData,
+        steamAirMassFlowMethodData,
+        steamWaterMassFlowMethodData,
+        otherMethodData,
+        units};
 }
 
 std::vector<SteamReductionInput> getSteamReductionInputVec()
