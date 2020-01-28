@@ -14,6 +14,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <calculator/pump/PumpData.h>
 
 using namespace Nan;
 using namespace v8;

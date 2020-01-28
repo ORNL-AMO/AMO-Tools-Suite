@@ -1234,12 +1234,14 @@ void SQLite::insert_default_data()
     }
     for( auto const & surface : get_default_wall_losses_surface() ) {
         insert_wall_losses_surface(surface);
+        //getWallLossesSurfaceById(1);
     }
     /*
     for( auto const & pump : get_default_pump_data() ) {
         insert_pump_data(pump);
         //auto testing = getPumpDataById(1);
         //auto hello = 0;
+        //std::cout << "TEST";
 
     }
     */
