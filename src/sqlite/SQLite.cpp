@@ -1666,6 +1666,189 @@ bool SQLite::updateWallLossesSurface(WallLosses const &material) {
     return valid_insert;
 }
 
+bool SQLite::insertPumpData(PumpData const &pump) {
+    bind_value(m_pump_data_insert_stmt, 1, 1);
+    bind_value(m_pump_data_insert_stmt, 2, pump.manufacturer);
+    bind_value(m_pump_data_insert_stmt, 3, pump.model);
+    bind_value(m_pump_data_insert_stmt, 4, pump.type);
+    bind_value(m_pump_data_insert_stmt, 5, pump.serialNumber);
+    bind_value(m_pump_data_insert_stmt, 6, pump.status);
+    bind_value(m_pump_data_insert_stmt, 7, pump.pumpType);
+    bind_value(m_pump_data_insert_stmt, 8, pump.radialBearingType);
+    bind_value(m_pump_data_insert_stmt, 9, pump.thrustBearingType);
+    bind_value(m_pump_data_insert_stmt, 10, pump.shaftOrientation);
+    bind_value(m_pump_data_insert_stmt, 11, pump.shaftSealType);
+    bind_value(m_pump_data_insert_stmt, 12, pump.fluidType);
+    bind_value(m_pump_data_insert_stmt, 13, pump.priority);
+    bind_value(m_pump_data_insert_stmt, 14, pump.driveType);
+    bind_value(m_pump_data_insert_stmt, 15, pump.flangeConnectionClass);
+    bind_value(m_pump_data_insert_stmt, 16, pump.flangeConnectionSize);
+    bind_value(m_pump_data_insert_stmt, 17, pump.numShafts);
+    bind_value(m_pump_data_insert_stmt, 18, pump.speed);
+    bind_value(m_pump_data_insert_stmt, 19, pump.numStages);
+    bind_value(m_pump_data_insert_stmt, 20, pump.yearlyOperatingHours);
+    bind_value(m_pump_data_insert_stmt, 21, pump.yearInstalled);
+    bind_value(m_pump_data_insert_stmt, 22, pump.finalMotorRpm);
+    bind_value(m_pump_data_insert_stmt, 23, pump.inletDiameter);
+    bind_value(m_pump_data_insert_stmt, 24, pump.weight);
+    bind_value(m_pump_data_insert_stmt, 25, pump.outletDiameter);
+    bind_value(m_pump_data_insert_stmt, 26, pump.percentageOfSchedule);
+    bind_value(m_pump_data_insert_stmt, 27, pump.dailyPumpCapacity);
+    bind_value(m_pump_data_insert_stmt, 28, pump.measuredPumpCapacity);
+    bind_value(m_pump_data_insert_stmt, 29, pump.pumpPerformance);
+    bind_value(m_pump_data_insert_stmt, 30, pump.staticSuctionHead);
+    bind_value(m_pump_data_insert_stmt, 31, pump.staticDischargeHead);
+    bind_value(m_pump_data_insert_stmt, 32, pump.fluidDensity);
+    bind_value(m_pump_data_insert_stmt, 33, pump.lengthOfDischargePipe);
+    bind_value(m_pump_data_insert_stmt, 34, pump.pipeDesignFrictionLosses);
+    bind_value(m_pump_data_insert_stmt, 35, pump.maxWorkingPressure);
+    bind_value(m_pump_data_insert_stmt, 36, pump.maxAmbientTemperature);
+    bind_value(m_pump_data_insert_stmt, 37, pump.maxSuctionLift);
+    bind_value(m_pump_data_insert_stmt, 38, pump.displacement);
+    bind_value(m_pump_data_insert_stmt, 39, pump.startingTorque);
+    bind_value(m_pump_data_insert_stmt, 40, pump.ratedSpeed);
+    bind_value(m_pump_data_insert_stmt, 41, pump.shaftDiameter);
+    bind_value(m_pump_data_insert_stmt, 42, pump.impellerDiameter);
+    bind_value(m_pump_data_insert_stmt, 43, pump.efficiency);
+    bind_value(m_pump_data_insert_stmt, 44, pump.output60Hz);
+    bind_value(m_pump_data_insert_stmt, 45, pump.minFlowSize);
+    bind_value(m_pump_data_insert_stmt, 46, pump.pumpSize);
+    bind_value(m_pump_data_insert_stmt, 47, pump.outOfService);
+
+    int rc = step_command(m_pump_data_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_pump_data_insert_stmt);
+    return valid_insert;
+}
+
+bool SQLite::deletePumpData(int id) {
+    if (isDefaultMaterial(id, get_default_pump_data().size())) {
+        return false;
+    }
+    bind_value(m_pump_data_delete_stmt, 1, id);
+    int rc = step_command(m_pump_data_delete_stmt);
+    bool valid_command = step_validity(rc);
+    reset_command(m_pump_data_delete_stmt);
+    return valid_command;
+}
+
+bool SQLite::updatePumpData(PumpData const &pump) {
+    if (isDefaultMaterial(pump.id, get_default_pump_data().size())) {
+        return false;
+    }
+
+    bind_value(m_pump_data_update_stmt, 1, pump.manufacturer);
+    bind_value(m_pump_data_update_stmt, 2, pump.model);
+    bind_value(m_pump_data_update_stmt, 3, pump.type);
+    bind_value(m_pump_data_update_stmt, 4, pump.serialNumber);
+    bind_value(m_pump_data_update_stmt, 5, pump.status);
+    bind_value(m_pump_data_update_stmt, 6, pump.pumpType);
+    bind_value(m_pump_data_update_stmt, 7, pump.radialBearingType);
+    bind_value(m_pump_data_update_stmt, 8, pump.thrustBearingType);
+    bind_value(m_pump_data_update_stmt, 9, pump.shaftOrientation);
+    bind_value(m_pump_data_update_stmt, 10, pump.shaftSealType);
+    bind_value(m_pump_data_update_stmt, 11, pump.fluidType);
+    bind_value(m_pump_data_update_stmt, 12, pump.priority);
+    bind_value(m_pump_data_update_stmt, 13, pump.driveType);
+    bind_value(m_pump_data_update_stmt, 14, pump.flangeConnectionClass);
+    bind_value(m_pump_data_update_stmt, 15, pump.flangeConnectionSize);
+    bind_value(m_pump_data_update_stmt, 16, pump.numShafts);
+    bind_value(m_pump_data_update_stmt, 17, pump.speed);
+    bind_value(m_pump_data_update_stmt, 18, pump.numStages);
+    bind_value(m_pump_data_update_stmt, 19, pump.yearlyOperatingHours);
+    bind_value(m_pump_data_update_stmt, 20, pump.yearInstalled);
+    bind_value(m_pump_data_update_stmt, 21, pump.finalMotorRpm);
+    bind_value(m_pump_data_update_stmt, 22, pump.inletDiameter);
+    bind_value(m_pump_data_update_stmt, 23, pump.weight);
+    bind_value(m_pump_data_update_stmt, 24, pump.outletDiameter);
+    bind_value(m_pump_data_update_stmt, 25, pump.percentageOfSchedule);
+    bind_value(m_pump_data_update_stmt, 26, pump.dailyPumpCapacity);
+    bind_value(m_pump_data_update_stmt, 27, pump.measuredPumpCapacity);
+    bind_value(m_pump_data_update_stmt, 28, pump.pumpPerformance);
+    bind_value(m_pump_data_update_stmt, 29, pump.staticSuctionHead);
+    bind_value(m_pump_data_update_stmt, 30, pump.staticDischargeHead);
+    bind_value(m_pump_data_update_stmt, 31, pump.fluidDensity);
+    bind_value(m_pump_data_update_stmt, 32, pump.lengthOfDischargePipe);
+    bind_value(m_pump_data_update_stmt, 33, pump.pipeDesignFrictionLosses);
+    bind_value(m_pump_data_update_stmt, 34, pump.maxWorkingPressure);
+    bind_value(m_pump_data_update_stmt, 35, pump.maxAmbientTemperature);
+    bind_value(m_pump_data_update_stmt, 36, pump.maxSuctionLift);
+    bind_value(m_pump_data_update_stmt, 37, pump.displacement);
+    bind_value(m_pump_data_update_stmt, 38, pump.startingTorque);
+    bind_value(m_pump_data_update_stmt, 39, pump.ratedSpeed);
+    bind_value(m_pump_data_update_stmt, 40, pump.shaftDiameter);
+    bind_value(m_pump_data_update_stmt, 41, pump.impellerDiameter);
+    bind_value(m_pump_data_update_stmt, 42, pump.efficiency);
+    bind_value(m_pump_data_update_stmt, 43, pump.output60Hz);
+    bind_value(m_pump_data_update_stmt, 44, pump.minFlowSize);
+    bind_value(m_pump_data_update_stmt, 45, pump.pumpSize);
+    bind_value(m_pump_data_update_stmt, 46, pump.outOfService);
+
+    int rc = step_command(m_pump_data_update_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_pump_data_update_stmt);
+    return valid_insert;
+}
+
+bool SQLite::insert_pump_data(PumpData const &pump) {
+    if (isDefaultMaterial(pump.id, get_default_pump_data().size())) {
+        return false;
+    }
+
+    bind_value(m_pump_data_insert_stmt, 1, 0);
+    bind_value(m_pump_data_insert_stmt, 2, pump.manufacturer);
+    bind_value(m_pump_data_insert_stmt, 3, pump.model);
+    bind_value(m_pump_data_insert_stmt, 4, pump.type);
+    bind_value(m_pump_data_insert_stmt, 5, pump.serialNumber);
+    bind_value(m_pump_data_insert_stmt, 6, pump.status);
+    bind_value(m_pump_data_insert_stmt, 7, pump.pumpType);
+    bind_value(m_pump_data_insert_stmt, 8, pump.radialBearingType);
+    bind_value(m_pump_data_insert_stmt, 9, pump.thrustBearingType);
+    bind_value(m_pump_data_insert_stmt, 10, pump.shaftOrientation);
+    bind_value(m_pump_data_insert_stmt, 11, pump.shaftSealType);
+    bind_value(m_pump_data_insert_stmt, 12, pump.fluidType);
+    bind_value(m_pump_data_insert_stmt, 13, pump.priority);
+    bind_value(m_pump_data_insert_stmt, 14, pump.driveType);
+    bind_value(m_pump_data_insert_stmt, 15, pump.flangeConnectionClass);
+    bind_value(m_pump_data_insert_stmt, 16, pump.flangeConnectionSize);
+    bind_value(m_pump_data_insert_stmt, 17, pump.numShafts);
+    bind_value(m_pump_data_insert_stmt, 18, pump.speed);
+    bind_value(m_pump_data_insert_stmt, 19, pump.numStages);
+    bind_value(m_pump_data_insert_stmt, 20, pump.yearlyOperatingHours);
+    bind_value(m_pump_data_insert_stmt, 21, pump.yearInstalled);
+    bind_value(m_pump_data_insert_stmt, 22, pump.finalMotorRpm);
+    bind_value(m_pump_data_insert_stmt, 23, pump.inletDiameter);
+    bind_value(m_pump_data_insert_stmt, 24, pump.weight);
+    bind_value(m_pump_data_insert_stmt, 25, pump.outletDiameter);
+    bind_value(m_pump_data_insert_stmt, 26, pump.percentageOfSchedule);
+    bind_value(m_pump_data_insert_stmt, 27, pump.dailyPumpCapacity);
+    bind_value(m_pump_data_insert_stmt, 28, pump.measuredPumpCapacity);
+    bind_value(m_pump_data_insert_stmt, 29, pump.pumpPerformance);
+    bind_value(m_pump_data_insert_stmt, 30, pump.staticSuctionHead);
+    bind_value(m_pump_data_insert_stmt, 31, pump.staticDischargeHead);
+    bind_value(m_pump_data_insert_stmt, 32, pump.fluidDensity);
+    bind_value(m_pump_data_insert_stmt, 33, pump.lengthOfDischargePipe);
+    bind_value(m_pump_data_insert_stmt, 34, pump.pipeDesignFrictionLosses);
+    bind_value(m_pump_data_insert_stmt, 35, pump.maxWorkingPressure);
+    bind_value(m_pump_data_insert_stmt, 36, pump.maxAmbientTemperature);
+    bind_value(m_pump_data_insert_stmt, 37, pump.maxSuctionLift);
+    bind_value(m_pump_data_insert_stmt, 38, pump.displacement);
+    bind_value(m_pump_data_insert_stmt, 39, pump.startingTorque);
+    bind_value(m_pump_data_insert_stmt, 40, pump.ratedSpeed);
+    bind_value(m_pump_data_insert_stmt, 41, pump.shaftDiameter);
+    bind_value(m_pump_data_insert_stmt, 42, pump.impellerDiameter);
+    bind_value(m_pump_data_insert_stmt, 43, pump.efficiency);
+    bind_value(m_pump_data_insert_stmt, 44, pump.output60Hz);
+    bind_value(m_pump_data_insert_stmt, 45, pump.minFlowSize);
+    bind_value(m_pump_data_insert_stmt, 46, pump.pumpSize);
+    bind_value(m_pump_data_insert_stmt, 47, pump.outOfService);
+
+    int rc = step_command(m_pump_data_insert_stmt);
+    bool valid_insert = step_validity(rc);
+    reset_command(m_pump_data_insert_stmt);
+    return valid_insert;
+}
+
 SQLiteWrapper::SQLiteWrapper( std::shared_ptr<sqlite3> const & db )
     :
     m_db(db)
