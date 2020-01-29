@@ -14,7 +14,6 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
-#include <calculator/util/Conversion.h>
 
 using namespace Nan;
 using namespace v8;
@@ -401,13 +400,14 @@ NAN_METHOD(selectSolidLiquidFlueGasMaterials)
 NAN_METHOD(insertSolidLiquidFlueGasMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    double carbon = Conversion(Get("carbon")).fractionToPercent();
-    double hydrogen = Conversion(Get("hydrogen")).fractionToPercent();
-    double sulphur = Conversion(Get("sulphur")).fractionToPercent();
-    double inertAsh = Conversion(Get("inertAsh")).fractionToPercent();
-    double o2 = Conversion(Get("o2")).fractionToPercent();
-    double moisture = Conversion(Get("moisture")).fractionToPercent();
-    double nitrogen = Conversion(Get("nitrogen")).fractionToPercent();
+
+    double carbon = Get("carbon") * 100.0;
+    double hydrogen = Get("hydrogen") * 100.0;
+    double sulphur = Get("sulphur") * 100.0;
+    double inertAsh = Get("inertAsh") * 100.0;
+    double o2 = Get("o2") * 100.0;
+    double moisture = Get("moisture") * 100.0;
+    double nitrogen = Get("nitrogen") * 100.0;
     std::string substance = GetStr("substance");
 
     SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, carbon, hydrogen,
@@ -428,13 +428,14 @@ NAN_METHOD(deleteSolidLiquidFlueGasMaterial)
 NAN_METHOD(updateSolidLiquidFlueGasMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    double carbon = Conversion(Get("carbon")).fractionToPercent();
-    double hydrogen = Conversion(Get("hydrogen")).fractionToPercent();
-    double sulphur = Conversion(Get("sulphur")).fractionToPercent();
-    double inertAsh = Conversion(Get("inertAsh")).fractionToPercent();
-    double o2 = Conversion(Get("o2")).fractionToPercent();
-    double moisture = Conversion(Get("moisture")).fractionToPercent();
-    double nitrogen = Conversion(Get("nitrogen")).fractionToPercent();
+
+    double carbon = Get("carbon") * 100.0;
+    double hydrogen = Get("hydrogen") * 100.0;
+    double sulphur = Get("sulphur") * 100.0;
+    double inertAsh = Get("inertAsh") * 100.0;
+    double o2 = Get("o2") * 100.0;
+    double moisture = Get("moisture") * 100.0;
+    double nitrogen = Get("nitrogen") * 100.0;
     std::string substance = GetStr("substance");
     int id = (int)Get("id");
 
@@ -547,9 +548,9 @@ NAN_METHOD(insertGasFlueGasMaterial)
     double SO2 = Get("SO2");
     double O2 = Get("O2");
 
-    do
-        GasCompositions comp(substance, CH4, C2H6, N2, H2, C3H8,
-                             C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+    GasCompositions comp(substance, CH4, C2H6, N2, H2, C3H8,
+                         C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+
     try
     {
         bool success = sql->insertGasFlueGasMaterial(comp);
@@ -764,7 +765,7 @@ NAN_METHOD(insertWallLossesSurface)
     wl.setSurface(surface);
     wl.setConditionFactor(conditionFactor);
     bool success = sql->insertWallLossesSurface(wl);
-    
+
     info.GetReturnValue().Set(success);
 };
 
