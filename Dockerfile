@@ -136,6 +136,8 @@ RUN node-gyp rebuild
 RUN npm run test
 
 RUN npm run at
+
+RUN cat debug.txt
 #--------------------------------------------------------------
 
-WORKDIR /home/
+#WORKDIR /home/
