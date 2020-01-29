@@ -12,6 +12,7 @@
 #include <sqlite/AtmosphereSpecificHeatData.h>
 #include <sqlite/WallLossesSurfaceData.h>
 #include <calculator/motor/MotorData.h>
+#include <calculator/pump/PumpData.h>
 
 #include <fstream>
 #include <iostream>
@@ -42,6 +43,8 @@ SQLite::SQLite(std::string const & db_name, bool init_db)
 
     create_select_stmt();
     create_update_and_delete_stmt();
+
+    //auto test = get_default_pump_data();
 }
 
 SQLite::~SQLite()
@@ -1245,6 +1248,7 @@ void SQLite::insert_default_data()
 
     }
     */
+    auto test = get_default_pump_data();
 
 }
 
