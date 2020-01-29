@@ -43,8 +43,6 @@ SQLite::SQLite(std::string const & db_name, bool init_db)
 
     create_select_stmt();
     create_update_and_delete_stmt();
-
-    //auto test = get_default_pump_data();
 }
 
 SQLite::~SQLite()
@@ -1239,7 +1237,7 @@ void SQLite::insert_default_data()
         insert_wall_losses_surface(surface);
         //getWallLossesSurfaceById(1);
     }
-    /*
+    ///*
     for( auto const & pump : get_default_pump_data() ) {
         insert_pump_data(pump);
         //auto testing = getPumpDataById(1);
@@ -1247,8 +1245,8 @@ void SQLite::insert_default_data()
         //std::cout << "TEST";
 
     }
-    */
-    auto test = get_default_pump_data();
+    //*/
+    //auto test = get_default_pump_data();
 
 }
 
