@@ -1237,7 +1237,7 @@ void SQLite::insert_default_data()
         insert_wall_losses_surface(surface);
         //getWallLossesSurfaceById(1);
     }
-    ///*
+    /*
     for( auto const & pump : get_default_pump_data() ) {
         insert_pump_data(pump);
         //auto testing = getPumpDataById(1);
@@ -1245,8 +1245,24 @@ void SQLite::insert_default_data()
         //std::cout << "TEST";
 
     }
-    //*/
-    //auto test = get_default_pump_data();
+    */
+    auto test = get_default_pump_data();
+
+    std::ofstream ofs("debug.txt");
+    ofs << "get_default_pump_data() returned a size of " << test.size();
+    auto index = 0;
+    for( auto const & pump : get_default_pump_data() ) {
+        ofs << " pump: " << pump.manufacturer << " pump.id (uninitialized prob): " << pump.id << std::endl;
+        auto result = insert_pump_data(pump);
+        ofs << " result: " << result << std::endl;
+        auto all_pumps_so_far = getPumpData();
+        ofs << "pump count as of now: " << all_pumps_so_far.size() << std::endl << std::endl;
+        for( auto const & pump_inner : all_pumps_so_far ) {
+            ofs << " pump_inner: " << pump_inner.manufacturer << " pump_inner.id (should be initialized): " << pump_inner.id << std::endl;
+        }
+        ofs << std::endl << std::endl;
+    }
+    auto hello = 0;
 
 }
 
