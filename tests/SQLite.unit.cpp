@@ -302,6 +302,15 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 		sqlite.insertPumpData(pump1);
         sqlite.insertPumpData(pump2);
 
+        /*
+        std::ofstream ofs("debug.txt");
+        auto test = sqlite.getPumpData();
+        ofs << std::endl;
+        ofs << "getPumpData() returned size " << test.size() << std::endl;
+        ofs << std::endl;
+        ofs.close();
+        */
+
         auto custom1 = sqlite.getCustomPumpData().at(0);
         auto custom2 = sqlite.getCustomPumpData().at(1);
 
