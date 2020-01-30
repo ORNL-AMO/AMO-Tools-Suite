@@ -890,3 +890,7 @@ flycheck_*.el
 *.vcxproj.filters
 *.vcxproj/*
 .sln
+
+
+## CPack Packages
+_CPack_Packages/

@@ -40,7 +40,7 @@ MediumPressureHeaderModeler::model(const int headerCountInput, const HeaderWithH
             }
         } catch (const ReducedSteamException &e) {
             //TODO extract methods
-            const std::string &actionMessage = e.getActionMessage();
+        //     const std::string &actionMessage = e.getActionMessage();
         //     std::cout << methodName << "ReducedSteamException: " << actionMessage
                      // << "; rerunning MediumPressureHeaderModeler with updated highToLowPressureTurbine" << std::endl;
             const std::shared_ptr<Turbine> &highToLowPressureTurbine = e.getHighToLowPressureTurbineUpdated();

@@ -17,8 +17,17 @@
  * Contains all of the basic properties of a head tool.
  * Used to calculate velocity and velocity head so those values can be used in the HeadToolSuctionTank class or HeadTool class to calculate all of the values in the returned map.
  */
-class HeadToolBase {
-protected:
+class HeadToolBase
+{
+  protected:
+	struct Output
+	{
+		Output(double elevationHead, double pressureHead, double velocityHeadDifferential, double suctionHead, double dischargeHead, double pumpHead)
+			: elevationHead(elevationHead), pressureHead(pressureHead), velocityHeadDifferential(velocityHeadDifferential), suctionHead(suctionHead), dischargeHead(dischargeHead), pumpHead(pumpHead) {}
+
+		Output() = default;
+		double elevationHead = 0, pressureHead = 0, velocityHeadDifferential = 0, suctionHead = 0, dischargeHead = 0, pumpHead = 0;
+	};
 	/**
     * Constructor for the abstract HeadToolBase class with all inputs specified
     *
@@ -34,31 +43,30 @@ protected:
  * */
 
 	HeadToolBase(
-			const double specificGravity,
-			const double flowRate,
-			const double suctionPipeDiameter,
-			const double suctionLineLossCoefficients,
-			const double dischargePipeDiameter,
-			const double dischargeGaugePressure,
-			const double dischargeGaugeElevation,
-			const double dischargeLineLossCoefficients
-	) :
-			specificGravity(specificGravity),
-			flowRate(flowRate),
-			suctionPipeDiameter(suctionPipeDiameter),
-			suctionLineLossCoefficients(suctionLineLossCoefficients),
-			dischargePipeDiameter(dischargePipeDiameter),
-			dischargeGaugePressure(dischargeGaugePressure),
-			dischargeGaugeElevation(dischargeGaugeElevation),
-			dischargeLineLossCoefficients(dischargeLineLossCoefficients)
-	{}
+		const double specificGravity,
+		const double flowRate,
+		const double suctionPipeDiameter,
+		const double suctionLineLossCoefficients,
+		const double dischargePipeDiameter,
+		const double dischargeGaugePressure,
+		const double dischargeGaugeElevation,
+		const double dischargeLineLossCoefficients) : specificGravity(specificGravity),
+													  flowRate(flowRate),
+													  suctionPipeDiameter(suctionPipeDiameter),
+													  suctionLineLossCoefficients(suctionLineLossCoefficients),
+													  dischargePipeDiameter(dischargePipeDiameter),
+													  dischargeGaugePressure(dischargeGaugePressure),
+													  dischargeGaugeElevation(dischargeGaugeElevation),
+													  dischargeLineLossCoefficients(dischargeLineLossCoefficients)
+	{
+	}
 
 	/**
      * Calculates the operating pump head
      *
      * @return unordered map with all its values calculated
      */
-	virtual std::unordered_map<std::string, double> calculate() = 0;
+	virtual HeadToolBase::Output calculate() = 0;
 
 	/**
      * Calculates the velocity
@@ -104,9 +112,9 @@ protected:
  * Contains all of the properties of a head tool suction tank.
  * Used to calculate all of the values in the returned map.
  */
-class HeadToolSuctionTank : private HeadToolBase {
-public:
-
+class HeadToolSuctionTank : private HeadToolBase
+{
+  public:
 	/**
     * Constructor for the HeadToolSuctionTank class with all inputs specified
     *
@@ -124,37 +132,37 @@ public:
  * */
 
 	HeadToolSuctionTank(
-			const double specificGravity,
-			const double flowRate,
-			const double suctionPipeDiameter,
-			const double suctionTankGasOverPressure,
-			const double suctionTankFluidSurfaceElevation,
-			const double suctionLineLossCoefficients,
-			const double dischargePipeDiameter,
-			const double dischargeGaugePressure,
-			const double dischargeGaugeElevation,
-			const double dischargeLineLossCoefficients
-	) :
-			HeadToolBase( specificGravity,
-			              flowRate,
-			              suctionPipeDiameter,
-			              suctionLineLossCoefficients,
-			              dischargePipeDiameter,
-			              dischargeGaugePressure,
-			              dischargeGaugeElevation,
-			              dischargeLineLossCoefficients),
-			suctionTankGasOverPressure(suctionTankGasOverPressure),
-			suctionTankFluidSurfaceElevation(suctionTankFluidSurfaceElevation)
-	{}
+		const double specificGravity,
+		const double flowRate,
+		const double suctionPipeDiameter,
+		const double suctionTankGasOverPressure,
+		const double suctionTankFluidSurfaceElevation,
+		const double suctionLineLossCoefficients,
+		const double dischargePipeDiameter,
+		const double dischargeGaugePressure,
+		const double dischargeGaugeElevation,
+		const double dischargeLineLossCoefficients) : HeadToolBase(specificGravity,
+																   flowRate,
+																   suctionPipeDiameter,
+																   suctionLineLossCoefficients,
+																   dischargePipeDiameter,
+																   dischargeGaugePressure,
+																   dischargeGaugeElevation,
+																   dischargeLineLossCoefficients),
+													  suctionTankGasOverPressure(suctionTankGasOverPressure),
+													  suctionTankFluidSurfaceElevation(suctionTankFluidSurfaceElevation)
+	{
+	}
 
 	/**
      * Calculates the operating pump head
-     * @return unordered map with all the values calculated for operating pump head
+     * @return Output struct with all the values calculated for operating pump head
      */
-	std::unordered_map<std::string, double> calculate() override;
+	HeadToolBase::Output calculate() override;
 
-private:
+  private:
 	const double suctionTankGasOverPressure, suctionTankFluidSurfaceElevation;
+	HeadToolBase::Output output;
 };
 
 /**
@@ -162,10 +170,10 @@ private:
  * Contains all of the properties of a head tool.
  * Used to calculate all of the values of the returned unordered map.
  */
-class HeadTool : private HeadToolBase {
-public:
-
-/**
+class HeadTool : private HeadToolBase
+{
+  public:
+	/**
 * Constructor for HeadTool with no Suction Tank, all inputs specified
 *
 * @param specificGravity double, specific gravity - unitless
@@ -182,36 +190,38 @@ public:
 * */
 
 	HeadTool(
-			const double specificGravity,
-			const double flowRate,
-			const double suctionPipeDiameter,
-			const double suctionGaugePressure,
-			const double suctionGaugeElevation,
-			const double suctionLineLossCoefficients,
-			const double dischargePipeDiameter,
-			const double dischargeGaugePressure,
-			const double dischargeGaugeElevation,
-			const double dischargeLineLossCoefficients
-	) :
-			HeadToolBase( specificGravity,
-			              flowRate,
-			              suctionPipeDiameter,
-			              suctionLineLossCoefficients,
-			              dischargePipeDiameter,
-			              dischargeGaugePressure,
-			              dischargeGaugeElevation,
-			              dischargeLineLossCoefficients),
-			suctionGaugePressure(suctionGaugePressure),
-			suctionGaugeElevation(suctionGaugeElevation)
-	{}
+		const double specificGravity,
+		const double flowRate,
+		const double suctionPipeDiameter,
+		const double suctionGaugePressure,
+		const double suctionGaugeElevation,
+		const double suctionLineLossCoefficients,
+		const double dischargePipeDiameter,
+		const double dischargeGaugePressure,
+		const double dischargeGaugeElevation,
+		const double dischargeLineLossCoefficients) : HeadToolBase(specificGravity,
+																   flowRate,
+																   suctionPipeDiameter,
+																   suctionLineLossCoefficients,
+																   dischargePipeDiameter,
+																   dischargeGaugePressure,
+																   dischargeGaugeElevation,
+																   dischargeLineLossCoefficients),
+													  suctionGaugePressure(suctionGaugePressure),
+													  suctionGaugeElevation(suctionGaugeElevation)
+	{
+	}
 	/**
      * Calculates the operating pump head
-     * @return unordered_map with internal values calculated
+     * @return Output struct with internal values calculated
      */
-	std::unordered_map<std::string, double> calculate() override;
 
-private:
+	HeadToolBase::Output calculate() override;
+	// std::unordered_map<std::string, double> calculate() override;
+
+  private:
 	const double suctionGaugePressure, suctionGaugeElevation;
+	HeadToolBase::Output output;
 };
 
 #endif //AMO_TOOLS_SUITE_HEADTOOL_H

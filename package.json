@@ -8,6 +8,7 @@
   "gypfile": true,
   "dependencies": {
     "d3": "^4.13.0",
+    "esm": "^3.2.25",
     "nan": "2.14.0",
     "node-gyp": "4.0.0",
     "utf-8-validate": "5.0.2"
@@ -17,12 +18,13 @@
     "tap": "12.6.0"
   },
   "engines": {
-    "node": "10.11.0",
-    "npm": "6.4.1"
+    "node": "12.8.0",
+    "npm": "6.13.4"
   },
   "scripts": {
     "test": "tap debug tests/js/*.js",
-    "at": "tap debug tests/at/js/*.js"
+    "at": "tap debug tests/at/js/*.js",
+    "install": "node-gyp rebuild"
   },
   "repository": {
     "type": "git",
@@ -33,5 +35,6 @@
   "bugs": {
     "url": "https://github.com/ORNL-AMO/AMO-Tools-Suite/issues"
   },
-  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme"
+  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme",
+  "main": "index.js"
 }

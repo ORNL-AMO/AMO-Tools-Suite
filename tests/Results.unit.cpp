@@ -478,7 +478,8 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	};
 
 	auto const compare = [&unitTestNumber, &expected](const std::array<double, 6> & results) {
-		for (auto i = 0; i < results.size(); i++) {
+		for (unsigned int i = 0; i < results.size(); i++) {
+		// for (auto i = 0; i < results.size(); i++) {
 			INFO("index is " + std::to_string(i) + " and the unit test number is " + std::to_string(unitTestNumber));
 			CHECK(expected.at(unitTestNumber).at(i) == Approx(results[i]));
 		}
