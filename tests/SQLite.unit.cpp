@@ -7,6 +7,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <calculator/pump/PumpData.h>
 #include <fstream>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
@@ -285,6 +286,34 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
         CHECK(Approx(sqlite.getCustomWallLossesSurface().at(0).getConditionFactor()) == 0.5);
         CHECK(Approx(sqlite.getCustomWallLossesSurface().at(1).getConditionFactor()) == 0.75);
     }
+
+    {
+
+		PumpData pump1("manufacturerCustom1", "modelCustom1", "typeCustom1", "serialNumberCustom1", "statusCustom1", "pumpTypeCustom1",
+                    "radialBearingTypeCustom1", "thrustBearingTypeCustom1", "shaftOrientationCustom1", "shaftSealTypeCustom1", "fluidTypeCustom1",
+                    "priorityCustom1", "driveTypeCustom1", "flangeConnectionClassCustom1", "flangeConnectionSizeCustom1", 1, 2, 1, 9000, 2018, 1780,
+                    5, 90, 6, 89, 90, 85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1);
+
+        PumpData pump2("manufacturerCustom2", "modelCustom2", "typeCustom2", "serialNumberCustom2", "statusCustom2", "pumpTypeCustom2",
+                    "radialBearingTypeCustom2", "thrustBearingTypeCustom2", "shaftOrientationCustom2", "shaftSealTypeCustom2", "fluidTypeCustom2",
+                    "priorityCustom2", "driveTypeCustom2", "flangeConnectionClassCustom2", "flangeConnectionSizeCustom2", 1, 2, 1, 9000, 2018, 1780,
+                    5, 90, 6, 89, 90, 85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1);
+
+		sqlite.insertPumpData(pump1);
+        sqlite.insertPumpData(pump2);
+
+        auto custom1 = sqlite.getCustomPumpData().at(0);
+        auto custom2 = sqlite.getCustomPumpData().at(1);
+
+		custom1.setManufacturer("updatedManufacturerCustom1");
+        custom2.setManufacturer("updatedManufacturerCustom2");
+
+        sqlite.updatePumpData(custom1);
+        sqlite.updatePumpData(custom2);
+
+        CHECK(sqlite.getCustomPumpData().at(0).getManufacturer() == "updatedManufacturerCustom1");
+        CHECK(sqlite.getCustomPumpData().at(1).getManufacturer() == "updatedManufacturerCustom2");
+	}
 }
 
 TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
