@@ -1237,7 +1237,7 @@ void SQLite::insert_default_data()
         insert_wall_losses_surface(surface);
         //getWallLossesSurfaceById(1);
     }
-    /*
+    ///*
     for( auto const & pump : get_default_pump_data() ) {
         insert_pump_data(pump);
         //auto testing = getPumpDataById(1);
@@ -1245,7 +1245,8 @@ void SQLite::insert_default_data()
         //std::cout << "TEST";
 
     }
-    */
+    //*/
+    /*
     auto test = get_default_pump_data();
 
     std::ofstream ofs("debug.txt");
@@ -1263,6 +1264,7 @@ void SQLite::insert_default_data()
         ofs << std::endl << std::endl;
     }
     auto hello = 0;
+    */
 
 }
 
@@ -1687,7 +1689,7 @@ bool SQLite::updateWallLossesSurface(WallLosses const &material) {
 }
 
 bool SQLite::insertPumpData(PumpData const &pump) {
-    bind_value(m_pump_data_insert_stmt, 1, 1);
+    bind_value(m_pump_data_insert_stmt, 1, 1); // sid
     bind_value(m_pump_data_insert_stmt, 2, pump.manufacturer);
     bind_value(m_pump_data_insert_stmt, 3, pump.model);
     bind_value(m_pump_data_insert_stmt, 4, pump.type);
@@ -1803,6 +1805,7 @@ bool SQLite::updatePumpData(PumpData const &pump) {
     bind_value(m_pump_data_update_stmt, 44, pump.minFlowSize);
     bind_value(m_pump_data_update_stmt, 45, pump.pumpSize);
     bind_value(m_pump_data_update_stmt, 46, pump.outOfService);
+    bind_value(m_pump_data_update_stmt, 47, pump.id);
 
     int rc = step_command(m_pump_data_update_stmt);
     bool valid_insert = step_validity(rc);
@@ -1815,7 +1818,7 @@ bool SQLite::insert_pump_data(PumpData const &pump) {
         return false;
     }
 
-    bind_value(m_pump_data_insert_stmt, 1, 0);
+    bind_value(m_pump_data_insert_stmt, 1, 0); // sid
     bind_value(m_pump_data_insert_stmt, 2, pump.manufacturer);
     bind_value(m_pump_data_insert_stmt, 3, pump.model);
     bind_value(m_pump_data_insert_stmt, 4, pump.type);
