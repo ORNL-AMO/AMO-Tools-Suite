@@ -1246,10 +1246,11 @@ void SQLite::insert_default_data()
 
     }
     //*/
+    //std::ofstream ofs("debug.txt");
     /*
     auto test = get_default_pump_data();
 
-    std::ofstream ofs("debug.txt");
+    //std::ofstream ofs("debug.txt");
     ofs << "get_default_pump_data() returned a size of " << test.size();
     auto index = 0;
     for( auto const & pump : get_default_pump_data() ) {
@@ -1264,6 +1265,21 @@ void SQLite::insert_default_data()
         ofs << std::endl << std::endl;
     }
     auto hello = 0;
+    */
+
+    /*
+    //SolidLoadChargeMaterial slcm("Substance", 0.247910198231111, 887, 0.2501, 1117);
+    //auto result = insert_solid_load_charge_materials(slcm);
+    //ofs << "result: " << result << std::endl;
+    //auto slcm_data = get_default_solid_load_charge_materials();
+    auto slcm_data = getSolidLoadChargeMaterials();
+    //auto slcm_data_single = getSolidLoadChargeMaterialById(0);
+    ofs << "getSolidLoadChargeMaterials() returned a size of " << slcm_data.size();
+    ofs << std::endl << std::endl;
+    for( auto const & slcm : slcm_data ) {
+        ofs << " slcm: " << slcm.substance << " slcm.id: " << slcm.id << std::endl;
+    }
+    //ofs << "getSolidLoadChargeMaterialById(0) returned substance of " << slcm_data_single.substance << std::endl;
     */
 
 }
