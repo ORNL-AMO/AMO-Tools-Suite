@@ -481,9 +481,39 @@ test('dbInsertWallLossesSurface', function (t) {
     t.equal(res[size].surface, obj2.surface, res[size].surface + " != " + obj2.surface);
     t.equal(res[size].conditionFactor, obj2.conditionFactor, res[size].conditionFactor + " != " + obj2.conditionFactor);
 });
+/*
+test('dbSelectPumpData', function (t) {
+    t.plan(2);
+    bindings.startup();
+    t.type(bindings.selectPumpById, 'function');
 
-// PUMP TEST HERE
+    var res = bindings.selectPumpById(1);
+    var obj = {
+        id: 1, manufacturer: "manufacturer", model: "model", type: "type", serialNumber: "serialNumber",
+        status: "status",  pumpType: "pumpType", radialBearingType: "radialBearingType", thrustBearingType: "thrustBearingType",
+        shaftOrientation: "shaftOrientation", shaftSealType: "shaftSealType", fluidType: "fluidType", priority: "priority",
+        driveType: "driveType", flangeConnectionClass: "flangeConnectionClass", flangeConnectionSize: "flangeConnectionSize",
+        numShafts: 1, speed: 2, numStages: 1,  yearlyOperatingHours: 9000, yearInstalled: 2018,
+        finalMotorRpm: 1780, inletDiameter: 5, weight: 90, outletDiameter: 6,
+        percentageOfSchedule: 89, dailyPumpCapacity: 90, measuredPumpCapacity: 85,
+        pumpPerformance: 99, staticSuctionHead: 15, staticDischargeHead: 11, fluidDensity: 13,
+        lengthOfDischargePipe: 14, pipeDesignFrictionLosses: 0.5, maxWorkingPressure: 250,
+        maxAmbientTemperature: 85, maxSuctionLift: 1.5, displacement: 600, startingTorque: 400,
+        ratedSpeed: 70, shaftDiameter: 15, impellerDiameter: 20, efficiency: 88,
+        output60Hz: 15, minFlowSize: 15, pumpSize: 15, outOfService: 1
+    };
 
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
+
+    // bindings.insertPump(pump_example);
+    //var all_pumps = bindings.selectPumps();
+    //var size = all_pumps.size;
+    // t.equal(all_pumps.length, 1);
+
+    // var all_motors = bindings.selectMotors();
+    //var test = 0
+});
+*/
 test('dbDeletions', function (t) {
     t.plan(7);
     bindings.startup();
