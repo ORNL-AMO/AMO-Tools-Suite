@@ -482,6 +482,8 @@ test('dbInsertWallLossesSurface', function (t) {
     t.equal(res[size].conditionFactor, obj2.conditionFactor, res[size].conditionFactor + " != " + obj2.conditionFactor);
 });
 
+// PUMP TEST HERE
+
 test('dbDeletions', function (t) {
     t.plan(7);
     bindings.startup();
