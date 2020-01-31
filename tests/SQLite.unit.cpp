@@ -426,6 +426,21 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
         auto const output2 = sqlite.getWallLossesSurface();
         CHECK( output2[output2.size() - 1].getSurface() == last );
     }
+
+    {
+        auto const output = sqlite.getPumpData();
+        auto const last = output.back().getManufacturer();
+        PumpData pump(
+                "throw this pump away delete", "model", "type", "serialNumber", "status", "pumpType", "radial",
+                "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
+                "flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
+                85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1 );
+
+        sqlite.insertPumpData(pump);
+        sqlite.deletePumpData(sqlite.getPumpData().back().getId());
+        auto const output2 = sqlite.getPumpData();
+        CHECK( output2[output2.size() - 1].getManufacturer() == last );
+    }
 }
 
 //// commented because it writes to HDD
