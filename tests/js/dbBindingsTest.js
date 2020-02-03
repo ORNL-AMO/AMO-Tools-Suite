@@ -481,13 +481,15 @@ test('dbInsertWallLossesSurface', function (t) {
     t.equal(res[size].surface, obj2.surface, res[size].surface + " != " + obj2.surface);
     t.equal(res[size].conditionFactor, obj2.conditionFactor, res[size].conditionFactor + " != " + obj2.conditionFactor);
 });
-/*
+///*
 test('dbSelectPumpData', function (t) {
     t.plan(2);
     bindings.startup();
     t.type(bindings.selectPumpById, 'function');
 
-    var res = bindings.selectPumpById(1);
+    //var res = bindings.selectPumpById(1);
+    var test = bindings.selectPumps();
+    var size = test.length;
     var obj = {
         id: 1, manufacturer: "manufacturer", model: "model", type: "type", serialNumber: "serialNumber",
         status: "status",  pumpType: "pumpType", radialBearingType: "radialBearingType", thrustBearingType: "thrustBearingType",
@@ -503,7 +505,8 @@ test('dbSelectPumpData', function (t) {
         output60Hz: 15, minFlowSize: 15, pumpSize: 15, outOfService: 1
     };
 
-    t.equal(res.id, obj.id, res.id + " != " + obj.id);
+    //t.equal(res.id, obj.id, res.id + " != " + obj.id);
+    t.equal(size, 0, size + " != 0");
 
     // bindings.insertPump(pump_example);
     //var all_pumps = bindings.selectPumps();
@@ -513,7 +516,7 @@ test('dbSelectPumpData', function (t) {
     // var all_motors = bindings.selectMotors();
     //var test = 0
 });
-*/
+//*/
 test('dbDeletions', function (t) {
     t.plan(7);
     bindings.startup();

@@ -52,11 +52,13 @@ std::string GetStr(std::string const &nm)
 inline void SetObj(Local<Object> &obj, const std::string &key, double val)
 {
     Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
+    //Nan::Set(obj, Nan::New<String>(static_cast<std::string>(key)).ToLocalChecked(), Nan::New<Number>(val));
 }
 
 inline void SetObj(Local<Object> &obj, const std::string &key, const std::string &val)
 {
     Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<String>(val).ToLocalChecked());
+    //Nan::Set(obj, Nan::New<String>(static_cast<std::string>(key)).ToLocalChecked(), Nan::New<String>(val).ToLocalChecked());
 }
 
 void SetPumpData(Local<Object> & obj, const PumpData & pump) {
@@ -780,7 +782,8 @@ NAN_METHOD(selectPumpById) {
     Local<Object> pump = Nan::New<Object>();
     try {
         //SetPumpData(pump, sql->getPumpDataById(static_cast<int>(info[0].FromJust())));
-        SetPumpData(pump, sql->getPumpDataById(static_cast<int>(Nan::To<double>(info[0]).FromJust())));
+        //SetPumpData(pump, sql->getPumpDataById(static_cast<int>(Nan::To<double>(info[0]).FromJust())));
+        sql->getPumpDataById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     } catch (std::runtime_error const & e) {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in selectPumpById - db.h: " + what).c_str());

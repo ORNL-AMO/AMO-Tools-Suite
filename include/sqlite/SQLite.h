@@ -82,7 +82,8 @@ protected:
                 return retVal;
             }
             reset_command(stmt);
-            throw std::runtime_error("Invalid command during get_object");
+            //throw std::runtime_error("Invalid command during get_object");
+            throw std::runtime_error("Invalid command during get_object. SQLite return code: " + std::to_string(rc));
         }
         throw std::runtime_error("No valid database connection");
     }

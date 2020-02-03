@@ -1232,5 +1232,11 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         sqlite.updatePumpData(pump);
 
         compare(sqlite.getPumpData().back(), pump);
+
+        auto pumpById = sqlite.getPumpDataById(2);
+        compare(sqlite.getPumpData().back(), pumpById);
+
+        //sqlite.deletePumpData(2);
+        //compare(sqlite.getPumpData().back(), expected);
     }
 }
