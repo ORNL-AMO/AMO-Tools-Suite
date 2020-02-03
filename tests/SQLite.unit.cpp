@@ -1202,7 +1202,8 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
     };
 
     auto sqlite = SQLite(":memory:", true);
-//    auto sqlite = SQLite("cpp_amo_tools_suite.db", true);
+    //auto sqlite = SQLite("cpp_amo_tools_suite.db", true);
+    //auto sqlite = SQLite("test.db", true);
 
     {
         auto const pumps = sqlite.getPumpData();

@@ -1245,6 +1245,16 @@ void SQLite::insert_default_data()
         //std::cout << "TEST";
 
     }
+    /*
+    std::ofstream ofs("debug.txt");
+    auto test = getPumpData();
+    ofs << std::endl;
+    ofs << "get_default_pump_data() returned a size of " << test.size();
+    ofs << std::endl;
+    ofs << "manufacturer: " << test[0].getManufacturer();
+    ofs << std::endl;
+    */
+
     //*/
     //std::ofstream ofs("debug.txt");
     /*

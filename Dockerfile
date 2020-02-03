@@ -118,6 +118,10 @@ WORKDIR /home/
 RUN apt-get -y install emacs
 RUN emacs --version
 
+# Install sqlite3
+RUN apt-get install sqlite3 libsqlite3-dev
+RUN sqlite3 --version
+
 
 # Commands to run for building/testing/running AMO-Tools-Suite
 # -------------------------------------------------------------
