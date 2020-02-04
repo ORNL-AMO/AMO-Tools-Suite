@@ -488,8 +488,7 @@ test('dbSelectPumpData', function (t) {
     t.type(bindings.selectPumpById, 'function');
 
     var res = bindings.selectPumpById(1);
-    //var test = bindings.selectPumps();
-    //var size = test.length;
+    
     var obj = {
         id: 1, manufacturer: "manufacturer", model: "model", type: "type", serialNumber: "serialNumber",
         status: "status",  pumpType: "pumpType", radialBearingType: "radialBearingType", thrustBearingType: "thrustBearingType",
@@ -506,10 +505,11 @@ test('dbSelectPumpData', function (t) {
     };
 
     //bindings.insertPump(obj);
-    var test = bindings.selectPumps();
+    //var test = bindings.selectPumps();
 
-    //t.equal(res.id, obj.id, res.id + " != " + obj.id);
-    t.equal(test.length, 1, test.length + " != 1");
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
+    //t.equal(res.manufacturer , obj.manufacturer, res.manufacturer + " != " + obj.manufacturer);
+    //t.equal(test.length, 1, test.length + " != 1");
     //t.equal(0, 0, "0 != 0");
 
     // bindings.insertPump(pump_example);
