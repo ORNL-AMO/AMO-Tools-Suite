@@ -1215,6 +1215,9 @@ void SQLite::create_tables()
 
 void SQLite::insert_default_data()
 {
+    for( auto const & pump : get_default_pump_data() ) {
+        insert_pump_data(pump);
+    }
     for( auto const & material : get_default_solid_load_charge_materials() ) {
         insert_solid_load_charge_materials(material);
     }
@@ -1235,8 +1238,8 @@ void SQLite::insert_default_data()
     }
     for( auto const & surface : get_default_wall_losses_surface() ) {
         insert_wall_losses_surface(surface);
-        //getWallLossesSurfaceById(1);
     }
+    /*
     std::ofstream fout;
     //fout.open("debug.txt", std::ios::app);
     for( auto const & pump : get_default_pump_data() ) {
@@ -1248,6 +1251,7 @@ void SQLite::insert_default_data()
 
     }
     //fout.close();
+    */
 }
 
 bool SQLite::insert_solid_load_charge_materials(SolidLoadChargeMaterial const & material)
