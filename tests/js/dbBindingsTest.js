@@ -483,7 +483,7 @@ test('dbInsertWallLossesSurface', function (t) {
 });
 ///*
 test('dbSelectPumpData', function (t) {
-    t.plan(2);
+    t.plan(48); //2
     bindings.startup();
     t.type(bindings.selectPumpById, 'function');
 
@@ -504,13 +504,54 @@ test('dbSelectPumpData', function (t) {
         output60Hz: 15, minFlowSize: 15, pumpSize: 15, outOfService: 1
     };
 
-    //bindings.insertPump(obj);
-    //var test = bindings.selectPumps();
-
+    //t.equal(res, obj, res.toString() + " != " + obj.toString());
     t.equal(res.id, obj.id, res.id + " != " + obj.id);
-    //t.equal(res.manufacturer , obj.manufacturer, res.manufacturer + " != " + obj.manufacturer);
-    //t.equal(test.length, 1, test.length + " != 1");
-    //t.equal(0, 0, "0 != 0");
+    t.equal(res.manufacturer, obj.manufacturer, res.manufacturer + " != " + obj.manufacturer);
+    t.equal(res.model, obj.model, res.model + " != " + obj.model);
+    t.equal(res.type, obj.type, res.type + " != " + obj.type);
+    t.equal(res.serialNumber, obj.serialNumber, res.serialNumber + " != " + obj.serialNumber);
+    t.equal(res.status, obj.status, res.status + " != " + obj.status);
+    t.equal(res.pumpType, obj.pumpType, res.pumpType + " != " + obj.pumpType);
+    t.equal(res.radialBearingType, obj.radialBearingType, res.radialBearingType + " != " + obj.radialBearingType);
+    t.equal(res.thrustBearingType, obj.thrustBearingType, res.thrustBearingType + " != " + obj.thrustBearingType);
+    t.equal(res.shaftOrientation, obj.shaftOrientation, res.shaftOrientation + " != " + obj.shaftOrientation);
+    t.equal(res.shaftSealType, obj.shaftSealType, res.shaftSealType + " != " + obj.shaftSealType);
+    t.equal(res.fluidType, obj.fluidType, res.fluidType + " != " + obj.fluidType);
+    t.equal(res.priority, obj.priority, res.priority + " != " + obj.priority);
+    t.equal(res.driveType, obj.driveType, res.driveType + " != " + obj.driveType);
+    t.equal(res.flangeConnectionClass, obj.flangeConnectionClass, res.flangeConnectionClass + " != " + obj.flangeConnectionClass);
+    t.equal(res.flangeConnectionSize, obj.flangeConnectionSize, res.flangeConnectionSize + " != " + obj.flangeConnectionSize);
+    t.equal(res.numShafts, obj.numShafts, res.numShafts + " != " + obj.numShafts);
+    t.equal(res.speed, obj.speed, res.speed + " != " + obj.speed);
+    t.equal(res.numStages, obj.numStages, res.numStages + " != " + obj.numStages);
+    t.equal(res.yearlyOperatingHours, obj.yearlyOperatingHours, res.yearlyOperatingHours + " != " + obj.yearlyOperatingHours);
+    t.equal(res.yearlyInstalled, obj.yearlyInstalled, res.yearlyInstalled + " != " + obj.yearlyInstalled);
+    t.equal(res.finalMotorRpm, obj.finalMotorRpm, res.finalMotorRpm + " != " + obj.finalMotorRpm);
+    t.equal(res.inletDiameter, obj.inletDiameter, res.inletDiameter + " != " + obj.inletDiameter);
+    t.equal(res.weight, obj.weight, res.weight + " != " + obj.weight);
+    t.equal(res.outletDiameter, obj.outletDiameter, res.outletDiameter + " != " + obj.outletDiameter);
+    t.equal(res.percentageOfSchedule, obj.percentageOfSchedule, res.percentageOfSchedule + " != " + obj.percentageOfSchedule);
+    t.equal(res.dailyPumpCapacity, obj.dailyPumpCapacity, res.dailyPumpCapacity + " != " + obj.dailyPumpCapacity);
+    t.equal(res.measuredPumpCapacity, obj.measuredPumpCapacity, res.measuredPumpCapacity + " != " + obj.measuredPumpCapacity);
+    t.equal(res.pumpPerformance, obj.pumpPerformance, res.pumpPerformance + " != " + obj.pumpPerformance);
+    t.equal(res.staticSuctionHead, obj.staticSuctionHead, res.staticSuctionHead + " != " + obj.staticSuctionHead);
+    t.equal(res.staticDischargeHead, obj.staticDischargeHead, res.staticDischargeHead + " != " + obj.staticDischargeHead);
+    t.equal(res.fluidDensity, obj.fluidDensity, res.fluidDensity + " != " + obj.fluidDensity);
+    t.equal(res.lengthOfDischargePipe, obj.lengthOfDischargePipe, res.lengthOfDischargePipe + " != " + obj.lengthOfDischargePipe);
+    t.equal(res.pipeDesignFrictionLosses, obj.pipeDesignFrictionLosses, res.pipeDesignFrictionLosses + " != " + obj.pipeDesignFrictionLosses);
+    t.equal(res.maxWorkingPressure, obj.maxWorkingPressure, res.maxWorkingPressure + " != " + obj.maxWorkingPressure);
+    t.equal(res.maxAmbientTemperature, obj.maxAmbientTemperature, res.maxAmbientTemperature + " != " + obj.maxAmbientTemperature);
+    t.equal(res.maxSuctionLift, obj.maxSuctionLift, res.maxSuctionLift + " != " + obj.maxSuctionLift);
+    t.equal(res.displacement, obj.displacement, res.displacement + " != " + obj.displacement);
+    t.equal(res.startingTorque, obj.startingTorque, res.startingTorque + " != " + obj.startingTorque);
+    t.equal(res.ratedSpeed, obj.ratedSpeed, res.ratedSpeed + " != " + obj.ratedSpeed);
+    t.equal(res.shaftDiameter, obj.shaftDiameter, res.shaftDiameter + " != " + obj.shaftDiameter);
+    t.equal(res.impellerDiameter, obj.impellerDiameter, res.impellerDiameter + " != " + obj.impellerDiameter);
+    t.equal(res.efficiency, obj.efficiency, res.efficiency + " != " + obj.efficiency);
+    t.equal(res.output60Hz, obj.output60Hz, res.output60Hz + " != " + obj.output60Hz);
+    t.equal(res.minFlowSize, obj.minFlowSize, res.minFlowSize + " != " + obj.minFlowSize);
+    t.equal(res.pumpSize, obj.pumpSize, res.pumpSize + " != " + obj.pumpSize);
+    t.equal(res.outOfService, obj.outOfService, res.outOfService + " != " + obj.outOfService);
 
     // bindings.insertPump(pump_example);
     //var all_pumps = bindings.selectPumps();
