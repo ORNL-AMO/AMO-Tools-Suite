@@ -1237,65 +1237,17 @@ void SQLite::insert_default_data()
         insert_wall_losses_surface(surface);
         //getWallLossesSurfaceById(1);
     }
-    ///*
     std::ofstream fout;
-    fout.open("debug.txt", std::ios::app);
+    //fout.open("debug.txt", std::ios::app);
     for( auto const & pump : get_default_pump_data() ) {
-        bool flag = insert_pump_data(pump);
-        fout << flag << std::endl; // expected number of times flag printed to file: 35
+        insert_pump_data(pump);
+        //fout << flag << std::endl; // expected number of times flag printed to file: 35
         //auto testing = getPumpDataById(1);
         //auto hello = 0;
         //std::cout << "TEST";
 
     }
-    fout.close();
-    /*
-    std::ofstream ofs("debug.txt");
-    auto test = getPumpData();
-    ofs << std::endl;
-    ofs << "get_default_pump_data() returned a size of " << test.size();
-    ofs << std::endl;
-    ofs << "manufacturer: " << test[0].getManufacturer();
-    ofs << std::endl;
-    */
-
-    //*/
-    //std::ofstream ofs("debug.txt");
-    /*
-    auto test = get_default_pump_data();
-
-    //std::ofstream ofs("debug.txt");
-    ofs << "get_default_pump_data() returned a size of " << test.size();
-    auto index = 0;
-    for( auto const & pump : get_default_pump_data() ) {
-        ofs << " pump: " << pump.manufacturer << " pump.id (uninitialized prob): " << pump.id << std::endl;
-        auto result = insert_pump_data(pump);
-        ofs << " result: " << result << std::endl;
-        auto all_pumps_so_far = getPumpData();
-        ofs << "pump count as of now: " << all_pumps_so_far.size() << std::endl << std::endl;
-        for( auto const & pump_inner : all_pumps_so_far ) {
-            ofs << " pump_inner: " << pump_inner.manufacturer << " pump_inner.id (should be initialized): " << pump_inner.id << std::endl;
-        }
-        ofs << std::endl << std::endl;
-    }
-    auto hello = 0;
-    */
-
-    /*
-    //SolidLoadChargeMaterial slcm("Substance", 0.247910198231111, 887, 0.2501, 1117);
-    //auto result = insert_solid_load_charge_materials(slcm);
-    //ofs << "result: " << result << std::endl;
-    //auto slcm_data = get_default_solid_load_charge_materials();
-    auto slcm_data = getSolidLoadChargeMaterials();
-    //auto slcm_data_single = getSolidLoadChargeMaterialById(0);
-    ofs << "getSolidLoadChargeMaterials() returned a size of " << slcm_data.size();
-    ofs << std::endl << std::endl;
-    for( auto const & slcm : slcm_data ) {
-        ofs << " slcm: " << slcm.substance << " slcm.id: " << slcm.id << std::endl;
-    }
-    //ofs << "getSolidLoadChargeMaterialById(0) returned substance of " << slcm_data_single.substance << std::endl;
-    */
-
+    //fout.close();
 }
 
 bool SQLite::insert_solid_load_charge_materials(SolidLoadChargeMaterial const & material)
