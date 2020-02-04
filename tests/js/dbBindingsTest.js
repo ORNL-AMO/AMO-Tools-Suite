@@ -487,7 +487,7 @@ test('dbSelectPumpData', function (t) {
     bindings.startup();
     t.type(bindings.selectPumpById, 'function');
 
-    //var res = bindings.selectPumpById(1);
+    var res = bindings.selectPumpById(1);
     //var test = bindings.selectPumps();
     //var size = test.length;
     var obj = {
