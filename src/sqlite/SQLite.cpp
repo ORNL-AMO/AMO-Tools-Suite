@@ -1238,13 +1238,17 @@ void SQLite::insert_default_data()
         //getWallLossesSurfaceById(1);
     }
     ///*
+    std::ofstream fout;
+    fout.open("debug.txt", std::ios::app);
     for( auto const & pump : get_default_pump_data() ) {
-        insert_pump_data(pump);
+        bool flag = insert_pump_data(pump);
+        fout << flag << std::endl; // expected number of times 'SUCCESS' printed to file: 35
         //auto testing = getPumpDataById(1);
         //auto hello = 0;
         //std::cout << "TEST";
 
     }
+    fout.close();
     /*
     std::ofstream ofs("debug.txt");
     auto test = getPumpData();

@@ -15,7 +15,6 @@
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
 #include <calculator/pump/PumpData.h>
-//#include <sqlite/PumpData.h>
 
 using namespace Nan;
 using namespace v8;
@@ -125,24 +124,18 @@ NAN_METHOD(startup)
     //	    sql.reset();
     //        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
 
-    std::string const dbName = ":memory:";
-    //std::string const dbName = "test.db";
+    //std::string const dbName = ":memory:";
+    std::string const dbName = "test.db";
     sql.reset();
     sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
-    auto sqlite = SQLite("test.db", true);
+
+    //auto sqlite = SQLite("test.db", true);
     /*
     PumpData pump("manufacturer", "model", "type", "serialNumber", "status", "pumpType", "radialBearingType",
 					"thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
 					"flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
 					85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1);
-    auto flag = sql->insertPumpData(pump);
-    //std::ofstream ofs("debug.txt");
-    //auto test = sql->getPumpData();
-    //ofs << std::endl;
-    //ofs << "getPumpData() returned a size of " << test.size();
-    //ofs << std::endl;
-    //ofs << "manufacturer: " << test[0].getManufacturer();
-    //ofs << std::endl;
+    sql->insertPumpData(pump);
     */
 }
 
