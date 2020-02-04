@@ -509,8 +509,8 @@ test('dbSelectPumpData', function (t) {
     var test = bindings.selectPumps();
 
     //t.equal(res.id, obj.id, res.id + " != " + obj.id);
-    //t.equal(test.length, 0, test.length + " != 1");
-    t.equal(0, 0, "0 != 0");
+    t.equal(test.length, 1, test.length + " != 1");
+    //t.equal(0, 0, "0 != 0");
 
     // bindings.insertPump(pump_example);
     //var all_pumps = bindings.selectPumps();
