@@ -1242,7 +1242,7 @@ void SQLite::insert_default_data()
     fout.open("debug.txt", std::ios::app);
     for( auto const & pump : get_default_pump_data() ) {
         bool flag = insert_pump_data(pump);
-        fout << flag << std::endl; // expected number of times 'SUCCESS' printed to file: 35
+        fout << flag << std::endl; // expected number of times flag printed to file: 35
         //auto testing = getPumpDataById(1);
         //auto hello = 0;
         //std::cout << "TEST";
