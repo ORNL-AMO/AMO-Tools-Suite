@@ -124,8 +124,8 @@ NAN_METHOD(startup)
     //	    sql.reset();
     //        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
 
-    //std::string const dbName = ":memory:";
-    std::string const dbName = "test.db";
+    std::string const dbName = ":memory:";
+    //std::string const dbName = "test.db";
     sql.reset();
     sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
 
