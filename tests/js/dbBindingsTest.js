@@ -605,9 +605,6 @@ test('dbSelectPumpData', function (t) {
     t.equal(res[0].minFlowSize, obj.minFlowSize, res[0].minFlowSize + " != " + obj.minFlowSize);
     t.equal(res[0].pumpSize, obj.pumpSize, res[0].pumpSize + " != " + obj.pumpSize);
     t.equal(res[0].outOfService, obj.outOfService, res[0].outOfService + " != " + obj.outOfService);
-
-    // var all_motors = bindings.selectMotors();
-    //var test = 0
 });
 
 test('dbInsertPump', function (t) {
@@ -687,7 +684,7 @@ test('dbInsertPump', function (t) {
 });
 
 test('dbDeletions', function (t) {
-    t.plan(7);
+    t.plan(8);
     bindings.startup();
 
     var res = bindings.selectLiquidLoadChargeMaterials();
@@ -791,10 +788,31 @@ test('dbDeletions', function (t) {
     bindings.deleteWallLossesSurface(bindings.selectWallLossesSurface().length);
     res = bindings.selectWallLossesSurface();
     t.equal(last, res[res.length - 1].surface);
+
+    res = bindings.selectPumps();
+    last = res[res.length - 1].id;
+    obj = {
+        id: 2, manufacturer: "manufacturer2", model: "model2", type: "type2", serialNumber: "serialNumber2",
+        status: "status2",  pumpType: "pumpType2", radialBearingType: "radialBearingType2", thrustBearingType: "thrustBearingType2",
+        shaftOrientation: "shaftOrientation2", shaftSealType: "shaftSealType2", fluidType: "fluidType2", priority: "priority2",
+        driveType: "driveType2", flangeConnectionClass: "flangeConnectionClass2", flangeConnectionSize: "flangeConnectionSize2",
+        numShafts: 1, speed: 2, numStages: 1,  yearlyOperatingHours: 9000, yearInstalled: 2018,
+        finalMotorRpm: 1780, inletDiameter: 5, weight: 90, outletDiameter: 6,
+        percentageOfSchedule: 89, dailyPumpCapacity: 90, measuredPumpCapacity: 85,
+        pumpPerformance: 99, staticSuctionHead: 15, staticDischargeHead: 11, fluidDensity: 13,
+        lengthOfDischargePipe: 14, pipeDesignFrictionLosses: 0.5, maxWorkingPressure: 250,
+        maxAmbientTemperature: 85, maxSuctionLift: 1.5, displacement: 600, startingTorque: 400,
+        ratedSpeed: 70, shaftDiameter: 15, impellerDiameter: 20, efficiency: 88,
+        output60Hz: 15, minFlowSize: 15, pumpSize: 15, outOfService: 1
+    };
+    bindings.insertPump(obj);
+    bindings.deletePump(bindings.selectPumps().length);
+    res = bindings.selectPumps();
+    t.equal(last, res[res.length - 1].id);
 });
 
 test('dbUpdates', function (t) {
-    t.plan(7);
+    t.plan(8);
     bindings.startup();
 
     var obj = {
@@ -892,6 +910,26 @@ test('dbUpdates', function (t) {
     mat.surface = 'updated';
     bindings.updateWallLossesSurface(mat);
     t.equal(bindings.selectWallLossesSurfaceById(bindings.selectWallLossesSurface().length).surface, 'updated');
+
+    obj = {
+        id: 2, manufacturer: "manufacturer2", model: "model2", type: "type2", serialNumber: "serialNumber2",
+        status: "status2",  pumpType: "pumpType2", radialBearingType: "radialBearingType2", thrustBearingType: "thrustBearingType2",
+        shaftOrientation: "shaftOrientation2", shaftSealType: "shaftSealType2", fluidType: "fluidType2", priority: "priority2",
+        driveType: "driveType2", flangeConnectionClass: "flangeConnectionClass2", flangeConnectionSize: "flangeConnectionSize2",
+        numShafts: 1, speed: 2, numStages: 1,  yearlyOperatingHours: 9000, yearInstalled: 2018,
+        finalMotorRpm: 1780, inletDiameter: 5, weight: 90, outletDiameter: 6,
+        percentageOfSchedule: 89, dailyPumpCapacity: 90, measuredPumpCapacity: 85,
+        pumpPerformance: 99, staticSuctionHead: 15, staticDischargeHead: 11, fluidDensity: 13,
+        lengthOfDischargePipe: 14, pipeDesignFrictionLosses: 0.5, maxWorkingPressure: 250,
+        maxAmbientTemperature: 85, maxSuctionLift: 1.5, displacement: 600, startingTorque: 400,
+        ratedSpeed: 70, shaftDiameter: 15, impellerDiameter: 20, efficiency: 88,
+        output60Hz: 15, minFlowSize: 15, pumpSize: 15, outOfService: 1
+    };
+    bindings.insertPump(obj);
+    pump = bindings.selectPumpById(bindings.selectPumps().length);
+    pump.manufacturer = 'updated';
+    bindings.updatePump(pump);
+    t.equal(bindings.selectPumpById(bindings.selectPumps().length).manufacturer, 'updated');
 });
 
 
