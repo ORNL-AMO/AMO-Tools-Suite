@@ -128,15 +128,6 @@ NAN_METHOD(startup)
     //std::string const dbName = "test.db";
     sql.reset();
     sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
-
-    //auto sqlite = SQLite("test.db", true);
-    /*
-    PumpData pump("manufacturer", "model", "type", "serialNumber", "status", "pumpType", "radialBearingType",
-					"thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
-					"flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
-					85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1);
-    sql->insertPumpData(pump);
-    */
 }
 
 NAN_METHOD(selectSolidLoadChargeMaterials)

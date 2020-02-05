@@ -377,7 +377,7 @@ set(INCLUDE_FILES
         include/sqlite/PumpData.h
         )
 
-# TODO: Add unit test for Pump Table
+# Pending: PumpData calculator unit test
 
 set(TEST_FILES
         tests/OptimalSpecificSpeedCorrection.unit.cpp
