@@ -1,14 +1,24 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13)
 project(amo_tools_suite)
 
-set(CMAKE_MACOSX_RPATH 1)
+#set(CMAKE_MACOSX_RPATH 1)
 
-set( CMAKE_VERSION_MAJOR 0 )
-set( CMAKE_VERSION_MINOR 3 )
-set( CMAKE_VERSION_PATCH 1 )
+#set( CMAKE_VERSION_MAJOR 0 )
+#set( CMAKE_VERSION_MINOR 3 )
+#set( CMAKE_VERSION_PATCH 1 )
 
 set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
 INCLUDE_DIRECTORIES (node_modules/nan)
+
+#### WASM ####
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "--bind -s WASM=1 -O3 -s ASSERTIONS=1 -std=c++11")
+
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/public")
+
+#add_executable(client ${WASM_BINDINGS})
+#### END WASM ####
+
 
 # Build package
 # Requires:
@@ -31,8 +41,8 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-include(cmake/ProjectMacros.cmake)
-include(cmake/CompilerFlags.cmake)
+#include(cmake/ProjectMacros.cmake)
+#include(cmake/CompilerFlags.cmake)
 
 # On Windows, things end up under Debug/ or Release/.
 if (WIN32)
@@ -194,7 +204,11 @@ set(SOURCE_FILES
         src/calculator/util/insulation/services/RayleighNumber.cpp
         src/calculator/util/insulation/services/ReynoldsNumber.cpp
         src/calculator/util/insulation/services/ThermalResistance.cpp
-        src/calculator/util/SteamReduction.cpp)
+        src/calculator/util/SteamReduction.cpp
+        bindings-wasm/psat.cpp)
+
+#set(WASM_BINDINGS
+#        bindings-wasm/psat.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -439,6 +453,10 @@ set(TEST_FILES
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
 
+#### WASM ####
+add_executable(client ${SOURCE_FILES})
+#### END ####
+
 if (MINGW)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
   set(CMAKE_STATIC_LIBRARY_PREFIX "")
@@ -462,14 +480,14 @@ add_executable(amo_tools_suite_main main.cpp)
 set_target_properties(amo_tools_suite_main PROPERTIES OUTPUT_NAME "amo_tools_suite")
 target_link_libraries( amo_tools_suite_main amo_tools_suite )
 
-if( BUILD_TESTING )
-    add_library(Catch INTERFACE)
-    target_include_directories(Catch INTERFACE third_party/catch/)
+#if( BUILD_TESTING )
+ #   add_library(Catch INTERFACE)
+ #   target_include_directories(Catch INTERFACE third_party/catch/)
 
     # Create unit testing executable
-    add_executable(amo_tools_suite_tests tests/main.unit.cpp ${TEST_FILES})
-    target_link_libraries( amo_tools_suite_tests Catch amo_tools_suite )
-endif()
+  #  add_executable(amo_tools_suite_tests tests/main.unit.cpp ${TEST_FILES})
+  #  target_link_libraries( amo_tools_suite_tests Catch amo_tools_suite )
+#endif()
 
 #if(BUILD_DOCUMENTATION)
 #    find_package(Doxygen REQUIRED)
