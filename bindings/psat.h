@@ -1,6 +1,8 @@
 #ifndef AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 #define AMO_TOOLS_SUITE_PSAT_BRIDGE_H
 
+#include "NanDataConverters.h"
+
 #include <iostream>
 
 #include <map>
@@ -24,48 +26,21 @@
 using namespace Nan;
 using namespace v8;
 
-//
-//// Setup
-//
-//Isolate* iso;
-Local<Object> inp;
-Local<Object> r;
-
-//NAN function for fetching value associated with provided key
-double Get(std::string const & nm) {
-	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-	v8::Isolate *isolate = v8::Isolate::GetCurrent();
-	v8::Local<v8::Context> context = isolate->GetCurrentContext();
-	Local<Value> rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
-	if (rObj->IsUndefined()) {
-		ThrowTypeError(std::string("Get method in psat.h: " + nm + " not present in object").c_str());
-	}
-	return Nan::To<double>(rObj).FromJust();
-}
-
-//NAN function for binding data to anonymous object
-void SetR(const char *nm, double n)
-{
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    Local<Number> getNum = Nan::New<Number>(n);
-    Nan::Set(r, getName, getNum);
-}
-
 NAN_METHOD(headToolSuctionTank)
 {
     //NAN initialize data
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
-    const double specificGravity = Get("specificGravity");
-    const double flowRate = Get("flowRate");
-    const double suctionPipeDiameter = Get("suctionPipeDiameter");
-    const double suctionTankGasOverPressure = Get("suctionTankGasOverPressure");
-    const double suctionTankFluidSurfaceElevation = Get("suctionTankFluidSurfaceElevation");
-    const double suctionLineLossCoefficients = Get("suctionLineLossCoefficients");
-    const double dischargePipeDiameter = Get("dischargePipeDiameter");
-    const double dischargeGaugePressure = Get("dischargeGaugePressure");
-    const double dischargeGaugeElevation = Get("dischargeGaugeElevation");
-    const double dischargeLineLossCoefficients = Get("dischargeLineLossCoefficients");
+    const double specificGravity = getDouble("specificGravity");
+    const double flowRate = getDouble("flowRate");
+    const double suctionPipeDiameter = getDouble("suctionPipeDiameter");
+    const double suctionTankGasOverPressure = getDouble("suctionTankGasOverPressure");
+    const double suctionTankFluidSurfaceElevation = getDouble("suctionTankFluidSurfaceElevation");
+    const double suctionLineLossCoefficients = getDouble("suctionLineLossCoefficients");
+    const double dischargePipeDiameter = getDouble("dischargePipeDiameter");
+    const double dischargeGaugePressure = getDouble("dischargeGaugePressure");
+    const double dischargeGaugeElevation = getDouble("dischargeGaugeElevation");
+    const double dischargeLineLossCoefficients = getDouble("dischargeLineLossCoefficients");
 
     //Calculation procedure
     auto rv = HeadToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure,
@@ -74,12 +49,12 @@ NAN_METHOD(headToolSuctionTank)
                   .calculate();
 
     //NAN return data
-    SetR("differentialElevationHead", rv.elevationHead);
-    SetR("differentialPressureHead", rv.pressureHead);
-    SetR("differentialVelocityHead", rv.velocityHeadDifferential);
-    SetR("estimatedSuctionFrictionHead", rv.suctionHead);
-    SetR("estimatedDischargeFrictionHead", rv.dischargeHead);
-    SetR("pumpHead", rv.pumpHead);
+    setR("differentialElevationHead", rv.elevationHead);
+    setR("differentialPressureHead", rv.pressureHead);
+    setR("differentialVelocityHead", rv.velocityHeadDifferential);
+    setR("estimatedSuctionFrictionHead", rv.suctionHead);
+    setR("estimatedDischargeFrictionHead", rv.dischargeHead);
+    setR("pumpHead", rv.pumpHead);
     info.GetReturnValue().Set(r);
 }
 
@@ -88,16 +63,16 @@ NAN_METHOD(headTool)
     //NAN initialize data
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
-    const double specificGravity = Get("specificGravity");
-    const double flowRate = Get("flowRate");
-    const double suctionPipeDiameter = Get("suctionPipeDiameter");
-    const double suctionGaugePressure = Get("suctionGaugePressure");
-    const double suctionGaugeElevation = Get("suctionGaugeElevation");
-    const double suctionLineLossCoefficients = Get("suctionLineLossCoefficients");
-    const double dischargePipeDiameter = Get("dischargePipeDiameter");
-    const double dischargeGaugePressure = Get("dischargeGaugePressure");
-    const double dischargeGaugeElevation = Get("dischargeGaugeElevation");
-    const double dischargeLineLossCoefficients = Get("dischargeLineLossCoefficients");
+    const double specificGravity = getDouble("specificGravity");
+    const double flowRate = getDouble("flowRate");
+    const double suctionPipeDiameter = getDouble("suctionPipeDiameter");
+    const double suctionGaugePressure = getDouble("suctionGaugePressure");
+    const double suctionGaugeElevation = getDouble("suctionGaugeElevation");
+    const double suctionLineLossCoefficients = getDouble("suctionLineLossCoefficients");
+    const double dischargePipeDiameter = getDouble("dischargePipeDiameter");
+    const double dischargeGaugePressure = getDouble("dischargeGaugePressure");
+    const double dischargeGaugeElevation = getDouble("dischargeGaugeElevation");
+    const double dischargeLineLossCoefficients = getDouble("dischargeLineLossCoefficients");
 
     //Calculation procedure
     auto rv = HeadTool(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure,
@@ -106,12 +81,12 @@ NAN_METHOD(headTool)
                   .calculate();
 
     //NAN return data
-    SetR("differentialElevationHead", rv.elevationHead);
-    SetR("differentialPressureHead", rv.pressureHead);
-    SetR("differentialVelocityHead", rv.velocityHeadDifferential);
-    SetR("estimatedSuctionFrictionHead", rv.suctionHead);
-    SetR("estimatedDischargeFrictionHead", rv.dischargeHead);
-    SetR("pumpHead", rv.pumpHead);
+    setR("differentialElevationHead", rv.elevationHead);
+    setR("differentialPressureHead", rv.pressureHead);
+    setR("differentialVelocityHead", rv.velocityHeadDifferential);
+    setR("estimatedSuctionFrictionHead", rv.suctionHead);
+    setR("estimatedDischargeFrictionHead", rv.dischargeHead);
+    setR("pumpHead", rv.pumpHead);
     info.GetReturnValue().Set(r);
 }
 
@@ -119,32 +94,32 @@ NAN_METHOD(headTool)
 
 Motor::LineFrequency line()
 {
-    unsigned val = static_cast<unsigned>(Get("line_frequency"));
+    unsigned val = static_cast<unsigned>(getDouble("line_frequency"));
     return static_cast<Motor::LineFrequency>(val);
 }
 Motor::EfficiencyClass effCls()
 {
-    unsigned val = static_cast<unsigned>(Get("efficiency_class"));
+    unsigned val = static_cast<unsigned>(getDouble("efficiency_class"));
     return static_cast<Motor::EfficiencyClass>(val);
 }
 Motor::Drive drive()
 {
-    unsigned val = static_cast<unsigned>(Get("drive"));
+    unsigned val = static_cast<unsigned>(getDouble("drive"));
     return static_cast<Motor::Drive>(val);
 }
 Pump::Style style()
 {
-    unsigned val = static_cast<unsigned>(Get("pump_style"));
+    unsigned val = static_cast<unsigned>(getDouble("pump_style"));
     return static_cast<Pump::Style>(val);
 }
 Motor::LoadEstimationMethod loadEstimationMethod()
 {
-    unsigned val = static_cast<unsigned>(Get("load_estimation_method"));
+    unsigned val = static_cast<unsigned>(getDouble("load_estimation_method"));
     return static_cast<Motor::LoadEstimationMethod>(val);
 }
 Pump::SpecificSpeed speed()
 {
-    unsigned val = static_cast<unsigned>(Get("fixed_speed"));
+    unsigned val = static_cast<unsigned>(getDouble("fixed_speed"));
     return static_cast<Pump::SpecificSpeed>(val);
 }
 
@@ -154,36 +129,36 @@ NAN_METHOD(resultsExisting)
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     Pump::Style style1 = style();
-    double pumpSpecified = Get("pump_specified");
-    double pumpRatedSpeed = Get("pump_rated_speed");
+    double pumpSpecified = getDouble("pump_specified");
+    double pumpRatedSpeed = getDouble("pump_rated_speed");
     Motor::Drive drive1 = drive();
     double kinematicViscosity = 0;
-    double specificGravity = Get("specific_gravity");
-    int stages = static_cast<int>(Get("stages"));
+    double specificGravity = getDouble("specific_gravity");
+    int stages = static_cast<int>(getDouble("stages"));
     double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED)
     {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
+        specifiedDriveEfficiency = getDouble("specifiedDriveEfficiency");
     }
     else
     {
         specifiedDriveEfficiency = 100.0;
     }
     Motor::LineFrequency lineFrequency = line();
-    double motorRatedPower = Get("motor_rated_power");
-    double motorRatedSpeed = Get("motor_rated_speed");
+    double motorRatedPower = getDouble("motor_rated_power");
+    double motorRatedSpeed = getDouble("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
-    double specifiedMotorEfficiency = Get("efficiency");
-    double motorRatedVoltage = Get("motor_rated_voltage");
-    double motorRatedFLA = Get("motor_rated_fla");
-    double flowRate = Get("flow_rate");
-    double head = Get("head");
+    double specifiedMotorEfficiency = getDouble("efficiency");
+    double motorRatedVoltage = getDouble("motor_rated_voltage");
+    double motorRatedFLA = getDouble("motor_rated_fla");
+    double flowRate = getDouble("flow_rate");
+    double head = getDouble("head");
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
-    double motorFieldPower = Get("motor_field_power");
-    double motorFieldCurrent = Get("motor_field_current");
-    double motorFieldVoltage = Get("motor_field_voltage");
-    double operatingHours = Get("operating_hours");
-    double costKwHour = Get("cost_kw_hour");
+    double motorFieldPower = getDouble("motor_field_power");
+    double motorFieldCurrent = getDouble("motor_field_current");
+    double motorFieldVoltage = getDouble("motor_field_voltage");
+    double operatingHours = getDouble("operating_hours");
+    double costKwHour = getDouble("cost_kw_hour");
 
     //Calculation procedure
     pumpSpecified = Conversion(pumpSpecified).percentToFraction();
@@ -208,20 +183,20 @@ NAN_METHOD(resultsExisting)
         double annualSavingsPotentialResult = Conversion(psat.getAnnualSavingsPotential()).manualConversion(1000.0);
 
         //NAN return data
-        SetR("pump_efficiency", ex.pumpEfficiency);
-        SetR("motor_rated_power", ex.motorRatedPower);
-        SetR("motor_shaft_power", ex.motorShaftPower);
-        SetR("pump_shaft_power", ex.pumpShaftPower);
-        SetR("motor_efficiency", ex.motorEfficiency);
-        SetR("motor_power_factor", ex.motorPowerFactor);
-        SetR("motor_current", ex.motorCurrent);
-        SetR("motor_power", ex.motorPower);
-        SetR("load_factor", ex.loadFactor);
-        SetR("drive_efficiency", ex.driveEfficiency);
-        SetR("annual_energy", ex.annualEnergy);
-        SetR("annual_cost", ex.annualCost);
-        SetR("annual_savings_potential", annualSavingsPotentialResult);
-        SetR("optimization_rating", psat.getOptimizationRating());
+        setR("pump_efficiency", ex.pumpEfficiency);
+        setR("motor_rated_power", ex.motorRatedPower);
+        setR("motor_shaft_power", ex.motorShaftPower);
+        setR("pump_shaft_power", ex.pumpShaftPower);
+        setR("motor_efficiency", ex.motorEfficiency);
+        setR("motor_power_factor", ex.motorPowerFactor);
+        setR("motor_current", ex.motorCurrent);
+        setR("motor_power", ex.motorPower);
+        setR("load_factor", ex.loadFactor);
+        setR("drive_efficiency", ex.driveEfficiency);
+        setR("annual_energy", ex.annualEnergy);
+        setR("annual_cost", ex.annualCost);
+        setR("annual_savings_potential", annualSavingsPotentialResult);
+        setR("optimization_rating", psat.getOptimizationRating());
         info.GetReturnValue().Set(r);
     }
     catch (std::runtime_error const &e)
@@ -239,37 +214,37 @@ NAN_METHOD(resultsModified)
     r = Nan::New<Object>();
     Pump::SpecificSpeed fixedSpeed = speed();
     Pump::Style style1 = style();
-    double pumpSpecified = Get("pump_specified");
-    double pumpRatedSpeed = Get("pump_rated_speed");
+    double pumpSpecified = getDouble("pump_specified");
+    double pumpRatedSpeed = getDouble("pump_rated_speed");
     Motor::Drive drive1 = drive();
-    double kinematicViscosity = Get("kinematic_viscosity");
-    double specificGravity = Get("specific_gravity");
-    int stages = static_cast<int>(Get("stages"));
+    double kinematicViscosity = getDouble("kinematic_viscosity");
+    double specificGravity = getDouble("specific_gravity");
+    int stages = static_cast<int>(getDouble("stages"));
     double specifiedDriveEfficiency;
     if (drive1 == Motor::Drive::SPECIFIED)
     {
-        specifiedDriveEfficiency = Get("specifiedDriveEfficiency");
+        specifiedDriveEfficiency = getDouble("specifiedDriveEfficiency");
     }
     else
     {
         specifiedDriveEfficiency = 100.0;
     }
     Motor::LineFrequency lineFrequency = line();
-    double motorRatedPower = Get("motor_rated_power");
-    double motorRatedSpeed = Get("motor_rated_speed");
+    double motorRatedPower = getDouble("motor_rated_power");
+    double motorRatedSpeed = getDouble("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
-    double specifiedMotorEfficiency = Get("efficiency");
-    double motorRatedVoltage = Get("motor_rated_voltage");
-    double motorRatedFLA = Get("motor_rated_fla");
-    double margin = Get("margin");
-    double flowRate = Get("flow_rate");
-    double head = Get("head");
+    double specifiedMotorEfficiency = getDouble("efficiency");
+    double motorRatedVoltage = getDouble("motor_rated_voltage");
+    double motorRatedFLA = getDouble("motor_rated_fla");
+    double margin = getDouble("margin");
+    double flowRate = getDouble("flow_rate");
+    double head = getDouble("head");
     Motor::LoadEstimationMethod loadEstimationMethod1 = loadEstimationMethod();
-    double motorFieldPower = Get("motor_field_power");
-    double motorFieldCurrent = Get("motor_field_current");
-    double motorFieldVoltage = Get("motor_field_voltage");
-    double operatingHours = Get("operating_hours");
-    double costKwHour = Get("cost_kw_hour");
+    double motorFieldPower = getDouble("motor_field_power");
+    double motorFieldCurrent = getDouble("motor_field_current");
+    double motorFieldVoltage = getDouble("motor_field_voltage");
+    double operatingHours = getDouble("operating_hours");
+    double costKwHour = getDouble("cost_kw_hour");
 
     //Calculation procedure
     specifiedDriveEfficiency = Conversion(specifiedDriveEfficiency).percentToFraction();
@@ -296,20 +271,20 @@ NAN_METHOD(resultsModified)
         double annualSavingsPotential = Conversion(psat.getAnnualSavingsPotential()).manualConversion(1000.0);
 
         //NAN return data
-        SetR("pump_efficiency", mod.pumpEfficiency);
-        SetR("motor_rated_power", mod.motorRatedPower);
-        SetR("motor_shaft_power", mod.motorShaftPower);
-        SetR("pump_shaft_power", mod.pumpShaftPower);
-        SetR("motor_efficiency", mod.motorEfficiency);
-        SetR("motor_power_factor", mod.motorPowerFactor);
-        SetR("motor_current", mod.motorCurrent);
-        SetR("motor_power", mod.motorPower);
-        SetR("load_factor", mod.loadFactor);
-        SetR("drive_efficiency", mod.driveEfficiency);
-        SetR("annual_energy", mod.annualEnergy);
-        SetR("annual_cost", mod.annualCost);
-        SetR("annual_savings_potential", annualSavingsPotential);
-        SetR("optimization_rating", psat.getOptimizationRating());
+        setR("pump_efficiency", mod.pumpEfficiency);
+        setR("motor_rated_power", mod.motorRatedPower);
+        setR("motor_shaft_power", mod.motorShaftPower);
+        setR("pump_shaft_power", mod.pumpShaftPower);
+        setR("motor_efficiency", mod.motorEfficiency);
+        setR("motor_power_factor", mod.motorPowerFactor);
+        setR("motor_current", mod.motorCurrent);
+        setR("motor_power", mod.motorPower);
+        setR("load_factor", mod.loadFactor);
+        setR("drive_efficiency", mod.driveEfficiency);
+        setR("annual_energy", mod.annualEnergy);
+        setR("annual_cost", mod.annualCost);
+        setR("annual_savings_potential", annualSavingsPotential);
+        setR("optimization_rating", psat.getOptimizationRating());
         info.GetReturnValue().Set(r);
     }
     catch (std::runtime_error const &e)
@@ -324,12 +299,12 @@ NAN_METHOD(estFLA)
 {
     //NAN initialize data
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    double motor_rated_power = Get("motor_rated_power");
-    double motor_rated_speed = Get("motor_rated_speed");
+    double motor_rated_power = getDouble("motor_rated_power");
+    double motor_rated_speed = getDouble("motor_rated_speed");
     Motor::LineFrequency l = line();
     Motor::EfficiencyClass e = effCls();
-    double efficiency = Get("efficiency");
-    double motor_rated_voltage = Get("motor_rated_voltage");
+    double efficiency = getDouble("efficiency");
+    double motor_rated_voltage = getDouble("motor_rated_voltage");
 
     //Calculation procedure
     EstimateFLA fla(motor_rated_power, motor_rated_speed, l, e, efficiency, motor_rated_voltage);
@@ -345,13 +320,13 @@ NAN_METHOD(motorPerformance)
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     Motor::LineFrequency l = line();
-    double motorRatedSpeed = Get("motor_rated_speed");
+    double motorRatedSpeed = getDouble("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
-    double efficiency = Get("efficiency");
-    double motorRatedPower = Get("motor_rated_power");
-    double loadFactor = Get("load_factor");
-    double motorRatedVoltage = Get("motor_rated_voltage");
-    double motorRatedFLA = Get("motor_rated_fla");
+    double efficiency = getDouble("efficiency");
+    double motorRatedPower = getDouble("motor_rated_power");
+    double loadFactor = getDouble("load_factor");
+    double motorRatedVoltage = getDouble("motor_rated_voltage");
+    double motorRatedFLA = getDouble("motor_rated_fla");
 
     try
     {
@@ -368,9 +343,9 @@ NAN_METHOD(motorPerformance)
         double motorPowerFactorResult = Conversion(motorPowerFactorVal).fractionToPercent();
 
         //NAN return data
-        SetR("efficiency", motorEfficiencyResult);
-        SetR("motor_current", motorCurrentResult);
-        SetR("motor_power_factor", motorPowerFactorResult);
+        setR("efficiency", motorEfficiencyResult);
+        setR("motor_current", motorCurrentResult);
+        setR("motor_power_factor", motorPowerFactorResult);
     }
     catch (std::runtime_error const &e)
     {
@@ -388,7 +363,7 @@ NAN_METHOD(pumpEfficiency)
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     r = Nan::New<Object>();
     Pump::Style s = style();
-    double flow = Get("flow_rate");
+    double flow = getDouble("flow_rate");
 
     //Calculation procedure
     OptimalPrePumpEff pef(s, flow);
@@ -397,8 +372,8 @@ NAN_METHOD(pumpEfficiency)
     double max = v * odf;
 
     //NAN return data
-    SetR("average", v);
-    SetR("max", max);
+    setR("average", v);
+    setR("max", max);
     info.GetReturnValue().Set(r);
 }
 
@@ -406,7 +381,7 @@ NAN_METHOD(achievableEfficiency)
 {
     //NAN initialize data
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    double specificSpeed = Get("specific_speed");
+    double specificSpeed = getDouble("specific_speed");
     Pump::Style s = style();
 
     //Calculation procedure
@@ -423,11 +398,11 @@ NAN_METHOD(nema)
     // inp = Nan::To<Object>(info[0]).ToLocalChecked();
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     Motor::LineFrequency l = line();
-    double motorRatedSpeed = Get("motor_rated_speed");
+    double motorRatedSpeed = getDouble("motor_rated_speed");
     Motor::EfficiencyClass efficiencyClass = effCls();
-    double efficiency = Get("efficiency");
-    double motorRatedPower = Get("motor_rated_power");
-    double loadFactor = Get("load_factor");
+    double efficiency = getDouble("efficiency");
+    double motorRatedPower = getDouble("motor_rated_power");
+    double loadFactor = getDouble("load_factor");
     try
     {
         //Calculation procedure

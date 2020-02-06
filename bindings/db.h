@@ -1,5 +1,8 @@
 #ifndef AMO_TOOLS_SUITE_DB_H
 #define AMO_TOOLS_SUITE_DB_H
+
+#include "NanDataConverters.h"
+
 #include <nan.h>
 #include <node.h>
 #include <sqlite/SQLite.h>
@@ -18,35 +21,7 @@
 using namespace Nan;
 using namespace v8;
 
-Local<Object> inp;
 std::unique_ptr<SQLite> sql;
-
-double Get(std::string const &nm)
-{
-    v8::Isolate *isolate = v8::Isolate::GetCurrent();
-    v8::Local<v8::Context> context = isolate->GetCurrentContext();
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    Local<Value> rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
-    if (rObj->IsUndefined())
-    {
-        ThrowTypeError(std::string("Get method in db.h: " + nm + " not present in object").c_str());
-    }
-    return Nan::To<double>(rObj).FromJust();
-}
-
-std::string GetStr(std::string const &nm)
-{
-    v8::Isolate *isolate = v8::Isolate::GetCurrent();
-    v8::Local<v8::Context> context = isolate->GetCurrentContext();
-    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-    Local<Value> obj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
-    if (obj->IsUndefined())
-    {
-        ThrowTypeError(std::string("GetStr method in db.h: " + nm + " not present in object").c_str());
-    }
-    v8::String::Utf8Value s(isolate, obj);
-    return std::string(*s);
-}
 
 inline void SetObj(Local<Object> &obj, const std::string &key, double val)
 {
@@ -136,11 +111,11 @@ NAN_METHOD(selectSolidLoadChargeMaterialById)
 NAN_METHOD(insertSolidLoadChargeMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string substance = GetStr("substance");
-    double specificHeatSolid = Get("specificHeatSolid");
-    double specificHeatLiquid = Get("specificHeatLiquid");
-    double latentHeat = Get("latentHeat");
-    double meltingPoint = Get("meltingPoint");
+    std::string substance = getString("substance");
+    double specificHeatSolid = getDouble("specificHeatSolid");
+    double specificHeatLiquid = getDouble("specificHeatLiquid");
+    double latentHeat = getDouble("latentHeat");
+    double meltingPoint = getDouble("meltingPoint");
 
     SolidLoadChargeMaterial slcm;
     slcm.setSubstance(substance);
@@ -162,12 +137,12 @@ NAN_METHOD(deleteSolidLoadChargeMaterial)
 NAN_METHOD(updateSolidLoadChargeMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string substance = GetStr("substance");
-    double specificHeatSolid = Get("specificHeatSolid");
-    double specificHeatLiquid = Get("specificHeatLiquid");
-    double latentHeat = Get("latentHeat");
-    double meltingPoint = Get("meltingPoint");
-    int id = (int)Get("id");
+    std::string substance = getString("substance");
+    double specificHeatSolid = getDouble("specificHeatSolid");
+    double specificHeatLiquid = getDouble("specificHeatLiquid");
+    double latentHeat = getDouble("latentHeat");
+    double meltingPoint = getDouble("meltingPoint");
+    int id = (int)getDouble("id");
 
     SolidLoadChargeMaterial slcm;
     slcm.setSubstance(substance);
@@ -213,11 +188,11 @@ NAN_METHOD(insertLiquidLoadChargeMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
-    std::string substance = GetStr("substance");
-    double specificHeatLiquid = Get("specificHeatLiquid");
-    double specificHeatVapor = Get("specificHeatVapor");
-    double vaporizationTemperature = Get("vaporizationTemperature");
-    double latentHeat = Get("latentHeat");
+    std::string substance = getString("substance");
+    double specificHeatLiquid = getDouble("specificHeatLiquid");
+    double specificHeatVapor = getDouble("specificHeatVapor");
+    double vaporizationTemperature = getDouble("vaporizationTemperature");
+    double latentHeat = getDouble("latentHeat");
 
     LiquidLoadChargeMaterial llcm;
     llcm.setSubstance(substance);
@@ -238,12 +213,12 @@ NAN_METHOD(deleteLiquidLoadChargeMaterial)
 NAN_METHOD(updateLiquidLoadChargeMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string substance = GetStr("substance");
-    double specificHeatLiquid = Get("specificHeatLiquid");
-    double specificHeatVapor = Get("specificHeatVapor");
-    double vaporizationTemperature = Get("vaporizationTemperature");
-    double latentHeat = Get("latentHeat");
-    int id = (int)Get("id");
+    std::string substance = getString("substance");
+    double specificHeatLiquid = getDouble("specificHeatLiquid");
+    double specificHeatVapor = getDouble("specificHeatVapor");
+    double vaporizationTemperature = getDouble("vaporizationTemperature");
+    double latentHeat = getDouble("latentHeat");
+    int id = (int)getDouble("id");
 
     LiquidLoadChargeMaterial llcm;
     llcm.setSubstance(substance);
@@ -312,8 +287,8 @@ NAN_METHOD(insertGasLoadChargeMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     GasLoadChargeMaterial glcm;
-    glcm.setSubstance(GetStr("substance"));
-    glcm.setSpecificHeatVapor(Get("specificHeatVapor"));
+    glcm.setSubstance(getString("substance"));
+    glcm.setSpecificHeatVapor(getDouble("specificHeatVapor"));
     bool success = sql->insertGasLoadChargeMaterials(glcm);
     info.GetReturnValue().Set(success);
 }
@@ -327,9 +302,9 @@ NAN_METHOD(deleteGasLoadChargeMaterial)
 NAN_METHOD(updateGasLoadChargeMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string substance = GetStr("substance");
-    double specificHeatVapor = Get("specificHeatVapor");
-    int id = (int)Get("id");
+    std::string substance = getString("substance");
+    double specificHeatVapor = getDouble("specificHeatVapor");
+    int id = (int)getDouble("id");
 
     GasLoadChargeMaterial glcm;
     glcm.setSubstance(substance);
@@ -401,14 +376,14 @@ NAN_METHOD(insertSolidLiquidFlueGasMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
-    double carbon = Get("carbon") * 100.0;
-    double hydrogen = Get("hydrogen") * 100.0;
-    double sulphur = Get("sulphur") * 100.0;
-    double inertAsh = Get("inertAsh") * 100.0;
-    double o2 = Get("o2") * 100.0;
-    double moisture = Get("moisture") * 100.0;
-    double nitrogen = Get("nitrogen") * 100.0;
-    std::string substance = GetStr("substance");
+    double carbon = getDouble("carbon") * 100.0;
+    double hydrogen = getDouble("hydrogen") * 100.0;
+    double sulphur = getDouble("sulphur") * 100.0;
+    double inertAsh = getDouble("inertAsh") * 100.0;
+    double o2 = getDouble("o2") * 100.0;
+    double moisture = getDouble("moisture") * 100.0;
+    double nitrogen = getDouble("nitrogen") * 100.0;
+    std::string substance = getString("substance");
 
     SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, carbon, hydrogen,
                                      sulphur, inertAsh, o2,
@@ -429,15 +404,15 @@ NAN_METHOD(updateSolidLiquidFlueGasMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
-    double carbon = Get("carbon") * 100.0;
-    double hydrogen = Get("hydrogen") * 100.0;
-    double sulphur = Get("sulphur") * 100.0;
-    double inertAsh = Get("inertAsh") * 100.0;
-    double o2 = Get("o2") * 100.0;
-    double moisture = Get("moisture") * 100.0;
-    double nitrogen = Get("nitrogen") * 100.0;
-    std::string substance = GetStr("substance");
-    int id = (int)Get("id");
+    double carbon = getDouble("carbon") * 100.0;
+    double hydrogen = getDouble("hydrogen") * 100.0;
+    double sulphur = getDouble("sulphur") * 100.0;
+    double inertAsh = getDouble("inertAsh") * 100.0;
+    double o2 = getDouble("o2") * 100.0;
+    double moisture = getDouble("moisture") * 100.0;
+    double nitrogen = getDouble("nitrogen") * 100.0;
+    std::string substance = getString("substance");
+    int id = (int)getDouble("id");
 
     SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, carbon, hydrogen,
                                      sulphur, inertAsh, o2,
@@ -535,18 +510,18 @@ NAN_METHOD(selectGasFlueGasMaterials)
 NAN_METHOD(insertGasFlueGasMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string substance = GetStr("substance");
-    double CH4 = Get("CH4");
-    double C2H6 = Get("C2H6");
-    double N2 = Get("N2");
-    double H2 = Get("H2");
-    double C3H8 = Get("C3H8");
-    double C4H10_CnH2n = Get("C4H10_CnH2n");
-    double H2O = Get("H2O");
-    double CO = Get("CO");
-    double CO2 = Get("CO2");
-    double SO2 = Get("SO2");
-    double O2 = Get("O2");
+    std::string substance = getString("substance");
+    double CH4 = getDouble("CH4");
+    double C2H6 = getDouble("C2H6");
+    double N2 = getDouble("N2");
+    double H2 = getDouble("H2");
+    double C3H8 = getDouble("C3H8");
+    double C4H10_CnH2n = getDouble("C4H10_CnH2n");
+    double H2O = getDouble("H2O");
+    double CO = getDouble("CO");
+    double CO2 = getDouble("CO2");
+    double SO2 = getDouble("SO2");
+    double O2 = getDouble("O2");
 
     GasCompositions comp(substance, CH4, C2H6, N2, H2, C3H8,
                          C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
@@ -574,19 +549,19 @@ NAN_METHOD(deleteGasFlueGasMaterial)
 NAN_METHOD(updateGasFlueGasMaterial)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string substance = GetStr("substance");
-    double CH4 = Get("CH4");
-    double C2H6 = Get("C2H6");
-    double N2 = Get("N2");
-    double H2 = Get("H2");
-    double C3H8 = Get("C3H8");
-    double C4H10_CnH2n = Get("C4H10_CnH2n");
-    double H2O = Get("H2O");
-    double CO = Get("CO");
-    double CO2 = Get("CO2");
-    double SO2 = Get("SO2");
-    double O2 = Get("O2");
-    int id = (int)Get("id");
+    std::string substance = getString("substance");
+    double CH4 = getDouble("CH4");
+    double C2H6 = getDouble("C2H6");
+    double N2 = getDouble("N2");
+    double H2 = getDouble("H2");
+    double C3H8 = getDouble("C3H8");
+    double C4H10_CnH2n = getDouble("C4H10_CnH2n");
+    double H2O = getDouble("H2O");
+    double CO = getDouble("CO");
+    double CO2 = getDouble("CO2");
+    double SO2 = getDouble("SO2");
+    double O2 = getDouble("O2");
+    int id = (int)getDouble("id");
 
     GasCompositions comp(substance, CH4, C2H6, N2, H2, C3H8,
                          C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
@@ -678,8 +653,8 @@ NAN_METHOD(selectAtmosphereSpecificHeat)
 NAN_METHOD(insertAtmosphereSpecificHeat)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string substance = GetStr("substance");
-    double specificHeat = Get("specificHeat");
+    std::string substance = getString("substance");
+    double specificHeat = getDouble("specificHeat");
 
     Atmosphere atmos;
     atmos.setSubstance(substance);
@@ -698,9 +673,9 @@ NAN_METHOD(deleteAtmosphereSpecificHeat)
 NAN_METHOD(updateAtmosphereSpecificHeat)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string substance = GetStr("substance");
-    double specificHeat = Get("specificHeat");
-    int id = (int)Get("id");
+    std::string substance = getString("substance");
+    double specificHeat = getDouble("specificHeat");
+    int id = (int)getDouble("id");
 
     Atmosphere atmos;
     atmos.setSubstance(substance);
@@ -758,8 +733,8 @@ NAN_METHOD(selectWallLossesSurface)
 NAN_METHOD(insertWallLossesSurface)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string surface = GetStr("surface");
-    double conditionFactor = Get("conditionFactor");
+    std::string surface = getString("surface");
+    double conditionFactor = getDouble("conditionFactor");
 
     WallLosses wl;
     wl.setSurface(surface);
@@ -778,9 +753,9 @@ NAN_METHOD(deleteWallLossesSurface)
 NAN_METHOD(updateWallLossesSurface)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    std::string surface = GetStr("surface");
-    double conditionFactor = Get("conditionFactor");
-    int id = (int)Get("id");
+    std::string surface = getString("surface");
+    double conditionFactor = getDouble("conditionFactor");
+    int id = (int)getDouble("id");
 
     WallLosses wl;
     wl.setSurface(surface);

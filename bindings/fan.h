@@ -1,3 +1,5 @@
+#include "NanDataConverters.h"
+
 #include <nan.h>
 #include <node.h>
 #include <string>
@@ -19,23 +21,6 @@
 using namespace Nan;
 using namespace v8;
 
-Local<Object> inp;
-Local<Object> r;
-
-//NAN function for fetching DOUBLE value associated with provided key
-double Get(std::string const &key, Local<Object> obj)
-{
-	v8::Isolate *isolate = v8::Isolate::GetCurrent();
-	v8::Local<v8::Context> context = isolate->GetCurrentContext();
-	Local<String> getName = Nan::New<String>(key).ToLocalChecked();
-	Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
-	if (rObj->IsUndefined())
-	{
-		ThrowTypeError(std::string("Get method in fan.h: " + key + " not present in object").c_str());
-	}
-	return Nan::To<double>(rObj).FromJust();
-}
-
 //NAN function for fetching ENUM value associated with provided key
 template <typename T>
 T GetEnumVal(std::string const &key, Local<Object> obj)
@@ -51,35 +36,6 @@ T GetEnumVal(std::string const &key, Local<Object> obj)
 	return static_cast<T>(Nan::To<int32_t>(rObj).FromJust());
 }
 
-//NAN function for fetching BOOLEAN value associated with provided key
-bool GetBool(std::string const &key, Local<Object> obj)
-{
-	Local<String> getName = Nan::New<String>(key).ToLocalChecked();
-	v8::Isolate *isolate = v8::Isolate::GetCurrent();
-	v8::Local<v8::Context> context = isolate->GetCurrentContext();
-	Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
-	if (rObj->IsUndefined())
-	{
-		ThrowTypeError(std::string("GetBool method in fan.h: Boolean value " + key + " not present in object").c_str());
-	}
-	return rObj->BooleanValue(context).ToChecked();
-}
-
-//NAN function for fetching STRING value associated with provided key
-std::string GetStr(std::string const &key, Local<Object> obj)
-{
-	Local<String> getName = Nan::New<String>(key).ToLocalChecked();
-	v8::Isolate *isolate = v8::Isolate::GetCurrent();
-	v8::Local<v8::Context> context = isolate->GetCurrentContext();
-	Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
-	if (rObj->IsUndefined())
-	{
-		ThrowTypeError(std::string("GetStr method in fan.h: String " + key + " not present in object").c_str());
-	}
-	v8::String::Utf8Value s(isolate, rObj);
-	return std::string(*s);
-}
-
 //NAN function for checking if an object parameter has been defined with a value
 bool isDefined(Local<Object> obj, std::string const &key)
 {
@@ -88,12 +44,6 @@ bool isDefined(Local<Object> obj, std::string const &key)
 	v8::Local<v8::Context> context = isolate->GetCurrentContext();
 	Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
 	return !rObj->IsUndefined();
-}
-
-//NAN function for binding DOUBLE data to anonymous object
-inline void SetR(const std::string &key, double val)
-{
-	Nan::Set(r, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
 }
 
 //helper functions for building nested array of objects via NAN
@@ -121,9 +71,9 @@ std::vector<std::vector<double>> getTraverseInputData(Local<Object> obj)
 FlangePlane constructFlange(Local<Object> obj)
 {
 	//NAN init data
-	const double area = Get("area", obj);
-	const double dryBulbTemp = Get("dryBulbTemp", obj);
-	const double barometricPressure = Get("barometricPressure", obj);
+	const double area = getDouble("area", obj);
+	const double dryBulbTemp = getDouble("dryBulbTemp", obj);
+	const double barometricPressure = getDouble("barometricPressure", obj);
 
 	//Create C++ obj and return
 	FlangePlane flangePlane(area, dryBulbTemp, barometricPressure);
@@ -133,10 +83,10 @@ FlangePlane constructFlange(Local<Object> obj)
 MstPlane constructMst(Local<Object> obj)
 {
 	//NAN init data
-	const double area = Get("area", obj);
-	const double dryBulbTemp = Get("dryBulbTemp", obj);
-	const double barometricPressure = Get("barometricPressure", obj);
-	const double staticPressure = Get("staticPressure", obj);
+	const double area = getDouble("area", obj);
+	const double dryBulbTemp = getDouble("dryBulbTemp", obj);
+	const double barometricPressure = getDouble("barometricPressure", obj);
+	const double staticPressure = getDouble("staticPressure", obj);
 
 	//Create C++ obj and return
 	MstPlane mstPlane(area, dryBulbTemp, barometricPressure, staticPressure);
@@ -146,11 +96,11 @@ MstPlane constructMst(Local<Object> obj)
 TraversePlane constructTraverse(Local<Object> obj)
 {
 	//NAN init data
-	const double area = Get("area", obj);
-	const double dryBulbTemp = Get("dryBulbTemp", obj);
-	const double barometricPressure = Get("barometricPressure", obj);
-	const double staticPressure = Get("staticPressure", obj);
-	const double pitotTubeCoefficient = Get("pitotTubeCoefficient", obj);
+	const double area = getDouble("area", obj);
+	const double dryBulbTemp = getDouble("dryBulbTemp", obj);
+	const double barometricPressure = getDouble("barometricPressure", obj);
+	const double staticPressure = getDouble("staticPressure", obj);
+	const double pitotTubeCoefficient = getDouble("pitotTubeCoefficient", obj);
 	const std::vector<std::vector<double>> traverseInputData = getTraverseInputData(obj);
 
 	//Create C++ obj and return
@@ -166,11 +116,11 @@ FanRatedInfo getFanRatedInfo()
 	Local<String> fanRatedInfoStringV8 = Nan::New<String>("FanRatedInfo").ToLocalChecked();
 	Local<Object> fanRatedInfoV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(context, fanRatedInfoStringV8).ToLocalChecked()).ToLocalChecked();
 
-	const double fanSpeed = Get("fanSpeed", fanRatedInfoV8);
-	const double motorSpeed = Get("motorSpeed", fanRatedInfoV8);
-	const double fanSpeedCorrected = Get("fanSpeedCorrected", fanRatedInfoV8);
-	const double densityCorrected = Get("densityCorrected", fanRatedInfoV8);
-	const double pressureBarometricCorrected = Get("pressureBarometricCorrected", fanRatedInfoV8);
+	const double fanSpeed = getDouble("fanSpeed", fanRatedInfoV8);
+	const double motorSpeed = getDouble("motorSpeed", fanRatedInfoV8);
+	const double fanSpeedCorrected = getDouble("fanSpeedCorrected", fanRatedInfoV8);
+	const double densityCorrected = getDouble("densityCorrected", fanRatedInfoV8);
+	const double pressureBarometricCorrected = getDouble("pressureBarometricCorrected", fanRatedInfoV8);
 
 	//Create C++ obj and return
 	FanRatedInfo fanRatedInfo(fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected);
@@ -199,9 +149,9 @@ PlaneData getPlaneData()
 	TraversePlane flowTraverse = constructTraverse(Nan::To<Object>(planeDataV8->Get(context, Nan::New<String>("FlowTraverse").ToLocalChecked()).ToLocalChecked()).ToLocalChecked());
 	MstPlane inletMstPlane = constructMst(Nan::To<Object>(planeDataV8->Get(context, Nan::New<String>("InletMstPlane").ToLocalChecked()).ToLocalChecked()).ToLocalChecked());
 	MstPlane outletMstPlane = constructMst(Nan::To<Object>(planeDataV8->Get(context, Nan::New<String>("OutletMstPlane").ToLocalChecked()).ToLocalChecked()).ToLocalChecked());
-	const double totalPressureLossBtwnPlanes1and4 = Get("totalPressureLossBtwnPlanes1and4", planeDataV8);
-	const double totalPressureLossBtwnPlanes2and5 = Get("totalPressureLossBtwnPlanes2and5", planeDataV8);
-	const bool plane5upstreamOfPlane2 = GetBool("plane5upstreamOfPlane2", planeDataV8);
+	const double totalPressureLossBtwnPlanes1and4 = getDouble("totalPressureLossBtwnPlanes1and4", planeDataV8);
+	const double totalPressureLossBtwnPlanes2and5 = getDouble("totalPressureLossBtwnPlanes2and5", planeDataV8);
+	const bool plane5upstreamOfPlane2 = getBool("plane5upstreamOfPlane2", planeDataV8);
 
 	//Create C++ obj and return
 	PlaneData planeData(fanInletFlange, fanEvaseOrOutletFlange, flowTraverse, std::move(addlTravPlanes), inletMstPlane, outletMstPlane, totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5, plane5upstreamOfPlane2);
@@ -211,7 +161,7 @@ PlaneData getPlaneData()
 BaseGasDensity::GasType getGasType(Local<Object> obj)
 {
 	//NAN init data
-	std::string const &gasTypeStr = GetStr("gasType", obj);
+	std::string const &gasTypeStr = getString("gasType", obj);
 
 	//perform logic and return C++ data
 	if (gasTypeStr == "AIR")
@@ -228,7 +178,7 @@ BaseGasDensity::GasType getGasType(Local<Object> obj)
 BaseGasDensity::InputType getInputType(Local<Object> obj)
 {
 	//NAN init data
-	std::string const &inputTypeStr = GetStr("inputType", obj);
+	std::string const &inputTypeStr = getString("inputType", obj);
 
 	//perform logic and return C++ data
 	if (inputTypeStr == "relativeHumidity")
@@ -247,35 +197,35 @@ NAN_METHOD(fanResultsExisting)
 	//NAN initialize data
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
-	const double fanSpeed = Get("fanSpeed", inp);
-	const double airDensity = Get("airDensity", inp);
+	const double fanSpeed = getDouble("fanSpeed", inp);
+	const double airDensity = getDouble("airDensity", inp);
 	Motor::Drive drive1 = GetEnumVal<Motor::Drive>("drive", inp);
 	double specifiedDriveEfficiency;
 	if (drive1 == Motor::Drive::SPECIFIED)
 	{
-		specifiedDriveEfficiency = Get("specifiedDriveEfficiency", inp);
+		specifiedDriveEfficiency = getDouble("specifiedDriveEfficiency", inp);
 	}
 	else
 	{
 		specifiedDriveEfficiency = 100.0;
 	}
 	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
-	double const motorRatedPower = Get("motorRatedPower", inp);
-	double const motorRpm = Get("motorRpm", inp);
+	double const motorRatedPower = getDouble("motorRatedPower", inp);
+	double const motorRpm = getDouble("motorRpm", inp);
 	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
-	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
-	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
-	double const fullLoadAmps = Get("fullLoadAmps", inp);
-	double const sizeMargin = Get("sizeMargin", inp);
-	double const measuredPower = Get("measuredPower", inp);
-	double const measuredVoltage = Get("measuredVoltage", inp);
-	double const measuredAmps = Get("measuredAmps", inp);
-	double const flowRate = Get("flowRate", inp);
-	double const inletPressure = Get("inletPressure", inp);
-	double const outletPressure = Get("outletPressure", inp);
-	double const compressibilityFactor = Get("compressibilityFactor", inp);
-	double const operatingHours = Get("operatingHours", inp);
-	double const unitCost = Get("unitCost", inp);
+	double const specifiedEfficiency = getDouble("specifiedEfficiency", inp);
+	double const motorRatedVoltage = getDouble("motorRatedVoltage", inp);
+	double const fullLoadAmps = getDouble("fullLoadAmps", inp);
+	double const sizeMargin = getDouble("sizeMargin", inp);
+	double const measuredPower = getDouble("measuredPower", inp);
+	double const measuredVoltage = getDouble("measuredVoltage", inp);
+	double const measuredAmps = getDouble("measuredAmps", inp);
+	double const flowRate = getDouble("flowRate", inp);
+	double const inletPressure = getDouble("inletPressure", inp);
+	double const outletPressure = getDouble("outletPressure", inp);
+	double const compressibilityFactor = getDouble("compressibilityFactor", inp);
+	double const operatingHours = getDouble("operatingHours", inp);
+	double const unitCost = getDouble("unitCost", inp);
 	Motor::LoadEstimationMethod const loadEstimationMethod = GetEnumVal<Motor::LoadEstimationMethod>("loadEstimationMethod", inp);
 
 	//Calculation procedure
@@ -293,20 +243,20 @@ NAN_METHOD(fanResultsExisting)
 	output.driveEfficiency = Conversion(output.driveEfficiency).fractionToPercent();
 
 	//NAN create return obj
-	SetR("fanEfficiency", output.fanEfficiency);
-	SetR("motorRatedPower", output.motorRatedPower);
-	SetR("motorShaftPower", output.motorShaftPower);
-	SetR("fanShaftPower", output.fanShaftPower);
-	SetR("motorEfficiency", output.motorEfficiency);
-	SetR("motorPowerFactor", output.motorPowerFactor);
-	SetR("motorCurrent", output.motorCurrent);
-	SetR("motorPower", output.motorPower);
-	SetR("loadFactor", output.loadFactor);
-	SetR("driveEfficiency", output.driveEfficiency);
-	SetR("annualEnergy", output.annualEnergy);
-	SetR("annualCost", output.annualCost);
-	SetR("estimatedFLA", output.estimatedFLA);
-	SetR("fanEnergyIndex", output.fanEnergyIndex);
+	setR("fanEfficiency", output.fanEfficiency);
+	setR("motorRatedPower", output.motorRatedPower);
+	setR("motorShaftPower", output.motorShaftPower);
+	setR("fanShaftPower", output.fanShaftPower);
+	setR("motorEfficiency", output.motorEfficiency);
+	setR("motorPowerFactor", output.motorPowerFactor);
+	setR("motorCurrent", output.motorCurrent);
+	setR("motorPower", output.motorPower);
+	setR("loadFactor", output.loadFactor);
+	setR("driveEfficiency", output.driveEfficiency);
+	setR("annualEnergy", output.annualEnergy);
+	setR("annualCost", output.annualCost);
+	setR("estimatedFLA", output.estimatedFLA);
+	setR("fanEnergyIndex", output.fanEnergyIndex);
 	//NAN return obj
 	info.GetReturnValue().Set(r);
 }
@@ -316,35 +266,35 @@ NAN_METHOD(fanResultsModified)
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 	//NAN init data
-	const double fanSpeed = Get("fanSpeed", inp);
-	const double airDensity = Get("airDensity", inp);
+	const double fanSpeed = getDouble("fanSpeed", inp);
+	const double airDensity = getDouble("airDensity", inp);
 	Motor::Drive drive1 = GetEnumVal<Motor::Drive>("drive", inp);
 	double specifiedDriveEfficiency;
 	if (drive1 == Motor::Drive::SPECIFIED)
 	{
-		specifiedDriveEfficiency = Get("specifiedDriveEfficiency", inp);
+		specifiedDriveEfficiency = getDouble("specifiedDriveEfficiency", inp);
 	}
 	else
 	{
 		specifiedDriveEfficiency = 100.0;
 	}
-	double const measuredVoltage = Get("measuredVoltage", inp);
-	double const measuredAmps = Get("measuredAmps", inp);
-	double const flowRate = Get("flowRate", inp);
-	double const inletPressure = Get("inletPressure", inp);
-	double const outletPressure = Get("outletPressure", inp);
-	double const compressibilityFactor = Get("compressibilityFactor", inp);
+	double const measuredVoltage = getDouble("measuredVoltage", inp);
+	double const measuredAmps = getDouble("measuredAmps", inp);
+	double const flowRate = getDouble("flowRate", inp);
+	double const inletPressure = getDouble("inletPressure", inp);
+	double const outletPressure = getDouble("outletPressure", inp);
+	double const compressibilityFactor = getDouble("compressibilityFactor", inp);
 	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
-	double const motorRatedPower = Get("motorRatedPower", inp);
-	double const motorRpm = Get("motorRpm", inp);
+	double const motorRatedPower = getDouble("motorRatedPower", inp);
+	double const motorRpm = getDouble("motorRpm", inp);
 	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
-	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
-	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
-	double const fullLoadAmps = Get("fullLoadAmps", inp);
-	double const sizeMargin = Get("sizeMargin", inp);
-	const double operatingHours = Get("operatingHours", inp);
-	const double unitCost = Get("unitCost", inp);
-	double fanEfficiency = Get("fanEfficiency", inp);
+	double const specifiedEfficiency = getDouble("specifiedEfficiency", inp);
+	double const motorRatedVoltage = getDouble("motorRatedVoltage", inp);
+	double const fullLoadAmps = getDouble("fullLoadAmps", inp);
+	double const sizeMargin = getDouble("sizeMargin", inp);
+	const double operatingHours = getDouble("operatingHours", inp);
+	const double unitCost = getDouble("unitCost", inp);
+	double fanEfficiency = getDouble("fanEfficiency", inp);
 
 	//Calculation procedure
 	fanEfficiency = Conversion(fanEfficiency).percentToFraction();
@@ -362,20 +312,20 @@ NAN_METHOD(fanResultsModified)
 	output.driveEfficiency = Conversion(output.driveEfficiency).fractionToPercent();
 
 	//NAN create return obj
-	SetR("fanEfficiency", output.fanEfficiency);
-	SetR("motorRatedPower", output.motorRatedPower);
-	SetR("motorShaftPower", output.motorShaftPower);
-	SetR("fanShaftPower", output.fanShaftPower);
-	SetR("motorEfficiency", output.motorEfficiency);
-	SetR("motorPowerFactor", output.motorPowerFactor);
-	SetR("motorCurrent", output.motorCurrent);
-	SetR("motorPower", output.motorPower);
-	SetR("loadFactor", output.loadFactor);
-	SetR("driveEfficiency", output.driveEfficiency);
-	SetR("annualEnergy", output.annualEnergy);
-	SetR("annualCost", output.annualCost);
-	SetR("estimatedFLA", output.estimatedFLA);
-	SetR("fanEnergyIndex", output.fanEnergyIndex);
+	setR("fanEfficiency", output.fanEfficiency);
+	setR("motorRatedPower", output.motorRatedPower);
+	setR("motorShaftPower", output.motorShaftPower);
+	setR("fanShaftPower", output.fanShaftPower);
+	setR("motorEfficiency", output.motorEfficiency);
+	setR("motorPowerFactor", output.motorPowerFactor);
+	setR("motorCurrent", output.motorCurrent);
+	setR("motorPower", output.motorPower);
+	setR("loadFactor", output.loadFactor);
+	setR("driveEfficiency", output.driveEfficiency);
+	setR("annualEnergy", output.annualEnergy);
+	setR("annualCost", output.annualCost);
+	setR("estimatedFLA", output.estimatedFLA);
+	setR("fanEnergyIndex", output.fanEnergyIndex);
 	//NAN return obj
 	info.GetReturnValue().Set(r);
 }
@@ -388,51 +338,51 @@ NAN_METHOD(fanResultsModified)
 
 // 	double specifiedDriveEfficiency;
 //     if (drive1 == Motor::Drive::SPECIFIED) {
-//         specifiedDriveEfficiency = Get("specifiedDriveEfficiency", inp) / 100;
+//         specifiedDriveEfficiency = getDouble("specifiedDriveEfficiency", inp) / 100;
 //     }
 //     else {
 //         specifiedDriveEfficiency = 1;
 //     }
 
-// 	Fan::Input input = {Get("fanSpeed", inp), Get("airDensity", inp), drive1, specifiedDriveEfficiency};
+// 	Fan::Input input = {getDouble("fanSpeed", inp), getDouble("airDensity", inp), drive1, specifiedDriveEfficiency};
 
-// 	double const measuredVoltage = Get("measuredVoltage", inp);
-// 	double const measuredAmps = Get("measuredAmps", inp);
-// 	double const flowRate = Get("flowRate", inp);
-// 	double const inletPressure = Get("inletPressure", inp);
-// 	double const outletPressure = Get("outletPressure", inp);
-// 	double const compressibilityFactor = Get("compressibilityFactor", inp);
+// 	double const measuredVoltage = getDouble("measuredVoltage", inp);
+// 	double const measuredAmps = getDouble("measuredAmps", inp);
+// 	double const flowRate = getDouble("flowRate", inp);
+// 	double const inletPressure = getDouble("inletPressure", inp);
+// 	double const outletPressure = getDouble("outletPressure", inp);
+// 	double const compressibilityFactor = getDouble("compressibilityFactor", inp);
 // 	Fan::FieldDataModified fanFieldData = {measuredVoltage, measuredAmps, flowRate, inletPressure,
 // 	                                                 outletPressure, compressibilityFactor};
 
 // 	Motor::LineFrequency const lineFrequency = GetEnumVal<Motor::LineFrequency>("lineFrequency", inp);
-// 	double const motorRatedPower = Get("motorRatedPower", inp);
-// 	double const motorRpm = Get("motorRpm", inp);
+// 	double const motorRatedPower = getDouble("motorRatedPower", inp);
+// 	double const motorRpm = getDouble("motorRpm", inp);
 // 	Motor::EfficiencyClass const efficiencyClass = GetEnumVal<Motor::EfficiencyClass>("efficiencyClass", inp);
-// 	double const specifiedEfficiency = Get("specifiedEfficiency", inp);
-// 	double const motorRatedVoltage = Get("motorRatedVoltage", inp);
-// 	double const fullLoadAmps = Get("fullLoadAmps", inp);
-// 	double const sizeMargin = Get("sizeMargin", inp);
+// 	double const specifiedEfficiency = getDouble("specifiedEfficiency", inp);
+// 	double const motorRatedVoltage = getDouble("motorRatedVoltage", inp);
+// 	double const fullLoadAmps = getDouble("fullLoadAmps", inp);
+// 	double const sizeMargin = getDouble("sizeMargin", inp);
 
 // 	Motor motor = {lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin};
 
-// 	FanResult result = {input, motor, Get("operatingHours", inp), Get("unitCost", inp)};
+// 	FanResult result = {input, motor, getDouble("operatingHours", inp), getDouble("unitCost", inp)};
 
-// 	auto const output = GetBool("isSpecified", inp) ? result.calculateOptimal(fanFieldData, Get("userInputFanEfficiency", inp) / 100)
+// 	auto const output = getBool("isSpecified", inp) ? result.calculateOptimal(fanFieldData, getDouble("userInputFanEfficiency", inp) / 100)
 // 	                                                : result.calculateOptimal(fanFieldData, GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp));
 
-// 	SetR("fanEfficiency", output.fanEfficiency * 100);
-// 	SetR("motorRatedPower", output.motorRatedPower);
-// 	SetR("motorShaftPower", output.motorShaftPower);
-// 	SetR("fanShaftPower", output.fanShaftPower);
-// 	SetR("motorEfficiency", output.motorEfficiency * 100);
-// 	SetR("motorPowerFactor", output.motorPowerFactor * 100);
-// 	SetR("motorCurrent", output.motorCurrent);
-// 	SetR("motorPower", output.motorPower);
-// 	SetR("annualEnergy", output.annualEnergy);
-// 	SetR("annualCost", output.annualCost);
-// 	SetR("estimatedFLA", output.estimatedFLA);
-// 	SetR("fanEnergyIndex", output.fanEnergyIndex);
+// 	setR("fanEfficiency", output.fanEfficiency * 100);
+// 	setR("motorRatedPower", output.motorRatedPower);
+// 	setR("motorShaftPower", output.motorShaftPower);
+// 	setR("fanShaftPower", output.fanShaftPower);
+// 	setR("motorEfficiency", output.motorEfficiency * 100);
+// 	setR("motorPowerFactor", output.motorPowerFactor * 100);
+// 	setR("motorCurrent", output.motorCurrent);
+// 	setR("motorPower", output.motorPower);
+// 	setR("annualEnergy", output.annualEnergy);
+// 	setR("annualCost", output.annualCost);
+// 	setR("estimatedFLA", output.estimatedFLA);
+// 	setR("fanEnergyIndex", output.fanEnergyIndex);
 // 	info.GetReturnValue().Set(r);
 // }
 
@@ -443,13 +393,13 @@ NAN_METHOD(getBaseGasDensityRelativeHumidity)
 	try
 	{
 		//NAN data init
-		const double dryBulbTemp = Get("dryBulbTemp", inp);
-		const double staticPressure = Get("staticPressure", inp);
-		const double barometricPressure = Get("barometricPressure", inp);
-		const double relativeHumidity = Get("relativeHumidity", inp);
+		const double dryBulbTemp = getDouble("dryBulbTemp", inp);
+		const double staticPressure = getDouble("staticPressure", inp);
+		const double barometricPressure = getDouble("barometricPressure", inp);
+		const double relativeHumidity = getDouble("relativeHumidity", inp);
 		BaseGasDensity::GasType gasType = getGasType(inp);
 		BaseGasDensity::InputType inputType = getInputType(inp);
-		const double specificGravity = Get("specificGravity", inp);
+		const double specificGravity = getDouble("specificGravity", inp);
 
 		//Calculation procedure
 		double result = BaseGasDensity(
@@ -480,13 +430,13 @@ NAN_METHOD(getBaseGasDensityDewPoint)
 	try
 	{
 		//NAN data init
-		const double dryBulbTemp = Get("dryBulbTemp", inp);
-		const double staticPressure = Get("staticPressure", inp);
-		const double barometricPressure = Get("barometricPressure", inp);
-		const double dewPoint = Get("dewPoint", inp);
+		const double dryBulbTemp = getDouble("dryBulbTemp", inp);
+		const double staticPressure = getDouble("staticPressure", inp);
+		const double barometricPressure = getDouble("barometricPressure", inp);
+		const double dewPoint = getDouble("dewPoint", inp);
 		BaseGasDensity::GasType gasType = getGasType(inp);
 		BaseGasDensity::InputType inputType = getInputType(inp);
-		const double specificGravity = Get("specificGravity", inp);
+		const double specificGravity = getDouble("specificGravity", inp);
 
 		//Calculation procedure
 		double result = BaseGasDensity(
@@ -517,14 +467,14 @@ NAN_METHOD(getBaseGasDensityWetBulb)
 	try
 	{
 		//NAN data init
-		const double dryBulbTemp = Get("dryBulbTemp", inp);
-		const double staticPressure = Get("staticPressure", inp);
-		const double barometricPressure = Get("barometricPressure", inp);
-		const double wetBulbTemp = Get("wetBulbTemp", inp);
+		const double dryBulbTemp = getDouble("dryBulbTemp", inp);
+		const double staticPressure = getDouble("staticPressure", inp);
+		const double barometricPressure = getDouble("barometricPressure", inp);
+		const double wetBulbTemp = getDouble("wetBulbTemp", inp);
 		BaseGasDensity::GasType gasType = getGasType(inp);
 		BaseGasDensity::InputType inputType = getInputType(inp);
-		const double specificGravity = Get("specificGravity", inp);
-		const double specificHeatGas = Get("specificHeatGas", inp);
+		const double specificGravity = getDouble("specificGravity", inp);
+		const double specificHeatGas = getDouble("specificHeatGas", inp);
 
 		//Calculation procedure
 		double result = BaseGasDensity(
@@ -555,10 +505,10 @@ BaseGasDensity getBaseGasDensity()
 	v8::Isolate *isolate = v8::Isolate::GetCurrent();
 	v8::Local<v8::Context> context = isolate->GetCurrentContext();
 	Local<Object> baseGasDensityV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(context, Nan::New<String>("BaseGasDensity").ToLocalChecked()).ToLocalChecked()).ToLocalChecked();
-	const double dryBulbTemp = Get("dryBulbTemp", baseGasDensityV8);
-	const double staticPressure = Get("staticPressure", baseGasDensityV8);
-	const double barometricPressure = Get("barometricPressure", baseGasDensityV8);
-	const double gasDensity = Get("gasDensity", baseGasDensityV8);
+	const double dryBulbTemp = getDouble("dryBulbTemp", baseGasDensityV8);
+	const double staticPressure = getDouble("staticPressure", baseGasDensityV8);
+	const double barometricPressure = getDouble("barometricPressure", baseGasDensityV8);
+	const double gasDensity = getDouble("gasDensity", baseGasDensityV8);
 	const BaseGasDensity::GasType gasType = getGasType(baseGasDensityV8);
 
 	//Create C++ obj and return
@@ -572,11 +522,11 @@ FanShaftPower getFanShaftPower()
 	v8::Isolate *isolate = v8::Isolate::GetCurrent();
 	v8::Local<v8::Context> context = isolate->GetCurrentContext();
 	Local<Object> fanShaftPowerV8 = Nan::To<Object>(Nan::To<Object>(inp).ToLocalChecked()->Get(context, Nan::New<String>("FanShaftPower").ToLocalChecked()).ToLocalChecked()).ToLocalChecked();
-	const double motorShaftPower = Get("motorShaftPower", fanShaftPowerV8);
-	const double efficiencyMotor = Get("efficiencyMotor", fanShaftPowerV8);
-	const double efficiencyVFD = Get("efficiencyVFD", fanShaftPowerV8);
-	const double efficiencyBelt = Get("efficiencyBelt", fanShaftPowerV8);
-	const double sumSEF = Get("sumSEF", fanShaftPowerV8);
+	const double motorShaftPower = getDouble("motorShaftPower", fanShaftPowerV8);
+	const double efficiencyMotor = getDouble("efficiencyMotor", fanShaftPowerV8);
+	const double efficiencyVFD = getDouble("efficiencyVFD", fanShaftPowerV8);
+	const double efficiencyBelt = getDouble("efficiencyBelt", fanShaftPowerV8);
+	const double sumSEF = getDouble("sumSEF", fanShaftPowerV8);
 
 	//Create C++ obj and return
 	FanShaftPower fanShaftPower(motorShaftPower, efficiencyMotor, efficiencyVFD, efficiencyBelt, sumSEF);
@@ -596,8 +546,8 @@ NAN_METHOD(getVelocityPressureData)
 	percent75Rule = Conversion(percent75Rule).fractionToPercent();
 
 	//NAN construct return obj
-	SetR("pv3", pv3);
-	SetR("percent75Rule", percent75Rule);
+	setR("pv3", pv3);
+	setR("percent75Rule", percent75Rule);
 
 	//NAN return obj
 	info.GetReturnValue().Set(r);
@@ -626,14 +576,14 @@ NAN_METHOD(getPlaneResults)
 															bool isArray = false, bool isStaticPressure = false, const double staticPressure = 0) {
 			//NAN assigning data to array of child-objects
 			r = Nan::New<Object>();
-			SetR("gasDensity", data.gasDensity);
-			SetR("gasVolumeFlowRate", data.gasVolumeFlowRate);
-			SetR("gasVelocity", data.gasVelocity);
-			SetR("gasVelocityPressure", data.gasVelocityPressure);
-			SetR("gasTotalPressure", data.gasTotalPressure);
+			setR("gasDensity", data.gasDensity);
+			setR("gasVolumeFlowRate", data.gasVolumeFlowRate);
+			setR("gasVelocity", data.gasVelocity);
+			setR("gasVelocityPressure", data.gasVelocityPressure);
+			setR("gasTotalPressure", data.gasTotalPressure);
 			if (isStaticPressure)
 			{
-				SetR("staticPressure", staticPressure);
+				setR("staticPressure", staticPressure);
 			}
 
 			if (isArray)
@@ -683,21 +633,21 @@ NAN_METHOD(fan203)
 		Fan203::Output const rv = Fan203(fanRatedInfo, planeData, baseGasDensity, fanShaftPower).calculate();
 
 		//NAN return resutls
-		SetR("fanEfficiencyTotalPressure", rv.fanEfficiencyTotalPressure);
-		SetR("fanEfficiencyStaticPressure", rv.fanEfficiencyStaticPressure);
-		SetR("fanEfficiencyStaticPressureRise", rv.fanEfficiencyStaticPressureRise);
-		SetR("flow", rv.asTested.flow);
-		SetR("pressureTotal", rv.asTested.pressureTotal);
-		SetR("pressureStatic", rv.asTested.pressureStatic);
-		SetR("staticPressureRise", rv.asTested.staticPressureRise);
-		SetR("power", rv.asTested.power);
-		SetR("kpc", rv.asTested.kpc);
-		SetR("flowCorrected", rv.converted.flow);
-		SetR("pressureTotalCorrected", rv.converted.pressureTotal);
-		SetR("pressureStaticCorrected", rv.converted.pressureStatic);
-		SetR("staticPressureRiseCorrected", rv.converted.staticPressureRise);
-		SetR("powerCorrected", rv.converted.power);
-		SetR("kpcCorrected", rv.converted.kpc);
+		setR("fanEfficiencyTotalPressure", rv.fanEfficiencyTotalPressure);
+		setR("fanEfficiencyStaticPressure", rv.fanEfficiencyStaticPressure);
+		setR("fanEfficiencyStaticPressureRise", rv.fanEfficiencyStaticPressureRise);
+		setR("flow", rv.asTested.flow);
+		setR("pressureTotal", rv.asTested.pressureTotal);
+		setR("pressureStatic", rv.asTested.pressureStatic);
+		setR("staticPressureRise", rv.asTested.staticPressureRise);
+		setR("power", rv.asTested.power);
+		setR("kpc", rv.asTested.kpc);
+		setR("flowCorrected", rv.converted.flow);
+		setR("pressureTotalCorrected", rv.converted.pressureTotal);
+		setR("pressureStaticCorrected", rv.converted.pressureStatic);
+		setR("staticPressureRiseCorrected", rv.converted.staticPressureRise);
+		setR("powerCorrected", rv.converted.power);
+		setR("kpcCorrected", rv.converted.kpc);
 	}
 	catch (std::runtime_error const &e)
 	{
@@ -712,7 +662,7 @@ NAN_METHOD(fan203)
 FanCurveType getFanCurveType()
 {
 	//NAN init data
-	std::string const curveTypeStr = GetStr("curveType", inp);
+	std::string const curveTypeStr = getString("curveType", inp);
 
 	//perform logic and return value
 	if (curveTypeStr == "StaticPressureRise")
@@ -834,17 +784,17 @@ NAN_METHOD(fanCurve)
 	const bool ratedPointCurveDataDefined = isDefined(inp, "RatedPointCurveData");
 
 	//NAN data fetching
-	const double density = Get("density", inp);
-	const double densityCorrected = Get("densityCorrected", inp);
-	const double speed = Get("speed", inp);
-	const double speedCorrected = Get("speedCorrected", inp);
-	const double pressureBarometric = Get("pressureBarometric", inp);
-	const double pressureBarometricCorrected = Get("pressureBarometricCorrected", inp);
-	const double pt1Factor = Get("pt1Factor", inp);
-	const double gamma = Get("gamma", inp);
-	const double gammaCorrected = Get("gammaCorrected", inp);
-	const double area1 = Get("area1", inp);
-	const double area2 = Get("area2", inp);
+	const double density = getDouble("density", inp);
+	const double densityCorrected = getDouble("densityCorrected", inp);
+	const double speed = getDouble("speed", inp);
+	const double speedCorrected = getDouble("speedCorrected", inp);
+	const double pressureBarometric = getDouble("pressureBarometric", inp);
+	const double pressureBarometricCorrected = getDouble("pressureBarometricCorrected", inp);
+	const double pt1Factor = getDouble("pt1Factor", inp);
+	const double gamma = getDouble("gamma", inp);
+	const double gammaCorrected = getDouble("gammaCorrected", inp);
+	const double area1 = getDouble("area1", inp);
+	const double area2 = getDouble("area2", inp);
 
 	if (baseCurveDataDefined)
 	{
@@ -894,11 +844,11 @@ NAN_METHOD(optimalFanEfficiency)
 	//NAN init data
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	OptimalFanEfficiency::FanType const fanType = GetEnumVal<OptimalFanEfficiency::FanType>("fanType", inp);
-	double const fanSpeed = Get("fanSpeed", inp);
-	double const flowRate = Get("flowRate", inp);
-	double const inletPressure = Get("inletPressure", inp);
-	double const outletPressure = Get("outletPressure", inp);
-	double const compressibility = Get("compressibility", inp);
+	double const fanSpeed = getDouble("fanSpeed", inp);
+	double const flowRate = getDouble("flowRate", inp);
+	double const inletPressure = getDouble("inletPressure", inp);
+	double const outletPressure = getDouble("outletPressure", inp);
+	double const compressibility = getDouble("compressibility", inp);
 
 	//Create C++ obj and calculate
 	double efficiency = OptimalFanEfficiency(fanType, fanSpeed, flowRate, inletPressure, outletPressure,
@@ -914,12 +864,12 @@ NAN_METHOD(compressibilityFactor)
 {
 	//NAN init data
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
-	const double moverShaftPower = Get("moverShaftPower", inp);
-	const double inletPressure = Get("inletPressure", inp);
-	const double outletPressure = Get("outletPressure", inp);
-	const double barometricPressure = Get("barometricPressure", inp);
-	const double flowRate = Get("flowRate", inp);
-	const double specificHeatRatio = Get("specificHeatRatio", inp);
+	const double moverShaftPower = getDouble("moverShaftPower", inp);
+	const double inletPressure = getDouble("inletPressure", inp);
+	const double outletPressure = getDouble("outletPressure", inp);
+	const double barometricPressure = getDouble("barometricPressure", inp);
+	const double flowRate = getDouble("flowRate", inp);
+	const double specificHeatRatio = getDouble("specificHeatRatio", inp);
 
 	//Create C++ obj and calculate
 	double const compressibilityFactor = CompressibilityFactor(
