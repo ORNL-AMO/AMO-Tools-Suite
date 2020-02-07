@@ -1,7 +1,7 @@
 function nemaTest() {
     let lineFrequency = Module.LineFrequency.FREQ60;
     let motorRatedSpeed = 1200;
-    let efficiencyClass = Module.EfficiencyClass.ENERGY_EFFICIENT;
+    let efficiencyClass = Module.MotorEfficiencyClass.ENERGY_EFFICIENT;
     let efficiency = 0;
     let motorRatedPower = 200;
     let loadFactor = 1;

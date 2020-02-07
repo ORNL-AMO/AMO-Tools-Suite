@@ -206,7 +206,9 @@ set(SOURCE_FILES
         src/calculator/util/insulation/services/ThermalResistance.cpp
         src/calculator/util/SteamReduction.cpp
         bindings-wasm/psat/psat.cpp
-        bindings-wasm/motor/nema.cpp)
+        bindings-wasm/motor/nema.cpp
+        bindings-wasm/motor/motorEnum.cpp
+        bindings-wasm/psat/psatEnum.cpp)
 
 #set(WASM_BINDINGS
 #        bindings-wasm/psat.cpp)
