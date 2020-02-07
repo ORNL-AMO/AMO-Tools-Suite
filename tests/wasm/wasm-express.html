@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Wasm Testing</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/jquery/jquery.js"></script>
+    <script>
+        var Module = {
+            onRuntimeInitialized: function () {
+                $.getScript('tests/test-value.js');
+                $.getScript('tests/wasm-psat-test.js');
+                $.getScript('tests/wasm-motor-test.js');
+                $.getScript('tests/finish-testing.js');
+            }
+        }
+    </script>
+    <script src="assets/client.js"></script>
+    <style>
+        .invalid {
+            color: red;
+            padding-top: 3px;
+        }
+
+        .valid {
+            color: green;
+            padding-top: 3px;
+        }
+
+        label{
+            font-size: larger;
+            font-weight: bold;
+        }
+        .expected-div{
+            border-bottom: solid 2px;
+            padding-bottom: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <script src="tests/wasm-example-test.js"></script> -->
+    <label>Wasm Tests</label>
+</body>
+
+</html>

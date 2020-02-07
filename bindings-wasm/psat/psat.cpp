@@ -1,9 +1,10 @@
 
 #include "calculator/pump/PumpShaftPower.h"
+// #include "calculator/pump/HeadTool.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
-
+//pump shaft power
 EMSCRIPTEN_BINDINGS(pump_shaft_class)
 {
     enum_<Motor::Drive>("Drive")
@@ -22,3 +23,13 @@ EMSCRIPTEN_BINDINGS(pump_shaft_class)
         .property("pumpShaftPower", &PumpShaftPower::Output::pumpShaftPower)
         .property("driveEfficiency", &PumpShaftPower::Output::driveEfficiency);
 }
+
+//headToolSuctionTank
+//headTool
+//resultsExisting
+//resultsModified
+//estFLA
+//achievableEfficiency
+//pumpEfficiency
+//nema
+//motorPerformance

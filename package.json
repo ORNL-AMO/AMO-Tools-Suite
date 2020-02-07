@@ -7,10 +7,14 @@
   },
   "gypfile": true,
   "dependencies": {
+    "assert": "^2.0.0",
     "d3": "^4.13.0",
     "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
     "nan": "2.14.0",
     "node-gyp": "4.0.0",
+    "require": "^2.4.20",
     "utf-8-validate": "5.0.2"
   },
   "devDependencies": {
@@ -24,7 +28,8 @@
   "scripts": {
     "test": "tap debug tests/js/*.js",
     "at": "tap debug tests/at/js/*.js",
-    "install": "node-gyp rebuild"
+    "install": "node-gyp rebuild",
+    "test-wasm": "node tests/wasm/wasm-express.js"
   },
   "repository": {
     "type": "git",
