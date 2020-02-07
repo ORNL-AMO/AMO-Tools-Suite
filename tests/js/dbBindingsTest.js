@@ -483,7 +483,7 @@ test('dbInsertWallLossesSurface', function (t) {
 });
 
 test('dbSelectPumpData', function (t) {
-    t.plan(97); //2
+    t.plan(99); //2, 97
     bindings.startup();
 
     t.type(bindings.selectPumpById, 'function');
