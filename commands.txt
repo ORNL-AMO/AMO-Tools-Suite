@@ -7,6 +7,14 @@ docker login
 docker push comma64/ornl:issue-258
 
 
+
+docker stop $(docker ps -aq) 2>/dev/null || true
+docker rm $(docker ps -a -q) 2>/dev/null|| true
+docker rmi $(docker images -q) 2>/dev/null || true
+docker image prune -fa || sudo systemctl restart docker
+docker system prune -fa || sudo systemctl restart docker
+
+
 # Commands to run for building/testing/running AMO-Tools-Suite
 # -------------------------------------------------------------
 
