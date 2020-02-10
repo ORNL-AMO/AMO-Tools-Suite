@@ -38,7 +38,9 @@ public:
         efficiencyClass(efficiencyClass),
         specifiedEfficiency(specifiedEfficiency),
         ratedVoltage(ratedVoltage)
-    {};
+    {
+            calculate();
+    };
 
     /**
      * Calculates the 25% interval
