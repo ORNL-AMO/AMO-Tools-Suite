@@ -482,6 +482,114 @@ test('dbInsertWallLossesSurface', function (t) {
     t.equal(res[size].conditionFactor, obj2.conditionFactor, res[size].conditionFactor + " != " + obj2.conditionFactor);
 });
 
+test('dbSelectMotorData', function (t) {
+    t.plan(87);
+    bindings.startup();
+
+    t.type(bindings.selectMotorById, 'function');
+    var res = bindings.selectMotorById(1);
+
+    var obj = {
+        id: 1, manufacturer: "GE", model: "X$D Ultra IEEE 841", catalog: "M9455", motorType: "NEMA Design B", hp: 50, speed:1800,
+        fullLoadSpeed: 1780, enclosureType: "TEFC", frameNumber: "326T", voltageRating: 460,
+        purpose: "IEEE 841 Petroleum/Chemical", uFrame: 0, cFace: 0, verticalShaft: 0, dFlange: 0, serviceFactor: 1.15, insulationClass: "F",
+        weight: 511, listPrice: 4, windingResistance: 615, warranty: 99.5, rotorBars: 5, statorSlots: 38, efficiency100: 48,
+        efficiency75: 94.5, efficiency50: 94.7, efficiency25: 94.3, powerFactor100: 91.6, powerFactor75: 78, powerFactor50: 73.6,
+        powerFactor25: 63.3, torqueFullLoad: 41.5, torqueBreakDown: 147.4, torqueLockedRotor: 294.8, ampsFullLoad: 206.4, ampsIdle: 63.5,
+        ampsLockedRotor: 25.7, stalledRotorTimeHot: 362.5, stalledRotorTimeCold: 92.9, peakVoltage0ms: 115.2, peakVoltage5ms: 2000
+    };
+
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
+    t.equal(res.manufacturer, obj.manufacturer, res.manufacturer + " != " + obj.manufacturer);
+    t.equal(res.model, obj.model, res.model + " != " + obj.model);
+    t.equal(res.catalog, obj.catalog, res.catalog + " != " + obj.catalog);
+    t.equal(res.motorType, obj.motorType, res.motorType + " != " + obj.motorType);
+    t.equal(res.hp, obj.hp, res.hp + " != " + obj.hp);
+    t.equal(res.speed, obj.speed, res.speed + " != " + obj.speed);
+    t.equal(res.fullLoadSpeed, obj.fullLoadSpeed, res.fullLoadSpeed + " != " + obj.fullLoadSpeed);
+    t.equal(res.enclosureType, obj.enclosureType, res.enclosureType + " != " + obj.enclosureType);
+    t.equal(res.frameNumber, obj.frameNumber, res.frameNumber + " != " + obj.frameNumber);
+    t.equal(res.voltageRating, obj.voltageRating, res.voltageRating + " != " + obj.voltageRating);
+    t.equal(res.purpose, obj.purpose, res.purpose + " != " + obj.purpose);
+    t.equal(res.uFrame, obj.uFrame, res.uFrame + " != " + obj.uFrame);
+    t.equal(res.cFace, obj.cFace, res.cFace + " != " + obj.cFace);
+    t.equal(res.verticalShaft, obj.verticalShaft, res.verticalShaft + " != " + obj.verticalShaft);
+    t.equal(res.dFlange, obj.dFlange, res.dFlange + " != " + obj.dFlange);
+    t.equal(res.serviceFactor, obj.serviceFactor, res.serviceFactor + " != " + obj.serviceFactor);
+    t.equal(res.insulationClass, obj.insulationClass, res.insulationClass + " != " + obj.insulationClass);
+    t.equal(res.weight, obj.weight, res.weight + " != " + obj.weight);
+    t.equal(res.listPrice, obj.listPrice, res.listPrice + " != " + obj.listPrice);
+    t.equal(res.windingResistance, obj.windingResistance, res.windingResistance + " != " + obj.windingResistance);
+    t.equal(res.warranty, obj.warranty, res.warranty + " != " + obj.warranty);
+    t.equal(res.rotorBars, obj.rotorBars, res.rotorBars + " != " + obj.rotorBars);
+    t.equal(res.statorSlots, obj.statorSlots, res.statorSlots + " != " + obj.statorSlots);
+    t.equal(res.efficiency100, obj.efficiency100, res.efficiency100 + " != " + obj.efficiency100);
+    t.equal(res.efficiency75, obj.efficiency75, res.efficiency75 + " != " + obj.efficiency75);
+    t.equal(res.efficiency50, obj.efficiency50, res.efficiency50 + " != " + obj.efficiency50);
+    t.equal(res.efficiency25, obj.efficiency25, res.efficiency25 + " != " + obj.efficiency25);
+    t.equal(res.powerFactor100, obj.powerFactor100, res.powerFactor100 + " != " + obj.powerFactor100);
+    t.equal(res.powerFactor75, obj.powerFactor75, res.powerFactor75 + " != " + obj.powerFactor75);
+    t.equal(res.powerFactor50, obj.powerFactor50, res.powerFactor50 + " != " + obj.powerFactor50);
+    t.equal(res.powerFactor25, obj.powerFactor25, res.powerFactor25 + " != " + obj.powerFactor25);
+    t.equal(res.torqueFullLoad, obj.torqueFullLoad, res.torqueFullLoad + " != " + obj.torqueFullLoad);
+    t.equal(res.torqueBreakDown, obj.torqueBreakDown, res.torqueBreakDown + " != " + obj.torqueBreakDown);
+    t.equal(res.torqueLockedRotor, obj.torqueLockedRotor, res.torqueLockedRotor + " != " + obj.torqueLockedRotor);
+    t.equal(res.ampsFullLoad, obj.ampsFullLoad, res.ampsFullLoad + " != " + obj.ampsFullLoad);
+    t.equal(res.ampsIdle, obj.ampsIdle, res.ampsIdle + " != " + obj.ampsIdle);
+    t.equal(res.ampsLockedRotor, obj.ampsLockedRotor, res.ampsLockedRotor + " != " + obj.ampsLockedRotor);
+    t.equal(res.stalledRotorTimeHot, obj.stalledRotorTimeHot, res.stalledRotorTimeHot + " != " + obj.stalledRotorTimeHot);
+    t.equal(res.stalledRotorTimeCold, obj.stalledRotorTimeCold, res.stalledRotorTimeCold + " != " + obj.stalledRotorTimeCold);
+    t.equal(res.peakVoltage0ms, obj.peakVoltage0ms, res.peakVoltage0ms + " != " + obj.peakVoltage0ms);
+    t.equal(res.peakVoltage5ms, obj.peakVoltage5ms, res.peakVoltage5ms + " != " + obj.peakVoltage5ms);
+
+    t.type(bindings.selectMotors, 'function');
+    res = bindings.selectMotors();
+
+    t.equal(res.length, 3, "array is not size 3");
+    t.equal(res[0].id, obj.id, res[0].id + " != " + obj.id);
+    t.equal(res[0].manufacturer, obj.manufacturer, res[0].manufacturer + " != " + obj.manufacturer);
+    t.equal(res[0].model, obj.model, res[0].model + " != " + obj.model);
+    t.equal(res[0].catalog, obj.catalog, res[0].catalog + " != " + obj.catalog);
+    t.equal(res[0].motorType, obj.motorType, res[0].motorType + " != " + obj.motorType);
+    t.equal(res[0].hp, obj.hp, res[0].hp + " != " + obj.hp);
+    t.equal(res[0].speed, obj.speed, res[0].speed + " != " + obj.speed);
+    t.equal(res[0].fullLoadSpeed, obj.fullLoadSpeed, res[0].fullLoadSpeed + " != " + obj.fullLoadSpeed);
+    t.equal(res[0].enclosureType, obj.enclosureType, res[0].enclosureType + " != " + obj.enclosureType);
+    t.equal(res[0].frameNumber, obj.frameNumber, res[0].frameNumber + " != " + obj.frameNumber);
+    t.equal(res[0].voltageRating, obj.voltageRating, res[0].voltageRating + " != " + obj.voltageRating);
+    t.equal(res[0].purpose, obj.purpose, res[0].purpose + " != " + obj.purpose);
+    t.equal(res[0].uFrame, obj.uFrame, res[0].uFrame + " != " + obj.uFrame);
+    t.equal(res[0].cFace, obj.cFace, res[0].cFace + " != " + obj.cFace);
+    t.equal(res[0].verticalShaft, obj.verticalShaft, res[0].verticalShaft + " != " + obj.verticalShaft);
+    t.equal(res[0].dFlange, obj.dFlange, res[0].dFlange + " != " + obj.dFlange);
+    t.equal(res[0].serviceFactor, obj.serviceFactor, res[0].serviceFactor + " != " + obj.serviceFactor);
+    t.equal(res[0].insulationClass, obj.insulationClass, res[0].insulationClass + " != " + obj.insulationClass);
+    t.equal(res[0].weight, obj.weight, res[0].weight + " != " + obj.weight);
+    t.equal(res[0].listPrice, obj.listPrice, res[0].listPrice + " != " + obj.listPrice);
+    t.equal(res[0].windingResistance, obj.windingResistance, res[0].windingResistance + " != " + obj.windingResistance);
+    t.equal(res[0].warranty, obj.warranty, res[0].warranty + " != " + obj.warranty);
+    t.equal(res[0].rotorBars, obj.rotorBars, res[0].rotorBars + " != " + obj.rotorBars);
+    t.equal(res[0].statorSlots, obj.statorSlots, res[0].statorSlots + " != " + obj.statorSlots);
+    t.equal(res[0].efficiency100, obj.efficiency100, res[0].efficiency100 + " != " + obj.efficiency100);
+    t.equal(res[0].efficiency75, obj.efficiency75, res[0].efficiency75 + " != " + obj.efficiency75);
+    t.equal(res[0].efficiency50, obj.efficiency50, res[0].efficiency50 + " != " + obj.efficiency50);
+    t.equal(res[0].efficiency25, obj.efficiency25, res[0].efficiency25 + " != " + obj.efficiency25);
+    t.equal(res[0].powerFactor100, obj.powerFactor100, res[0].powerFactor100 + " != " + obj.powerFactor100);
+    t.equal(res[0].powerFactor75, obj.powerFactor75, res[0].powerFactor75 + " != " + obj.powerFactor75);
+    t.equal(res[0].powerFactor50, obj.powerFactor50, res[0].powerFactor50 + " != " + obj.powerFactor50);
+    t.equal(res[0].powerFactor25, obj.powerFactor25, res[0].powerFactor25 + " != " + obj.powerFactor25);
+    t.equal(res[0].torqueFullLoad, obj.torqueFullLoad, res[0].torqueFullLoad + " != " + obj.torqueFullLoad);
+    t.equal(res[0].torqueBreakDown, obj.torqueBreakDown, res[0].torqueBreakDown + " != " + obj.torqueBreakDown);
+    t.equal(res[0].torqueLockedRotor, obj.torqueLockedRotor, res[0].torqueLockedRotor + " != " + obj.torqueLockedRotor);
+    t.equal(res[0].ampsFullLoad, obj.ampsFullLoad, res[0].ampsFullLoad + " != " + obj.ampsFullLoad);
+    t.equal(res[0].ampsIdle, obj.ampsIdle, res[0].ampsIdle + " != " + obj.ampsIdle);
+    t.equal(res[0].ampsLockedRotor, obj.ampsLockedRotor, res[0].ampsLockedRotor + " != " + obj.ampsLockedRotor);
+    t.equal(res[0].stalledRotorTimeHot, obj.stalledRotorTimeHot, res[0].stalledRotorTimeHot + " != " + obj.stalledRotorTimeHot);
+    t.equal(res[0].stalledRotorTimeCold, obj.stalledRotorTimeCold, res[0].stalledRotorTimeCold + " != " + obj.stalledRotorTimeCold);
+    t.equal(res[0].peakVoltage0ms, obj.peakVoltage0ms, res[0].peakVoltage0ms + " != " + obj.peakVoltage0ms);
+    t.equal(res[0].peakVoltage5ms, obj.peakVoltage5ms, res[0].peakVoltage5ms + " != " + obj.peakVoltage5ms);
+});
+
 test('dbSelectPumpData', function (t) {
     t.plan(97); //2
     bindings.startup();
