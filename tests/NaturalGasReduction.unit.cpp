@@ -221,8 +221,8 @@ TEST_CASE("Natural Gas Reduction All Methods", "[NaturalGasReduction][Util]")
     auto naturalGasReduction = NaturalGasReduction(naturalGasReductionInputVec);
     auto testOutput = naturalGasReduction.calculate();
 
-    CHECK(testOutput.energyUse == Approx(89285454.70976));
-    CHECK(testOutput.energyCost == Approx(10714254.56517));
+    CHECK(testOutput.energyUse == Approx(293543.70176));
+    CHECK(testOutput.energyCost == Approx(35225.2442112));
     CHECK(testOutput.heatFlow == Approx(16.866592));
     CHECK(testOutput.totalFlow == Approx(20870));
 }
