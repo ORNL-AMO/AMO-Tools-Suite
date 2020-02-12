@@ -1002,7 +1002,7 @@ test('dbDeletions', function (t) {
 });
 
 test('dbUpdates', function (t) {
-    t.plan(8);
+    t.plan(9);
     bindings.startup();
 
     var obj = {
@@ -1120,6 +1120,21 @@ test('dbUpdates', function (t) {
     pump.manufacturer = 'updated';
     bindings.updatePump(pump);
     t.equal(bindings.selectPumpById(bindings.selectPumps().length).manufacturer, 'updated');
+
+    obj = {
+        id: 4, manufacturer: "A", model: "B", catalog: "C", motorType: "D", hp: 50, speed:1800,
+        fullLoadSpeed: 1780, enclosureType: "E", frameNumber: "F", voltageRating: 460,
+        purpose: "G", uFrame: 0, cFace: 0, verticalShaft: 0, dFlange: 0, serviceFactor: 1.15, insulationClass: "H",
+        weight: 511, listPrice: 4, windingResistance: 615, warranty: 99.5, rotorBars: 5, statorSlots: 38, efficiency100: 48,
+        efficiency75: 94.5, efficiency50: 94.7, efficiency25: 94.3, powerFactor100: 91.6, powerFactor75: 78, powerFactor50: 73.6,
+        powerFactor25: 63.3, torqueFullLoad: 41.5, torqueBreakDown: 147.4, torqueLockedRotor: 294.8, ampsFullLoad: 206.4, ampsIdle: 63.5,
+        ampsLockedRotor: 25.7, stalledRotorTimeHot: 362.5, stalledRotorTimeCold: 92.9, peakVoltage0ms: 115.2, peakVoltage5ms: 2000
+    };
+    bindings.insertMotor(obj);
+    motor = bindings.selectMotorById(bindings.selectMotors().length);
+    motor.manufacturer = 'updated';
+    bindings.updateMotor(motor);
+    t.equal(bindings.selectMotorById(bindings.selectMotors().length).manufacturer, 'updated');
 });
 
 
