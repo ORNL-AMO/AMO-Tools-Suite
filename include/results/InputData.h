@@ -170,6 +170,7 @@ namespace Pump {
 		 * @param specificGravity double, specific gravity- unitless
 		 * @param stageCount int, the number of pump stages
 		 * @param speed Speed, type of pump speed from either fixed or not fixed.
+		 * @param specifiedEfficiency double
 		 */
 		Input(const Style style, double pumpEfficiency, const double rpm, const Motor::Drive drive,
 		     const double kviscosity,

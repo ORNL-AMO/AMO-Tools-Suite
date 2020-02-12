@@ -100,7 +100,7 @@ public:
      * @param operatingHours double, fraction(%) of calendar hours the equipment is operating
      * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
-  PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingHours, double unitCost)
+  PSATResult(Pump::Input pumpInput, Motor motor, Pump::FieldData fieldData, double operatingHours, double unitCost)
       : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
         unitCost(unitCost){};
 

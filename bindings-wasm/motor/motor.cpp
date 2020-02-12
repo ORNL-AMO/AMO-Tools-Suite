@@ -16,3 +16,9 @@ EMSCRIPTEN_BINDINGS(est_fla_class)
         .constructor<double, double, Motor::LineFrequency, Motor::EfficiencyClass, double, double>()
         .function("getEstimatedFLA", &EstimateFLA::getEstimatedFLA);
 }
+
+EMSCRIPTEN_BINDINGS(motor_class)
+{
+    class_<Motor>("Motor")
+        .constructor<Motor::LineFrequency, double, double, Motor::EfficiencyClass, double, double, double, double>();
+}

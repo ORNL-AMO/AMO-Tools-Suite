@@ -16,6 +16,10 @@ EMSCRIPTEN_BINDINGS(motor_enums)
         .value("FREQ60", Motor::LineFrequency::FREQ60)
         .value("FREQ50", Motor::LineFrequency::FREQ50);
 
+    enum_<Motor::LoadEstimationMethod>("LoadEstimationMethod")
+        .value("POWER", Motor::LoadEstimationMethod::POWER)
+        .value("CURRENT", Motor::LoadEstimationMethod::CURRENT);
+
     enum_<Motor::EfficiencyClass>("MotorEfficiencyClass")
         .value("STANDARD", Motor::EfficiencyClass::STANDARD)
         .value("ENERGY_EFFICIENT", Motor::EfficiencyClass::ENERGY_EFFICIENT)

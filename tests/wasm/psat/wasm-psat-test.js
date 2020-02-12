@@ -54,7 +54,7 @@ function headTool() {
     let results = instance.calculate();
     instance.delete();
 
-    testNumberValue(results.pumpHead, 100.39593224945455,  'Head Tool (pumpHead)');
+    testNumberValue(results.pumpHead, 100.39593224945455, 'Head Tool (pumpHead)');
     testNumberValue(results.differentialElevationHead, -4, 'Head Tool (differentialElevationHead)');
     testNumberValue(results.differentialPressureHead, 103.98613494168427, 'Head Tool (differentialPressureHead)');
     testNumberValue(results.differentialVelocityHead, 0.10385896098722718, 'Head Tool (differentialVelocityHead)');
@@ -62,9 +62,52 @@ function headTool() {
     testNumberValue(results.estimatedSuctionFrictionHead, 0.10103969289791588, 'Head Tool (estimatedSuctionFrictionHead)');
 }
 
+function resultsExisting() {
+    //pump input
+    let pumpStyle = Module.PumpStyle.END_SUCTION_STOCK;
+    let pumpEfficiency = .69;
+    let rpm = 1780;
+    let drive = Module.Drive.SPECIFIED;
+    let kviscosity = 1.0;
+    let specificGravity = 1.0;
+    let stageCount = 1;
+    let speed = Module.SpecificSpeed.FIXED_SPEED;
+    let specifiedEfficiency = 95 / 100;
+    let pumpInput = new Module.PsatInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedEfficiency);
+    //motor
+    let lineFrequency = Module.LineFrequency.FREQ60;
+    let motorRatedPower = 300;
+    let motorRpm = 1780;
+    let efficiencyClass = Module.MotorEfficiencyClass.STANDARD;
+    let specifiedMotorEfficiency = 95;
+    let motorRatedVoltage = 460;
+    let fullLoadAmps = 337.3;
+    let sizeMargin = 0;
+    let motor = new Module.Motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedMotorEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
+    //field data
+    let flowRate = 1840;
+    let head = 277.0;
+    let loadEstimationMethod = Module.LoadEstimationMethod.POWER;
+    let motorPower = 150;
+    let motorAmps = 80.5;
+    let voltage = 460;
+    let fieldData = new Module.PumpFieldData(flowRate, head, loadEstimationMethod, motorPower, motorAmps, voltage);
+    let psatResult = new Module.ResultsExisting(pumpInput, motor, fieldData, 8760, 0.06);
+    let calculatedResults = psatResult.calculateExisting();
+    psatResult.delete();
+    fieldData.delete();
+    motor.delete();
+    pumpInput.delete();
+    testNumberValue(calculatedResults.pumpEfficiency * 100, 71.5541741283, "PSAT Results Existing (pumpEfficiency)");
+    testNumberValue(calculatedResults.motorShaftPower, 189.2746748003, "PSAT Results Existing (motorShaftPower)");
+    testNumberValue(calculatedResults.pumpShaftPower, 179.8109410603, "PSAT Results Existing (pumpShaftPower)");
+    testNumberValue(calculatedResults.motorEfficiency * 100, 94.132604934, "PSAT Results Existing (motorEfficiency)");
+}
+
 //execute tests
 pumpShaftPowerTest();
 achievableEfficiency();
 headToolSuctionTank();
 headTool();
+resultsExisting();
 
