@@ -65,7 +65,7 @@ function headTool() {
 function resultsExisting() {
     //pump input
     let pumpStyle = Module.PumpStyle.END_SUCTION_STOCK;
-    let pumpEfficiency = .69;
+    let pumpEfficiency = 90 / 100;
     let rpm = 1780;
     let drive = Module.Drive.SPECIFIED;
     let kviscosity = 1.0;
@@ -92,7 +92,7 @@ function resultsExisting() {
     let motorAmps = 80.5;
     let voltage = 460;
     let fieldData = new Module.PumpFieldData(flowRate, head, loadEstimationMethod, motorPower, motorAmps, voltage);
-    let psatResult = new Module.ResultsExisting(pumpInput, motor, fieldData, 8760, 0.06);
+    let psatResult = new Module.PSAT(pumpInput, motor, fieldData, 8760, 0.06);
     let calculatedResults = psatResult.calculateExisting();
     psatResult.delete();
     fieldData.delete();
@@ -104,10 +104,58 @@ function resultsExisting() {
     testNumberValue(calculatedResults.motorEfficiency * 100, 94.132604934, "PSAT Results Existing (motorEfficiency)");
 }
 
+function resultsModified() {
+    //pump input
+    let pumpStyle = Module.PumpStyle.END_SUCTION_ANSI_API;
+    let pumpEfficiency = 80 / 100;
+    let rpm = 1780;
+    let drive = Module.Drive.DIRECT_DRIVE;
+    let kviscosity = 1.0;
+    let specificGravity = 1.0;
+    let stageCount = 2;
+    let speed = Module.SpecificSpeed.NOT_FIXED_SPEED;
+    let specifiedEfficiency = 80;
+    let pumpInput = new Module.PsatInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedEfficiency);
+    //motor
+    let lineFrequency = Module.LineFrequency.FREQ60;
+    let motorRatedPower = 100;
+    let motorRpm = 1780;
+    let efficiencyClass = Module.MotorEfficiencyClass.SPECIFIED;
+    let specifiedMotorEfficiency = 95;
+    let motorRatedVoltage = 460;
+    let fullLoadAmps = 225;
+    let sizeMargin = 0;
+    let motor = new Module.Motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedMotorEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
+    //field data
+    let flowRate = 1840;
+    let head = 174.85;
+    let loadEstimationMethod = Module.LoadEstimationMethod.POWER;
+    let motorPower = 80;
+    let motorAmps = 125.857;
+    let voltage = 480;
+    let fieldData = new Module.PumpFieldData(flowRate, head, loadEstimationMethod, motorPower, motorAmps, voltage);
+    let psatResult = new Module.PSAT(pumpInput, motor, fieldData, 8760, 0.05);
+    let calculatedResults = psatResult.calculateModified();
+    psatResult.delete();
+    fieldData.delete();
+    motor.delete();
+    pumpInput.delete();
+
+    testNumberValue(calculatedResults.pumpEfficiency * 100, 80, "PSAT Results Modified (pumpEfficiency)");
+    testNumberValue(calculatedResults.motorRatedPower, 100, "PSAT Results Modified (motorRatedPower)");
+    testNumberValue(calculatedResults.motorShaftPower, 101.51891512553706, "PSAT Results Modified (motorShaftPower)");
+    testNumberValue(calculatedResults.pumpShaftPower, 101.51891512553706, "PSAT Results Modified (pumpShaftPower)");
+    testNumberValue(calculatedResults.motorEfficiency * 100, 94.973283, "PSAT Results Modified (motorEfficiency)");
+    testNumberValue(calculatedResults.motorPowerFactor * 100, 86.926875, "PSAT Results Modified (motorPowerFactor)");
+    testNumberValue(calculatedResults.motorCurrent, 110.338892, "PSAT Results Modified (motorCurrent)");
+    testNumberValue(calculatedResults.motorPower, 79.741528, "PSAT Results Modified (motorPower)");
+    testNumberValue(calculatedResults.annualEnergy, 698.535785, "PSAT Results Modified (annualEnergy)");
+    testNumberValue(calculatedResults.annualCost * 1000, 34926.789251, "PSAT Results Modified (annualCost)");
+}
 //execute tests
 pumpShaftPowerTest();
 achievableEfficiency();
 headToolSuctionTank();
 headTool();
 resultsExisting();
-
+resultsModified();

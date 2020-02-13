@@ -48,8 +48,8 @@ EMSCRIPTEN_BINDINGS(head_tool_output)
         .property("pumpHead", &HeadToolBase::Output::pumpHead);
 }
 
-//resultsExisting
-EMSCRIPTEN_BINDINGS(psat_results_existing)
+//resultsExisting & resultsModified
+EMSCRIPTEN_BINDINGS(psat_results)
 {
     class_<Pump::Input>("PsatInput")
         .constructor<Pump::Style, double, double, Motor::Drive, double, double, int, Pump::SpecificSpeed, double>();
@@ -57,9 +57,10 @@ EMSCRIPTEN_BINDINGS(psat_results_existing)
     class_<Pump::FieldData>("PumpFieldData")
         .constructor<double, double, Motor::LoadEstimationMethod, double, double, double>();
 
-    class_<PSATResult>("ResultsExisting")
+    class_<PSATResult>("PSAT")
         .constructor<Pump::Input, Motor, Pump::FieldData, double, double>()
-        .function("calculateExisting", &PSATResult::calculateExisting);
+        .function("calculateExisting", &PSATResult::calculateExisting)
+        .function("calculateModified", &PSATResult::calculateModified);
 }
 
 EMSCRIPTEN_BINDINGS(psat_results_output)
@@ -82,7 +83,6 @@ EMSCRIPTEN_BINDINGS(psat_results_output)
 }
 
 //resultsModified
-//estFLA
 //achievableEfficiency
 EMSCRIPTEN_BINDINGS(optimal_specified_speed_class)
 {
