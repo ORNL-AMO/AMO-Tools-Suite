@@ -209,10 +209,10 @@ set(SOURCE_FILES
         bindings-wasm/motor/motor.cpp
         bindings-wasm/motor/motorEnum.cpp
         bindings-wasm/psat/psatEnum.cpp
-        src/calculator/motor/MotorPerformance.cpp)
-
-#set(WASM_BINDINGS
-#        bindings-wasm/psat.cpp)
+        src/calculator/motor/MotorPerformance.cpp
+        src/calculator/pump/PumpEfficiency.cpp
+        bindings-wasm/fan/fan.cpp
+        )
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -391,6 +391,7 @@ set(INCLUDE_FILES
         include/fans/OptimalFanEfficiency.h
         include/ssmt/HeatExchanger.h
         include/calculator/motor/MotorPerformance.h
+        include/calculator/pump/PumpEfficiency.h
         )
 
 set(TEST_FILES

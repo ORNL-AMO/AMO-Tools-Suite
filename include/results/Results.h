@@ -57,7 +57,7 @@ public:
     // const double loadFactor, driveEfficiency, estimatedFLA;
   };
 
-  FanResult(Fan::Input &fanInput, Motor &motor, double operatingHours, double unitCost)
+  FanResult(Fan::Input fanInput, Motor motor, double operatingHours, double unitCost)
       : fanInput(fanInput), motor(motor), operatingHours(operatingHours), unitCost(unitCost)
   {
   }
@@ -66,14 +66,14 @@ public:
      * @param fanFieldData, Fan::FieldDataBaseline
      * @return FanResult::Output, the results of an existing fan system assessment
      */
-  Output calculateExisting(Fan::FieldDataBaseline const &fanFieldData);
+  Output calculateExisting(Fan::FieldDataBaseline const fanFieldData);
 
   /**
      * @param fanFieldData, Fan::FieldDataModified
      * @param fanEfficiency, double
      * @return FanResult::Output, the results of a fan system assessment
      */
-  Output calculateModified(Fan::FieldDataModified const &fanFieldData, double fanEfficiency);
+  Output calculateModified(Fan::FieldDataModified const fanFieldData, double fanEfficiency);
 
 private:
   double annualSavingsPotential = 0;

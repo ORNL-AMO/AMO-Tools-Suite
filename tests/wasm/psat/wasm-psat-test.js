@@ -98,10 +98,10 @@ function resultsExisting() {
     fieldData.delete();
     motor.delete();
     pumpInput.delete();
-    testNumberValue(calculatedResults.pumpEfficiency * 100, 71.5541741283, "PSAT Results Existing (pumpEfficiency)");
-    testNumberValue(calculatedResults.motorShaftPower, 189.2746748003, "PSAT Results Existing (motorShaftPower)");
-    testNumberValue(calculatedResults.pumpShaftPower, 179.8109410603, "PSAT Results Existing (pumpShaftPower)");
-    testNumberValue(calculatedResults.motorEfficiency * 100, 94.132604934, "PSAT Results Existing (motorEfficiency)");
+    testNumberValue(calculatedResults.pump_efficiency * 100, 71.5541741283, "PSAT Results Existing (pump_efficiency)");
+    testNumberValue(calculatedResults.motor_shaft_power, 189.2746748003, "PSAT Results Existing (motor_shaft_power)");
+    testNumberValue(calculatedResults.pump_shaft_power, 179.8109410603, "PSAT Results Existing (pump_shaft_power)");
+    testNumberValue(calculatedResults.motor_efficiency * 100, 94.132604934, "PSAT Results Existing (motor_efficiency)");
 }
 
 function resultsModified() {
@@ -141,17 +141,28 @@ function resultsModified() {
     motor.delete();
     pumpInput.delete();
 
-    testNumberValue(calculatedResults.pumpEfficiency * 100, 80, "PSAT Results Modified (pumpEfficiency)");
-    testNumberValue(calculatedResults.motorRatedPower, 100, "PSAT Results Modified (motorRatedPower)");
-    testNumberValue(calculatedResults.motorShaftPower, 101.51891512553706, "PSAT Results Modified (motorShaftPower)");
-    testNumberValue(calculatedResults.pumpShaftPower, 101.51891512553706, "PSAT Results Modified (pumpShaftPower)");
-    testNumberValue(calculatedResults.motorEfficiency * 100, 94.973283, "PSAT Results Modified (motorEfficiency)");
-    testNumberValue(calculatedResults.motorPowerFactor * 100, 86.926875, "PSAT Results Modified (motorPowerFactor)");
-    testNumberValue(calculatedResults.motorCurrent, 110.338892, "PSAT Results Modified (motorCurrent)");
-    testNumberValue(calculatedResults.motorPower, 79.741528, "PSAT Results Modified (motorPower)");
-    testNumberValue(calculatedResults.annualEnergy, 698.535785, "PSAT Results Modified (annualEnergy)");
-    testNumberValue(calculatedResults.annualCost * 1000, 34926.789251, "PSAT Results Modified (annualCost)");
+    testNumberValue(calculatedResults.pump_efficiency * 100, 80, "PSAT Results Modified (pump_efficiency)");
+    testNumberValue(calculatedResults.motor_rated_power, 100, "PSAT Results Modified (motor_rated_power)");
+    testNumberValue(calculatedResults.motor_shaft_power, 101.51891512553706, "PSAT Results Modified (motor_shaft_power)");
+    testNumberValue(calculatedResults.pump_shaft_power, 101.51891512553706, "PSAT Results Modified (pump_shaft_power)");
+    testNumberValue(calculatedResults.motor_efficiency * 100, 94.973283, "PSAT Results Modified (motor_efficiency)");
+    testNumberValue(calculatedResults.motor_power_factor * 100, 86.926875, "PSAT Results Modified (motor_power_factor)");
+    testNumberValue(calculatedResults.motor_current, 110.338892, "PSAT Results Modified (motor_current)");
+    testNumberValue(calculatedResults.motor_power, 79.741528, "PSAT Results Modified (motor_power)");
+    testNumberValue(calculatedResults.annual_energy, 698.535785, "PSAT Results Modified (annual_energy)");
+    testNumberValue(calculatedResults.annual_cost * 1000, 34926.789251, "PSAT Results Modified (annual_cost)");
 }
+
+function pumpEfficiency(){
+    let pumpStyle = Module.PumpStyle.END_SUCTION_ANSI_API;
+    let flowRate = 2000;
+    let instance = new Module.PumpEfficiency(pumpStyle, flowRate);
+    let results = instance.calculate();
+    instance.delete();
+    testNumberValue(results.average, 83.97084437955112, "Pump Efficiency (average)");
+    testNumberValue(results.max, 86.99584193768345, "Pump Efficiency (max)");
+}
+
 //execute tests
 pumpShaftPowerTest();
 achievableEfficiency();
@@ -159,3 +170,4 @@ headToolSuctionTank();
 headTool();
 resultsExisting();
 resultsModified();
+pumpEfficiency();

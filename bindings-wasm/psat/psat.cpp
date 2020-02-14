@@ -2,7 +2,8 @@
 #include "calculator/pump/PumpShaftPower.h"
 #include "calculator/pump/OptimalSpecificSpeedCorrection.h"
 #include "calculator/pump/HeadTool.h"
-#include <calculator/motor/MotorShaftPower.h>
+#include "calculator/motor/MotorShaftPower.h"
+#include "calculator/pump/PumpEfficiency.h"
 #include "results/Results.h"
 #include "results/InputData.h"
 #include <emscripten/bind.h>
@@ -60,29 +61,30 @@ EMSCRIPTEN_BINDINGS(psat_results)
     class_<PSATResult>("PSAT")
         .constructor<Pump::Input, Motor, Pump::FieldData, double, double>()
         .function("calculateExisting", &PSATResult::calculateExisting)
-        .function("calculateModified", &PSATResult::calculateModified);
+        .function("calculateModified", &PSATResult::calculateModified)
+        .function("getAnnualSavingsPotential", &PSATResult::getAnnualSavingsPotential)
+        .function("getOptimizationRating", &PSATResult::getOptimizationRating);
 }
 
 EMSCRIPTEN_BINDINGS(psat_results_output)
 {
     class_<PSATResult::Output>("PsatResults")
         .constructor<double, double, double, double, double, double, double, double, double, double, double, double>()
-        .property("pumpEfficiency", &PSATResult::Output::pumpEfficiency)
-        .property("motorRatedPower", &PSATResult::Output::motorRatedPower)
-        .property("motorShaftPower", &PSATResult::Output::motorShaftPower)
-        .property("pumpShaftPower", &PSATResult::Output::pumpShaftPower)
-        .property("motorEfficiency", &PSATResult::Output::motorEfficiency)
-        .property("motorPowerFactor", &PSATResult::Output::motorPowerFactor)
-        .property("motorCurrent", &PSATResult::Output::motorCurrent)
-        .property("motorPower", &PSATResult::Output::motorPower)
-        .property("annualEnergy", &PSATResult::Output::annualEnergy)
-        .property("annualCost", &PSATResult::Output::annualCost)
-        .property("loadFactor", &PSATResult::Output::loadFactor)
-        .property("driveEfficiency", &PSATResult::Output::driveEfficiency)
+        .property("pump_efficiency", &PSATResult::Output::pumpEfficiency)
+        .property("motor_rated_power", &PSATResult::Output::motorRatedPower)
+        .property("motor_shaft_power", &PSATResult::Output::motorShaftPower)
+        .property("pump_shaft_power", &PSATResult::Output::pumpShaftPower)
+        .property("motor_efficiency", &PSATResult::Output::motorEfficiency)
+        .property("motor_power_factor", &PSATResult::Output::motorPowerFactor)
+        .property("motor_current", &PSATResult::Output::motorCurrent)
+        .property("motor_power", &PSATResult::Output::motorPower)
+        .property("annual_energy", &PSATResult::Output::annualEnergy)
+        .property("annual_cost", &PSATResult::Output::annualCost)
+        .property("load_factor", &PSATResult::Output::loadFactor)
+        .property("drive_efficiency", &PSATResult::Output::driveEfficiency)
         .property("estimatedFLA", &PSATResult::Output::estimatedFLA);
 }
 
-//resultsModified
 //achievableEfficiency
 EMSCRIPTEN_BINDINGS(optimal_specified_speed_class)
 {
@@ -91,4 +93,17 @@ EMSCRIPTEN_BINDINGS(optimal_specified_speed_class)
         .function("calculate", &OptimalSpecificSpeedCorrection::calculate);
 }
 //pumpEfficiency
-//motorPerformance
+EMSCRIPTEN_BINDINGS(pump_efficiency)
+{
+    class_<PumpEfficiency>("PumpEfficiency")
+        .constructor<Pump::Style, double>()
+        .function("calculate", &PumpEfficiency::calculate);
+}
+
+EMSCRIPTEN_BINDINGS(pump_efficiency_output)
+{
+    class_<PumpEfficiency::Output>("PumpEfficiencyResults")
+        .constructor<double, double>()
+        .property("average", &PumpEfficiency::Output::average)
+        .property("max", &PumpEfficiency::Output::max);
+}
