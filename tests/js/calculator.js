@@ -232,8 +232,8 @@ test('Natural Gas Reduction test 1', function (t) {
     };
 
     var res = bindings.naturalGasReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(88992000.00), 'res.energyUse is ' + res.energyUse);
-    t.equal(rnd(res.energyCost), rnd(10679040.00), 'res.energyCost is ' + res.energyCost);
+    t.equal(rnd(res.energyUse), rnd(88.992), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(10.67904), 'res.energyCost is ' + res.energyCost);
 });
 
 
