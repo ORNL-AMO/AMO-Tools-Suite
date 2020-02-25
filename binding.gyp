@@ -72,11 +72,12 @@
         },
         {
             "target_name": "phast",
-            'include_dirs': ['include', 'include/calculator/losses', 'include/phast', 'include/calculator/furnace' ,
+            'include_dirs': ['include', 'include/calculator/losses', 'include/phast', 'include/calculator/furnace', 'include/calculator/util',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
                 'bindings/phast.cpp',
+                'src/calculator/util/Conversion.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/furnace/').map(f=>'src/calculator/furnace/'+f).join(' '))\")"
             ],
@@ -128,12 +129,26 @@
         },
         {
             "target_name": "ssmt",
-            'include_dirs': ['include', 'include/ssmt',
+            'include_dirs': ['include', 'include/ssmt', 'include/ssmt/api', 'include/ssmt/domain',
+                'include/ssmt/service', 'include/ssmt/service/high_pressure_header',
+                'include/ssmt/service/low_pressure_header', 'include/ssmt/service/medium_pressure_header',
+                'include/ssmt/service/water_and_condensate', 'include/ssmt/service/power_balance',
+                'include/ssmt/service/process_steam_usage', 'include/ssmt/service/energy_and_cost',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources' : [
                 'bindings/ssmt.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/').map(f=>'src/ssmt/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/api/').map(f=>'src/ssmt/api/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/domain/').map(f=>'src/ssmt/domain/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/').map(f=>'src/ssmt/service/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/high_pressure_header/').map(f=>'src/ssmt/service/high_pressure_header/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/low_pressure_header/').map(f=>'src/ssmt/service/low_pressure_header/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/medium_pressure_header/').map(f=>'src/ssmt/service/medium_pressure_header/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/water_and_condensate/').map(f=>'src/ssmt/service/water_and_condensate/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/power_balance/').map(f=>'src/ssmt/service/power_balance/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/process_steam_usage/').map(f=>'src/ssmt/service/process_steam_usage/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/ssmt/service/energy_and_cost/').map(f=>'src/ssmt/service/energy_and_cost/'+f).join(' '))\")",
             ],
             "conditions": [
                 [ 'OS=="mac"', {
@@ -182,8 +197,13 @@
             "target_name": "calculator",
             'include_dirs': [
                 'include',
+                'include/calculator/util', 
+                'include/calculator/util/insulation', 
+                'include/calculator/util/insulation/pipes',
+                'include/calculator/util/insulation/tanks',
+                'include/calculator/util/insulation/objects',
+                'include/calculator/util/insulation/services',
                 'include/ssmt',
-                'include/calculator/util',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources': [
@@ -197,6 +217,10 @@
                 'src/ssmt/SaturatedProperties.cpp',
                 'src/calculator/util/SteamReduction.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/pipes/').map(f=>'src/calculator/util/insulation/pipes/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/tanks/').map(f=>'src/calculator/util/insulation/tanks/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/objects/').map(f=>'src/calculator/util/insulation/objects/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/services/').map(f=>'src/calculator/util/insulation/services/'+f).join(' '))\")"
             ],
             "conditions": [
                 [ 'OS=="mac"', {

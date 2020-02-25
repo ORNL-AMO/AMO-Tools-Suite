@@ -35,6 +35,8 @@ public:
     FlashTank(double inletWaterPressure, SteamProperties::ThermodynamicQuantity quantityType, double quantityValue,
               double inletWaterMassFlow, double tankPressure);
 
+    friend std::ostream &operator<<(std::ostream &stream, const FlashTank &flashTank);
+    friend std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<FlashTank> &flashTank);
 
     /**
      * Gets all of the properties of the inlet water

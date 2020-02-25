@@ -17,7 +17,7 @@ double HeadToolBase::velocityHead(const double velocity, const double gravity) {
 	return ( ( velocity * velocity ) / 2.0 )  / gravity;
 }
 
-std::unordered_map<std::string, double> HeadToolSuctionTank::calculate() {
+HeadToolBase::Output HeadToolSuctionTank::calculate() {
 	// this flow and pressure head should be used when units are metric, and the number 12 should be replaced with 1000
 	// in the velocityHead Suction and Discharge calculations
 //	const double flow = flowRate * 4.402867544 / 15850.32316;
@@ -37,17 +37,10 @@ std::unordered_map<std::string, double> HeadToolSuctionTank::calculate() {
 
 	const double pumpHead = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
 
-	return {
-			{"elevationHead",            elevationHead},
-			{"pressureHead",             pressureHead},
-			{"velocityHeadDifferential", velocityHeadDifferential},
-			{"suctionHead",              suctionHead},
-			{"dischargeHead",            dischargeHead},
-			{"pumpHead",                 pumpHead}
-	};
+	return Output(elevationHead, pressureHead, velocityHeadDifferential, suctionHead, dischargeHead, pumpHead);
 }
 
-std::unordered_map<std::string, double> HeadTool::calculate() {
+HeadToolBase::Output HeadTool::calculate() {
 //	const double flow = flowRate * 4.402867544 / 15850.32316;
 //	const double pressureHead =
 //			(((dischargeGaugePressure - suctionGaugePressure) * 0.145037738007) / 1.42197020632) / specificGravity;
@@ -65,13 +58,6 @@ std::unordered_map<std::string, double> HeadTool::calculate() {
 
 	const double pumpHead = elevationHead + pressureHead + velocityHeadDifferential + suctionHead + dischargeHead;
 
-	return {
-			{"elevationHead",            elevationHead},
-			{"pressureHead",             pressureHead},
-			{"velocityHeadDifferential", velocityHeadDifferential},
-			{"suctionHead",              suctionHead},
-			{"dischargeHead",            dischargeHead},
-			{"pumpHead",                 pumpHead}
-	};
+	return Output(elevationHead, pressureHead, velocityHeadDifferential, suctionHead, dischargeHead, pumpHead);
 }
 

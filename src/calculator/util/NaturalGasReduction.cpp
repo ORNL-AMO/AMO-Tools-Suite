@@ -4,19 +4,19 @@
 
 NaturalGasReduction::Output NaturalGasReduction::calculate()
 {
-    double energyUse = 0, energyCost = 0, annualEnergySavings = 0, costSavings = 0, heatFlow = 0, totalFlow = 0;
+    double energyUse = 0, energyCost = 0, heatFlow = 0, totalFlow = 0;
 
     // loop through all supplied inputs
     for (auto &naturalGasReductionInput : naturalGasReductionInputVec)
     {
-        double tmpEnergyUse = 0, tmpEnergyCost = 0, tmpAnnualEnergySavings = 0, tmpCostSavings = 0, tmpHeatFlow = 0, tmpTotalFlow = 0;
+        double tmpEnergyUse = 0, tmpEnergyCost = 0, tmpHeatFlow = 0, tmpTotalFlow = 0;
 
         //flow meter method
         if (naturalGasReductionInput.getMeasurementMethod() == 0)
         {
             FlowMeterMethodData flowMeterMethodData = naturalGasReductionInput.getFlowMeterMethodData();
             tmpTotalFlow = flowMeterMethodData.getFlowRate() * naturalGasReductionInput.getUnits();
-            tmpEnergyUse = tmpTotalFlow * naturalGasReductionInput.getOperatingHours() * 1.03;
+            tmpEnergyUse = tmpTotalFlow * naturalGasReductionInput.getOperatingHours() * 1.03 / 1000.0;
             tmpEnergyCost = tmpEnergyUse * naturalGasReductionInput.getFuelCost();
         }
         //air mass flow method
@@ -64,7 +64,7 @@ NaturalGasReduction::Output NaturalGasReduction::calculate()
         heatFlow = heatFlow + tmpHeatFlow;
         totalFlow = totalFlow + tmpTotalFlow;
     }
-    return NaturalGasReduction::Output(energyUse, energyCost, annualEnergySavings, costSavings, heatFlow, totalFlow);
+    return NaturalGasReduction::Output(energyUse, energyCost, heatFlow, totalFlow);
 }
 
 void FlowMeterMethodData::setFlowRate(const double flowRate)

@@ -2,6 +2,8 @@
 #define AMO_TOOLS_SUITE_STEAMSYSTEMMODELERTOOL_H
 
 #include <cmath>
+#include <memory>
+#include <iostream>
 #include <string>
 
 class Point {
@@ -39,6 +41,8 @@ public:
                 density(density), specificEnthalpy(specificEnthalpy), specificEntropy(specificEntropy),
                 internalEnergy(internalEnergy)
         {}
+
+        friend std::ostream &operator<<(std::ostream &stream, const SteamPropertiesOutput &props);
 
         SteamPropertiesOutput() = default;
 
@@ -106,6 +110,9 @@ public:
                                       sp.specificEnthalpy, sp.specificEntropy, sp.internalEnergy),
                 massFlow(massFlow), energyFlow(energyFlow)
         {}
+
+        friend std::ostream &operator<<(std::ostream &stream, const FluidProperties &props);
+        friend std::ostream &operator<<(std::ostream &stream, const std::shared_ptr<FluidProperties> &props);
 
         FluidProperties() = default;
 

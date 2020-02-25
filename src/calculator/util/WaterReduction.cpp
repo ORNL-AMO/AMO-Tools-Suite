@@ -7,7 +7,7 @@ WaterReduction::Output WaterReduction::calculate()
 
     for (auto & waterReductionInput : waterReductionInputVec)
     {
-        double tmpWaterUse, tmpWaterCost, tmpAnnualWaterSavings, tmpCostSavings;
+        double tmpWaterUse, tmpWaterCost;
 
         if (waterReductionInput.getMeasurementMethod() == 0)
         {

@@ -23,7 +23,8 @@
 #include "calculator/motor/OptimalMotorPower.h"
 #include "calculator/motor/OptimalMotorSize.h"
 
-FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const & fanFieldData) {
+FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const &fanFieldData)
+{
     MotorShaftPower motorShaftPower(motor.motorRatedPower, fanFieldData.measuredPower, motor.motorRpm,
                                     motor.lineFrequency, motor.efficiencyClass, motor.specifiedEfficiency,
                                     motor.motorRatedVoltage, motor.fullLoadAmps, fanFieldData.measuredVoltage,
@@ -32,23 +33,27 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const & fa
 
     PumpShaftPower::Output const pumpShaftPower = PumpShaftPower(output.shaftPower, fanInput.drive, fanInput.specifiedEfficiency).calculate();
     double const fanShaftPower = pumpShaftPower.pumpShaftPower;
-    double const driveEfficiency = pumpShaftPower.driveEfficiency;    
+    double const driveEfficiency = pumpShaftPower.driveEfficiency;
     double const fanEfficiency = MoverEfficiency(fanFieldData.flowRate, fanShaftPower, fanFieldData.inletPressure,
-                                                 fanFieldData.outletPressure, fanFieldData.compressibilityFactor).calculate();
+                                                 fanFieldData.outletPressure, fanFieldData.compressibilityFactor)
+                                     .calculate();
     double const annualEnergy = AnnualEnergy(output.power, operatingHours).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
 
     double const fanEnergyIndex = FanEnergyIndex(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
-                                                 fanInput.airDensity, fanFieldData.measuredPower).calculateEnergyIndex();
+                                                 fanInput.airDensity, fanFieldData.measuredPower)
+                                      .calculateEnergyIndex();
 
     return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost,
             fanEnergyIndex, output.loadFactor, driveEfficiency, output.estimatedFLA};
 }
 
-FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const & fanFieldData, const double fanEfficiency) {
+FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const &fanFieldData, const double fanEfficiency)
+{
     double const fanShaftPower = OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure,
                                                        fanFieldData.outletPressure, fanFieldData.compressibilityFactor,
-                                                       fanEfficiency).calculate();
+                                                       fanEfficiency)
+                                     .calculate();
 
     OptimalMotorShaftPower::Output const optimalMotorShaftPower = OptimalMotorShaftPower(fanShaftPower, fanInput.drive, fanInput.specifiedEfficiency).calculate();
     double const motorShaftPower = optimalMotorShaftPower.motorShaftPower;
@@ -56,20 +61,23 @@ FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const & fa
 
     OptimalMotorPower::Output const output = OptimalMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                                                motor.efficiencyClass, motor.specifiedEfficiency, motor.motorRatedVoltage,
-                                                               fanFieldData.measuredVoltage, motorShaftPower).calculate();
-                                                            //    fanFieldData.measuredVoltage, motorShaftPower).calculate(isOptimal);
+                                                               fanFieldData.measuredVoltage, motorShaftPower)
+                                                 .calculate();
+    //    fanFieldData.measuredVoltage, motorShaftPower).calculate(isOptimal);
 
     double const annualEnergy = AnnualEnergy(output.power, operatingHours).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
 
     double const fanEnergyIndex = FanEnergyIndex(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
-                                                 fanInput.airDensity, output.power).calculateEnergyIndex();
+                                                 fanInput.airDensity, output.power)
+                                      .calculateEnergyIndex();
 
     return {fanEfficiency, motor.motorRatedPower, motorShaftPower, fanShaftPower, output.efficiency, output.powerFactor,
             output.current, output.power, annualEnergy, annualCost, fanEnergyIndex, output.loadFactor, driveEfficiency};
 }
 
-PSATResult::Result & PSATResult::calculateExisting() {
+PSATResult::Output PSATResult::calculateExisting()
+{
     /**
      * 1a	Calculate motor shaft power from measured power, OR
      * 1b	Calculate motor shaft power from measured current, voltage
@@ -91,29 +99,42 @@ PSATResult::Result & PSATResult::calculateExisting() {
                                     fieldData.loadEstimationMethod, fieldData.motorAmps);
     auto const output = motorShaftPower.calculate();
 
-    existing.motorShaftPower = output.shaftPower;
-    existing.motorCurrent = output.current;
-    existing.motorPowerFactor = output.powerFactor;
-    existing.motorEfficiency = output.efficiency;
-    existing.motorPower = output.power;
-    existing.estimatedFLA = output.estimatedFLA;
-    existing.loadFactor = output.loadFactor;
+    // existing.motorShaftPower = output.shaftPower;
+    // existing.motorCurrent = output.current;
+    // existing.motorPowerFactor = output.powerFactor;
+    // existing.motorEfficiency = output.efficiency;
+    // existing.motorPower = output.power;
+    // existing.estimatedFLA = output.estimatedFLA;
+    // existing.loadFactor = output.loadFactor;
 
-	existing.motorRatedPower = motor.motorRatedPower;
-
+    // existing.motorRatedPower = motor.motorRatedPower;
 
     //fix this with proper type and attributes, need to store drive efficiency and get it in return object
-    PumpShaftPower::Output const pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
-    existing.pumpShaftPower = pumpShaftPower.pumpShaftPower;
-    existing.driveEfficiency = pumpShaftPower.driveEfficiency;
-    existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
-                                              existing.pumpShaftPower).calculate();
-    existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingHours).calculate();
-    existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
-    return existing;
+    PumpShaftPower::Output const pumpShaftPower = PumpShaftPower(output.shaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
+    // PumpShaftPower::Output const pumpShaftPower = PumpShaftPower(existing.motorShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency).calculate();
+    // existing.pumpShaftPower = pumpShaftPower.pumpShaftPower;
+    // existing.driveEfficiency = pumpShaftPower.driveEfficiency;
+
+    double pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
+                                            pumpShaftPower.pumpShaftPower)
+                                .calculate();
+    // existing.pumpEfficiency = MoverEfficiency(pumpInput.specificGravity, fieldData.flowRate, fieldData.head,
+    //                                           existing.pumpShaftPower)
+    //                               .calculate();
+
+    double annualEnergy = AnnualEnergy(output.power, operatingHours).calculate();
+    // existing.annualEnergy = AnnualEnergy(existing.motorPower, operatingHours).calculate();
+
+    double annualCost = AnnualCost(annualEnergy, unitCost).calculate();
+    // existing.annualCost = AnnualCost(existing.annualEnergy, unitCost).calculate();
+
+    return Output(pumpEfficiency, motor.motorRatedPower, output.shaftPower, pumpShaftPower.pumpShaftPower, output.efficiency,
+                  output.powerFactor, output.current, output.power, annualEnergy, annualCost, output.loadFactor, pumpShaftPower.driveEfficiency, output.estimatedFLA);
+    // return existing;
 }
 
-PSATResult::Result & PSATResult::calculateModified() {
+PSATResult::Output PSATResult::calculateModified()
+{
     /**
          * Steps for calculating the modified values:
      *  1. Calculate fluid power and pump shaft power
@@ -130,35 +151,44 @@ PSATResult::Result & PSATResult::calculateModified() {
 
      */
 
-    modified.pumpEfficiency = pumpInput.pumpEfficiency;
+    // modified.pumpEfficiency = pumpInput.pumpEfficiency;
     OptimalPumpShaftPower modifiedPumpShaftPower(fieldData.flowRate, fieldData.head, pumpInput.specificGravity,
-                                                modified.pumpEfficiency);
-    modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
+                                                 pumpInput.pumpEfficiency);
+    double pumpShaftPower = modifiedPumpShaftPower.calculate();
+    // modified.pumpShaftPower = modifiedPumpShaftPower.calculate();
 
-    OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
+    OptimalMotorShaftPower modifiedMotorShaftPower(pumpShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
+    // OptimalMotorShaftPower modifiedMotorShaftPower(modified.pumpShaftPower, pumpInput.drive, pumpInput.specifiedEfficiency);
+
     OptimalMotorShaftPower::Output const motorShaftPowerOutput = modifiedMotorShaftPower.calculate();
-    modified.motorShaftPower = motorShaftPowerOutput.motorShaftPower;
-    modified.driveEfficiency = motorShaftPowerOutput.driveEfficiency;
+    // modified.motorShaftPower = motorShaftPowerOutput.motorShaftPower;
+    // modified.driveEfficiency = motorShaftPowerOutput.driveEfficiency;
 
-    modified.motorRatedPower = motor.motorRatedPower;
-    OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
+    // modified.motorRatedPower = motor.motorRatedPower;
+
+    OptimalMotorPower modifiedMotorPower(motor.motorRatedPower, motor.motorRpm, motor.lineFrequency,
                                          motor.efficiencyClass, motor.specifiedEfficiency,
-                                         motor.motorRatedVoltage, fieldData.voltage, modified.motorShaftPower);
-    OptimalMotorPower::Output output = modifiedMotorPower.calculate();
-    modified.motorCurrent = output.current;
-    modified.motorEfficiency = output.efficiency;
-    modified.motorPower = output.power;
-    modified.motorPowerFactor = output.powerFactor;
-    modified.loadFactor = output.loadFactor;
+                                         motor.motorRatedVoltage, fieldData.voltage, motorShaftPowerOutput.motorShaftPower);
 
+    // OptimalMotorPower modifiedMotorPower(modified.motorRatedPower, motor.motorRpm, motor.lineFrequency,
+    //                                      motor.efficiencyClass, motor.specifiedEfficiency,
+    //                                      motor.motorRatedVoltage, fieldData.voltage, modified.motorShaftPower);
+    OptimalMotorPower::Output output = modifiedMotorPower.calculate();
+    // modified.motorCurrent = output.current;
+    // modified.motorEfficiency = output.efficiency;
+    // modified.motorPower = output.power;
+    // modified.motorPowerFactor = output.powerFactor;
+    // modified.loadFactor = output.loadFactor;
 
     // Calculate Annual Energy
-    AnnualEnergy annualEnergy(modified.motorPower, operatingHours);
-    modified.annualEnergy = annualEnergy.calculate();
+    AnnualEnergy annualEnergy(output.power, operatingHours);
+    // AnnualEnergy annualEnergy(modified.motorPower, operatingHours);
+    double annualEnergyCalculation = annualEnergy.calculate();
+    // modified.annualEnergy = annualEnergy.calculate();
 
     // Calculate Annual Cost
-    AnnualCost annualCost(modified.annualEnergy, unitCost);
-    modified.annualCost = annualCost.calculate();
+    AnnualCost annualCost(annualEnergyCalculation, unitCost);
+    double annualCostCalculation = annualCost.calculate();
 
     // Annual Savings potential
     //annualSavingsPotential = existing.annualCost - modified.annualCost;
@@ -166,5 +196,9 @@ PSATResult::Result & PSATResult::calculateModified() {
     // Optimization Rating
     //optimizationRating = modified.motorPower / existing.motorPower;
     optimizationRating = 0.0;
-	return modified;
+
+    return Output(pumpInput.pumpEfficiency, motor.motorRatedPower, motorShaftPowerOutput.motorShaftPower, pumpShaftPower, output.efficiency,
+                  output.powerFactor, output.current, output.power, annualEnergyCalculation, annualCostCalculation, output.loadFactor, motorShaftPowerOutput.driveEfficiency);
+
+    // return modified;
 }

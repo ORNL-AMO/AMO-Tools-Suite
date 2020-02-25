@@ -10,6 +10,7 @@
 #define AMO_TOOLS_SUITE_INPUT_DATA_H
 
 #include <cmath>
+#include "calculator/util/Conversion.h"
 
 struct Motor {
 	enum class EfficiencyClass {
@@ -57,18 +58,20 @@ struct Motor {
 	{};
 
 	const LineFrequency lineFrequency;
-	const double motorRatedPower, motorRpm, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin;
+	const double motorRatedPower, motorRpm;
 	const Motor::EfficiencyClass efficiencyClass;
+	const double specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin;
 };
 
 namespace Fan {
 	struct Input {
-		Input(double const fanSpeed, const double airDensity, const Motor::Drive drive, const double specifiedEfficiency)
+		Input(const double fanSpeed, const double airDensity, const Motor::Drive drive, double specifiedEfficiency)
 				: fanSpeed(fanSpeed), airDensity(airDensity), drive(drive), specifiedEfficiency(specifiedEfficiency)
 		{}
 
-		double fanSpeed, airDensity, specifiedEfficiency;
+		double fanSpeed, airDensity;
 		Motor::Drive drive;
+		double specifiedEfficiency;
 	};
 
 	struct FieldDataModified {
@@ -147,12 +150,13 @@ namespace Pump {
 		 */
 		FieldData(const double flowRate, const double head, const Motor::LoadEstimationMethod loadEstimationMethod, const double motorPower,
 		          const double motorAmps, const double voltage)
-				: loadEstimationMethod(loadEstimationMethod), flowRate(flowRate), head(head), motorPower(motorPower),
+				: flowRate(flowRate), head(head), loadEstimationMethod(loadEstimationMethod),  motorPower(motorPower),
 				  motorAmps(motorAmps), voltage(voltage)
 		{}
 
+		const double flowRate, head;
 		const Motor::LoadEstimationMethod loadEstimationMethod;
-		const double flowRate, head, motorPower, motorAmps, voltage;
+		const double motorPower, motorAmps, voltage;
 	};
 
 	struct Input {
@@ -167,18 +171,29 @@ namespace Pump {
 		 * @param stageCount int, the number of pump stages
 		 * @param speed Speed, type of pump speed from either fixed or not fixed.
 		 */
-		Input(const Style style, const double pumpEfficiency, const double rpm, const Motor::Drive drive,
+		Input(const Style style, double pumpEfficiency, const double rpm, const Motor::Drive drive,
 		     const double kviscosity,
-		     const double specificGravity, const int stageCount, const SpecificSpeed speed, const double specifiedEfficiency)
-				: style(style), drive(drive), speed(speed), pumpEfficiency(pumpEfficiency), rpm(rpm),
+		     const double specificGravity, const int stageCount, const SpecificSpeed speed, double specifiedEfficiency)
+				: style(style), pumpEfficiency(pumpEfficiency), rpm(rpm), drive(drive),  
 				  kviscosity(kviscosity),
-				  specificGravity(specificGravity), stageCount(stageCount), specifiedEfficiency(specifiedEfficiency) {};
+				  specificGravity(specificGravity), stageCount(stageCount), speed(speed), specifiedEfficiency(specifiedEfficiency) {
+					  /**
+					   * Convert percent values to fractions for proper calculation  
+					   */
+					//   this->specifiedEfficiency = Conversion(specifiedEfficiency).percentToFraction();
+					//   this->pumpEfficiency = Conversion(pumpEfficiency).percentToFraction();
+					//   this->specifiedEfficiency = specifiedEfficiency / 100.0;
+					//   this->pumpEfficiency = pumpEfficiency / 100.0;
+				  };
 
 		const Style style;
+		double pumpEfficiency, rpm;
 		const Motor::Drive drive;
-		const SpecificSpeed speed;
-		const double pumpEfficiency, rpm, kviscosity, specificGravity, specifiedEfficiency;
+		const double kviscosity, specificGravity;
 		const int stageCount;
+		const SpecificSpeed speed;
+		double specifiedEfficiency;
+	
 	};
 }
 
