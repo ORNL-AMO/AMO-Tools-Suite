@@ -27,8 +27,8 @@ before_install:
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
       bew update
-      brew install -y make
-      brew install -y doxygen
+      brew install make
+      brew install doxygen
     fi
   
   - node --version
