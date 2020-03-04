@@ -10,15 +10,8 @@ compiler:
 #  - clang
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    brew update;
-    brew install doxygen;
-    nvm install 12.8.0;
-    nvm use 12.8.0;
-    else
-    choco install nodejs.install --version 12.8.0
-    choco install doxygen.install
-    fi
+  - choco install nodejs.install --version 12.8.0
+  - choco install doxygen.install
 
 install: travis_retry npm install
 
