@@ -10,8 +10,9 @@ compiler:
 #  - clang
 
 before_install:
-  - choco install nodejs.install --version 12.8.0
-  - choco install doxygen.install
+  #- choco install -y nodejs.install --version 12.8.0
+  - choco install -y --force nodejs@v12.8.0
+  - choco install -y doxygen.install
 
 install: travis_retry npm install
 
