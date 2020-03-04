@@ -25,9 +25,15 @@ install: travis_retry npm install
 
 script:
   - ls -a
-  - node --version
-  - cmake ./
-  - ls -a
+  - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./
+  - cmake --build .
+  - ./bin/amo_tools_suite_tests
+  - npm install
+  - node-gyp rebuild
+  - npm run test
+  - npm run at
+  #- node --version
+  #- cmake ./
   #- make
   #- ./bin/amo_tools_suite_tests
   #- npm install
