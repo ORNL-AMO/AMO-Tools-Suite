@@ -17,12 +17,12 @@ before_install:
     if [[ $TRAVIS_OS_NAME == "linux" ]]; then
       sudo apt-get update
       sudo apt-get install -y make
-      sudo apt-get install -y doxygen.portable
+      sudo apt-get install -y doxygen
     fi
   - |
     if [[ $TRAVIS_OS_NAME == "windows" ]]; then
       choco install -y make
-      choco install -y doxygen
+      choco install -y doxygen.install
     fi
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
