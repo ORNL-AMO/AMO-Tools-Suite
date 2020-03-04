@@ -7,6 +7,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <calculator/pump/PumpData.h>
 #include <fstream>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
@@ -285,6 +286,43 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
         CHECK(Approx(sqlite.getCustomWallLossesSurface().at(0).getConditionFactor()) == 0.5);
         CHECK(Approx(sqlite.getCustomWallLossesSurface().at(1).getConditionFactor()) == 0.75);
     }
+
+    {
+
+		PumpData pump1("manufacturerCustom1", "modelCustom1", "typeCustom1", "serialNumberCustom1", "statusCustom1", "pumpTypeCustom1",
+                    "radialBearingTypeCustom1", "thrustBearingTypeCustom1", "shaftOrientationCustom1", "shaftSealTypeCustom1", "fluidTypeCustom1",
+                    "priorityCustom1", "driveTypeCustom1", "flangeConnectionClassCustom1", "flangeConnectionSizeCustom1", 1, 2, 1, 9000, 2018, 1780,
+                    5, 90, 6, 89, 90, 85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1);
+
+        PumpData pump2("manufacturerCustom2", "modelCustom2", "typeCustom2", "serialNumberCustom2", "statusCustom2", "pumpTypeCustom2",
+                    "radialBearingTypeCustom2", "thrustBearingTypeCustom2", "shaftOrientationCustom2", "shaftSealTypeCustom2", "fluidTypeCustom2",
+                    "priorityCustom2", "driveTypeCustom2", "flangeConnectionClassCustom2", "flangeConnectionSizeCustom2", 1, 2, 1, 9000, 2018, 1780,
+                    5, 90, 6, 89, 90, 85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1);
+
+		sqlite.insertPumpData(pump1);
+        sqlite.insertPumpData(pump2);
+
+        /*
+        std::ofstream ofs("debug.txt");
+        auto test = sqlite.getPumpData();
+        ofs << std::endl;
+        ofs << "getPumpData() returned size " << test.size() << std::endl;
+        ofs << std::endl;
+        ofs.close();
+        */
+
+        auto custom1 = sqlite.getCustomPumpData().at(0);
+        auto custom2 = sqlite.getCustomPumpData().at(1);
+
+		custom1.setManufacturer("updatedManufacturerCustom1");
+        custom2.setManufacturer("updatedManufacturerCustom2");
+
+        sqlite.updatePumpData(custom1);
+        sqlite.updatePumpData(custom2);
+
+        CHECK(sqlite.getCustomPumpData().at(0).getManufacturer() == "updatedManufacturerCustom1");
+        CHECK(sqlite.getCustomPumpData().at(1).getManufacturer() == "updatedManufacturerCustom2");
+	}
 }
 
 TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
@@ -387,6 +425,21 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
         sqlite.deleteWallLossesSurface(sqlite.getCustomWallLossesSurface().back().getID());
         auto const output2 = sqlite.getWallLossesSurface();
         CHECK( output2[output2.size() - 1].getSurface() == last );
+    }
+
+    {
+        auto const output = sqlite.getPumpData();
+        auto const last = output.back().getManufacturer();
+        PumpData pump(
+                "throw this pump away delete", "model", "type", "serialNumber", "status", "pumpType", "radial",
+                "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
+                "flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
+                85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1 );
+
+        sqlite.insertPumpData(pump);
+        sqlite.deletePumpData(sqlite.getPumpData().back().getId());
+        auto const output2 = sqlite.getPumpData();
+        CHECK( output2[output2.size() - 1].getManufacturer() == last );
     }
 }
 
@@ -1094,5 +1147,97 @@ TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
         auto const output = sqlite.getCustomWallLossesSurface();
         CHECK( output.size() == 2 );
         CHECK( output[1].getConditionFactor() == expected.getConditionFactor() );
+    }
+}
+
+TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]" ) {
+    auto const compare = [](PumpData result, PumpData expected) {
+        CHECK(result.getManufacturer() == expected.getManufacturer());
+        CHECK(result.getModel() == expected.getModel());
+        CHECK(result.getType() == expected.getType());
+        CHECK(result.getSerialNumber() == expected.getSerialNumber());
+        CHECK(result.getStatus() == expected.getStatus());
+        CHECK(result.getPumpType() == expected.getPumpType());
+        CHECK(result.getRadialBearingType() == expected.getRadialBearingType());
+        CHECK(result.getThrustBearingType() == expected.getThrustBearingType());
+        CHECK(result.getShaftOrientation() == expected.getShaftOrientation());
+        CHECK(result.getShaftSealType() == expected.getShaftSealType());
+        CHECK(result.getFluidType() == expected.getFluidType());
+        CHECK(result.getPriority() == expected.getPriority());
+        CHECK(result.getDriveType() == expected.getDriveType());
+        CHECK(result.getFlangeConnectionClass() == expected.getFlangeConnectionClass());
+        CHECK(result.getFlangeConnectionSize() == expected.getFlangeConnectionSize());
+        CHECK(result.getNumShafts() == expected.getNumShafts());
+        CHECK(result.getSpeed() == expected.getSpeed());
+        CHECK(result.getNumStages() == expected.getNumStages());
+        CHECK(result.getYearlyOperatingHours() == expected.getYearlyOperatingHours());
+        CHECK(result.getYearInstalled() == expected.getYearInstalled());
+        CHECK(result.getFinalMotorRpm() == expected.getFinalMotorRpm());
+        CHECK(result.getInletDiameter() == expected.getInletDiameter());
+        CHECK(result.getWeight() == expected.getWeight());
+        CHECK(result.getOutletDiameter() == expected.getOutletDiameter());
+        CHECK(result.getPercentageOfSchedule() == expected.getPercentageOfSchedule());
+        CHECK(result.getDailyPumpCapacity() == expected.getDailyPumpCapacity());
+        CHECK(result.getMeasuredPumpCapacity() == expected.getMeasuredPumpCapacity());
+        CHECK(result.getPumpPerformance() == expected.getPumpPerformance());
+        CHECK(result.getStaticSuctionHead() == expected.getStaticSuctionHead());
+        CHECK(result.getStaticDischargeHead() == expected.getStaticDischargeHead());
+        CHECK(result.getFluidDensity() == expected.getFluidDensity());
+        CHECK(result.getLengthOfDischargePipe() == expected.getLengthOfDischargePipe());
+        CHECK(result.getPipeDesignFrictionLosses() == expected.getPipeDesignFrictionLosses());
+        CHECK(result.getMaxWorkingPressure() == expected.getMaxWorkingPressure());
+        CHECK(result.getMaxAmbientTemperature() == expected.getMaxAmbientTemperature());
+        CHECK(result.getMaxSuctionLift() == expected.getMaxSuctionLift());
+        CHECK(result.getDisplacement() == expected.getDisplacement());
+        CHECK(result.getStartingTorque() == expected.getStartingTorque());
+        CHECK(result.getRatedSpeed() == expected.getRatedSpeed());
+        CHECK(result.getShaftDiameter() == expected.getShaftDiameter());
+        CHECK(result.getImpellerDiameter() == expected.getImpellerDiameter());
+        CHECK(result.getEfficiency() == expected.getEfficiency());
+        CHECK(result.getOutput60Hz() == expected.getOutput60Hz());
+        CHECK(result.getMinFlowSize() == expected.getMinFlowSize());
+        CHECK(result.getPumpSize() == expected.getPumpSize());
+        CHECK(result.getOutOfService() == expected.getOutOfService());
+        CHECK(result.getId() == expected.getId());
+    };
+
+    auto sqlite = SQLite(":memory:", true);
+    //auto sqlite = SQLite("cpp_amo_tools_suite.db", true);
+    //auto sqlite = SQLite("test.db", true);
+
+    {
+        auto const pumps = sqlite.getPumpData();
+
+        auto expected = PumpData(
+                "manufacturer", "model", "type", "serialNumber", "status", "pumpType", "radialBearingType",
+                "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
+                "flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
+                85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1 );
+                
+        expected.setId(1);
+
+        compare(pumps.at(0), expected);
+
+        auto pump = PumpData(
+                "test-manufacturer", "test-model", "test-type", "test-serialNumber", "status", "pumpType", "radialBearingType",
+                "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
+                "flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
+                85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1 );
+
+        sqlite.insertPumpData(pump);
+        pump.setId(2);
+        compare(sqlite.getPumpData().back(), pump);
+
+        pump = sqlite.getPumpData().back();
+        pump.setManufacturer("updated");
+        sqlite.updatePumpData(pump);
+
+        compare(sqlite.getPumpData().back(), pump);
+
+        auto pumpById = sqlite.getPumpDataById(2);
+        compare(sqlite.getPumpData().back(), pumpById);
+
+        //sqlite.deletePumpData(2);
+        //compare(sqlite.getPumpData().back(), expected);
     }
 }

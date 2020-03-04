@@ -14,6 +14,7 @@
 #include <calculator/losses/SolidLiquidFlueGasMaterial.h>
 #include <calculator/losses/Atmosphere.h>
 #include <calculator/losses/WallLosses.h>
+#include <calculator/pump/PumpData.h>
 
 using namespace Nan;
 using namespace v8;
@@ -51,11 +52,63 @@ std::string GetStr(std::string const &nm)
 inline void SetObj(Local<Object> &obj, const std::string &key, double val)
 {
     Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
+    //Nan::Set(obj, Nan::New<String>(static_cast<std::string>(key)).ToLocalChecked(), Nan::New<Number>(val));
 }
 
 inline void SetObj(Local<Object> &obj, const std::string &key, const std::string &val)
 {
     Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<String>(val).ToLocalChecked());
+    //Nan::Set(obj, Nan::New<String>(static_cast<std::string>(key)).ToLocalChecked(), Nan::New<String>(val).ToLocalChecked());
+}
+
+void SetPumpData(Local<Object> & obj, const PumpData & pump) {
+    SetObj(obj, "id", pump.getId());
+    SetObj(obj, "manufacturer", pump.getManufacturer());
+    SetObj(obj, "model", pump.getModel());
+    SetObj(obj, "type", pump.getType());
+    SetObj(obj, "serialNumber", pump.getSerialNumber());
+    SetObj(obj, "status", pump.getStatus());
+    SetObj(obj, "pumpType", pump.getPumpType());
+    SetObj(obj, "radialBearingType", pump.getRadialBearingType());
+    SetObj(obj, "thrustBearingType", pump.getThrustBearingType());
+    SetObj(obj, "shaftOrientation", pump.getShaftOrientation());
+    SetObj(obj, "shaftSealType", pump.getShaftSealType());
+    SetObj(obj, "fluidType", pump.getFluidType());
+    SetObj(obj, "priority", pump.getPriority());
+    SetObj(obj, "driveType", pump.getDriveType());
+    SetObj(obj, "flangeConnectionClass", pump.getFlangeConnectionClass());
+    SetObj(obj, "flangeConnectionSize", pump.getFlangeConnectionSize());
+    SetObj(obj, "numShafts", pump.getNumShafts());
+    SetObj(obj, "speed", pump.getSpeed());
+    SetObj(obj, "numStages", pump.getNumStages());
+    SetObj(obj, "yearlyOperatingHours", pump.getYearlyOperatingHours());
+    SetObj(obj, "yearInstalled", pump.getYearInstalled());
+    SetObj(obj, "finalMotorRpm", pump.getFinalMotorRpm());
+    SetObj(obj, "inletDiameter", pump.getInletDiameter());
+    SetObj(obj, "weight", pump.getWeight());
+    SetObj(obj, "outletDiameter", pump.getOutletDiameter());
+    SetObj(obj, "percentageOfSchedule", pump.getPercentageOfSchedule());
+    SetObj(obj, "dailyPumpCapacity", pump.getDailyPumpCapacity());
+    SetObj(obj, "measuredPumpCapacity", pump.getMeasuredPumpCapacity());
+    SetObj(obj, "pumpPerformance", pump.getPumpPerformance());
+    SetObj(obj, "staticSuctionHead", pump.getStaticSuctionHead());
+    SetObj(obj, "staticDischargeHead", pump.getStaticDischargeHead());
+    SetObj(obj, "fluidDensity", pump.getFluidDensity());
+    SetObj(obj, "lengthOfDischargePipe", pump.getLengthOfDischargePipe());
+    SetObj(obj, "pipeDesignFrictionLosses", pump.getPipeDesignFrictionLosses());
+    SetObj(obj, "maxWorkingPressure", pump.getMaxWorkingPressure());
+    SetObj(obj, "maxAmbientTemperature", pump.getMaxAmbientTemperature());
+    SetObj(obj, "maxSuctionLift", pump.getMaxSuctionLift());
+    SetObj(obj, "displacement", pump.getDisplacement());
+    SetObj(obj, "startingTorque", pump.getStartingTorque());
+    SetObj(obj, "ratedSpeed", pump.getRatedSpeed());
+    SetObj(obj, "shaftDiameter", pump.getShaftDiameter());
+    SetObj(obj, "impellerDiameter", pump.getImpellerDiameter());
+    SetObj(obj, "efficiency", pump.getEfficiency());
+    SetObj(obj, "output60Hz", pump.getOutput60Hz());
+    SetObj(obj, "minFlowSize", pump.getMinFlowSize());
+    SetObj(obj, "pumpSize", pump.getPumpSize());
+    SetObj(obj, "outOfService", pump.getOutOfService());
 }
 
 // when creating sqlite, add table that has history, put in tools-suite number and the date so that we know where db's came from
@@ -72,6 +125,7 @@ NAN_METHOD(startup)
     //        sql = std::unique_ptr<SQLite>(new SQLite(dbName, ! fileExists));
 
     std::string const dbName = ":memory:";
+    //std::string const dbName = "test.db";
     sql.reset();
     sql = std::unique_ptr<SQLite>(new SQLite(dbName, true));
 }
@@ -812,6 +866,82 @@ NAN_METHOD(selectWallLossesSurfaceById)
     }
 
     info.GetReturnValue().Set(obj);
+};
+
+NAN_METHOD(selectPumps) {
+    auto const pumps = sql->getPumpData(); // TODO this returns 0 pumps confirmed, but doesn't in C++. I don't think I can do anything else here anymore.
+
+    auto pumpsNan = Nan::New<v8::Array>();
+    for (std::size_t i = 0; i < pumps.size(); i++) {
+        Local<Object> pump = Nan::New<Object>();
+        SetPumpData(pump, pumps[i]);
+        Nan::Set(pumpsNan, i, pump);
+    }
+
+    info.GetReturnValue().Set(pumpsNan);
+};
+
+NAN_METHOD(selectPumpById) {
+    Local<Object> pump = Nan::New<Object>();
+    try {
+        //SetPumpData(pump, sql->getPumpDataById(static_cast<int>(info[0].FromJust())));
+        SetPumpData(pump, sql->getPumpDataById(static_cast<int>(Nan::To<double>(info[0]).FromJust())));
+        //sql->getPumpDataById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
+    } catch (std::runtime_error const & e) {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in selectPumpById - db.h: " + what).c_str());
+    }
+    info.GetReturnValue().Set(pump);
+};
+
+NAN_METHOD(insertPump) {
+    //inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+
+    PumpData pump(
+            GetStr("manufacturer"), GetStr("model"), GetStr("type"), GetStr("serialNumber"), GetStr("status"),
+            GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"), GetStr("shaftOrientation"),
+            GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"), GetStr("driveType"),
+            GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"), Get("numShafts"), Get("speed"),
+            Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
+            Get("inletDiameter"), Get("weight"), Get("outletDiameter"), Get("percentageOfSchedule"),
+            Get("dailyPumpCapacity"), Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"),
+            Get("staticDischargeHead"), Get("fluidDensity"), Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"),
+            Get("maxWorkingPressure"), Get("maxAmbientTemperature"), Get("maxSuctionLift"), Get("displacement"),
+            Get("startingTorque"), Get("ratedSpeed"), Get("shaftDiameter"), Get("impellerDiameter"),
+            Get("efficiency"), Get("output60Hz"), Get("minFlowSize"), Get("pumpSize"), Get("outOfService")
+    );
+    bool success = sql->insertPumpData(pump);
+    info.GetReturnValue().Set(success);
+};
+
+NAN_METHOD(deletePump) {
+    //bool success = sql->deletePumpData(static_cast<int>(info[0].FromJust()));
+    bool success = sql->deletePumpData(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
+    info.GetReturnValue().Set(success);
+};
+
+NAN_METHOD(updatePump) {
+    //inp = info[0]->ToObject();
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+
+    PumpData pump(
+            GetStr("manufacturer"), GetStr("model"), GetStr("type"), GetStr("serialNumber"), GetStr("status"),
+            GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"),
+            GetStr("shaftOrientation"), GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"),
+            GetStr("driveType"), GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"), Get("numShafts"),
+            Get("speed"), Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
+            Get("inletDiameter"), Get("weight"), Get("outletDiameter"), Get("percentageOfSchedule"), Get("dailyPumpCapacity"),
+            Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"), Get("staticDischargeHead"),
+            Get("fluidDensity"), Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"), Get("maxWorkingPressure"),
+            Get("maxAmbientTemperature"), Get("maxSuctionLift"), Get("displacement"), Get("startingTorque"),
+            Get("ratedSpeed"), Get("shaftDiameter"), Get("impellerDiameter"), Get("efficiency"),
+            Get("output60Hz"), Get("minFlowSize"), Get("pumpSize"), Get("outOfService")
+    );
+
+    pump.setId(Get("id"));
+    bool success = sql->updatePumpData(pump);
+    info.GetReturnValue().Set(success);
 };
 
 #endif //AMO_TOOLS_SUITE_DB_H
