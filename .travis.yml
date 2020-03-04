@@ -16,9 +16,9 @@ before_install:
   #- choco install -y nodejs.install --version 12.8.0
   #- choco install -y --force nodejs@v12.8.0
   #- npm i -g npm
-  #- choco install -y doxygen.install
   - choco install -y make
   - node --version
+  - choco install -y doxygen.install
   #- npm --version
 
 install: travis_retry npm install
