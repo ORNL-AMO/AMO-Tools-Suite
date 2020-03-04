@@ -25,7 +25,7 @@ before_install:
       choco install -y doxygen.install
     fi
   - |
-    if [[ $TRAVIS_OS_NAME == "mac" ]]; then
+    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
       bew update
       brew install -y make
       brew install -y doxygen
