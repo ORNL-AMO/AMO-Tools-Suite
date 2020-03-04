@@ -22,7 +22,7 @@ before_install:
   - |
     if [[ $TRAVIS_OS_NAME == "windows" ]]; then
       choco install -y make
-      choco install -y doxygen.install
+      choco install -y doxygen.portable
     fi
   - |
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
