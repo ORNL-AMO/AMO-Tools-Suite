@@ -16,7 +16,7 @@ before_install:
     nvm install 12.8.0;
     nvm use 12.8.0;
     elif [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-    choco install nodejs.install --version 12.8.0
+    choco install nodejs.install --version 12.8
     choco install doxygen.install
     else
     sudo apt-get update;
