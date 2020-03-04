@@ -17,6 +17,7 @@ before_install:
   #- choco install -y --force nodejs@v12.8.0
   #- npm i -g npm
   #- choco install -y doxygen.install
+  - choco install -y make
   - node --version
   #- npm --version
 
