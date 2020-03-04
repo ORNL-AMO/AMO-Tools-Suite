@@ -15,14 +15,9 @@ before_install:
     brew install doxygen;
     nvm install 12.8.0;
     nvm use 12.8.0;
-    elif [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-    choco install nodejs.install --version 12.8
-    choco install doxygen.install
     else
-    sudo apt-get update;
-    sudo apt-get install doxygen;
-    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -;
-    sudo apt-get install -y nodejs;
+    choco install nodejs.install --version 12.8.0
+    choco install doxygen.install
     fi
 
 install: travis_retry npm install
