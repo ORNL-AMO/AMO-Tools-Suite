@@ -4,8 +4,8 @@ node_js:
   - '12.8.0'
 
 os:
-  #- linux
-  #- osx
+  - linux
+  - osx
   - windows
 
 compiler:
@@ -32,7 +32,7 @@ before_install:
     fi
   
   - node --version
-  - doxygen --version
+  #- doxygen --version
 
 install: travis_retry npm install
 
@@ -55,7 +55,7 @@ script:
     if [[ $TRAVIS_OS_NAME == "windows" ]]; then
       echo "Skipping Doxygen"
     else
-      - doxygen Doxyfile.in
+      doxygen Doxyfile.in
     fi
   #- node --version
   #- cmake ./
