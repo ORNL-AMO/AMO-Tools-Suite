@@ -14,6 +14,7 @@ before_install:
   #- choco install -y --force nodejs@v12.8.0
   #- npm i -g npm
   - choco install -y doxygen.install
+  - refreshenv
 
 install: travis_retry npm install
 
