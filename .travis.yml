@@ -32,6 +32,7 @@ before_install:
     fi
   
   - node --version
+  - doxygen --version
 
 install: travis_retry npm install
 
