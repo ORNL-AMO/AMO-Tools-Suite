@@ -27,9 +27,11 @@ script:
   - ls -a
   - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./
   - cmake --build .
-  - ./bin/amo_tools_suite_tests
+  - ls -a
+  #- ./bin/amo_tools_suite_tests
+  - ./Debug/amo_tools_suite_tests
   - npm install
-  - node-gyp rebuild
+  #- node-gyp rebuild
   - npm run test
   - npm run at
   #- node --version
