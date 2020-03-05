@@ -2,7 +2,7 @@
 
 
 
-if [ ["$TRAVIS_BRANCH" == "$PRODUCTION"] && [$"TRAVIS_OS_NAME" != "windows"] ]
+if [ ["$TRAVIS_BRANCH" == "$PRODUCTION"] && ["$TRAVIS_OS_NAME" != "windows"] ]
 then
     make package
     ls -a
