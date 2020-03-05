@@ -66,11 +66,12 @@ script:
 - |
   if [ [$TRAVIS_BRANCH == $PRODUCTION] AND NOT [$TRAVIS_OS_NAME == "windows"] ]; then
     make package
+    ls -a
   fi
   if [ [$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME == "windows"] ]; then
     cmake --build . --config Release --target PACKAGE
+    ls -a Release/
   fi
-- ls -a
 
 deploy:
   provider: releases
