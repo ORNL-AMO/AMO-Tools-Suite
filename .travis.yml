@@ -68,6 +68,7 @@ script:
     make package
     ls -a
   fi
+- |
   if [ [$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME == "windows"] ]; then
     cmake --build . --config Release --target PACKAGE
     ls -a Release/
