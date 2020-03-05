@@ -60,7 +60,11 @@ script:
   fi
 - |
   if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
-    make package
+    if [[ $TRAVIS_OS_NAME == "windows" ]]; then
+      cmake --build . --config Release --target PACKAGE
+    else
+      make package
+    fi
   fi
 - ls -a
 
