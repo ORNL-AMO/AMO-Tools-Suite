@@ -64,7 +64,7 @@ script:
     doxygen Doxyfile.in
   fi
 - |
-  if [ [$TRAVIS_BRANCH == $PRODUCTION] AND NOT [$TRAVIS_OS_NAME == "windows"] ]; then
+  if [ [$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME != "windows"] ]; then
     make package
     ls -a
   fi
