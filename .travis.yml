@@ -39,7 +39,7 @@ install:
   #- node-gyp rebuild
 
 script:
-  if: branch = master
+  - if: branch = "master"
   - ls -a
   - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./
   - cmake --build .
