@@ -64,7 +64,7 @@ script:
     doxygen Doxyfile.in
   fi
 - bash travis_scripts/package_release.sh
-ls -a
+- ls -a
 - |
   if [[ $TRAVIS_OS_NAME == "windows" ]]; then
     ls -a Release
