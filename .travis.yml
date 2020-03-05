@@ -69,7 +69,11 @@ deploy:
   api_key:
     secure: ae/L9wH/mRCWvMQVwoY1qiTT510I/mcbS+OPwBMRtRvP1Svg3klkd7eDxnurIh6bdTgqNdc/Bu1AHXS0xK9pJ27hsJdFsnFaLGZ5kzj4dcH47G9pigEbPKUBHkQzZxn/KikYBvY2M8K+AA39w1In1+V8BE2YPZQYEHwL2g9i0wwqI6xgWl5eUgP1r3Z9+0SNYcWhUsYyx3sYGLwa3E6Sr+/JEHre+qLzHqrdB0PZygxKmjRTeksr3i/tYlAIYaDVXL/xbfewxSuSDYgnz6js5HqdUlpmSDH+aEgPcUopuQOH8utYMBfjKZYpbH3XqcFyPTCQHiJ28FRAi3PnvCZSqdyIkuX6e32GFULbAjJCYpY+pB7Tp89W+/rzOMzZ/H63fDtekfTH+6Q5aDc3WJx1ENh+U7WYHFKu4/qVwDwNfenmUpHR/CGJ/29Waw5+lNVb8RaGl9kiztBOsNAmcsK+qxHPwzIwM/lzlg0fksjoQJ+reNkPJwSpJg6Sn3VvsSKmRGb49qqToYzMsTW4pKhjtyDzaP0g+GxMl/a71KqP9lAxGf9/Auwh1zlp2TsZDOFxLLDFuT24GGto+btdF1TjvzIuym/qwkHac+EPCVm0qGG4+TwSJih7yBd5FL0RNR0VwJW3UQY2PDhv//IvpVF/Pmz8lJJ6AgsUumtYU5bnw+U=
   file:
-    - "File_To_Upload"
+    - "amo_tools_suite--Linux-x86_64.sh"
+    - "amo_tools_suite--Linux-x86_64.tar.gz"
+    - "amo_tools_suite--Darwin-x86_64.sh"
+    - "amo_tools_suite--Darwin-x86_64.tar.gz"
+    - "amo_tools_suite--Windows-i386.exe"
   overwrite: true
   skip_cleanup: true
   draft: true
