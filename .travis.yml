@@ -34,9 +34,12 @@ before_install:
   - node --version
   #- doxygen --version
 
-install: travis_retry npm install
+install:
+  - travis_retry npm install
+  #- node-gyp rebuild
 
 script:
+  if: branch = master
   - ls -a
   - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./
   - cmake --build .
@@ -47,8 +50,6 @@ script:
     else
       ./bin/amo_tools_suite_tests
     fi
-  - npm install
-  #- node-gyp rebuild
   - npm run test
   - npm run at
   - |
@@ -57,11 +58,3 @@ script:
     else
       doxygen Doxyfile.in
     fi
-  #- node --version
-  #- cmake ./
-  #- make
-  #- ./bin/amo_tools_suite_tests
-  #- npm install
-  #- npm run test
-  #- npm run at
-  #- doxygen Doxyfile.in
