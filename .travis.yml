@@ -63,12 +63,7 @@ script:
   else
     doxygen Doxyfile.in
   fi
-- |
-  if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
-    make package
-    #cmake --build . --config Release --target PACKAGE
-    ls -a
-  fi
+- bash travis_scripts/package_release.sh
 
 deploy:
   provider: releases
