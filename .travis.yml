@@ -2,15 +2,21 @@
 language: node_js
 node_js:
   - '12.8.0'
-
-os:
-  - linux
-  - osx
-  - windows
-
+  
 compiler:
   - gcc
-#  - clang
+  #- clang
+  
+matrix:
+  include:
+    - name: "Linux Build"
+      os: linux
+    
+    - name: "Mac Build"
+      os: osx
+      
+    - name: "Windows Build"
+      os: windows
 
 before_install:
   - |
