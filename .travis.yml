@@ -1,80 +1,76 @@
-#language: cpp
 language: node_js
 node_js:
-  - '12.8.0'
-  
+- 12.8.0
 compiler:
-  - gcc
-  #- clang
-  
+- gcc
 matrix:
   include:
-    - name: "Linux Build"
-      os: linux
-    
-    - name: "Mac Build"
-      os: osx
-      
-    - name: "Windows Build"
-      os: windows
-
+  - name: Linux Build
+    os: linux
+  - name: Mac Build
+    os: osx
+  - name: Windows Build
+    os: windows
 before_install:
-  - |
-    if [[ $TRAVIS_BRANCH == "master" ]]; then
-      export PRODUCTION="master"
-    fi
-  - |
-    if [[ $TRAVIS_OS_NAME == "linux" ]]; then
-      sudo apt-get update
-      sudo apt-get install -y make
-      sudo apt-get install -y doxygen
-    fi
-  - |
-    if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-      choco install make --yes
-      choco install doxygen.install --yes
-    fi
-  - |
-    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-      bew update
-      brew install make
-      brew install doxygen
-    fi
-  
-  - node --version
-  #- doxygen --version
-
+- |
+  if [[ $TRAVIS_BRANCH == "master" ]]; then
+    export PRODUCTION="master"
+  fi
+- |
+  if [[ $TRAVIS_OS_NAME == "linux" ]]; then
+    sudo apt-get update
+    sudo apt-get install -y make
+    sudo apt-get install -y doxygen
+  fi
+- |
+  if [[ $TRAVIS_OS_NAME == "windows" ]]; then
+    choco install make --yes
+    choco install doxygen.install --yes
+  fi
+- |
+  if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+    bew update
+    brew install make
+    brew install doxygen
+  fi
+- node --version
 install:
-  - travis_retry npm install
-  #- node-gyp rebuild
-
+- travis_retry npm install
 script:
-  - |
-    if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
-      export PACKAGE="ON"
-    else
-      export PACKAGE="OFF"
-    fi
-  - ls -a
-  - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
-  - cmake --build . --config Release
-  - ls -a
-  - |
-    if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-      ./Release/amo_tools_suite_tests
-    else
-      ./bin/amo_tools_suite_tests
-    fi
-  - npm run test
-  - npm run at
-  - |
-    if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-      echo "Skipping Doxygen"
-    else
-      doxygen Doxyfile.in
-    fi
-  - |
-    if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
-      make package
-    fi
-  - ls
+- |
+  if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
+    export PACKAGE="ON"
+  else
+    export PACKAGE="OFF"
+  fi
+- ls -a
+- cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
+- cmake --build . --config Release
+- ls -a
+- |
+  if [[ $TRAVIS_OS_NAME == "windows" ]]; then
+    ./Release/amo_tools_suite_tests
+  else
+    ./bin/amo_tools_suite_tests
+  fi
+- npm run test
+- npm run at
+- |
+  if [[ $TRAVIS_OS_NAME == "windows" ]]; then
+    echo "Skipping Doxygen"
+  else
+    doxygen Doxyfile.in
+  fi
+- |
+  if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
+    make package
+  fi
+- ls
+deploy:
+  provider: releases
+  api_key:
+    secure: ae/L9wH/mRCWvMQVwoY1qiTT510I/mcbS+OPwBMRtRvP1Svg3klkd7eDxnurIh6bdTgqNdc/Bu1AHXS0xK9pJ27hsJdFsnFaLGZ5kzj4dcH47G9pigEbPKUBHkQzZxn/KikYBvY2M8K+AA39w1In1+V8BE2YPZQYEHwL2g9i0wwqI6xgWl5eUgP1r3Z9+0SNYcWhUsYyx3sYGLwa3E6Sr+/JEHre+qLzHqrdB0PZygxKmjRTeksr3i/tYlAIYaDVXL/xbfewxSuSDYgnz6js5HqdUlpmSDH+aEgPcUopuQOH8utYMBfjKZYpbH3XqcFyPTCQHiJ28FRAi3PnvCZSqdyIkuX6e32GFULbAjJCYpY+pB7Tp89W+/rzOMzZ/H63fDtekfTH+6Q5aDc3WJx1ENh+U7WYHFKu4/qVwDwNfenmUpHR/CGJ/29Waw5+lNVb8RaGl9kiztBOsNAmcsK+qxHPwzIwM/lzlg0fksjoQJ+reNkPJwSpJg6Sn3VvsSKmRGb49qqToYzMsTW4pKhjtyDzaP0g+GxMl/a71KqP9lAxGf9/Auwh1zlp2TsZDOFxLLDFuT24GGto+btdF1TjvzIuym/qwkHac+EPCVm0qGG4+TwSJih7yBd5FL0RNR0VwJW3UQY2PDhv//IvpVF/Pmz8lJJ6AgsUumtYU5bnw+U=
+  file: '"File_To_Upload"'
+  on:
+    repo: ORNL-AMO/AMO-Tools-Suite
+    branch: issue-480
