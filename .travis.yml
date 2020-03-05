@@ -20,6 +20,10 @@ matrix:
 
 before_install:
   - |
+    if [[ $TRAVIS_BRANCH == "master" ]]; then
+      export PRODUCTION="master"
+    fi
+  - |
     if [[ $TRAVIS_OS_NAME == "linux" ]]; then
       sudo apt-get update
       sudo apt-get install -y make
@@ -45,14 +49,19 @@ install:
   #- node-gyp rebuild
 
 script:
-  - if: branch = "master"
+  - |
+    if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
+      export PACKAGE="ON"
+    else
+      export PACKAGE="OFF"
+    fi
   - ls -a
-  - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./
+  - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE --config Release ./
   - cmake --build .
   - ls -a
   - |
     if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-      ./Debug/amo_tools_suite_tests
+      ./Release/amo_tools_suite_tests
     else
       ./bin/amo_tools_suite_tests
     fi
@@ -64,3 +73,8 @@ script:
     else
       doxygen Doxyfile.in
     fi
+    - |
+      if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
+        make package
+      fi
+    - ls
