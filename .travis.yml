@@ -1,8 +1,12 @@
+if: tag IS blank
+
 language: node_js
 node_js:
 - 12.8.0
+
 compiler:
 - gcc
+
 matrix:
   include:
   - name: Linux Build
@@ -11,6 +15,7 @@ matrix:
     os: osx
   - name: Windows Build
     os: windows
+    
 before_install:
 - export PRODUCTION="issue-480"
 - |
