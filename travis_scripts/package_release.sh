@@ -5,6 +5,7 @@ then
   if (("$TRAVIS_OS_NAME" == "windows"))
   then
     cmake --build . --config Release --target PACKAGE
+    ls -a
     ls -a Release/
   else
     make package
