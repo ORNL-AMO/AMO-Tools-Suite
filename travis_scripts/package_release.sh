@@ -1,13 +1,13 @@
 #!/bin/bash
 
-
-
-if [ ["$TRAVIS_BRANCH" == "$PRODUCTION"] && ["$TRAVIS_OS_NAME" != "windows"] ]
+if ["$TRAVIS_BRANCH" == "$PRODUCTION"]
 then
+  if ["$TRAVIS_OS_NAME" != "windows"]
+  then
     make package
     ls -a
-elif [ ["$TRAVIS_BRANCH" == "$PRODUCTION"] && ["$TRAVIS_OS_NAME" == "windows"] ]
-then
+  else
     cmake --build . --config Release --target PACKAGE
     ls -a Release/
+  fi
 fi
