@@ -43,10 +43,10 @@ script:
   else
     export PACKAGE="OFF"
   fi
-- ls -a
+#- ls -a
 - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
 - cmake --build . --config Release
-- ls -a
+#- ls -a
 - |
   if [[ $TRAVIS_OS_NAME == "windows" ]]; then
     ./Release/amo_tools_suite_tests
@@ -65,7 +65,8 @@ script:
   if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
     make package
   fi
-- ls
+- ls -a
+
 deploy:
   provider: releases
   api_key:
