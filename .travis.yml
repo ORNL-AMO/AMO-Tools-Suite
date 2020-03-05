@@ -63,12 +63,8 @@ script:
   else
     doxygen Doxyfile.in
   fi
+- echo "$TRAVIS_OS_NAME"
 - bash travis_scripts/package_release.sh
-- ls -a
-- |
-  if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-    ls -a Release
-  fi
 
 deploy:
   provider: releases
