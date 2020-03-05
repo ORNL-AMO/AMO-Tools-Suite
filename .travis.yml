@@ -12,7 +12,7 @@ matrix:
   - name: Windows Build
     os: windows
 before_install:
-- export PRODUCTION="master"
+- export PRODUCTION="issue-480"
 - |
   if [[ $TRAVIS_OS_NAME == "linux" ]]; then
     sudo apt-get update
@@ -77,6 +77,6 @@ deploy:
   #tag_name: "release_draft"
   on:
     repo: ORNL-AMO/AMO-Tools-Suite
-    branch: master
+    branch: issue-480
     #condition: type = push AND branch = master
     #tags: false
