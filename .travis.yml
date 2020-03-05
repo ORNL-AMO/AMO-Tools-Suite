@@ -56,8 +56,8 @@ script:
       export PACKAGE="OFF"
     fi
   - ls -a
-  - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE --config Release ./
-  - cmake --build .
+  - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
+  - cmake --build . --config Release
   - ls -a
   - |
     if [[ $TRAVIS_OS_NAME == "windows" ]]; then
