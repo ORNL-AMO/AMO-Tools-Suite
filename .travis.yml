@@ -73,8 +73,8 @@ script:
     else
       doxygen Doxyfile.in
     fi
-    - |
-      if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
-        make package
-      fi
-    - ls
+  - |
+    if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
+      make package
+    fi
+  - ls
