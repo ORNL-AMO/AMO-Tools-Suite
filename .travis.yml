@@ -64,14 +64,10 @@ script:
     doxygen Doxyfile.in
   fi
 - |
-  if [ [$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME != "windows"] ]; then
+  if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
     make package
+    #cmake --build . --config Release --target PACKAGE
     ls -a
-  fi
-- |
-  if [ [$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME == "windows"] ]; then
-    cmake --build . --config Release --target PACKAGE
-    ls -a Release/
   fi
 
 deploy:
