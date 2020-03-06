@@ -62,11 +62,14 @@ script:
 #- echo "$TRAVIS_OS_NAME"
 #- bash travis_scripts/package_release.sh
 
-#- make package
-#- ls -a
-- cmake --build . --config Release --target PACKAGE
+- if [[ $TRAVIS_OS_NAME == "windows" ]]; then
+    cmake --build . --config Release --target PACKAGE
+  else
+    make package
+  fi
+
 - ls -a
-- ls -a Release/
+#- ls -a Release/
 
 deploy:
   provider: releases
