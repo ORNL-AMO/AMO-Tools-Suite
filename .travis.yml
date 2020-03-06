@@ -64,7 +64,7 @@ script:
     doxygen Doxyfile.in
   fi
 - echo "$TRAVIS_OS_NAME"
-- bash travis_scripts/package_release.sh
+- ./travis_scripts/package_release.sh
 
 deploy:
   provider: releases
