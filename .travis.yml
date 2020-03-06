@@ -59,8 +59,12 @@ script:
   fi
 #- echo "$TRAVIS_OS_NAME"
 #- bash travis_scripts/package_release.sh
-- make package
+
+#- make package
+#- ls -a
+- cmake --build . --config Release --target PACKAGE
 - ls -a
+- ls -a Release/
 
 deploy:
   provider: releases
