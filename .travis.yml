@@ -57,8 +57,16 @@ script:
   else
     doxygen Doxyfile.in;
   fi
-- echo "$TRAVIS_OS_NAME"
-- bash travis_scripts/package_release.sh
+#- echo "$TRAVIS_OS_NAME"
+#- bash travis_scripts/package_release.sh
+- if [[$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME == "windows"]];
+    cmake --build . --config Release --target PACKAGE;
+    ls -a
+    ls -a Release/
+  elif [[$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME != "windows"]];
+    make package
+    ls -a
+  fi
 
 deploy:
   provider: releases
