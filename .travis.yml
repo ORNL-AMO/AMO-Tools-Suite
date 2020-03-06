@@ -18,50 +18,44 @@ matrix:
     
 before_install:
 - export PRODUCTION="issue-480"
-- |
-  if [[ $TRAVIS_OS_NAME == "linux" ]]; then
-    sudo apt-get update
-    sudo apt-get install -y make
-    sudo apt-get install -y doxygen
+- if [[ $TRAVIS_OS_NAME == "linux" ]]; then
+    sudo apt-get update;
+    sudo apt-get install -y make;
+    sudo apt-get install -y doxygen;
   fi
-- |
-  if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-    choco install make --yes
-    choco install doxygen.install --yes
+- if [[ $TRAVIS_OS_NAME == "windows" ]]; then
+    choco install make --yes;
+    choco install doxygen.install --yes;
   fi
-- |
-  if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-    bew update
-    brew install make
-    brew install doxygen
+- if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+    bew update;
+    brew install make;
+    brew install doxygen;
   fi
 - node --version
 install:
 - travis_retry npm install
 script:
-- |
-  if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
-    export PACKAGE="ON"
+- if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
+    export PACKAGE="ON";
   else
-    export PACKAGE="OFF"
+    export PACKAGE="OFF";
   fi
 #- ls -a
 - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
 - cmake --build . --config Release
 #- ls -a
-- |
-  if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-    ./Release/amo_tools_suite_tests
+- if [[ $TRAVIS_OS_NAME == "windows" ]]; then
+    ./Release/amo_tools_suite_tests;
   else
-    ./bin/amo_tools_suite_tests
+    ./bin/amo_tools_suite_tests;
   fi
 - npm run test
 - npm run at
-- |
-  if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-    echo "Skipping Doxygen"
+- if [[ $TRAVIS_OS_NAME == "windows" ]]; then
+    echo "Skipping Doxygen";
   else
-    doxygen Doxyfile.in
+    doxygen Doxyfile.in;
   fi
 - echo "$TRAVIS_OS_NAME"
 - bash travis_scripts/package_release.sh
