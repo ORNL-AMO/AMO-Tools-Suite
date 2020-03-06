@@ -63,7 +63,8 @@ script:
     cmake --build . --config Release --target PACKAGE;
     ls -a
     ls -a Release/
-  elif [[$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME != "windows"]]; then
+  fi
+- if [[$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME != "windows"]]; then
     make package
     ls -a
   fi
