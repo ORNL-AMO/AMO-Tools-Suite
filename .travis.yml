@@ -61,12 +61,12 @@ script:
 #- bash travis_scripts/package_release.sh
 - if [[$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME == "windows"]]; then
     cmake --build . --config Release --target PACKAGE;
-    ls -a
-    ls -a Release/
+    ls -a;
+    ls -a Release/;
   fi
 - if [[$TRAVIS_BRANCH == $PRODUCTION] AND [$TRAVIS_OS_NAME != "windows"]]; then
-    make package
-    ls -a
+    make package;
+    ls -a;
   fi
 
 deploy:
