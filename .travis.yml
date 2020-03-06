@@ -71,7 +71,15 @@ script:
 
 - ls -a
 #- ls -a Release/
-
+before_deploy:
+  #function keep_alive() {
+  #  while true; do
+  #    echo -en "\a"
+  #    sleep 5
+  #  done
+  #}
+  #keep_alive &
+  - export TRAVIS_TAG="release_draft"
 deploy:
   provider: releases
   api_key:
