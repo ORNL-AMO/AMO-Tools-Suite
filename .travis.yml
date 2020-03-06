@@ -26,6 +26,7 @@ before_install:
 - if [[ $TRAVIS_OS_NAME == "windows" ]]; then
     choco install make --yes;
     choco install doxygen.install --yes;
+    choco install visualstudio2017buildtools --yes;
   fi
 - if [[ $TRAVIS_OS_NAME == "osx" ]]; then
     bew update;
