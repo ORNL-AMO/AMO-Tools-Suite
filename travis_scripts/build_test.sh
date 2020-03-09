@@ -21,8 +21,7 @@ npm run test
 npm run at
 
 if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-  #echo "Skipping Doxygen";
-  doxygen Doxyfile.in;
+  echo "Skipping Doxygen";
 else
   doxygen Doxyfile.in;
 fi
