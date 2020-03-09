@@ -28,7 +28,7 @@ fi
 
 if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
   if [[ $TRAVIS_OS_NAME == 'windows' ]]; then
-    travis_retry cmake --build . --config Release --target PACKAGE;
+    cmake --build . --config Release --target PACKAGE;
   else
     make package;
   fi
