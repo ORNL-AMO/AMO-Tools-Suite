@@ -2,6 +2,12 @@
 
 set -ev
 
+if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
+  export PACKAGE="ON";
+else
+  export PACKAGE="OFF";
+fi
+
 cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
 cmake --build . --config Release
 
