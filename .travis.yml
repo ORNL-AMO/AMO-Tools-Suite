@@ -2,10 +2,10 @@ if: tag IS blank
 
 language: node_js
 node_js:
-- 12.8.0
+  - 12.8.0
 
 compiler:
-- gcc
+  - gcc
 
 matrix:
   include:
@@ -17,44 +17,17 @@ matrix:
     os: windows
     
 before_install:
-- chmod 777 travis_scripts/*
-- export PRODUCTION="issue-480"
-- travis_retry ./travis_scripts/before_install.sh
-- node --version
+  - chmod 777 travis_scripts/*
+  - export PRODUCTION="issue-480"
+  - travis_retry ./travis_scripts/before_install.sh
+  - node --version
 install:
-- travis_retry npm install
+  - travis_retry npm install
 script:
-- if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
-    export PACKAGE="ON";
-    export TESTING="OFF";
-  else
-    export PACKAGE="OFF";
-    export TESTING="ON";
-  fi
-#- ls -a
-- cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
-- cmake --build . --config Release
-#- ls -a
-- if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-    ./Release/amo_tools_suite_tests;
-  else
-    ./bin/amo_tools_suite_tests;
-  fi
-- npm run test
-- npm run at
-- if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-    echo "Skipping Doxygen";
-  else
-    doxygen Doxyfile.in;
-  fi
-#- echo "$TRAVIS_OS_NAME"
-#- bash travis_scripts/package_release.sh
-- if [ [$TRAVIS_OS_NAME == 'windows'] AND [$TRAVIS_BRANCH == $PRODUCTION] ]; then travis_retry cmake --build . --config Release --target PACKAGE; fi
-
-- if [ [$TRAVIS_OS_NAME != 'windows'] AND [$TRAVIS_BRANCH == $PRODUCTION] ]; then travis_retry make package; fi
-
-- ls -a
-#- ls -a Release/
+  - travis_retry ./travis_scripts/build_test.sh
+  - ls -a
+  - echo "Building and testing complete"
+  #- ls -a Release/
 before_deploy:
   #function keep_alive() {
   #  while true; do
