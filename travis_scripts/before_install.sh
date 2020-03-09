@@ -14,7 +14,7 @@ if [[ $TRAVIS_OS_NAME == "windows" ]]; then
   choco install nsis --yes;
 fi
 if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-  bew update;
+  brew update;
   brew install make;
   brew install doxygen;
 fi
