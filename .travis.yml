@@ -24,11 +24,6 @@ before_install:
 install:
   - travis_retry npm install
 script:
-  - if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
-      export PACKAGE="ON";
-    else
-      export PACKAGE="OFF";
-    fi
   - travis_retry ./travis_scripts/build_test.sh
   - ls -a
   - echo "Building and testing complete"
