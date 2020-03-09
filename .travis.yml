@@ -17,31 +17,19 @@ matrix:
     os: windows
     
 before_install:
+- chmod 777 travis_scripts/*
 - export PRODUCTION="issue-480"
-- if [[ $TRAVIS_OS_NAME == "linux" ]]; then
-    sudo apt-get update;
-    sudo apt-get install -y make;
-    sudo apt-get install -y doxygen;
-  fi
-- if [[ $TRAVIS_OS_NAME == "windows" ]]; then
-    choco install make --yes;
-    choco install doxygen.install --yes;
-    choco install visualstudio2017buildtools --yes;
-    choco install nsis --yes;
-  fi
-- if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-    bew update;
-    brew install make;
-    brew install doxygen;
-  fi
+- travis_retry ./travis_scripts/before_install.sh
 - node --version
 install:
 - travis_retry npm install
 script:
 - if [[ $TRAVIS_BRANCH == $PRODUCTION ]]; then
     export PACKAGE="ON";
+    export TESTING="OFF";
   else
     export PACKAGE="OFF";
+    export TESTING="ON";
   fi
 #- ls -a
 - cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=$PACKAGE ./
