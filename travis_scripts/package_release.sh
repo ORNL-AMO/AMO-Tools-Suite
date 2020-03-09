@@ -1,12 +1,16 @@
 #!/bin/bash
 
-if [["$TRAVIS_BRANCH" == "$PRODUCTION" && "$TRAVIS_OS_NAME" == "windows"]];
+set -ev
+
+if [[ $TRAVIS_OS_NAME == "linux" ]]
 then
-  cmake --build . --config Release --target PACKAGE
-  ls -a
-  ls -s Release/
-elif [["$TRAVIS_BRANCH" == "$PRODUCTION" && "$TRAVIS_OS_NAME" != "windows"]];
+    export OS_FLAG="l";
+elif [[ $TRAVIS_OS_NAME == "osx" ]]
 then
-  make package
-  ls -a
+    export OS_FLAG="m";
+elif [[ $TRAVIS_OS_NAME == "windows" ]]
+then
+    export OS_FLAG="w";
 fi
+
+exit 0;
