@@ -126,9 +126,9 @@ private:
  */
 	double calculateSaturationPressure(double dryBulbTemp) const
 	{
-		double const C1 = -5674.5359, C2 = -0.51523058, C3 = -0.009677843, C4 = 0.00000062215701;
-		double const C5 = 2.0747825 * std::pow(10, -9), C6 = -9.0484024 * std::pow(10, -13), C7 = 4.1635019, C8 = -5800.2206;
-		double const C9 = -5.516256, C10 = -0.048640239, C11 = 0.000041764768, C12 = -0.000000014452093, C13 = 6.5459673;
+		double const C1 = -5674.5359, C2 = 6.3925247, C3 = -0.009677843, C4 = 0.00000062215701;
+		double const C5 = 2.0747825 * std::pow(10, -9), C6 = -9.484024 * std::pow(10, -13), C7 = 4.1635019;
+		double const C8 = -5800.2206, C9 = 1.3914093, C10 = -0.048640239, C11 = 0.000041764768, C12 = -0.000000014452093, C13 = 6.5459673;
 
 		double const tKelvin = (dryBulbTemp + 459.67) * 0.555556;
 

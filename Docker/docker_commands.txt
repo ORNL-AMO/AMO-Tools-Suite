@@ -1,10 +1,10 @@
-docker image build -f Docker/Dockerfile -t comma64/ornl:issue-258 .
-docker run -t -d --name amo-suite comma64/ornl:issue-258
+docker image build -f Docker/Dockerfile -t comma64/ornl:amo-tools-suite .
+docker run -t -d --name amo-suite comma64/ornl:amo-tools-suite
 docker exec -it amo-suite /bin/bash
 docker container rm --force amo-suite
 
 docker login
-docker push comma64/ornl:issue-258
+docker push comma64/ornl:amo-tools-suite
 
 
 
