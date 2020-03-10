@@ -19,6 +19,9 @@
 #include "Planar.h"
 #include "FanShaftPower.h"
 
+#include <fstream>
+#include <iostream>
+
 class FanRatedInfo;
 class Planar;
 class FlangePlane;
@@ -135,11 +138,11 @@ private:
 		if (tKelvin < 273.15)
 		{
 			double const p = std::exp(C1 / tKelvin + C2 + tKelvin * C3 + tKelvin * tKelvin * (C4 + tKelvin * (C5 + C6 * tKelvin)) + C7 * std::log(tKelvin));
-			return p * (29.9216 / 101.325);
+			return p * (29.9216 / 101325);
 		}
 		double const p = std::exp(C8 / tKelvin + C9 + tKelvin * (C10 + tKelvin * (C11 + tKelvin * C12)) + C13 * std::log(tKelvin));
 
-		return p * (29.9216 / 101.325);
+		return p * (29.9216 / 101325);
 	}
 	/**
  * @brief Calculates Relative Humidity Ratio
