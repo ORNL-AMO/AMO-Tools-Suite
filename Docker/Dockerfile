@@ -140,6 +140,8 @@ RUN node-gyp rebuild
 RUN npm run test
 
 RUN npm run at
+
+RUN doxygen Doxyfile.in
 #--------------------------------------------------------------
 
 #WORKDIR /home/

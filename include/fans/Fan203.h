@@ -76,7 +76,13 @@ public:
  * @param gasType, double, gas, type of gas, unitless
  * @param inputType const, type of input, unitless
  * @param specificGravity, double, const, specific gravity, unitless
- * @return BaseGasDensity double, density of the gas in pounds per sqft, lb/scf
+ * @param pIn double, Absolute Pressure In in in Hg
+ * @param satW double, Saturated Humidity Ratio, unitless
+ * @param satDeg double, Degree of Saturation, unitless
+ * @param humW double, Humidity Ratio, unitless
+ * @param specVol double, Specific Volume, ft^3/lb
+ * @param satPress double, Saturation Pressure, in Hg
+ * @return density double, density of the gas in pounds per sqft, lb/scf
  */
 	// TODO ensure correctness
 	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
@@ -126,6 +132,7 @@ private:
  * @brief Calculates Saturation Pressure
  * 
  * @param dryBulbTemp double, temperature of inputted air in °F
+ * @return satPress double, Saturation Pressure, in Hg
  */
 	double calculateSaturationPressure(double dryBulbTemp) const
 	{
@@ -151,6 +158,7 @@ private:
  * @param relativeHumidity double, relative humidity as %
  * @param barometricPressure double, pressure in Hg 
  * @param specificGravity double, specific gravity, unitless
+ * @return humW double, Humidity Ratio, unitless
  */
 	double calculateRatioRH(const double dryBulbTemp, const double relativeHumidity, const double barometricPressure,
 							const double specificGravity) const
