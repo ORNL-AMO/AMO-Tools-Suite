@@ -76,12 +76,12 @@ public:
  * @param gasType, double, gas, type of gas, unitless
  * @param inputType const, type of input, unitless
  * @param specificGravity, double, const, specific gravity, unitless
- * @param pIn double, Absolute Pressure In in in Hg
- * @param satW double, Saturated Humidity Ratio, unitless
- * @param satDeg double, Degree of Saturation, unitless
- * @param humW double, Humidity Ratio, unitless
- * @param specVol double, Specific Volume, ft^3/lb
- * @param satPress double, Saturation Pressure, in Hg
+ * @return pIn double, Absolute Pressure In in in Hg
+ * @return satW double, Saturated Humidity Ratio, unitless
+ * @return satDeg double, Degree of Saturation, unitless
+ * @return humW double, Humidity Ratio, unitless
+ * @return specVol double, Specific Volume, ft^3/lb
+ * @return satPress double, Saturation Pressure, in Hg
  * @return density double, density of the gas in pounds per sqft, lb/scf
  */
 	// TODO ensure correctness
@@ -105,8 +105,40 @@ public:
 			throw std::runtime_error("The wrong constructor for BaseGasDensity was called here - check inputType field");
 		}
 
+		/*
 		double const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
 		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+		*/
+
+		pIn = pbo + (pso/13.3);
+		satW = 0.62198 * satPress/(pIn – satPress);
+		satDeg = rh / ( 1 + ( 1 – rh) * satW/0.62198);
+		humW = satDeg * satW;
+		specVol = (10.731557* (tdo + 459.67) * (1 + 1.6078 * humW))/(28.9645 * pIn * 0.491541);
+		po = (1 / specVol) * (1 + humW);
+		double const enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
+
+		if(inputType != inputType::DewPoint)
+		{
+			double const alpha = std::log(pIn*0.4911541*humW / (0.62196 + humW));
+
+			if(tdo < 32)
+			{
+				double const dewPoint = 90.12+26.412* alpha +0.8927* alpha * alpha;
+			}
+			else
+			{
+				// Fix this. Needs different exponent function
+				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * ((std::exp (alpha)) ^ 0.1984));
+			}
+			
+		}
+		else // ?
+		{
+			relativeHumidityOrDewPoint;
+		}
+		
+
 	}
 
 	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
@@ -118,8 +150,10 @@ public:
 			throw std::runtime_error("The wrong constructor for BaseGasDensity was called - check inputType field");
 		double const satPress = calculateSaturationPressure(tdo);
 		double const rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
+		/*
 		double const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
 		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+		*/
 	}
 
 	double getGasDensity() const
@@ -197,6 +231,16 @@ private:
 	 */
 	double po, g;
 	const GasType gasType;
+
+	/**
+	 * @param pIn double, Absolute Pressure In in in Hg XXX
+	 * @param satW double, Saturated Humidity Ratio, unitless
+	 * @param satDeg double, Degree of Saturation, unitless
+	 * @param humW double, Humidity Ratio, unitless
+	 * @param specVol double, Specific Volume, ft^3/lb
+	 * @param satPress double, Saturation Pressure, in Hg
+	 */
+	double pIn, satW, satDeg, humW, specVol, satPress;
 
 	friend class PlaneData;
 	friend class Fan203;
