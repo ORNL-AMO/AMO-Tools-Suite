@@ -167,5 +167,46 @@ TEST_CASE( "BaseGasDensity", "[BaseGasDensity]") {
 	auto const bdg = BaseGasDensity(
 			70, 26.62, 29.92, 60, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::RelativeHumidity, 1
 	);
-	CHECK(bdg.getGasDensity() == Approx(0.08143315));
+	//CHECK(bdg.getGasDensity() == Approx(0.08143315));
+
+	CHECK(bdg.getGasDensity() == Approx(0.0794202473));
+	CHECK(bdg.getAbsolutePressureIn() == Approx(31.8761011803));
+	CHECK(bdg.getSaturatedHumidityRatio() == Approx(0.014773));
+	CHECK(bdg.getDegreeOfSaturation() == Approx(0.5943528804));
+	CHECK(bdg.getHumidityRatio() == Approx(0.0087806));
+	CHECK(bdg.getSpecificVolume() == Approx(12.7018112191));
+	CHECK(bdg.getEnthalpy() == Approx(26.87954206));
+	CHECK(bdg.getDewPoint() == Approx(55.5523108718));
+	CHECK(bdg.getRelativeHumidity() == Approx(0.60));
+	CHECK(bdg.getSaturationPressure() == Approx(0.7395925636));
+
+	auto const bdg2 = BaseGasDensity(
+			70, 26.62, 29.92, 55.5, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::DewPoint, 1
+	);
+
+	CHECK(bdg2.getGasDensity() == Approx(0.0794202473));
+	CHECK(bdg2.getAbsolutePressureIn() == Approx(31.8761011803));
+	CHECK(bdg2.getSaturatedHumidityRatio() == Approx(0.014773));
+	CHECK(bdg2.getDegreeOfSaturation() == Approx(0.5945291299));
+	CHECK(bdg2.getHumidityRatio() == Approx(0.0087806));
+	CHECK(bdg2.getSpecificVolume() == Approx(12.7018112191));
+	CHECK(bdg2.getEnthalpy() == Approx(26.882385744));
+	CHECK(bdg2.getDewPoint() == Approx(55.5));
+	CHECK(bdg2.getRelativeHumidity() == Approx(0.6001754464));
+	CHECK(bdg2.getSaturationPressure() == Approx(0.7395925636));
+
+	auto const bdg3 = BaseGasDensity(
+			70, 26.62, 29.92, 61.2, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::WetBulbTemp, 1, 0.24
+	);
+
+	CHECK(bdg3.getGasDensity() == Approx(0.079326234));
+	CHECK(bdg3.getAbsolutePressureIn() == Approx(31.8761011803));
+	CHECK(bdg3.getSaturatedHumidityRatio() == Approx(0.014773));
+	CHECK(bdg3.getDegreeOfSaturation() == Approx(0.595));
+	CHECK(bdg3.getHumidityRatio() == Approx(0.0087834));
+	CHECK(bdg3.getSpecificVolume() == Approx(12.71));
+	CHECK(bdg3.getEnthalpy() == Approx(26.39));
+	CHECK(bdg3.getDewPoint() == Approx(55.51));
+	CHECK(bdg3.getRelativeHumidity() == Approx(0.6002));
+	CHECK(bdg3.getSaturationPressure() == Approx(0.07867490));
 }

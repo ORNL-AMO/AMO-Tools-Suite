@@ -3,6 +3,7 @@
  *
  * @author Preston Shires (pshires)
  * @author Allie Ledbetter (Aeledbetter)
+ * @author Colin Causey (causeyc)
  * @bug No known bugs.
  * 
  */
@@ -90,8 +91,8 @@ public:
 				   InputType const inputType, double const specificGravity)
 		: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
 	{
-		double const satPress = calculateSaturationPressure(tdo);
-		double rh = 0;
+		satPress = calculateSaturationPressure(tdo);
+		rh = 0;
 		if (inputType == InputType::RelativeHumidity)
 		{
 			rh = relativeHumidityOrDewPoint / 100;
@@ -110,34 +111,35 @@ public:
 		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
 		*/
 
-		pIn = pbo + (pso/13.3);
-		satW = 0.62198 * satPress/(pIn – satPress);
-		satDeg = rh / ( 1 + ( 1 – rh) * satW/0.62198);
+		pIn = pbo + (pso / 13.608703);
+		satW = 0.62198 * satPress / (pIn - satPress);
+		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
 		humW = satDeg * satW;
-		specVol = (10.731557* (tdo + 459.67) * (1 + 1.6078 * humW))/(28.9645 * pIn * 0.491541);
+		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
 		po = (1 / specVol) * (1 + humW);
-		double const enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
+		enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
 
-		if(inputType != inputType::DewPoint)
+		if(inputType != InputType::DewPoint)
 		{
-			double const alpha = std::log(pIn*0.4911541*humW / (0.62196 + humW));
+			double const alpha = std::log(pIn * 0.4911541 * humW / (0.62196 + humW));
 
 			if(tdo < 32)
 			{
-				double const dewPoint = 90.12+26.412* alpha +0.8927* alpha * alpha;
+				dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
+				//dewPoint = 1;
 			}
 			else
 			{
-				// Fix this. Needs different exponent function
-				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * ((std::exp (alpha)) ^ 0.1984));
+				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow(std::exp(alpha), 0.1984));
+				//dewPoint = 2;
 			}
 			
 		}
-		else // ?
+		else
 		{
-			relativeHumidityOrDewPoint;
+			dewPoint = relativeHumidityOrDewPoint;
+			//dewPoint = 3;
 		}
-		
 
 	}
 
@@ -148,17 +150,73 @@ public:
 	{
 		if (inputType != InputType::WetBulbTemp)
 			throw std::runtime_error("The wrong constructor for BaseGasDensity was called - check inputType field");
-		double const satPress = calculateSaturationPressure(tdo);
-		double const rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
+		satPress = calculateSaturationPressure(tdo);
+		rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
 		/*
 		double const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
 		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
 		*/
+		pIn = pbo + (pso / 13.608703);
+		satW = 0.62198 * satPress / (pIn - satPress);
+		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
+		humW = satDeg * satW;
+		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
+		po = (1 / specVol) * (1 + humW);
+		enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
+
+		double const alpha = std::log(pIn * 0.4911541 * humW / (0.62196 + humW));
+
+		if(tdo < 32)
+		{
+			dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
+			//dewPoint = 1;
+		}
+		else
+		{
+			dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow(std::exp(alpha), 0.1984));
+			//dewPoint = 2;
+		}
 	}
 
 	double getGasDensity() const
 	{
 		return po;
+	}
+	double getAbsolutePressureIn() const
+	{
+		return pIn;
+	}
+	double getSaturatedHumidityRatio() const
+	{
+		return satW;
+	}
+	double getDegreeOfSaturation() const
+	{
+		return satDeg;
+	}
+	double getHumidityRatio() const
+	{
+		return humW;
+	}
+	double getSpecificVolume() const
+	{
+		return specVol;
+	}
+	double getEnthalpy() const
+	{
+		return enthalpy;
+	}
+	double getDewPoint() const
+	{
+		return dewPoint;
+	}
+	double getRelativeHumidity() const
+	{
+		return rh;
+	}
+	double getSaturationPressure() const
+	{
+		return satPress;
 	}
 
 private:
@@ -215,7 +273,8 @@ private:
 		//	double const wSat = nMol * psatDb / (pAtm - psatDb);
 		double const psatWb = calculateSaturationPressure(wetBulbTemp);
 		double const wStar = nMol * psatWb / (pAtm - psatWb);
-		double const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
+		//double const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
+		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
 		double const pV = pAtm * w / (nMol + w);
 		return pV / psatDb;
@@ -238,9 +297,12 @@ private:
 	 * @param satDeg double, Degree of Saturation, unitless
 	 * @param humW double, Humidity Ratio, unitless
 	 * @param specVol double, Specific Volume, ft^3/lb
+	 * @param entropy double, Entropy, B/lb
+	 * @param dewPoint double, Dewpoint, deg F
+	 * @param rh double, Relative Humidity, %
 	 * @param satPress double, Saturation Pressure, in Hg
 	 */
-	double pIn, satW, satDeg, humW, specVol, satPress;
+	double pIn, satW, satDeg, humW, specVol, enthalpy, dewPoint, rh, satPress;
 
 	friend class PlaneData;
 	friend class Fan203;
