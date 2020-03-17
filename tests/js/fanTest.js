@@ -181,7 +181,8 @@ test('getBaseGasDensity', function (t) {
     };
 
     var res = bindings.getBaseGasDensityRelativeHumidity(inp);
-    t.equal(rnd(res), rnd(0.06231117736966));
+    //t.equal(rnd(res), rnd(0.06231117736966));
+    t.equal(rnd(res), rnd(0.0564228));
 
     inp = {
         dryBulbTemp: 123,
@@ -195,7 +196,8 @@ test('getBaseGasDensity', function (t) {
     };
 
     res = bindings.getBaseGasDensityDewPoint(inp);
-    t.equal(rnd(res), rnd(0.06551801779516826));
+    //t.equal(rnd(res), rnd(0.06551801779516826));
+    t.equal(rnd(res), rnd(0.057519));
 
     inp = {
         dryBulbTemp: 123,
@@ -210,7 +212,8 @@ test('getBaseGasDensity', function (t) {
     };
 
     res = bindings.getBaseGasDensityWetBulb(inp);
-    t.equal(rnd(res), rnd(0.065456));
+    //t.equal(rnd(res), rnd(0.065456));
+    t.equal(rnd(res), rnd(0.0557205));
 });
 
 test('getVelocityPressureData', function (t) {

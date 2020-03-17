@@ -112,6 +112,12 @@ public:
 		*/
 
 		calculateFanAttributes(inputType, relativeHumidityOrDewPoint);
+		std::ofstream fout;
+    	fout.open("debug.txt", std::ios::app);
+		fout << "Answer: " << po << std::endl;
+		fout << "------------------------------" << std::endl << std::endl;
+		fout.close();
+
 		/*
 		pIn = pbo + (pso / 13.608703);
 		satW = 0.62198 * satPress / (pIn - satPress);
@@ -161,6 +167,12 @@ public:
 		*/
 
 		calculateFanAttributes(inputType);
+		std::ofstream fout;
+    	fout.open("debug.txt", std::ios::app);
+		fout << "Answer: " << po << std::endl;
+		fout << "------------------------------" << std::endl << std::endl;
+		fout.close();
+		
 		/*
 		pIn = pbo + (pso / 13.608703);
 		satW = 0.62198 * satPress / (pIn - satPress);
