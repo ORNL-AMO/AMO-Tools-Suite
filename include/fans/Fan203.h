@@ -19,6 +19,9 @@
 #include "Planar.h"
 #include "FanShaftPower.h"
 
+#include <fstream>
+#include <iostream>
+
 class FanRatedInfo;
 class Planar;
 class FlangePlane;
@@ -126,20 +129,20 @@ private:
  */
 	double calculateSaturationPressure(double dryBulbTemp) const
 	{
-		double const C1 = -5674.5359, C2 = -0.51523058, C3 = -0.009677843, C4 = 0.00000062215701;
-		double const C5 = 2.0747825 * std::pow(10, -9), C6 = -9.0484024 * std::pow(10, -13), C7 = 4.1635019, C8 = -5800.2206;
-		double const C9 = -5.516256, C10 = -0.048640239, C11 = 0.000041764768, C12 = -0.000000014452093, C13 = 6.5459673;
+		double const C1 = -5674.5359, C2 = 6.3925247, C3 = -0.009677843, C4 = 0.00000062215701;
+		double const C5 = 2.0747825 * std::pow(10, -9), C6 = -9.484024 * std::pow(10, -13), C7 = 4.1635019;
+		double const C8 = -5800.2206, C9 = 1.3914093, C10 = -0.048640239, C11 = 0.000041764768, C12 = -0.000000014452093, C13 = 6.5459673;
 
 		double const tKelvin = (dryBulbTemp + 459.67) * 0.555556;
 
 		if (tKelvin < 273.15)
 		{
 			double const p = std::exp(C1 / tKelvin + C2 + tKelvin * C3 + tKelvin * tKelvin * (C4 + tKelvin * (C5 + C6 * tKelvin)) + C7 * std::log(tKelvin));
-			return p * (29.9216 / 101.325);
+			return p * (29.9216 / 101325);
 		}
 		double const p = std::exp(C8 / tKelvin + C9 + tKelvin * (C10 + tKelvin * (C11 + tKelvin * C12)) + C13 * std::log(tKelvin));
 
-		return p * (29.9216 / 101.325);
+		return p * (29.9216 / 101325);
 	}
 	/**
  * @brief Calculates Relative Humidity Ratio

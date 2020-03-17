@@ -167,5 +167,5 @@ TEST_CASE( "BaseGasDensity", "[BaseGasDensity]") {
 	auto const bdg = BaseGasDensity(
 			70, 26.62, 29.92, 60, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::RelativeHumidity, 1
 	);
-	CHECK(bdg.getGasDensity() == Approx(0.08143));
+	CHECK(bdg.getGasDensity() == Approx(0.08143315));
 }
