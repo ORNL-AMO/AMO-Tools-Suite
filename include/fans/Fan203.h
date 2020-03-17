@@ -111,6 +111,8 @@ public:
 		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
 		*/
 
+		calculateFanAttributes(inputType, relativeHumidityOrDewPoint);
+		/*
 		pIn = pbo + (pso / 13.608703);
 		satW = 0.62198 * satPress / (pIn - satPress);
 		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
@@ -140,6 +142,7 @@ public:
 			dewPoint = relativeHumidityOrDewPoint;
 			//dewPoint = 3;
 		}
+		*/
 
 	}
 
@@ -156,6 +159,9 @@ public:
 		double const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
 		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
 		*/
+
+		calculateFanAttributes(inputType);
+		/*
 		pIn = pbo + (pso / 13.608703);
 		satW = 0.62198 * satPress / (pIn - satPress);
 		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
@@ -176,6 +182,7 @@ public:
 			dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow(std::exp(alpha), 0.1984));
 			//dewPoint = 2;
 		}
+		*/
 	}
 
 	double getGasDensity() const
@@ -268,16 +275,56 @@ private:
 	double calculateRelativeHumidityFromWetBulb(const double dryBulbTemp, const double wetBulbTemp,
 												const double cpGas) const
 	{
-		double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
+		double const nMol = 0.62198;
+		//double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
 		double const psatDb = calculateSaturationPressure(dryBulbTemp);
 		//	double const wSat = nMol * psatDb / (pAtm - psatDb);
 		double const psatWb = calculateSaturationPressure(wetBulbTemp);
-		double const wStar = nMol * psatWb / (pAtm - psatWb);
+		double const wStar = nMol * psatWb / (pbo - psatWb);
 		//double const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
 		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
-		double const pV = pAtm * w / (nMol + w);
+		double const pV = pbo * w / (nMol + w);
 		return pV / psatDb;
+	}
+	/**
+ * @brief Calculates numerous fan attributes. Note: This function assumes that the member variables pbo, pso, satPress, and rh already 
+ 		  have valid values.
+ * 
+ * @param inputType const, type of input, unitless
+ * @param relativeHumidityOrDewPoint double, const, relative humidity in % or Dewpoint in °F
+ */
+	void calculateFanAttributes(InputType const inputType, double const relativeHumidityOrDewPoint = -1)
+	{
+		pIn = pbo + (pso / 13.608703);
+		satW = 0.62198 * satPress / (pIn - satPress);
+		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
+		humW = satDeg * satW;
+		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
+		po = (1 / specVol) * (1 + humW);
+		enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
+
+		if(inputType != InputType::DewPoint)
+		{
+			double const alpha = std::log(pIn * 0.4911541 * humW / (0.62196 + humW));
+
+			if(tdo < 32)
+			{
+				dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
+				//dewPoint = 1;
+			}
+			else
+			{
+				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow(std::exp(alpha), 0.1984));
+				//dewPoint = 2;
+			}
+			
+		}
+		else
+		{
+			dewPoint = relativeHumidityOrDewPoint;
+			//dewPoint = 3;
+		}
 	}
 
 	// dry bulb temp, reference static pressure, reference barometric pressure, gas density respectively
