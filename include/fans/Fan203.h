@@ -114,7 +114,16 @@ public:
 		calculateFanAttributes(inputType, relativeHumidityOrDewPoint);
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
-		fout << "Answer: " << po << std::endl;
+		fout << "po:       " << po << std::endl;
+		fout << "pIn:      " << pIn << std::endl;
+		fout << "satW:     " << satW << std::endl;
+		fout << "satDeg:   " << satDeg << std::endl;
+		fout << "humW:     " << humW << std::endl;
+		fout << "specVol:  " << specVol << std::endl;
+		fout << "enthalpy: " << enthalpy << std::endl;
+		fout << "dewPoint: " << dewPoint << std::endl;
+		fout << "rh:       " << rh << std::endl;
+		fout << "satPress: " << satPress << std::endl;
 		fout << "------------------------------" << std::endl << std::endl;
 		fout.close();
 
@@ -169,10 +178,20 @@ public:
 		calculateFanAttributes(inputType);
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
-		fout << "Answer: " << po << std::endl;
+		fout << "Wet Bulb" << std::endl;
+		fout << "po:       " << po << std::endl;
+		fout << "pIn:      " << pIn << std::endl;
+		fout << "satW:     " << satW << std::endl;
+		fout << "satDeg:   " << satDeg << std::endl;
+		fout << "humW:     " << humW << std::endl;
+		fout << "specVol:  " << specVol << std::endl;
+		fout << "enthalpy: " << enthalpy << std::endl;
+		fout << "dewPoint: " << dewPoint << std::endl;
+		fout << "rh:       " << rh << std::endl;
+		fout << "satPress: " << satPress << std::endl;
 		fout << "------------------------------" << std::endl << std::endl;
 		fout.close();
-		
+
 		/*
 		pIn = pbo + (pso / 13.608703);
 		satW = 0.62198 * satPress / (pIn - satPress);
@@ -297,6 +316,15 @@ private:
 		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
 		double const pV = pbo * w / (nMol + w);
+		std::ofstream fout;
+    	fout.open("debug.txt", std::ios::app);
+		fout << "calculateRelativeHumidityFromWetBulb" << std::endl;
+		fout << "psatDb: " << psatDb << std::endl;
+		fout << "psatWb: " << psatWb << std::endl;
+		fout << "wStar:  " << wStar << std::endl;
+		fout << "w:      " << w << std::endl;
+		fout << "------------------------------" << std::endl << std::endl;
+		fout.close();
 		return pV / psatDb;
 	}
 	/**

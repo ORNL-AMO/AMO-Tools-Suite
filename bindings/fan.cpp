@@ -15,6 +15,9 @@ NAN_MODULE_INIT(InitFans) {
 	Nan::Set(target, New<String>("fan203").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(fan203)).ToLocalChecked());
 
+	Nan::Set(target, New<String>("getBaseGasDensityObj").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(getBaseGasDensityObj)).ToLocalChecked());
+
 	Nan::Set(target, New<String>("getBaseGasDensityRelativeHumidity").ToLocalChecked(),
 			 GetFunction(New<FunctionTemplate>(getBaseGasDensityRelativeHumidity)).ToLocalChecked());
 

@@ -208,6 +208,6 @@ TEST_CASE( "BaseGasDensity", "[BaseGasDensity]") {
 	CHECK(bdg3.getEnthalpy() == Approx(26.39));
 	CHECK(bdg3.getDewPoint() == Approx(55.51));
 	CHECK(bdg3.getRelativeHumidity() == Approx(0.6002));
-	CHECK(bdg3.getSaturationPressure() == Approx(0.07867490));
+	CHECK(bdg3.getSaturationPressure() == Approx(0.7867490));
 	*/
 }

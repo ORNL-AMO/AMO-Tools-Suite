@@ -436,6 +436,67 @@ NAN_METHOD(fanResultsModified)
 // 	info.GetReturnValue().Set(r);
 // }
 
+NAN_METHOD(getBaseGasDensityObj)
+{
+	// Local<Double> ???
+	Local<String> po = Nan::New<String>("po").ToLocalChecked();
+	Local<String> pIn = Nan::New<String>("pIn").ToLocalChecked();
+	Local<String> satW = Nan::New<String>("satW").ToLocalChecked();
+	Local<String> satDeg = Nan::New<String>("satDeg").ToLocalChecked();
+	Local<String> humW = Nan::New<String>("humW").ToLocalChecked();
+	Local<String> specVol = Nan::New<String>("specVol").ToLocalChecked();
+	Local<String> enthalpy = Nan::New<String>("enthalpy").ToLocalChecked();
+	Local<String> dewPoint = Nan::New<String>("dewPoint").ToLocalChecked();
+	Local<String> rh = Nan::New<String>("rh").ToLocalChecked();
+	Local<String> satPress = Nan::New<String>("satPress").ToLocalChecked();
+
+	Local<Object> obj = Nan::New<Object>();
+
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
+	r = Nan::New<Object>();
+	try
+	{
+		//NAN data init
+		const double dryBulbTemp = Get("dryBulbTemp", inp);
+		const double staticPressure = Get("staticPressure", inp);
+		const double barometricPressure = Get("barometricPressure", inp);
+		const double relativeHumidity = Get("relativeHumidity", inp);
+		BaseGasDensity::GasType gasType = getGasType(inp);
+		BaseGasDensity::InputType inputType = getInputType(inp);
+		const double specificGravity = Get("specificGravity", inp);
+
+		//Calculation procedure
+		auto bgd = BaseGasDensity(
+							dryBulbTemp,
+							staticPressure,
+							barometricPressure,
+							relativeHumidity,
+							gasType,
+							inputType,
+							specificGravity);
+
+		Nan::Set(obj, po, Nan::New<Number>(bgd.getGasDensity()));
+        Nan::Set(obj, pIn, Nan::New<Number>(bgd.getAbsolutePressureIn()));
+        Nan::Set(obj, satW, Nan::New<Number>(bgd.getSaturatedHumidityRatio()));
+        Nan::Set(obj, satDeg, Nan::New<Number>(bgd.getDegreeOfSaturation()));
+        Nan::Set(obj, humW, Nan::New<Number>(bgd.getHumidityRatio()));
+        Nan::Set(obj, specVol, Nan::New<Number>(bgd.getSpecificVolume()));
+		Nan::Set(obj, enthalpy, Nan::New<Number>(bgd.getEnthalpy()));
+        Nan::Set(obj, dewPoint, Nan::New<Number>(bgd.getDewPoint()));
+        Nan::Set(obj, rh, Nan::New<Number>(bgd.getRelativeHumidity()));
+        Nan::Set(obj, satPress, Nan::New<Number>(bgd.getSaturationPressure()));
+		
+		//NAN return object
+		info.GetReturnValue().Set(obj);
+	}
+	catch (std::runtime_error const &e)
+	{
+		info.GetReturnValue().Set(0);
+		std::string const what = e.what();
+		ThrowError(std::string("std::runtime_error thrown in getBaseGasDensityRelativeHumidity - fan.h: " + what).c_str());
+	}
+}
+
 NAN_METHOD(getBaseGasDensityRelativeHumidity)
 {
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();

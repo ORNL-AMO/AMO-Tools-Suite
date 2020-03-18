@@ -164,7 +164,8 @@ test('fan203 test', function (t) {
 });
 
 test('getBaseGasDensity', function (t) {
-    t.plan(6);
+    //t.plan(6);
+    t.plan(16);
     t.type(bindings.getBaseGasDensityRelativeHumidity, 'function');
     t.type(bindings.getBaseGasDensityDewPoint, 'function');
     t.type(bindings.getBaseGasDensityWetBulb, 'function');
@@ -214,6 +215,28 @@ test('getBaseGasDensity', function (t) {
     res = bindings.getBaseGasDensityWetBulb(inp);
     //t.equal(rnd(res), rnd(0.065456));
     t.equal(rnd(res), rnd(0.0557205));
+
+    inp = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasDensity: 0.0547,
+        gasType: 'AIR',
+        inputType: 'relativeHumidity',
+        relativeHumidity: 35,
+        specificGravity: 1.05
+    };
+    res = bindings.getBaseGasDensityObj(inp);
+    t.equal(rnd(res.po), rnd(0.0564228));
+    t.equal(rnd(res.pIn), rnd(25.27671));
+    t.equal(rnd(res.satW), rnd(0.108296));
+    t.equal(rnd(res.satDeg), rnd(0.314416));
+    t.equal(rnd(res.humW), rnd(0.03405));
+    t.equal(rnd(res.specVol), rnd(18.326807));
+    t.equal(rnd(res.enthalpy), rnd(68.367639));
+    t.equal(rnd(res.dewPoint), rnd(87.401991));
+    t.equal(rnd(res.rh), rnd(0.35));
+    t.equal(rnd(res.satPress), rnd(3.748405));
 });
 
 test('getVelocityPressureData', function (t) {
