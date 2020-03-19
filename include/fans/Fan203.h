@@ -266,9 +266,25 @@ private:
  */
 	double calculateSaturationPressure(double dryBulbTemp) const
 	{
-		double const C1 = -5674.5359, C2 = 6.3925247, C3 = -0.009677843, C4 = 0.00000062215701;
-		double const C5 = 2.0747825 * std::pow(10, -9), C6 = -9.484024 * std::pow(10, -13), C7 = 4.1635019;
-		double const C8 = -5800.2206, C9 = 1.3914093, C10 = -0.048640239, C11 = 0.000041764768, C12 = -0.000000014452093, C13 = 6.5459673;
+		double const C1 = -5674.5359;
+		double const C2 = 6.3925247;
+		double const C3 = -0.009677843;
+		double const C4 = 0.00000062215701;
+		//double const C4 = 6.22157 * std::pow(10, -7);
+		double const C5 = 2.0747825 * std::pow(10, -9);
+		//double const C5 = 2.07478 * std::pow(10, -9);
+		double const C6 = -9.484024 * std::pow(10, -13);
+		//double const C6 = -9.48402 * std::pow(10, -13);
+		double const C7 = 4.1635019;
+		double const C8 = -5800.2206;
+		double const C9 = 1.3914093;
+		//double const C9 = 1.3914993;
+		double const C10 = -0.048640239;
+		double const C11 = 0.000041764768;
+		//double const C11 = 4.17648 * std::pow(10, -5);
+		double const C12 = -0.000000014452093;
+		//double const C12 = -1.44521 * std::pow(10, -8);
+		double const C13 = 6.5459673;
 
 		double const tKelvin = (dryBulbTemp + 459.67) * 0.555556;
 
@@ -307,10 +323,12 @@ private:
 												const double cpGas) const
 	{
 		double const nMol = 0.62198;
+		//double const nMol = 0.5831677622;
 		//double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
 		double const psatDb = calculateSaturationPressure(dryBulbTemp);
 		//	double const wSat = nMol * psatDb / (pAtm - psatDb);
 		double const psatWb = calculateSaturationPressure(wetBulbTemp);
+		//double const psatWb = 0.5112186;
 		double const wStar = nMol * psatWb / (pbo - psatWb);
 		//double const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
 		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
@@ -340,7 +358,8 @@ private:
 		satW = 0.62198 * satPress / (pIn - satPress);
 		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
 		humW = satDeg * satW;
-		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
+		//specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
+		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.4911541);
 		po = (1 / specVol) * (1 + humW);
 		enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
 

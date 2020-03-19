@@ -142,6 +142,7 @@ RUN ./bin/amo_tools_suite_tests
 #RUN npm run at
 
 #RUN doxygen Doxyfile.in
+RUN cat debug.txt
 #--------------------------------------------------------------
 
 #WORKDIR /home/

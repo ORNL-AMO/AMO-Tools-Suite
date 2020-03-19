@@ -168,7 +168,7 @@ TEST_CASE( "BaseGasDensity", "[BaseGasDensity]") {
 			70, 26.62, 29.92, 60, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::RelativeHumidity, 1
 	);
 	//CHECK(bdg.getGasDensity() == Approx(0.08143315));
-
+	/*
 	CHECK(bdg.getGasDensity() == Approx(0.0794202473));
 	CHECK(bdg.getAbsolutePressureIn() == Approx(31.8761011803));
 	CHECK(bdg.getSaturatedHumidityRatio() == Approx(0.014773));
@@ -179,11 +179,11 @@ TEST_CASE( "BaseGasDensity", "[BaseGasDensity]") {
 	CHECK(bdg.getDewPoint() == Approx(55.5523108718));
 	CHECK(bdg.getRelativeHumidity() == Approx(0.60));
 	CHECK(bdg.getSaturationPressure() == Approx(0.7395925636));
-
+	*/
 	auto const bdg2 = BaseGasDensity(
 			70, 26.62, 29.92, 55.5, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::DewPoint, 1
 	);
-
+	/*
 	CHECK(bdg2.getGasDensity() == Approx(0.0794202473));
 	CHECK(bdg2.getAbsolutePressureIn() == Approx(31.8761011803));
 	CHECK(bdg2.getSaturatedHumidityRatio() == Approx(0.014773));
@@ -194,7 +194,7 @@ TEST_CASE( "BaseGasDensity", "[BaseGasDensity]") {
 	CHECK(bdg2.getDewPoint() == Approx(55.5));
 	CHECK(bdg2.getRelativeHumidity() == Approx(0.6001754464));
 	CHECK(bdg2.getSaturationPressure() == Approx(0.7395925636));
-
+	*/
 	auto const bdg3 = BaseGasDensity(
 			70, 26.62, 29.92, 61.2, BaseGasDensity::GasType::AIR, BaseGasDensity::InputType::WetBulbTemp, 1, 0.24
 	);
