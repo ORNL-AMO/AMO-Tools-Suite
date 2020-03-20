@@ -277,8 +277,8 @@ private:
 		//double const C6 = -9.48402 * std::pow(10, -13);
 		double const C7 = 4.1635019;
 		double const C8 = -5800.2206;
-		double const C9 = 1.3914093;
-		//double const C9 = 1.3914993;
+		//double const C9 = 1.3914093;
+		double const C9 = 1.3914993;
 		double const C10 = -0.048640239;
 		double const C11 = 0.000041764768;
 		//double const C11 = 4.17648 * std::pow(10, -5);
@@ -329,7 +329,7 @@ private:
 		//	double const wSat = nMol * psatDb / (pAtm - psatDb);
 		double const psatWb = calculateSaturationPressure(wetBulbTemp);
 		//double const psatWb = 0.5112186;
-		double const wStar = nMol * psatWb / (pbo - psatWb);
+		double const wStar = nMol * psatWb / (pbo + (pso / 13.608703) - psatWb); // pIn = pbo + (pso / 13.608703)
 		//double const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
 		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
@@ -354,9 +354,11 @@ private:
  */
 	void calculateFanAttributes(InputType const inputType, double const relativeHumidityOrDewPoint = -1)
 	{
+		double const nMol = 0.62198;
+
 		pIn = pbo + (pso / 13.608703);
-		satW = 0.62198 * satPress / (pIn - satPress);
-		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
+		satW = nMol * satPress / (pIn - satPress);
+		satDeg = rh / ( 1 + ( 1 - rh) * satW / nMol);
 		humW = satDeg * satW;
 		//specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
 		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.4911541);
@@ -365,7 +367,7 @@ private:
 
 		if(inputType != InputType::DewPoint)
 		{
-			double const alpha = std::log(pIn * 0.4911541 * humW / (0.62196 + humW));
+			double const alpha = std::log(pIn * 0.4911541 * humW / (nMol + humW));
 
 			if(tdo < 32)
 			{
@@ -374,7 +376,8 @@ private:
 			}
 			else
 			{
-				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow(std::exp(alpha), 0.1984));
+				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow((pIn * 0.4911541 * humW / (0.62196 + humW)), 0.1984));
+				//dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::exp(std::pow(alpha, 0.1984))); //(std::pow(std::exp(alpha), 0.1984));
 				//dewPoint = 2;
 			}
 			
