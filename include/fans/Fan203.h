@@ -323,17 +323,19 @@ private:
 												const double cpGas) const
 	{
 		double const nMol = 0.62198;
+		double const local_pIn = pbo + (pso / 13.608703);
 		//double const nMol = 0.5831677622;
 		//double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
 		double const psatDb = calculateSaturationPressure(dryBulbTemp);
 		//	double const wSat = nMol * psatDb / (pAtm - psatDb);
 		double const psatWb = calculateSaturationPressure(wetBulbTemp);
 		//double const psatWb = 0.5112186;
-		double const wStar = nMol * psatWb / (pbo + (pso / 13.608703) - psatWb); // pIn = pbo + (pso / 13.608703)
+		double const wStar = nMol * psatWb / (local_pIn - psatWb); // pIn = pbo + (pso / 13.608703)
 		//double const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
 		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
-		double const pV = pbo * w / (nMol + w);
+		//double const pV = pbo * w / (nMol + w);
+		double const pV = local_pIn * w / (nMol + w);
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
 		fout << "calculateRelativeHumidityFromWetBulb" << std::endl;
