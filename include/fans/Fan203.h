@@ -56,6 +56,7 @@ public:
 		RelativeHumidity,
 		WetBulbTemp
 	};
+ 
 	/**
  * @param dryBulbTemp double, temperature of inputted air in °F
  * @param staticPressure const, double, pressure in Hg 
