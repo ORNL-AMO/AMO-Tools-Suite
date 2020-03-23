@@ -436,9 +436,8 @@ NAN_METHOD(fanResultsModified)
 // 	info.GetReturnValue().Set(r);
 // }
 
-NAN_METHOD(getBaseGasDensityObj)
+void SetBaseGasDensityData(Local<Object> & obj, const BaseGasDensity & bgd)
 {
-	// Local<Double> ???
 	Local<String> po = Nan::New<String>("po").ToLocalChecked();
 	Local<String> pIn = Nan::New<String>("pIn").ToLocalChecked();
 	Local<String> satW = Nan::New<String>("satW").ToLocalChecked();
@@ -450,6 +449,20 @@ NAN_METHOD(getBaseGasDensityObj)
 	Local<String> rh = Nan::New<String>("rh").ToLocalChecked();
 	Local<String> satPress = Nan::New<String>("satPress").ToLocalChecked();
 
+	Nan::Set(obj, po, Nan::New<Number>(bgd.getGasDensity()));
+    Nan::Set(obj, pIn, Nan::New<Number>(bgd.getAbsolutePressureIn()));
+    Nan::Set(obj, satW, Nan::New<Number>(bgd.getSaturatedHumidityRatio()));
+    Nan::Set(obj, satDeg, Nan::New<Number>(bgd.getDegreeOfSaturation()));
+    Nan::Set(obj, humW, Nan::New<Number>(bgd.getHumidityRatio()));
+    Nan::Set(obj, specVol, Nan::New<Number>(bgd.getSpecificVolume()));
+	Nan::Set(obj, enthalpy, Nan::New<Number>(bgd.getEnthalpy()));
+    Nan::Set(obj, dewPoint, Nan::New<Number>(bgd.getDewPoint()));
+    Nan::Set(obj, rh, Nan::New<Number>(bgd.getRelativeHumidity()));
+    Nan::Set(obj, satPress, Nan::New<Number>(bgd.getSaturationPressure()));
+}
+
+NAN_METHOD(getBaseGasDensityObj)
+{
 	Local<Object> obj = Nan::New<Object>();
 
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
@@ -466,7 +479,7 @@ NAN_METHOD(getBaseGasDensityObj)
 		const double specificGravity = Get("specificGravity", inp);
 
 		//Calculation procedure
-		auto bgd = BaseGasDensity(
+		BaseGasDensity bgd = BaseGasDensity(
 							dryBulbTemp,
 							staticPressure,
 							barometricPressure,
@@ -475,16 +488,7 @@ NAN_METHOD(getBaseGasDensityObj)
 							inputType,
 							specificGravity);
 
-		Nan::Set(obj, po, Nan::New<Number>(bgd.getGasDensity()));
-        Nan::Set(obj, pIn, Nan::New<Number>(bgd.getAbsolutePressureIn()));
-        Nan::Set(obj, satW, Nan::New<Number>(bgd.getSaturatedHumidityRatio()));
-        Nan::Set(obj, satDeg, Nan::New<Number>(bgd.getDegreeOfSaturation()));
-        Nan::Set(obj, humW, Nan::New<Number>(bgd.getHumidityRatio()));
-        Nan::Set(obj, specVol, Nan::New<Number>(bgd.getSpecificVolume()));
-		Nan::Set(obj, enthalpy, Nan::New<Number>(bgd.getEnthalpy()));
-        Nan::Set(obj, dewPoint, Nan::New<Number>(bgd.getDewPoint()));
-        Nan::Set(obj, rh, Nan::New<Number>(bgd.getRelativeHumidity()));
-        Nan::Set(obj, satPress, Nan::New<Number>(bgd.getSaturationPressure()));
+		SetBaseGasDensityData(obj, bgd);
 		
 		//NAN return object
 		info.GetReturnValue().Set(obj);

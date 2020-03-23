@@ -106,12 +106,9 @@ public:
 			throw std::runtime_error("The wrong constructor for BaseGasDensity was called here - check inputType field");
 		}
 
-		/*
-		double const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
-		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
-		*/
-
 		calculateFanAttributes(inputType, relativeHumidityOrDewPoint);
+
+		/*
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
 		fout << "po:       " << po << std::endl;
@@ -126,39 +123,7 @@ public:
 		fout << "satPress: " << satPress << std::endl;
 		fout << "------------------------------" << std::endl << std::endl;
 		fout.close();
-
-		/*
-		pIn = pbo + (pso / 13.608703);
-		satW = 0.62198 * satPress / (pIn - satPress);
-		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
-		humW = satDeg * satW;
-		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
-		po = (1 / specVol) * (1 + humW);
-		enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
-
-		if(inputType != InputType::DewPoint)
-		{
-			double const alpha = std::log(pIn * 0.4911541 * humW / (0.62196 + humW));
-
-			if(tdo < 32)
-			{
-				dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
-				//dewPoint = 1;
-			}
-			else
-			{
-				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow(std::exp(alpha), 0.1984));
-				//dewPoint = 2;
-			}
-			
-		}
-		else
-		{
-			dewPoint = relativeHumidityOrDewPoint;
-			//dewPoint = 3;
-		}
 		*/
-
 	}
 
 	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
@@ -170,12 +135,10 @@ public:
 			throw std::runtime_error("The wrong constructor for BaseGasDensity was called - check inputType field");
 		satPress = calculateSaturationPressure(tdo);
 		rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
-		/*
-		double const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
-		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
-		*/
 
 		calculateFanAttributes(inputType);
+
+		/*
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
 		fout << "Wet Bulb" << std::endl;
@@ -191,28 +154,6 @@ public:
 		fout << "satPress: " << satPress << std::endl;
 		fout << "------------------------------" << std::endl << std::endl;
 		fout.close();
-
-		/*
-		pIn = pbo + (pso / 13.608703);
-		satW = 0.62198 * satPress / (pIn - satPress);
-		satDeg = rh / ( 1 + ( 1 - rh) * satW / 0.62198);
-		humW = satDeg * satW;
-		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
-		po = (1 / specVol) * (1 + humW);
-		enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
-
-		double const alpha = std::log(pIn * 0.4911541 * humW / (0.62196 + humW));
-
-		if(tdo < 32)
-		{
-			dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
-			//dewPoint = 1;
-		}
-		else
-		{
-			dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow(std::exp(alpha), 0.1984));
-			//dewPoint = 2;
-		}
 		*/
 	}
 
@@ -270,20 +211,14 @@ private:
 		double const C2 = 6.3925247;
 		double const C3 = -0.009677843;
 		double const C4 = 0.00000062215701;
-		//double const C4 = 6.22157 * std::pow(10, -7);
 		double const C5 = 2.0747825 * std::pow(10, -9);
-		//double const C5 = 2.07478 * std::pow(10, -9);
 		double const C6 = -9.484024 * std::pow(10, -13);
-		//double const C6 = -9.48402 * std::pow(10, -13);
 		double const C7 = 4.1635019;
 		double const C8 = -5800.2206;
-		//double const C9 = 1.3914093;
 		double const C9 = 1.3914993;
 		double const C10 = -0.048640239;
 		double const C11 = 0.000041764768;
-		//double const C11 = 4.17648 * std::pow(10, -5);
 		double const C12 = -0.000000014452093;
-		//double const C12 = -1.44521 * std::pow(10, -8);
 		double const C13 = 6.5459673;
 
 		double const tKelvin = (dryBulbTemp + 459.67) * 0.555556;
@@ -324,18 +259,16 @@ private:
 	{
 		double const nMol = 0.62198;
 		double const local_pIn = pbo + (pso / 13.608703);
-		//double const nMol = 0.5831677622;
 		//double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
 		double const psatDb = calculateSaturationPressure(dryBulbTemp);
 		//	double const wSat = nMol * psatDb / (pAtm - psatDb);
 		double const psatWb = calculateSaturationPressure(wetBulbTemp);
-		//double const psatWb = 0.5112186;
-		double const wStar = nMol * psatWb / (local_pIn - psatWb); // pIn = pbo + (pso / 13.608703)
-		//double const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
+		double const wStar = nMol * psatWb / (local_pIn - psatWb);
 		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
-		//double const pV = pbo * w / (nMol + w);
 		double const pV = local_pIn * w / (nMol + w);
+
+		/*
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
 		fout << "calculateRelativeHumidityFromWetBulb" << std::endl;
@@ -345,6 +278,8 @@ private:
 		fout << "w:      " << w << std::endl;
 		fout << "------------------------------" << std::endl << std::endl;
 		fout.close();
+		*/
+		
 		return pV / psatDb;
 	}
 	/**
@@ -362,7 +297,6 @@ private:
 		satW = nMol * satPress / (pIn - satPress);
 		satDeg = rh / ( 1 + ( 1 - rh) * satW / nMol);
 		humW = satDeg * satW;
-		//specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.491541);
 		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.4911541);
 		po = (1 / specVol) * (1 + humW);
 		enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
@@ -374,20 +308,16 @@ private:
 			if(tdo < 32)
 			{
 				dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
-				//dewPoint = 1;
 			}
 			else
 			{
 				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow((pIn * 0.4911541 * humW / (0.62196 + humW)), 0.1984));
-				//dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::exp(std::pow(alpha, 0.1984))); //(std::pow(std::exp(alpha), 0.1984));
-				//dewPoint = 2;
 			}
 			
 		}
 		else
 		{
 			dewPoint = relativeHumidityOrDewPoint;
-			//dewPoint = 3;
 		}
 	}
 
