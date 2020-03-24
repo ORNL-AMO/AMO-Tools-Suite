@@ -226,6 +226,38 @@ std::array<double, 6> EstimateFLA::calculate() {
          * 3. Divide the selected (EE or SE) efficiency by the specified efficiency and then multiply that by the FLA for the corresponding selection.
          */
 
+        auto const seeffVal = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::STANDARD,
+                                            motorRatedPower).calculate(1, specifiedEfficiency);
+   
+        auto const eeeffVal = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT,
+                                            motorRatedPower).calculate(1, specifiedEfficiency);
+
+        if (std::fabs(seeffVal - specifiedEfficiency) < std::fabs(eeeffVal - specifiedEfficiency))
+        {
+                // SE is the nominal efficiency
+             estimatedFLA = adjustForVoltage(seFLAValue * plMultiplier[4], seeffVal);
+                return {
+                        {
+                                seFLAValue * plMultiplier[0], seFLAValue * plMultiplier[1], seFLAValue * plMultiplier[2],
+                                seFLAValue * plMultiplier[3], seFLAValue * plMultiplier[4], seFLAValue * plMultiplier[5]
+                        }
+                };
+        }
+        else 
+        {
+                /// EE is the nominal efficiency
+             estimatedFLA = adjustForVoltage(eeFLAValue * plMultiplier[4], eeeffVal);
+                return {
+                        {
+                                eeFLAValue * plMultiplier[0], eeFLAValue * plMultiplier[1], eeFLAValue * plMultiplier[2],
+                                eeFLAValue * plMultiplier[3], eeFLAValue * plMultiplier[4], eeFLAValue * plMultiplier[5]
+                        }
+                };
+        }
+    }
+    return {};
+
+/*
 //        specifiedEfficiency = 95; // commented out due to this not making sense
         if (std::fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency) > std::fabs(seFLAValue * plMultiplier[4] - specifiedEfficiency))
         {
@@ -253,4 +285,5 @@ std::array<double, 6> EstimateFLA::calculate() {
         }
     }
 	return {};
+*/
 }

@@ -8,7 +8,7 @@
 TEST_CASE( "Estimate FLA", "[EstimateFLA]" ) {
     auto fla1 = EstimateFLA(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 94, 460);
     auto fla2 = EstimateFLA(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 95, 460);
-    
+
     std::ofstream fout;
     fout.open("debug.txt", std::ios::app);
     auto results1 = fla1.calculate();
