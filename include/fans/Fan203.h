@@ -78,13 +78,16 @@ public:
  * @param gasType, double, gas, type of gas, unitless
  * @param inputType const, type of input, unitless
  * @param specificGravity, double, const, specific gravity, unitless
- * @return pIn double, Absolute Pressure In in in Hg
+ * @return po double, density of the gas in pounds per sqft, lb/scf
+ * @return pIn double, Absolute Pressure In in in Hg XXX
  * @return satW double, Saturated Humidity Ratio, unitless
  * @return satDeg double, Degree of Saturation, unitless
  * @return humW double, Humidity Ratio, unitless
  * @return specVol double, Specific Volume, ft^3/lb
+ * @return entropy double, Entropy, B/lb
+ * @return dewPoint double, Dewpoint, deg F
+ * @return rh double, Relative Humidity, %
  * @return satPress double, Saturation Pressure, in Hg
- * @return density double, density of the gas in pounds per sqft, lb/scf
  */
 	// TODO ensure correctness
 	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
