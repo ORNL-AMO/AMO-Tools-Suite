@@ -133,13 +133,15 @@ RUN cmake --build .
 
 RUN ./bin/amo_tools_suite_tests
 
-RUN npm install
+#RUN npm install
 
-RUN node-gyp rebuild
+#RUN node-gyp rebuild
 
-RUN npm run test
+#RUN npm run test
 
-RUN npm run at
+#RUN npm run at
+
+RUN cat debug.txt
 #--------------------------------------------------------------
 
 #WORKDIR /home/
