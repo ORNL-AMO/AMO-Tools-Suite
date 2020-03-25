@@ -15,6 +15,7 @@
 #include "calculator/motor/EstimateFLA.h"
 #include "calculator/motor/MotorEfficiency.h"
 #include "calculator/motor/Poles.h"
+#include <fstream>
 
 /**
  * Estimating FLA methodology
@@ -232,7 +233,7 @@ std::array<double, 6> EstimateFLA::calculate() {
         auto const eeeffVal = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT,
                                             motorRatedPower).calculate(1, specifiedEfficiency);
 
-        if (std::fabs(seeffVal - specifiedEfficiency) < std::fabs(eeeffVal - specifiedEfficiency))
+        if (std::fabs(seeffVal - (specifiedEfficiency / 100)) < std::fabs(eeeffVal - (specifiedEfficiency / 100)))
         {
                 // SE is the nominal efficiency
              estimatedFLA = adjustForVoltage(seFLAValue * plMultiplier[4], seeffVal);
@@ -256,34 +257,4 @@ std::array<double, 6> EstimateFLA::calculate() {
         }
     }
     return {};
-
-/*
-//        specifiedEfficiency = 95; // commented out due to this not making sense
-        if (std::fabs(eeFLAValue * plMultiplier[4] - specifiedEfficiency) > std::fabs(seFLAValue * plMultiplier[4] - specifiedEfficiency))
-        {
-            // SE is the nominal efficiency
-            auto const effVal = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::STANDARD,
-                                                motorRatedPower).calculate(1, specifiedEfficiency);
-	        estimatedFLA = adjustForVoltage(seFLAValue * plMultiplier[4], effVal);
-            return {
-                    {
-                            seFLAValue * plMultiplier[0], seFLAValue * plMultiplier[1], seFLAValue * plMultiplier[2],
-                            seFLAValue * plMultiplier[3], seFLAValue * plMultiplier[4], seFLAValue * plMultiplier[5]
-                    }
-            };
-        } else {
-            /// EE is the nominal efficiency
-            auto const effVal = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT,
-                                                motorRatedPower).calculate(1, specifiedEfficiency);
-	        estimatedFLA = adjustForVoltage(eeFLAValue * plMultiplier[4], effVal);
-            return {
-                    {
-                            eeFLAValue * plMultiplier[0], eeFLAValue * plMultiplier[1], eeFLAValue * plMultiplier[2],
-                            eeFLAValue * plMultiplier[3], eeFLAValue * plMultiplier[4], eeFLAValue * plMultiplier[5]
-                    }
-            };
-        }
-    }
-	return {};
-*/
 }

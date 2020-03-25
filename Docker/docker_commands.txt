@@ -1,12 +1,20 @@
 docker image build -f Docker/Dockerfile -t comma64/ornl:amo-tools-suite .
 docker run -t -d --name amo-suite comma64/ornl:amo-tools-suite
+
+# Mount a host directory to persist source code and builds
+docker run -t -d -v "/home/81c/AMO/src:/home/AMO/src/" --name amo-suite comma64/ornl:amo-tools-suite
+
+
 docker exec -it amo-suite /bin/bash
+
 docker container rm --force amo-suite
+docker rmi comma64/ornl:amo-tools-suite
 
 docker login
 docker push comma64/ornl:amo-tools-suite
 
-
+PowerShell (remove all images):
+docker rmi $(docker images -q)
 
 docker stop $(docker ps -aq) 2>/dev/null || true
 docker rm $(docker ps -a -q) 2>/dev/null|| true
@@ -33,4 +41,3 @@ npm run test
 
 npm run at
 #--------------------------------------------------------------
-

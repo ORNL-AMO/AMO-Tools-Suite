@@ -518,17 +518,25 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 
 	t = EstimateFLA(100, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 80, 220);
 	t.calculate();
-	CHECK(t.getEstimatedFLA() ==  Approx(311.3720600292));
+	CHECK(t.getEstimatedFLA() ==  Approx(312.5479443728)); //311.3720600292
 
-	t = EstimateFLA(120, 1900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 90, 220);
+	t = EstimateFLA(125, 1900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 90, 220); // 120 -> 125, 
 	t.calculate();
-	CHECK(t.getEstimatedFLA() ==  Approx(291.0633925033));
+	CHECK(t.getEstimatedFLA() ==  Approx(302.2156478756)); //291.0633925033
 
 	t = EstimateFLA(90, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 95, 120);
 	t.calculate();
 	CHECK(t.getEstimatedFLA() ==  Approx(432.5925070407));
 
-	t = EstimateFLA(150, 2900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 55, 90);
+	t = EstimateFLA(150, 2900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 55, 600); // 90 -> 600
 	t.calculate();
-	CHECK(t.getEstimatedFLA() ==  Approx(1457.2693184418));
+	CHECK(t.getEstimatedFLA() ==  Approx(218.1935995715)); //1457.2693184418
+
+	t = EstimateFLA(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 94, 460);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() == Approx(228.3902237064));
+
+	t = EstimateFLA(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 95, 460);
+	t.calculate();
+	CHECK(t.getEstimatedFLA() == Approx(227.288340026));
 }
