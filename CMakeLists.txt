@@ -195,7 +195,8 @@ set(SOURCE_FILES
         src/calculator/util/insulation/services/ReynoldsNumber.cpp
         src/calculator/util/insulation/services/ThermalResistance.cpp
         src/calculator/util/SteamReduction.cpp
-        src/calculator/pump/PumpData.cpp)
+        src/calculator/pump/PumpData.cpp
+        src/calculator/motor/MotorData.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -375,6 +376,8 @@ set(INCLUDE_FILES
         include/ssmt/HeatExchanger.h
         include/calculator/pump/PumpData.h
         include/sqlite/PumpData.h
+        include/calculator/motor/MotorData.h
+        include/sqlite/MotorData.h
         )
 
 # Pending: PumpData calculator unit test
