@@ -3,6 +3,7 @@
  *
  * @author Preston Shires (pshires)
  * @author Allie Ledbetter (Aeledbetter)
+ * @author Colin Causey (causeyc)
  * @bug No known bugs.
  * 
  */
@@ -55,6 +56,7 @@ public:
 		RelativeHumidity,
 		WetBulbTemp
 	};
+ 
 	/**
  * @param dryBulbTemp double, temperature of inputted air in °F
  * @param staticPressure const, double, pressure in Hg 
@@ -76,7 +78,16 @@ public:
  * @param gasType, double, gas, type of gas, unitless
  * @param inputType const, type of input, unitless
  * @param specificGravity, double, const, specific gravity, unitless
- * @return BaseGasDensity double, density of the gas in pounds per sqft, lb/scf
+ * @return po double, density of the gas in pounds per sqft, lb/scf
+ * @return pIn double, Absolute Pressure In in in Hg XXX
+ * @return satW double, Saturated Humidity Ratio, unitless
+ * @return satDeg double, Degree of Saturation, unitless
+ * @return humW double, Humidity Ratio, unitless
+ * @return specVol double, Specific Volume, ft^3/lb
+ * @return entropy double, Entropy, B/lb
+ * @return dewPoint double, Dewpoint, deg F
+ * @return rh double, Relative Humidity, %
+ * @return satPress double, Saturation Pressure, in Hg
  */
 	// TODO ensure correctness
 	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
@@ -84,8 +95,8 @@ public:
 				   InputType const inputType, double const specificGravity)
 		: tdo(dryBulbTemp), pso(staticPressure), pbo(barometricPressure), g(specificGravity), gasType(gasType)
 	{
-		double const satPress = calculateSaturationPressure(tdo);
-		double rh = 0;
+		satPress = calculateSaturationPressure(tdo);
+		rh = 0;
 		if (inputType == InputType::RelativeHumidity)
 		{
 			rh = relativeHumidityOrDewPoint / 100;
@@ -99,8 +110,24 @@ public:
 			throw std::runtime_error("The wrong constructor for BaseGasDensity was called here - check inputType field");
 		}
 
-		double const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
-		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh * rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+		calculateFanAttributes(inputType, relativeHumidityOrDewPoint);
+
+		/*
+		std::ofstream fout;
+    	fout.open("debug.txt", std::ios::app);
+		fout << "po:       " << po << std::endl;
+		fout << "pIn:      " << pIn << std::endl;
+		fout << "satW:     " << satW << std::endl;
+		fout << "satDeg:   " << satDeg << std::endl;
+		fout << "humW:     " << humW << std::endl;
+		fout << "specVol:  " << specVol << std::endl;
+		fout << "enthalpy: " << enthalpy << std::endl;
+		fout << "dewPoint: " << dewPoint << std::endl;
+		fout << "rh:       " << rh << std::endl;
+		fout << "satPress: " << satPress << std::endl;
+		fout << "------------------------------" << std::endl << std::endl;
+		fout.close();
+		*/
 	}
 
 	BaseGasDensity(double const dryBulbTemp, double const staticPressure, double const barometricPressure,
@@ -110,15 +137,69 @@ public:
 	{
 		if (inputType != InputType::WetBulbTemp)
 			throw std::runtime_error("The wrong constructor for BaseGasDensity was called - check inputType field");
-		double const satPress = calculateSaturationPressure(tdo);
-		double const rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
-		double const rhRatio = calculateRatioRH(tdo, rh, pbo, specificGravity);
-		po = (((pbo + (pso / 13.6)) - satPress * rh) * g + satPress * rh + rhRatio) / ((21.85 / (g * 29.98)) * (tdo + 459.7));
+		satPress = calculateSaturationPressure(tdo);
+		rh = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
+
+		calculateFanAttributes(inputType);
+
+		/*
+		std::ofstream fout;
+    	fout.open("debug.txt", std::ios::app);
+		fout << "Wet Bulb" << std::endl;
+		fout << "po:       " << po << std::endl;
+		fout << "pIn:      " << pIn << std::endl;
+		fout << "satW:     " << satW << std::endl;
+		fout << "satDeg:   " << satDeg << std::endl;
+		fout << "humW:     " << humW << std::endl;
+		fout << "specVol:  " << specVol << std::endl;
+		fout << "enthalpy: " << enthalpy << std::endl;
+		fout << "dewPoint: " << dewPoint << std::endl;
+		fout << "rh:       " << rh << std::endl;
+		fout << "satPress: " << satPress << std::endl;
+		fout << "------------------------------" << std::endl << std::endl;
+		fout.close();
+		*/
 	}
 
 	double getGasDensity() const
 	{
 		return po;
+	}
+	double getAbsolutePressureIn() const
+	{
+		return pIn;
+	}
+	double getSaturatedHumidityRatio() const
+	{
+		return satW;
+	}
+	double getDegreeOfSaturation() const
+	{
+		return satDeg;
+	}
+	double getHumidityRatio() const
+	{
+		return humW;
+	}
+	double getSpecificVolume() const
+	{
+		return specVol;
+	}
+	double getEnthalpy() const
+	{
+		return enthalpy;
+	}
+	double getDewPoint() const
+	{
+		return dewPoint;
+	}
+	double getRelativeHumidity() const
+	{
+		return rh;
+	}
+	double getSaturationPressure() const
+	{
+		return satPress;
 	}
 
 private:
@@ -126,12 +207,23 @@ private:
  * @brief Calculates Saturation Pressure
  * 
  * @param dryBulbTemp double, temperature of inputted air in °F
+ * @return satPress double, Saturation Pressure, in Hg
  */
 	double calculateSaturationPressure(double dryBulbTemp) const
 	{
-		double const C1 = -5674.5359, C2 = 6.3925247, C3 = -0.009677843, C4 = 0.00000062215701;
-		double const C5 = 2.0747825 * std::pow(10, -9), C6 = -9.484024 * std::pow(10, -13), C7 = 4.1635019;
-		double const C8 = -5800.2206, C9 = 1.3914093, C10 = -0.048640239, C11 = 0.000041764768, C12 = -0.000000014452093, C13 = 6.5459673;
+		double const C1 = -5674.5359;
+		double const C2 = 6.3925247;
+		double const C3 = -0.009677843;
+		double const C4 = 0.00000062215701;
+		double const C5 = 2.0747825 * std::pow(10, -9);
+		double const C6 = -9.484024 * std::pow(10, -13);
+		double const C7 = 4.1635019;
+		double const C8 = -5800.2206;
+		double const C9 = 1.3914993;
+		double const C10 = -0.048640239;
+		double const C11 = 0.000041764768;
+		double const C12 = -0.000000014452093;
+		double const C13 = 6.5459673;
 
 		double const tKelvin = (dryBulbTemp + 459.67) * 0.555556;
 
@@ -151,6 +243,7 @@ private:
  * @param relativeHumidity double, relative humidity as %
  * @param barometricPressure double, pressure in Hg 
  * @param specificGravity double, specific gravity, unitless
+ * @return humW double, Humidity Ratio, unitless
  */
 	double calculateRatioRH(const double dryBulbTemp, const double relativeHumidity, const double barometricPressure,
 							const double specificGravity) const
@@ -168,15 +261,68 @@ private:
 	double calculateRelativeHumidityFromWetBulb(const double dryBulbTemp, const double wetBulbTemp,
 												const double cpGas) const
 	{
-		double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
+		double const nMol = 0.62198;
+		double const local_pIn = pbo + (pso / 13.608703);
+		//double const pAtm = 29.9213 / pbo, nMol = 18.02 / (g * 28.98);
 		double const psatDb = calculateSaturationPressure(dryBulbTemp);
 		//	double const wSat = nMol * psatDb / (pAtm - psatDb);
 		double const psatWb = calculateSaturationPressure(wetBulbTemp);
-		double const wStar = nMol * psatWb / (pAtm - psatWb);
-		double const w = ((1061 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1061 + (0.444 * dryBulbTemp) - wetBulbTemp);
+		double const wStar = nMol * psatWb / (local_pIn - psatWb);
+		double const w = ((1093 - (1 - 0.444) * wetBulbTemp) * wStar - cpGas * (dryBulbTemp - wetBulbTemp)) / (1093 + (0.444 * dryBulbTemp) - wetBulbTemp);
 
-		double const pV = pAtm * w / (nMol + w);
+		double const pV = local_pIn * w / (nMol + w);
+
+		/*
+		std::ofstream fout;
+    	fout.open("debug.txt", std::ios::app);
+		fout << "calculateRelativeHumidityFromWetBulb" << std::endl;
+		fout << "psatDb: " << psatDb << std::endl;
+		fout << "psatWb: " << psatWb << std::endl;
+		fout << "wStar:  " << wStar << std::endl;
+		fout << "w:      " << w << std::endl;
+		fout << "------------------------------" << std::endl << std::endl;
+		fout.close();
+		*/
+		
 		return pV / psatDb;
+	}
+	/**
+ * @brief Calculates numerous fan attributes. Note: This function assumes that the member variables pbo, pso, satPress, and rh already 
+ 		  have valid values.
+ * 
+ * @param inputType const, type of input, unitless
+ * @param relativeHumidityOrDewPoint double, const, relative humidity in % or Dewpoint in °F
+ */
+	void calculateFanAttributes(InputType const inputType, double const relativeHumidityOrDewPoint = -1)
+	{
+		double const nMol = 0.62198;
+
+		pIn = pbo + (pso / 13.608703);
+		satW = nMol * satPress / (pIn - satPress);
+		satDeg = rh / ( 1 + ( 1 - rh) * satW / nMol);
+		humW = satDeg * satW;
+		specVol = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humW)) / (28.9645 * pIn * 0.4911541);
+		po = (1 / specVol) * (1 + humW);
+		enthalpy = (0.247 * tdo) + (humW * (1061 + 0.444 * tdo));
+
+		if(inputType != InputType::DewPoint)
+		{
+			double const alpha = std::log(pIn * 0.4911541 * humW / (nMol + humW));
+
+			if(tdo < 32)
+			{
+				dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
+			}
+			else
+			{
+				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow((pIn * 0.4911541 * humW / (0.62196 + humW)), 0.1984));
+			}
+			
+		}
+		else
+		{
+			dewPoint = relativeHumidityOrDewPoint;
+		}
 	}
 
 	// dry bulb temp, reference static pressure, reference barometric pressure, gas density respectively
@@ -189,6 +335,19 @@ private:
 	 */
 	double po, g;
 	const GasType gasType;
+
+	/**
+	 * @param pIn double, Absolute Pressure In in in Hg XXX
+	 * @param satW double, Saturated Humidity Ratio, unitless
+	 * @param satDeg double, Degree of Saturation, unitless
+	 * @param humW double, Humidity Ratio, unitless
+	 * @param specVol double, Specific Volume, ft^3/lb
+	 * @param entropy double, Entropy, B/lb
+	 * @param dewPoint double, Dewpoint, deg F
+	 * @param rh double, Relative Humidity, %
+	 * @param satPress double, Saturation Pressure, in Hg
+	 */
+	double pIn, satW, satDeg, humW, specVol, enthalpy, dewPoint, rh, satPress;
 
 	friend class PlaneData;
 	friend class Fan203;
