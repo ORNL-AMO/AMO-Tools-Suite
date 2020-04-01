@@ -115,8 +115,8 @@ RUN npm install tap@12.6.0 --save-dev
 WORKDIR /home/
 
 # Install emacs
-RUN apt-get -y install emacs
-RUN emacs --version
+#RUN apt-get -y install emacs
+#RUN emacs --version
 
 # Install sqlite3
 RUN apt-get install sqlite3 libsqlite3-dev

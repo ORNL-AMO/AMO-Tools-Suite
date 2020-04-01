@@ -179,7 +179,7 @@ test('Air System Capacity', function (t) {
 });
 
 test('Air Velocity', function (t) {
-    t.plan(13);
+    t.plan(21);
     t.type(bindings.airVelocity, 'function');
 
     var compare = function(results, expected) {
@@ -195,13 +195,21 @@ test('Air Velocity', function (t) {
         t.equal(rnd(results.four), expected[9]);
         t.equal(rnd(results.five), expected[10]);
         t.equal(rnd(results.six), expected[11]);
+        t.equal(rnd(results.eight), expected[12]);
+        t.equal(rnd(results.ten), expected[13]);
+        t.equal(rnd(results.twelve), expected[14]);
+        t.equal(rnd(results.fourteen), expected[15]);
+        t.equal(rnd(results.sixteen), expected[16]);
+        t.equal(rnd(results.eighteen), expected[17]);
+        t.equal(rnd(results.twenty), expected[18]);
+        t.equal(rnd(results.twentyFour), expected[19]);
     };
 
     var inp = {
         airFlow: 1800, pipePressure: 100, atmosphericPressure: 14.7
     };
 
-    compare(bindings.airVelocity(inp), [1845.510026, 1044.628317, 643.782567, 369.102005, 271.398533, 164.777681, 115.585179, 74.919216, 55.981093, 43.491988, 27.68265, 19.164175]);
+    compare(bindings.airVelocity(inp), [1845.510026, 1044.628317, 643.782567, 369.102005, 271.398533, 164.777681, 115.585179, 74.919216, 55.981093, 43.491988, 27.68265, 19.164175, 11.068633, 7.021598, 4.947748, 4.09204, 3.133294, 2.471665, 1.991558, 1.376904]);
 });
 
 test('Pipe Sizing', function (t) {
