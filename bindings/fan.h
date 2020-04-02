@@ -438,27 +438,27 @@ NAN_METHOD(fanResultsModified)
 
 void SetBaseGasDensityData(Local<Object> & obj, const BaseGasDensity & bgd)
 {
-	Local<String> po = Nan::New<String>("po").ToLocalChecked();
-	Local<String> pIn = Nan::New<String>("pIn").ToLocalChecked();
-	Local<String> satW = Nan::New<String>("satW").ToLocalChecked();
-	Local<String> satDeg = Nan::New<String>("satDeg").ToLocalChecked();
-	Local<String> humW = Nan::New<String>("humW").ToLocalChecked();
-	Local<String> specVol = Nan::New<String>("specVol").ToLocalChecked();
+	Local<String> gasDensity = Nan::New<String>("gasDensity").ToLocalChecked();
+	Local<String> absolutePressure = Nan::New<String>("absolutePressure").ToLocalChecked();
+	Local<String> saturatedHumidity = Nan::New<String>("saturatedHumidity").ToLocalChecked();
+	Local<String> saturationDegree = Nan::New<String>("saturationDegree").ToLocalChecked();
+	Local<String> humidityRatio = Nan::New<String>("humidityRatio").ToLocalChecked();
+	Local<String> specificVolume = Nan::New<String>("specificVolume").ToLocalChecked();
 	Local<String> enthalpy = Nan::New<String>("enthalpy").ToLocalChecked();
 	Local<String> dewPoint = Nan::New<String>("dewPoint").ToLocalChecked();
-	Local<String> rh = Nan::New<String>("rh").ToLocalChecked();
-	Local<String> satPress = Nan::New<String>("satPress").ToLocalChecked();
+	Local<String> relativeHumidity = Nan::New<String>("relativeHumidity").ToLocalChecked();
+	Local<String> saturationPressure = Nan::New<String>("saturationPressure").ToLocalChecked();
 
-	Nan::Set(obj, po, Nan::New<Number>(bgd.getGasDensity()));
-    Nan::Set(obj, pIn, Nan::New<Number>(bgd.getAbsolutePressureIn()));
-    Nan::Set(obj, satW, Nan::New<Number>(bgd.getSaturatedHumidityRatio()));
-    Nan::Set(obj, satDeg, Nan::New<Number>(bgd.getDegreeOfSaturation()));
-    Nan::Set(obj, humW, Nan::New<Number>(bgd.getHumidityRatio()));
-    Nan::Set(obj, specVol, Nan::New<Number>(bgd.getSpecificVolume()));
+	Nan::Set(obj, gasDensity, Nan::New<Number>(bgd.getGasDensity()));
+    Nan::Set(obj, absolutePressure, Nan::New<Number>(bgd.getAbsolutePressureIn()));
+    Nan::Set(obj, saturatedHumidity, Nan::New<Number>(bgd.getSaturatedHumidityRatio()));
+    Nan::Set(obj, saturationDegree, Nan::New<Number>(bgd.getDegreeOfSaturation()));
+    Nan::Set(obj, humidityRatio, Nan::New<Number>(bgd.getHumidityRatio()));
+    Nan::Set(obj, specificVolume, Nan::New<Number>(bgd.getSpecificVolume()));
 	Nan::Set(obj, enthalpy, Nan::New<Number>(bgd.getEnthalpy()));
     Nan::Set(obj, dewPoint, Nan::New<Number>(bgd.getDewPoint()));
-    Nan::Set(obj, rh, Nan::New<Number>(bgd.getRelativeHumidity()));
-    Nan::Set(obj, satPress, Nan::New<Number>(bgd.getSaturationPressure()));
+    Nan::Set(obj, relativeHumidity, Nan::New<Number>(bgd.getRelativeHumidity()));
+    Nan::Set(obj, saturationPressure, Nan::New<Number>(bgd.getSaturationPressure()));
 }
 NAN_METHOD(getBaseGasDensityRelativeHumidity)
 {
