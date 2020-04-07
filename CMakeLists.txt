@@ -212,7 +212,7 @@ set(SOURCE_FILES
         src/calculator/motor/MotorPerformance.cpp
         src/calculator/pump/PumpEfficiency.cpp
         bindings-wasm/fan/fan.cpp
-        )
+        bindings-wasm/fan/fanEnum.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
