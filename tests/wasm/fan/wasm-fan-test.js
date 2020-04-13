@@ -236,6 +236,48 @@ function getBaseGasDensity() {
 //     //FanShaftPower
 // }
 
+function getOptimalFanEfficiency()
+{   
+    //let fanType = 0;
+    let fanType = Module.OptimalFanEfficiencyFanType.AirfoilSISW
+    let fanSpeed = 1180;
+    let flowRate = 40000;
+    let inletPressure = -9;
+    let outletPressure = 1;
+    let compressibility = 0.995;
+
+    let optimalEfficiencyFactor = new Module.OptimalFanEfficiency(fanType, fanSpeed, flowRate, inletPressure, outletPressure, compressibility);
+    let optimalEfficiencyFactorResult = optimalEfficiencyFactor.calculate();
+    optimalEfficiencyFactorResult = optimalEfficiencyFactorResult * 100;
+    testNumberValue(optimalEfficiencyFactorResult, 80.56103029, "Optimal Efficiency Factor (input 1)");
+
+    //fanType = 11;
+    fanType = Module.OptimalFanEfficiencyFanType.LongShavings;
+    fanSpeed = 1180;
+    flowRate = 10000;
+    inletPressure = -9;
+    outletPressure = 1;
+    compressibility = 0.995;
+
+    optimalEfficiencyFactor = new Module.OptimalFanEfficiency(fanType, fanSpeed, flowRate, inletPressure, outletPressure, compressibility);
+    optimalEfficiencyFactorResult = optimalEfficiencyFactor.calculate();
+    optimalEfficiencyFactorResult = optimalEfficiencyFactorResult * 100;
+    testNumberValue(optimalEfficiencyFactorResult, 60.6953126, "Optimal Efficiency Factor (input 2)");
+
+    //fanType = 6;
+    fanType = Module.OptimalFanEfficiencyFanType.BackwardCurvedDIDW;
+    fanSpeed = 1180;
+    flowRate = 500000;
+    inletPressure = -6;
+    outletPressure = 1;
+    compressibility = 0.995;
+
+    optimalEfficiencyFactor = new Module.OptimalFanEfficiency(fanType, fanSpeed, flowRate, inletPressure, outletPressure, compressibility);
+    optimalEfficiencyFactorResult = optimalEfficiencyFactor.calculate();
+    optimalEfficiencyFactorResult = optimalEfficiencyFactorResult * 100;
+    testNumberValue(optimalEfficiencyFactorResult, 29.31237501, "Optimal Efficiency Factor (input 3)");
+}
+
 function getCompressibilityFactor()
 {
     let moverShaftPower = 300;
@@ -278,4 +320,5 @@ function getCompressibilityFactor()
 resultsExisting();
 resultsModified();
 getBaseGasDensity();
+getOptimalFanEfficiency();
 getCompressibilityFactor();
