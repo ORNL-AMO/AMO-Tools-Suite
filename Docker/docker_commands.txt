@@ -14,7 +14,7 @@ docker login
 docker push comma64/ornl:amo-tools-suite
 
 PowerShell (remove all images):
-docker rmi $(docker images -q)
+docker rmi $(docker images -q) --force
 
 docker stop $(docker ps -aq) 2>/dev/null || true
 docker rm $(docker ps -a -q) 2>/dev/null|| true

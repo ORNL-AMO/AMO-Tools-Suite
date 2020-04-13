@@ -271,6 +271,14 @@ NAN_METHOD(airVelocity) {
 	SetR("four", output.four);
 	SetR("five", output.five);
 	SetR("six", output.six);
+	SetR("eight", output.eight);
+	SetR("ten", output.ten);
+	SetR("twelve", output.twelve);
+	SetR("fourteen", output.fourteen);
+	SetR("sixteen", output.sixteen);
+	SetR("eighteen", output.eighteen);
+	SetR("twenty", output.twenty);
+	SetR("twentyFour", output.twentyFour);
 
 	info.GetReturnValue().Set(r);
 }
