@@ -1,4 +1,5 @@
 #include "fans/Fan203.h"
+#include "fans/OptimalFanEfficiency.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -14,4 +15,17 @@ EMSCRIPTEN_BINDINGS(fan_enums)
         .value("RelativeHumidity", BaseGasDensity::InputType::RelativeHumidity)
         .value("WetBulbTemp", BaseGasDensity::InputType::WetBulbTemp);
 
+    enum_<OptimalFanEfficiency::FanType>("OptimalFanEfficiencyFanType")
+        .value("AirfoilSISW", OptimalFanEfficiency::FanType::AirfoilSISW)
+        .value("BackwardCurvedSISW", OptimalFanEfficiency::FanType::BackwardCurvedSISW)
+        .value("RadialSISW", OptimalFanEfficiency::FanType::RadialSISW)
+        .value("RadialTipSISW", OptimalFanEfficiency::FanType::RadialTipSISW)
+        .value("BackwardInclinedSISW", OptimalFanEfficiency::FanType::BackwardInclinedSISW)
+        .value("AirfoilDIDW", OptimalFanEfficiency::FanType::AirfoilDIDW)
+        .value("BackwardCurvedDIDW", OptimalFanEfficiency::FanType::BackwardCurvedDIDW)
+        .value("BackwardInclinedDIDW", OptimalFanEfficiency::FanType::BackwardInclinedDIDW)
+        .value("VaneAxial", OptimalFanEfficiency::FanType::VaneAxial)
+        .value("AirHandling", OptimalFanEfficiency::FanType::AirHandling)
+        .value("MaterialHandling", OptimalFanEfficiency::FanType::MaterialHandling)
+        .value("LongShavings", OptimalFanEfficiency::FanType::LongShavings);
 }

@@ -99,6 +99,12 @@ EMSCRIPTEN_BINDINGS(base_gas_density)
 //fanCurve
 
 //optimalFanEfficiency
+EMSCRIPTEN_BINDINGS(optimal_fan_efficiency)
+{
+    class_<OptimalFanEfficiency>("OptimalFanEfficiency")
+        .constructor<OptimalFanEfficiency::FanType, double, double, double, double, double>()
+        .function("calculate", &OptimalFanEfficiency::calculate);
+}
 
 //compressibilityFactor
 EMSCRIPTEN_BINDINGS(compressibility_factor)
