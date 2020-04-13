@@ -135,108 +135,108 @@ function getBaseGasDensity() {
     testNumberValue(wetBulbResult, 0.065456, "Gas Density (wetBulb)");
 }
 
-fan203()
-{
-    var area = 143.63 * 32.63 / 144.0;
-    var inp = {
+// fan203()
+// {
+//     var area = 143.63 * 32.63 / 144.0;
+//     var inp = {
 
-        PlaneData: {
-            plane5upstreamOfPlane2: true,
-            totalPressureLossBtwnPlanes1and4: 0,
-            totalPressureLossBtwnPlanes2and5: 0.627,
+//         PlaneData: {
+//             plane5upstreamOfPlane2: true,
+//             totalPressureLossBtwnPlanes1and4: 0,
+//             totalPressureLossBtwnPlanes2and5: 0.627,
 
-            FanEvaseOrOutletFlange: {
-                area: 70 * 78 / 144.0,
-                dryBulbTemp: 132.7,
-                barometricPressure: 26.57
-            },
-            FlowTraverse: {
-                area: area,
-                dryBulbTemp: 123,
-                barometricPressure: 26.57,
-                staticPressure: -18.1,
-                pitotTubeCoefficient: 0.87292611371180784,
-                traverseData: [
-                    [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
-                    [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
-                    [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
-                ]
-            },
-            AddlTraversePlanes: [
-                {
-                    area: area,
-                    dryBulbTemp: 123,
-                    barometricPressure: 26.57,
-                    staticPressure: -17.0,
-                    pitotTubeCoefficient: 0.87292611371180784,
-                    traverseData: [
-                        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
-                        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
-                        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
-                    ]
-                }
-            ],
-            InletMstPlane: {
-                area: area * 2,
-                dryBulbTemp: 123,
-                barometricPressure: 26.57,
-                staticPressure: -17.55
-            },
-            OutletMstPlane: {
-                area: (55.42 * 60.49) / 144.0,
-                dryBulbTemp: 132.7,
-                barometricPressure: 26.57,
-                staticPressure: 1.8
-            }
-        },
-        BaseGasDensity: {
-            dryBulbTemp: 123,
-            staticPressure: -17.6,
-            barometricPressure: 26.57,
-            gasDensity: 0.0547,
-            gasType: 'AIR'
-        },
-        FanShaftPower: {
-            motorShaftPower: (4200 * 205 * 0.88 * Math.sqrt(3)) / 746.0,
-            efficiencyMotor: 95,
-            efficiencyVFD: 100,
-            efficiencyBelt: 100,
-            sumSEF: 0
-        }
-    };
-    let fanSpeed = 1191;
-    let motorSpeed = 1191;
-    let fanSpeedCorrected = 1170;
-    let densityCorrected = 0.05;
-    let pressureBarometricCorrected = 26.28;
-    //FanRatedInfo
-    let fanRatedInfoInstance = new Module.FanRatedInfo(fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected);
-    //plane data
-    //FlangePlane
-    let flangePlaneArea = area * 2;
-    let flangePlaneLength = 32.63;
-    let dryBulbTemp = 123;
-    let barometricPressure = 26.57;
-    let flangePlaneInstance = new Module.FlangePlane(flangePlaneArea, dryBulbTemp, barometricPressure);
-    //TraversePlane
-    let traverseArea = area;
-    let traverseDryBulbTemp = 123;
-    let traverseBarometricPressure = 26.57;
-    let traverseStaticPressure = -18.1;
-    let pitotTubeCoefficient = 0.87292611371180784;
-    let traversePlaneTraverseData = [
-        [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
-        [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
-        [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
-    ]
-    let traversePlaneInstance = new Module.TraversePlane()
-    //MstPlane
-    //FanShaftPower
-    //BaseGasDensity
-    //FanShaftPower
-}
+//             FanEvaseOrOutletFlange: {
+//                 area: 70 * 78 / 144.0,
+//                 dryBulbTemp: 132.7,
+//                 barometricPressure: 26.57
+//             },
+//             FlowTraverse: {
+//                 area: area,
+//                 dryBulbTemp: 123,
+//                 barometricPressure: 26.57,
+//                 staticPressure: -18.1,
+//                 pitotTubeCoefficient: 0.87292611371180784,
+//                 traverseData: [
+//                     [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+//                     [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+//                     [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+//                 ]
+//             },
+//             AddlTraversePlanes: [
+//                 {
+//                     area: area,
+//                     dryBulbTemp: 123,
+//                     barometricPressure: 26.57,
+//                     staticPressure: -17.0,
+//                     pitotTubeCoefficient: 0.87292611371180784,
+//                     traverseData: [
+//                         [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
+//                         [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
+//                         [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+//                     ]
+//                 }
+//             ],
+//             InletMstPlane: {
+//                 area: area * 2,
+//                 dryBulbTemp: 123,
+//                 barometricPressure: 26.57,
+//                 staticPressure: -17.55
+//             },
+//             OutletMstPlane: {
+//                 area: (55.42 * 60.49) / 144.0,
+//                 dryBulbTemp: 132.7,
+//                 barometricPressure: 26.57,
+//                 staticPressure: 1.8
+//             }
+//         },
+//         BaseGasDensity: {
+//             dryBulbTemp: 123,
+//             staticPressure: -17.6,
+//             barometricPressure: 26.57,
+//             gasDensity: 0.0547,
+//             gasType: 'AIR'
+//         },
+//         FanShaftPower: {
+//             motorShaftPower: (4200 * 205 * 0.88 * Math.sqrt(3)) / 746.0,
+//             efficiencyMotor: 95,
+//             efficiencyVFD: 100,
+//             efficiencyBelt: 100,
+//             sumSEF: 0
+//         }
+//     };
+//     let fanSpeed = 1191;
+//     let motorSpeed = 1191;
+//     let fanSpeedCorrected = 1170;
+//     let densityCorrected = 0.05;
+//     let pressureBarometricCorrected = 26.28;
+//     //FanRatedInfo
+//     let fanRatedInfoInstance = new Module.FanRatedInfo(fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected);
+//     //plane data
+//     //FlangePlane
+//     let flangePlaneArea = area * 2;
+//     let flangePlaneLength = 32.63;
+//     let dryBulbTemp = 123;
+//     let barometricPressure = 26.57;
+//     let flangePlaneInstance = new Module.FlangePlane(flangePlaneArea, dryBulbTemp, barometricPressure);
+//     //TraversePlane
+//     let traverseArea = area;
+//     let traverseDryBulbTemp = 123;
+//     let traverseBarometricPressure = 26.57;
+//     let traverseStaticPressure = -18.1;
+//     let pitotTubeCoefficient = 0.87292611371180784;
+//     let traversePlaneTraverseData = [
+//         [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+//         [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+//         [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+//     ]
+//     let traversePlaneInstance = new Module.TraversePlane()
+//     //MstPlane
+//     //FanShaftPower
+//     //BaseGasDensity
+//     //FanShaftPower
+// }
 
-getCompressibilityFactor()
+function getCompressibilityFactor()
 {
     let moverShaftPower = 300;
     let inletPressure = -8.5;
