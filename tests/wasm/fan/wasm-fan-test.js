@@ -236,7 +236,46 @@ fan203()
     //FanShaftPower
 }
 
+getCompressibilityFactor()
+{
+    let moverShaftPower = 300;
+    let inletPressure = -8.5;
+    let outletPressure = 3;
+    let barometricPressure = 29;
+    let flowRate = 1000;
+    let specificHeatRatio = 1.4;
+
+    let compressibilityFactor = new Module.CompressibilityFactor(moverShaftPower, inletPressure, outletPressure, barometricPressure, flowRate, specificHeatRatio);
+    let compressibilityFactorResult = compressibilityFactor.calculate();
+    testNumberValue(compressibilityFactorResult, 1.5795535958, "Compressibility Factor (input 1)");
+
+
+    moverShaftPower = 566;
+    inletPressure = -16.36;
+    outletPressure = 1.1;
+    barometricPressure = 29.36;
+    flowRate = 129691;
+    specificHeatRatio = 1.4;
+
+    compressibilityFactor = new Module.CompressibilityFactor(moverShaftPower, inletPressure, outletPressure, barometricPressure, flowRate, specificHeatRatio);
+    compressibilityFactorResult = compressibilityFactor.calculate();
+    testNumberValue(compressibilityFactorResult, 0.9879934727, "Compressibility Factor (input 2)");
+
+    
+    moverShaftPower = 623;
+    inletPressure = -8.92;
+    outletPressure = 2.28;
+    barometricPressure = 29.36;
+    flowRate = 151961;
+    specificHeatRatio = 1.4;
+
+    compressibilityFactor = new Module.CompressibilityFactor(moverShaftPower, inletPressure, outletPressure, barometricPressure, flowRate, specificHeatRatio);
+    compressibilityFactorResult = compressibilityFactor.calculate();
+    testNumberValue(compressibilityFactorResult, 0.9953146218, "Compressibility Factor (input 3)");
+}
+
 //call tests
 resultsExisting();
 resultsModified();
 getBaseGasDensity();
+getCompressibilityFactor();
