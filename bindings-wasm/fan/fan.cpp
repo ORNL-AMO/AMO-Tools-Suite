@@ -2,6 +2,7 @@
 #include "results/Results.h"
 #include "results/InputData.h"
 #include "fans/Fan203.h"
+#include "fans/CompressibilityFactor.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -100,3 +101,9 @@ EMSCRIPTEN_BINDINGS(base_gas_density)
 //optimalFanEfficiency
 
 //compressibilityFactor
+EMSCRIPTEN_BINDINGS(compressibility_factor)
+{
+    class_<CompressibilityFactor>("CompressibilityFactor")
+        .constructor<double, double, double, double, double, double>()
+        .function("calculate", &CompressibilityFactor::calculate);
+}
