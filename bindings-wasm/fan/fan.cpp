@@ -3,6 +3,7 @@
 #include "results/InputData.h"
 #include "fans/Fan203.h"
 #include "fans/CompressibilityFactor.h"
+#include "fans/FanCurve.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -97,6 +98,17 @@ EMSCRIPTEN_BINDINGS(base_gas_density)
 //getPlaneResults
 
 //fanCurve
+/*
+FanCurve(const double density, const double densityCorrected, const double speed, const double speedCorrected,
+	         const double pressureBarometric, const double pressureBarometricCorrected, const double pt1Factor,
+	         const double gamma, const double gammaCorrected, const double area1, const double area2, FanCurveData data)
+*/
+EMSCRIPTEN_BINDINGS(fan_curve)
+{
+    class_<FanCurve>("FanCurve")
+        .constructor<double, double, double, double, double, double, double, double, double, double, double, FanCurveData>()
+        .function("calculate", &FanCurve::calculate);
+}
 
 //optimalFanEfficiency
 EMSCRIPTEN_BINDINGS(optimal_fan_efficiency)

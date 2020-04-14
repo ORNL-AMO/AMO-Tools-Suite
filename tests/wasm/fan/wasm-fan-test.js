@@ -236,6 +236,11 @@ function getBaseGasDensity() {
 //     //FanShaftPower
 // }
 
+function getFanCurve()
+{
+    //
+}
+
 function getOptimalFanEfficiency()
 {   
     //let fanType = 0;
@@ -320,5 +325,6 @@ function getCompressibilityFactor()
 resultsExisting();
 resultsModified();
 getBaseGasDensity();
+//getFanCurve();
 getOptimalFanEfficiency();
 getCompressibilityFactor();
