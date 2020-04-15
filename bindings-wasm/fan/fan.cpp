@@ -77,6 +77,7 @@ EMSCRIPTEN_BINDINGS(fan_203)
         .constructor<double, double, double, Fan203::Results, Fan203::Results>();
 
     // register_vector<TraversePlane>("TraversePlaneVector");
+    //traverse_plane_vector<TraversePlane>("TraversePlaneVector");
     register_vector<double>("DoubleVector");
 }
 
