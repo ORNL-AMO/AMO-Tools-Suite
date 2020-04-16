@@ -1,3 +1,15 @@
+function returnDoubleVector(doublesArray)
+{
+    let doubleVector = new Module.DoubleVector();
+
+    for (x of doublesArray)
+    {
+        doubleVector.push_back(x);
+    }
+
+    return doubleVector;
+}
+
 function resultsExisting() {
     let fanSpeed = 1180;
     let drive = Module.Drive.DIRECT_DRIVE;
@@ -484,11 +496,41 @@ function getCompressibilityFactor()
     testNumberValue(compressibilityFactorResult, 0.9953146218, "Compressibility Factor (input 3)");
 }
 
+function test_traverse_plane_creation()
+{
+    let area = 143.63 * 32.63 / 144.0;
+
+    let traverseArea = area;
+    let traverseDryBulbTemp = 123;
+    let traverseBarometricPressure = 26.57;
+    let traverseStaticPressure = -18.1;
+    let pitotTubeCoefficient = 0.87292611371180784;
+
+    let doubles = [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130];
+    let doubleVector = returnDoubleVector(doubles);
+    
+    doubles = [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865];
+    let doubleVector2 = returnDoubleVector(doubles);
+
+    doubles = [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569];
+    let doubleVector3 = returnDoubleVector(doubles);
+
+    let traversePlaneTraverseData = new Module.DoubleVector2D();
+
+    traversePlaneTraverseData.push_back(doubleVector);
+    traversePlaneTraverseData.push_back(doubleVector2);
+    traversePlaneTraverseData.push_back(doubleVector3);
+
+    // area, dryBulbTemp, barometricPressure, staticPressure, pitotTubeCoefficient, traverseInputData
+    let traversePlaneInstance = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
+}
+
 //call tests
 resultsExisting();
 resultsModified();
 getBaseGasDensity();
-fan203();
+//fan203();
 //getFanCurve();
 getOptimalFanEfficiency();
 getCompressibilityFactor();
+test_traverse_plane_creation();
