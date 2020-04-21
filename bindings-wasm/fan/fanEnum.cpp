@@ -1,5 +1,6 @@
 #include "fans/Fan203.h"
 #include "fans/OptimalFanEfficiency.h"
+#include "fans/FanCurve.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -28,4 +29,14 @@ EMSCRIPTEN_BINDINGS(fan_enums)
         .value("AirHandling", OptimalFanEfficiency::FanType::AirHandling)
         .value("MaterialHandling", OptimalFanEfficiency::FanType::MaterialHandling)
         .value("LongShavings", OptimalFanEfficiency::FanType::LongShavings);
+
+    enum_<FanCurveData::CalculationType>("FanCurveDataCalculationType")
+        .value("BaseCurve", FanCurveData::CalculationType::BaseCurve)
+        .value("RatedPoint", FanCurveData::CalculationType::RatedPoint)
+        .value("BaseOperatingPoint", FanCurveData::CalculationType::BaseOperatingPoint);
+
+    enum_<FanCurveType>("FanCurveType")
+        .value("FanStaticPressure", FanCurveType::FanStaticPressure)
+        .value("FanTotalPressure", FanCurveType::FanTotalPressure)
+        .value("StaticPressureRise", FanCurveType::StaticPressureRise);
 }
