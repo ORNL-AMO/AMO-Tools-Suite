@@ -135,8 +135,25 @@ EMSCRIPTEN_BINDINGS(fan_203)
     class_<Fan203>("Fan203")
         .constructor<FanRatedInfo, PlaneData, BaseGasDensity, FanShaftPower>()
         .function("calculate", &Fan203::calculate);
+    //const double fanEfficiencyTotalPressure, fanEfficiencyStaticPressure, fanEfficiencyStaticPressureRise;
+	//const Results asTested, converted;
     class_<Fan203::Output>("Fsat203Output")
-        .constructor<double, double, double, Fan203::Results, Fan203::Results>();
+        .constructor<double, double, double, Fan203::Results, Fan203::Results>()
+        .property("fanEfficiencyTotalPressure", &Fan203::Output::fanEfficiencyTotalPressure)
+        .property("fanEfficiencyStaticPressure", &Fan203::Output::fanEfficiencyStaticPressure)
+        .property("fanEfficiencyStaticPressureRise", &Fan203::Output::fanEfficiencyStaticPressureRise);
+        //.property("flow", &Fan203::Output::flow)
+        //.property("kpc", &Fan203::Output::kpc)
+        //.property("power", &Fan203::Output::power)
+        //.property("pressureStatic", &Fan203::Output::pressureStatic)
+        //.property("pressureTotal", &Fan203::Output::pressureTotal)
+        //.property("staticPressureRise", &Fan203::Output::staticPressureRise)
+        //.property("flowCorrected", &Fan203::Output::flowCorrected)
+        //.property("kpcCorrected", &Fan203::Output::kpcCorrected)
+        //.property("powerCorrected", &Fan203::Output::powerCorrected)
+        //.property("pressureStaticCorrected", &Fan203::Output::pressureStaticCorrected)
+        //.property("pressureTotalCorrected", &Fan203::Output::pressureTotalCorrected)
+        //.property("staticPressureRiseCorrected", &Fan203::Output::staticPressureRiseCorrected);
 
     register_vector<double>("DoubleVector");
     register_vector<std::vector<double>>("DoubleVector2D");

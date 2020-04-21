@@ -330,34 +330,9 @@ function fan203()
     traversePlaneTraverseData.push_back(traverseDataVector3);
 
     traversePlaneInstance2 = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
-
-    traverseArea = area;
-    traverseDryBulbTemp = 124;
-    traverseBarometricPressure = 26.57;
-    traverseStaticPressure = -16.5;
-    pitotTubeCoefficient = 0.872;
-    traversePlaneTraverseData = new Module.DoubleVector2D();
-
-    traversePlaneTraverseDoubles = [
-        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
-        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
-        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
-    ];
-
-    traverseDataVector = returnDoubleVector(traversePlaneTraverseDoubles[0]);
-    traverseDataVector2 = returnDoubleVector(traversePlaneTraverseDoubles[1]);
-    traverseDataVector3 = returnDoubleVector(traversePlaneTraverseDoubles[2]);
-
-    traversePlaneTraverseData.push_back(traverseDataVector);
-    traversePlaneTraverseData.push_back(traverseDataVector2);
-    traversePlaneTraverseData.push_back(traverseDataVector3);
-
-    let traversePlaneInstance3 = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
-
-    // Not currently working
-    //let AddlTraversePlanes = new Module.TraversePlaneVector();
-    //AddlTraversePlanes.push_back(traversePlaneInstance2);
-    //AddlTraversePlanes.push_back(traversePlaneInstance3);
+    
+    let AddlTraversePlanes = new Module.TraversePlaneVector();
+    AddlTraversePlanes.push_back(traversePlaneInstance2);
 
     //MstPlane
     //InletMstPlane
@@ -376,28 +351,6 @@ function fan203()
 
     let mstPlaneInstance2 = new Module.MstPlane(mstArea, mstDryBulbTemp, mstBarometricPressure, mstStaticPressure);
 
-    //BaseGasDensity
-    //let bgdDryBulbTemp = 123;
-    //let bgdStaticPressure = -17.6;
-    //let bgdBarometricPressure = 26.57;
-    //let bgdGasDensity = 0.0547;
-    //let gasType = Module.GasType.AIR;
-
-    //let baseGasDensityInstance = new Module.BaseGasDensity(bgdDryBulbTemp, bgdStaticPressure, bgdBarometricPressure, bgdGasDensity, gasType);
-
-    /*
-    var res = bindings.getPlaneResults(inp);
-    function testEq(results, expected, isStaticPressure) {
-        t.equal(rnd(results.gasDensity), rnd(expected.gasDensity));
-        t.equal(rnd(results.gasVolumeFlowRate), rnd(expected.gasVolumeFlowRate));
-        t.equal(rnd(results.gasVelocity), rnd(expected.gasVelocity));
-        t.equal(rnd(results.gasVelocityPressure), rnd(expected.gasVelocityPressure));
-        t.equal(rnd(results.gasTotalPressure), rnd(expected.gasTotalPressure));
-        if (isStaticPressure) {
-            t.equal(rnd(results.staticPressure), rnd(expected.staticPressure));
-        }
-    }
-    */
 
     //getPlaneData()
     let planeDataInstance = new Module.PlaneData(flangePlaneInstance, flangePlaneInstance2, traversePlaneInstance, AddlTraversePlanes, mstPlaneInstance, mstPlaneInstance2, totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5, plane5upstreamOfPlane2);
@@ -413,6 +366,8 @@ function fan203()
     let baseGasDensityInstance = new Module.BaseGasDensity(bgdDryBulbTemp, bgdStaticPressure, bgdBarometricPressure, bgdGasDensity, gasType);
 
     //FanShaftPower
+    //const double motorShaftPower, const double efficiencyMotor, const double efficiencyVFD,
+    //const double efficiencyBelt, const double sumSEF
     let fspMotorShaftPower = (4200 * 205 * 0.88 * Math.sqrt(3)) / 746.0;
     let fspEfficiencyMotor = 95;
     let fspEfficiencyVFD = 100;
@@ -424,8 +379,9 @@ function fan203()
     
     //Calculation procedure
     //Fan203::Output const rv = Fan203(fanRatedInfo, planeData, baseGasDensity, fanShaftPower).calculate();
-    fan203Instance = new Module.Fan203(fanRatedInfoInstance, planeDataInstance, baseGasDensityInstance, fanShaftPowerInstance);
-    fan203Output = fan203Instance.calculate();
+    let fan203Instance = new Module.Fan203(fanRatedInfoInstance, planeDataInstance, baseGasDensityInstance, fanShaftPowerInstance);
+    let fan203Output = fan203Instance.calculate();
+
 
     /*
     t.equal(rnd(res.fanEfficiencyTotalPressure), rnd(53.60738684355601));
@@ -448,11 +404,11 @@ function fan203()
     */
 
     //Tests
-    /*
+    
     testNumberValue(fan203Output.fanEfficiencyTotalPressure, 53.60738684355601, "Fan Efficiency Total Pressure");
     testNumberValue(fan203Output.fanEfficiencyStaticPressure, 49.20691409764023, "Fan Efficiency Static Pressure");
     testNumberValue(fan203Output.fanEfficiencyStaticPressureRise, 50.768875240824116, "Fan Efficiency Static Pressure Rise");
-
+    /*
     testNumberValue(fan203Output.flow, 250332.6394178045, "Flow");
     testNumberValue(fan203Output.kpc, 0.9982905074, "KPC");
     testNumberValue(fan203Output.power, 1671.2107816151, "Power");
@@ -756,8 +712,8 @@ function test_traverse_plane_creation()
 resultsExisting();
 resultsModified();
 getBaseGasDensity();
-//fan203();
+fan203();
 //getFanCurve();
 getOptimalFanEfficiency();
 getCompressibilityFactor();
-test_traverse_plane_creation();
+//test_traverse_plane_creation();
