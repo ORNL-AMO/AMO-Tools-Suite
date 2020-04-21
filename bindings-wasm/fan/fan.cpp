@@ -140,7 +140,7 @@ EMSCRIPTEN_BINDINGS(fan_203)
 
     register_vector<double>("DoubleVector");
     register_vector<std::vector<double>>("DoubleVector2D");
-    //register_vector<TraversePlane>("TraversePlaneVector"); //Implement copy constructor for Planar classes
+    register_vector<TraversePlane>("TraversePlaneVector"); //Implement copy constructor for Planar classes
 
     //register_vector<Dummy>("DummyVector");
     //register_vector<Dummy2>("Dummy2Vector");
@@ -175,6 +175,8 @@ FanCurve(const double density, const double densityCorrected, const double speed
 	         const double pressureBarometric, const double pressureBarometricCorrected, const double pt1Factor,
 	         const double gamma, const double gammaCorrected, const double area1, const double area2, FanCurveData data)
 */
+
+/*
 EMSCRIPTEN_BINDINGS(fan_curve)
 {
     class_<FanCurve>("FanCurve")
@@ -184,7 +186,7 @@ EMSCRIPTEN_BINDINGS(fan_curve)
         .constructor<FanCurveType const, std::vector<FanCurveData::BaseCurve>>() //BaseCurve
         .constructor<FanCurveType const, std::vector<FanCurveData::RatedPoint>>() //RatedPoint
         .constructor<FanCurveType const, std::vector<FanCurveData::BaseOperatingPoint>>(); //BaseOperatingPoint
-    ///*
+    
     class_<FanCurveData::BaseCurve>("FanCurveDataBaseCurve")
         .constructor<const double, const double, const double>()
         .property("flow", &FanCurveData::BaseCurve::flow)
@@ -209,31 +211,31 @@ EMSCRIPTEN_BINDINGS(fan_curve)
         .property("pressureBarometric", &FanCurveData::BaseOperatingPoint::pressureBarometric)
         .property("usePt1Factor", &FanCurveData::BaseOperatingPoint::usePt1Factor)
         .property("pt1", &FanCurveData::BaseOperatingPoint::pt1);
-    //*/
+    
 
-    /*
-    value_object<FanCurveData::BaseCurve>("BaseCurve")
-        .field("flow", &FanCurveData::BaseCurve::flow)
-        .field("pressure", &FanCurveData::BaseCurve::pressure)
-        .field("power", &FanCurveData::BaseCurve::power);
-    value_object<FanCurveData::RatedPoint>("RatedPoint")
-        .field("flow", &FanCurveData::RatedPoint::flow)
-        .field("pressure", &FanCurveData::RatedPoint::pressure)
-        .field("power", &FanCurveData::RatedPoint::power)
-        .field("density", &FanCurveData::RatedPoint::density)
-        .field("speed", &FanCurveData::RatedPoint::speed)
-        .field("speedCorrected", &FanCurveData::RatedPoint::speedCorrected);
-    value_object<FanCurveData::BaseOperatingPoint>("BaseOperatingPoint")
-        .field("flow", &FanCurveData::BaseOperatingPoint::flow)
-        .field("pressure", &FanCurveData::BaseOperatingPoint::pressure)
-        .field("power", &FanCurveData::BaseOperatingPoint::power)
-        .field("density", &FanCurveData::BaseOperatingPoint::density)
-        .field("speed", &FanCurveData::BaseOperatingPoint::speed)
-        .field("speedCorrected", &FanCurveData::BaseOperatingPoint::speedCorrected)
-        .field("pressureBarometric", &FanCurveData::BaseOperatingPoint::pressureBarometric)
-        .field("usePt1Factor", &FanCurveData::BaseOperatingPoint::usePt1Factor)
-        .field("pt1", &FanCurveData::BaseOperatingPoint::pt1);
-    */
+    
+    //value_object<FanCurveData::BaseCurve>("BaseCurve")
+        //.field("flow", &FanCurveData::BaseCurve::flow)
+        //.field("pressure", &FanCurveData::BaseCurve::pressure)
+        //.field("power", &FanCurveData::BaseCurve::power);
+    //value_object<FanCurveData::RatedPoint>("RatedPoint")
+        //.field("flow", &FanCurveData::RatedPoint::flow)
+        //.field("pressure", &FanCurveData::RatedPoint::pressure)
+        //.field("power", &FanCurveData::RatedPoint::power)
+        //.field("density", &FanCurveData::RatedPoint::density)
+        //.field("speed", &FanCurveData::RatedPoint::speed)
+        //.field("speedCorrected", &FanCurveData::RatedPoint::speedCorrected);
+    //value_object<FanCurveData::BaseOperatingPoint>("BaseOperatingPoint")
+        //.field("flow", &FanCurveData::BaseOperatingPoint::flow)
+        //.field("pressure", &FanCurveData::BaseOperatingPoint::pressure)
+        //.field("power", &FanCurveData::BaseOperatingPoint::power)
+        //.field("density", &FanCurveData::BaseOperatingPoint::density)
+        //.field("speed", &FanCurveData::BaseOperatingPoint::speed)
+        //.field("speedCorrected", &FanCurveData::BaseOperatingPoint::speedCorrected)
+        //.field("pressureBarometric", &FanCurveData::BaseOperatingPoint::pressureBarometric)
+        //.field("usePt1Factor", &FanCurveData::BaseOperatingPoint::usePt1Factor)
+        //.field("pt1", &FanCurveData::BaseOperatingPoint::pt1);
+
     class_<ResultData>("ResultData")
         .constructor<const double, const double, const double, const double>();
 
@@ -242,6 +244,7 @@ EMSCRIPTEN_BINDINGS(fan_curve)
     //register_vector<FanCurveData::BaseOperatingPoint>("BaseOperatingPointVector");
 
 }
+*/
 
 //optimalFanEfficiency
 EMSCRIPTEN_BINDINGS(optimal_fan_efficiency)
