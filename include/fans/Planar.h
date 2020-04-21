@@ -54,7 +54,7 @@ protected:
 		percent75Rule = count / static_cast<double>(this->traverseHoleData.size() * this->traverseHoleData[0].size());
 	}
 
-	const double pitotTubeCoefficient;
+	const double pitotTubeCoefficient; // !!! was const !!!
 	double pv3 = 0, percent75Rule = 0;
 
 	std::vector< std::vector< double > > traverseHoleData;
@@ -75,7 +75,7 @@ protected:
 	 * @param gasFlowVolumeRate, double, flow rate in ft3/min
 	 * @param gasVelocityPressure, double, velocity of a gas pressure in 
 	 */
-	const double dryBulbTemperature, barometricPressure, area;
+	const double dryBulbTemperature, barometricPressure, area; // !!! was const !!!
 	double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
 	double staticPressure = 0;
 
