@@ -7,67 +7,6 @@
 #include <emscripten/bind.h>
 using namespace emscripten;
 
-/*
-std::vector<TraversePlane> returnTraversePlaneVector()
-{
-    std::vector<TraversePlane> traversePlaneVector;
-    return traversePlaneVector;
-}
-
-class TraversePlaneVector
-{
-    public:
-        std::vector<TraversePlane> traversePlaneVector;
-};
-
-class Dummy
-{
-    public:
-        Dummy(int x, int y, int z) : x(x), y(y), z(z) {}
-        
-        Dummy(const Dummy &d) : x(d.x), y(d.y), z(d.z)
-        {
-            //this->x = d.x;
-            //this->y = d.y;
-            //this->z = d.z;
-        }
-        
-        
-        bool operator=(const Dummy &d) // only assignment is necessary
-        {
-            this->x = d.x;
-            //this->y = d.y;
-            //this->z = d.z;
-        }
-        
-        
-        bool operator==(const Dummy &d)
-        {
-            return ((this->x == d.x) && (this->y == d.y) && (this->z == d.z));
-        }
-        bool operator<(const Dummy &d)
-        {
-            return ((this->x < d.x) && (this->y < d.y) && (this->z < d.z));
-        }
-        
-
-    private:
-        int x; //const
-        const int y;
-        const int z;
-        std::vector<int> dumbVector;
-};
-
-//Dummy dummy1(1, 2, 3);
-//Dummy dummy2 = dummy1;
-//Dummy dummy3(4, 5, 6);
-//dummy3 = dummy1;
-//std::vector<Dummy> dummyVector;
-//dummyVector.push_back(dummy1);
-//dummyVector.push_back(dummy3);
-
-*/
-
 //fanResultsExisting / fanResultsModified
 EMSCRIPTEN_BINDINGS(fsat_results)
 {
@@ -137,36 +76,39 @@ EMSCRIPTEN_BINDINGS(fan_203)
         .function("calculate", &Fan203::calculate);
     //const double fanEfficiencyTotalPressure, fanEfficiencyStaticPressure, fanEfficiencyStaticPressureRise;
 	//const Results asTested, converted;
+    class_<Fan203::Results>("Fsat203Results")
+        .constructor<double, double, double, double, double, double>()
+        .property("kpc", &Fan203::Results::kpc)
+        .property("power", &Fan203::Results::power)
+        .property("flow", &Fan203::Results::flow)
+        .property("pressureTotal", &Fan203::Results::pressureTotal)
+        .property("pressureStatic", &Fan203::Results::pressureStatic)
+        .property("staticPressureRise", &Fan203::Results::staticPressureRise);
     class_<Fan203::Output>("Fsat203Output")
         .constructor<double, double, double, Fan203::Results, Fan203::Results>()
         .property("fanEfficiencyTotalPressure", &Fan203::Output::fanEfficiencyTotalPressure)
         .property("fanEfficiencyStaticPressure", &Fan203::Output::fanEfficiencyStaticPressure)
-        .property("fanEfficiencyStaticPressureRise", &Fan203::Output::fanEfficiencyStaticPressureRise);
-        //.property("flow", &Fan203::Output::flow)
-        //.property("kpc", &Fan203::Output::kpc)
-        //.property("power", &Fan203::Output::power)
-        //.property("pressureStatic", &Fan203::Output::pressureStatic)
-        //.property("pressureTotal", &Fan203::Output::pressureTotal)
-        //.property("staticPressureRise", &Fan203::Output::staticPressureRise)
-        //.property("flowCorrected", &Fan203::Output::flowCorrected)
-        //.property("kpcCorrected", &Fan203::Output::kpcCorrected)
-        //.property("powerCorrected", &Fan203::Output::powerCorrected)
-        //.property("pressureStaticCorrected", &Fan203::Output::pressureStaticCorrected)
-        //.property("pressureTotalCorrected", &Fan203::Output::pressureTotalCorrected)
-        //.property("staticPressureRiseCorrected", &Fan203::Output::staticPressureRiseCorrected);
+        .property("fanEfficiencyStaticPressureRise", &Fan203::Output::fanEfficiencyStaticPressureRise)
+        .property("asTested", &Fan203::Output::asTested)
+        .property("converted", &Fan203::Output::converted);
+        /*
+        .property("flow", &Fan203::Output::asTested.flow)
+        .property("kpc", &Fan203::Output::asTested.kpc)
+        .property("power", &Fan203::Output::asTested.power)
+        .property("pressureStatic", &Fan203::Output::asTested.pressureStatic)
+        .property("pressureTotal", &Fan203::Output::asTested.pressureTotal)
+        .property("staticPressureRise", &Fan203::Output::asTested.staticPressureRise)
+        .property("flowCorrected", &Fan203::Output::converted.flow)
+        .property("kpcCorrected", &Fan203::Output::converted.kpc)
+        .property("powerCorrected", &Fan203::Output::converted.power)
+        .property("pressureStaticCorrected", &Fan203::Output::converted.pressureStatic)
+        .property("pressureTotalCorrected", &Fan203::Output::converted.pressureTotal)
+        .property("staticPressureRiseCorrected", &Fan203::Output::converted.staticPressureRise);
+        */
 
     register_vector<double>("DoubleVector");
     register_vector<std::vector<double>>("DoubleVector2D");
-    register_vector<TraversePlane>("TraversePlaneVector"); //Implement copy constructor for Planar classes
-
-    //register_vector<Dummy>("DummyVector");
-    //register_vector<Dummy2>("Dummy2Vector");
-
-    //std::vector<TraversePlane> traversePlaneVector();
-
-    //function("returnTraversePlaneVector", &returnTraversePlaneVector);
-    //class_<TraversePlaneVector>("TraversePlaneVector")
-    //    .constructor();
+    register_vector<TraversePlane>("TraversePlaneVector");
 }
 
 

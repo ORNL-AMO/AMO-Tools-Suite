@@ -408,21 +408,20 @@ function fan203()
     testNumberValue(fan203Output.fanEfficiencyTotalPressure, 53.60738684355601, "Fan Efficiency Total Pressure");
     testNumberValue(fan203Output.fanEfficiencyStaticPressure, 49.20691409764023, "Fan Efficiency Static Pressure");
     testNumberValue(fan203Output.fanEfficiencyStaticPressureRise, 50.768875240824116, "Fan Efficiency Static Pressure Rise");
-    /*
-    testNumberValue(fan203Output.flow, 250332.6394178045, "Flow");
-    testNumberValue(fan203Output.kpc, 0.9982905074, "KPC");
-    testNumberValue(fan203Output.power, 1671.2107816151, "Power");
-    testNumberValue(fan203Output.pressureStatic, 21.2207447999, "Pressure Static");
-    testNumberValue(fan203Output.pressureTotal, 23.1184721997, "Pressure Total");
-    testNumberValue(fan203Output.staticPressureRise, 21.8943488943, "Static Pressure Rise");
+    
+    testNumberValue(fan203Output.asTested.flow, 250332.6394178045, "Flow");
+    testNumberValue(fan203Output.asTested.kpc, 0.9982905074, "KPC");
+    testNumberValue(fan203Output.asTested.power, 1671.2107816151, "Power");
+    testNumberValue(fan203Output.asTested.pressureStatic, 21.2207447999, "Pressure Static");
+    testNumberValue(fan203Output.asTested.pressureTotal, 23.1184721997, "Pressure Total");
+    testNumberValue(fan203Output.asTested.staticPressureRise, 21.8943488943, "Static Pressure Rise");
 
-    testNumberValue(fan203Output.flowCorrected, 245498.3175715673, "Flow Corrected");
-    testNumberValue(fan203Output.kpcCorrected, 0.986542913, "KPC Corrected");
-    testNumberValue(fan203Output.powerCorrected, 1445.5400545013, "Power Corrected");
-    testNumberValue(fan203Output.pressureStaticCorrected, 18.6846696404, "Pressure Static Corrected");
-    testNumberValue(fan203Output.pressureTotalCorrected, 20.355601074, "Pressure Total Corrected");
-    testNumberValue(fan203Output.staticPressureRiseCorrected, 19.277771819, "Static Pressure Rise Corrected");
-    */
+    testNumberValue(fan203Output.converted.flow, 245498.3175715673, "Flow Corrected");
+    testNumberValue(fan203Output.converted.kpc, 0.986542913, "KPC Corrected");
+    testNumberValue(fan203Output.converted.power, 1445.5400545013, "Power Corrected");
+    testNumberValue(fan203Output.converted.pressureStatic, 18.6846696404, "Pressure Static Corrected");
+    testNumberValue(fan203Output.converted.pressureTotal, 20.355601074, "Pressure Total Corrected");
+    testNumberValue(fan203Output.converted.staticPressureRise, 19.277771819, "Static Pressure Rise Corrected");
 }
 
 function getFanCurve()
