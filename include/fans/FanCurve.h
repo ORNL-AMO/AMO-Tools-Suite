@@ -32,7 +32,7 @@ public:
 			  efficiency(efficiency)
 	{};
 
-	const double flow, pressure, power, efficiency;
+	double flow, pressure, power, efficiency; // !!! was const !!!
 };
 /**
  * Fan Curve Data class
@@ -59,7 +59,7 @@ public:
 				  power(power)
 		{};
 
-		const double flow, pressure, power;
+		double flow, pressure, power; // !!! was const !!!
 		friend class FanCurveData;
 	};
 
@@ -73,7 +73,7 @@ public:
 				  speedCorrected(speedCorrected)
 		{};
 
-		const double density, speed, speedCorrected;
+		double density, speed, speedCorrected; // !!! was const!!!
 		friend class FanCurveData;
 	};
 
@@ -86,9 +86,9 @@ public:
 				  pressureBarometric(pressureBarometric), usePt1Factor(usePt1Factor), pt1(pt1)
 		{};
 
-		const double pressureBarometric;
+		double pressureBarometric; // !!! was const !!!
 		bool usePt1Factor;
-		const double pt1;
+		double pt1; // !!! was const !!!
 		friend class FanCurveData;
 	};
 

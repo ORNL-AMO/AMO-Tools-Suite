@@ -216,7 +216,7 @@ public:
 				: gasDensity(density), gasVelocity(velocity), gasVolumeFlowRate(volumeFlowRate),
 				  gasVelocityPressure(velocityPressure), gasTotalPressure(totalPressure) {}
 
-			const double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0;
+			double gasDensity = 0, gasVelocity = 0, gasVolumeFlowRate = 0, gasVelocityPressure = 0, gasTotalPressure = 0; // !!! was const !!!
 		};
 		/**
 	 * @param density const, double, density in pounds per sqft, lb/scf
@@ -233,7 +233,7 @@ public:
 				: Data(density, velocity, volumeFlowRate, velocityPressure, totalPressure),
 				  staticPressure(staticPressure) {}
 
-			const double staticPressure = 0;
+			double staticPressure = 0; // !!! was const !!!
 		};
 		struct Output
 		{

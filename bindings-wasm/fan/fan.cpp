@@ -4,6 +4,9 @@
 #include "fans/Fan203.h"
 #include "fans/CompressibilityFactor.h"
 #include "fans/FanCurve.h"
+#include "fans/Planar.h"
+#include "fans/FanShaftPower.h"
+#include "fans/OptimalFanEfficiency.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -57,13 +60,15 @@ EMSCRIPTEN_BINDINGS(fan_203)
     //plane data
     class_<PlaneData>("PlaneData")
         .constructor<FlangePlane, FlangePlane, TraversePlane, std::vector<TraversePlane>, MstPlane, MstPlane, double, double, bool>();
-        //.register_vector<TraversePlane>("TraversePlaneVector"); ???
     //FlangePlane
     class_<FlangePlane>("FlangePlane")
         .constructor<double, double, double>();
     //TraversePlane
-    class_<TraversePlane>("TraversePlane")
+    class_<TraversePlane, base<VelocityPressureTraverseData>>("TraversePlane") // Also inherits from Planar (multiple inheritance?)
         .constructor<double, double, double, double, double, std::vector<std::vector<double>>>();
+        //.function("getPv3Value", &VelocityPressureTraverseData::getPv3Value)
+        //.function("get75PercentRule", &VelocityPressureTraverseData::get75percentRule);
+    register_vector<TraversePlane>("TraversePlaneVector");
     //MstPlane
     class_<MstPlane>("MstPlane")
         .constructor<double, double, double, double>();
@@ -74,8 +79,6 @@ EMSCRIPTEN_BINDINGS(fan_203)
     class_<Fan203>("Fan203")
         .constructor<FanRatedInfo, PlaneData, BaseGasDensity, FanShaftPower>()
         .function("calculate", &Fan203::calculate);
-    //const double fanEfficiencyTotalPressure, fanEfficiencyStaticPressure, fanEfficiencyStaticPressureRise;
-	//const Results asTested, converted;
     class_<Fan203::Results>("Fsat203Results")
         .constructor<double, double, double, double, double, double>()
         .property("kpc", &Fan203::Results::kpc)
@@ -91,24 +94,9 @@ EMSCRIPTEN_BINDINGS(fan_203)
         .property("fanEfficiencyStaticPressureRise", &Fan203::Output::fanEfficiencyStaticPressureRise)
         .property("asTested", &Fan203::Output::asTested)
         .property("converted", &Fan203::Output::converted);
-        /*
-        .property("flow", &Fan203::Output::asTested.flow)
-        .property("kpc", &Fan203::Output::asTested.kpc)
-        .property("power", &Fan203::Output::asTested.power)
-        .property("pressureStatic", &Fan203::Output::asTested.pressureStatic)
-        .property("pressureTotal", &Fan203::Output::asTested.pressureTotal)
-        .property("staticPressureRise", &Fan203::Output::asTested.staticPressureRise)
-        .property("flowCorrected", &Fan203::Output::converted.flow)
-        .property("kpcCorrected", &Fan203::Output::converted.kpc)
-        .property("powerCorrected", &Fan203::Output::converted.power)
-        .property("pressureStaticCorrected", &Fan203::Output::converted.pressureStatic)
-        .property("pressureTotalCorrected", &Fan203::Output::converted.pressureTotal)
-        .property("staticPressureRiseCorrected", &Fan203::Output::converted.staticPressureRise);
-        */
 
     register_vector<double>("DoubleVector");
     register_vector<std::vector<double>>("DoubleVector2D");
-    register_vector<TraversePlane>("TraversePlaneVector");
 }
 
 
@@ -125,85 +113,123 @@ EMSCRIPTEN_BINDINGS(base_gas_density)
 }
 
 //getVelocityPressureData
+EMSCRIPTEN_BINDINGS(velocity_pressure_data)
+{
+    class_<VelocityPressureTraverseData>("VelocityPressureTraverseData")
+        .function("getPv3Value", &VelocityPressureTraverseData::getPv3Value)
+        .function("get75percentRule", &VelocityPressureTraverseData::get75percentRule);
+}
 
 //getPlaneResults
+EMSCRIPTEN_BINDINGS(plane_results)
+{
+    class_<PlaneData::NodeBinding>("PlaneDataNodeBinding")
+        .function("calculate", &PlaneData::NodeBinding::calculate);
+    function("PlaneDataNodeBindingCalculate", &PlaneData::NodeBinding::calculate);
+    class_<PlaneData::NodeBinding::Data>("PlaneDataNodeBindingData")
+        .constructor<double, double, double, double, double>()
+        .property("gasDensity", &PlaneData::NodeBinding::Data::gasDensity)
+        .property("gasVelocity", &PlaneData::NodeBinding::Data::gasVelocity)
+        .property("gasVolumeFlowRate", &PlaneData::NodeBinding::Data::gasVolumeFlowRate)
+        .property("gasVelocityPressure", &PlaneData::NodeBinding::Data::gasVelocityPressure)
+        .property("gasTotalPressure", &PlaneData::NodeBinding::Data::gasTotalPressure);
+    register_vector<PlaneData::NodeBinding::Data>("PlaneDataNodeBindingDataVector");
+    class_<PlaneData::NodeBinding::DataFlange, base<PlaneData::NodeBinding::Data>>("PlaneDataNodeBindingDataFlange")
+        .constructor<double, double, double, double, double, double>()
+        .property("staticPressure", &PlaneData::NodeBinding::DataFlange::staticPressure);
+    class_<PlaneData::NodeBinding::Output>("PlaneDataNodeBindingOutput")
+        .constructor<PlaneData>()
+        .property("fanInletFlange", &PlaneData::NodeBinding::Output::fanInletFlange)
+        .property("fanOrEvaseOutletFlange", &PlaneData::NodeBinding::Output::fanOrEvaseOutletFlange)
+        .property("flowTraverse", &PlaneData::NodeBinding::Output::flowTraverse)
+        .property("inletMstPlane", &PlaneData::NodeBinding::Output::inletMstPlane)
+        .property("outletMstPlane", &PlaneData::NodeBinding::Output::outletMstPlane)
+        .property("addlTravPlanes", &PlaneData::NodeBinding::Output::addlTravPlanes);
+}
 
 //fanCurve
-/*
-FanCurve(const double density, const double densityCorrected, const double speed, const double speedCorrected,
-	         const double pressureBarometric, const double pressureBarometricCorrected, const double pt1Factor,
-	         const double gamma, const double gammaCorrected, const double area1, const double area2, FanCurveData data)
-*/
 
-/*
+class Dummy
+{
+    public:
+        Dummy(int x, double y)
+        {
+            this->x = x;
+            this->y = y;
+            this->z = 0;
+        }
+        Dummy(int x, int z)
+        {
+            this->x = x;
+            this->y = 0.0;
+            this->z = 0;
+        }
+
+    private:
+        int x;
+        double y;
+        int z;
+};
+
 EMSCRIPTEN_BINDINGS(fan_curve)
 {
+    class_<Dummy>("Dummy")
+        .constructor<int, double>();
+        //.constructor<int, int>();
+    //EMSCRIPTEN_BINDINGS(base_example) 
+    //{
+        //class_<BaseClass>("BaseClass");
+        //class_<DerivedClass, base<BaseClass>>("DerivedClass");
+    //}
     class_<FanCurve>("FanCurve")
         .constructor<double, double, double, double, double, double, double, double, double, double, double, FanCurveData>()
         .function("calculate", &FanCurve::calculate);
     class_<FanCurveData>("FanCurveData")
-        .constructor<FanCurveType const, std::vector<FanCurveData::BaseCurve>>() //BaseCurve
-        .constructor<FanCurveType const, std::vector<FanCurveData::RatedPoint>>() //RatedPoint
-        .constructor<FanCurveType const, std::vector<FanCurveData::BaseOperatingPoint>>(); //BaseOperatingPoint
+        .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>();
+    /*
+    // Cannot have overloaded constructors with the same number of arguments...
+    class_<FanCurveData>("FanCurveData")
+        .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>()
+        .constructor<FanCurveType, std::vector<FanCurveData::RatedPoint>>()
+        .constructor<FanCurveType, std::vector<FanCurveData::BaseOperatingPoint>>();
+    */
+    /*
+    // This doesn't work either
+    class_<FanCurveData>("FanCurveData_BaseCurve")
+        .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>();
+    class_<FanCurveData>("FanCurveData_RatedPoint")
+        .constructor<FanCurveType, std::vector<FanCurveData::RatedPoint>>();
+    class_<FanCurveData>("FanCurveData_BaseOperatingPoint")
+        .constructor<FanCurveType, std::vector<FanCurveData::BaseOperatingPoint>>();
+    */
     
     class_<FanCurveData::BaseCurve>("FanCurveDataBaseCurve")
-        .constructor<const double, const double, const double>()
+        .constructor<double, double, double>()
         .property("flow", &FanCurveData::BaseCurve::flow)
         .property("pressure", &FanCurveData::BaseCurve::pressure)
         .property("power", &FanCurveData::BaseCurve::power);
-    class_<FanCurveData::RatedPoint>("FanCurveDataRatedPoint")
-        .constructor<const double, const double, const double, const double, const double, const double>()
-        //.property("flow", &FanCurveData::RatedPoint::flow)
-        //.property("pressure", &FanCurveData::RatedPoint::pressure)
-        //.property("power", &FanCurveData::RatedPoint::power)
+    register_vector<FanCurveData::BaseCurve>("BaseCurveVector");
+    class_<FanCurveData::RatedPoint, base<FanCurveData::BaseCurve>>("FanCurveDataRatedPoint")
+        .constructor<double, double, double, double, double, double>()
         .property("density", &FanCurveData::RatedPoint::density)
         .property("speed", &FanCurveData::RatedPoint::speed)
         .property("speedCorrected", &FanCurveData::RatedPoint::speedCorrected);
-    class_<FanCurveData::BaseOperatingPoint>("FanCurveDataBaseOperatingPoint")
-        .constructor<const double, const double, const double, const double, const double, const double, const double, const double, const double>()
-        //.property("flow", &FanCurveData::BaseOperatingPoint::flow)
-        //.property("pressure", &FanCurveData::BaseOperatingPoint::pressure)
-        //.property("power", &FanCurveData::BaseOperatingPoint::power)
-        //.property("density", &FanCurveData::BaseOperatingPoint::density)
-        //.property("speed", &FanCurveData::BaseOperatingPoint::speed)
-        //.property("speedCorrected", &FanCurveData::BaseOperatingPoint::speedCorrected)
+    register_vector<FanCurveData::RatedPoint>("RatedPointVector");
+    class_<FanCurveData::BaseOperatingPoint, base<FanCurveData::RatedPoint>>("FanCurveDataBaseOperatingPoint")
+        .constructor<double, double, double, double, double, double, double, double, double>()
         .property("pressureBarometric", &FanCurveData::BaseOperatingPoint::pressureBarometric)
         .property("usePt1Factor", &FanCurveData::BaseOperatingPoint::usePt1Factor)
         .property("pt1", &FanCurveData::BaseOperatingPoint::pt1);
-    
-
-    
-    //value_object<FanCurveData::BaseCurve>("BaseCurve")
-        //.field("flow", &FanCurveData::BaseCurve::flow)
-        //.field("pressure", &FanCurveData::BaseCurve::pressure)
-        //.field("power", &FanCurveData::BaseCurve::power);
-    //value_object<FanCurveData::RatedPoint>("RatedPoint")
-        //.field("flow", &FanCurveData::RatedPoint::flow)
-        //.field("pressure", &FanCurveData::RatedPoint::pressure)
-        //.field("power", &FanCurveData::RatedPoint::power)
-        //.field("density", &FanCurveData::RatedPoint::density)
-        //.field("speed", &FanCurveData::RatedPoint::speed)
-        //.field("speedCorrected", &FanCurveData::RatedPoint::speedCorrected);
-    //value_object<FanCurveData::BaseOperatingPoint>("BaseOperatingPoint")
-        //.field("flow", &FanCurveData::BaseOperatingPoint::flow)
-        //.field("pressure", &FanCurveData::BaseOperatingPoint::pressure)
-        //.field("power", &FanCurveData::BaseOperatingPoint::power)
-        //.field("density", &FanCurveData::BaseOperatingPoint::density)
-        //.field("speed", &FanCurveData::BaseOperatingPoint::speed)
-        //.field("speedCorrected", &FanCurveData::BaseOperatingPoint::speedCorrected)
-        //.field("pressureBarometric", &FanCurveData::BaseOperatingPoint::pressureBarometric)
-        //.field("usePt1Factor", &FanCurveData::BaseOperatingPoint::usePt1Factor)
-        //.field("pt1", &FanCurveData::BaseOperatingPoint::pt1);
-
+    register_vector<FanCurveData::BaseOperatingPoint>("BaseOperatingPointVector");
     class_<ResultData>("ResultData")
-        .constructor<const double, const double, const double, const double>();
-
-    //register_vector<FanCurveData::BaseCurve>("BaseCurveVector");
-    //register_vector<FanCurveData::RatedPoint>("RatedPointVector");
-    //register_vector<FanCurveData::BaseOperatingPoint>("BaseOperatingPointVector");
-
+        .constructor<double, double, double, double>()
+        .property("flow", &ResultData::flow)
+        .property("pressure", &ResultData::pressure)
+        .property("power", &ResultData::power)
+        .property("efficiency", &ResultData::efficiency);
+    register_vector<ResultData>("ResultDataVector");
 }
-*/
+
 
 //optimalFanEfficiency
 EMSCRIPTEN_BINDINGS(optimal_fan_efficiency)

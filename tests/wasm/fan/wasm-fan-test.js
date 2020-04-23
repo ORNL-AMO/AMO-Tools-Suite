@@ -9,13 +9,10 @@ function returnDoubleVector(doublesArray)
 
     return doubleVector;
 }
-/*
+
 function returnBaseCurveData(flow, pressure, power)
 {
-    let baseCurveData = Module.FanCurveData.BaseCurve;
-    baseCurveData.flow = flow;
-    baseCurveData.pressure = pressure;
-    baseCurveData.power = power;
+    let baseCurveData = new Module.FanCurveDataBaseCurve(flow, pressure, power);
 
     return baseCurveData;
 }
@@ -23,14 +20,50 @@ function returnBaseCurveVector(baseCurveData)
 {
     let baseCurveVector = new Module.BaseCurveVector();
 
-    for (x of baseCurveData)
+    for (x of baseCurveData) // each row of baseCurveData should have three columns
     {
         baseCurveVector.push_back(returnBaseCurveData(x[0], x[1], x[2]));
     }
 
     return baseCurveVector;
 }
-*/
+
+function returnRatedPointData(flow, pressure, power, density, speed, speedCorrected)
+{
+    let ratedPointData = new Module.FanCurveDataRatedPoint(flow, pressure, power, density, speed, speedCorrected);
+
+    return ratedPointData;
+}
+function returnRatedPointVector(ratedPointData)
+{
+    let ratedPointVector = new Module.RatedPointVector();
+
+    for (x of ratedPointData) // each row of ratedPointData should have six columns
+    {
+        ratedPointVector.push_back(returnRatedPointData(x[0], x[1], x[2], x[3], x[4], x[5]));
+    }
+
+    return ratedPointVector;
+}
+
+function returnBaseOperatingPointData(flow, pressure, power, density, speed, speedCorrected, pressureBarometric, usePt1Factor, pt1)
+{
+    let baseOperatingPointData = new Module.FanCurveDataBaseOperatingPoint(flow, pressure, power, density, speed, speedCorrected, pressureBarometric, usePt1Factor, pt1);
+
+    return baseOperatingPointData;
+}
+function returnRatedPointVector(baseOperatingPointData)
+{
+    let baseOperatingPointVector = new Module.BaseOperatingPointVector();
+
+    for (x of baseOperatingPointData) // each row of baseOperatingPointData should have nine columns
+    {
+        baseOperatingPointVector.push_back(returnBaseOperatingPointData(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]));
+    }
+
+    return baseOperatingPointVector;
+}
+
 
 function resultsExisting() {
     let fanSpeed = 1180;
@@ -169,84 +202,326 @@ function getBaseGasDensity() {
     testNumberValue(wetBulbResult, 0.065456, "Gas Density (wetBulb)");
 }
 
+function getVelocityPressureData()
+{
+    let area = 143.63 * 32.63 / 144.0;
+    let dryBulbTemp = 123;
+    let barometricPressure = 26.57;
+    let staticPressure = -18.1;
+    let pitotTubeCoefficient = 0.87292611371180784;
+    let traversePlaneTraverseData = new Module.DoubleVector2D();
+    let traverseData = [
+        [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+        [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+        [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+    ];
+
+    let traverseDataVector = returnDoubleVector(traverseData[0]);
+    let traverseDataVector2 = returnDoubleVector(traverseData[1]);
+    let traverseDataVector3 = returnDoubleVector(traverseData[2]);
+
+    traversePlaneTraverseData.push_back(traverseDataVector);
+    traversePlaneTraverseData.push_back(traverseDataVector2);
+    traversePlaneTraverseData.push_back(traverseDataVector3);
+
+    let traversePlaneInstance = new Module.TraversePlane(area, dryBulbTemp, barometricPressure, staticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
+
+    let pv3 = traversePlaneInstance.getPv3Value();
+    let percent75Rule = traversePlaneInstance.get75percentRule() * 100; // Convert to percentage
+
+    testNumberValue(pv3, 0.7508102988157324, "VelocityPressureData: pv3 (1)");
+    testNumberValue(percent75Rule, 100, "VelocityPressureData: percent75Rule (1)");
+
+    // Release memory
+    traversePlaneInstance.delete();
+    traverseDataVector.delete();
+    traverseDataVector2.delete();
+    traverseDataVector3.delete();
+    traversePlaneTraverseData.delete();
+
+    area = 143.63 * 32.63 / 144.0;
+    dryBulbTemp = 123;
+    barometricPressure = 26.57;
+    staticPressure = -17.0;
+    pitotTubeCoefficient = 0.87292611371180784;
+    traversePlaneTraverseData = new Module.DoubleVector2D();
+    traverseData = [
+        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
+        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
+        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+    ];
+
+    traverseDataVector = returnDoubleVector(traverseData[0]);
+    traverseDataVector2 = returnDoubleVector(traverseData[1]);
+    traverseDataVector3 = returnDoubleVector(traverseData[2]);
+
+    traversePlaneTraverseData.push_back(traverseDataVector);
+    traversePlaneTraverseData.push_back(traverseDataVector2);
+    traversePlaneTraverseData.push_back(traverseDataVector3);
+
+    let traversePlaneInstance2 = new Module.TraversePlane(area, dryBulbTemp, barometricPressure, staticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
+
+    pv3 = traversePlaneInstance2.getPv3Value();
+    percent75Rule = traversePlaneInstance2.get75percentRule() * 100; // Convert to percentage
+
+    testNumberValue(pv3, 0.6007, "VelocityPressureData: pv3 (2)");
+    testNumberValue(percent75Rule, 100, "VelocityPressureData: percent75Rule (2)");
+
+    // Release memory
+    traversePlaneInstance2.delete();
+    traverseDataVector.delete();
+    traverseDataVector2.delete();
+    traverseDataVector3.delete();
+    traversePlaneTraverseData.delete();
+}
+
+function getPlaneResults()
+{
+    let area = 143.63 * 32.63 / 144.0;
+
+    //getPlaneData()
+
+    //PlaneData
+    let plane5upstreamOfPlane2 = true;
+    let totalPressureLossBtwnPlanes1and4 = 0;
+    let totalPressureLossBtwnPlanes2and5 = 0.627;
+
+    //let planeDataInstance = new Module.PlaneData(FlangePlane, FlangePlane, TraversePlane, std::vector<TraversePlane>, MstPlane, MstPlane, double, double, bool)
+
+    //FlangePlane
+    //FanInletFlange
+    let flangePlaneArea = area * 2;
+    let flangePlaneLength = 32.63;
+    let dryBulbTemp = 123;
+    let barometricPressure = 26.57;
+    let flangePlaneInstance = new Module.FlangePlane(flangePlaneArea, dryBulbTemp, barometricPressure);
+    //FanEvaseOrOutletFlange
+    flangePlaneArea = 70 * 78 / 144.0;
+    dryBulbTemp = 132.7;
+    barometricPressure = 26.57;
+    let flangePlaneInstance2 = new Module.FlangePlane(flangePlaneArea, dryBulbTemp, barometricPressure);
+
+
+    //TraversePlane
+    //FlowTraverse
+    let traverseArea = area;
+    let traverseDryBulbTemp = 123;
+    let traverseBarometricPressure = 26.57;
+    let traverseStaticPressure = -18.1;
+    let pitotTubeCoefficient = 0.87292611371180784;
+    let traversePlaneTraverseData = new Module.DoubleVector2D();
+
+    let traversePlaneTraverseDoubles = [
+        [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
+        [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
+        [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+    ];
+    
+    let traverseDataVector = returnDoubleVector(traversePlaneTraverseDoubles[0]);
+    let traverseDataVector2 = returnDoubleVector(traversePlaneTraverseDoubles[1]);
+    let traverseDataVector3 = returnDoubleVector(traversePlaneTraverseDoubles[2]);
+    
+    traversePlaneTraverseData.push_back(traverseDataVector);
+    traversePlaneTraverseData.push_back(traverseDataVector2);
+    traversePlaneTraverseData.push_back(traverseDataVector3);
+
+    // area, dryBulbTemp, barometricPressure, staticPressure, pitotTubeCoefficient, traverseInputData
+    let traversePlaneInstance = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
+    
+    // Release memory
+    traverseDataVector.delete();
+    traverseDataVector2.delete();
+    traverseDataVector3.delete();
+    traversePlaneTraverseData.delete();
+
+    //AddlTraversePlanes
+    //traverse_plane_vector
+    traverseArea = area;
+    traverseDryBulbTemp = 123;
+    traverseBarometricPressure = 26.57;
+    traverseStaticPressure = -17.0;
+    pitotTubeCoefficient = 0.87292611371180784;
+    traversePlaneTraverseData = new Module.DoubleVector2D();
+
+    traversePlaneTraverseDoubles = [
+        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
+        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
+        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+    ];
+
+    traverseDataVector = returnDoubleVector(traversePlaneTraverseDoubles[0]);
+    traverseDataVector2 = returnDoubleVector(traversePlaneTraverseDoubles[1]);
+    traverseDataVector3 = returnDoubleVector(traversePlaneTraverseDoubles[2]);
+
+    traversePlaneTraverseData.push_back(traverseDataVector);
+    traversePlaneTraverseData.push_back(traverseDataVector2);
+    traversePlaneTraverseData.push_back(traverseDataVector3);
+
+    traversePlaneInstance2 = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
+
+    // Release memory
+    traverseDataVector.delete();
+    traverseDataVector2.delete();
+    traverseDataVector3.delete();
+    traversePlaneTraverseData.delete();
+
+    traverseArea = area;
+    traverseDryBulbTemp = 124;
+    traverseBarometricPressure = 26.57;
+    traverseStaticPressure = -16.5;
+    pitotTubeCoefficient = 0.872;
+    traversePlaneTraverseData = new Module.DoubleVector2D();
+
+    traversePlaneTraverseDoubles = [
+        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
+        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
+        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
+    ];
+
+    traverseDataVector = returnDoubleVector(traversePlaneTraverseDoubles[0]);
+    traverseDataVector2 = returnDoubleVector(traversePlaneTraverseDoubles[1]);
+    traverseDataVector3 = returnDoubleVector(traversePlaneTraverseDoubles[2]);
+
+    traversePlaneTraverseData.push_back(traverseDataVector);
+    traversePlaneTraverseData.push_back(traverseDataVector2);
+    traversePlaneTraverseData.push_back(traverseDataVector3);
+
+    traversePlaneInstance3 = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
+    
+    // Release memory
+    traverseDataVector.delete();
+    traverseDataVector2.delete();
+    traverseDataVector3.delete();
+    traversePlaneTraverseData.delete();
+    
+    let AddlTraversePlanes = new Module.TraversePlaneVector();
+    AddlTraversePlanes.push_back(traversePlaneInstance2);
+    AddlTraversePlanes.push_back(traversePlaneInstance3);
+
+    traversePlaneInstance2.delete();
+    traversePlaneInstance3.delete();
+
+    //MstPlane
+    //InletMstPlane
+    let mstArea = area * 2;
+    let mstDryBulbTemp = 123;
+    let mstBarometricPressure = 26.57;
+    let mstStaticPressure = -17.55;
+
+    let mstPlaneInstance = new Module.MstPlane(mstArea, mstDryBulbTemp, mstBarometricPressure, mstStaticPressure);
+
+    //OutletMstPlane
+    mstArea = (55.42 * 60.49) / 144.0;
+    mstDryBulbTemp = 132.7;
+    mstBarometricPressure = 26.57;
+    mstStaticPressure = 1.8;
+
+    let mstPlaneInstance2 = new Module.MstPlane(mstArea, mstDryBulbTemp, mstBarometricPressure, mstStaticPressure);
+
+
+    //getPlaneData()
+    let planeDataInstance = new Module.PlaneData(flangePlaneInstance, flangePlaneInstance2, traversePlaneInstance, AddlTraversePlanes, mstPlaneInstance, mstPlaneInstance2, totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5, plane5upstreamOfPlane2);
+
+    flangePlaneInstance.delete();
+    flangePlaneInstance2.delete();
+    traversePlaneInstance.delete()
+    AddlTraversePlanes.delete();
+    mstPlaneInstance.delete();
+    mstPlaneInstance2.delete();
+
+    //getBaseGasDensity()
+
+    //BaseGasDensity
+    let bgdDryBulbTemp = 123;
+    let bgdStaticPressure = -17.6;
+    let bgdBarometricPressure = 26.57;
+    let bgdGasDensity = 0.0547;
+    let gasType = Module.GasType.AIR;
+
+    //getBaseGasDensity()
+    let baseGasDensityInstance = new Module.BaseGasDensity(bgdDryBulbTemp, bgdStaticPressure, bgdBarometricPressure, bgdGasDensity, gasType);
+
+    let output = Module.PlaneDataNodeBindingCalculate(planeDataInstance, baseGasDensityInstance);
+
+    baseGasDensityInstance.delete();
+    
+    function testEq(results, expected, isStaticPressure, testNum) {
+        testNumberValue(results.gasDensity, expected.gasDensity, "PlaneResults: gasDensity" + ' (' + testNum.toString() + ')');
+        testNumberValue(results.gasVolumeFlowRate, expected.gasVolumeFlowRate, "PlaneResults: gasVolumeFlowRate" + ' (' + testNum.toString() + ')');
+        testNumberValue(results.gasVelocity, expected.gasVelocity, "PlaneResults: gasVelocity" + ' (' + testNum.toString() + ')');
+        testNumberValue(results.gasVelocityPressure, expected.gasVelocityPressure, "PlaneResults: gasVelocityPressure" + ' (' + testNum.toString() + ')');
+        testNumberValue(results.gasTotalPressure, expected.gasTotalPressure, "PlaneResults: gasTotalPressure" + ' (' + testNum.toString() + ')');
+        if (isStaticPressure) {
+            testNumberValue(results.staticPressure, expected.staticPressure, "PlaneResults: staticPressure" + ' (' + testNum.toString() + ')');
+        }
+    }
+    
+    testEq(output.fanInletFlange, {
+        "gasDensity": 0.054707937910736096,
+        "gasVolumeFlowRate": 368484.70105160266,
+        "gasVelocity": 5660.955271820326,
+        "gasVelocityPressure": 1.4595154074095142,
+        "gasTotalPressure": -16.090484592590485,
+        "staticPressure": -17.55
+    }, true, 1);
+    testEq(output.fanOrEvaseOutletFlange, {
+        "gasDensity": 0.05781581992717993,
+        "gasVolumeFlowRate": 348742.34384798247,
+        "gasVelocity": 9197.600277309428,
+        "gasVelocityPressure": 4.070924792774011,
+        "gasTotalPressure": 12.156298668206892,
+        "staticPressure": 8.085373875432882
+    }, true, 2);
+    testEq(output.flowTraverse, {
+        "gasDensity": 0.0546206208926391,
+        "gasVolumeFlowRate": 132250.42933608184,
+        "gasVelocity": 4063.47271956754,
+        "gasVelocityPressure": .75081,
+        "gasTotalPressure": -17.34919
+    }, false, 3);
+    testEq(output.inletMstPlane, {
+        "gasDensity": 0.054707937910736096,
+        "gasVolumeFlowRate": 368484.70105160266,
+        "gasVelocity": 5660.955271820326,
+        "gasVelocityPressure": 1.4595154074095142,
+        "gasTotalPressure": -16.090484592590485
+    }, false, 4);
+    testEq(output.outletMstPlane, {
+        "gasDensity": 0.05683429586662124,
+        "gasVolumeFlowRate": 354698.4763125503,
+        "gasVelocity": 15236.026136905648,
+        "gasVelocityPressure": 10.983298668206892,
+        "gasTotalPressure": 12.783298668206893
+    }, false, 5);
+
+    let trav = [
+        {
+            "gasDensity": 0.054795254928833075,
+            "gasVolumeFlowRate": 118104.78734062292,
+            "gasVelocity": 3628.839496538495,
+            "gasVelocityPressure": 0.6007,
+            "gasTotalPressure": -16.3993
+        },
+        {
+            "gasDensity": 0.054780670621748434,
+            "gasVolumeFlowRate": 117995.19024728928,
+            "gasVelocity": 3625.472060975973,
+            "gasVelocityPressure": 0.599426,
+            "gasTotalPressure": -15.900574 
+        }
+    ];
+
+    //let addlTravPlanesVector = new Module.PlaneDataNodeBindingDataVector(output.addlTravPlanes);
+
+    let testNum = 6;
+    for (let i = 0; i < output.addlTravPlanes.size(); i++) { // error: length = 0, was .size
+        testEq(output.addlTravPlanes.get(i), trav[i], false, testNum);
+        testNum++;
+    }
+}
+
 function fan203()
 {
-    /*
-    var area = 143.63 * 32.63 / 144.0;
-    var inp = {
-        FanRatedInfo: {
-            fanSpeed: 1191,
-            motorSpeed: 1191,
-            fanSpeedCorrected: 1170,
-            densityCorrected: 0.05,
-            pressureBarometricCorrected: 26.28
-        },
-        PlaneData: {
-            plane5upstreamOfPlane2: true,
-            totalPressureLossBtwnPlanes1and4: 0,
-            totalPressureLossBtwnPlanes2and5: 0.627,
-
-            FanEvaseOrOutletFlange: {
-                area: 70 * 78 / 144.0,
-                dryBulbTemp: 132.7,
-                barometricPressure: 26.57
-            },
-            FlowTraverse: {
-                area: area,
-                dryBulbTemp: 123,
-                barometricPressure: 26.57,
-                staticPressure: -18.1,
-                pitotTubeCoefficient: 0.87292611371180784,
-                traverseData: [
-                    [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
-                    [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
-                    [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
-                ]
-            },
-            AddlTraversePlanes: [
-                {
-                    area: area,
-                    dryBulbTemp: 123,
-                    barometricPressure: 26.57,
-                    staticPressure: -17.0,
-                    pitotTubeCoefficient: 0.87292611371180784,
-                    traverseData: [
-                        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
-                        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
-                        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
-                    ]
-                }
-            ],
-            InletMstPlane: {
-                area: area * 2,
-                dryBulbTemp: 123,
-                barometricPressure: 26.57,
-                staticPressure: -17.55
-            },
-            OutletMstPlane: {
-                area: (55.42 * 60.49) / 144.0,
-                dryBulbTemp: 132.7,
-                barometricPressure: 26.57,
-                staticPressure: 1.8
-            }
-        },
-        BaseGasDensity: {
-            dryBulbTemp: 123,
-            staticPressure: -17.6,
-            barometricPressure: 26.57,
-            gasDensity: 0.0547,
-            gasType: 'AIR'
-        },
-        FanShaftPower: {
-            motorShaftPower: (4200 * 205 * 0.88 * Math.sqrt(3)) / 746.0,
-            efficiencyMotor: 95,
-            efficiencyVFD: 100,
-            efficiencyBelt: 100,
-            sumSEF: 0
-        }
-    };
-    */
-
     let area = 143.63 * 32.63 / 144.0;
 
     //FanRatedInfo
@@ -306,6 +581,12 @@ function fan203()
     // area, dryBulbTemp, barometricPressure, staticPressure, pitotTubeCoefficient, traverseInputData
     let traversePlaneInstance = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
 
+    // Release memory
+    traverseDataVector.delete();
+    traverseDataVector2.delete();
+    traverseDataVector3.delete();
+    traversePlaneTraverseData.delete();
+
     //AddlTraversePlanes
     //traverse_plane_vector
     traverseArea = area;
@@ -330,9 +611,16 @@ function fan203()
     traversePlaneTraverseData.push_back(traverseDataVector3);
 
     traversePlaneInstance2 = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
+
+    // Release memory
+    traverseDataVector.delete();
+    traverseDataVector2.delete();
+    traverseDataVector3.delete();
+    traversePlaneTraverseData.delete();
     
     let AddlTraversePlanes = new Module.TraversePlaneVector();
     AddlTraversePlanes.push_back(traversePlaneInstance2);
+    traversePlaneInstance2.delete();
 
     //MstPlane
     //InletMstPlane
@@ -354,6 +642,13 @@ function fan203()
 
     //getPlaneData()
     let planeDataInstance = new Module.PlaneData(flangePlaneInstance, flangePlaneInstance2, traversePlaneInstance, AddlTraversePlanes, mstPlaneInstance, mstPlaneInstance2, totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5, plane5upstreamOfPlane2);
+
+    // Release memory
+    flangePlaneInstance.delete();
+    flangePlaneInstance2.delete();
+    AddlTraversePlanes.delete()
+    mstPlaneInstance.delete()
+    mstPlaneInstance2.delete();
 
     //BaseGasDensity
     let bgdDryBulbTemp = 123;
@@ -382,75 +677,41 @@ function fan203()
     let fan203Instance = new Module.Fan203(fanRatedInfoInstance, planeDataInstance, baseGasDensityInstance, fanShaftPowerInstance);
     let fan203Output = fan203Instance.calculate();
 
-
-    /*
-    t.equal(rnd(res.fanEfficiencyTotalPressure), rnd(53.60738684355601));
-    t.equal(rnd(res.fanEfficiencyStaticPressure), rnd(49.20691409764023));
-    t.equal(rnd(res.fanEfficiencyStaticPressureRise), rnd(50.768875240824116));
-
-    t.equal(rnd(res.flow), rnd(250332.6394178045));
-    t.equal(rnd(res.kpc), rnd(0.9982905074));
-    t.equal(rnd(res.power), rnd(1671.2107816151));
-    t.equal(rnd(res.pressureStatic), rnd(21.2207447999));
-    t.equal(rnd(res.pressureTotal), rnd(23.1184721997));
-    t.equal(rnd(res.staticPressureRise), rnd(21.8943488943));
-
-    t.equal(rnd(res.flowCorrected), rnd(245498.3175715673));
-    t.equal(rnd(res.kpcCorrected), rnd(0.986542913));
-    t.equal(rnd(res.powerCorrected), rnd(1445.5400545013));
-    t.equal(rnd(res.pressureStaticCorrected), rnd(18.6846696404));
-    t.equal(rnd(res.pressureTotalCorrected), rnd(20.355601074));
-    t.equal(rnd(res.staticPressureRiseCorrected), rnd(19.277771819));
-    */
-
     //Tests
     
-    testNumberValue(fan203Output.fanEfficiencyTotalPressure, 53.60738684355601, "Fan Efficiency Total Pressure");
-    testNumberValue(fan203Output.fanEfficiencyStaticPressure, 49.20691409764023, "Fan Efficiency Static Pressure");
-    testNumberValue(fan203Output.fanEfficiencyStaticPressureRise, 50.768875240824116, "Fan Efficiency Static Pressure Rise");
+    testNumberValue(fan203Output.fanEfficiencyTotalPressure, 53.60738684355601, "Fan203: Fan Efficiency Total Pressure");
+    testNumberValue(fan203Output.fanEfficiencyStaticPressure, 49.20691409764023, "Fan203: Fan Efficiency Static Pressure");
+    testNumberValue(fan203Output.fanEfficiencyStaticPressureRise, 50.768875240824116, "Fan203: Fan Efficiency Static Pressure Rise");
     
-    testNumberValue(fan203Output.asTested.flow, 250332.6394178045, "Flow");
-    testNumberValue(fan203Output.asTested.kpc, 0.9982905074, "KPC");
-    testNumberValue(fan203Output.asTested.power, 1671.2107816151, "Power");
-    testNumberValue(fan203Output.asTested.pressureStatic, 21.2207447999, "Pressure Static");
-    testNumberValue(fan203Output.asTested.pressureTotal, 23.1184721997, "Pressure Total");
-    testNumberValue(fan203Output.asTested.staticPressureRise, 21.8943488943, "Static Pressure Rise");
+    testNumberValue(fan203Output.asTested.flow, 250332.6394178045, "Fan203: Flow");
+    testNumberValue(fan203Output.asTested.kpc, 0.9982905074, "Fan203: KPC");
+    testNumberValue(fan203Output.asTested.power, 1671.2107816151, "Fan203: Power");
+    testNumberValue(fan203Output.asTested.pressureStatic, 21.2207447999, "Fan203: Pressure Static");
+    testNumberValue(fan203Output.asTested.pressureTotal, 23.1184721997, "Fan203: Pressure Total");
+    testNumberValue(fan203Output.asTested.staticPressureRise, 21.8943488943, "Fan203: Static Pressure Rise");
 
-    testNumberValue(fan203Output.converted.flow, 245498.3175715673, "Flow Corrected");
-    testNumberValue(fan203Output.converted.kpc, 0.986542913, "KPC Corrected");
-    testNumberValue(fan203Output.converted.power, 1445.5400545013, "Power Corrected");
-    testNumberValue(fan203Output.converted.pressureStatic, 18.6846696404, "Pressure Static Corrected");
-    testNumberValue(fan203Output.converted.pressureTotal, 20.355601074, "Pressure Total Corrected");
-    testNumberValue(fan203Output.converted.staticPressureRise, 19.277771819, "Static Pressure Rise Corrected");
+    testNumberValue(fan203Output.converted.flow, 245498.3175715673, "Fan203: Flow Corrected");
+    testNumberValue(fan203Output.converted.kpc, 0.986542913, "Fan203: KPC Corrected");
+    testNumberValue(fan203Output.converted.power, 1445.5400545013, "Fan203: Power Corrected");
+    testNumberValue(fan203Output.converted.pressureStatic, 18.6846696404, "Fan203: Pressure Static Corrected");
+    testNumberValue(fan203Output.converted.pressureTotal, 20.355601074, "Fan203: Pressure Total Corrected");
+    testNumberValue(fan203Output.converted.staticPressureRise, 19.277771819, "Fan203: Static Pressure Rise Corrected");
+
+
+    // Release memory
+    fanRatedInfoInstance.delete();
+
 }
 
-function getFanCurve()
+function fanCurve()
 {
-    /*
-    var inp = {
-        density: 0.0308, densityCorrected: 0.0332, speed: 1180, speedCorrected: 1187,
-        pressureBarometric: 29.36, pressureBarometricCorrected: 29.36, pt1Factor: -0.93736,
-        gamma: 1.4, gammaCorrected: 1.4, area1: 34, area2: 12.7, curveType: 'FanStaticPressure',
-        BaseCurveData: [
-            [0, 22.3, 115],
-            [14410, 22.5, 154],
-            [28820, 22.3, 194],
-            [43230, 21.8, 241],
-            [57640, 21.2, 293],
-            [72050, 20.3, 349],
-            [86460, 19.3, 406],
-            [100871, 18, 462],
-            [115281, 16.5, 515],
-            [129691, 14.8, 566],
-            [144101, 12.7, 615],
-            [158511, 10.2, 667],
-            [172921, 7.3, 725],
-            [187331, 3.7, 789],
-            [201741, -0.8, 861]
-        ]
-    };
-    */
+    // Needs to be handled by the "middle layer"
+    // if (baseCurveDataDefined)
+    // else if (ratedPointCurveDataDefined)
+    // else
 
+
+    //BaseCurve
     let density = 0.0308;
     let densityCorrected = 0.0332;
     let speed = 1180;
@@ -481,9 +742,14 @@ function getFanCurve()
         [201741, -0.8, 861]
     ];
 
-    //let baseCurveVector = returnBaseCurveVector(baseCurveData);
-    /*
-    var res = bindings.fanCurve(inp);
+    let baseCurveVector = returnBaseCurveVector(baseCurveData);
+    let fanCurveData = new Module.FanCurveData(curveType, baseCurveVector);
+
+    let fanCurve = new Module.FanCurve(density, densityCorrected, speed, speedCorrected, pressureBarometric, pressureBarometricCorrected, pt1Factor, gamma, gammaCorrected, area1, area2, fanCurveData);
+    let resultData = fanCurve.calculate();
+
+    
+    //var res = bindings.fanCurve(inp);
 
     var expected = [
         [0, 24.3237008519,  126.1802380783, 0],
@@ -503,46 +769,99 @@ function getFanCurve()
         [202889.8046137204, -0.8723928962, 944.4826765914, -0.029540604]
     ];
 
-    function testEq(results, expected) {
-        for (var i = 0; i < results.length; i++) {
-            for (var j = 0; j < results[i].length; j++) {
-                t.equal(rnd(results[i][j]), rnd(expected[i][j]));
-            }
+    
+    
+    function testEq(results, expected, testNum) {
+        for (var i = 0; i < results.size(); i++) {
+            testNumberValue(results.get(i).flow, expected[i].flow, "FanCurve: flow" + ' (' + testNum.toString() + ')');
+            testNumberValue(results.get(i).pressure, expected[i].pressure, "FanCurve: pressure" + ' (' + testNum.toString() + ')');
+            testNumberValue(results.get(i).power, expected[i].power, "FanCurve: power" + ' (' + testNum.toString() + ')');
+            testNumberValue(results.get(i).efficiency, expected[i].efficiency, "FanCurve: efficiency" + ' (' + testNum.toString() + ')');
+            testNum++;
         }
     }
 
-    testEq(res.ResultData, expected);
+    function returnResultDataObj(flow, pressure, power, efficiency)
+    {
+        let resultDataObj = {
+            "flow": flow,
+            "pressure": pressure,
+            "power": power,
+            "efficiency": efficiency
+        };
 
-    var density = 0.0308, speed = 1180, speedCorrected = 1187;
-    inp = {
-        density: density, densityCorrected: 0.0332, speed: speed, speedCorrected: speedCorrected,
-        pressureBarometric: 29.36, pressureBarometricCorrected: 29.36, pt1Factor: -0.93736,
-        gamma: 1.4, gammaCorrected: 1.4, area1: 34, area2: 12.7, curveType: 'FanStaticPressure',
-        RatedPointCurveData: [
-            [0, 22.3, 115, density, speed, speedCorrected],
-            [14410, 22.5, 154, density, speed, speedCorrected],
-            [28820, 22.3, 194, density, speed, speedCorrected],
-            [43230, 21.8, 241, density, speed, speedCorrected],
-            [57640, 21.2, 293, density, speed, speedCorrected],
-            [72050, 20.3, 349, density, speed, speedCorrected],
-            [86460, 19.3, 406, density, speed, speedCorrected],
-            [100871, 18, 462, density, speed, speedCorrected],
-            [115281, 16.5, 515, density, speed, speedCorrected],
-            [129691, 14.8, 566, density, speed, speedCorrected],
-            [144101, 12.7, 615, density, speed, speedCorrected],
-            [158511, 10.2, 667, density, speed, speedCorrected],
-            [172921, 7.3, 725, density, speed, speedCorrected],
-            [187331, 3.7, 789, density, speed, speedCorrected],
-            [201741, -0.8, 861, density, speed, speedCorrected]
-        ]
-    };
+        return resultDataObj;
+    }
+    function returnResultDataObjArray(resultDataArrays)
+    {
+        let resultDataObjArray = [];
 
-    res = bindings.fanCurve(inp);
-    testEq(res.ResultData, expected);
-    */
+        for (x of resultDataArrays) // each row of resultDataArrays should have four columns
+        {
+            resultDataObjArray.push(returnResultDataObj(x[0], x[1], x[2], x[3]));
+        }
+
+        return resultDataObjArray;
+    }
+
+    let testNum = 1;
+    testEq(resultData, returnResultDataObjArray(expected), testNum);
+
+    // Release memory
+    baseCurveVector.delete();
+    fanCurveData.delete();
+    fanCurve.delete();
+    resultData.delete();
+
+    
+    //RatedPoint
+    density = 0.0308;
+    densityCorrected = 0.0332;
+    speed = 1180;
+    speedCorrected = 1187;
+    pressureBarometric = 29.36;
+    pressureBarometricCorrected = 29.36;
+    pt1Factor = -0.93736;
+    gamma = 1.4;
+    gammaCorrected = 1.4;
+    area1 = 34;
+    area2 = 12.7;
+    curveType = 'FanStaticPressure';
+    let ratedPointCurveData = [
+        [0, 22.3, 115, density, speed, speedCorrected],
+        [14410, 22.5, 154, density, speed, speedCorrected],
+        [28820, 22.3, 194, density, speed, speedCorrected],
+        [43230, 21.8, 241, density, speed, speedCorrected],
+        [57640, 21.2, 293, density, speed, speedCorrected],
+        [72050, 20.3, 349, density, speed, speedCorrected],
+        [86460, 19.3, 406, density, speed, speedCorrected],
+        [100871, 18, 462, density, speed, speedCorrected],
+        [115281, 16.5, 515, density, speed, speedCorrected],
+        [129691, 14.8, 566, density, speed, speedCorrected],
+        [144101, 12.7, 615, density, speed, speedCorrected],
+        [158511, 10.2, 667, density, speed, speedCorrected],
+        [172921, 7.3, 725, density, speed, speedCorrected],
+        [187331, 3.7, 789, density, speed, speedCorrected],
+        [201741, -0.8, 861, density, speed, speedCorrected]
+    ];
+
+    let ratedPointVector = returnRatedPointVector(ratedPointCurveData);
+    fanCurveData = new Module.FanCurveData(curveType, ratedPointVector);
+
+    fanCurve = new Module.FanCurve(density, densityCorrected, speed, speedCorrected, pressureBarometric, pressureBarometricCorrected, pt1Factor, gamma, gammaCorrected, area1, area2, fanCurveData);
+    resultData = fanCurve.calculate();
+
+    testNum = 16;
+    testEq(resultData, returnResultDataObjArray(expected), testNum);
+
+    // Release memory
+    ratedPointVector.delete();
+    fanCurveData.delete();
+    fanCurve.delete();
+    resultData.delete();
 }
 
-function getOptimalFanEfficiency()
+function optimalFanEfficiency()
 {   
     //let fanType = 0;
     let fanType = Module.OptimalFanEfficiencyFanType.AirfoilSISW
@@ -557,6 +876,8 @@ function getOptimalFanEfficiency()
     optimalEfficiencyFactorResult = optimalEfficiencyFactorResult * 100;
     testNumberValue(optimalEfficiencyFactorResult, 80.56103029, "Optimal Efficiency Factor (input 1)");
 
+    optimalEfficiencyFactor.delete();
+
     //fanType = 11;
     fanType = Module.OptimalFanEfficiencyFanType.LongShavings;
     fanSpeed = 1180;
@@ -570,6 +891,8 @@ function getOptimalFanEfficiency()
     optimalEfficiencyFactorResult = optimalEfficiencyFactorResult * 100;
     testNumberValue(optimalEfficiencyFactorResult, 60.6953126, "Optimal Efficiency Factor (input 2)");
 
+    optimalEfficiencyFactor.delete();
+
     //fanType = 6;
     fanType = Module.OptimalFanEfficiencyFanType.BackwardCurvedDIDW;
     fanSpeed = 1180;
@@ -582,9 +905,11 @@ function getOptimalFanEfficiency()
     optimalEfficiencyFactorResult = optimalEfficiencyFactor.calculate();
     optimalEfficiencyFactorResult = optimalEfficiencyFactorResult * 100;
     testNumberValue(optimalEfficiencyFactorResult, 29.31237501, "Optimal Efficiency Factor (input 3)");
+
+    optimalEfficiencyFactor.delete();
 }
 
-function getCompressibilityFactor()
+function compressibilityFactor()
 {
     let moverShaftPower = 300;
     let inletPressure = -8.5;
@@ -597,6 +922,7 @@ function getCompressibilityFactor()
     let compressibilityFactorResult = compressibilityFactor.calculate();
     testNumberValue(compressibilityFactorResult, 1.5795535958, "Compressibility Factor (input 1)");
 
+    compressibilityFactor.delete();
 
     moverShaftPower = 566;
     inletPressure = -16.36;
@@ -609,6 +935,7 @@ function getCompressibilityFactor()
     compressibilityFactorResult = compressibilityFactor.calculate();
     testNumberValue(compressibilityFactorResult, 0.9879934727, "Compressibility Factor (input 2)");
 
+    compressibilityFactor.delete();
     
     moverShaftPower = 623;
     inletPressure = -8.92;
@@ -620,99 +947,17 @@ function getCompressibilityFactor()
     compressibilityFactor = new Module.CompressibilityFactor(moverShaftPower, inletPressure, outletPressure, barometricPressure, flowRate, specificHeatRatio);
     compressibilityFactorResult = compressibilityFactor.calculate();
     testNumberValue(compressibilityFactorResult, 0.9953146218, "Compressibility Factor (input 3)");
-}
 
-function test_traverse_plane_creation()
-{
-    let area = 143.63 * 32.63 / 144.0;
-
-    let traverseArea = area;
-    let traverseDryBulbTemp = 123;
-    let traverseBarometricPressure = 26.57;
-    let traverseStaticPressure = -18.1;
-    let pitotTubeCoefficient = 0.87292611371180784;
-
-    let doubles = [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130];
-    let doubleVector = returnDoubleVector(doubles);
-    
-    doubles = [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865];
-    let doubleVector2 = returnDoubleVector(doubles);
-
-    doubles = [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569];
-    let doubleVector3 = returnDoubleVector(doubles);
-
-    let traversePlaneTraverseData = new Module.DoubleVector2D();
-
-    traversePlaneTraverseData.push_back(doubleVector);
-    traversePlaneTraverseData.push_back(doubleVector2);
-    traversePlaneTraverseData.push_back(doubleVector3);
-
-    // area, dryBulbTemp, barometricPressure, staticPressure, pitotTubeCoefficient, traverseInputData
-    let traversePlaneInstance = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
-
-
-
-    traverseArea = area;
-    traverseDryBulbTemp = 123;
-    traverseBarometricPressure = 26.57;
-    traverseStaticPressure = -17.0;
-    pitotTubeCoefficient = 0.87292611371180784;
-    traversePlaneTraverseData = new Module.DoubleVector2D();
-
-    traversePlaneTraverseDoubles = [
-        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
-        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
-        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
-    ];
-
-    traverseDataVector = returnDoubleVector(traversePlaneTraverseDoubles[0]);
-    traverseDataVector2 = returnDoubleVector(traversePlaneTraverseDoubles[1]);
-    traverseDataVector3 = returnDoubleVector(traversePlaneTraverseDoubles[2]);
-
-    traversePlaneTraverseData.push_back(traverseDataVector);
-    traversePlaneTraverseData.push_back(traverseDataVector2);
-    traversePlaneTraverseData.push_back(traverseDataVector3);
-
-    traversePlaneInstance2 = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
-
-    traverseArea = area;
-    traverseDryBulbTemp = 124;
-    traverseBarometricPressure = 26.57;
-    traverseStaticPressure = -16.5;
-    pitotTubeCoefficient = 0.872;
-    traversePlaneTraverseData = new Module.DoubleVector2D();
-
-    traversePlaneTraverseDoubles = [
-        [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
-        [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
-        [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
-    ];
-
-    traverseDataVector = returnDoubleVector(traversePlaneTraverseDoubles[0]);
-    traverseDataVector2 = returnDoubleVector(traversePlaneTraverseDoubles[1]);
-    traverseDataVector3 = returnDoubleVector(traversePlaneTraverseDoubles[2]);
-
-    traversePlaneTraverseData.push_back(traverseDataVector);
-    traversePlaneTraverseData.push_back(traverseDataVector2);
-    traversePlaneTraverseData.push_back(traverseDataVector3);
-
-    let traversePlaneInstance3 = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
-
-    
-    //let TraversePlaneVector = new Module.TraversePlaneVector();
-    let AddlTraversePlanes = new Module.TraversePlaneVector();
-    //let AddlTraversePlanes = new Module.TraversePlaneVector();
-    //let AddlTraversePlanes = Module.returnTraversePlaneVector();
-    AddlTraversePlanes.push_back(traversePlaneInstance2);
-    AddlTraversePlanes.push_back(traversePlaneInstance3);
+    compressibilityFactor.delete();
 }
 
 //call tests
 resultsExisting();
 resultsModified();
 getBaseGasDensity();
+getVelocityPressureData();
+getPlaneResults();
 fan203();
-//getFanCurve();
-getOptimalFanEfficiency();
-getCompressibilityFactor();
-//test_traverse_plane_creation();
+fanCurve();
+optimalFanEfficiency();
+compressibilityFactor();

@@ -1,6 +1,7 @@
 #include "fans/Fan203.h"
 #include "fans/OptimalFanEfficiency.h"
 #include "fans/FanCurve.h"
+#include "fans/Planar.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
