@@ -845,13 +845,15 @@ function fanCurve()
         [201741, -0.8, 861, density, speed, speedCorrected]
     ];
 
+    // This final bit is currently not working due to overloaded constructor for FanCurveData not working correctly
     let ratedPointVector = returnRatedPointVector(ratedPointCurveData);
     fanCurveData = new Module.FanCurveData(curveType, ratedPointVector);
+    //fanCurveData = Module.returnFanCurveData_RatedPoint(curveType, ratedPointVector);
 
     fanCurve = new Module.FanCurve(density, densityCorrected, speed, speedCorrected, pressureBarometric, pressureBarometricCorrected, pt1Factor, gamma, gammaCorrected, area1, area2, fanCurveData);
     resultData = fanCurve.calculate();
 
-    testNum = 16;
+    //testNum = 16;
     testEq(resultData, returnResultDataObjArray(expected), testNum);
 
     // Release memory
@@ -863,7 +865,7 @@ function fanCurve()
 
 function optimalFanEfficiency()
 {   
-    //let fanType = 0;
+    //fanType = 0;
     let fanType = Module.OptimalFanEfficiencyFanType.AirfoilSISW
     let fanSpeed = 1180;
     let flowRate = 40000;

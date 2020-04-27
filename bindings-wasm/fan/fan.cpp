@@ -66,8 +66,6 @@ EMSCRIPTEN_BINDINGS(fan_203)
     //TraversePlane
     class_<TraversePlane, base<VelocityPressureTraverseData>>("TraversePlane") // Also inherits from Planar (multiple inheritance?)
         .constructor<double, double, double, double, double, std::vector<std::vector<double>>>();
-        //.function("getPv3Value", &VelocityPressureTraverseData::getPv3Value)
-        //.function("get75PercentRule", &VelocityPressureTraverseData::get75percentRule);
     register_vector<TraversePlane>("TraversePlaneVector");
     //MstPlane
     class_<MstPlane>("MstPlane")
@@ -149,52 +147,66 @@ EMSCRIPTEN_BINDINGS(plane_results)
 
 //fanCurve
 
-class Dummy
+// Factory methods
+FanCurveData* returnFanCurveData_BaseCurve(FanCurveType curveType, std::vector<FanCurveData::BaseCurve> baseCurveData)
 {
-    public:
-        Dummy(int x, double y)
-        {
-            this->x = x;
-            this->y = y;
-            this->z = 0;
-        }
-        Dummy(int x, int z)
-        {
-            this->x = x;
-            this->y = 0.0;
-            this->z = 0;
-        }
-
-    private:
-        int x;
-        double y;
-        int z;
-};
+    FanCurveData* fanCurveDataPtr;
+    FanCurveData fanCurveData(curveType, baseCurveData);
+    fanCurveDataPtr = &fanCurveData;
+    return fanCurveDataPtr;
+    //return FanCurveData(curveType, baseCurveData);
+}
+FanCurveData* returnFanCurveData_RatedPoint(FanCurveType curveType, std::vector<FanCurveData::RatedPoint> ratedPointData)
+{
+    FanCurveData* fanCurveDataPtr;
+    FanCurveData fanCurveData(curveType, ratedPointData);
+    fanCurveDataPtr = &fanCurveData;
+    return fanCurveDataPtr;
+    //return FanCurveData(curveType, ratedPointData);
+}
+FanCurveData* returnFanCurveData_BaseOperatingPoint(FanCurveType curveType, std::vector<FanCurveData::BaseOperatingPoint> baseOperatingPointData)
+{
+    FanCurveData* fanCurveDataPtr;
+    FanCurveData fanCurveData(curveType, baseOperatingPointData);
+    fanCurveDataPtr = &fanCurveData;
+    return fanCurveDataPtr;
+    //return FanCurveData(curveType, baseOperatingPointData);
+}
 
 EMSCRIPTEN_BINDINGS(fan_curve)
 {
-    class_<Dummy>("Dummy")
-        .constructor<int, double>();
-        //.constructor<int, int>();
-    //EMSCRIPTEN_BINDINGS(base_example) 
-    //{
-        //class_<BaseClass>("BaseClass");
-        //class_<DerivedClass, base<BaseClass>>("DerivedClass");
-    //}
+    //.function("foo_int", select_overload<void(int)>(&HasOverloadedMethods::foo))
+
     class_<FanCurve>("FanCurve")
         .constructor<double, double, double, double, double, double, double, double, double, double, double, FanCurveData>()
         .function("calculate", &FanCurve::calculate);
+     // Cannot have overloaded constructors with the same number of arguments...
     class_<FanCurveData>("FanCurveData")
         .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>();
+        //.constructor<FanCurveType, std::vector<FanCurveData::RatedPoint>>()
+        //.constructor<FanCurveType, std::vector<FanCurveData::BaseOperatingPoint>>();
+    
+    // None of the following commented out implementations worked.
     /*
-    // Cannot have overloaded constructors with the same number of arguments...
-    class_<FanCurveData>("FanCurveData")
-        .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>()
-        .constructor<FanCurveType, std::vector<FanCurveData::RatedPoint>>()
-        .constructor<FanCurveType, std::vector<FanCurveData::BaseOperatingPoint>>();
+    class_<FanCurveData>("FanCurveData_BaseCurve")
+        .constructor(&returnFanCurveData_BaseCurve, allow_raw_pointers());
+    class_<FanCurveData>("FanCurveData_RatedPoint")
+        .constructor(&returnFanCurveData_RatedPoint, allow_raw_pointers());
+    class_<FanCurveData>("FanCurveData_BaseOperatingPoint")
+        .constructor(&returnFanCurveData_BaseOperatingPoint, allow_raw_pointers());
     */
     /*
-    // This doesn't work either
+    class_<FanCurveData>("FanCurveData")
+        .constructor(&returnFanCurveData_BaseCurve, allow_raw_pointers())
+        .constructor(&returnFanCurveData_RatedPoint, allow_raw_pointers())
+        .constructor(&returnFanCurveData_BaseOperatingPoint, allow_raw_pointers());
+    */
+    /*
+    function("returnFanCurveData_BaseCurve", &returnFanCurveData_BaseCurve);
+    function("returnFanCurveData_RatedPoint", &returnFanCurveData_RatedPoint);
+    function("returnFanCurveData_BaseOperatingPoint", &returnFanCurveData_BaseOperatingPoint);
+    */
+    /*
     class_<FanCurveData>("FanCurveData_BaseCurve")
         .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>();
     class_<FanCurveData>("FanCurveData_RatedPoint")
