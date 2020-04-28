@@ -102,10 +102,27 @@ TEST_CASE( "Compressor Air System Capacity", "[CompressedAir][AirSystemCapacity]
 	CHECK(output3.totalPipeVolume == Approx(155.28));
 	CHECK(output3.totalReceiverVol == Approx(510.6951871658));
 	CHECK(output3.totalCapacityOfCompressedAirSystem == Approx(665.9751871658));
+	
 	CHECK(output3.pipeLengths.oneHalf == Approx(6.3));
 	CHECK(output3.pipeLengths.threeFourths == Approx(7.4));
+	CHECK(output3.pipeLengths.one == Approx(6));
+	CHECK(output3.pipeLengths.oneAndOneFourth == Approx(2.08));
+	CHECK(output3.pipeLengths.oneAndOneHalf == Approx(1.41));
 	CHECK(output3.pipeLengths.two == Approx(11.65));
+	CHECK(output3.pipeLengths.twoAndOneHalf == Approx(16.65));
+	CHECK(output3.pipeLengths.three == Approx(15.39));
+	CHECK(output3.pipeLengths.threeAndOneHalf == Approx(0));
 	CHECK(output3.pipeLengths.four == Approx(88.4));
+	CHECK(output3.pipeLengths.five == Approx(0));
+	CHECK(output3.pipeLengths.six == Approx(0));
+	CHECK(output3.pipeLengths.eight == Approx(0));
+	CHECK(output3.pipeLengths.ten == Approx(0));
+	CHECK(output3.pipeLengths.twelve == Approx(0));
+	CHECK(output3.pipeLengths.fourteen == Approx(0));
+	CHECK(output3.pipeLengths.sixteen == Approx(0));
+	CHECK(output3.pipeLengths.eighteen == Approx(0));
+	CHECK(output3.pipeLengths.twenty == Approx(0));
+	CHECK(output3.pipeLengths.twentyFour == Approx(0));
 	CHECK(output3.receiverCapacities.at(0) == Approx(80.2139037433));
 	CHECK(output3.receiverCapacities.at(1) == Approx(200.5347593583));
 	CHECK(output3.receiverCapacities.at(3) == Approx(141.7112299465));
