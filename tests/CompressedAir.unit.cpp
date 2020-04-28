@@ -88,17 +88,17 @@ TEST_CASE( "Compressor Operating Cost", "[CompressedAir][OperatingCost]") {
 
 
 TEST_CASE( "Compressor Air System Capacity", "[CompressedAir][AirSystemCapacity]") {
-	auto output = Compressor::AirSystemCapacity({3000, 2000, 1000, 200, 100, 500, 0, 300, 0, 1000, 0, 0}, {400, 500, 660, 1060}).calculate();
+	auto output = Compressor::AirSystemCapacity({3000, 2000, 1000, 200, 100, 500, 0, 300, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {400, 500, 660, 1060}).calculate();
 	CHECK(output.totalPipeVolume == Approx(138.63));
 	CHECK(output.totalReceiverVol == Approx(350.2673796791));
 	CHECK(output.totalCapacityOfCompressedAirSystem == Approx(488.897379679));
 
-	auto output2 = Compressor::AirSystemCapacity({3000, 2000, 1000, 200, 100, 500, 500, 300, 0, 1000, 0, 0}, {400, 500, 660, 1060}).calculate();
+	auto output2 = Compressor::AirSystemCapacity({3000, 2000, 1000, 200, 100, 500, 500, 300, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {400, 500, 660, 1060}).calculate();
 	CHECK(output2.totalPipeVolume == Approx(155.28));
 	CHECK(output2.totalReceiverVol == Approx(350.2673796791));
 	CHECK(output2.totalCapacityOfCompressedAirSystem == Approx(505.5473796791));
 
-	auto output3 = Compressor::AirSystemCapacity({3000, 2000, 1000, 200, 100, 500, 500, 300, 0, 1000, 0, 0}, {600, 1500, 660, 1060}).calculate();
+	auto output3 = Compressor::AirSystemCapacity({3000, 2000, 1000, 200, 100, 500, 500, 300, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {600, 1500, 660, 1060}).calculate();
 	CHECK(output3.totalPipeVolume == Approx(155.28));
 	CHECK(output3.totalReceiverVol == Approx(510.6951871658));
 	CHECK(output3.totalCapacityOfCompressedAirSystem == Approx(665.9751871658));

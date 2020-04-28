@@ -165,7 +165,8 @@ test('Air System Capacity', function (t) {
 
     var inp = {
         oneHalf: 3000, threeFourths: 2000, one: 1000, oneAndOneFourth: 200, oneAndOneHalf: 100, two: 500, twoAndOneHalf: 500, three: 300,
-        threeAndOneHalf: 0, four: 1000, five: 0, six: 0,
+        threeAndOneHalf: 0, four: 1000, five: 0, six: 0, eight: 0, ten: 0, twelve: 0, fourteen: 0, sixteen: 0, eighteen: 0, twenty: 0,
+        twentyFour: 0,
         receiverCapacities: [
             400, 500, 660, 1060
         ]
