@@ -170,16 +170,20 @@ namespace Compressor {
 		 */
 		PipeData(const double oneHalf, const double threeFourths, const double one, const double oneAndOneFourth,
 		         const double oneAndOneHalf, const double two, const double twoAndOneHalf, const double three,
-		         const double threeAndOneHalf, const double four, const double five, const double six)
+		         const double threeAndOneHalf, const double four, const double five, const double six, const double eight, 
+				 const double ten, const double twelve, const double fourteen, const double sixteen, const double eighteen, 
+				 const double twenty, const double twentyFour)
 				: oneHalf(oneHalf * 0.0021), threeFourths(threeFourths * 0.0037), one(one * 0.006),
 				  oneAndOneFourth(oneAndOneFourth * 0.0104), oneAndOneHalf(oneAndOneHalf * 0.0141),
 				  two(two * 0.0233), twoAndOneHalf(twoAndOneHalf * 0.0333), three(three * 0.0513),
 				  threeAndOneHalf(threeAndOneHalf * 0.0687), four(four * 0.0884), five(five * 0.1389),
-				  six(six * 0.2006), eight(eight * 0.3442), ten(0.5476), twelve(0.7763), fourteen(fourteen * 0.9354),
+				  six(six * 0.2006), eight(eight * 0.3442), ten(ten * 0.5476), twelve(twelve * 0.7763), fourteen(fourteen * 0.9354), // **ten and twelve**
 				  sixteen(sixteen * 1.223), eighteen(eighteen * 1.555), twenty(twenty * 1.926), twentyFour(twentyFour * 2.793),
 				  totalPipeVolume(this->oneHalf + this->threeFourths + this->one + this->oneAndOneFourth
 				                  + this->oneAndOneHalf + this->two + this->twoAndOneHalf + this->three
-				                  + this->threeAndOneHalf + this->four + this->five + this->six)
+				                  + this->threeAndOneHalf + this->four + this->five + this->six
+								  + this->eight + this->ten + this->twelve + this->fourteen + this->sixteen
+								  + this->eighteen + this->twenty + this->twentyFour)
 		{}
 
 		/**

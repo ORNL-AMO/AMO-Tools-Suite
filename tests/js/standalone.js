@@ -141,7 +141,7 @@ test('Operating Cost', function (t) {
 });
 
 test('Air System Capacity', function (t) {
-    t.plan(20);
+    t.plan(28);
     t.type(bindings.airSystemCapacity, 'function');
 
     var compare = function(results, expected, gallons) {
@@ -157,6 +157,14 @@ test('Air System Capacity', function (t) {
         t.equal(rnd(results.four), expected[9]);
         t.equal(rnd(results.five), expected[10]);
         t.equal(rnd(results.six), expected[11]);
+        t.equal(rnd(results.eight), expected[12]);
+        t.equal(rnd(results.ten), expected[13]);
+        t.equal(rnd(results.twelve), expected[14]);
+        t.equal(rnd(results.fourteen), expected[15]);
+        t.equal(rnd(results.sixteen), expected[16]);
+        t.equal(rnd(results.eighteen), expected[17]);
+        t.equal(rnd(results.twenty), expected[18]);
+        t.equal(rnd(results.twentyFour), expected[19]);
 
         for (var i = 0; i < gallons.length; i++) {
             t.equal(rnd(results.receiverCapacities[i]), gallons[i]);
@@ -165,7 +173,8 @@ test('Air System Capacity', function (t) {
 
     var inp = {
         oneHalf: 3000, threeFourths: 2000, one: 1000, oneAndOneFourth: 200, oneAndOneHalf: 100, two: 500, twoAndOneHalf: 500, three: 300,
-        threeAndOneHalf: 0, four: 1000, five: 0, six: 0,
+        threeAndOneHalf: 0, four: 1000, five: 0, six: 0, eight: 0, ten: 0, twelve: 0, fourteen: 0, sixteen: 0, eighteen: 0, twenty: 0,
+        twentyFour: 0,
         receiverCapacities: [
             400, 500, 660, 1060
         ]
@@ -175,7 +184,7 @@ test('Air System Capacity', function (t) {
     t.equal(rnd(results.totalPipeVolume), 155.28);
     t.equal(rnd(results.totalReceiverVolume), 350.26738);
     t.equal(rnd(results.totalCapacityOfCompressedAirSystem), 505.54738);
-    compare(results, [6.3, 7.4, 6, 2.08, 1.41, 11.65, 16.65, 15.39, 0, 88.4, 0, 0], [53.475936, 66.84492, 88.235294, 141.71123]);
+    compare(results, [6.3, 7.4, 6, 2.08, 1.41, 11.65, 16.65, 15.39, 0, 88.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [53.475936, 66.84492, 88.235294, 141.71123]);
 });
 
 test('Air Velocity', function (t) {
