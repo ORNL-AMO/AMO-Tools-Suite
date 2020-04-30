@@ -354,6 +354,17 @@ NAN_METHOD(bagMethod) {
 
 	info.GetReturnValue().Set(r);
 }
+/*
+NAN_METHOD(estimateMethod) {
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
+	r = Nan::New<Object>();
 
+	//ReceiverTank::Method method = static_cast<ReceiverTank::Method>(static_cast<unsigned>(Get("method")));
+	//std::string const &leakEstimateTypeStr = GetStr("leakEstimateType");
+	EstimateMethod::LeakEstimateType leakEstimateType = static_cast<EstimateMethod::LeakEstimateType>(static_cast<unsigned>(Get("leakEstimateType")));
+	const double operatingTime = Get("operatingTime");
+
+}
+*/
 
 #endif //AMO_TOOLS_SUITE_STANDALONE_H
