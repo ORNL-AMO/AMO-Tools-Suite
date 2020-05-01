@@ -27,7 +27,7 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
             tmpFlowRate = (60.0 / bagMethodData.getFillTime()) * M_PI * bagMethodData.getHeight() * pow((bagMethodData.getDiameter() / 2.0), 2.0) * (1.0 / pow(12.0, 3.0));
             tmpTotalConsumption = tmpFlowRate * 60.0 * compressedAirReductionInput.getHoursPerYear() * compressedAirReductionInput.getUnits();
         }
-        // orifice/pressure method
+        // pressure method
         else if (compressedAirReductionInput.getMeasurementMethod() == 2)
         {
             PressureMethodData pressureMethodData = compressedAirReductionInput.getPressureMethodData();
@@ -40,6 +40,25 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
         {
             CompressedAirOtherMethodData otherMethodData = compressedAirReductionInput.getOtherMethodData();
             tmpTotalConsumption = otherMethodData.getConsumption();
+        }
+        // orifice method
+        else if(compressedAirReductionInput.getMeasurementMethod() == 4)
+        {
+            OrificeMethodData orificeMethodData = compressedAirReductionInput.getOrificeMethodData();
+            tmpFlowRate = orificeMethodData.calculate();
+            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) / 1000; // / 1000?
+        }
+        // decibels method
+        else if(compressedAirReductionInput.getMeasurementMethod() == 5)
+        {
+            DecibelsMethodData decibelsMethodData = compressedAirReductionInput.getDecibelsMethodData();
+        }
+        // estimate method
+        else if(compressedAirReductionInput.getMeasurementMethod() == 6)
+        {
+            EstimateMethodData estimateMethodData = compressedAirReductionInput.getEstimateMethodData();
+            tmpFlowRate = estimateMethodData.getLeakRateEstimate();
+            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) / 1000; // / 1000?
         }
 
         //electricity calculation
@@ -89,6 +108,19 @@ double PressureMethodData::calculate()
     return singleNozzleFlowRate;
 }
 
+double OrificeMethodData::calculate()
+{
+    const double standardDensity = (atmPressure + supplyPressure) * (144 / (53.34 * airTemp));
+	const double sonicDensity = std::pow(standardDensity * (2 / (1.4 + 1)), 1/(1.4 - 1));
+	const double leakVelocity = std::pow(((2 * 1.4) / (1.4 + 1)) * 53.34 * airTemp * 32.2, 0.5);
+	const double leakRateLBMmin = sonicDensity * (diameter * diameter) * (M_PI/(4 * 144)) * leakVelocity * 60 * dischargeCoef;
+	const double leakRateScfm = leakRateLBMmin / standardDensity;
+	const double leakRateEstimate = leakRateScfm * numOrifices;
+	//const double annualComsumption = (operatingTime * leakRateEstimate * 60) / 1000;
+
+    return leakRateEstimate;
+}
+
 double CompressorElectricityData::calculate()
 {
     const double c = 1.0 / 60;
@@ -133,6 +165,36 @@ void BagMethodData::setDiameter(const double diameter)
 void BagMethodData::setFillTime(const double fillTime)
 {
     this->fillTime = fillTime;
+}
+
+void OrificeMethodData::setAirTemp(const double airTemp)
+{
+    this->airTemp = airTemp;
+}
+void OrificeMethodData::setAtmPressure(const double atmPressure)
+{
+    this->atmPressure = atmPressure;
+}
+void OrificeMethodData::setDischargeCoef(const double dischargeCoef)
+{
+    this->dischargeCoef = dischargeCoef;
+}
+void OrificeMethodData::setDiameter(const double diameter)
+{
+    this->diameter = diameter;
+}
+void OrificeMethodData::setSupplyPressure(const double supplyPressure)
+{
+    this->supplyPressure = supplyPressure;
+}
+void OrificeMethodData::setNumOrifices(const int numOrifices)
+{
+    this->numOrifices = numOrifices;
+}
+
+void EstimateMethodData::setLeakRateEstimate(const double leakRateEstimate)
+{
+    this->leakRateEstimate = leakRateEstimate;
 }
 
 void CompressedAirFlowMeterMethodData::setMeterReading(const double meterReading)

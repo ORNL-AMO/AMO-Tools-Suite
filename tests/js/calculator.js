@@ -264,6 +264,20 @@ test('Compressed Air Reduction Basic Test', function (t) {
                 otherMethodData: {
                     consumption: 200000
                 },
+                orificeMethodData: {
+                    compressorAirTemp: 0,
+                    atmosphericPressure: 0,
+                    dischargeCoefficient: 0,
+                    orificeDiameter: 0,
+                    supplyPressure: 0,
+                    numberOfOrifices: 1
+                },
+                decibelsMethodData: {
+                    soundIntensity: 0
+                },
+                estimateMethodData: {
+                    leakRateEstimate: 0
+                },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,
                     compressorSpecificPower: 0.16
@@ -314,6 +328,20 @@ test('Compressed Air Reduction Test All', function (t) {
                 otherMethodData: {
                     consumption: 200000
                 },
+                orificeMethodData: {
+                    compressorAirTemp: 0,
+                    atmosphericPressure: 0,
+                    dischargeCoefficient: 0,
+                    orificeDiameter: 0,
+                    supplyPressure: 0,
+                    numberOfOrifices: 1
+                },
+                decibelsMethodData: {
+                    soundIntensity: 0
+                },
+                estimateMethodData: {
+                    leakRateEstimate: 0
+                },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,
                     compressorSpecificPower: 0.16
@@ -347,6 +375,20 @@ test('Compressed Air Reduction Test All', function (t) {
                 otherMethodData: {
                     consumption: 200000
                 },
+                orificeMethodData: {
+                    compressorAirTemp: 0,
+                    atmosphericPressure: 0,
+                    dischargeCoefficient: 0,
+                    orificeDiameter: 0,
+                    supplyPressure: 0,
+                    numberOfOrifices: 1
+                },
+                decibelsMethodData: {
+                    soundIntensity: 0
+                },
+                estimateMethodData: {
+                    leakRateEstimate: 0
+                },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,
                     compressorSpecificPower: 0.16
@@ -378,6 +420,20 @@ test('Compressed Air Reduction Test All', function (t) {
                 otherMethodData: {
                     consumption: 200000
                 },
+                orificeMethodData: {
+                    compressorAirTemp: 0,
+                    atmosphericPressure: 0,
+                    dischargeCoefficient: 0,
+                    orificeDiameter: 0,
+                    supplyPressure: 0,
+                    numberOfOrifices: 1
+                },
+                decibelsMethodData: {
+                    soundIntensity: 0
+                },
+                estimateMethodData: {
+                    leakRateEstimate: 0
+                },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,
                     compressorSpecificPower: 0.16
@@ -408,6 +464,20 @@ test('Compressed Air Reduction Test All', function (t) {
                 },
                 otherMethodData: {
                     consumption: 200000
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 0,
+                    atmosphericPressure: 0,
+                    dischargeCoefficient: 0,
+                    orificeDiameter: 0,
+                    supplyPressure: 0,
+                    numberOfOrifices: 1
+                },
+                decibelsMethodData: {
+                    soundIntensity: 0
+                },
+                estimateMethodData: {
+                    leakRateEstimate: 0
                 },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,

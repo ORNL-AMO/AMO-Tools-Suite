@@ -517,6 +517,61 @@ CompressedAirOtherMethodData getCompressedAirOtherMethodData(Local<Object> obj)
     return {consumption};
 }
 
+OrificeMethodData getOrificeMethodData(Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>("orificeMethodData").ToLocalChecked();
+    Local<Object> orificeMethodDataV8 = Nan::To<Object>(obj->Get(context, getName).ToLocalChecked()).ToLocalChecked();
+    if (orificeMethodDataV8->IsUndefined())
+    {
+        ThrowTypeError(std::string("CompressedAirReduction: getOrificeMethodData method in calculator.h: orificeMethodData not present in object").c_str());
+    }
+    double airTemp = GetDouble("compressorAirTemp", orificeMethodDataV8);
+    double atmPressure = GetDouble("atmosphericPressure", orificeMethodDataV8);
+    double dischargeCoef = GetDouble("dischargeCoefficient", orificeMethodDataV8);
+    double diameter = GetDouble("orificeDiameter", orificeMethodDataV8);
+    double supplyPressure = GetDouble("supplyPressure", orificeMethodDataV8);
+    int numOrifices = static_cast<int>(GetDouble("numberOfOrifices", orificeMethodDataV8));
+    return {
+        airTemp,
+        atmPressure,
+        dischargeCoef,
+        diameter,
+        supplyPressure,
+        numOrifices};
+}
+
+DecibelsMethodData getDecibelsMethodData(Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>("decibelsMethodData").ToLocalChecked();
+    Local<Object> decibelsMethodDataV8 = Nan::To<Object>(obj->Get(context, getName).ToLocalChecked()).ToLocalChecked();
+    if (decibelsMethodDataV8->IsUndefined())
+    {
+        ThrowTypeError(std::string("CompressedAirReduction: getDecibelsMethodData method in calculator.h: decibelsMethodData not present in object").c_str());
+    }
+    double leakRateEstimate = GetDouble("soundIntensity", decibelsMethodDataV8);
+    return {
+        leakRateEstimate};
+}
+
+EstimateMethodData getEstimateMethodData(Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>("estimateMethodData").ToLocalChecked();
+    Local<Object> estimateMethodDataV8 = Nan::To<Object>(obj->Get(context, getName).ToLocalChecked()).ToLocalChecked();
+    if (estimateMethodDataV8->IsUndefined())
+    {
+        ThrowTypeError(std::string("CompressedAirReduction: getEstimateMethodData method in calculator.h: estimateMethodData not present in object").c_str());
+    }
+    double leakRateEstimate = GetDouble("leakRateEstimate", estimateMethodDataV8);
+    return {
+        leakRateEstimate};
+}
+
 CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
 {
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
@@ -544,6 +599,9 @@ CompressedAirReductionInput constructCompressedAirReductionInput(Local<Object> o
     BagMethodData bagMethodData = getBagMethodData(obj);
     PressureMethodData pressureMethodData = getPressureMethodData(obj);
     CompressedAirOtherMethodData otherMethodData = getCompressedAirOtherMethodData(obj);
+    OrificeMethodData orificeMethodData = getOrificeMethodData(obj);
+    DecibelsMethodData decibelsMethodData = getDecibelsMethodData(obj);
+    EstimateMethodData estimateMethodData = getEstimateMethodData(obj);
     CompressorElectricityData electricityData = getCompressorElectricityData(obj);
     int units = static_cast<int>(GetDouble("units", obj));
     return {
@@ -555,6 +613,9 @@ CompressedAirReductionInput constructCompressedAirReductionInput(Local<Object> o
         bagMethodData,
         pressureMethodData,
         otherMethodData,
+        orificeMethodData,
+        decibelsMethodData,
+        estimateMethodData,
         electricityData,
         units};
 }

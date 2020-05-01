@@ -699,7 +699,7 @@ test('dbSelectPumpData', function (t) {
     t.equal(res.speed, obj.speed, res.speed + " != " + obj.speed);
     t.equal(res.numStages, obj.numStages, res.numStages + " != " + obj.numStages);
     t.equal(res.yearlyOperatingHours, obj.yearlyOperatingHours, res.yearlyOperatingHours + " != " + obj.yearlyOperatingHours);
-    t.equal(res.yearlyInstalled, obj.yearlyInstalled, res.yearlyInstalled + " != " + obj.yearlyInstalled);
+    t.equal(res.yearInstalled, obj.yearInstalled, res.yearInstalled + " != " + obj.yearInstalled);
     t.equal(res.finalMotorRpm, obj.finalMotorRpm, res.finalMotorRpm + " != " + obj.finalMotorRpm);
     t.equal(res.inletDiameter, obj.inletDiameter, res.inletDiameter + " != " + obj.inletDiameter);
     t.equal(res.weight, obj.weight, res.weight + " != " + obj.weight);
@@ -828,7 +828,7 @@ test('dbInsertPump', function (t) {
     t.equal(res[size].speed, obj.speed, res[size].speed + " != " + obj.speed);
     t.equal(res[size].numStages, obj.numStages, res[size].numStages + " != " + obj.numStages);
     t.equal(res[size].yearlyOperatingHours, obj.yearlyOperatingHours, res[size].yearlyOperatingHours + " != " + obj.yearlyOperatingHours);
-    t.equal(res[size].yearlyInstalled, obj.yearlyInstalled, res[size].yearlyInstalled + " != " + obj.yearlyInstalled);
+    t.equal(res[size].yearInstalled, obj.yearInstalled, res[size].yearInstalled + " != " + obj.yearInstalled);
     t.equal(res[size].finalMotorRpm, obj.finalMotorRpm, res[size].finalMotorRpm + " != " + obj.finalMotorRpm);
     t.equal(res[size].inletDiameter, obj.inletDiameter, res[size].inletDiameter + " != " + obj.inletDiameter);
     t.equal(res[size].weight, obj.weight, res[size].weight + " != " + obj.weight);
@@ -851,7 +851,7 @@ test('dbInsertPump', function (t) {
     t.equal(res[size].shaftDiameter, obj.shaftDiameter, res[size].shaftDiameter + " != " + obj.shaftDiameter);
     t.equal(res[size].impellerDiameter, obj.impellerDiameter, res[size].impellerDiameter + " != " + obj.impellerDiameter);
     t.equal(res[size].efficiency, obj.efficiency, res[size].efficiency + " != " + obj.efficiency);
-    t.equal(res[size].output6sizeHz, obj.output6sizeHz, res[size].output6sizeHz + " != " + obj.output6sizeHz);
+    t.equal(res[size].output60Hz, obj.output60Hz, res[size].output60Hz + " != " + obj.output60Hz);
     t.equal(res[size].minFlowSize, obj.minFlowSize, res[size].minFlowSize + " != " + obj.minFlowSize);
     t.equal(res[size].pumpSize, obj.pumpSize, res[size].pumpSize + " != " + obj.pumpSize);
     t.equal(res[size].outOfService, obj.outOfService, res[size].outOfService + " != " + obj.outOfService);

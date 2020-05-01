@@ -9,6 +9,9 @@ TEST_CASE("Compressed Air Reduction Flow Meter Method", "[CompressedAirReduction
                                     BagMethodData(10, 5, 30),
                                     PressureMethodData(0, 1, 80),
                                     CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(1.0),
+                                    EstimateMethodData(0.1),
                                     CompressorElectricityData(1.428, 1.38233),
                                     1)};
 
@@ -29,6 +32,9 @@ TEST_CASE("Compressed Air Reduction Flow Meter Method and Electricity", "[Compre
                                     BagMethodData(10, 5, 30),
                                     PressureMethodData(0, 1, 80),
                                     CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(1.0),
+                                    EstimateMethodData(0.1),
                                     CompressorElectricityData(0.8, 0.16),
                                     1)};
 
@@ -49,6 +55,9 @@ TEST_CASE("Compressed Air Reduction Bag Method and Electricity", "[CompressedAir
                                     BagMethodData(15, 10, 12),
                                     PressureMethodData(0, 1, 80),
                                     CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(1.0),
+                                    EstimateMethodData(0.1),
                                     CompressorElectricityData(0.40, 0.16),
                                     2)};
 
@@ -69,6 +78,9 @@ TEST_CASE("Compressed Air Reduction Orifice Pressure Method and Electricity", "[
                                     BagMethodData(15, 10, 12),
                                     PressureMethodData(0, 1, 80),
                                     CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(1.0),
+                                    EstimateMethodData(0.1),
                                     CompressorElectricityData(0.40, 0.16),
                                     1)};
 
@@ -89,6 +101,9 @@ TEST_CASE("Compressed Air Reduction Orifice Pressure Method Multiple Nozzles", "
                                     BagMethodData(15, 10, 12),
                                     PressureMethodData(2, 4, 50),
                                     CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(1.0),
+                                    EstimateMethodData(0.1),
                                     CompressorElectricityData(0.40, 0.16),
                                     3)};
 
@@ -109,6 +124,9 @@ TEST_CASE("Compressed Air Reduction Other Method", "[CompressedAirReduction][Uti
                                     BagMethodData(15, 10, 12),
                                     PressureMethodData(2, 4, 50),
                                     CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(1.0),
+                                    EstimateMethodData(0.1),
                                     CompressorElectricityData(0.40, 0.16),
                                     1)};
 

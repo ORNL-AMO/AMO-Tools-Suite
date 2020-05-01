@@ -55,6 +55,68 @@ class PressureMethodData
     double supplyPressure;
 };
 
+class DecibelsMethodData
+{
+  public:
+    DecibelsMethodData(const double soundIntensity) : soundIntensity(soundIntensity) {}
+
+    double calculate();
+
+  private:
+    double soundIntensity;
+    double linePressure;
+    double decibels;
+    double decibelRatingA; // y1
+    double presureA; // x1
+    double firstFlowA; // q11
+    double secondFlowA; // q22
+    double decibelRatingB;
+    double presureB;
+    double firstFlowB;
+    double secondFlowB;
+};
+
+class EstimateMethodData
+{
+  public:
+    EstimateMethodData(const double leakRateEstimate) : leakRateEstimate(leakRateEstimate) {}
+
+    double getLeakRateEstimate() const {return leakRateEstimate; }
+    void setLeakRateEstimate(double leakRateEstimate);
+
+  private:
+    double leakRateEstimate;
+};
+
+class OrificeMethodData
+{
+  public:
+    OrificeMethodData(const double airTemp, const double atmPressure, const double dischargeCoef, // removed operatingTime
+			const double diameter, const double supplyPressure, const int numOrifices)
+			: airTemp(airTemp), atmPressure(atmPressure), dischargeCoef(dischargeCoef), diameter(diameter),
+			  supplyPressure(supplyPressure), numOrifices(numOrifices) {}
+
+    double getAirTemp() const { return airTemp; }
+    double getAtmPressure() const { return atmPressure; }
+    double getDischargeCoef() const { return dischargeCoef; }
+    double getDiameter() const { return diameter; }
+    double getSupplyPressure() const { return supplyPressure; }
+    int getNumOrifices() const { return numOrifices; }
+
+    void setAirTemp(double airTemp);
+    void setAtmPressure(double atmPressure);
+    void setDischargeCoef(double dischargeCoef);
+    void setDiameter(double diameter);
+    void setSupplyPressure(double supplyPressure);
+    void setNumOrifices(int numOrifices);
+
+    double calculate();
+
+  private:
+    double airTemp, atmPressure, dischargeCoef, diameter, supplyPressure;
+    int numOrifices;
+};
+
 class CompressedAirOtherMethodData
 {
   public:
@@ -87,13 +149,16 @@ class CompressedAirReductionInput
     CompressedAirReductionInput(const int hoursPerYear, const int utilityType, const double utilityCost, const int measurementMethod,
                                 const CompressedAirFlowMeterMethodData flowMeterMethodData, const BagMethodData bagMethodData,
                                 const PressureMethodData pressureMethodData, const CompressedAirOtherMethodData otherMethodData,
-                                const CompressorElectricityData compressorElectricityData, const int units)
+                                const OrificeMethodData orificeMethodData, const DecibelsMethodData decibelsMethodData,
+                                const EstimateMethodData estimateMethodData, const CompressorElectricityData compressorElectricityData,
+                                const int units)
         : hoursPerYear(hoursPerYear), utilityType(utilityType), utilityCost(utilityCost), measurementMethod(measurementMethod),
           flowMeterMethodData(flowMeterMethodData), bagMethodData(bagMethodData),
-          pressureMethodData(pressureMethodData), otherMethodData(otherMethodData),
+          pressureMethodData(pressureMethodData), otherMethodData(otherMethodData), orificeMethodData(orificeMethodData),
+          decibelsMethodData(decibelsMethodData), estimateMethodData(estimateMethodData),
           compressorElectricityData(compressorElectricityData), units(units) {}
 
-    int getHoursPerYear() const { return hoursPerYear; }
+    int getHoursPerYear() const { return hoursPerYear; } // operating time
     int getUtilityType() const { return utilityType; }
     int getMeasurementMethod() const { return measurementMethod; }
     int getUnits() const { return units; }
@@ -102,6 +167,9 @@ class CompressedAirReductionInput
     BagMethodData getBagMethodData() const { return bagMethodData; }
     PressureMethodData getPressureMethodData() const { return pressureMethodData; }
     CompressedAirOtherMethodData getOtherMethodData() const { return otherMethodData; }
+    OrificeMethodData getOrificeMethodData() const { return orificeMethodData; }
+    DecibelsMethodData getDecibelsMethodData() const { return decibelsMethodData; }
+    EstimateMethodData getEstimateMethodData() const { return estimateMethodData; }
     CompressorElectricityData getCompressorElectricityData() const { return compressorElectricityData; }
 
   private:
@@ -112,6 +180,9 @@ class CompressedAirReductionInput
     BagMethodData bagMethodData;
     PressureMethodData pressureMethodData;
     CompressedAirOtherMethodData otherMethodData;
+    OrificeMethodData orificeMethodData;
+    DecibelsMethodData decibelsMethodData;
+    EstimateMethodData estimateMethodData;
     CompressorElectricityData compressorElectricityData;
     int units;
 };
