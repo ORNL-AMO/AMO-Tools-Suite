@@ -182,6 +182,40 @@ EstimateMethod::Output EstimateMethod::calculate() {
 	return output;
 }
 
+DecibelsMethod::DecibelsMethod(const double operatingTime, const double linePressure, const double decibels, const double decibelRatingA, 
+		const double pressureA, const double firstFlowA, const double secondFlowA, const double decibelRatingB, const double pressureB,
+		const double firstFlowB, const double secondFlowB)
+		: operatingTime(operatingTime), linePressure(linePressure), decibels(decibels), decibelRatingA(decibelRatingA), 
+		  pressureA(pressureA), firstFlowA(firstFlowA), secondFlowA(secondFlowA), decibelRatingB(decibelRatingB),
+		  pressureB(pressureB), firstFlowB(firstFlowB), secondFlowB(secondFlowB)
+{}
+
+DecibelsMethod::Output DecibelsMethod::calculate() {
+	/*
+	double operatingTime;
+    double linePressure; // X
+    double decibels; // Y
+    double decibelRatingA; // Y1
+    double pressureA; // X1
+    double firstFlowA; // Q11
+    double secondFlowA; // Q21
+    double decibelRatingB; // Y2
+    double pressureB; // X2
+    double firstFlowB; // Q12
+    double secondFlowB; // Q22
+	*/
+
+	const double denominator = (pressureB - pressureA) * (decibelRatingB - decibelRatingA);
+	const double leakRateEstimate = ((pressureB - linePressure) * (decibelRatingB - decibels)) / denominator * firstFlowA
+							      + ((linePressure - pressureA) * (decibelRatingB - decibels)) / denominator * secondFlowA
+							      + ((pressureB - linePressure) * (decibels - decibelRatingA)) / denominator * firstFlowB
+							      + ((linePressure - pressureA) * (decibels - decibelRatingA)) / denominator * secondFlowB;
+	const double annualConsumption = (leakRateEstimate * operatingTime * 60) / 1000;
+	DecibelsMethod::Output output(leakRateEstimate, annualConsumption);
+
+	return output;
+}
+
 OrificeMethod::OrificeMethod(const double operatingTime, const double airTemp, const double atmPressure, const double dischargeCoef,
 			const double diameter, const double supplyPressure, const int numOrifices)
 			: operatingTime(operatingTime), airTemp(airTemp), atmPressure(atmPressure), dischargeCoef(dischargeCoef), diameter(diameter),
@@ -195,8 +229,8 @@ OrificeMethod::Output OrificeMethod::calculate() {
 	const double leakRateLBMmin = sonicDensity * (diameter * diameter) * (M_PI/(4 * 144)) * leakVelocity * 60 * dischargeCoef;
 	const double leakRateScfm = leakRateLBMmin / standardDensity;
 	const double leakRateEstimate = leakRateScfm * numOrifices;
-	const double annualComsumption = (operatingTime * leakRateEstimate * 60) / 1000;
-	OrificeMethod::Output output(standardDensity, sonicDensity, leakVelocity, leakRateLBMmin, leakRateScfm, leakRateEstimate, annualComsumption);
+	const double annualConsumption = (operatingTime * leakRateEstimate * 60) / 1000;
+	OrificeMethod::Output output(standardDensity, sonicDensity, leakVelocity, leakRateLBMmin, leakRateScfm, leakRateEstimate, annualConsumption);
 
 	return output;
 }

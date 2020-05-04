@@ -552,9 +552,27 @@ DecibelsMethodData getDecibelsMethodData(Local<Object> obj)
     {
         ThrowTypeError(std::string("CompressedAirReduction: getDecibelsMethodData method in calculator.h: decibelsMethodData not present in object").c_str());
     }
-    double leakRateEstimate = GetDouble("soundIntensity", decibelsMethodDataV8);
+    double linePressure = GetDouble("linePressure", decibelsMethodDataV8);
+    double decibels = GetDouble("decibels", decibelsMethodDataV8);
+    double decibelRatingA = GetDouble("decibelRatingA", decibelsMethodDataV8);
+    double pressureA = GetDouble("pressureA", decibelsMethodDataV8);
+    double firstFlowA = GetDouble("firstFlowA", decibelsMethodDataV8);
+    double secondFlowA = GetDouble("secondFlowA", decibelsMethodDataV8);
+    double decibelRatingB = GetDouble("decibelRatingB", decibelsMethodDataV8);
+    double pressureB = GetDouble("pressureB", decibelsMethodDataV8);
+    double firstFlowB = GetDouble("firstFlowB", decibelsMethodDataV8);
+    double secondFlowB = GetDouble("secondFlowB", decibelsMethodDataV8);
     return {
-        leakRateEstimate};
+        linePressure,
+        decibels,
+        decibelRatingA,
+        pressureA,
+        firstFlowA,
+        secondFlowA,
+        decibelRatingB,
+        pressureB,
+        firstFlowB,
+        secondFlowB};
 }
 
 EstimateMethodData getEstimateMethodData(Local<Object> obj)

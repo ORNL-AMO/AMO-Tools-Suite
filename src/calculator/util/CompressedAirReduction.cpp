@@ -46,19 +46,21 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
         {
             OrificeMethodData orificeMethodData = compressedAirReductionInput.getOrificeMethodData();
             tmpFlowRate = orificeMethodData.calculate();
-            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) / 1000; // / 1000?
+            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits(); // / 1000?
         }
         // decibels method
         else if(compressedAirReductionInput.getMeasurementMethod() == 5)
         {
             DecibelsMethodData decibelsMethodData = compressedAirReductionInput.getDecibelsMethodData();
+            tmpFlowRate = decibelsMethodData.calculate();
+            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits(); // / 1000?
         }
         // estimate method
         else if(compressedAirReductionInput.getMeasurementMethod() == 6)
         {
             EstimateMethodData estimateMethodData = compressedAirReductionInput.getEstimateMethodData();
             tmpFlowRate = estimateMethodData.getLeakRateEstimate();
-            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) / 1000; // / 1000?
+            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits(); // / 1000?
         }
 
         //electricity calculation
@@ -106,6 +108,30 @@ double PressureMethodData::calculate()
     const double c = nozzleTable[this->nozzleType][2];
     double singleNozzleFlowRate = (a * (pow(this->supplyPressure, 2.0))) + (b * this->supplyPressure) + c;
     return singleNozzleFlowRate;
+}
+
+double DecibelsMethodData::calculate()
+{
+    /*
+    double linePressure; // X
+    double decibels; // Y
+    double decibelRatingA; // Y1
+    double pressureA; // X1
+    double firstFlowA; // Q11
+    double secondFlowA; // Q21
+    double decibelRatingB; // Y2
+    double pressureB; // X2
+    double firstFlowB; // Q12
+    double secondFlowB; // Q22
+	*/
+
+	const double denominator = (pressureB - pressureA) * (decibelRatingB - decibelRatingA);
+	const double leakRateEstimate = ((pressureB - linePressure) * (decibelRatingB - decibels)) / denominator * firstFlowA
+							      + ((linePressure - pressureA) * (decibelRatingB - decibels)) / denominator * secondFlowA
+							      + ((pressureB - linePressure) * (decibels - decibelRatingA)) / denominator * firstFlowB
+							      + ((linePressure - pressureA) * (decibels - decibelRatingA)) / denominator * secondFlowB;
+
+    return leakRateEstimate;
 }
 
 double OrificeMethodData::calculate()
@@ -190,6 +216,47 @@ void OrificeMethodData::setSupplyPressure(const double supplyPressure)
 void OrificeMethodData::setNumOrifices(const int numOrifices)
 {
     this->numOrifices = numOrifices;
+}
+
+void DecibelsMethodData::setLinePressure(double linePressure)
+{
+    this->linePressure = linePressure;
+}
+void DecibelsMethodData::setDecibels(double decibels)
+{
+    this->decibels = decibels;
+}
+void DecibelsMethodData::setDecibelRatingA(double decibelRatingA)
+{
+    this->decibelRatingA = decibelRatingA;
+}
+void DecibelsMethodData::setPressureA(double pressureA)
+{
+    this->pressureA = pressureA;
+}
+void DecibelsMethodData::setFirstFlowA(double firstFlowA)
+{
+    this->firstFlowA = firstFlowA;
+}
+void DecibelsMethodData::setSecondFlowA(double secondFlowA)
+{
+    this->secondFlowA = secondFlowA;
+}
+void DecibelsMethodData::setDecibelRatingB(double decibelRatingB)
+{
+    this->decibelRatingB = decibelRatingB;
+}
+void DecibelsMethodData::setPressureB(double pressureB)
+{
+    this->pressureB = pressureB;
+}
+void DecibelsMethodData::setFirstFlowB(double firstFlowB)
+{
+    this->firstFlowB = firstFlowB;
+}
+void DecibelsMethodData::setSecondFlowB(double secondFlowB)
+{
+    this->secondFlowB = secondFlowB;
 }
 
 void EstimateMethodData::setLeakRateEstimate(const double leakRateEstimate)

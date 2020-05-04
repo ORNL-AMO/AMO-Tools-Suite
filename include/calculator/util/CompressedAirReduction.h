@@ -58,22 +58,48 @@ class PressureMethodData
 class DecibelsMethodData
 {
   public:
-    DecibelsMethodData(const double soundIntensity) : soundIntensity(soundIntensity) {}
+    DecibelsMethodData(const double linePressure, const double decibels, const double decibelRatingA, 
+		  const double pressureA, const double firstFlowA, const double secondFlowA, const double decibelRatingB, const double pressureB,
+		  const double firstFlowB, const double secondFlowB)
+		  : linePressure(linePressure), decibels(decibels), decibelRatingA(decibelRatingA), 
+		    pressureA(pressureA), firstFlowA(firstFlowA), secondFlowA(secondFlowA), decibelRatingB(decibelRatingB),
+		    pressureB(pressureB), firstFlowB(firstFlowB), secondFlowB(secondFlowB) {}
+
+    double getLinePressure() const { return linePressure; }
+    double getDecibels() const { return decibels; }
+    double getDecibelRatingA() const { return decibelRatingA; }
+    double getPressureA() const { return pressureA; }
+    double getFirstFlowA() const { return firstFlowA; }
+    double getSecondFlowA() const { return secondFlowA; }
+    double getDecibelRatingB() const { return decibelRatingB; }
+    double getPressureB() const { return pressureB; }
+    double getFirstFlowB() const { return firstFlowB; }
+    double getSecondFlowB() const { return secondFlowB; }
+
+    void setLinePressure(double linePressure);
+    void setDecibels(double decibels);
+    void setDecibelRatingA(double decibelRatingA);
+    void setPressureA(double pressureA);
+    void setFirstFlowA(double firstFlowA);
+    void setSecondFlowA(double secondFlowA);
+    void setDecibelRatingB(double decibelRatingB);
+    void setPressureB(double pressureB);
+    void setFirstFlowB(double firstFlowB);
+    void setSecondFlowB(double secondFlowB);
 
     double calculate();
 
   private:
-    double soundIntensity;
-    double linePressure;
-    double decibels;
-    double decibelRatingA; // y1
-    double presureA; // x1
-    double firstFlowA; // q11
-    double secondFlowA; // q22
-    double decibelRatingB;
-    double presureB;
-    double firstFlowB;
-    double secondFlowB;
+    double linePressure; // X
+    double decibels; // Y
+    double decibelRatingA; // Y1
+    double pressureA; // X1
+    double firstFlowA; // Q11
+    double secondFlowA; // Q21
+    double decibelRatingB; // Y2
+    double pressureB; // X2
+    double firstFlowB; // Q12
+    double secondFlowB; // Q22
 };
 
 class EstimateMethodData

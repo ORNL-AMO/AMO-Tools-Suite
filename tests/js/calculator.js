@@ -273,7 +273,16 @@ test('Compressed Air Reduction Basic Test', function (t) {
                     numberOfOrifices: 1
                 },
                 decibelsMethodData: {
-                    soundIntensity: 0
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
                 },
                 estimateMethodData: {
                     leakRateEstimate: 0
@@ -337,7 +346,16 @@ test('Compressed Air Reduction Test All', function (t) {
                     numberOfOrifices: 1
                 },
                 decibelsMethodData: {
-                    soundIntensity: 0
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
                 },
                 estimateMethodData: {
                     leakRateEstimate: 0
@@ -384,7 +402,16 @@ test('Compressed Air Reduction Test All', function (t) {
                     numberOfOrifices: 1
                 },
                 decibelsMethodData: {
-                    soundIntensity: 0
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
                 },
                 estimateMethodData: {
                     leakRateEstimate: 0
@@ -429,7 +456,16 @@ test('Compressed Air Reduction Test All', function (t) {
                     numberOfOrifices: 1
                 },
                 decibelsMethodData: {
-                    soundIntensity: 0
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
                 },
                 estimateMethodData: {
                     leakRateEstimate: 0
@@ -474,7 +510,16 @@ test('Compressed Air Reduction Test All', function (t) {
                     numberOfOrifices: 1
                 },
                 decibelsMethodData: {
-                    soundIntensity: 0
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
                 },
                 estimateMethodData: {
                     leakRateEstimate: 0
