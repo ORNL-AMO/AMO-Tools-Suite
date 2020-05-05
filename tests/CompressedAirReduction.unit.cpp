@@ -159,3 +159,69 @@ TEST_CASE("Compressed Air Reduction Orifice Method and Electricity", "[Compresse
     CHECK(testOutput.singleNozzleFlowRate == Approx(0.0));
     CHECK(testOutput.consumption == Approx(1175234379));
 }
+
+TEST_CASE("Compressed Air Reduction Decibels Method and Electricity", "[CompressedAirReduction][Util]")
+{
+    std::vector<CompressedAirReductionInput> compressedAirReductionInputVec = {
+        CompressedAirReductionInput(8640, 1, 0.12, 5,
+                                    CompressedAirFlowMeterMethodData(200000),
+                                    BagMethodData(15, 10, 12),
+                                    PressureMethodData(0, 1, 80),
+                                    CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
+                                    EstimateMethodData(0.1),
+                                    CompressorElectricityData(0.40, 0.16),
+                                    1)};
+
+    auto compressedAirReduction = CompressedAirReduction(compressedAirReductionInputVec);
+    auto testOutput = compressedAirReduction.calculate();
+    CHECK(testOutput.energyUse == Approx(790.17984));
+    CHECK(testOutput.energyCost == Approx(94.8215808));
+    CHECK(testOutput.flowRate == Approx(1.429));
+    CHECK(testOutput.singleNozzleFlowRate == Approx(0.0));
+    CHECK(testOutput.consumption == Approx(740793.6));
+}
+
+TEST_CASE("Compressed Air Reduction Estimate Method and Electricity", "[CompressedAirReduction][Util]")
+{
+    std::vector<CompressedAirReductionInput> compressedAirReductionInputVec = {
+        CompressedAirReductionInput(8640, 1, 0.12, 6,
+                                    CompressedAirFlowMeterMethodData(200000),
+                                    BagMethodData(15, 10, 12),
+                                    PressureMethodData(0, 1, 80),
+                                    CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
+                                    EstimateMethodData(0.1),
+                                    CompressorElectricityData(0.40, 0.16),
+                                    1)};
+
+    auto compressedAirReduction = CompressedAirReduction(compressedAirReductionInputVec);
+    auto testOutput = compressedAirReduction.calculate();
+    CHECK(testOutput.energyUse == Approx(55.296));
+    CHECK(testOutput.energyCost == Approx(6.63552));
+    CHECK(testOutput.flowRate == Approx(0.1));
+    CHECK(testOutput.singleNozzleFlowRate == Approx(0.0));
+    CHECK(testOutput.consumption == Approx(51840));
+
+    compressedAirReductionInputVec = {
+        CompressedAirReductionInput(3840, 1, 0.12, 6,
+                                    CompressedAirFlowMeterMethodData(200000),
+                                    BagMethodData(15, 10, 12),
+                                    PressureMethodData(0, 1, 80),
+                                    CompressedAirOtherMethodData(200000),
+                                    OrificeMethodData(250.0, 14.7, 1.0, 6.0, 6.2, 4),
+                                    DecibelsMethodData(130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65),
+                                    EstimateMethodData(0.1),
+                                    CompressorElectricityData(0.25, 0.16),
+                                    1)};
+
+    compressedAirReduction = CompressedAirReduction(compressedAirReductionInputVec);
+    testOutput = compressedAirReduction.calculate();
+    CHECK(testOutput.energyUse == Approx(15.36));
+    CHECK(testOutput.energyCost == Approx(1.8432));
+    CHECK(testOutput.flowRate == Approx(0.1));
+    CHECK(testOutput.singleNozzleFlowRate == Approx(0.0));
+    CHECK(testOutput.consumption == Approx(23040));
+}

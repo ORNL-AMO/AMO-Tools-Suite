@@ -285,7 +285,7 @@ test('Compressed Air Reduction Basic Test', function (t) {
                     secondFlowB: 1.65
                 },
                 estimateMethodData: {
-                    leakRateEstimate: 0
+                    leakRateEstimate: 0.1
                 },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,
@@ -358,7 +358,7 @@ test('Compressed Air Reduction Test All', function (t) {
                     secondFlowB: 1.65
                 },
                 estimateMethodData: {
-                    leakRateEstimate: 0
+                    leakRateEstimate: 0.1
                 },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,
@@ -414,7 +414,7 @@ test('Compressed Air Reduction Test All', function (t) {
                     secondFlowB: 1.65
                 },
                 estimateMethodData: {
-                    leakRateEstimate: 0
+                    leakRateEstimate: 0.1
                 },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,
@@ -468,7 +468,7 @@ test('Compressed Air Reduction Test All', function (t) {
                     secondFlowB: 1.65
                 },
                 estimateMethodData: {
-                    leakRateEstimate: 0
+                    leakRateEstimate: 0.1
                 },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,
@@ -522,7 +522,7 @@ test('Compressed Air Reduction Test All', function (t) {
                     secondFlowB: 1.65
                 },
                 estimateMethodData: {
-                    leakRateEstimate: 0
+                    leakRateEstimate: 0.1
                 },
                 compressorElectricityData: {
                     compressorControlAdjustment: 0.8,

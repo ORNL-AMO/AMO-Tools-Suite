@@ -46,21 +46,21 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
         {
             OrificeMethodData orificeMethodData = compressedAirReductionInput.getOrificeMethodData();
             tmpFlowRate = orificeMethodData.calculate();
-            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits(); // / 1000?
+            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits();
         }
         // decibels method
         else if(compressedAirReductionInput.getMeasurementMethod() == 5)
         {
             DecibelsMethodData decibelsMethodData = compressedAirReductionInput.getDecibelsMethodData();
             tmpFlowRate = decibelsMethodData.calculate();
-            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits(); // / 1000?
+            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits();
         }
         // estimate method
         else if(compressedAirReductionInput.getMeasurementMethod() == 6)
         {
             EstimateMethodData estimateMethodData = compressedAirReductionInput.getEstimateMethodData();
             tmpFlowRate = estimateMethodData.getLeakRateEstimate();
-            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits(); // / 1000?
+            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits();
         }
 
         //electricity calculation
