@@ -180,6 +180,7 @@ set(SOURCE_FILES
         src/calculator/util/NaturalGasReduction.cpp
         src/calculator/util/CompressedAirReduction.cpp
         src/calculator/util/CompressedAirPressureReduction.cpp
+        src/calculator/util/CompressedAirLeakSurvey.cpp
         src/calculator/util/WaterReduction.cpp
         src/calculator/util/insulation/pipes/InsulatedPipeInput.cpp
         src/calculator/util/insulation/pipes/InsulatedPipeCalculator.cpp
@@ -352,6 +353,7 @@ set(INCLUDE_FILES
         include/calculator/util/ElectricityReduction.h
         include/calculator/util/NaturalGasReduction.h
         include/calculator/util/CompressedAirReduction.h
+        include/calculator/util/CompressedAirLeakSurvey.h
         include/calculator/util/CompressedAirPressureReduction.h
         include/calculator/util/WaterReduction.h
         include/calculator/util/insulation/pipes/InsulatedPipeInput.h

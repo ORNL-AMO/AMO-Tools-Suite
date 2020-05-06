@@ -303,7 +303,74 @@ test('Compressed Air Reduction Basic Test', function (t) {
     t.equal(rnd(res.singleNozzleFlowRate), rnd(0.0));
     t.equal(rnd(res.consumption), rnd(103680000000.0));
 });
+/*
+test('Compressed Air Reduction Test (misc)', function (t) {
+    t.plan(6);
+    t.type(bindings.compressedAirReduction, 'function');
 
+    var inp = {
+        compressedAirReductionInputVec: [
+            {
+                hoursPerYear: 8640,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 5,
+                flowMeterMethodData: {
+                    meterReading: 0
+                },
+                bagMethodData: {
+                    height: 0,
+                    diameter: 0,
+                    fillTime: 0
+                },
+                pressureMethodData: {
+                    nozzleType: 0,
+                    numberOfNozzles: 1,
+                    supplyPressure: 80
+                },
+                otherMethodData: {
+                    consumption: 0
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 0,
+                    atmosphericPressure: 0,
+                    dischargeCoefficient: 0,
+                    orificeDiameter: 0,
+                    supplyPressure: 0,
+                    numberOfOrifices: 0
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                estimateMethodData: {
+                    leakRateEstimate: 0
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.4,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.compressedAirReduction(inp);
+    t.equal(rnd(res.energyUse), rnd(790.1798));
+    t.equal(rnd(res.energyCost), rnd(94.8216));
+    t.equal(rnd(res.flowRate), rnd(1.429));
+    t.equal(rnd(res.singleNozzleFlowRate), rnd(0.0));
+    t.equal(rnd(res.consumption), rnd(740793.6));
+});
+*/
 test('Compressed Air Reduction Test All', function (t) {
     t.plan(6);
     t.type(bindings.compressedAirReduction, 'function');

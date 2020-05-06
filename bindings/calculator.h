@@ -601,6 +601,7 @@ CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
         ThrowTypeError(std::string("CompressedAirReduction: getCompressorElectricityData method in calculator.h: compressorElectricityData not present in object").c_str());
     }
     double compressorControlAdjustment = Conversion(GetDouble("compressorControlAdjustment", compressorElectricityDataV8)).percentToFraction();
+    //double compressorControlAdjustment = GetDouble("compressorControlAdjustment", compressorElectricityDataV8);
     double compressorSpecificPower = GetDouble("compressorSpecificPower", compressorElectricityDataV8);
     return {
         compressorControlAdjustment,
