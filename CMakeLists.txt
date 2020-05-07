@@ -412,6 +412,7 @@ set(TEST_FILES
         tests/ElectricityReduction.unit.cpp
         tests/NaturalGasReduction.unit.cpp
         tests/CompressedAirReduction.unit.cpp
+        tests/CompressedAirLeakSurvey.unit.cpp
         tests/CompressedAirPressureReduction.unit.cpp
         tests/WaterReduction.unit.cpp
         tests/InsulatedPipeReduction.unit.cpp

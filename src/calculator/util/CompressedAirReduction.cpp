@@ -27,7 +27,7 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
             tmpFlowRate = (60.0 / bagMethodData.getFillTime()) * M_PI * bagMethodData.getHeight() * pow((bagMethodData.getDiameter() / 2.0), 2.0) * (1.0 / pow(12.0, 3.0));
             tmpTotalConsumption = tmpFlowRate * 60.0 * compressedAirReductionInput.getHoursPerYear() * compressedAirReductionInput.getUnits();
         }
-        // pressure method
+        // orifice/pressure method
         else if (compressedAirReductionInput.getMeasurementMethod() == 2)
         {
             PressureMethodData pressureMethodData = compressedAirReductionInput.getPressureMethodData();
@@ -40,27 +40,6 @@ CompressedAirReduction::Output CompressedAirReduction::calculate()
         {
             CompressedAirOtherMethodData otherMethodData = compressedAirReductionInput.getOtherMethodData();
             tmpTotalConsumption = otherMethodData.getConsumption();
-        }
-        // orifice method
-        else if(compressedAirReductionInput.getMeasurementMethod() == 4)
-        {
-            OrificeMethodData orificeMethodData = compressedAirReductionInput.getOrificeMethodData();
-            tmpFlowRate = orificeMethodData.calculate();
-            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits();
-        }
-        // decibels method
-        else if(compressedAirReductionInput.getMeasurementMethod() == 5)
-        {
-            DecibelsMethodData decibelsMethodData = compressedAirReductionInput.getDecibelsMethodData();
-            tmpFlowRate = decibelsMethodData.calculate();
-            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits();
-        }
-        // estimate method
-        else if(compressedAirReductionInput.getMeasurementMethod() == 6)
-        {
-            EstimateMethodData estimateMethodData = compressedAirReductionInput.getEstimateMethodData();
-            tmpFlowRate = estimateMethodData.getLeakRateEstimate();
-            tmpTotalConsumption = (compressedAirReductionInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirReductionInput.getUnits();
         }
 
         //electricity calculation
@@ -110,43 +89,6 @@ double PressureMethodData::calculate()
     return singleNozzleFlowRate;
 }
 
-double DecibelsMethodData::calculate()
-{
-    /*
-    double linePressure; // X
-    double decibels; // Y
-    double decibelRatingA; // Y1
-    double pressureA; // X1
-    double firstFlowA; // Q11
-    double secondFlowA; // Q21
-    double decibelRatingB; // Y2
-    double pressureB; // X2
-    double firstFlowB; // Q12
-    double secondFlowB; // Q22
-	*/
-
-	const double denominator = (pressureB - pressureA) * (decibelRatingB - decibelRatingA);
-	const double leakRateEstimate = ((pressureB - linePressure) * (decibelRatingB - decibels)) / denominator * firstFlowA
-							      + ((linePressure - pressureA) * (decibelRatingB - decibels)) / denominator * secondFlowA
-							      + ((pressureB - linePressure) * (decibels - decibelRatingA)) / denominator * firstFlowB
-							      + ((linePressure - pressureA) * (decibels - decibelRatingA)) / denominator * secondFlowB;
-
-    return leakRateEstimate;
-}
-
-double OrificeMethodData::calculate()
-{
-    const double standardDensity = (atmPressure + supplyPressure) * (144 / (53.34 * airTemp));
-	const double sonicDensity = std::pow(standardDensity * (2 / (1.4 + 1)), 1/(1.4 - 1));
-	const double leakVelocity = std::pow(((2 * 1.4) / (1.4 + 1)) * 53.34 * airTemp * 32.2, 0.5);
-	const double leakRateLBMmin = sonicDensity * (diameter * diameter) * (M_PI/(4 * 144)) * leakVelocity * 60 * dischargeCoef;
-	const double leakRateScfm = leakRateLBMmin / standardDensity;
-	const double leakRateEstimate = leakRateScfm * numOrifices;
-	//const double annualComsumption = (operatingTime * leakRateEstimate * 60) / 1000;
-
-    return leakRateEstimate;
-}
-
 double CompressorElectricityData::calculate()
 {
     const double c = 1.0 / 60;
@@ -191,77 +133,6 @@ void BagMethodData::setDiameter(const double diameter)
 void BagMethodData::setFillTime(const double fillTime)
 {
     this->fillTime = fillTime;
-}
-
-void OrificeMethodData::setAirTemp(const double airTemp)
-{
-    this->airTemp = airTemp;
-}
-void OrificeMethodData::setAtmPressure(const double atmPressure)
-{
-    this->atmPressure = atmPressure;
-}
-void OrificeMethodData::setDischargeCoef(const double dischargeCoef)
-{
-    this->dischargeCoef = dischargeCoef;
-}
-void OrificeMethodData::setDiameter(const double diameter)
-{
-    this->diameter = diameter;
-}
-void OrificeMethodData::setSupplyPressure(const double supplyPressure)
-{
-    this->supplyPressure = supplyPressure;
-}
-void OrificeMethodData::setNumOrifices(const int numOrifices)
-{
-    this->numOrifices = numOrifices;
-}
-
-void DecibelsMethodData::setLinePressure(double linePressure)
-{
-    this->linePressure = linePressure;
-}
-void DecibelsMethodData::setDecibels(double decibels)
-{
-    this->decibels = decibels;
-}
-void DecibelsMethodData::setDecibelRatingA(double decibelRatingA)
-{
-    this->decibelRatingA = decibelRatingA;
-}
-void DecibelsMethodData::setPressureA(double pressureA)
-{
-    this->pressureA = pressureA;
-}
-void DecibelsMethodData::setFirstFlowA(double firstFlowA)
-{
-    this->firstFlowA = firstFlowA;
-}
-void DecibelsMethodData::setSecondFlowA(double secondFlowA)
-{
-    this->secondFlowA = secondFlowA;
-}
-void DecibelsMethodData::setDecibelRatingB(double decibelRatingB)
-{
-    this->decibelRatingB = decibelRatingB;
-}
-void DecibelsMethodData::setPressureB(double pressureB)
-{
-    this->pressureB = pressureB;
-}
-void DecibelsMethodData::setFirstFlowB(double firstFlowB)
-{
-    this->firstFlowB = firstFlowB;
-}
-void DecibelsMethodData::setSecondFlowB(double secondFlowB)
-{
-    this->secondFlowB = secondFlowB;
-}
-
-void EstimateMethodData::setLeakRateEstimate(const double leakRateEstimate)
-{
-    this->leakRateEstimate = leakRateEstimate;
 }
 
 void CompressedAirFlowMeterMethodData::setMeterReading(const double meterReading)
