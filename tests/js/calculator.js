@@ -475,10 +475,10 @@ test('Compressed Air Leak Survey Basic Test', function (t) {
     };
 
     var res = bindings.compressedAirLeakSurvey(inp);
-    t.equal(rnd(res.energyUse), rnd(55.296));
-    t.equal(rnd(res.energyCost), rnd(6.63552));
-    t.equal(rnd(res.flowRate), rnd(0.1));
-    t.equal(rnd(res.compressedAirUse), rnd(51840));
+    t.equal(rnd(res.annualTotalElectricity), rnd(55.296));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(6.63552));
+    t.equal(rnd(res.totalFlowRate), rnd(0.1));
+    t.equal(rnd(res.annualTotalFlowRate), rnd(51840));
 });
 
 test('Compressed Air Leak Survey Additional Tests', function (t) {
@@ -647,10 +647,10 @@ test('Compressed Air Leak Survey Additional Tests', function (t) {
     };
 
     var res = bindings.compressedAirLeakSurvey(inp);
-    t.equal(rnd(res.energyUse), rnd(77477.145735));
-    t.equal(rnd(res.energyCost), rnd(9297.257488));
-    t.equal(rnd(res.flowRate), rnd(221.110576));
-    t.equal(rnd(res.compressedAirUse), rnd(116215718.602824));
+    t.equal(rnd(res.annualTotalElectricity), rnd(77477.145735));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(9297.257488));
+    t.equal(rnd(res.totalFlowRate), rnd(221.110576));
+    t.equal(rnd(res.annualTotalFlowRate), rnd(116215718.602824));
 });
 
 test('Compressed Air Leak Survey Test All', function (t) {
@@ -839,10 +839,10 @@ test('Compressed Air Leak Survey Test All', function (t) {
     };
 
     var res = bindings.compressedAirLeakSurvey(inp);
-    t.equal(rnd(res.energyUse), rnd(1258198.724925));
-    t.equal(rnd(res.energyCost), rnd(150983.846991));
-    t.equal(rnd(res.flowRate), rnd(2275.388319)); // 2271.979473
-    t.equal(rnd(res.compressedAirUse), rnd(1179561304.616953));
+    t.equal(rnd(res.annualTotalElectricity), rnd(1258198.724925));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(150983.846991));
+    t.equal(rnd(res.totalFlowRate), rnd(2275.388319)); // 2271.979473
+    t.equal(rnd(res.annualTotalFlowRate), rnd(1179561304.616953));
 });
 
 test('Compressed Air Pressure Reduction - Baseline', function (t) {

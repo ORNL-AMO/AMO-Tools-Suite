@@ -14,10 +14,10 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
     auto testOutput = compressedAirLeakSurvey.calculate();
-    CHECK(testOutput.energyUse == Approx(55.296));
-    CHECK(testOutput.energyCost == Approx(6.63552));
-    CHECK(testOutput.flowRate == Approx(0.1));
-    CHECK(testOutput.compressedAirUse == Approx(51840));
+    CHECK(testOutput.annualTotalElectricity == Approx(55.296));
+    CHECK(testOutput.annualTotalElectricityCost == Approx(6.63552));
+    CHECK(testOutput.totalFlowRate == Approx(0.1));
+    CHECK(testOutput.annualTotalFlowRate == Approx(51840));
 
     compressedAirLeakSurveyInputVec = {
         CompressedAirLeakSurveyInput(3840, 1, 0.12, 0,
@@ -30,10 +30,10 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 
     compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
     testOutput = compressedAirLeakSurvey.calculate();
-    CHECK(testOutput.energyUse == Approx(15.36));
-    CHECK(testOutput.energyCost == Approx(1.8432));
-    CHECK(testOutput.flowRate == Approx(0.1));
-    CHECK(testOutput.compressedAirUse == Approx(23040));
+    CHECK(testOutput.annualTotalElectricity == Approx(15.36));
+    CHECK(testOutput.annualTotalElectricityCost == Approx(1.8432));
+    CHECK(testOutput.totalFlowRate == Approx(0.1));
+    CHECK(testOutput.annualTotalFlowRate == Approx(23040));
 
     compressedAirLeakSurveyInputVec = {
         CompressedAirLeakSurveyInput(8760, 1, 0.12, 0,
@@ -46,10 +46,10 @@ TEST_CASE("Compressed Air Leak Survey Estimate Method and Electricity", "[Compre
 
     compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
     testOutput = compressedAirLeakSurvey.calculate();
-    CHECK(testOutput.energyUse == Approx(35040));
-    CHECK(testOutput.energyCost == Approx(4204.8));
-    CHECK(testOutput.flowRate == Approx(100));
-    CHECK(testOutput.compressedAirUse == Approx(52560000));
+    CHECK(testOutput.annualTotalElectricity == Approx(35040));
+    CHECK(testOutput.annualTotalElectricityCost == Approx(4204.8));
+    CHECK(testOutput.totalFlowRate == Approx(100));
+    CHECK(testOutput.annualTotalFlowRate == Approx(52560000));
 }
 
 TEST_CASE("Compressed Air Leak Survey Decibels Method and Electricity", "[CompressedAirLeakSurvey][Util]")
@@ -65,10 +65,10 @@ TEST_CASE("Compressed Air Leak Survey Decibels Method and Electricity", "[Compre
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
     auto testOutput = compressedAirLeakSurvey.calculate();
-    CHECK(testOutput.energyUse == Approx(790.17984));
-    CHECK(testOutput.energyCost == Approx(94.8215808));
-    CHECK(testOutput.flowRate == Approx(1.429));
-    CHECK(testOutput.compressedAirUse == Approx(740793.6));
+    CHECK(testOutput.annualTotalElectricity == Approx(790.17984));
+    CHECK(testOutput.annualTotalElectricityCost == Approx(94.8215808));
+    CHECK(testOutput.totalFlowRate == Approx(1.429));
+    CHECK(testOutput.annualTotalFlowRate == Approx(740793.6));
 }
 
 TEST_CASE("Compressed Air Leak Survey Bag Method and Electricity", "[CompressedAirLeakSurvey][Util]")
@@ -84,10 +84,10 @@ TEST_CASE("Compressed Air Leak Survey Bag Method and Electricity", "[CompressedA
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
     auto testOutput = compressedAirLeakSurvey.calculate();
-    CHECK(testOutput.energyUse == Approx(3769.9111));
-    CHECK(testOutput.energyCost == Approx(452.3893));
-    CHECK(testOutput.flowRate == Approx(6.8176923906));
-    CHECK(testOutput.compressedAirUse == Approx(3534291.73528));
+    CHECK(testOutput.annualTotalElectricity == Approx(3769.9111));
+    CHECK(testOutput.annualTotalElectricityCost == Approx(452.3893));
+    CHECK(testOutput.totalFlowRate == Approx(6.8176923906));
+    CHECK(testOutput.annualTotalFlowRate == Approx(3534291.73528));
 }
 
 TEST_CASE("Compressed Air Leak Survey Orifice Method and Electricity", "[CompressedAirLeakSurvey][Util]")
@@ -103,8 +103,8 @@ TEST_CASE("Compressed Air Leak Survey Orifice Method and Electricity", "[Compres
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
     auto testOutput = compressedAirLeakSurvey.calculate();
-    CHECK(testOutput.energyUse == Approx(1253583.3379004421));
-    CHECK(testOutput.energyCost == Approx(150430.000548053));
-    CHECK(testOutput.flowRate == Approx(2267.0416267007));
-    CHECK(testOutput.compressedAirUse == Approx(1175234379));
+    CHECK(testOutput.annualTotalElectricity == Approx(1253583.3379004421));
+    CHECK(testOutput.annualTotalElectricityCost == Approx(150430.000548053));
+    CHECK(testOutput.totalFlowRate == Approx(2267.0416267007));
+    CHECK(testOutput.annualTotalFlowRate == Approx(1175234379));
 }

@@ -135,11 +135,12 @@ class CompressedAirLeakSurvey
   public:
     struct Output
     {
-        Output(double energyUse, double energyCost, double flowRate, double compressedAirUse)
-            : energyUse(energyUse), energyCost(energyCost), flowRate(flowRate), compressedAirUse(compressedAirUse) {}
+        Output(double annualTotalElectricity, double annualTotalElectricityCost, double totalFlowRate, double annualTotalFlowRate)
+            : annualTotalElectricity(annualTotalElectricity), annualTotalElectricityCost(annualTotalElectricityCost), 
+              totalFlowRate(totalFlowRate), annualTotalFlowRate(annualTotalFlowRate) {}
 
         Output() = default;
-        double energyUse = 0, energyCost = 0, flowRate = 0, compressedAirUse = 0;
+        double annualTotalElectricity = 0, annualTotalElectricityCost = 0, totalFlowRate = 0, annualTotalFlowRate = 0;
     };
 
     CompressedAirLeakSurvey(std::vector<CompressedAirLeakSurveyInput> &compressedAirLeakSurveyInputVec) : compressedAirLeakSurveyInputVec(compressedAirLeakSurveyInputVec)

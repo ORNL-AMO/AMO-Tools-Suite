@@ -738,10 +738,10 @@ NAN_METHOD(compressedAirLeakSurvey)
     {
         std::vector<CompressedAirLeakSurveyInput> inputVec = getCompressedAirLeakSurveyInputVec();
         CompressedAirLeakSurvey::Output rv = CompressedAirLeakSurvey(inputVec).calculate();
-        SetR("energyUse", rv.energyUse);
-        SetR("energyCost", rv.energyCost);
-        SetR("flowRate", rv.flowRate);
-        SetR("compressedAirUse", rv.compressedAirUse);
+        SetR("annualTotalElectricity", rv.annualTotalElectricity);
+        SetR("annualTotalElectricityCost", rv.annualTotalElectricityCost);
+        SetR("totalFlowRate", rv.totalFlowRate);
+        SetR("annualTotalFlowRate", rv.annualTotalFlowRate);
     }
     catch (std::runtime_error const &e)
     {
