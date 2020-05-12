@@ -17,29 +17,29 @@ CompressedAirLeakSurvey::Output CompressedAirLeakSurvey::calculate()
         if(compressedAirLeakSurveyInput.getMeasurementMethod() == 0)
         {
             EstimateMethodData estimateMethodData = compressedAirLeakSurveyInput.getEstimateMethodData();
-            tmpFlowRate = estimateMethodData.getLeakRateEstimate();
-            tmpTotalCompressedAirUse = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirLeakSurveyInput.getUnits();
+            tmpFlowRate = estimateMethodData.getLeakRateEstimate() * compressedAirLeakSurveyInput.getUnits();
+            tmpTotalCompressedAirUse = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpFlowRate * 60);
         }
         // decibels method
         else if(compressedAirLeakSurveyInput.getMeasurementMethod() == 1)
         {
             DecibelsMethodData decibelsMethodData = compressedAirLeakSurveyInput.getDecibelsMethodData();
-            tmpFlowRate = decibelsMethodData.calculate();
-            tmpTotalCompressedAirUse = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirLeakSurveyInput.getUnits();
+            tmpFlowRate = decibelsMethodData.calculate() * compressedAirLeakSurveyInput.getUnits();
+            tmpTotalCompressedAirUse = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpFlowRate * 60);
         }
         // bag method
         else if (compressedAirLeakSurveyInput.getMeasurementMethod() == 2)
         {
             BagMethodData bagMethodData = compressedAirLeakSurveyInput.getBagMethodData();
-            tmpFlowRate = (60.0 / bagMethodData.getFillTime()) * M_PI * bagMethodData.getHeight() * pow((bagMethodData.getDiameter() / 2.0), 2.0) * (1.0 / pow(12.0, 3.0));
-            tmpTotalCompressedAirUse = tmpFlowRate * 60.0 * compressedAirLeakSurveyInput.getHoursPerYear() * compressedAirLeakSurveyInput.getUnits();
+            tmpFlowRate = ((60.0 / bagMethodData.getFillTime()) * M_PI * bagMethodData.getHeight() * pow((bagMethodData.getDiameter() / 2.0), 2.0) * (1.0 / pow(12.0, 3.0))) * compressedAirLeakSurveyInput.getUnits();
+            tmpTotalCompressedAirUse = tmpFlowRate * 60.0 * compressedAirLeakSurveyInput.getHoursPerYear();
         }
         // orifice method
         else if(compressedAirLeakSurveyInput.getMeasurementMethod() == 3)
         {
             OrificeMethodData orificeMethodData = compressedAirLeakSurveyInput.getOrificeMethodData();
-            tmpFlowRate = orificeMethodData.calculate();
-            tmpTotalCompressedAirUse = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpFlowRate * 60) * compressedAirLeakSurveyInput.getUnits();
+            tmpFlowRate = orificeMethodData.calculate() * compressedAirLeakSurveyInput.getUnits();
+            tmpTotalCompressedAirUse = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpFlowRate * 60);
         }
 
         //electricity calculation
