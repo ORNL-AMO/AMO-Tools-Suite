@@ -112,8 +112,6 @@ public:
 
 		calculateFanAttributes(inputType, relativeHumidityOrDewPoint);
 
-		//wetBulbTemp = calculateWetBulbTemperature(dryBulbTemp, relativeHumidity, absolutePressure); //barometricPressure
-
 		/*
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
@@ -128,18 +126,6 @@ public:
 		fout << "relativeHumidity:       " << relativeHumidity << std::endl;
 		fout << "saturationPressure: " << saturationPressure << std::endl;
 		fout << "------------------------------" << std::endl << std::endl;
-		fout.close();
-		*/
-		/*
-		std::ofstream fout;
-    	fout.open("debug.txt", std::ios::app);
-		fout << "Wet Bulb Temperature Test" << std::endl << std::endl;
-		fout << "dryBulbTemp: " << "45.00" << std::endl;
-		fout << "relativeHumidity: " << 50.0 / 100 << std::endl;
-		fout << "barometricPressure: " << "29.28" << std::endl;
-		fout << std::endl;
-		fout << "wetBulbTemp: " << calculateWetBulbTemperature(45.00, 50.0 / 100, 29.28) << std::endl;
-		fout << std::endl;
 		fout.close();
 		*/
 	}
@@ -171,19 +157,6 @@ public:
 		fout << "relativeHumidity:       " << relativeHumidity << std::endl;
 		fout << "saturationPressure: " << saturationPressure << std::endl;
 		fout << "------------------------------" << std::endl << std::endl;
-		fout.close();
-		*/
-
-		/*
-		std::ofstream fout;
-    	fout.open("debug.txt", std::ios::app);
-		fout << "Wet Bulb Temperature Test" << std::endl << std::endl;
-		fout << "dryBulbTemp: " << dryBulbTemp << std::endl;
-		fout << "relativeHumidity: " << relativeHumidity << std::endl;
-		fout << "barometricPressure: " << barometricPressure << std::endl;
-		fout << std::endl;
-		fout << "wetBulbTemp: " << calculateWetBulbTemperature(dryBulbTemp, relativeHumidity, barometricPressure) << std::endl;
-		fout << std::endl;
 		fout.close();
 		*/
 	}
