@@ -448,6 +448,7 @@ void SetBaseGasDensityData(Local<Object> & obj, const BaseGasDensity & bgd)
 	Local<String> dewPoint = Nan::New<String>("dewPoint").ToLocalChecked();
 	Local<String> relativeHumidity = Nan::New<String>("relativeHumidity").ToLocalChecked();
 	Local<String> saturationPressure = Nan::New<String>("saturationPressure").ToLocalChecked();
+	Local<String> wetBulbTemp = Nan::New<String>("wetBulbTemp").ToLocalChecked();
 
 	Nan::Set(obj, gasDensity, Nan::New<Number>(bgd.getGasDensity()));
     Nan::Set(obj, absolutePressure, Nan::New<Number>(bgd.getAbsolutePressureIn()));
@@ -459,6 +460,7 @@ void SetBaseGasDensityData(Local<Object> & obj, const BaseGasDensity & bgd)
     Nan::Set(obj, dewPoint, Nan::New<Number>(bgd.getDewPoint()));
     Nan::Set(obj, relativeHumidity, Nan::New<Number>(bgd.getRelativeHumidity()));
     Nan::Set(obj, saturationPressure, Nan::New<Number>(bgd.getSaturationPressure()));
+	Nan::Set(obj, wetBulbTemp, Nan::New<Number>(bgd.getWetBulbTemp()));
 }
 NAN_METHOD(getBaseGasDensityRelativeHumidity)
 {

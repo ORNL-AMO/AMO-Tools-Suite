@@ -112,7 +112,7 @@ public:
 
 		calculateFanAttributes(inputType, relativeHumidityOrDewPoint);
 
-		wetBulbTemp = calculateWetBulbTemperature(dryBulbTemp, relativeHumidity, barometricPressure);
+		//wetBulbTemp = calculateWetBulbTemperature(dryBulbTemp, relativeHumidity, absolutePressure); //barometricPressure
 
 		/*
 		std::ofstream fout;
@@ -155,7 +155,7 @@ public:
 		relativeHumidity = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
 
 		calculateFanAttributes(inputType);
-
+		
 		/*
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
@@ -242,68 +242,19 @@ private:
  * @param barometricPressure, double, const,  pressure in Hg
  * @return wetBulbTemp double, Wet Bulb Temperature, °F
  */
-	double calculateWetBulbTemperature(double dryBulbTemp, double relativeHumidity, double barometricPressure) const
+	double calculateWetBulbTemperature(double dryBulbTemp, double relativeHumidity, double absolutePressure) const
 	{
-		//Tdb = (dryBulbTemp * (9/5)) + 32; // Convert to
-		double humidityRatioNormal = calculateRatioRH(dryBulbTemp, relativeHumidity, barometricPressure, 1); // Hum_rat2
-		//double humidityRatioNormal = getHumidityRatio();
+		double humidityRatioNormal = calculateRatioRH(dryBulbTemp, relativeHumidity, absolutePressure, 1); // Hum_rat2
 		double wetBulbTemp = dryBulbTemp; // set initial guess
-		//double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, barometricPressure); // Hum_rat
-		//double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24); // MOVE INSIDE LOOP
-		//double humidityRatioNew = 0.50255;
-
-		///*
-		std::ofstream fout;
-    	fout.open("debug.txt", std::ios::app);
-		fout << "----------START OF 'calculateWetBulbTemperature'----------" << std::endl;
-		fout << "Parameters:" << std::endl;
-		fout << "--------------" << std::endl;
-		fout << "dryBulbTemp: " << dryBulbTemp << std::endl;
-		fout << "relativeHumidity: " << relativeHumidity << std::endl;
-		fout << "barometricPressure: " << barometricPressure << std::endl;
-		fout << std::endl;
-		fout << "Before Loop:" << std::endl;
-		fout << "--------------" << std::endl;
-		fout << "humidityRatioNormal: " << humidityRatioNormal << std::endl;
-		fout << "wetBulbTemp: " << wetBulbTemp << std::endl;
-		//fout << "humidityRatioNew: " << humidityRatioNew << std::endl;
-		fout << std::endl;
-		//fout.close();
-		int iteration = 1;
-		//*/
-
-		// Use Newton-Raphson iteration to quickly solve to within 0.001% accuracy
-		//double humidityRatioNew;
-		double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
-		double humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
-		fout << "humidityRatioNew: " << humidityRatioNew << std::endl;
-		fout << "humidityRatioNew2: " << humidityRatioNew2 << std::endl;
+		double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24); // MOVE INSIDE LOOP
+		
 		while (abs((humidityRatioNew - humidityRatioNormal) / humidityRatioNormal) > 0.00001)
 		{
+			double humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
 			double dw_dtwb = (humidityRatioNew - humidityRatioNew2) / 0.001;
 			wetBulbTemp = wetBulbTemp - (humidityRatioNew - humidityRatioNormal) / dw_dtwb;
-
 			humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
-			humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
-			//double dw_dtwb = (humidityRatioNew - humidityRatioNew2) / 0.001;
-			//wetBulbTemp = wetBulbTemp - (humidityRatioNew - humidityRatioNormal) / dw_dtwb;
-			//humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, barometricPressure);
-			fout << "Iteration: " << iteration << std::endl;
-			fout << "--------------" << std::endl;
-			iteration++;
-			fout << "humidityRatioNew: " << humidityRatioNew << std::endl;
-			fout << "humidityRatioNew2: " << humidityRatioNew2 << std::endl;
-			fout << "dw_dtwb: " << dw_dtwb << std::endl;
-			fout << "wetBulbTemp: " << wetBulbTemp << std::endl;
-			//fout << "humidityRatioNew: " << humidityRatioNew << std::endl;
-			fout << std::endl;
-
 		}
-
-		fout << "Final wetBulbTemp: " << wetBulbTemp << std::endl;
-		fout << "----------END OF 'calculateWetBulbTemperature'----------" << std::endl;
-		fout << std::endl;
-		fout.close();
 
 		return wetBulbTemp;
 	}
@@ -352,13 +303,6 @@ private:
 	double calculateRatioRH(const double dryBulbTemp, const double relativeHumidity, const double barometricPressure,
 							const double specificGravity) const
 	{
-		std::ofstream fout;
-    	fout.open("debug.txt", std::ios::app);
-		fout << "----------START OF 'calculateRatioRH'----------" << std::endl;
-		fout << "saturationPressure: " << calculateSaturationPressure(dryBulbTemp) << std::endl;
-		fout << "----------END OF 'calculateRatioRH'----------" << std::endl;
-		fout << std::endl;
-		fout.close();
 		auto const pw = (calculateSaturationPressure(dryBulbTemp) * relativeHumidity);
 		return (18.02 / (specificGravity * 28.98)) * pw / (barometricPressure - pw);
 	}
@@ -452,6 +396,11 @@ private:
 		else
 		{
 			dewPoint = relativeHumidityOrDewPoint;
+		}
+
+		if(inputType != InputType::WetBulbTemp) // If not given as an input, calculate wet bulb temperature
+		{
+			wetBulbTemp = calculateWetBulbTemperature(tdo, relativeHumidity, absolutePressure);
 		}
 	}
 
