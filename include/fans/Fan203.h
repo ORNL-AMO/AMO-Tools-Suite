@@ -273,13 +273,20 @@ private:
 		//*/
 
 		// Use Newton-Raphson iteration to quickly solve to within 0.001% accuracy
-		double humidityRatioNew;
-		do
+		//double humidityRatioNew;
+		double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
+		double humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
+		fout << "humidityRatioNew: " << humidityRatioNew << std::endl;
+		fout << "humidityRatioNew2: " << humidityRatioNew2 << std::endl;
+		while (abs((humidityRatioNew - humidityRatioNormal) / humidityRatioNormal) > 0.00001)
 		{
-			humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
-			double humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, barometricPressure);
 			double dw_dtwb = (humidityRatioNew - humidityRatioNew2) / 0.001;
 			wetBulbTemp = wetBulbTemp - (humidityRatioNew - humidityRatioNormal) / dw_dtwb;
+
+			humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
+			humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
+			//double dw_dtwb = (humidityRatioNew - humidityRatioNew2) / 0.001;
+			//wetBulbTemp = wetBulbTemp - (humidityRatioNew - humidityRatioNormal) / dw_dtwb;
 			//humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, barometricPressure);
 			fout << "Iteration: " << iteration << std::endl;
 			fout << "--------------" << std::endl;
@@ -288,10 +295,10 @@ private:
 			fout << "humidityRatioNew2: " << humidityRatioNew2 << std::endl;
 			fout << "dw_dtwb: " << dw_dtwb << std::endl;
 			fout << "wetBulbTemp: " << wetBulbTemp << std::endl;
-			fout << "humidityRatioNew: " << humidityRatioNew << std::endl;
+			//fout << "humidityRatioNew: " << humidityRatioNew << std::endl;
 			fout << std::endl;
 
-		} while (abs((humidityRatioNew - humidityRatioNormal) / humidityRatioNormal) > 0.00001);
+		}
 
 		fout << "Final wetBulbTemp: " << wetBulbTemp << std::endl;
 		fout << "----------END OF 'calculateWetBulbTemperature'----------" << std::endl;
