@@ -221,7 +221,7 @@ private:
 		double wetBulbTemp = dryBulbTemp; // set initial guess
 		double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
 		
-		while (abs((humidityRatioNew - humidityRatioNormal) / humidityRatioNormal) > 0.00001)
+		while (fabs((humidityRatioNew - humidityRatioNormal) / humidityRatioNormal) > 0.00001)
 		{
 			double humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
 			double dw_dtwb = (humidityRatioNew - humidityRatioNew2) / 0.001;
