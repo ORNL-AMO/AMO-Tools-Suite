@@ -64,47 +64,16 @@ inline void SetObj(Local<Object> &obj, const std::string &key, const std::string
 
 void SetMotorData(Local<Object> & obj, const MotorData & motor) {
     SetObj(obj, "id", motor.getId());
-    SetObj(obj, "manufacturer", motor.getManufacturer());
-    SetObj(obj, "model", motor.getModel());
-    SetObj(obj, "catalog", motor.getCatalog());
-    SetObj(obj, "motorType", motor.getMotorType());
     SetObj(obj, "hp", motor.getHp());
-    SetObj(obj, "speed", motor.getSpeed());
-    SetObj(obj, "fullLoadSpeed", motor.getFullLoadSpeed());
-    SetObj(obj, "enclosureType", motor.getEnclosureType());
-    SetObj(obj, "frameNumber", motor.getFrameNumber());
-    SetObj(obj, "voltageRating", motor.getVoltageRating());
-    SetObj(obj, "purpose", motor.getPurpose());
-    SetObj(obj, "uFrame", motor.getUFrame());
-    SetObj(obj, "cFace", motor.getCFace());
-    SetObj(obj, "verticalShaft", motor.getVerticalShaft());
-    SetObj(obj, "dFlange", motor.getDFlange());
-    SetObj(obj, "serviceFactor", motor.getServiceFactor());
-    SetObj(obj, "insulationClass", motor.getInsulationClass());
-    SetObj(obj, "weight", motor.getWeight());
-    SetObj(obj, "listPrice", motor.getListPrice());
-    SetObj(obj, "windingResistance", motor.getWindingResistance());
-    SetObj(obj, "warranty", motor.getWarranty());
-    SetObj(obj, "rotorBars", motor.getRotorBars());
-    SetObj(obj, "statorSlots", motor.getStatorSlots());
-    SetObj(obj, "efficiency100", motor.getEfficiency100());
-    SetObj(obj, "efficiency75", motor.getEfficiency75());
-    SetObj(obj, "efficiency50", motor.getEfficiency50());
-    SetObj(obj, "efficiency25", motor.getEfficiency25());
-    SetObj(obj, "powerFactor100", motor.getPowerFactor100());
-    SetObj(obj, "powerFactor75", motor.getPowerFactor75());
-    SetObj(obj, "powerFactor50", motor.getPowerFactor50());
-    SetObj(obj, "powerFactor25", motor.getPowerFactor25());
-    SetObj(obj, "torqueFullLoad", motor.getTorqueFullLoad());
-    SetObj(obj, "torqueBreakDown", motor.getTorqueBreakDown());
-    SetObj(obj, "torqueLockedRotor", motor.getTorqueLockedRotor());
-    SetObj(obj, "ampsFullLoad", motor.getAmpsFullLoad());
-    SetObj(obj, "ampsIdle", motor.getAmpsIdle());
-    SetObj(obj, "ampsLockedRotor", motor.getAmpsLockedRotor());
-    SetObj(obj, "stalledRotorTimeHot", motor.getStalledRotorTimeHot());
-    SetObj(obj, "stalledRotorTimeCold", motor.getStalledRotorTimeCold());
-    SetObj(obj, "peakVoltage0ms", motor.getPeakVoltage0ms());
-    SetObj(obj, "peakVoltage5ms", motor.getPeakVoltage5ms());
+    SetObj(obj, "synchronousSpeed", motor.getSynchronousSpeed());
+    SetObj(obj, "poles", motor.getPoles());
+    SetObj(obj, "nominalEfficiency", motor.getNominalEfficiency());
+    SetObj(obj, "efficiencyType", motor.getEfficiencyType());
+    SetObj(obj, "nemaTable", motor.getNemaTable());
+    SetObj(obj, "motorType", motor.getMotorType());
+    SetObj(obj, "hz", motor.getHz());
+    SetObj(obj, "voltageLimit", motor.getVoltageLimit());
+    SetObj(obj, "catalog", motor.getCatalog());
 }
 
 void SetPumpData(Local<Object> & obj, const PumpData & pump) {
@@ -940,15 +909,8 @@ NAN_METHOD(selectMotorById) {
 
 NAN_METHOD(insertMotor) {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    MotorData motor(GetStr("manufacturer"), GetStr("model"), GetStr("catalog"), GetStr("motorType"),
-                    Get("hp"), Get("speed"), Get("fullLoadSpeed"), GetStr("enclosureType"), GetStr("frameNumber"),
-                    Get("voltageRating"), GetStr("purpose"), Get("uFrame"), Get("cFace"), Get("verticalShaft"), Get("dFlange"),
-                    Get("serviceFactor"), GetStr("insulationClass"), Get("weight"), Get("listPrice"), Get("windingResistance"),
-                    Get("warranty"), Get("rotorBars"), Get("statorSlots"), Get("efficiency100"), Get("efficiency75"),
-                    Get("efficiency50"), Get("efficiency25"), Get("powerFactor100"), Get("powerFactor75"), Get("powerFactor50"),
-                    Get("powerFactor25"), Get("torqueFullLoad"), Get("torqueBreakDown"), Get("torqueLockedRotor"),
-                    Get("ampsFullLoad"), Get("ampsIdle"), Get("ampsLockedRotor"), Get("stalledRotorTimeHot"),
-                    Get("stalledRotorTimeCold"), Get("peakVoltage0ms"), Get("peakVoltage5ms")
+    MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), GetStr("efficiencyType"), 
+                    GetStr("nemaTable"), GetStr("motorType"), Get("hz"), Get("voltageLimit"), GetStr("catalog")
     );
 	bool success = sql->insertMotorData(motor);
     info.GetReturnValue().Set(success);
@@ -961,15 +923,8 @@ NAN_METHOD(deleteMotor) {
 
 NAN_METHOD(updateMotor) {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    MotorData motor(GetStr("manufacturer"), GetStr("model"), GetStr("catalog"), GetStr("motorType"),
-                    Get("hp"), Get("speed"), Get("fullLoadSpeed"), GetStr("enclosureType"), GetStr("frameNumber"),
-                    Get("voltageRating"), GetStr("purpose"), Get("uFrame"), Get("cFace"), Get("verticalShaft"), Get("dFlange"),
-                    Get("serviceFactor"), GetStr("insulationClass"), Get("weight"), Get("listPrice"), Get("windingResistance"),
-                    Get("warranty"), Get("rotorBars"), Get("statorSlots"), Get("efficiency100"), Get("efficiency75"),
-                    Get("efficiency50"), Get("efficiency25"), Get("powerFactor100"), Get("powerFactor75"), Get("powerFactor50"),
-                    Get("powerFactor25"), Get("torqueFullLoad"), Get("torqueBreakDown"), Get("torqueLockedRotor"),
-                    Get("ampsFullLoad"), Get("ampsIdle"), Get("ampsLockedRotor"), Get("stalledRotorTimeHot"),
-                    Get("stalledRotorTimeCold"), Get("peakVoltage0ms"), Get("peakVoltage5ms")
+    MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), GetStr("efficiencyType"), 
+                    GetStr("nemaTable"), GetStr("motorType"), Get("hz"), Get("voltageLimit"), GetStr("catalog")
     );
 
     motor.setId(Get("id"));

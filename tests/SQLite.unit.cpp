@@ -289,13 +289,11 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
     }
 
     {
-        MotorData motor1 = {"Beta", "Xtrainer 300", "20018ET3G447", "2 Stroke 300cc", 200, 1800, 0, "TEFC",
-                       "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
-                       95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0};
+        auto motorData = sqlite.getMotorData();
+        CHECK(motorData.size() == 161);
 
-        MotorData motor2 = {"Suzuki", "Drz400", "20018ET3G447", "4 Stroke 398cc", 200, 1800, 0, "TEFC",
-                        "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
-                        95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0};
+        MotorData motor1 = {1, 3800, 4, 75.8, "Energy Efficient", "Table 12-11", "TEFC", 60, 600, "NEMA MG - 1-2018"};
+        MotorData motor2 = {2, 3600, 4, 79.8, "Energy Efficient", "Table 12-11", "TEFC", 60, 600, "NEMA MG - 1-2018"};
 
         sqlite.insertMotorData(motor1);
         sqlite.insertMotorData(motor2);
@@ -303,14 +301,14 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 	    auto custom = sqlite.getCustomMotorData().at(0);
         auto custom2 = sqlite.getCustomMotorData().at(1);
 
-        custom.setManufacturer("Beta Motorcycles");
-        custom2.setManufacturer("Slow Suzuki");
+        custom.setEfficiencyType("updated 1");
+        custom2.setEfficiencyType("updated 2");
 
 	    sqlite.updateMotorData(custom);
         sqlite.updateMotorData(custom2);
 
-        CHECK(sqlite.getCustomMotorData().at(0).getManufacturer() == "Beta Motorcycles");
-        CHECK(sqlite.getCustomMotorData().at(1).getManufacturer() == "Slow Suzuki");
+        CHECK(sqlite.getCustomMotorData().at(0).getEfficiencyType() == "updated 1");
+        CHECK(sqlite.getCustomMotorData().at(1).getEfficiencyType() == "updated 2");
     }
 
     {
@@ -446,17 +444,13 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 
     {
         auto const output = sqlite.getMotorData();
-        auto const last = output.back().getManufacturer();
-        MotorData motor(
-                    "throw this motor away delete", "X$D Ultra IEEE 841", "M9455", "NEMA Design B", 50, 1800, 1780, "TEFC", "326T", 460,
-					"IEEE 841 Petroleum/Chemical", 0, 0, 0, 0, 1.15, "F", 511, 4, 615, 99.5, 5, 38, 48, 94.5, 94.7,
-					94.3, 91.6, 78, 73.6, 63.3, 41.5, 147.4, 294.8, 206.4, 63.5, 25.7, 362.5, 92.9, 115.2, 2000
-        );
+        auto const last = output.back().getEfficiencyType();
+        MotorData motor = {1, 3800, 4, 75.8, "throw this motor away", "Table 12-11", "TEFC", 60, 600, "NEMA MG - 1-2018"};
 
         sqlite.insertMotorData(motor);
         sqlite.deleteMotorData(sqlite.getMotorData().back().getId());
         auto const output2 = sqlite.getMotorData();
-        CHECK( output2[output2.size() - 1].getManufacturer() == last );
+        CHECK( output2[output2.size() - 1].getEfficiencyType() == last );
     }
 
     {
@@ -1184,47 +1178,16 @@ TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
 
 TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][motor]" ) {
     auto const compare = [](MotorData result, MotorData expected) {
-		CHECK(result.getManufacturer() == expected.getManufacturer());
-		CHECK(result.getModel() == expected.getModel());
-		CHECK(result.getCatalog() == expected.getCatalog());
-		CHECK(result.getMotorType() == expected.getMotorType());
 		CHECK(result.getHp() == expected.getHp());
-		CHECK(result.getSpeed() == expected.getSpeed());
-		CHECK(result.getFullLoadSpeed() == expected.getFullLoadSpeed());
-		CHECK(result.getEnclosureType() == expected.getEnclosureType());
-		CHECK(result.getFrameNumber() == expected.getFrameNumber());
-		CHECK(result.getVoltageRating() == expected.getVoltageRating());
-		CHECK(result.getPurpose() == expected.getPurpose());
-		CHECK(result.getUFrame() == expected.getUFrame());
-		CHECK(result.getCFace() == expected.getCFace());
-		CHECK(result.getVerticalShaft() == expected.getVerticalShaft());
-		CHECK(result.getDFlange() == expected.getDFlange());
-		CHECK(result.getServiceFactor() == expected.getServiceFactor());
-		CHECK(result.getInsulationClass() == expected.getInsulationClass());
-		CHECK(result.getWeight() == expected.getWeight());
-		CHECK(result.getListPrice() == expected.getListPrice());
-		CHECK(result.getWindingResistance() == expected.getWindingResistance());
-		CHECK(result.getWarranty() == expected.getWarranty());
-		CHECK(result.getRotorBars() == expected.getRotorBars());
-		CHECK(result.getStatorSlots() == expected.getStatorSlots());
-		CHECK(result.getEfficiency100() == expected.getEfficiency100());
-		CHECK(result.getEfficiency75() == expected.getEfficiency75());
-		CHECK(result.getEfficiency50() == expected.getEfficiency50());
-		CHECK(result.getEfficiency25() == expected.getEfficiency25());
-		CHECK(result.getPowerFactor100() == expected.getPowerFactor100());
-		CHECK(result.getPowerFactor75() == expected.getPowerFactor75());
-		CHECK(result.getPowerFactor50() == expected.getPowerFactor50());
-		CHECK(result.getPowerFactor25() == expected.getPowerFactor25());
-		CHECK(result.getTorqueFullLoad() == expected.getTorqueFullLoad());
-		CHECK(result.getTorqueBreakDown() == expected.getTorqueBreakDown());
-		CHECK(result.getTorqueLockedRotor() == expected.getTorqueLockedRotor());
-		CHECK(result.getAmpsFullLoad() == expected.getAmpsFullLoad());
-		CHECK(result.getAmpsIdle() == expected.getAmpsIdle());
-		CHECK(result.getAmpsLockedRotor() == expected.getAmpsLockedRotor());
-		CHECK(result.getStalledRotorTimeHot() == expected.getStalledRotorTimeHot());
-		CHECK(result.getStalledRotorTimeCold() == expected.getStalledRotorTimeCold());
-		CHECK(result.getPeakVoltage0ms() == expected.getPeakVoltage0ms());
-		CHECK(result.getPeakVoltage5ms() == expected.getPeakVoltage5ms());
+		CHECK(result.getSynchronousSpeed() == expected.getSynchronousSpeed());
+		CHECK(result.getPoles() == expected.getPoles());
+		CHECK(result.getNominalEfficiency() == expected.getNominalEfficiency());
+		CHECK(result.getEfficiencyType() == expected.getEfficiencyType());
+		CHECK(result.getNemaTable() == expected.getNemaTable());
+		CHECK(result.getMotorType() == expected.getMotorType());
+		CHECK(result.getHz() == expected.getHz());
+		CHECK(result.getVoltageLimit() == expected.getVoltageLimit());
+		CHECK(result.getCatalog() == expected.getCatalog());
         CHECK(result.getId() == expected.getId());
     };
 
@@ -1233,52 +1196,37 @@ TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][moto
     {
         auto const motors = sqlite.getMotorData();
 
-        auto expected1 = MotorData(
-                "GE", "X$D Ultra IEEE 841", "M9455", "NEMA Design B", 50, 1800, 1780, "TEFC", "326T", 460,
-                "IEEE 841 Petroleum/Chemical", 0, 0, 0, 0, 1.15, "F", 511, 4, 615, 99.5, 5, 38, 48, 94.5, 94.7,
-                94.3, 91.6, 78, 73.6, 63.3, 41.5, 147.4, 294.8, 206.4, 63.5, 25.7, 362.5, 92.9, 115.2, 2000
-        );
+        auto expected1 = MotorData(1, 3600, 2, 75.5, "Energy Efficient", "Table 12-11", "TEFC", 60, 600, "NEMA MG - 1-2018");
         expected1.setId(1);
 
         auto motor = sqlite.getMotorDataById(1);
 	    compare(motors.at(0), expected1);
 
-	    auto expected2 = MotorData(
-			    "WEG Electric", "W22-NEMA Premium SD", "20018ET3G447", "NEMA Design B", 200, 1800, 0, "TEFC",
-			    "447/9T", 460, "undefined", 0, 0, 0, 0, 1.15, "undefined", 1899, 21098, 0, 0, 0, 0, 96.2, 96.2,
-			    95.4, 0, 85, 82, 73, 0, 582, 1455, 1396.8, 230, 0, 1564, 16, 35, 0, 0
-	    );
+	    auto expected2 = MotorData(1, 3600, 2,77, "Premium Efficiency", "Table 12-12", "ODP", 60, 600, "NEMA MG - 1-2018");
         expected2.setId(2);
 
 	    motor = sqlite.getMotorDataById(2);
         compare(motor, expected2);
 
-        auto expected3 = MotorData(
-                "Teco/Westinghouse", "MAX-E2/841", "HB2004", "NEMA Design B", 200, 1800, 1786, "TEFC", "447T", 460,
-				"undefined", 0, 0, 0, 0, 1.15, "F", 2420, 23132, 0, 0, 0, 0, 96.2, 95.8, 95,0, 84.5, 82.5, 78.5,0,
-				588, 1234.8, 705.6, 230, 46.4, 1450, 0, 0, 0, 0
-        );
+        auto expected3 = MotorData(1, 3600, 2, 77, "Premium Efficiency", "Table 12-12", "TEFC", 60, 600, "NEMA MG - 1-2018");
         expected3.setId(3);
 
         motor = sqlite.getMotorDataById(3);
+        compare(motor, expected3);
     }
 
     {
-        auto ktm = MotorData(
-                "KTM", "Freeride-e", "KTM Motors 2018", "electric motor", 24, 4500, 5000, "TEFC",
-                "447/9T", 260, "to provide hours of fun on a single charge", 0, 0, 0, 0, 1.15, "undefined", 60, 5000, 0, 2, 0, 0, 96.2, 96.2,
-                95.4, 0, 85, 82, 73, 0, 42, 42, 42, 230, 0, 1564, 16, 35, 300, 300
-        );
-	    ktm.setId(4);
+        auto motorToInsert = MotorData(4, 4400, 2, 78.5, "insert motor", "Table 12-11", "TEFC", 60, 600, "NEMA MG - 1-2018");
+	    motorToInsert.setId(162);
 
-        sqlite.insertMotorData(ktm);
+        sqlite.insertMotorData(motorToInsert);
         auto const motors = sqlite.getMotorData();
-	    compare(ktm, motors.back());
+	    compare(motorToInsert, motors.back());
 
         auto const customMotors = sqlite.getCustomMotorData();
-        compare(ktm, customMotors[0]);
+        compare(motorToInsert, customMotors[0]);
 
-        sqlite.deleteMotorData(ktm.getId());
+        sqlite.deleteMotorData(motorToInsert.getId());
 	    CHECK(sqlite.getCustomMotorData().size() == 0);
     }
 }
