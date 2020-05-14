@@ -217,9 +217,9 @@ private:
  */
 	double calculateWetBulbTemperature(double dryBulbTemp, double relativeHumidity, double absolutePressure) const
 	{
-		double humidityRatioNormal = calculateRatioRH(dryBulbTemp, relativeHumidity, absolutePressure, 1); // Hum_rat2
+		double humidityRatioNormal = calculateRatioRH(dryBulbTemp, relativeHumidity, absolutePressure, 1);
 		double wetBulbTemp = dryBulbTemp; // set initial guess
-		double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24); // MOVE INSIDE LOOP
+		double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
 		
 		while (abs((humidityRatioNew - humidityRatioNormal) / humidityRatioNormal) > 0.00001)
 		{
