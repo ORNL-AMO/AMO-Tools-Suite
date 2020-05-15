@@ -217,6 +217,8 @@ private:
  */
 	double calculateWetBulbTemperature(double dryBulbTemp, double relativeHumidity, double absolutePressure) const
 	{
+		// Newton-Raphson iteration (solve to within 0.001% accuracy)
+		
 		double humidityRatioNormal = calculateRatioRH(dryBulbTemp, relativeHumidity, absolutePressure, 1);
 		double wetBulbTemp = dryBulbTemp; // set initial guess
 		double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
