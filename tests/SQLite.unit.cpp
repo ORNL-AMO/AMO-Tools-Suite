@@ -1322,3 +1322,24 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         //compare(sqlite.getPumpData().back(), expected);
     }
 }
+/*
+TEST_CASE( "SQLite - getStandardEfficiencyData", "[MotorData]" ) {
+    std::vector<double> hpValues = {1, 1.5, 2, 3, 5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500}; // 25
+	std::vector<int> synchronousSpeedValues = {900, 1000, 1200, 1500, 1800, 3000, 3600}; // 7
+	std::vector<int> polesValues = {2, 4, 6, 8}; // 4
+	std::vector<double> nominalEfficiencyValues; // To be calculated
+	std::vector<std::string> efficiencyTypeValues = {"Standard Efficiency"}; // 1
+	//std::vector<std::string> nemaTableValues; N/A
+	std::vector<std::string> motorTypeValues = {"TEFC", "ODP"}; // 2
+	std::vector<int> hzValues = {50, 60}; // 2
+	std::vector<int> voltageLimitValues = {600, 5000}; // 2
+	//std::vector<std::string> catalogValues; N/A
+
+	std::vector<std::tuple<double, int, int, double, std::string, std::string, int, int>> combinations = getStandardEffCombinations(
+																										  hpValues, synchronousSpeedValues,
+																										  polesValues, efficiencyTypeValues,
+																										  motorTypeValues, hzValues,
+																										  voltageLimitValues);
+    CHECK(combinations.size() == 5600);
+}
+*/
