@@ -1,5 +1,114 @@
-#include "calculator.h"
+#ifndef AMO_TOOLS_SUITE_CHILLERS_H
+#define AMO_TOOLS_SUITE_CHILLERS_H
+
+#include <nan.h>
+#include <node.h>
+#include <string>
+#include <stdexcept>
+#include <array>
+#include <cmath>
+#include <vector>
+#include <iostream>
+
+//#include "calculator.h"
 #include "chillers/CoolingTower.h"
+
+using namespace Nan;
+using namespace v8;
+
+Local<Object> inp;
+Local<Object> r;
+
+double GetDouble(std::string const &key, Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>(key).ToLocalChecked();
+    Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    if (rObj->IsUndefined())
+    {
+        ThrowTypeError(std::string("GetDouble method in calculator.h: " + key + " not present in object").c_str());
+    }
+    return Nan::To<double>(rObj).FromJust();
+}
+
+std::vector<double> GetVector(std::string const &key, Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>(key).ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    if (arrayTmp->IsUndefined())
+    {
+        ThrowTypeError(std::string("GetVector method in calculator.h: " + key + " not present in object").c_str());
+    }
+    Local<Array> jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    std::vector<double> array;
+    for (unsigned int i = 0; i < jsArray->Length(); i++)
+    {
+        v8::Local<v8::Value> jsElement = jsArray->Get(context, i).ToLocalChecked();
+        double val = Nan::To<double>(jsElement).FromJust();
+        array.push_back(val);
+    }
+    return array;
+}
+
+template <typename T>
+T GetEnumVal(std::string const &key, Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>(key).ToLocalChecked();
+    Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    if (rObj->IsUndefined())
+    {
+        ThrowTypeError(std::string("GetEnumVal method in calculator.h: Enum value " + key + " not present in object").c_str());
+    }
+    return static_cast<T>(Nan::To<double>(rObj).FromJust());
+}
+
+bool GetBool(std::string const &key, Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>(key).ToLocalChecked();
+    Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    if (rObj->IsUndefined())
+    {
+        ThrowTypeError(std::string("GetBool method in calculator.h: Boolean value " + key + " not present in object").c_str());
+    }
+    return rObj->BooleanValue(context).ToChecked();
+}
+
+std::string GetStr(std::string const &key, Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>(key).ToLocalChecked();
+    Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    if (rObj->IsUndefined())
+    {
+        ThrowTypeError(std::string("GetStr method in calculator.h: String " + key + " not present in object").c_str());
+    }
+    v8::String::Utf8Value s(isolate, rObj);
+    return std::string(*s);
+}
+
+//NAN function for checking if an object parameter has been defined with a value
+bool isDefined(Local<Object> obj, std::string const &key)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>(key).ToLocalChecked();
+    Local<Value> rObj = Nan::To<Object>(obj).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    return !rObj->IsUndefined();
+}
+
+//NAN function for binding DOUBLE data to anonymous object
+inline void SetR(const std::string &key, double val)
+{
+    Nan::Set(r, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
+}
 
 CoolingTowerOperatingConditionsData getCoolingTowerOperatingConditionsData(Local<Object> obj)
 {
@@ -75,3 +184,5 @@ NAN_METHOD(coolingTowerMakeupWater)
     }
     info.GetReturnValue().Set(r);
 }
+
+#endif //AMO_TOOLS_SUITE_CHILLERS_H

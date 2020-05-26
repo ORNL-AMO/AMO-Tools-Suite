@@ -245,7 +245,7 @@
             "target_name": "chillers",
             'include_dirs': [
                 'include',
-                'include/chillers//CoolingTower.h',
+                'include/chillers/CoolingTower.h',
                 #'include/calculator/util', 
                 #'include/calculator/util/insulation', 
                 #'include/calculator/util/insulation/pipes',
