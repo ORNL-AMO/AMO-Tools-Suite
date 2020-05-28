@@ -60,11 +60,6 @@ INSTALL(FILES third_party/sqlite/sqlite3.h
         COMPONENT headers
         )
 
-INSTALL(FILES third_party/fast-cpp-csv-parser/csv.h
-        DESTINATION include/
-        COMPONENT headers
-        )
-
 #install(FILES "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db" DESTINATION "./db/")
 
 set(CPACK_COMPONENTS_ALL libraries headers)
@@ -83,4 +78,3 @@ set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
 #endif ()
 
 INCLUDE(CPack)
-
