@@ -165,7 +165,7 @@ test('fan203 test', function (t) {
 
 test('getBaseGasDensity', function (t) {
     //t.plan(6);
-    t.plan(63);
+    t.plan(69); // 63
     t.type(bindings.getBaseGasDensityRelativeHumidity, 'function');
     t.type(bindings.getBaseGasDensityDewPoint, 'function');
     t.type(bindings.getBaseGasDensityWetBulb, 'function');
@@ -193,6 +193,7 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res.dewPoint), rnd(87.403871));
     t.equal(rnd(res.relativeHumidity), rnd(0.35));
     t.equal(rnd(res.saturationPressure), rnd(3.748742));
+    t.equal(rnd(res.wetBulbTemp), rnd(93.258046));
 
     inp = {
         dryBulbTemp: 70,
@@ -216,6 +217,7 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res.dewPoint), rnd(55.553919));
     t.equal(rnd(res.relativeHumidity), rnd(0.60));
     t.equal(rnd(res.saturationPressure), rnd(0.739659));
+    t.equal(rnd(res.wetBulbTemp), rnd(61.189518));
 
     inp = {
         dryBulbTemp: 123,
@@ -240,6 +242,7 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res.dewPoint), rnd(0.35));
     t.equal(rnd(res.relativeHumidity), rnd(0.010235));
     t.equal(rnd(res.saturationPressure), rnd(3.748742));
+    t.equal(rnd(res.wetBulbTemp), rnd(62.949704));
 
     inp = {
         dryBulbTemp: 70,
@@ -263,6 +266,7 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res.dewPoint), rnd(55.5));
     t.equal(rnd(res.relativeHumidity), rnd(0.600175));
     t.equal(rnd(res.saturationPressure), rnd(0.739659));
+    t.equal(rnd(res.wetBulbTemp), rnd(61.19374));
 
     inp = {
         dryBulbTemp: 123,
@@ -288,6 +292,7 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res.dewPoint), rnd(103.567304));
     t.equal(rnd(res.relativeHumidity), rnd(0.574939));
     t.equal(rnd(res.saturationPressure), rnd(3.748742));
+    t.equal(rnd(res.wetBulbTemp), rnd(110));
 
     inp = {
         dryBulbTemp: 70,
@@ -312,7 +317,7 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res.dewPoint), rnd(55.566384));
     t.equal(rnd(res.relativeHumidity), rnd(0.600272));
     t.equal(rnd(res.saturationPressure), rnd(0.739659));
-
+    t.equal(rnd(res.wetBulbTemp), rnd(61.2));
 });
 
 test('getVelocityPressureData', function (t) {
