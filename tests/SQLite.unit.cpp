@@ -9,6 +9,7 @@
 #include <calculator/losses/WallLosses.h>
 #include <calculator/motor/MotorData.h>
 #include <calculator/pump/PumpData.h>
+#include <calculator/motor/MotorEfficiency.h>
 #include <fstream>
 
 TEST_CASE( "SQLite - getSolidLoadChargeMaterials", "[sqlite]" ) {
@@ -290,7 +291,7 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 
     {
         auto motorData = sqlite.getMotorData();
-        CHECK(motorData.size() == 161);
+        CHECK(motorData.size() == 2961); // 161
 
         MotorData motor1 = {1, 3800, 4, 75.8, "Energy Efficient", "Table 12-11", "TEFC", 60, 600, "NEMA MG - 1-2018"};
         MotorData motor2 = {2, 3600, 4, 79.8, "Energy Efficient", "Table 12-11", "TEFC", 60, 600, "NEMA MG - 1-2018"};
@@ -1217,7 +1218,7 @@ TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][moto
 
     {
         auto motorToInsert = MotorData(4, 4400, 2, 78.5, "insert motor", "Table 12-11", "TEFC", 60, 600, "NEMA MG - 1-2018");
-	    motorToInsert.setId(162);
+	    motorToInsert.setId(2962); // 162
 
         sqlite.insertMotorData(motorToInsert);
         auto const motors = sqlite.getMotorData();
@@ -1229,6 +1230,52 @@ TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][moto
         sqlite.deleteMotorData(motorToInsert.getId());
 	    CHECK(sqlite.getCustomMotorData().size() == 0);
     }
+}
+
+TEST_CASE( "SQLite - Calculate nominal efficiency from data", "[sqlite][motor]" ) {
+    auto const calculateNominalEfficiency = [](const MotorData &inp) {
+
+        Motor::EfficiencyClass efficiencyClass;
+        if(inp.getEfficiencyType() == "Energy Efficient")
+        {
+            efficiencyClass = Motor::EfficiencyClass::ENERGY_EFFICIENT;
+        }
+        else if(inp.getEfficiencyType() == "Premium Efficiency")
+        {
+            efficiencyClass = Motor::EfficiencyClass::PREMIUM;
+        }
+        else if(inp.getEfficiencyType() == "Standard Efficiency")
+        {
+            efficiencyClass = Motor::EfficiencyClass::STANDARD;
+        }
+
+        Motor::LineFrequency lineFrequency;
+        if(inp.getHz() == 50)
+        {
+            lineFrequency = Motor::LineFrequency::FREQ50;
+        }
+        else if(inp.getHz() == 60)
+        {
+            lineFrequency = Motor::LineFrequency::FREQ60;
+        }
+
+		double nominalEfficiency = MotorEfficiency(lineFrequency, inp.getSynchronousSpeed(), efficiencyClass, inp.getHp()).calculate(1) * 100;
+
+        return nominalEfficiency;
+    };
+
+    auto sqlite = SQLite(":memory:", true);
+
+    auto const motors = sqlite.getMotorData();
+
+    auto motor = sqlite.getMotorDataById(162);
+    CHECK(motor.getNominalEfficiency() == Approx(73.8267754532));
+
+    motor = sqlite.getMotorDataById(254);
+    CHECK(motor.getNominalEfficiency() == Approx(77.4632395073));
+
+    motor = sqlite.getMotorDataById(1351);
+    CHECK(motor.getNominalEfficiency() == Approx(89.9286895162));
 }
 
 TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]" ) {
@@ -1322,24 +1369,3 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         //compare(sqlite.getPumpData().back(), expected);
     }
 }
-/*
-TEST_CASE( "SQLite - getStandardEfficiencyData", "[MotorData]" ) {
-    std::vector<double> hpValues = {1, 1.5, 2, 3, 5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500}; // 25
-	std::vector<int> synchronousSpeedValues = {900, 1000, 1200, 1500, 1800, 3000, 3600}; // 7
-	std::vector<int> polesValues = {2, 4, 6, 8}; // 4
-	std::vector<double> nominalEfficiencyValues; // To be calculated
-	std::vector<std::string> efficiencyTypeValues = {"Standard Efficiency"}; // 1
-	//std::vector<std::string> nemaTableValues; N/A
-	std::vector<std::string> motorTypeValues = {"TEFC", "ODP"}; // 2
-	std::vector<int> hzValues = {50, 60}; // 2
-	std::vector<int> voltageLimitValues = {600, 5000}; // 2
-	//std::vector<std::string> catalogValues; N/A
-
-	std::vector<std::tuple<double, int, int, double, std::string, std::string, int, int>> combinations = getStandardEffCombinations(
-																										  hpValues, synchronousSpeedValues,
-																										  polesValues, efficiencyTypeValues,
-																										  motorTypeValues, hzValues,
-																										  voltageLimitValues);
-    CHECK(combinations.size() == 5600);
-}
-*/

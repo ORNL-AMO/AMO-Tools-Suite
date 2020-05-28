@@ -509,7 +509,7 @@ test('dbSelectMotorData', function (t) {
     t.type(bindings.selectMotors, 'function');
     res = bindings.selectMotors();
 
-    t.equal(res.length, 161, "array is not size 161");
+    t.equal(res.length, 2961, "array is not size 2961");
     t.equal(res[0].id, obj.id, res[0].id + " != " + obj.id);
     t.equal(res[0].hp, obj.hp, res[0].hp + " != " + obj.hp);
     t.equal(res[0].synchronousSpeed, obj.synchronousSpeed, res[0].synchronousSpeed + " != " + obj.synchronousSpeed);
@@ -530,7 +530,7 @@ test('dbInsertMotor', function (t) {
     t.type(bindings.insertPump, 'function');
 
     var obj = {
-        id: 162, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
+        id: 2962, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
         nemaTable: "Table 12-11", motorType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
 
