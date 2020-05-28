@@ -246,32 +246,11 @@
             'include_dirs': [
                 'include',
                 'include/chillers/CoolingTower.h',
-                #'include/calculator/util', 
-                #'include/calculator/util/insulation', 
-                #'include/calculator/util/insulation/pipes',
-                #'include/calculator/util/insulation/tanks',
-                #'include/calculator/util/insulation/objects',
-                #'include/calculator/util/insulation/services',
-                #'include/ssmt',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources': [
                 'bindings/chillers.cpp',
-                #'bindings/calculator.cpp',
                 'src/chillers/CoolingTower.cpp'
-                #'src/calculator/util/ElectricityReduction.cpp',
-                #'src/calculator/util/NaturalGasReduction.cpp',
-                #'src/calculator/util/CompressedAirReduction.cpp',
-                #'src/calculator/util/CompressedAirPressureReduction.cpp',
-                #'src/calculator/util/WaterReduction.cpp',
-                #'src/ssmt/SteamSystemModelerTool.cpp',
-                #'src/ssmt/SaturatedProperties.cpp',
-                #'src/calculator/util/SteamReduction.cpp',
-                #"<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
-                #"<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/pipes/').map(f=>'src/calculator/util/insulation/pipes/'+f).join(' '))\")",
-                #"<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/tanks/').map(f=>'src/calculator/util/insulation/tanks/'+f).join(' '))\")",
-                #"<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/objects/').map(f=>'src/calculator/util/insulation/objects/'+f).join(' '))\")",
-                #"<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/services/').map(f=>'src/calculator/util/insulation/services/'+f).join(' '))\")"
             ],
             "conditions": [
                 [ 'OS=="mac"', {
