@@ -47,7 +47,7 @@ TEST_CASE("Cooling Tower Makeup Water Calculator", "[CoolingTower][Chillers]")
                                                                                 lossCorrectionFactor, baselineCyclesOfConcentration,
                                                                                 baselineDriftLossFactor, modificationCyclesOfConcentration,
                                                                                 modificationDriftLossFactor};
-    std::tuple<double, double, double> expectedOutput1 = {2100000, 1815000, 285000};
+    std::tuple<double, double, double> expectedOutput1 = {2100000.0, 1815000.0, 285000.0};
 
     test(input1, expectedOutput1);
 
@@ -68,7 +68,7 @@ TEST_CASE("Cooling Tower Makeup Water Calculator", "[CoolingTower][Chillers]")
                                                                                 lossCorrectionFactor, baselineCyclesOfConcentration,
                                                                                 baselineDriftLossFactor, modificationCyclesOfConcentration,
                                                                                 modificationDriftLossFactor};
-    std::tuple<double, double, double> expectedOutput2 = {2400000, 1830000, 570000};
+    std::tuple<double, double, double> expectedOutput2 = {2400000.0, 1830000.0, 570000.0};
 
     test(input2, expectedOutput2);
 
@@ -89,7 +89,7 @@ TEST_CASE("Cooling Tower Makeup Water Calculator", "[CoolingTower][Chillers]")
                                                                                 lossCorrectionFactor, baselineCyclesOfConcentration,
                                                                                 baselineDriftLossFactor, modificationCyclesOfConcentration,
                                                                                 modificationDriftLossFactor};
-    std::tuple<double, double, double> expectedOutput3 = {1980000, 1125000, 855000};
+    std::tuple<double, double, double> expectedOutput3 = {1980000.0, 1125000.0, 855000.0};
 
     test(input3, expectedOutput3);
 }
