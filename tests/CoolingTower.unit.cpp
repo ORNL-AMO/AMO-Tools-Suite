@@ -43,10 +43,10 @@ TEST_CASE("Cooling Tower Makeup Water Calculator", "[CoolingTower][Chillers]")
     int modificationCyclesOfConcentration = 3;
     double modificationDriftLossFactor = 0.0001;
 
-    std::tuple<double, double, int, double, int, double, int, double> input1 = {flowRate, coolingLoad, operationalHours, 
-                                                                                lossCorrectionFactor, baselineCyclesOfConcentration,
-                                                                                baselineDriftLossFactor, modificationCyclesOfConcentration,
-                                                                                modificationDriftLossFactor};
+    std::tuple<double, double, int, double, int, double, int, double> input1;
+    input1 = std::make_tuple(flowRate, coolingLoad, operationalHours, lossCorrectionFactor, baselineCyclesOfConcentration,
+                             baselineDriftLossFactor, modificationCyclesOfConcentration, modificationDriftLossFactor);
+
     std::tuple<double, double, double> expectedOutput1;
     expectedOutput1 = std::make_tuple(2100000.0, 1815000.0, 285000.0);
 
@@ -65,10 +65,10 @@ TEST_CASE("Cooling Tower Makeup Water Calculator", "[CoolingTower][Chillers]")
     modificationCyclesOfConcentration = 3;
     modificationDriftLossFactor = 0.0001;
 
-    std::tuple<double, double, int, double, int, double, int, double> input2 = {flowRate, coolingLoad, operationalHours, 
-                                                                                lossCorrectionFactor, baselineCyclesOfConcentration,
-                                                                                baselineDriftLossFactor, modificationCyclesOfConcentration,
-                                                                                modificationDriftLossFactor};
+    std::tuple<double, double, int, double, int, double, int, double> input2;
+    input2 = std::make_tuple(flowRate, coolingLoad, operationalHours, lossCorrectionFactor, baselineCyclesOfConcentration,
+                             baselineDriftLossFactor, modificationCyclesOfConcentration, modificationDriftLossFactor);
+
     std::tuple<double, double, double> expectedOutput2;
     expectedOutput2 = std::make_tuple(2400000.0, 1830000.0, 570000.0);
 
@@ -87,10 +87,10 @@ TEST_CASE("Cooling Tower Makeup Water Calculator", "[CoolingTower][Chillers]")
     modificationCyclesOfConcentration = 3;
     modificationDriftLossFactor = 0.0001;
 
-    std::tuple<double, double, int, double, int, double, int, double> input3 = {flowRate, coolingLoad, operationalHours, 
-                                                                                lossCorrectionFactor, baselineCyclesOfConcentration,
-                                                                                baselineDriftLossFactor, modificationCyclesOfConcentration,
-                                                                                modificationDriftLossFactor};
+    std::tuple<double, double, int, double, int, double, int, double> input3;
+    input3 = std::make_tuple(flowRate, coolingLoad, operationalHours, lossCorrectionFactor, baselineCyclesOfConcentration,
+                             baselineDriftLossFactor, modificationCyclesOfConcentration, modificationDriftLossFactor);
+                             
     std::tuple<double, double, double> expectedOutput3;
     expectedOutput3 = std::make_tuple(1980000.0, 1125000.0, 855000.0);
 
