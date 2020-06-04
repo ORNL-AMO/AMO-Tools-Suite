@@ -381,6 +381,141 @@ private:
 	double operatingTime, bagFillTime, heightOfBag, diameterOfBag, numberOfUnits;
 };
 
+// enum class CompressorType ???
 
+class EstimateMethod {
+	public:
+		struct Output {
+			Output(const double annualConsumption) : annualConsumption(annualConsumption)
+			{}
+
+			const double annualConsumption;
+		};
+
+		/**
+	 	* Constructor for EstimateMethod - The estimate method estimates the air loss by using visual and audible clues.
+		* @param operatingTime double, operating time of the system per year - hours
+		* @param leakRateEstimate double, estimated leak rate (determined by visual and audible clues)
+	 	*/
+		EstimateMethod(const double operatingTime, const double leakRateEstimate);
+
+		/**
+	 	* @return EstimateMethod::Output, annual consumption
+	 	*/
+		Output calculate();
+
+	private:
+		double operatingTime, leakRateEstimate;
+};
+
+class DecibelsMethod {
+  public:
+	struct Output {
+		Output(const double leakRateEstimate, const double annualConsumption) 
+			: leakRateEstimate(leakRateEstimate), annualConsumption(annualConsumption)
+		{}
+
+		const double leakRateEstimate, annualConsumption;
+	};
+
+	/**
+	* Constructor for DecibelsMethod - The decibels method estimates the air loss by using decibel and line pressure measurements
+	* @param operatingTime double, operating time of the system per year - hours
+	* @param linePressure double, 
+	* @param decibels double, 
+	* @param decibelRatingA double, 
+	* @param pressureA double, 
+	* @param firstFlowA double, 
+	* @param secondFlowA double, 
+	* @param decibelRatingB double, 
+	* @param pressureB double, 
+	* @param firstFlowB double, 
+	* @param secondFlowB double, 
+	*/
+    DecibelsMethod(const double operatingTime, const double linePressure, const double decibels, const double decibelRatingA, 
+		const double pressureA, const double firstFlowA, const double secondFlowA, const double decibelRatingB, const double pressureB,
+		const double firstFlowB, const double secondFlowB);
+
+    /**
+	* @return DecibelsMethod::Output, leak rate estimate, annual consumption
+	*/
+	Output calculate();
+
+  private:
+	double operatingTime;
+    double linePressure; // X
+    double decibels; // Y
+    double decibelRatingA; // Y1
+    double pressureA; // X1
+    double firstFlowA; // Q11
+    double secondFlowA; // Q21
+    double decibelRatingB; // Y2
+    double pressureB; // X2
+    double firstFlowB; // Q12
+    double secondFlowB; // Q22
+};
+
+class OrificeMethod {
+	public:
+		struct Output {
+			Output(const double standardDensity, const double sonicDensity, const double leakVelocity, const double leakRateLBMmin,
+				const double leakRateScfm, const double leakRateEstimate, const double annualConsumption) 
+				: standardDensity(standardDensity), sonicDensity(sonicDensity), leakVelocity(leakVelocity),
+				  leakRateLBMmin(leakRateLBMmin), leakRateScfm(leakRateScfm), leakRateEstimate(leakRateEstimate),
+				  annualConsumption(annualConsumption)
+			{}
+
+			const double standardDensity, sonicDensity, leakVelocity, leakRateLBMmin, leakRateScfm, leakRateEstimate, annualConsumption;
+		};
+
+		/**
+	 	* Constructor for OrificeMethod - The orifice method estimates the air loss by using the pressure and diameter of the orifice
+		* @param operatingTime double, operating time of the system per year - hours
+		* @param airTemp double, compressor air temperature (usually between 200 and 300 degrees F)
+		* @param atmPressure double, atmospheric temperature (standard pressure is 14.7 psia)
+		* @param dischargeCoef double, discharge coefficient used to capture the effect of the shape of the outlet on air loss
+		* @param parameter double, diameter of the orifice in inches
+		* @param supplyPressure double, supply pressure to the orifice in psi
+		* @param numOrifices int, number of orifices
+	 	*/
+		OrificeMethod(const double operatingTime, const double airTemp, const double atmPressure, const double dischargeCoef,
+			const double diameter, const double supplyPressure, const int numOrifices);
+
+		/**
+	 	* @return OrificeMethod::Output, standard density, sonic density, leak velocity, leak rate LBMmin, leak rate Scfm, leak rate estimate, annual consumption
+	 	*/
+		Output calculate();
+
+	private:
+		double operatingTime, airTemp, atmPressure, dischargeCoef, diameter, supplyPressure;
+		int numOrifices;
+
+};
+
+class AirLeakSurvey {
+	/**
+ 	* enum class for Method Type
+ 	* 
+ 	*/
+	enum class MethodType
+	{
+		EstimateMethod,
+		DecibelsMethod,
+		BagMethod,
+		OrificeMethod
+	};
+	/*
+	annualOperatingHours: number;
+  	// 
+  	// leakDescription 
+  	// anualOperatingHours 
+  	// measurementMethod 
+  	// utilityType = 'electricity' or 'compressed air'
+  	// utilityCost comes from TH setup but is editable input
+  	// compressorControlType
+  	// compressorType 
+  	leaks: Array<AirLeakSurveyData>;
+	*/
+};
 
 #endif //AMO_TOOLS_SUITE_COMPRESSEDAIR_H

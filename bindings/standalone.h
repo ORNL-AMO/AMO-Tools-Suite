@@ -354,6 +354,6 @@ NAN_METHOD(bagMethod) {
 
 	info.GetReturnValue().Set(r);
 }
-
+// TODO: Add estimate, orifice, and decibels methods in the future
 
 #endif //AMO_TOOLS_SUITE_STANDALONE_H

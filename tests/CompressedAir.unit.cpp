@@ -192,3 +192,36 @@ TEST_CASE( "Bag Method", "[CompressedAir][BagMethod]") {
 	compare(BagMethod(115200 / 60.0, 20, 10, 10, 1).calculate(), BagMethod::Output(1.365, 157.248));
 	compare(BagMethod(100000 / 60.0, 20, 10, 10, 1).calculate(), BagMethod::Output(1.365, 136.5));
 }
+
+TEST_CASE( "Estimate Method", "[CompressedAir][EstimateMethod]") {
+	//auto const compare = [](EstimateMethod::Output const & results, EstimateMethod::Output const & expected) {
+		//CHECK(expected.annualConsumption == Approx(results.annualConsumption));
+	//};
+	//compare(EstimateMethod(EstimateMethod::LeakEstimateType::Small, 115200 / 60.0).calculate(), EstimateMethod::Output(5.25));
+	//compare(EstimateMethod(EstimateMethod::LeakEstimateType::Small, 115200 / 60.0).calculate(), EstimateMethod::Output(1.092));
+	CHECK(EstimateMethod(1280, 0.1).calculate().annualConsumption == Approx(EstimateMethod::Output(7.68).annualConsumption));
+	CHECK(EstimateMethod(1280, 1.429).calculate().annualConsumption == Approx(EstimateMethod::Output(109.7472).annualConsumption));
+}
+
+TEST_CASE( "Decibels Method", "[CompressedAir][DecibelsMethod]") {
+	auto const compare = [](DecibelsMethod::Output const & results, DecibelsMethod::Output const & expected) {
+		CHECK(expected.leakRateEstimate == Approx(results.leakRateEstimate));
+		CHECK(expected.annualConsumption == Approx(results.annualConsumption));
+	};
+
+	compare(DecibelsMethod(1280, 130, 25, 20, 150, 1.04, 1.2, 30, 125, 1.85, 1.65).calculate(), DecibelsMethod::Output(1.429, 109.7472));
+}
+
+TEST_CASE( "Orifice Method", "[CompressedAir][OrificeMethod]") {
+	auto const compare = [](OrificeMethod::Output const & results, OrificeMethod::Output const & expected) {
+		CHECK(expected.standardDensity == Approx(results.standardDensity));
+		CHECK(expected.sonicDensity == Approx(results.sonicDensity));
+		CHECK(expected.leakVelocity == Approx(results.leakVelocity));
+		CHECK(expected.leakRateLBMmin == Approx(results.leakRateLBMmin));
+		CHECK(expected.leakRateScfm == Approx(results.leakRateScfm));
+		CHECK(expected.leakRateEstimate == Approx(results.leakRateEstimate));
+		CHECK(expected.annualConsumption == Approx(results.annualConsumption));
+	};
+
+	compare(OrificeMethod(115200 / 60.0, 250.0, 14.7, 1.0, 6.0, 6.2, 4).calculate(), OrificeMethod::Output(0.2256917885, 0.0153403857, 707.7792735027, 127.9131698485, 566.7604066752, 2267.0416267007, 261163.1953959255));
+}

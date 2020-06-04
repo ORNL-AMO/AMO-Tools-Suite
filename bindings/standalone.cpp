@@ -33,6 +33,16 @@ NAN_MODULE_INIT(InitStandalone) {
 
 	Nan::Set(target, New<String>("bagMethod").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(bagMethod)).ToLocalChecked());
+	/*
+	Nan::Set(target, New<String>("estimateMethod").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(estimateMethod)).ToLocalChecked());
+	
+	Nan::Set(target, New<String>("decibelMethod").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(decibelMethod)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("orificeMethod").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(orificeMethod)).ToLocalChecked());
+	*/
 }
 
 NODE_MODULE(standalone, InitStandalone)
