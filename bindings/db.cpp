@@ -113,6 +113,36 @@ NAN_MODULE_INIT(InitDb) {
 
     Nan::Set(target, New<String>("updateWallLossesSurface").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(updateWallLossesSurface)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("selectMotors").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectMotors)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("selectMotorById").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectMotorById)).ToLocalChecked());
+
+	Nan::Set(target, New<String>("insertMotor").ToLocalChecked(),
+	         GetFunction(New<FunctionTemplate>(insertMotor)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("deleteMotor").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(deleteMotor)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("updateMotor").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updateMotor)).ToLocalChecked());
+    
+    Nan::Set(target, New<String>("selectPumps").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectPumps)).ToLocalChecked());
+    
+    Nan::Set(target, New<String>("selectPumpById").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(selectPumpById)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("insertPump").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(insertPump)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("deletePump").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(deletePump)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("updatePump").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(updatePump)).ToLocalChecked());
 }
 
 NODE_MODULE(db, InitDb)

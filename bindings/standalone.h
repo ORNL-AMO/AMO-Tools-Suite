@@ -213,13 +213,22 @@ NAN_METHOD(airSystemCapacity) {
 	const double four = Get("four");
 	const double five = Get("five");
 	const double six = Get("six");
+	const double eight = Get("eight");
+	const double ten = Get("ten");
+	const double twelve = Get("twelve");
+	const double fourteen = Get("fourteen");
+	const double sixteen = Get("sixteen");
+	const double eighteen = Get("eighteen");
+	const double twenty = Get("twenty");
+	const double twentyFour = Get("twentyFour");
 
 	Compressor::AirSystemCapacity::Output output = Compressor::AirSystemCapacity
 			(
 					{
 							oneHalf, threeFourths, one, oneAndOneFourth,
 							oneAndOneHalf, two, twoAndOneHalf, three,
-							threeAndOneHalf, four, five, six
+							threeAndOneHalf, four, five, six, eight, ten, twelve, fourteen,
+							sixteen, eighteen, twenty, twentyFour
 					},
 					std::move(receiverCapacitiesGallons)
 			).calculate();
@@ -246,6 +255,14 @@ NAN_METHOD(airSystemCapacity) {
 	SetR("four", output.pipeLengths.four);
 	SetR("five", output.pipeLengths.five);
 	SetR("six", output.pipeLengths.six);
+	SetR("eight", output.pipeLengths.eight);
+	SetR("ten", output.pipeLengths.ten);
+	SetR("twelve", output.pipeLengths.twelve);
+	SetR("fourteen", output.pipeLengths.fourteen);
+	SetR("sixteen", output.pipeLengths.sixteen);
+	SetR("eighteen", output.pipeLengths.eighteen);
+	SetR("twenty", output.pipeLengths.twenty);
+	SetR("twentyFour", output.pipeLengths.twentyFour);
 	info.GetReturnValue().Set(r);
 }
 
@@ -271,6 +288,14 @@ NAN_METHOD(airVelocity) {
 	SetR("four", output.four);
 	SetR("five", output.five);
 	SetR("six", output.six);
+	SetR("eight", output.eight);
+	SetR("ten", output.ten);
+	SetR("twelve", output.twelve);
+	SetR("fourteen", output.fourteen);
+	SetR("sixteen", output.sixteen);
+	SetR("eighteen", output.eighteen);
+	SetR("twenty", output.twenty);
+	SetR("twentyFour", output.twentyFour);
 
 	info.GetReturnValue().Set(r);
 }
@@ -329,6 +354,6 @@ NAN_METHOD(bagMethod) {
 
 	info.GetReturnValue().Set(r);
 }
-
+// TODO: Add estimate, orifice, and decibels methods in the future
 
 #endif //AMO_TOOLS_SUITE_STANDALONE_H

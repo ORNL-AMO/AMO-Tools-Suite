@@ -168,12 +168,15 @@
         },
 		{
             "target_name": "db",
-            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses', 'include/calculator/motor',
+            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses',
+                'include/calculator/motor', 'include/calculator/pump',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
                 'bindings/db.cpp',
                 'third_party/sqlite/sqlite3.c',
+                'src/calculator/pump/PumpData.cpp',
+                'src/calculator/motor/MotorData.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
             ],
@@ -221,6 +224,33 @@
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/tanks/').map(f=>'src/calculator/util/insulation/tanks/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/objects/').map(f=>'src/calculator/util/insulation/objects/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/insulation/services/').map(f=>'src/calculator/util/insulation/services/'+f).join(' '))\")"
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
+        },
+        {
+            "target_name": "chillers",
+            'include_dirs': [
+                'include',
+                'include/chillers/CoolingTower.h',
+                "<!(node -e \"require('nan')\")"
+            ],
+            'sources': [
+                'bindings/chillers.cpp',
+                'src/chillers/CoolingTower.cpp'
             ],
             "conditions": [
                 [ 'OS=="mac"', {

@@ -1,0 +1,43 @@
+docker image build -f Docker/Dockerfile -t comma64/ornl:amo-tools-suite .
+docker run -t -d --name amo-suite comma64/ornl:amo-tools-suite
+
+# Mount a host directory to persist source code and builds
+docker run -t -d -v "/home/81c/AMO/src:/home/AMO/src/" --name amo-suite comma64/ornl:amo-tools-suite
+
+
+docker exec -it amo-suite /bin/bash
+
+docker container rm --force amo-suite
+docker rmi comma64/ornl:amo-tools-suite
+
+docker login
+docker push comma64/ornl:amo-tools-suite
+
+PowerShell (remove all images):
+docker rmi $(docker images -q) --force
+
+docker stop $(docker ps -aq) 2>/dev/null || true
+docker rm $(docker ps -a -q) 2>/dev/null|| true
+docker rmi $(docker images -q) 2>/dev/null || true
+docker image prune -fa || sudo systemctl restart docker
+docker system prune -fa || sudo systemctl restart docker
+
+
+# Commands to run for building/testing/running AMO-Tools-Suite
+# --------------------------------------------------------------
+
+cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./
+alternatively: ccmake .
+
+cmake --build . --target amo_tools_suite_tests
+alternatively: cmake --build .
+
+./bin/amo_tools_suite_tests
+
+npm install (OR (if necessary): npm install --unsafe-perm)
+alternatively (if already installed): node-gyp rebuild
+
+npm run test
+
+npm run at
+#--------------------------------------------------------------
