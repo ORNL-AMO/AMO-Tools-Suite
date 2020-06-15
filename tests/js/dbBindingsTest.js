@@ -490,8 +490,8 @@ test('dbSelectMotorData', function (t) {
     var res = bindings.selectMotorById(1);
     
     var obj = {
-        id: 1, hp: 1, synchronousSpeed: 3600, poles: 2, nominalEfficiency: 75.5, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", motorType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        id: 1, hp: 1, synchronousSpeed: 900, poles: 8, nominalEfficiency: 74, efficiencyType: "Energy Efficient", 
+        nemaTable: "Table 12-11", motorType: "ODP", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
 
     t.equal(res.id, obj.id, res.id + " != " + obj.id);
@@ -509,7 +509,7 @@ test('dbSelectMotorData', function (t) {
     t.type(bindings.selectMotors, 'function');
     res = bindings.selectMotors();
 
-    t.equal(res.length, 2961, "array is not size 2961");
+    t.equal(res.length, 954, "array is not size 954");
     t.equal(res[0].id, obj.id, res[0].id + " != " + obj.id);
     t.equal(res[0].hp, obj.hp, res[0].hp + " != " + obj.hp);
     t.equal(res[0].synchronousSpeed, obj.synchronousSpeed, res[0].synchronousSpeed + " != " + obj.synchronousSpeed);
@@ -524,13 +524,13 @@ test('dbSelectMotorData', function (t) {
 });
 
 test('dbInsertMotor', function (t) {
-    t.plan(13);
+    t.plan(12);
     bindings.startup();
 
     t.type(bindings.insertPump, 'function');
 
     var obj = {
-        id: 2962, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
+        hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
         nemaTable: "Table 12-11", motorType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
 
@@ -540,7 +540,8 @@ test('dbInsertMotor', function (t) {
     res = bindings.selectMotors();
 
     t.equal(res.length, size + 1, res.length + " != " + (size + 1));
-    t.equal(res[size].id, obj.id, res[size].id + " != " + obj.id);
+    //shouldn't have id on set..?
+    //t.equal(res[size].id, obj.id, res[size].id + " != " + obj.id);
     t.equal(res[size].hp, obj.hp, res[size].hp + " != " + obj.hp);
     t.equal(res[size].synchronousSpeed, obj.synchronousSpeed, res[size].synchronousSpeed + " != " + obj.synchronousSpeed);
     t.equal(res[size].poles, obj.poles, res[size].poles + " != " + obj.poles);

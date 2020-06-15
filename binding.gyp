@@ -175,6 +175,8 @@
             'sources' : [
                 'bindings/db.cpp',
                 'third_party/sqlite/sqlite3.c',
+                'src/ssmt/SteamSystemModelerTool.cpp',
+                'src/ssmt/SaturatedProperties.cpp',
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/pump/').map(f=>'src/calculator/pump/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/motor/').map(f=>'src/calculator/motor/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
