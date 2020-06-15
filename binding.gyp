@@ -242,6 +242,33 @@
                     'cflags_cc': ['-fexceptions']
                 }]
             ]
+        },
+        {
+            "target_name": "chillers",
+            'include_dirs': [
+                'include',
+                'include/chillers/CoolingTower.h',
+                "<!(node -e \"require('nan')\")"
+            ],
+            'sources': [
+                'bindings/chillers.cpp',
+                'src/chillers/CoolingTower.cpp'
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
         }
     ]
 }
