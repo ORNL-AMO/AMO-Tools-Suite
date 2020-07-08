@@ -491,7 +491,7 @@ test('dbSelectMotorData', function (t) {
     
     var obj = {
         id: 1, hp: 1, synchronousSpeed: 900, poles: 8, nominalEfficiency: 74, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", motorType: "ODP", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        nemaTable: "Table 12-11", enclosureType: "ODP", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
 
     t.equal(res.id, obj.id, res.id + " != " + obj.id);
@@ -501,7 +501,7 @@ test('dbSelectMotorData', function (t) {
     t.equal(res.nominalEfficiency, obj.nominalEfficiency, res.nominalEfficiency + " != " + obj.nominalEfficiency);
     t.equal(res.efficiencyType, obj.efficiencyType, res.efficiencyType + " != " + obj.efficiencyType);
     t.equal(res.nemaTable, obj.nemaTable, res.nemaTable + " != " + obj.nemaTable);
-    t.equal(res.motorType, obj.motorType, res.motorType + " != " + obj.motorType);
+    t.equal(res.enclosureType, obj.enclosureType, res.enclosureType + " != " + obj.enclosureType);
     t.equal(res.hz, obj.hz, res.hz + " != " + obj.hz);
     t.equal(res.voltageLimit, obj.voltageLimit, res.voltageLimit + " != " + obj.voltageLimit);
     t.equal(res.catalog, obj.catalog, res.catalog + " != " + obj.catalog);
@@ -517,7 +517,7 @@ test('dbSelectMotorData', function (t) {
     t.equal(res[0].nominalEfficiency, obj.nominalEfficiency, res[0].nominalEfficiency + " != " + obj.nominalEfficiency);
     t.equal(res[0].efficiencyType, obj.efficiencyType, res[0].efficiencyType + " != " + obj.efficiencyType);
     t.equal(res[0].nemaTable, obj.nemaTable, res[0].nemaTable + " != " + obj.nemaTable);
-    t.equal(res[0].motorType, obj.motorType, res[0].motorType + " != " + obj.motorType);
+    t.equal(res[0].enclosureType, obj.enclosureType, res[0].enclosureType + " != " + obj.enclosureType);
     t.equal(res[0].hz, obj.hz, res[0].hz + " != " + obj.hz);
     t.equal(res[0].voltageLimit, obj.voltageLimit, res[0].voltageLimit + " != " + obj.voltageLimit);
     t.equal(res[0].catalog, obj.catalog, res[0].catalog + " != " + obj.catalog);
@@ -531,7 +531,7 @@ test('dbInsertMotor', function (t) {
 
     var obj = {
         hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", motorType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        nemaTable: "Table 12-11", enclosureType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
 
     var res = bindings.selectMotors();
@@ -548,7 +548,7 @@ test('dbInsertMotor', function (t) {
     t.equal(res[size].nominalEfficiency, obj.nominalEfficiency, res[size].nominalEfficiency + " != " + obj.nominalEfficiency);
     t.equal(res[size].efficiencyType, obj.efficiencyType, res[size].efficiencyType + " != " + obj.efficiencyType);
     t.equal(res[size].nemaTable, obj.nemaTable, res[size].nemaTable + " != " + obj.nemaTable);
-    t.equal(res[size].motorType, obj.motorType, res[size].motorType + " != " + obj.motorType);
+    t.equal(res[size].enclosureType, obj.enclosureType, res[size].enclosureType + " != " + obj.enclosureType);
     t.equal(res[size].hz, obj.hz, res[size].hz + " != " + obj.hz);
     t.equal(res[size].voltageLimit, obj.voltageLimit, res[size].voltageLimit + " != " + obj.voltageLimit);
     t.equal(res[size].catalog, obj.catalog, res[size].catalog + " != " + obj.catalog);
@@ -886,7 +886,7 @@ test('dbDeletions', function (t) {
     last = res[res.length - 1].id;
     obj = {
         id: 162, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", motorType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        nemaTable: "Table 12-11", enclosureType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
     bindings.insertMotor(obj);
     bindings.deleteMotor(bindings.selectMotors().length);
@@ -1016,7 +1016,7 @@ test('dbUpdates', function (t) {
 
     obj = {
         id: 162, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", motorType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        nemaTable: "Table 12-11", enclosureType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
     bindings.insertMotor(obj);
     motor = bindings.selectMotorById(bindings.selectMotors().length);

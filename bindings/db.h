@@ -70,7 +70,7 @@ void SetMotorData(Local<Object> & obj, const MotorData & motor) {
     SetObj(obj, "nominalEfficiency", motor.getNominalEfficiency());
     SetObj(obj, "efficiencyType", motor.getEfficiencyType());
     SetObj(obj, "nemaTable", motor.getNemaTable());
-    SetObj(obj, "motorType", motor.getMotorType());
+    SetObj(obj, "enclosureType", motor.getEnclosureType());
     SetObj(obj, "hz", motor.getHz());
     SetObj(obj, "voltageLimit", motor.getVoltageLimit());
     SetObj(obj, "catalog", motor.getCatalog());
@@ -910,7 +910,7 @@ NAN_METHOD(selectMotorById) {
 NAN_METHOD(insertMotor) {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), GetStr("efficiencyType"), 
-                    GetStr("nemaTable"), GetStr("motorType"), Get("hz"), Get("voltageLimit"), GetStr("catalog")
+                    GetStr("nemaTable"), GetStr("enclosureType"), Get("hz"), Get("voltageLimit"), GetStr("catalog")
     );
 	bool success = sql->insertMotorData(motor);
     info.GetReturnValue().Set(success);
@@ -924,7 +924,7 @@ NAN_METHOD(deleteMotor) {
 NAN_METHOD(updateMotor) {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
     MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), GetStr("efficiencyType"), 
-                    GetStr("nemaTable"), GetStr("motorType"), Get("hz"), Get("voltageLimit"), GetStr("catalog")
+                    GetStr("nemaTable"), GetStr("enclosureType"), Get("hz"), Get("voltageLimit"), GetStr("catalog")
     );
 
     motor.setId(Get("id"));

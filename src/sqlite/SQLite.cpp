@@ -499,12 +499,12 @@ std::vector<MotorData> SQLite::getMotorData() const
         auto const nominalEfficiency = sqlite3_column_double(stmt, 5);
         auto const efficiencyType = convert_text(sqlite3_column_text(stmt, 6));
         auto const nemaTable = convert_text(sqlite3_column_text(stmt, 7));
-        auto const motorType = convert_text(sqlite3_column_text(stmt, 8));
+        auto const enclosureType = convert_text(sqlite3_column_text(stmt, 8));
         auto const hz = sqlite3_column_int(stmt, 9);
         auto const voltageLimit = sqlite3_column_int(stmt, 10);
         auto const catalog = convert_text(sqlite3_column_text(stmt, 11));
 
-        auto m = MotorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, voltageLimit, catalog);
+        auto m = MotorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, voltageLimit, catalog);
 	    m.setId(id);
         return m;
     };
@@ -522,12 +522,12 @@ std::vector<MotorData> SQLite::getCustomMotorData() const
         auto const nominalEfficiency = sqlite3_column_double(stmt, 5);
         auto const efficiencyType = convert_text(sqlite3_column_text(stmt, 6));
         auto const nemaTable = convert_text(sqlite3_column_text(stmt, 7));
-        auto const motorType = convert_text(sqlite3_column_text(stmt, 8));
+        auto const enclosureType = convert_text(sqlite3_column_text(stmt, 8));
         auto const hz = sqlite3_column_int(stmt, 9);
         auto const voltageLimit = sqlite3_column_int(stmt, 10);
         auto const catalog = convert_text(sqlite3_column_text(stmt, 11));
 
-        auto m = MotorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, voltageLimit, catalog);
+        auto m = MotorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, voltageLimit, catalog);
 	    m.setId(id);
         return m;
     };
@@ -545,12 +545,12 @@ MotorData SQLite::getMotorDataById(int id) const
         auto const nominalEfficiency = sqlite3_column_double(stmt, 5);
         auto const efficiencyType = convert_text(sqlite3_column_text(stmt, 6));
         auto const nemaTable = convert_text(sqlite3_column_text(stmt, 7));
-        auto const motorType = convert_text(sqlite3_column_text(stmt, 8));
+        auto const enclosureType = convert_text(sqlite3_column_text(stmt, 8));
         auto const hz = sqlite3_column_int(stmt, 9);
         auto const voltageLimit = sqlite3_column_int(stmt, 10);
         auto const catalog = convert_text(sqlite3_column_text(stmt, 11));
 
-        auto m = MotorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, voltageLimit, catalog);
+        auto m = MotorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, voltageLimit, catalog);
 	    m.setId(dbId);
         return m;
     };
@@ -905,14 +905,14 @@ void SQLite::create_select_stmt()
     prepare_statement(m_wall_losses_surface_select_custom_stmt, select_custom_wall_losses_surface);
 
     std::string const select_motor_data =
-            R"(SELECT id, sid, hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, 
+            R"(SELECT id, sid, hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, 
                 voltagelimit, catalog
             FROM motor_data)";
 
     prepare_statement(m_motor_data_select_stmt, select_motor_data);
 
     std::string const select_single_motor_data =
-            R"(SELECT id, sid, hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, 
+            R"(SELECT id, sid, hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, 
                 voltagelimit, catalog
            FROM motor_data
            WHERE id = ?)";
@@ -920,7 +920,7 @@ void SQLite::create_select_stmt()
     prepare_statement(m_motor_data_select_single_stmt, select_single_motor_data);
 
     std::string const select_custom_motor_data =
-            R"(SELECT id, sid, hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, 
+            R"(SELECT id, sid, hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, 
                 voltagelimit, catalog
            FROM motor_data
            WHERE sid = 1)";
@@ -1063,7 +1063,7 @@ void SQLite::create_update_and_delete_stmt() {
 
     std::string const update_motor_data =
             R"(UPDATE motor_data
-               SET hp=?, synchronousSpeed=?, poles=?, nominalEfficiency=?, efficiencyType=?, nemaTable=?, motorType=?,
+               SET hp=?, synchronousSpeed=?, poles=?, nominalEfficiency=?, efficiencyType=?, nemaTable=?, enclosureType=?,
                hz=?, voltageLimit=?, catalog=?
                WHERE id=? AND sid = 1)";
 
@@ -1137,7 +1137,7 @@ void SQLite::create_insert_stmt() {
     prepare_statement(m_wall_losses_surface_insert_stmt, wall_losses_surface_insert_sql);
     
     const std::string motor_data_insert_sql =
-            R"(INSERT INTO motor_data(sid, hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType,
+            R"(INSERT INTO motor_data(sid, hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType,
                 hz, voltageLimit, catalog)
            VALUES (?,?,?,?,?,?,?,?,?,?,?))";
 
@@ -1279,11 +1279,11 @@ void SQLite::create_tables()
              nominalEfficiency real NOT NULL,
              efficiencyType text NOT NULL,
              nemaTable text NOT NULL,
-             motorType text NOT NULL,
+             enclosureType text NOT NULL,
              hz integer NOT NULL,
              voltageLimit integer NOT NULL,
              catalog text NOT NULL,
-             UNIQUE (hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, voltageLimit, catalog)
+             UNIQUE (hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, voltageLimit, catalog)
       );)";
 
     execute_command(motor_table_sql);
@@ -1817,7 +1817,7 @@ bool SQLite::insert_motor_data(MotorData const & m)
     bind_value(m_motor_data_insert_stmt, 5, m.nominalEfficiency);
     bind_value(m_motor_data_insert_stmt, 6, m.efficiencyType);
     bind_value(m_motor_data_insert_stmt, 7, m.nemaTable);
-    bind_value(m_motor_data_insert_stmt, 8, m.motorType);
+    bind_value(m_motor_data_insert_stmt, 8, m.enclosureType);
     bind_value(m_motor_data_insert_stmt, 9, m.hz);
     bind_value(m_motor_data_insert_stmt, 10, m.voltageLimit);
     bind_value(m_motor_data_insert_stmt, 11, m.catalog);
@@ -1837,7 +1837,7 @@ bool SQLite::insertMotorData(MotorData const & m){
     bind_value(m_motor_data_insert_stmt, 5, m.nominalEfficiency);
     bind_value(m_motor_data_insert_stmt, 6, m.efficiencyType);
     bind_value(m_motor_data_insert_stmt, 7, m.nemaTable);
-    bind_value(m_motor_data_insert_stmt, 8, m.motorType);
+    bind_value(m_motor_data_insert_stmt, 8, m.enclosureType);
     bind_value(m_motor_data_insert_stmt, 9, m.hz);
     bind_value(m_motor_data_insert_stmt, 10, m.voltageLimit);
     bind_value(m_motor_data_insert_stmt, 11, m.catalog);
@@ -1869,7 +1869,7 @@ bool SQLite::updateMotorData(MotorData const & m) {
     bind_value(m_motor_data_update_stmt, 4, m.nominalEfficiency);
     bind_value(m_motor_data_update_stmt, 5, m.efficiencyType);
     bind_value(m_motor_data_update_stmt, 6, m.nemaTable);
-    bind_value(m_motor_data_update_stmt, 7, m.motorType);
+    bind_value(m_motor_data_update_stmt, 7, m.enclosureType);
     bind_value(m_motor_data_update_stmt, 8, m.hz);
     bind_value(m_motor_data_update_stmt, 9, m.voltageLimit);
     bind_value(m_motor_data_update_stmt, 10, m.catalog);

@@ -11,9 +11,9 @@
 
 
 MotorData::MotorData(double hp, int synchronousSpeed, int poles, double nominalEfficiency, std::string efficiencyType, std::string nemaTable,
-			  		 std::string motorType, int hz, int voltageLimit, std::string catalog)
+			  		 std::string enclosureType, int hz, int voltageLimit, std::string catalog)
 				   : hp(hp), synchronousSpeed(synchronousSpeed), poles(poles), nominalEfficiency(nominalEfficiency),
-				   	 efficiencyType(std::move(efficiencyType)), nemaTable(std::move(nemaTable)), motorType(std::move(motorType)),
+				   	 efficiencyType(std::move(efficiencyType)), nemaTable(std::move(nemaTable)), enclosureType(std::move(enclosureType)),
 					 hz(hz), voltageLimit(voltageLimit), catalog(std::move(catalog))
 {}
 
@@ -23,8 +23,8 @@ const std::string &MotorData::getEfficiencyType() const {
 const std::string &MotorData::getNemaTable() const {
 	return nemaTable;
 }
-const std::string &MotorData::getMotorType() const {
-	return motorType;
+const std::string &MotorData::getEnclosureType() const {
+	return enclosureType;
 }
 const std::string &MotorData::getCatalog() const {
 	return catalog;
@@ -57,8 +57,8 @@ void MotorData::setEfficiencyType(const std::string &efficiencyType) {
 void MotorData::setNemaTable(const std::string &nemaTable) {
 	MotorData::nemaTable = nemaTable;
 }
-void MotorData::setMotorType(const std::string &motorType) {
-	MotorData::motorType = motorType;
+void MotorData::setEnclosureType(const std::string &enclosureType) {
+	MotorData::enclosureType = enclosureType;
 }
 void MotorData::setCatalog(const std::string &catalog) {
 	MotorData::catalog = catalog;

@@ -11,7 +11,7 @@ class MotorData;
 std::vector<std::tuple<double, int, double, std::string, std::string, int, int>> getStandardEffCombinations(
 	const std::vector<double> &hpValues, const std::vector<int> &synchronousSpeedValues,
 	const std::vector<std::string> &efficiencyTypeValues,
-	const std::vector<std::string> &motorTypeValues, const std::vector<int> &hzValues,
+	const std::vector<std::string> &enclosureTypeValues, const std::vector<int> &hzValues,
 	const std::vector<int> &voltageLimitValues)
 {
 	std::vector<std::tuple<double, int, double, std::string, std::string, int, int>> combinations;
@@ -22,7 +22,7 @@ std::vector<std::tuple<double, int, double, std::string, std::string, int, int>>
 		{
 			for (auto const &efficiencyType : efficiencyTypeValues)
 			{
-				for (auto const &motorType : motorTypeValues)
+				for (auto const &enclosureType : enclosureTypeValues)
 				{
 					for (auto const &hz : hzValues)
 					{
@@ -38,7 +38,7 @@ std::vector<std::tuple<double, int, double, std::string, std::string, int, int>>
 								nominalEfficiency = MotorEfficiency(Motor::LineFrequency::FREQ60, synchronousSpeed, Motor::EfficiencyClass::STANDARD, hp).calculate(1) * 100;
 							}
 							std::tuple<double, int, double, std::string, std::string, int, int> combination;
-							combination = std::make_tuple(hp, synchronousSpeed, nominalEfficiency, efficiencyType, motorType, hz, voltageLimit);
+							combination = std::make_tuple(hp, synchronousSpeed, nominalEfficiency, efficiencyType, enclosureType, hz, voltageLimit);
 							combinations.push_back(combination);
 						}
 					}
@@ -58,7 +58,7 @@ std::vector<MotorData> getStandardEfficiencyData()
 	std::vector<double> nominalEfficiencyValues;							 // To be calculated
 	std::vector<std::string> efficiencyTypeValues = {"Standard Efficiency"}; // 1 possibility
 	//std::vector<std::string> nemaTableValues; N/A
-	std::vector<std::string> motorTypeValues = {"TEFC", "ODP"}; // 2 possibilities
+	std::vector<std::string> enclosureTypeValues = {"TEFC", "ODP"}; // 2 possibilities
 	std::vector<int> hzValues = {50, 60};						// 2 possibilities
 	std::vector<int> voltageLimitValues = {600, 5000};			// 2 possibilities
 	//std::vector<std::string> catalogValues; N/A
@@ -66,7 +66,7 @@ std::vector<MotorData> getStandardEfficiencyData()
 	std::vector<std::tuple<double, int, double, std::string, std::string, int, int>> combinations = getStandardEffCombinations(
 		hpValues, synchronousSpeedValues,
 		efficiencyTypeValues,
-		motorTypeValues, hzValues,
+		enclosureTypeValues, hzValues,
 		voltageLimitValues);
 
 	std::vector<MotorData> standardEffMotorData;
@@ -76,7 +76,7 @@ std::vector<MotorData> getStandardEfficiencyData()
 		// 1 -> synchronousSpeed
 		// 2 -> nominalEfficiency
 		// 3 -> efficiencyType
-		// 4 -> motorType
+		// 4 -> enclosureType
 		// 5 -> hz
 		// 6 -> voltageLimit
 
@@ -100,7 +100,7 @@ std::vector<MotorData> getStandardEfficiencyData()
 			double nominalEfficiency = std::get<2>(dataRow);
 			std::string efficiencyType = std::get<3>(dataRow);
 			std::string nemaTable = "N/A";
-			std::string motorType = std::get<4>(dataRow);
+			std::string enclosureType = std::get<4>(dataRow);
 			int hz = std::get<5>(dataRow);
 			double voltageLimit = std::get<6>(dataRow);
 			std::string catalog = "N/A";
@@ -144,7 +144,7 @@ std::vector<MotorData> getStandardEfficiencyData()
 				poles = 6;
 			}
 
-			MotorData motorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, voltageLimit, catalog);
+			MotorData motorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, voltageLimit, catalog);
 			standardEffMotorData.push_back(motorData);
 		}
 	}
@@ -719,7 +719,7 @@ std::vector<MotorData> SQLite::get_default_motor_data()
 	double nominalEfficiency;
 	std::string efficiencyType;
 	std::string nemaTable;
-	std::string motorType;
+	std::string enclosureType;
 	int hz;
 	int voltageLimit;
 	std::string catalog;
@@ -730,13 +730,13 @@ std::vector<MotorData> SQLite::get_default_motor_data()
 	std::cout << "got default data.." << std::endl;
 	for (auto const &defaultMotorDataItem : defaultCSVMotorData)
 	{
-		// MotorData motorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, voltageLimit, catalog);
+		// MotorData motorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, voltageLimit, catalog);
 		csvMotorData.push_back(defaultMotorDataItem);
 	}
 
-	// while (in.read_row(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, voltageLimit, catalog))
+	// while (in.read_row(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, voltageLimit, catalog))
 	// {
-	// 	MotorData motorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, motorType, hz, voltageLimit, catalog);
+	// 	MotorData motorData(hp, synchronousSpeed, poles, nominalEfficiency, efficiencyType, nemaTable, enclosureType, hz, voltageLimit, catalog);
 	// 	csvMotorData.push_back(motorData);
 	// }
 	std::cout << "read rows.." << std::endl;
@@ -763,7 +763,7 @@ std::vector<MotorData> SQLite::get_default_motor_data()
 	// 	fout << row.getNominalEfficiency() << ",";
 	// 	fout << row.getEfficiencyType() << ",";
 	// 	fout << row.getNemaTable() << ",";
-	// 	fout << row.getMotorType() << ",";
+	// 	fout << row.getEnclosureType() << ",";
 	// 	fout << row.getHz() << ",";
 	// 	fout << row.getVoltageLimit() << ",";
 	// 	fout << row.getCatalog();

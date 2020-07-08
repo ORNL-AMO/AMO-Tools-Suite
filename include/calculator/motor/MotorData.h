@@ -13,11 +13,11 @@ MotorData(std::string manufacturer, std::string model, std::string catalog, std:
 class MotorData {
 public:
 	MotorData(double hp, int synchronousSpeed, int poles, double nominalEfficiency, std::string efficiencyType, std::string nemaTable,
-			  std::string motorType, int hz, int voltageLimit, std::string catalog);
+			  std::string enclosureType, int hz, int voltageLimit, std::string catalog);
 
 	const std::string &getEfficiencyType() const;
 	const std::string &getNemaTable() const;
-	const std::string &getMotorType() const;
+	const std::string &getEnclosureType() const;
 	const std::string &getCatalog() const;
 
 	int getSynchronousSpeed() const;
@@ -31,7 +31,7 @@ public:
 
 	void setEfficiencyType(const std::string &efficiencyType);
 	void setNemaTable(const std::string &nemaTable);
-	void setMotorType(const std::string &motorType);
+	void setEnclosureType(const std::string &enclosureType);
 	void setCatalog(const std::string &catalog);
 
 	void setSynchronousSpeed(int synchronousSpeed);
@@ -48,7 +48,7 @@ public:
 	void setId(int id);
 
 private:
-	std::string efficiencyType, nemaTable, motorType, catalog;
+	std::string efficiencyType, nemaTable, enclosureType, catalog;
 
 	int synchronousSpeed, poles, hz, voltageLimit;
 
