@@ -490,8 +490,8 @@ test('dbSelectMotorData', function (t) {
     var res = bindings.selectMotorById(1);
     
     var obj = {
-        id: 1, hp: 1, synchronousSpeed: 900, poles: 8, nominalEfficiency: 74, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", enclosureType: "ODP", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        id: 1, hp: 1, synchronousSpeed: 900, poles: 8, nominalEfficiency: 74, efficiencyClass: 1, 
+        nemaTable: "Table 12-11", enclosureType: "ODP", lineFrequency: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
 
     t.equal(res.id, obj.id, res.id + " != " + obj.id);
@@ -499,10 +499,10 @@ test('dbSelectMotorData', function (t) {
     t.equal(res.synchronousSpeed, obj.synchronousSpeed, res.synchronousSpeed + " != " + obj.synchronousSpeed);
     t.equal(res.poles, obj.poles, res.poles + " != " + obj.poles);
     t.equal(res.nominalEfficiency, obj.nominalEfficiency, res.nominalEfficiency + " != " + obj.nominalEfficiency);
-    t.equal(res.efficiencyType, obj.efficiencyType, res.efficiencyType + " != " + obj.efficiencyType);
+    t.equal(res.efficiencyClass, obj.efficiencyClass, res.efficiencyClass + " != " + obj.efficiencyClass);
     t.equal(res.nemaTable, obj.nemaTable, res.nemaTable + " != " + obj.nemaTable);
     t.equal(res.enclosureType, obj.enclosureType, res.enclosureType + " != " + obj.enclosureType);
-    t.equal(res.hz, obj.hz, res.hz + " != " + obj.hz);
+    t.equal(res.lineFrequency, obj.lineFrequency, res.lineFrequency + " != " + obj.lineFrequency);
     t.equal(res.voltageLimit, obj.voltageLimit, res.voltageLimit + " != " + obj.voltageLimit);
     t.equal(res.catalog, obj.catalog, res.catalog + " != " + obj.catalog);
 
@@ -515,10 +515,10 @@ test('dbSelectMotorData', function (t) {
     t.equal(res[0].synchronousSpeed, obj.synchronousSpeed, res[0].synchronousSpeed + " != " + obj.synchronousSpeed);
     t.equal(res[0].poles, obj.poles, res[0].poles + " != " + obj.poles);
     t.equal(res[0].nominalEfficiency, obj.nominalEfficiency, res[0].nominalEfficiency + " != " + obj.nominalEfficiency);
-    t.equal(res[0].efficiencyType, obj.efficiencyType, res[0].efficiencyType + " != " + obj.efficiencyType);
+    t.equal(res[0].efficiencyClass, obj.efficiencyClass, res[0].efficiencyClass + " != " + obj.efficiencyClass);
     t.equal(res[0].nemaTable, obj.nemaTable, res[0].nemaTable + " != " + obj.nemaTable);
     t.equal(res[0].enclosureType, obj.enclosureType, res[0].enclosureType + " != " + obj.enclosureType);
-    t.equal(res[0].hz, obj.hz, res[0].hz + " != " + obj.hz);
+    t.equal(res[0].lineFrequency, obj.lineFrequency, res[0].lineFrequency + " != " + obj.lineFrequency);
     t.equal(res[0].voltageLimit, obj.voltageLimit, res[0].voltageLimit + " != " + obj.voltageLimit);
     t.equal(res[0].catalog, obj.catalog, res[0].catalog + " != " + obj.catalog);
 });
@@ -530,8 +530,8 @@ test('dbInsertMotor', function (t) {
     t.type(bindings.insertPump, 'function');
 
     var obj = {
-        hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", enclosureType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyClass: 1, 
+        nemaTable: "Table 12-11", enclosureType: "TEFC", lineFrequency: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
 
     var res = bindings.selectMotors();
@@ -546,10 +546,10 @@ test('dbInsertMotor', function (t) {
     t.equal(res[size].synchronousSpeed, obj.synchronousSpeed, res[size].synchronousSpeed + " != " + obj.synchronousSpeed);
     t.equal(res[size].poles, obj.poles, res[size].poles + " != " + obj.poles);
     t.equal(res[size].nominalEfficiency, obj.nominalEfficiency, res[size].nominalEfficiency + " != " + obj.nominalEfficiency);
-    t.equal(res[size].efficiencyType, obj.efficiencyType, res[size].efficiencyType + " != " + obj.efficiencyType);
+    t.equal(res[size].efficiencyClass, obj.efficiencyClass, res[size].efficiencyClass + " != " + obj.efficiencyClass);
     t.equal(res[size].nemaTable, obj.nemaTable, res[size].nemaTable + " != " + obj.nemaTable);
     t.equal(res[size].enclosureType, obj.enclosureType, res[size].enclosureType + " != " + obj.enclosureType);
-    t.equal(res[size].hz, obj.hz, res[size].hz + " != " + obj.hz);
+    t.equal(res[size].lineFrequency, obj.lineFrequency, res[size].lineFrequency + " != " + obj.lineFrequency);
     t.equal(res[size].voltageLimit, obj.voltageLimit, res[size].voltageLimit + " != " + obj.voltageLimit);
     t.equal(res[size].catalog, obj.catalog, res[size].catalog + " != " + obj.catalog);
 });
@@ -885,8 +885,8 @@ test('dbDeletions', function (t) {
     res = bindings.selectMotors();
     last = res[res.length - 1].id;
     obj = {
-        id: 162, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", enclosureType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        id: 162, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyClass: 1, 
+        nemaTable: "Table 12-11", enclosureType: "TEFC", lineFrequency: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
     bindings.insertMotor(obj);
     bindings.deleteMotor(bindings.selectMotors().length);
@@ -1015,14 +1015,14 @@ test('dbUpdates', function (t) {
     t.equal(bindings.selectPumpById(bindings.selectPumps().length).manufacturer, 'updated');
 
     obj = {
-        id: 162, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyType: "Energy Efficient", 
-        nemaTable: "Table 12-11", enclosureType: "TEFC", hz: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
+        id: 162, hp: 1, synchronousSpeed: 3800, poles: 4, nominalEfficiency: 75.8, efficiencyClass: 1, 
+        nemaTable: "Table 12-11", enclosureType: "TEFC", lineFrequency: 60, voltageLimit: 600, catalog: "NEMA MG - 1-2018"
     };
     bindings.insertMotor(obj);
     motor = bindings.selectMotorById(bindings.selectMotors().length);
-    motor.efficiencyType = 'updated';
+    motor.efficiencyClass = 2;
     bindings.updateMotor(motor);
-    t.equal(bindings.selectMotorById(bindings.selectMotors().length).efficiencyType, 'updated');
+    t.equal(bindings.selectMotorById(bindings.selectMotors().length).efficiencyClass, 2);
 });
 
 

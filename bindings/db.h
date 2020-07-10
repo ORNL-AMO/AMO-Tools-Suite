@@ -53,30 +53,67 @@ std::string GetStr(std::string const &nm)
 inline void SetObj(Local<Object> &obj, const std::string &key, double val)
 {
     Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(val));
-    //Nan::Set(obj, Nan::New<String>(static_cast<std::string>(key)).ToLocalChecked(), Nan::New<Number>(val));
 }
 
 inline void SetObj(Local<Object> &obj, const std::string &key, const std::string &val)
 {
     Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<String>(val).ToLocalChecked());
-    //Nan::Set(obj, Nan::New<String>(static_cast<std::string>(key)).ToLocalChecked(), Nan::New<String>(val).ToLocalChecked());
 }
 
-void SetMotorData(Local<Object> & obj, const MotorData & motor) {
+inline void SetObj(Local<Object> &obj, const std::string &key, const Motor::LineFrequency &val)
+{
+    int lineFreqNum = 1234;
+    if (val == Motor::LineFrequency::FREQ60)
+    {
+        lineFreqNum = 60;
+    }
+    else if (val == Motor::LineFrequency::FREQ50)
+    {
+        lineFreqNum = 50;
+    }
+
+    Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(lineFreqNum));
+}
+
+inline void SetObj(Local<Object> &obj, const std::string &key, const Motor::EfficiencyClass &val)
+{
+    int efficiencyClassNum;
+    if (val == Motor::EfficiencyClass::STANDARD)
+    {
+        efficiencyClassNum = 0;
+    }
+    else if (val == Motor::EfficiencyClass::ENERGY_EFFICIENT)
+    {
+        efficiencyClassNum = 1;
+    }
+    else if (val == Motor::EfficiencyClass::PREMIUM)
+    {
+        efficiencyClassNum = 2;
+    }
+    else if (val == Motor::EfficiencyClass::SPECIFIED)
+    {
+        efficiencyClassNum = 3;
+    }
+    Nan::Set(obj, Nan::New<String>(key).ToLocalChecked(), Nan::New<Number>(efficiencyClassNum));
+}
+
+void SetMotorData(Local<Object> &obj, const MotorData &motor)
+{
     SetObj(obj, "id", motor.getId());
     SetObj(obj, "hp", motor.getHp());
     SetObj(obj, "synchronousSpeed", motor.getSynchronousSpeed());
     SetObj(obj, "poles", motor.getPoles());
     SetObj(obj, "nominalEfficiency", motor.getNominalEfficiency());
-    SetObj(obj, "efficiencyType", motor.getEfficiencyType());
+    SetObj(obj, "efficiencyClass", motor.getEfficiencyClass());
     SetObj(obj, "nemaTable", motor.getNemaTable());
     SetObj(obj, "enclosureType", motor.getEnclosureType());
-    SetObj(obj, "hz", motor.getHz());
+    SetObj(obj, "lineFrequency", motor.getLineFrequency());
     SetObj(obj, "voltageLimit", motor.getVoltageLimit());
     SetObj(obj, "catalog", motor.getCatalog());
 }
 
-void SetPumpData(Local<Object> & obj, const PumpData & pump) {
+void SetPumpData(Local<Object> &obj, const PumpData &pump)
+{
     SetObj(obj, "id", pump.getId());
     SetObj(obj, "manufacturer", pump.getManufacturer());
     SetObj(obj, "model", pump.getModel());
@@ -883,60 +920,126 @@ NAN_METHOD(selectWallLossesSurfaceById)
     info.GetReturnValue().Set(obj);
 };
 
-NAN_METHOD(selectMotors) {
+NAN_METHOD(selectMotors)
+{
     auto const motors = sql->getMotorData();
 
     auto motorsNan = Nan::New<v8::Array>();
-    for (std::size_t i = 0; i < motors.size(); i++) {
+    for (std::size_t i = 0; i < motors.size(); i++)
+    {
         Local<Object> motor = Nan::New<Object>();
-	    SetMotorData(motor, motors[i]);
+        SetMotorData(motor, motors[i]);
         Nan::Set(motorsNan, i, motor);
     }
 
     info.GetReturnValue().Set(motorsNan);
 };
 
-NAN_METHOD(selectMotorById) {
+NAN_METHOD(selectMotorById)
+{
     Local<Object> motor = Nan::New<Object>();
-    try {
+    try
+    {
         SetMotorData(motor, sql->getMotorDataById(static_cast<int>(Nan::To<double>(info[0]).FromJust())));
-    } catch (std::runtime_error const & e) {
+    }
+    catch (std::runtime_error const &e)
+    {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in selectMotorById - db.h: " + what).c_str());
     }
     info.GetReturnValue().Set(motor);
 };
 
-NAN_METHOD(insertMotor) {
+NAN_METHOD(insertMotor)
+{
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), GetStr("efficiencyType"), 
-                    GetStr("nemaTable"), GetStr("enclosureType"), Get("hz"), Get("voltageLimit"), GetStr("catalog")
-    );
-	bool success = sql->insertMotorData(motor);
+    int lineFreq = Get("lineFrequency");
+    Motor::LineFrequency lineFreqEnum;
+    if (lineFreq == 60)
+    {
+        lineFreqEnum = Motor::LineFrequency::FREQ60;
+    }
+    else if (lineFreq == 50)
+    {
+        lineFreqEnum = Motor::LineFrequency::FREQ50;
+    }
+    int efficiencyClass = Get("efficiencyClass");
+    Motor::EfficiencyClass efficiencyClassEnum;
+    if (efficiencyClass == 0)
+    {
+        efficiencyClassEnum = Motor::EfficiencyClass::STANDARD;
+    }
+    else if (efficiencyClass == 1)
+    {
+        efficiencyClassEnum = Motor::EfficiencyClass::ENERGY_EFFICIENT;
+    }
+    else if (efficiencyClass == 2)
+    {
+        efficiencyClassEnum = Motor::EfficiencyClass::PREMIUM;
+    }
+    else if (efficiencyClass == 3)
+    {
+        efficiencyClassEnum = Motor::EfficiencyClass::SPECIFIED;
+    }
+
+    MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), efficiencyClassEnum,
+                    GetStr("nemaTable"), GetStr("enclosureType"), lineFreqEnum, Get("voltageLimit"), GetStr("catalog"));
+    bool success = sql->insertMotorData(motor);
     info.GetReturnValue().Set(success);
 };
 
-NAN_METHOD(deleteMotor) {
+NAN_METHOD(deleteMotor)
+{
     bool success = sql->deleteMotorData(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 };
 
-NAN_METHOD(updateMotor) {
+NAN_METHOD(updateMotor)
+{
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
-    MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), GetStr("efficiencyType"), 
-                    GetStr("nemaTable"), GetStr("enclosureType"), Get("hz"), Get("voltageLimit"), GetStr("catalog")
-    );
+    int lineFreq = Get("lineFrequency");
+    Motor::LineFrequency lineFreqEnum;
+    if (lineFreq == 60)
+    {
+        lineFreqEnum = Motor::LineFrequency::FREQ60;
+    }
+    else if (lineFreq == 50)
+    {
+        lineFreqEnum = Motor::LineFrequency::FREQ50;
+    }
+    int efficiencyClass = Get("efficiencyClass");
+    Motor::EfficiencyClass efficiencyClassEnum;
+    if (efficiencyClass == 0)
+    {
+        efficiencyClassEnum = Motor::EfficiencyClass::STANDARD;
+    }
+    else if (efficiencyClass == 1)
+    {
+        efficiencyClassEnum = Motor::EfficiencyClass::ENERGY_EFFICIENT;
+    }
+    else if (efficiencyClass == 2)
+    {
+        efficiencyClassEnum = Motor::EfficiencyClass::PREMIUM;
+    }
+    else if (efficiencyClass == 3)
+    {
+        efficiencyClassEnum = Motor::EfficiencyClass::SPECIFIED;
+    }
 
+    MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), efficiencyClassEnum,
+                    GetStr("nemaTable"), GetStr("enclosureType"), lineFreqEnum, Get("voltageLimit"), GetStr("catalog"));
     motor.setId(Get("id"));
     bool success = sql->insertMotorData(motor);
     info.GetReturnValue().Set(success);
 };
 
-NAN_METHOD(selectPumps) {
+NAN_METHOD(selectPumps)
+{
     auto const pumps = sql->getPumpData(); // TODO this returns 0 pumps confirmed, but doesn't in C++. I don't think I can do anything else here anymore.
 
     auto pumpsNan = Nan::New<v8::Array>();
-    for (std::size_t i = 0; i < pumps.size(); i++) {
+    for (std::size_t i = 0; i < pumps.size(); i++)
+    {
         Local<Object> pump = Nan::New<Object>();
         SetPumpData(pump, pumps[i]);
         Nan::Set(pumpsNan, i, pump);
@@ -945,63 +1048,68 @@ NAN_METHOD(selectPumps) {
     info.GetReturnValue().Set(pumpsNan);
 };
 
-NAN_METHOD(selectPumpById) {
+NAN_METHOD(selectPumpById)
+{
     Local<Object> pump = Nan::New<Object>();
-    try {
+    try
+    {
         //SetPumpData(pump, sql->getPumpDataById(static_cast<int>(info[0].FromJust())));
         SetPumpData(pump, sql->getPumpDataById(static_cast<int>(Nan::To<double>(info[0]).FromJust())));
         //sql->getPumpDataById(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
-    } catch (std::runtime_error const & e) {
+    }
+    catch (std::runtime_error const &e)
+    {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in selectPumpById - db.h: " + what).c_str());
     }
     info.GetReturnValue().Set(pump);
 };
 
-NAN_METHOD(insertPump) {
+NAN_METHOD(insertPump)
+{
     //inp = info[0]->ToObject();
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
     PumpData pump(
-            GetStr("manufacturer"), GetStr("model"), GetStr("type"), GetStr("serialNumber"), GetStr("status"),
-            GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"), GetStr("shaftOrientation"),
-            GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"), GetStr("driveType"),
-            GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"), Get("numShafts"), Get("speed"),
-            Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
-            Get("inletDiameter"), Get("weight"), Get("outletDiameter"), Get("percentageOfSchedule"),
-            Get("dailyPumpCapacity"), Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"),
-            Get("staticDischargeHead"), Get("fluidDensity"), Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"),
-            Get("maxWorkingPressure"), Get("maxAmbientTemperature"), Get("maxSuctionLift"), Get("displacement"),
-            Get("startingTorque"), Get("ratedSpeed"), Get("shaftDiameter"), Get("impellerDiameter"),
-            Get("efficiency"), Get("output60Hz"), Get("minFlowSize"), Get("pumpSize"), Get("outOfService")
-    );
+        GetStr("manufacturer"), GetStr("model"), GetStr("type"), GetStr("serialNumber"), GetStr("status"),
+        GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"), GetStr("shaftOrientation"),
+        GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"), GetStr("driveType"),
+        GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"), Get("numShafts"), Get("speed"),
+        Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
+        Get("inletDiameter"), Get("weight"), Get("outletDiameter"), Get("percentageOfSchedule"),
+        Get("dailyPumpCapacity"), Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"),
+        Get("staticDischargeHead"), Get("fluidDensity"), Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"),
+        Get("maxWorkingPressure"), Get("maxAmbientTemperature"), Get("maxSuctionLift"), Get("displacement"),
+        Get("startingTorque"), Get("ratedSpeed"), Get("shaftDiameter"), Get("impellerDiameter"),
+        Get("efficiency"), Get("output60Hz"), Get("minFlowSize"), Get("pumpSize"), Get("outOfService"));
     bool success = sql->insertPumpData(pump);
     info.GetReturnValue().Set(success);
 };
 
-NAN_METHOD(deletePump) {
+NAN_METHOD(deletePump)
+{
     //bool success = sql->deletePumpData(static_cast<int>(info[0].FromJust()));
     bool success = sql->deletePumpData(static_cast<int>(Nan::To<double>(info[0]).FromJust()));
     info.GetReturnValue().Set(success);
 };
 
-NAN_METHOD(updatePump) {
+NAN_METHOD(updatePump)
+{
     //inp = info[0]->ToObject();
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
     PumpData pump(
-            GetStr("manufacturer"), GetStr("model"), GetStr("type"), GetStr("serialNumber"), GetStr("status"),
-            GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"),
-            GetStr("shaftOrientation"), GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"),
-            GetStr("driveType"), GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"), Get("numShafts"),
-            Get("speed"), Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
-            Get("inletDiameter"), Get("weight"), Get("outletDiameter"), Get("percentageOfSchedule"), Get("dailyPumpCapacity"),
-            Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"), Get("staticDischargeHead"),
-            Get("fluidDensity"), Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"), Get("maxWorkingPressure"),
-            Get("maxAmbientTemperature"), Get("maxSuctionLift"), Get("displacement"), Get("startingTorque"),
-            Get("ratedSpeed"), Get("shaftDiameter"), Get("impellerDiameter"), Get("efficiency"),
-            Get("output60Hz"), Get("minFlowSize"), Get("pumpSize"), Get("outOfService")
-    );
+        GetStr("manufacturer"), GetStr("model"), GetStr("type"), GetStr("serialNumber"), GetStr("status"),
+        GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"),
+        GetStr("shaftOrientation"), GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"),
+        GetStr("driveType"), GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"), Get("numShafts"),
+        Get("speed"), Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
+        Get("inletDiameter"), Get("weight"), Get("outletDiameter"), Get("percentageOfSchedule"), Get("dailyPumpCapacity"),
+        Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"), Get("staticDischargeHead"),
+        Get("fluidDensity"), Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"), Get("maxWorkingPressure"),
+        Get("maxAmbientTemperature"), Get("maxSuctionLift"), Get("displacement"), Get("startingTorque"),
+        Get("ratedSpeed"), Get("shaftDiameter"), Get("impellerDiameter"), Get("efficiency"),
+        Get("output60Hz"), Get("minFlowSize"), Get("pumpSize"), Get("outOfService"));
 
     pump.setId(Get("id"));
     bool success = sql->updatePumpData(pump);
