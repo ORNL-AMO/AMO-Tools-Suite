@@ -302,14 +302,14 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 	    auto custom = sqlite.getCustomMotorData().at(0);
         auto custom2 = sqlite.getCustomMotorData().at(1);
 
-        custom.setEfficiencyClass(Motor::EfficiencyClass::SPECIFIED);
-        custom2.setEfficiencyClass(Motor::EfficiencyClass::SPECIFIED);
+        custom.setHp(5);
+        custom2.setHp(6);
 
 	    sqlite.updateMotorData(custom);
         sqlite.updateMotorData(custom2);
 
-        CHECK(sqlite.getCustomMotorData().at(0).getEfficiencyClass() == Motor::EfficiencyClass::SPECIFIED);
-        CHECK(sqlite.getCustomMotorData().at(1).getEfficiencyClass() == Motor::EfficiencyClass::SPECIFIED);
+        CHECK(sqlite.getCustomMotorData().at(0).getHp() == 5);
+        CHECK(sqlite.getCustomMotorData().at(1).getHp() == 6);
     }
 
     {
