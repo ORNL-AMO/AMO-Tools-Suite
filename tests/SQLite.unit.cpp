@@ -299,8 +299,8 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
         sqlite.insertMotorData(motor1);
         sqlite.insertMotorData(motor2);
 
-	    auto custom = sqlite.getCustomMotorData().at(0);
-        auto custom2 = sqlite.getCustomMotorData().at(1);
+	    auto custom = sqlite.getMotorDataById(0);
+        auto custom2 = sqlite.getMotorDataById(1);
 
         custom.setHp(5);
         custom2.setHp(6);
@@ -308,8 +308,8 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 	    sqlite.updateMotorData(custom);
         sqlite.updateMotorData(custom2);
 
-        CHECK(sqlite.getCustomMotorData().at(0).getHp() == 5);
-        CHECK(sqlite.getCustomMotorData().at(1).getHp() == 6);
+        CHECK(sqlite.getMotorDataById(0).getHp() == 5);
+        CHECK(sqlite.getMotorDataById(1).getHp() == 6);
     }
 
     {
