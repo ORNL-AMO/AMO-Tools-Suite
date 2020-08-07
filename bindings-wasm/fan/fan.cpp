@@ -148,99 +148,99 @@ EMSCRIPTEN_BINDINGS(plane_results)
 //fanCurve
 
 // Factory methods
-FanCurveData* returnFanCurveData_BaseCurve(FanCurveType curveType, std::vector<FanCurveData::BaseCurve> baseCurveData)
-{
-    FanCurveData* fanCurveDataPtr;
-    FanCurveData fanCurveData(curveType, baseCurveData);
-    fanCurveDataPtr = &fanCurveData;
-    return fanCurveDataPtr;
-    //return FanCurveData(curveType, baseCurveData);
-}
-FanCurveData* returnFanCurveData_RatedPoint(FanCurveType curveType, std::vector<FanCurveData::RatedPoint> ratedPointData)
-{
-    FanCurveData* fanCurveDataPtr;
-    FanCurveData fanCurveData(curveType, ratedPointData);
-    fanCurveDataPtr = &fanCurveData;
-    return fanCurveDataPtr;
-    //return FanCurveData(curveType, ratedPointData);
-}
-FanCurveData* returnFanCurveData_BaseOperatingPoint(FanCurveType curveType, std::vector<FanCurveData::BaseOperatingPoint> baseOperatingPointData)
-{
-    FanCurveData* fanCurveDataPtr;
-    FanCurveData fanCurveData(curveType, baseOperatingPointData);
-    fanCurveDataPtr = &fanCurveData;
-    return fanCurveDataPtr;
-    //return FanCurveData(curveType, baseOperatingPointData);
-}
+// FanCurveData* returnFanCurveData_BaseCurve(FanCurveType curveType, std::vector<FanCurveData::BaseCurve> baseCurveData)
+// {
+//     FanCurveData* fanCurveDataPtr;
+//     FanCurveData fanCurveData(curveType, baseCurveData);
+//     fanCurveDataPtr = &fanCurveData;
+//     return fanCurveDataPtr;
+//     //return FanCurveData(curveType, baseCurveData);
+// }
+// FanCurveData* returnFanCurveData_RatedPoint(FanCurveType curveType, std::vector<FanCurveData::RatedPoint> ratedPointData)
+// {
+//     FanCurveData* fanCurveDataPtr;
+//     FanCurveData fanCurveData(curveType, ratedPointData);
+//     fanCurveDataPtr = &fanCurveData;
+//     return fanCurveDataPtr;
+//     //return FanCurveData(curveType, ratedPointData);
+// }
+// FanCurveData* returnFanCurveData_BaseOperatingPoint(FanCurveType curveType, std::vector<FanCurveData::BaseOperatingPoint> baseOperatingPointData)
+// {
+//     FanCurveData* fanCurveDataPtr;
+//     FanCurveData fanCurveData(curveType, baseOperatingPointData);
+//     fanCurveDataPtr = &fanCurveData;
+//     return fanCurveDataPtr;
+//     //return FanCurveData(curveType, baseOperatingPointData);
+// }
 
-EMSCRIPTEN_BINDINGS(fan_curve)
-{
-    //.function("foo_int", select_overload<void(int)>(&HasOverloadedMethods::foo))
+// EMSCRIPTEN_BINDINGS(fan_curve)
+// {
+//     //.function("foo_int", select_overload<void(int)>(&HasOverloadedMethods::foo))
 
-    class_<FanCurve>("FanCurve")
-        .constructor<double, double, double, double, double, double, double, double, double, double, double, FanCurveData>()
-        .function("calculate", &FanCurve::calculate);
-     // Cannot have overloaded constructors with the same number of arguments...
-    class_<FanCurveData>("FanCurveData")
-        .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>();
-        //.constructor<FanCurveType, std::vector<FanCurveData::RatedPoint>>()
-        //.constructor<FanCurveType, std::vector<FanCurveData::BaseOperatingPoint>>();
+//     class_<FanCurve>("FanCurve")
+//         .constructor<double, double, double, double, double, double, double, double, double, double, double, FanCurveData>()
+//         .function("calculate", &FanCurve::calculate);
+//      // Cannot have overloaded constructors with the same number of arguments...
+//     class_<FanCurveData>("FanCurveData")
+//         .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>();
+//         //.constructor<FanCurveType, std::vector<FanCurveData::RatedPoint>>()
+//         //.constructor<FanCurveType, std::vector<FanCurveData::BaseOperatingPoint>>();
     
-    // None of the following commented out implementations worked.
-    /*
-    class_<FanCurveData>("FanCurveData_BaseCurve")
-        .constructor(&returnFanCurveData_BaseCurve, allow_raw_pointers());
-    class_<FanCurveData>("FanCurveData_RatedPoint")
-        .constructor(&returnFanCurveData_RatedPoint, allow_raw_pointers());
-    class_<FanCurveData>("FanCurveData_BaseOperatingPoint")
-        .constructor(&returnFanCurveData_BaseOperatingPoint, allow_raw_pointers());
-    */
-    /*
-    class_<FanCurveData>("FanCurveData")
-        .constructor(&returnFanCurveData_BaseCurve, allow_raw_pointers())
-        .constructor(&returnFanCurveData_RatedPoint, allow_raw_pointers())
-        .constructor(&returnFanCurveData_BaseOperatingPoint, allow_raw_pointers());
-    */
-    /*
-    function("returnFanCurveData_BaseCurve", &returnFanCurveData_BaseCurve);
-    function("returnFanCurveData_RatedPoint", &returnFanCurveData_RatedPoint);
-    function("returnFanCurveData_BaseOperatingPoint", &returnFanCurveData_BaseOperatingPoint);
-    */
-    /*
-    class_<FanCurveData>("FanCurveData_BaseCurve")
-        .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>();
-    class_<FanCurveData>("FanCurveData_RatedPoint")
-        .constructor<FanCurveType, std::vector<FanCurveData::RatedPoint>>();
-    class_<FanCurveData>("FanCurveData_BaseOperatingPoint")
-        .constructor<FanCurveType, std::vector<FanCurveData::BaseOperatingPoint>>();
-    */
+//     // None of the following commented out implementations worked.
+//     /*
+//     class_<FanCurveData>("FanCurveData_BaseCurve")
+//         .constructor(&returnFanCurveData_BaseCurve, allow_raw_pointers());
+//     class_<FanCurveData>("FanCurveData_RatedPoint")
+//         .constructor(&returnFanCurveData_RatedPoint, allow_raw_pointers());
+//     class_<FanCurveData>("FanCurveData_BaseOperatingPoint")
+//         .constructor(&returnFanCurveData_BaseOperatingPoint, allow_raw_pointers());
+//     */
+//     /*
+//     class_<FanCurveData>("FanCurveData")
+//         .constructor(&returnFanCurveData_BaseCurve, allow_raw_pointers())
+//         .constructor(&returnFanCurveData_RatedPoint, allow_raw_pointers())
+//         .constructor(&returnFanCurveData_BaseOperatingPoint, allow_raw_pointers());
+//     */
+//     /*
+//     function("returnFanCurveData_BaseCurve", &returnFanCurveData_BaseCurve);
+//     function("returnFanCurveData_RatedPoint", &returnFanCurveData_RatedPoint);
+//     function("returnFanCurveData_BaseOperatingPoint", &returnFanCurveData_BaseOperatingPoint);
+//     */
+//     /*
+//     class_<FanCurveData>("FanCurveData_BaseCurve")
+//         .constructor<FanCurveType, std::vector<FanCurveData::BaseCurve>>();
+//     class_<FanCurveData>("FanCurveData_RatedPoint")
+//         .constructor<FanCurveType, std::vector<FanCurveData::RatedPoint>>();
+//     class_<FanCurveData>("FanCurveData_BaseOperatingPoint")
+//         .constructor<FanCurveType, std::vector<FanCurveData::BaseOperatingPoint>>();
+//     */
     
-    class_<FanCurveData::BaseCurve>("FanCurveDataBaseCurve")
-        .constructor<double, double, double>()
-        .property("flow", &FanCurveData::BaseCurve::flow)
-        .property("pressure", &FanCurveData::BaseCurve::pressure)
-        .property("power", &FanCurveData::BaseCurve::power);
-    register_vector<FanCurveData::BaseCurve>("BaseCurveVector");
-    class_<FanCurveData::RatedPoint, base<FanCurveData::BaseCurve>>("FanCurveDataRatedPoint")
-        .constructor<double, double, double, double, double, double>()
-        .property("density", &FanCurveData::RatedPoint::density)
-        .property("speed", &FanCurveData::RatedPoint::speed)
-        .property("speedCorrected", &FanCurveData::RatedPoint::speedCorrected);
-    register_vector<FanCurveData::RatedPoint>("RatedPointVector");
-    class_<FanCurveData::BaseOperatingPoint, base<FanCurveData::RatedPoint>>("FanCurveDataBaseOperatingPoint")
-        .constructor<double, double, double, double, double, double, double, double, double>()
-        .property("pressureBarometric", &FanCurveData::BaseOperatingPoint::pressureBarometric)
-        .property("usePt1Factor", &FanCurveData::BaseOperatingPoint::usePt1Factor)
-        .property("pt1", &FanCurveData::BaseOperatingPoint::pt1);
-    register_vector<FanCurveData::BaseOperatingPoint>("BaseOperatingPointVector");
-    class_<ResultData>("ResultData")
-        .constructor<double, double, double, double>()
-        .property("flow", &ResultData::flow)
-        .property("pressure", &ResultData::pressure)
-        .property("power", &ResultData::power)
-        .property("efficiency", &ResultData::efficiency);
-    register_vector<ResultData>("ResultDataVector");
-}
+//     class_<FanCurveData::BaseCurve>("FanCurveDataBaseCurve")
+//         .constructor<double, double, double>()
+//         .property("flow", &FanCurveData::BaseCurve::flow)
+//         .property("pressure", &FanCurveData::BaseCurve::pressure)
+//         .property("power", &FanCurveData::BaseCurve::power);
+//     register_vector<FanCurveData::BaseCurve>("BaseCurveVector");
+//     class_<FanCurveData::RatedPoint, base<FanCurveData::BaseCurve>>("FanCurveDataRatedPoint")
+//         .constructor<double, double, double, double, double, double>()
+//         .property("density", &FanCurveData::RatedPoint::density)
+//         .property("speed", &FanCurveData::RatedPoint::speed)
+//         .property("speedCorrected", &FanCurveData::RatedPoint::speedCorrected);
+//     register_vector<FanCurveData::RatedPoint>("RatedPointVector");
+//     class_<FanCurveData::BaseOperatingPoint, base<FanCurveData::RatedPoint>>("FanCurveDataBaseOperatingPoint")
+//         .constructor<double, double, double, double, double, double, double, double, double>()
+//         .property("pressureBarometric", &FanCurveData::BaseOperatingPoint::pressureBarometric)
+//         .property("usePt1Factor", &FanCurveData::BaseOperatingPoint::usePt1Factor)
+//         .property("pt1", &FanCurveData::BaseOperatingPoint::pt1);
+//     register_vector<FanCurveData::BaseOperatingPoint>("BaseOperatingPointVector");
+//     class_<ResultData>("ResultData")
+//         .constructor<double, double, double, double>()
+//         .property("flow", &ResultData::flow)
+//         .property("pressure", &ResultData::pressure)
+//         .property("power", &ResultData::power)
+//         .property("efficiency", &ResultData::efficiency);
+//     register_vector<ResultData>("ResultDataVector");
+// }
 
 
 //optimalFanEfficiency
