@@ -17,7 +17,7 @@ EMSCRIPTEN_BINDINGS(fan_enums)
         .value("RelativeHumidity", BaseGasDensity::InputType::RelativeHumidity)
         .value("WetBulbTemp", BaseGasDensity::InputType::WetBulbTemp);
 
-    enum_<OptimalFanEfficiency::FanType>("OptimalFanEfficiencyFanType")
+    enum_<OptimalFanEfficiency::FanType>("FanType")
         .value("AirfoilSISW", OptimalFanEfficiency::FanType::AirfoilSISW)
         .value("BackwardCurvedSISW", OptimalFanEfficiency::FanType::BackwardCurvedSISW)
         .value("RadialSISW", OptimalFanEfficiency::FanType::RadialSISW)

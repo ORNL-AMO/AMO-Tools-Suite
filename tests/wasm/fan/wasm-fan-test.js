@@ -677,6 +677,11 @@ function fan203()
     let fan203Instance = new Module.Fan203(fanRatedInfoInstance, planeDataInstance, baseGasDensityInstance, fanShaftPowerInstance);
     let fan203Output = fan203Instance.calculate();
 
+    //release memory
+    fanShaftPowerInstance.delete();
+    baseGasDensityInstance.delete();
+    fan203Instance.delete();
+
     //Tests
     
     testNumberValue(fan203Output.fanEfficiencyTotalPressure, 53.60738684355601, "Fan203: Fan Efficiency Total Pressure");
@@ -703,170 +708,10 @@ function fan203()
 
 }
 
-// function fanCurve()
-// {
-//     // Needs to be handled by the "middle layer"
-//     // if (baseCurveDataDefined)
-//     // else if (ratedPointCurveDataDefined)
-//     // else
-
-
-//     //BaseCurve
-//     let density = 0.0308;
-//     let densityCorrected = 0.0332;
-//     let speed = 1180;
-//     let speedCorrected = 1187;
-//     let pressureBarometric = 29.36;
-//     let pressureBarometricCorrected = 29.36;
-//     let pt1Factor = -0.93736;
-//     let gamma = 1.4;
-//     let gammaCorrected = 1.4;
-//     let area1 = 34;
-//     let area2 = 12.7;
-//     let curveType = "FanStaticPressure";
-//     let baseCurveData = [
-//         [0, 22.3, 115],
-//         [14410, 22.5, 154],
-//         [28820, 22.3, 194],
-//         [43230, 21.8, 241],
-//         [57640, 21.2, 293],
-//         [72050, 20.3, 349],
-//         [86460, 19.3, 406],
-//         [100871, 18, 462],
-//         [115281, 16.5, 515],
-//         [129691, 14.8, 566],
-//         [144101, 12.7, 615],
-//         [158511, 10.2, 667],
-//         [172921, 7.3, 725],
-//         [187331, 3.7, 789],
-//         [201741, -0.8, 861]
-//     ];
-
-//     let baseCurveVector = returnBaseCurveVector(baseCurveData);
-//     let fanCurveData = new Module.FanCurveData(curveType, baseCurveVector);
-
-//     let fanCurve = new Module.FanCurve(density, densityCorrected, speed, speedCorrected, pressureBarometric, pressureBarometricCorrected, pt1Factor, gamma, gammaCorrected, area1, area2, fanCurveData);
-//     let resultData = fanCurve.calculate();
-
-    
-//     //var res = bindings.fanCurve(inp);
-
-//     var expected = [
-//         [0, 24.3237008519,  126.1802380783, 0],
-//         [14500.8543591511,  24.5509446301, 169.0344096605, 0.3296327776],
-//         [29026.8029521096,  24.3537683159, 213.1237007012, 0.5140168074],
-//         [43549.7454585634,  23.8129367203, 264.8147787583, 0.6053657684],
-//         [58070.0734274583,  23.1590288007, 321.9740080602, 0.6451968788],
-//         [72585.9393038736,  22.1753576429, 383.5029716631, 0.6484847133],
-//         [87098.9706713126,  21.0819694298, 446.1168381298, 0.6362806595],
-//         [101607.8897959761, 19.6602795889, 507.6073147301, 0.6089335382],
-//         [116111.3789740286, 18.0200947791, 565.7819229037, 0.5728692768],
-//         [130609.5615402702, 16.1615468983, 621.7364859870, 0.5266325641],
-//         [145098.2298738518, 13.8661188861, 675.4528304721, 0.4628825027],
-//         [159574.7652742440, 11.1342523247, 732.4119689902, 0.3778769228],
-//         [174035.6935709888, 7.96653610850, 795.8906212688, 0.2721540841],
-//         [188477.2686633575, 4.03652020770, 865.8668678138, 0.1378022756],
-//         [202889.8046137204, -0.8723928962, 944.4826765914, -0.029540604]
-//     ];
-
-    
-    
-//     function testEq(results, expected, testNum) {
-//         for (var i = 0; i < results.size(); i++) {
-//             testNumberValue(results.get(i).flow, expected[i].flow, "FanCurve: flow" + ' (' + testNum.toString() + ')');
-//             testNumberValue(results.get(i).pressure, expected[i].pressure, "FanCurve: pressure" + ' (' + testNum.toString() + ')');
-//             testNumberValue(results.get(i).power, expected[i].power, "FanCurve: power" + ' (' + testNum.toString() + ')');
-//             testNumberValue(results.get(i).efficiency, expected[i].efficiency, "FanCurve: efficiency" + ' (' + testNum.toString() + ')');
-//             testNum++;
-//         }
-//     }
-
-//     function returnResultDataObj(flow, pressure, power, efficiency)
-//     {
-//         let resultDataObj = {
-//             "flow": flow,
-//             "pressure": pressure,
-//             "power": power,
-//             "efficiency": efficiency
-//         };
-
-//         return resultDataObj;
-//     }
-//     function returnResultDataObjArray(resultDataArrays)
-//     {
-//         let resultDataObjArray = [];
-
-//         for (x of resultDataArrays) // each row of resultDataArrays should have four columns
-//         {
-//             resultDataObjArray.push(returnResultDataObj(x[0], x[1], x[2], x[3]));
-//         }
-
-//         return resultDataObjArray;
-//     }
-
-//     let testNum = 1;
-//     testEq(resultData, returnResultDataObjArray(expected), testNum);
-
-//     // Release memory
-//     baseCurveVector.delete();
-//     fanCurveData.delete();
-//     fanCurve.delete();
-//     resultData.delete();
-
-    
-//     //RatedPoint
-//     density = 0.0308;
-//     densityCorrected = 0.0332;
-//     speed = 1180;
-//     speedCorrected = 1187;
-//     pressureBarometric = 29.36;
-//     pressureBarometricCorrected = 29.36;
-//     pt1Factor = -0.93736;
-//     gamma = 1.4;
-//     gammaCorrected = 1.4;
-//     area1 = 34;
-//     area2 = 12.7;
-//     curveType = 'FanStaticPressure';
-//     let ratedPointCurveData = [
-//         [0, 22.3, 115, density, speed, speedCorrected],
-//         [14410, 22.5, 154, density, speed, speedCorrected],
-//         [28820, 22.3, 194, density, speed, speedCorrected],
-//         [43230, 21.8, 241, density, speed, speedCorrected],
-//         [57640, 21.2, 293, density, speed, speedCorrected],
-//         [72050, 20.3, 349, density, speed, speedCorrected],
-//         [86460, 19.3, 406, density, speed, speedCorrected],
-//         [100871, 18, 462, density, speed, speedCorrected],
-//         [115281, 16.5, 515, density, speed, speedCorrected],
-//         [129691, 14.8, 566, density, speed, speedCorrected],
-//         [144101, 12.7, 615, density, speed, speedCorrected],
-//         [158511, 10.2, 667, density, speed, speedCorrected],
-//         [172921, 7.3, 725, density, speed, speedCorrected],
-//         [187331, 3.7, 789, density, speed, speedCorrected],
-//         [201741, -0.8, 861, density, speed, speedCorrected]
-//     ];
-
-//     // This final bit is currently not working due to overloaded constructor for FanCurveData not working correctly
-//     let ratedPointVector = returnRatedPointVector(ratedPointCurveData);
-//     fanCurveData = new Module.FanCurveData(curveType, ratedPointVector);
-//     //fanCurveData = Module.returnFanCurveData_RatedPoint(curveType, ratedPointVector);
-
-//     fanCurve = new Module.FanCurve(density, densityCorrected, speed, speedCorrected, pressureBarometric, pressureBarometricCorrected, pt1Factor, gamma, gammaCorrected, area1, area2, fanCurveData);
-//     resultData = fanCurve.calculate();
-
-//     //testNum = 16;
-//     testEq(resultData, returnResultDataObjArray(expected), testNum);
-
-//     // Release memory
-//     ratedPointVector.delete();
-//     fanCurveData.delete();
-//     fanCurve.delete();
-//     resultData.delete();
-// }
-
 function optimalFanEfficiency()
 {   
     //fanType = 0;
-    let fanType = Module.OptimalFanEfficiencyFanType.AirfoilSISW
+    let fanType = Module.FanType.AirfoilSISW
     let fanSpeed = 1180;
     let flowRate = 40000;
     let inletPressure = -9;
@@ -881,7 +726,7 @@ function optimalFanEfficiency()
     optimalEfficiencyFactor.delete();
 
     //fanType = 11;
-    fanType = Module.OptimalFanEfficiencyFanType.LongShavings;
+    fanType = Module.FanType.LongShavings;
     fanSpeed = 1180;
     flowRate = 10000;
     inletPressure = -9;
@@ -896,7 +741,7 @@ function optimalFanEfficiency()
     optimalEfficiencyFactor.delete();
 
     //fanType = 6;
-    fanType = Module.OptimalFanEfficiencyFanType.BackwardCurvedDIDW;
+    fanType = Module.FanType.BackwardCurvedDIDW;
     fanSpeed = 1180;
     flowRate = 500000;
     inletPressure = -6;
@@ -960,6 +805,5 @@ getBaseGasDensity();
 getVelocityPressureData();
 getPlaneResults();
 fan203();
-// fanCurve();
 optimalFanEfficiency();
 compressibilityFactor();
