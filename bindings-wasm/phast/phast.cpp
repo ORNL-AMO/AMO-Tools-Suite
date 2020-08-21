@@ -1,5 +1,6 @@
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/AuxiliaryPower.h"
+#include "calculator/losses/FixtureLosses.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -23,7 +24,16 @@ EMSCRIPTEN_BINDINGS(auxiliaryPowerLoss)
         .function("getPowerUsed", &AuxiliaryPower::getPowerUsed);
 }
 // fixtureLosses
+// getHeatLoss()
+EMSCRIPTEN_BINDINGS(fixtureLosses)
+{
+    // specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor
+    class_<FixtureLosses>("FixtureLosses")
+        .constructor<double, double, double, double, double>()
+        .function("getHeatLoss", &FixtureLosses::getHeatLoss);
+}
 // energyInputEAF
+
 // energyInputExhaustGasLosses
 // exhaustGasEAF
 // flueGasLossesByVolume

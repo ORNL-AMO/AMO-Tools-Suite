@@ -11,12 +11,12 @@ function atmosphere() {
     atmosphere.delete();
 }
 
-function auxiliaryPowerLoss(){
+function auxiliaryPowerLoss() {
     var motorPhase = 3;
     var supplyVoltage = 460;
-    var avgCurrent = 19; 
-    var powerFactor= 0.85; 
-    var operatingTime= 100;
+    var avgCurrent = 19;
+    var powerFactor = 0.85;
+    var operatingTime = 100;
 
     var auxiliaryPowerLoss = new Module.AuxiliaryPower(motorPhase, supplyVoltage, avgCurrent, powerFactor, operatingTime);
     var powerUsed = auxiliaryPowerLoss.getPowerUsed();
@@ -51,5 +51,20 @@ function auxiliaryPowerLoss(){
     auxiliaryPowerLoss.delete();
 }
 
+function fixtureLosses() {
+    var specificHeat = 0.122;
+    var feedRate = 1250.0;
+    var initialTemperature = 300.0;
+    var finalTemperature = 1800.0;
+    var correctionFactor = 1.0;
+
+    var fixtureLosses = new Module.FixtureLosses(specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor);
+    var heatLoss = fixtureLosses.getHeatLoss();
+
+    testNumberValue(heatLoss, 228750.0, "PHAST FixtureLosses (fixtureLosses)");
+}
+
+
 atmosphere();
 auxiliaryPowerLoss();
+fixtureLosses();
