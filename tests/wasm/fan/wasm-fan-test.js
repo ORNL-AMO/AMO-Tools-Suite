@@ -10,61 +10,6 @@ function returnDoubleVector(doublesArray)
     return doubleVector;
 }
 
-function returnBaseCurveData(flow, pressure, power)
-{
-    let baseCurveData = new Module.FanCurveDataBaseCurve(flow, pressure, power);
-
-    return baseCurveData;
-}
-function returnBaseCurveVector(baseCurveData)
-{
-    let baseCurveVector = new Module.BaseCurveVector();
-
-    for (x of baseCurveData) // each row of baseCurveData should have three columns
-    {
-        baseCurveVector.push_back(returnBaseCurveData(x[0], x[1], x[2]));
-    }
-
-    return baseCurveVector;
-}
-
-function returnRatedPointData(flow, pressure, power, density, speed, speedCorrected)
-{
-    let ratedPointData = new Module.FanCurveDataRatedPoint(flow, pressure, power, density, speed, speedCorrected);
-
-    return ratedPointData;
-}
-function returnRatedPointVector(ratedPointData)
-{
-    let ratedPointVector = new Module.RatedPointVector();
-
-    for (x of ratedPointData) // each row of ratedPointData should have six columns
-    {
-        ratedPointVector.push_back(returnRatedPointData(x[0], x[1], x[2], x[3], x[4], x[5]));
-    }
-
-    return ratedPointVector;
-}
-
-function returnBaseOperatingPointData(flow, pressure, power, density, speed, speedCorrected, pressureBarometric, usePt1Factor, pt1)
-{
-    let baseOperatingPointData = new Module.FanCurveDataBaseOperatingPoint(flow, pressure, power, density, speed, speedCorrected, pressureBarometric, usePt1Factor, pt1);
-
-    return baseOperatingPointData;
-}
-function returnRatedPointVector(baseOperatingPointData)
-{
-    let baseOperatingPointVector = new Module.BaseOperatingPointVector();
-    for (x of baseOperatingPointData) // each row of baseOperatingPointData should have nine columns
-    {
-        console.log(x);
-        baseOperatingPointVector.push_back(returnBaseOperatingPointData(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]));
-    }
-
-    return baseOperatingPointVector;
-}
-
-
 function resultsExisting() {
     let fanSpeed = 1180;
     let drive = Module.Drive.DIRECT_DRIVE;

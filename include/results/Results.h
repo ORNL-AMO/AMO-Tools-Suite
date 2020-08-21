@@ -26,7 +26,7 @@ public:
   {
     Output(double fanEfficiency, const double motorRatedPower, const double motorShaftPower, const double fanShaftPower,
            double motorEfficiency, double motorPowerFactor, const double motorCurrent, const double motorPower,
-           const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double loadFactor, double driveEfficiency, const double estimatedFLA = 0)
+           const double annualEnergy, double annualCost, const double fanEnergyIndex, const double loadFactor, double driveEfficiency, const double estimatedFLA = 0)
         : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower),
           fanShaftPower(fanShaftPower), motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor),
           motorCurrent(motorCurrent), motorPower(motorPower), annualEnergy(annualEnergy), annualCost(annualCost),
@@ -35,7 +35,7 @@ public:
     }
 
     Output(const MotorShaftPower::Output output, double fanEfficiency, const double motorRatedPower,
-           const double fanShaftPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double loadFactor, double driveEfficiency,
+           const double fanShaftPower, const double annualEnergy, double annualCost, const double fanEnergyIndex, const double loadFactor, double driveEfficiency,
            const double estimatedFLA = 0)
         : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
           fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
@@ -46,8 +46,8 @@ public:
 
     double fanEfficiency;
     const double motorRatedPower, motorShaftPower, fanShaftPower;
-    double motorEfficiency, motorPowerFactor;
-    const double motorCurrent, motorPower, annualEnergy, annualCost, fanEnergyIndex, loadFactor;
+    double motorEfficiency, motorPowerFactor, annualCost;
+    const double motorCurrent, motorPower, annualEnergy, fanEnergyIndex, loadFactor;
     double driveEfficiency;
     const double estimatedFLA;
 
