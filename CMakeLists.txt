@@ -381,6 +381,7 @@ set(INCLUDE_FILES
         include/sqlite/PumpData.h
         include/calculator/motor/MotorData.h
         include/sqlite/MotorData.h
+        include/fast-cpp-csv-parser/csv.h
         include/chillers/CoolingTower.h
         )
 

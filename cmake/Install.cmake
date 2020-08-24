@@ -78,4 +78,3 @@ set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
 #endif ()
 
 INCLUDE(CPack)
-
