@@ -1,6 +1,8 @@
 #include "calculator/losses/Atmosphere.h"
 #include "calculator/losses/AuxiliaryPower.h"
 #include "calculator/losses/FixtureLosses.h"
+#include "calculator/losses/EnergyInputEAF.h"
+
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -33,7 +35,16 @@ EMSCRIPTEN_BINDINGS(fixtureLosses)
         .function("getHeatLoss", &FixtureLosses::getHeatLoss);
 }
 // energyInputEAF
+EMSCRIPTEN_BINDINGS(energyInputEAF)
+{
+    // naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse,
+                    //    electrodeHeatingValue, otherFuels, electricityInput
+    class_<EnergyInputEAF>("EnergyInputEAF")
+        .constructor<double, double, double, double, double>()
+        .function("getTotalChemicalEnergyInput", &EnergyInputEAF::getTotalChemicalEnergyInput)
+        .function("getHeatDelivered", &EnergyInputEAF::getHeatDelivered);
 
+}
 // energyInputExhaustGasLosses
 // exhaustGasEAF
 // flueGasLossesByVolume
