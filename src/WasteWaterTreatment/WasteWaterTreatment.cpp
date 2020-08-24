@@ -134,10 +134,8 @@ int main()
     //----------------------------------- Initializing --------------------------------------
     outputTable finalResult;
     inputTable inputParameters;
-    double Inp[17] = {20, 200, 1, 1, 40, 35, 0.85, 200, 20, 8, 10000, 3000, 0.1, 0.6, 60, 0.1, 8};
-    double Inp2[11] = {1.2, 0.84, 0.92, 3, 2100, 100, 24, 3, 100, 0.09};
-    // double Inp[17] = {26, 280, 9, 28, 30, 60, 0.85, 150, 15, 11, 10000, 3300, 0.1, 0.6, 60, 0.1, 8};
-    // double Inp2[11] = {1.2, 0.84, 0.92, 3, 2100, 100, 24, 3, 100, 0.09};
+    // double Inp[29] = {20, 200, 1, 1, 40, 35, 0.85, 200, 20, 8, 10000, 3000, 0.1, 0.6, 60, 0.1, 8, 72, 2,4.5, 0.84, 0.92, 2.7, 150, 200, 24, 1, 100, 0.09};
+    double Inp[29] = {26, 280, 9, 28, 30, 60, 0.85, 150, 15, 11, 10000, 3300, 0.1, 0.6, 60, 0.1, 8, 22, 0.5,1.2, 0.84, 0.92, 3, 2100, 100, 24, 3, 100, 0.09};
     inputParameters.Temperature = Inp[0];
     inputParameters.So = Inp[1];
     inputParameters.Volume = Inp[2];
@@ -155,19 +153,19 @@ int main()
     inputParameters.HalfSaturation = Inp[14];
     inputParameters.MicrobialDecay = Inp[15];
     inputParameters.MaxUtilizationRate = Inp[16];
-    inputParameters.MaxDays = 72;
-    inputParameters.TimeIncrement = 2;
+    inputParameters.MaxDays = Inp[17];
+    inputParameters.TimeIncrement = Inp[18];
 
-    inputParameters.OperatingDO = Inp2[0];
-    inputParameters.Alpha = Inp2[1];
-    inputParameters.Beta = Inp2[2];
-    inputParameters.SOTR = Inp2[3];
-    inputParameters.Aeration = Inp2[4];
-    inputParameters.Elevation = Inp2[5];
-    inputParameters.OperatingTime = Inp2[6];
-    inputParameters.TypeAerators = Inp2[7];
-    inputParameters.Speed = Inp2[8];
-    inputParameters.EnergyCostUnit = Inp2[9];
+    inputParameters.OperatingDO = Inp[19];
+    inputParameters.Alpha = Inp[20];
+    inputParameters.Beta = Inp[21];
+    inputParameters.SOTR = Inp[22];
+    inputParameters.Aeration = Inp[23];
+    inputParameters.Elevation = Inp[24];
+    inputParameters.OperatingTime = Inp[25];
+    inputParameters.TypeAerators = Inp[26];
+    inputParameters.Speed = Inp[27];
+    inputParameters.EnergyCostUnit = Inp[28];
    
     //Adjustment Kd and K for temperture
     double AdjustedMicrobialDecay = inputParameters.MicrobialDecay * pow((1.04), (inputParameters.Temperature - 20.0));
@@ -368,39 +366,39 @@ int main()
     std::cout <<"AeEnergy: "<<finalResult.AeEnergy << std::endl;
     std::cout <<"AeCost: "<<finalResult.AeCost << std::endl;
     
-    // std::cout << "-----------------------------------Output of First Table"<< std::endl;
-    // std::cout << finalResult.TotalAverageDailyFlowRate<< std::endl;
-    // std::cout << finalResult.VolumeInService << std::endl;
-    // std::cout << finalResult.InfluentBOD5Concentration << std::endl;
-    // std::cout << finalResult.InfluentBOD5MassLoading << std::endl;
-    // std::cout <<finalResult.SecWWOxidNLoad << std::endl;
-    // std::cout << finalResult.SecWWTSSLoad << std::endl;
-    // std::cout << finalResult.FM_ratio << std::endl;
-    // std::cout << finalResult.SolidsRetentionTime << std::endl;
-    // std::cout << finalResult.MLSS  << std::endl;
-    // std::cout << finalResult.MLVSS  << std::endl;
-    // std::cout << finalResult.TSSSludgeProduction << std::endl;
-    // std::cout << finalResult.TSSInActivatedSludgeEffluent << std::endl;
-    // std::cout << finalResult.TotalOxygenRequirements << std::endl;
-    // std::cout <<finalResult.TotalOxygenReqWDenit << std::endl;
-    // std::cout << finalResult.TotalOxygenSupplied << std::endl;
-    // std::cout << finalResult.MixingIntensityInReactor << std::endl;
-    // std::cout <<finalResult.RASFlowRate << std::endl;
-    // std::cout << finalResult.RASRecyclePercentage << std::endl;
-    // std::cout <<finalResult.WASFlowRate << std::endl;
-    // std::cout <<finalResult.RASTSSConcentration << std::endl;
-    // std::cout <<finalResult.TotalSludgeProduction << std::endl;
-    // std::cout << finalResult.ReactorDetentionTime << std::endl;
-    // std::cout <<finalResult.VOLR << std::endl;
-    // std::cout <<finalResult.EffluentCBOD5 << std::endl;
-    // std::cout <<finalResult.EffluentTSS << std::endl;
-    // std::cout << finalResult.EffluentAmmonia_N << std::endl;
-    // std::cout <<finalResult.EffluentNO3_N << std::endl;
-    // std::cout << finalResult.EffluentNO3_N_W_Denit << std::endl;
-    // std::cout << "-----------------------------------Output of Second Table"<< std::endl;
-    // std::cout <<"FieldOTR: "<<finalResult.FieldOTR << std::endl;
-    // std::cout <<"AeEnergy: "<<finalResult.AeEnergy << std::endl;
-    // std::cout <<"AeCost: "<<finalResult.AeCost << std::endl;
+    std::cout << "-----------------------------------Output of First Table"<< std::endl;
+    std::cout << finalResult.TotalAverageDailyFlowRate<< std::endl;
+    std::cout << finalResult.VolumeInService << std::endl;
+    std::cout << finalResult.InfluentBOD5Concentration << std::endl;
+    std::cout << finalResult.InfluentBOD5MassLoading << std::endl;
+    std::cout <<finalResult.SecWWOxidNLoad << std::endl;
+    std::cout << finalResult.SecWWTSSLoad << std::endl;
+    std::cout << finalResult.FM_ratio << std::endl;
+    std::cout << finalResult.SolidsRetentionTime << std::endl;
+    std::cout << finalResult.MLSS  << std::endl;
+    std::cout << finalResult.MLVSS  << std::endl;
+    std::cout << finalResult.TSSSludgeProduction << std::endl;
+    std::cout << finalResult.TSSInActivatedSludgeEffluent << std::endl;
+    std::cout << finalResult.TotalOxygenRequirements << std::endl;
+    std::cout <<finalResult.TotalOxygenReqWDenit << std::endl;
+    std::cout << finalResult.TotalOxygenSupplied << std::endl;
+    std::cout << finalResult.MixingIntensityInReactor << std::endl;
+    std::cout <<finalResult.RASFlowRate << std::endl;
+    std::cout << finalResult.RASRecyclePercentage << std::endl;
+    std::cout <<finalResult.WASFlowRate << std::endl;
+    std::cout <<finalResult.RASTSSConcentration << std::endl;
+    std::cout <<finalResult.TotalSludgeProduction << std::endl;
+    std::cout << finalResult.ReactorDetentionTime << std::endl;
+    std::cout <<finalResult.VOLR << std::endl;
+    std::cout <<finalResult.EffluentCBOD5 << std::endl;
+    std::cout <<finalResult.EffluentTSS << std::endl;
+    std::cout << finalResult.EffluentAmmonia_N << std::endl;
+    std::cout <<finalResult.EffluentNO3_N << std::endl;
+    std::cout << finalResult.EffluentNO3_N_W_Denit << std::endl;
+    std::cout << "-----------------------------------Output of Second Table"<< std::endl;
+    std::cout <<"FieldOTR: "<<finalResult.FieldOTR << std::endl;
+    std::cout <<"AeEnergy: "<<finalResult.AeEnergy << std::endl;
+    std::cout <<"AeCost: "<<finalResult.AeCost << std::endl;
 }
 
 
