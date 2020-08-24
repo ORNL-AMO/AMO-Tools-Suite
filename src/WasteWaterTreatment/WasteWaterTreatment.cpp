@@ -135,7 +135,9 @@ int main()
     outputTable finalResult;
     inputTable inputParameters;
     double Inp[17] = {20, 200, 1, 1, 40, 35, 0.85, 200, 20, 8, 10000, 3000, 0.1, 0.6, 60, 0.1, 8};
-    double Inp2[11] = {4.5, 0.84, 0.92, 2.7, 150, 200, 24, 1, 100, 0.09};
+    double Inp2[11] = {1.2, 0.84, 0.92, 3, 2100, 100, 24, 3, 100, 0.09};
+    // double Inp[17] = {26, 280, 9, 28, 30, 60, 0.85, 150, 15, 11, 10000, 3300, 0.1, 0.6, 60, 0.1, 8};
+    // double Inp2[11] = {1.2, 0.84, 0.92, 3, 2100, 100, 24, 3, 100, 0.09};
     inputParameters.Temperature = Inp[0];
     inputParameters.So = Inp[1];
     inputParameters.Volume = Inp[2];
@@ -191,28 +193,29 @@ int main()
     //----------------------------------- Current Conditions Calculation--------------------------------------
     int numberRows = round(inputParameters.MaxDays/inputParameters.TimeIncrement);
     std::vector<tableOfCalculations> calcTable(numberRows) ;
-    for (int i = 1; i < numberRows + 1; i++)
-        calcTable[i].SRT = inputParameters.TimeIncrement*i;
+    for (int i = 0; i < numberRows + 1; i++) {
+        calcTable[i].SRT = 1.0 + inputParameters.TimeIncrement*i;
+    }
     //The main loop to make the calculations
     for (int i = 0; i < numberRows; i++) {
         // Compute Se
-        calcTable[i].Se = (inputParameters.HalfSaturation * (1 + AdjustedMicrobialDecay * calcTable[i+1].SRT)) / (calcTable[i+1].SRT * (inputParameters.BiomassYeild * AdjustedMaxUtilizationRate - AdjustedMicrobialDecay) - 1);
+        calcTable[i].Se = (inputParameters.HalfSaturation * (1 + AdjustedMicrobialDecay * calcTable[i].SRT)) / (calcTable[i].SRT * (inputParameters.BiomassYeild * AdjustedMaxUtilizationRate - AdjustedMicrobialDecay) - 1);
         //Compute Heter Biomass
-        calcTable[i].HeterBio = (calcTable[i+1].SRT / (inputParameters.Volume / inputParameters.FlowRate)) * inputParameters.BiomassYeild * (inputParameters.So - calcTable[i].Se) / (1 + AdjustedMicrobialDecay * calcTable[i+1].SRT);
+        calcTable[i].HeterBio = (calcTable[i].SRT / (inputParameters.Volume / inputParameters.FlowRate)) * inputParameters.BiomassYeild * (inputParameters.So - calcTable[i].Se) / (1 + AdjustedMicrobialDecay * calcTable[i].SRT);
         //Compute CellDeb
-        calcTable[i].CellDeb = calcTable[i].HeterBio * inputParameters.FractionBiomass * AdjustedMicrobialDecay * calcTable[i+1].SRT;
+        calcTable[i].CellDeb = calcTable[i].HeterBio * inputParameters.FractionBiomass * AdjustedMicrobialDecay * calcTable[i].SRT;
         //Compute InterVes
-        calcTable[i].InterVes = inputParameters.InertVSS * calcTable[i+1].SRT / (inputParameters.Volume / inputParameters.FlowRate);
+        calcTable[i].InterVes = inputParameters.InertVSS * calcTable[i].SRT / (inputParameters.Volume / inputParameters.FlowRate);
         //Compute MLVSS
         calcTable[i].MLVSS = calcTable[i].HeterBio + calcTable[i].CellDeb + calcTable[i].InterVes;
         //Compute MLSS
-        calcTable[i].MLSS = (calcTable[i].HeterBio + calcTable[i].CellDeb) / inputParameters.Biomass + calcTable[i].InterVes + inputParameters.InertInOrgTSS * calcTable[i+1].SRT / (inputParameters.Volume / inputParameters.FlowRate);
+        calcTable[i].MLSS = (calcTable[i].HeterBio + calcTable[i].CellDeb) / inputParameters.Biomass + calcTable[i].InterVes + inputParameters.InertInOrgTSS * calcTable[i].SRT / (inputParameters.Volume / inputParameters.FlowRate);
         //Compute BiomassProd
-        calcTable[i].BiomassProd = (calcTable[i].HeterBio + calcTable[i].CellDeb) * inputParameters.Volume * 8.34 / calcTable[i+1].SRT;
+        calcTable[i].BiomassProd = (calcTable[i].HeterBio + calcTable[i].CellDeb) * inputParameters.Volume * 8.34 / calcTable[i].SRT;
         //Compute SludgeProd
-        calcTable[i].SludgeProd = calcTable[i].MLVSS * inputParameters.Volume * 8.34 / calcTable[i+1].SRT;
+        calcTable[i].SludgeProd = calcTable[i].MLVSS * inputParameters.Volume * 8.34 / calcTable[i].SRT;
         //Compute SolidProd
-        calcTable[i].SolidProd = calcTable[i].MLSS * inputParameters.Volume * 8.34 / calcTable[i+1].SRT;
+        calcTable[i].SolidProd = calcTable[i].MLSS * inputParameters.Volume * 8.34 / calcTable[i].SRT;
         //Compute Effluent
         calcTable[i].Effluent = inputParameters.EffluentTSS * inputParameters.FlowRate * 8.34;
         //Compue IntentWaste
@@ -222,8 +225,8 @@ int main()
         //Compute FlowMgd
         calcTable[i].FlowMgd = calcTable[i].IntentWaste / (inputParameters.RASTSS * 8.34);
         //Compute NRemoved
-        if  (calcTable[i+1].SRT < 40) {
-            calcTable[i].NRemoved = calcTable[i].BiomassProd * (0.12 + (-0.001 * (calcTable[i+1].SRT - 1)));
+        if  (calcTable[i].SRT < 40) {
+            calcTable[i].NRemoved = calcTable[i].BiomassProd * (0.12 + (-0.001 * (calcTable[i].SRT - 1)));
         } else {
             calcTable[i].NRemoved = calcTable[i].BiomassProd * 0.08;
         }
@@ -235,22 +238,22 @@ int main()
         //Compute Fraction Nox : FrNox
         double FrNox;
         if (inputParameters.Temperature < 15) {
-            if (calcTable[i+1].SRT < 40) {
-                vector<double> xData = { 1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40 };
-                vector<double> yData = { 0.1, 0.2, 0.3, 0.4, 0.6, 0.78, 0.88, 0.93, 0.955, 0.97, 0.98, 0.99 };
-                FrNox = interpolate( xData, yData, calcTable[i+1].SRT, true);
+            if (calcTable[i].SRT < 40) {
+                vector<double> xData = {  1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40 };
+                vector<double> yData = {  0.1, 0.2, 0.3, 0.4, 0.6, 0.78, 0.88, 0.93, 0.955, 0.97, 0.98, 0.99 };
+                FrNox = interpolate( xData, yData, calcTable[i].SRT, true);
             } else {FrNox = 0.99;}
         } else if (inputParameters.Temperature > 15 && inputParameters.Temperature < 24){
-            if (calcTable[i+1].SRT < 40) {
-                vector<double> xData = { 1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40 };
-                vector<double> yData = { 0.1, 0.22, 0.33, 0.43, 0.63, 0.82, 0.92, 0.96, 0.975, 0.98, 0.99, 0.995 };
-                FrNox = interpolate( xData, yData, calcTable[i+1].SRT, true);
+            if (calcTable[i].SRT < 40) {
+                vector<double> xData = {  1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40 };
+                vector<double> yData = {  0.1, 0.22, 0.33, 0.43, 0.63, 0.82, 0.92, 0.96, 0.975, 0.98, 0.99, 0.995 };
+                FrNox = interpolate( xData, yData, calcTable[i].SRT, true);
             } else {FrNox = 0.995;}   
         } else {
-            if (calcTable[i+1].SRT < 40) {
-                vector<double> xData = { 1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40 };
-                vector<double> yData = { 0.1, 0.25, 0.35, 0.45, 0.65, 0.85, 0.95, 0.98, 0.988, 0.99, 0.995, 0.999 };
-                FrNox = interpolate( xData, yData, calcTable[i+1].SRT, true);
+            if (calcTable[i].SRT < 40) {
+                vector<double> xData = {  1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40 };
+                vector<double> yData = {  0.1, 0.25, 0.35, 0.45, 0.65, 0.85, 0.95, 0.98, 0.988, 0.99, 0.995, 0.999 };
+                FrNox = interpolate( xData, yData, calcTable[i].SRT, true);
             } else {FrNox = 0.999;}
         }
         //Compute NitO2Dem
@@ -263,10 +266,10 @@ int main()
         if (calcTable[i].EffNH3N < 0) {calcTable[i].EffNH3N = 0;}
         //Compute EffNo3N
         if (inputParameters.OxidizableN > calcTable[i].NRemovedMgl && i > 0) {
-                if (calcTable[i+1].SRT < 30) {
-                    vector<double> xData = { 1, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32 };
-                    vector<double> yData = { 0, 0.1, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6, 0.62, 0.63, 0.65, 0.66, 0.68, 0.69, 0.7, 0.7};
-                    double Coef = interpolate( xData, yData, calcTable[i+1].SRT, true);
+                if (calcTable[i].SRT < 30) {
+                    vector<double> xData = {  1, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32 };
+                    vector<double> yData = {  0, 0.1, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6, 0.62, 0.63, 0.65, 0.66, 0.68, 0.69, 0.7, 0.7};
+                    double Coef = interpolate( xData, yData, calcTable[i].SRT, true);
                     calcTable[i].EffNo3N = (calcTable[0].EffNH3N - calcTable[i].EffNH3N) + Coef * (calcTable[0].NRemovedMgl - calcTable[i].NRemovedMgl);
                 } else{
                     calcTable[i].EffNo3N = (calcTable[0].EffNH3N - calcTable[i].EffNH3N) + 0.7 * (calcTable[0].NRemovedMgl - calcTable[i].NRemovedMgl);
@@ -278,8 +281,8 @@ int main()
         //Compute WAS
         calcTable[i].WAS = calcTable[i].IntentWaste / (inputParameters.RASTSS * 8.34);
         //Compute EstimatedEff
-        if (calcTable[i+1].SRT < 40) {
-            calcTable[i].EstimatedEff = calcTable[i].Se + inputParameters.EffluentTSS * (-0.00000000014086 * pow(calcTable[i+1].SRT, 5) + 0.000000057556 * pow(calcTable[i+1].SRT , 4) - 0.0000091279 * pow(calcTable[i+1].SRT , 3) + 0.0007014 * pow(calcTable[i+1].SRT , 2) - 0.0262 * calcTable[i+1].SRT + 0.6322);
+        if (calcTable[i].SRT < 40) {
+            calcTable[i].EstimatedEff = calcTable[i].Se + inputParameters.EffluentTSS * (-0.00000000014086 * pow(calcTable[i].SRT, 5) + 0.000000057556 * pow(calcTable[i].SRT , 4) - 0.0000091279 * pow(calcTable[i].SRT , 3) + 0.0007014 * pow(calcTable[i].SRT , 2) - 0.0262 * calcTable[i].SRT + 0.6322);
         } else {
             calcTable[i].EstimatedEff = calcTable[i].Se + inputParameters.EffluentTSS * (0.25);
         }
@@ -308,7 +311,7 @@ int main()
     finalResult.SecWWOxidNLoad = inputParameters.FlowRate * inputParameters.OxidizableN * 8.34;
     finalResult.SecWWTSSLoad = inputParameters.FlowRate * inputParameters.InfluentTSS * 8.34;
     finalResult.FM_ratio = calcTable[iCount].FmRatio;
-    finalResult.SolidsRetentionTime = calcTable[iCount + 1].SRT;
+    finalResult.SolidsRetentionTime = calcTable[iCount].SRT;
     finalResult.MLSS = calcTable[iCount].MLSS;
     finalResult.MLVSS = calcTable[iCount].MLVSS;
     finalResult.TSSSludgeProduction = calcTable[iCount].IntentWaste;
@@ -364,5 +367,43 @@ int main()
     std::cout <<"FieldOTR: "<<finalResult.FieldOTR << std::endl;
     std::cout <<"AeEnergy: "<<finalResult.AeEnergy << std::endl;
     std::cout <<"AeCost: "<<finalResult.AeCost << std::endl;
+    
+    // std::cout << "-----------------------------------Output of First Table"<< std::endl;
+    // std::cout << finalResult.TotalAverageDailyFlowRate<< std::endl;
+    // std::cout << finalResult.VolumeInService << std::endl;
+    // std::cout << finalResult.InfluentBOD5Concentration << std::endl;
+    // std::cout << finalResult.InfluentBOD5MassLoading << std::endl;
+    // std::cout <<finalResult.SecWWOxidNLoad << std::endl;
+    // std::cout << finalResult.SecWWTSSLoad << std::endl;
+    // std::cout << finalResult.FM_ratio << std::endl;
+    // std::cout << finalResult.SolidsRetentionTime << std::endl;
+    // std::cout << finalResult.MLSS  << std::endl;
+    // std::cout << finalResult.MLVSS  << std::endl;
+    // std::cout << finalResult.TSSSludgeProduction << std::endl;
+    // std::cout << finalResult.TSSInActivatedSludgeEffluent << std::endl;
+    // std::cout << finalResult.TotalOxygenRequirements << std::endl;
+    // std::cout <<finalResult.TotalOxygenReqWDenit << std::endl;
+    // std::cout << finalResult.TotalOxygenSupplied << std::endl;
+    // std::cout << finalResult.MixingIntensityInReactor << std::endl;
+    // std::cout <<finalResult.RASFlowRate << std::endl;
+    // std::cout << finalResult.RASRecyclePercentage << std::endl;
+    // std::cout <<finalResult.WASFlowRate << std::endl;
+    // std::cout <<finalResult.RASTSSConcentration << std::endl;
+    // std::cout <<finalResult.TotalSludgeProduction << std::endl;
+    // std::cout << finalResult.ReactorDetentionTime << std::endl;
+    // std::cout <<finalResult.VOLR << std::endl;
+    // std::cout <<finalResult.EffluentCBOD5 << std::endl;
+    // std::cout <<finalResult.EffluentTSS << std::endl;
+    // std::cout << finalResult.EffluentAmmonia_N << std::endl;
+    // std::cout <<finalResult.EffluentNO3_N << std::endl;
+    // std::cout << finalResult.EffluentNO3_N_W_Denit << std::endl;
+    // std::cout << "-----------------------------------Output of Second Table"<< std::endl;
+    // std::cout <<"FieldOTR: "<<finalResult.FieldOTR << std::endl;
+    // std::cout <<"AeEnergy: "<<finalResult.AeEnergy << std::endl;
+    // std::cout <<"AeCost: "<<finalResult.AeCost << std::endl;
 }
+
+
+
+
 
