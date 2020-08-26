@@ -4,7 +4,8 @@
 
 using namespace Nan;
 
-NAN_MODULE_INIT(InitPsat) {
+NAN_MODULE_INIT(InitPsat)
+{
 
     // PSAT
     Nan::Set(target, New<String>("achievableEfficiency").ToLocalChecked(),
@@ -40,7 +41,11 @@ NAN_MODULE_INIT(InitPsat) {
     Nan::Set(target, New<String>("resultsModified").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(resultsModified)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("motorPowerFactor").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(motorPowerFactor)).ToLocalChecked());
 
+    Nan::Set(target, New<String>("motorCurrent").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(motorCurrent)).ToLocalChecked());
 }
 
 NODE_MODULE(psat, InitPsat)

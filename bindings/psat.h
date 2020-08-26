@@ -445,4 +445,44 @@ NAN_METHOD(nema)
     }
 }
 
+NAN_METHOD(motorPowerFactor)
+{
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
+	r = Nan::New<Object>();
+
+	const double motorRatedPower = Get("motorRatedPower");
+	const double loadFactor = Get("loadFactor");
+	const double motorCurrent = Get("motorCurrent");
+	const double motorEfficiency = Get("motorEfficiency");
+	const double ratedVoltage = Get("ratedVoltage");
+
+	MotorPowerFactor motorPowerFactor(motorRatedPower, loadFactor, motorCurrent, motorEfficiency, ratedVoltage);
+	double motorPowerFactorVal = motorPowerFactor.calculate();
+    double motorPowerFactorResult = Conversion(motorPowerFactorVal).fractionToPercent();
+	Local<Number> retval = Nan::New(motorPowerFactorResult);
+	info.GetReturnValue().Set(retval);
+}
+
+NAN_METHOD(motorCurrent)
+{
+	inp = Nan::To<Object>(info[0]).ToLocalChecked();
+	r = Nan::New<Object>();
+
+	const double motorRatedPower = Get("motorRatedPower");
+    const double motorRPM = Get("motorRPM");
+    Motor::LineFrequency lineFrequency = line();
+    Motor::EfficiencyClass efficiencyClass = effCls();
+    const double specifiedEfficiency = Get("specifiedEfficiency");
+	const double loadFactor = Get("loadFactor");
+	const double ratedVoltage = Get("ratedVoltage");
+
+    const double fullLoadAmps = Get("fullLoadAmps");
+
+	MotorCurrent motorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClass, specifiedEfficiency, loadFactor, ratedVoltage);
+	double motorCurrentVal = motorCurrent.calculateCurrent(fullLoadAmps);
+	Local<Number> retval = Nan::New(motorCurrentVal);
+	info.GetReturnValue().Set(retval);
+}
+
+
 #endif //AMO_TOOLS_SUITE_PSAT_BRIDGE_H
