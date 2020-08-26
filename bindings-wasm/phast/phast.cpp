@@ -2,6 +2,8 @@
 #include "calculator/losses/AuxiliaryPower.h"
 #include "calculator/losses/FixtureLosses.h"
 #include "calculator/losses/EnergyInputEAF.h"
+#include "calculator/losses/EnergyInputExhaustGasLosses.h"
+#include "calculator/losses/ExhaustGasEAF.h"
 
 #include <emscripten/bind.h>
 using namespace emscripten;
@@ -40,13 +42,27 @@ EMSCRIPTEN_BINDINGS(energyInputEAF)
     // naturalGasHeatInput, coalCarbonInjection, coalHeatingValue, electrodeUse,
                     //    electrodeHeatingValue, otherFuels, electricityInput
     class_<EnergyInputEAF>("EnergyInputEAF")
-        .constructor<double, double, double, double, double>()
+        .constructor<double, double, double, double, double, double, double>()
         .function("getTotalChemicalEnergyInput", &EnergyInputEAF::getTotalChemicalEnergyInput)
         .function("getHeatDelivered", &EnergyInputEAF::getHeatDelivered);
 
 }
 // energyInputExhaustGasLosses
+EMSCRIPTEN_BINDINGS(energyInputExhaustGasLosses)
+{
+    class_<EnergyInputExhaustGasLosses>("EnergyInputExhaustGasLosses")
+        .constructor<double, double, double, double>()
+        .function("getHeatDelivered", &EnergyInputExhaustGasLosses::getHeatDelivered)
+        .function("getExhaustGasLosses", &EnergyInputExhaustGasLosses::getExhaustGasLosses)
+        .function("getAvailableHeat", &EnergyInputExhaustGasLosses::getAvailableHeat);
+}
 // exhaustGasEAF
+EMSCRIPTEN_BINDINGS(exhaustGasEAF)
+{
+    class_<ExhaustGasEAF>("ExhaustGasEAF")
+        .constructor<double, double, double, double, double, double>()
+        .function("getTotalHeatExhaust", &ExhaustGasEAF::getTotalHeatExhaust);
+}
 // flueGasLossesByVolume
 // flueGasByVolumeCalculateHeatingValue
 // flueGasLossesByMass
