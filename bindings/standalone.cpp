@@ -43,6 +43,7 @@ NAN_MODULE_INIT(InitStandalone) {
 	Nan::Set(target, New<String>("orificeMethod").ToLocalChecked(),
 	         GetFunction(New<FunctionTemplate>(orificeMethod)).ToLocalChecked());
 	*/
+
 }
 
 NODE_MODULE(standalone, InitStandalone)

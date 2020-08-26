@@ -271,3 +271,4 @@ test('Bag Method', function (t) {
     t.equal(rnd(results.flowRate), 1.365);
     t.equal(rnd(results.annualConsumption), 136.5);
 });
+

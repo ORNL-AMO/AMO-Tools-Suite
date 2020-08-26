@@ -5,12 +5,12 @@
 #include <node.h>
 #include "calculator/util/CHP.h"
 #include "calculator/util/CompressedAir.h"
+#include "calculator/motor/MotorPowerFactor.h"
 #include <string>
 #include <array>
 #include <vector>
 #include <exception>
 #include <iostream>
-
 
 using namespace Nan;
 using namespace v8;
@@ -18,12 +18,14 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const & nm) {
+double Get(std::string const &nm)
+{
 	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
 	v8::Isolate *isolate = v8::Isolate::GetCurrent();
 	v8::Local<v8::Context> context = isolate->GetCurrentContext();
 	Local<Value> rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
-	if (rObj->IsUndefined()) {
+	if (rObj->IsUndefined())
+	{
 		ThrowTypeError(std::string("Get method in standalone.h: " + nm + " not present in object").c_str());
 	}
 	return Nan::To<double>(rObj).FromJust();
@@ -35,25 +37,27 @@ std::vector<double> GetVector(const std::string &key, Local<Object> obj)
 	v8::Local<v8::Context> context = isolate->GetCurrentContext();
 
 	Local<Value> arrayTmp = Nan::Get(Nan::To<v8::Object>(obj).ToLocalChecked(), Nan::New<String>(key).ToLocalChecked()).ToLocalChecked();
-    Local<Array> jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
-    std::vector<double> array;
+	Local<Array> jsArray = v8::Local<v8::Array>::Cast(arrayTmp);
+	std::vector<double> array;
 
-    for (unsigned int i = 0; i < jsArray->Length(); i++)
-    {
-        v8::Local<v8::Value> jsElement = jsArray->Get(context, i).ToLocalChecked();
-        double val = Nan::To<double>(jsElement).FromJust();
-        array.push_back(val);
-    }
-    return array;
+	for (unsigned int i = 0; i < jsArray->Length(); i++)
+	{
+		v8::Local<v8::Value> jsElement = jsArray->Get(context, i).ToLocalChecked();
+		double val = Nan::To<double>(jsElement).FromJust();
+		array.push_back(val);
+	}
+	return array;
 }
 
-void SetR(std::string const & nm, double n) {
+void SetR(std::string const &nm, double n)
+{
 	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
 	Local<Number> getNum = Nan::New<Number>(n);
 	Nan::Set(r, getName, getNum);
 }
 
-NAN_METHOD(CHPcalculator) {
+NAN_METHOD(CHPcalculator)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
@@ -61,9 +65,9 @@ NAN_METHOD(CHPcalculator) {
 	const double annualElectricityConsumption = Get("annualElectricityConsumption");
 	const double annualThermalDemand = Get("annualThermalDemand");
 	const double boilerThermalFuelCosts = Get("boilerThermalFuelCosts");
-	const double avgElectricityCosts =  Get("avgElectricityCosts");
+	const double avgElectricityCosts = Get("avgElectricityCosts");
 	const double boilerThermalFuelCostsCHPcase = Get("boilerThermalFuelCostsCHPcase");
-	const double CHPfuelCosts =  Get("CHPfuelCosts");
+	const double CHPfuelCosts = Get("CHPfuelCosts");
 	const double percentAvgkWhElectricCostAvoidedOrStandbyRate = Get("percentAvgkWhElectricCostAvoidedOrStandbyRate");
 	const double displacedThermalEfficiency = Get("displacedThermalEfficiency");
 	const double chpAvailability = Get("chpAvailability");
@@ -73,11 +77,11 @@ NAN_METHOD(CHPcalculator) {
 	CHP::Option option = static_cast<CHP::Option>(val);
 
 	auto const chp = CHP(annualOperatingHours, annualElectricityConsumption, annualThermalDemand,
-	                     boilerThermalFuelCosts, avgElectricityCosts, option, boilerThermalFuelCostsCHPcase,
-	                     CHPfuelCosts, percentAvgkWhElectricCostAvoidedOrStandbyRate, displacedThermalEfficiency,
-	                     chpAvailability, thermalUtilization);
+						 boilerThermalFuelCosts, avgElectricityCosts, option, boilerThermalFuelCostsCHPcase,
+						 CHPfuelCosts, percentAvgkWhElectricCostAvoidedOrStandbyRate, displacedThermalEfficiency,
+						 chpAvailability, thermalUtilization);
 
-	auto const & costInfo = chp.getCostInfo();
+	auto const &costInfo = chp.getCostInfo();
 
 	SetR("annualOperationSavings", costInfo.at("annualOperationSavings"));
 	SetR("totalInstalledCostsPayback", costInfo.at("totalInstalledCostsPayback"));
@@ -89,7 +93,8 @@ NAN_METHOD(CHPcalculator) {
 	info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(usableAirCapacity) {
+NAN_METHOD(usableAirCapacity)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	const double tankSize = Get("tankSize");
 	const double airPressureIn = Get("airPressureIn");
@@ -97,7 +102,8 @@ NAN_METHOD(usableAirCapacity) {
 	info.GetReturnValue().Set(ReceiverTank::calculateUsableCapacity(tankSize, airPressureIn, airPressureOut));
 }
 
-NAN_METHOD(pneumaticAirRequirement) {
+NAN_METHOD(pneumaticAirRequirement)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
@@ -105,14 +111,16 @@ NAN_METHOD(pneumaticAirRequirement) {
 	auto const pistonType = (!val) ? PneumaticAirRequirement::PistonType::SingleActing : PneumaticAirRequirement::PistonType::DoubleActing;
 	const double cylinderDiameter = Get("cylinderDiameter");
 	const double cylinderStroke = Get("cylinderStroke");
-	const double airPressure =  Get("airPressure");
+	const double airPressure = Get("airPressure");
 	const double cyclesPerMinute = Get("cyclesPerMinute");
-	
 
 	PneumaticAirRequirement airRequirement;
-	if (pistonType == PneumaticAirRequirement::PistonType::SingleActing) {
+	if (pistonType == PneumaticAirRequirement::PistonType::SingleActing)
+	{
 		airRequirement = PneumaticAirRequirement(pistonType, cylinderDiameter, cylinderStroke, airPressure, cyclesPerMinute);
-	} else {
+	}
+	else
+	{
 		const double pistonRodDiameter = Get("pistonRodDiameter");
 		airRequirement = PneumaticAirRequirement(pistonType, cylinderDiameter, cylinderStroke, pistonRodDiameter, airPressure, cyclesPerMinute);
 	}
@@ -124,32 +132,35 @@ NAN_METHOD(pneumaticAirRequirement) {
 	info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(receiverTank) {
+NAN_METHOD(receiverTank)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
 	ReceiverTank tank;
 	ReceiverTank::Method method = static_cast<ReceiverTank::Method>(static_cast<unsigned>(Get("method")));
 
-	
-	if (method == ReceiverTank::Method::General) {
+	if (method == ReceiverTank::Method::General)
+	{
 
 		const double airDemand = Get("airDemand");
 		const double allowablePressureDrop = Get("allowablePressureDrop");
 		const double atmosphericPressure = Get("atmosphericPressure");
 
 		tank = {ReceiverTank::Method::General, airDemand, allowablePressureDrop, atmosphericPressure};
-
-	} else if (method == ReceiverTank::Method::DedicatedStorage) {
+	}
+	else if (method == ReceiverTank::Method::DedicatedStorage)
+	{
 
 		const double finalTankPressure = Get("finalTankPressure");
 		const double initialTankPressure = Get("initialTankPressure");
-		const double lengthOfDemand =  Get("lengthOfDemand");
+		const double lengthOfDemand = Get("lengthOfDemand");
 		const double airFlowRequirement = Get("airFlowRequirement");
 		const double atmosphericPressure = Get("atmosphericPressure");
 
 		tank = {ReceiverTank::Method::DedicatedStorage, lengthOfDemand, airFlowRequirement, atmosphericPressure, initialTankPressure, finalTankPressure};
-
-	} else if (method == ReceiverTank::Method::BridgingCompressorReactionDelay) {
+	}
+	else if (method == ReceiverTank::Method::BridgingCompressorReactionDelay)
+	{
 
 		const double speedOfAir = Get("speedOfAir");
 		const double distanceToCompressorRoom = Get("distanceToCompressorRoom");
@@ -158,27 +169,29 @@ NAN_METHOD(receiverTank) {
 		const double allowablePressureDrop = Get("allowablePressureDrop");
 
 		tank = {ReceiverTank::Method::BridgingCompressorReactionDelay, distanceToCompressorRoom, speedOfAir, atmosphericPressure, airDemand, allowablePressureDrop};
-
-	} else {
-		const double lengthOfDemand =  Get("lengthOfDemand");
+	}
+	else
+	{
+		const double lengthOfDemand = Get("lengthOfDemand");
 		const double airFlowRequirement = Get("airFlowRequirement");
 		const double atmosphericPressure = Get("atmosphericPressure");
 		const double initialTankPressure = Get("initialTankPressure");
 		const double finalTankPressure = Get("finalTankPressure");
 		const double meteredControl = Get("meteredControl");
-		
+
 		tank = {ReceiverTank::Method::MeteredStorage, lengthOfDemand, airFlowRequirement, atmosphericPressure, initialTankPressure, finalTankPressure, meteredControl};
 	}
 	Local<Number> size = Nan::New(tank.calculateSize());
 	info.GetReturnValue().Set(size);
 }
 
-NAN_METHOD(operatingCost) {
+NAN_METHOD(operatingCost)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
 	const double motorBhp = Get("motorBhp");
-	const double bhpUnloaded =  Get("bhpUnloaded");
+	const double bhpUnloaded = Get("bhpUnloaded");
 	const double annualOperatingHours = Get("annualOperatingHours");
 	const double runTimeLoaded = Get("runTimeLoaded");
 	const double efficiencyLoaded = Get("efficiencyLoaded");
@@ -186,8 +199,9 @@ NAN_METHOD(operatingCost) {
 	const double costOfElectricity = Get("costOfElectricity");
 
 	auto output = Compressor::OperatingCost(motorBhp, bhpUnloaded, annualOperatingHours,
-	                                        runTimeLoaded, efficiencyLoaded, efficiencyUnloaded,
-	                                        costOfElectricity).calculate();
+											runTimeLoaded, efficiencyLoaded, efficiencyUnloaded,
+											costOfElectricity)
+					  .calculate();
 
 	SetR("runTimeUnloaded", output.runTimeUnloaded);
 	SetR("costForLoaded", output.costForLoaded);
@@ -196,12 +210,13 @@ NAN_METHOD(operatingCost) {
 	info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(airSystemCapacity) {
+NAN_METHOD(airSystemCapacity)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
 	std::vector<double> receiverCapacitiesGallons = GetVector("receiverCapacities", inp);
-	const double oneHalf =  Get("oneHalf");
+	const double oneHalf = Get("oneHalf");
 	const double threeFourths = Get("threeFourths");
 	const double one = Get("one");
 	const double oneAndOneFourth = Get("oneAndOneFourth");
@@ -222,23 +237,21 @@ NAN_METHOD(airSystemCapacity) {
 	const double twenty = Get("twenty");
 	const double twentyFour = Get("twentyFour");
 
-	Compressor::AirSystemCapacity::Output output = Compressor::AirSystemCapacity
-			(
-					{
-							oneHalf, threeFourths, one, oneAndOneFourth,
-							oneAndOneHalf, two, twoAndOneHalf, three,
-							threeAndOneHalf, four, five, six, eight, ten, twelve, fourteen,
-							sixteen, eighteen, twenty, twentyFour
-					},
-					std::move(receiverCapacitiesGallons)
-			).calculate();
+	Compressor::AirSystemCapacity::Output output = Compressor::AirSystemCapacity(
+													   {oneHalf, threeFourths, one, oneAndOneFourth,
+														oneAndOneHalf, two, twoAndOneHalf, three,
+														threeAndOneHalf, four, five, six, eight, ten, twelve, fourteen,
+														sixteen, eighteen, twenty, twentyFour},
+													   std::move(receiverCapacitiesGallons))
+													   .calculate();
 
 	SetR("totalPipeVolume", output.totalPipeVolume);
 	SetR("totalReceiverVolume", output.totalReceiverVol);
 	SetR("totalCapacityOfCompressedAirSystem", output.totalCapacityOfCompressedAirSystem);
 
 	v8::Local<v8::Array> receiverCapacities = Nan::New<v8::Array>(output.receiverCapacities.size());
-	for (std::size_t i = 0; i < output.receiverCapacities.size(); i++) {
+	for (std::size_t i = 0; i < output.receiverCapacities.size(); i++)
+	{
 		Nan::Set(receiverCapacities, i, Nan::New<Number>(output.receiverCapacities[i]));
 	}
 	Nan::Set(r, Nan::New<String>("receiverCapacities").ToLocalChecked(), receiverCapacities);
@@ -266,7 +279,8 @@ NAN_METHOD(airSystemCapacity) {
 	info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(airVelocity) {
+NAN_METHOD(airVelocity)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
@@ -300,10 +314,11 @@ NAN_METHOD(airVelocity) {
 	info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(pipeSizing) {
+NAN_METHOD(pipeSizing)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
-	
+
 	const double airFlow = Get("airFlow");
 	const double airlinePressure = Get("airlinePressure");
 	const double designVelocity = Get("designVelocity");
@@ -317,19 +332,23 @@ NAN_METHOD(pipeSizing) {
 	info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(pneumaticValve) {
+NAN_METHOD(pneumaticValve)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
-    v8::Isolate *isolate = v8::Isolate::GetCurrent();
-    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+	v8::Isolate *isolate = v8::Isolate::GetCurrent();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext();
 
 	Local<Value> flowRate = inp->Get(context, Nan::New<String>("flowRate").ToLocalChecked()).ToLocalChecked();
 	const double inletPressure = Get("inletPressure");
 	const double outletPressure = Get("outletPressure");
-	if (flowRate->IsUndefined()) {
+	if (flowRate->IsUndefined())
+	{
 		double output = Compressor::PneumaticValve(inletPressure, outletPressure).calculate();
 		SetR("flowRate", output);
-	} else {
+	}
+	else
+	{
 		const double flowRateInput = Get("flowRate");
 		double output = Compressor::PneumaticValve(inletPressure, outletPressure, flowRateInput).calculate();
 		SetR("flowCoefficient", output);
@@ -338,7 +357,8 @@ NAN_METHOD(pneumaticValve) {
 	info.GetReturnValue().Set(r);
 }
 
-NAN_METHOD(bagMethod) {
+NAN_METHOD(bagMethod)
+{
 	inp = Nan::To<Object>(info[0]).ToLocalChecked();
 	r = Nan::New<Object>();
 
@@ -354,6 +374,8 @@ NAN_METHOD(bagMethod) {
 
 	info.GetReturnValue().Set(r);
 }
+
+
 // TODO: Add estimate, orifice, and decibels methods in the future
 
 #endif //AMO_TOOLS_SUITE_STANDALONE_H

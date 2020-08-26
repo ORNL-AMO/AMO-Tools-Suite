@@ -1,6 +1,6 @@
 const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../')
-    , bindings = require('bindings')({ module_root: testRoot, bindings: 'psat'});
+    , bindings = require('bindings')({ module_root: testRoot, bindings: 'psat' });
 
 function rnd(value) {
     return Number(Math.round(value + 'e' + 6) + 'e-' + 6);
@@ -135,18 +135,18 @@ test('motorPerformance', function (t) {
     t.plan(4);
     t.type(bindings.motorPerformance, 'function');
 
-//    {
-//        MotorEfficiency mef(Motor::LineFrequency::FREQ60,1780,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,200,.75);
-//        auto mefVal = mef.calculate();
-//        Check100(95.69,mefVal);
-//
-//        MotorCurrent mc(200,1780,Motor::LineFrequency::FREQ60,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,.75,460,225.8);
-//        auto mcVal = mc.calculate();
-//        Check100(76.63,mcVal/225.8);
-//
-//        MotorPowerFactor pf(200,.75,mcVal,mefVal,460);
-//        Check100(84.82,pf.calculate());
-//    }
+    //    {
+    //        MotorEfficiency mef(Motor::LineFrequency::FREQ60,1780,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,200,.75);
+    //        auto mefVal = mef.calculate();
+    //        Check100(95.69,mefVal);
+    //
+    //        MotorCurrent mc(200,1780,Motor::LineFrequency::FREQ60,Motor::EfficiencyClass::ENERGY_EFFICIENT,0,.75,460,225.8);
+    //        auto mcVal = mc.calculate();
+    //        Check100(76.63,mcVal/225.8);
+    //
+    //        MotorPowerFactor pf(200,.75,mcVal,mefVal,460);
+    //        Check100(84.82,pf.calculate());
+    //    }
 
     var inp = {};
     // Line frequency 60
@@ -190,3 +190,58 @@ test('estimateFLA estimate full load amps', function (t) {
     var res = bindings.estFLA(inp);
     t.equal(rnd(res), rnd(225.800612262395), 'res is ' + res);
 });
+
+test('Motor Power Factor', function (t) {
+    t.plan(3);
+    t.type(bindings.motorPowerFactor, 'function');
+
+    var result = bindings.motorPowerFactor({
+        motorRatedPower: 350,
+        loadFactor: 31,
+        motorCurrent: 149.2,
+        motorEfficiency: 91.5,
+        ratedVoltage: 460
+    });
+    t.equal(rnd(result), rnd(74.414949));
+    result = bindings.motorPowerFactor({
+        motorRatedPower: 600,
+        loadFactor: 96.3,
+        motorCurrent: 659.4,
+        motorEfficiency: 95.8,
+        ratedVoltage: 460
+    });
+    t.equal(rnd(result), rnd(85.64134));
+});
+
+
+test('Motor Current', function (t) {
+    t.plan(5);
+    t.type(bindings.motorPowerFactor, 'function');
+    var inp = {
+        motorRatedPower: 100,
+        motorRPM: 1500,
+        line_frequency: 0,
+        efficiency_class: 1,
+        specifiedEfficiency: 0,
+        loadFactor: 0.25,
+        ratedVoltage: 460,
+        fullLoadAmps: 113.8
+    };
+    var result = bindings.motorCurrent(inp);
+    t.equal(rnd(result), rnd(42.728308));
+
+    inp.motorRPM = 1785;
+    inp.ratedVoltage = 2300;
+    inp.motorRatedPower = 500;
+    inp.fullLoadAmps = 557.9;
+    var result2 = bindings.motorCurrent(inp);
+    t.equal(rnd(result2), rnd(197.4057226065));
+    
+    inp.loadFactor = .5;
+    var result3 = bindings.motorCurrent(inp);
+    t.equal(rnd(result3), rnd(304.6652143255));
+    
+    inp.loadFactor = .75;
+    var result4 = bindings.motorCurrent(inp);
+    t.equal(rnd(result4), rnd(426.5420335857));    
+})
