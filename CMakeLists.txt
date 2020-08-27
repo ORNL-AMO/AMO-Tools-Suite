@@ -213,7 +213,8 @@ set(SOURCE_FILES
         src/calculator/pump/PumpEfficiency.cpp
         bindings-wasm/fan/fan.cpp
         bindings-wasm/fan/fanEnum.cpp
-        bindings-wasm/phast/phast.cpp)
+        bindings-wasm/phast/phast.cpp
+        bindings-wasm/phast/phastEnum.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
