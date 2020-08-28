@@ -197,17 +197,17 @@ test('Motor Power Factor', function (t) {
 
     var result = bindings.motorPowerFactor({
         motorRatedPower: 350,
-        loadFactor: 31,
+        loadFactor: .31,
         motorCurrent: 149.2,
-        motorEfficiency: 91.5,
+        motorEfficiency: .915,
         ratedVoltage: 460
     });
     t.equal(rnd(result), rnd(74.414949));
     result = bindings.motorPowerFactor({
         motorRatedPower: 600,
-        loadFactor: 96.3,
+        loadFactor: .963,
         motorCurrent: 659.4,
-        motorEfficiency: 95.8,
+        motorEfficiency: .958,
         ratedVoltage: 460
     });
     t.equal(rnd(result), rnd(85.64134));
