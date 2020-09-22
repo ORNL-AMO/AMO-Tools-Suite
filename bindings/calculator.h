@@ -102,7 +102,7 @@ bool GetBool(std::string const &key, Local<Object> obj)
     {
         ThrowTypeError(std::string("GetBool method in calculator.h: Boolean value " + key + " not present in object").c_str());
     }
-    return rObj->BooleanValue(context).ToChecked();
+    return Nan::To<bool>(rObj).FromJust();
 }
 
 std::string GetStr(std::string const &key, Local<Object> obj)
@@ -155,8 +155,7 @@ MultimeterData getMultimeterData(Local<Object> obj)
         numberOfPhases,
         supplyVoltage,
         averageCurrent,
-        powerFactor
-    };
+        powerFactor};
 }
 
 NameplateData getNameplateData(Local<Object> obj)
@@ -181,8 +180,7 @@ NameplateData getNameplateData(Local<Object> obj)
         operationalFrequency,
         lineFrequency,
         motorAndDriveEfficiency,
-        loadFactor
-    };
+        loadFactor};
 }
 
 PowerMeterData getPowerMeterData(Local<Object> obj)
@@ -231,8 +229,7 @@ ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
         nameplateData,
         powerMeterData,
         otherMethodData,
-        units
-    };
+        units};
 }
 
 std::vector<ElectricityReductionInput> getElectricityReductionInputVec()
@@ -305,8 +302,7 @@ AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
     double airVelocity = GetDouble("airVelocity", airMassFlowMeasuredDataV8);
     return {
         areaOfDuct,
-        airVelocity
-    };
+        airVelocity};
 }
 
 AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
@@ -321,8 +317,7 @@ AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
     }
     double airFlow = GetDouble("airFlow", airMassFlowNameplateDataV8);
     return {
-        airFlow
-    };
+        airFlow};
 }
 
 AirMassFlowData getAirMassFlowData(Local<Object> obj)
@@ -347,8 +342,7 @@ AirMassFlowData getAirMassFlowData(Local<Object> obj)
         nameplateData,
         inletTemperature,
         outletTemperature,
-        systemEfficiency
-    };
+        systemEfficiency};
 }
 
 WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
@@ -369,8 +363,7 @@ WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
         waterFlow,
         inletTemperature,
         outletTemperature,
-        systemEfficiency
-    };
+        systemEfficiency};
 }
 
 NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj)
@@ -529,7 +522,7 @@ CompressorElectricityData getCompressorElectricityData(Local<Object> obj, bool c
         ThrowTypeError(std::string("CompressedAirReduction: getCompressorElectricityData method in calculator.h: compressorElectricityData not present in object").c_str());
     }
     double compressorControlAdjustment;
-    if(convert)
+    if (convert)
     {
         compressorControlAdjustment = Conversion(GetDouble("compressorControlAdjustment", compressorElectricityDataV8)).percentToFraction();
     }
