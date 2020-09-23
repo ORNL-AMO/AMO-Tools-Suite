@@ -10,7 +10,7 @@
     "d3": "^4.13.0",
     "esm": "^3.2.25",
     "nan": "2.14.0",
-    "node-gyp": "4.0.0",
+    "node-gyp": "7.1.0",
     "utf-8-validate": "5.0.2"
   },
   "devDependencies": {
