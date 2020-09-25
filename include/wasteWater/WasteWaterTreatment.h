@@ -194,6 +194,8 @@ public:
     {
     }
 
+    Output calculate();
+
 private:
     double Temperature;
     double So;
