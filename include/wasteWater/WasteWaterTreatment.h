@@ -19,11 +19,95 @@
 class WasteWaterTreatment
 {
 public:
+    struct CalculationsTable
+    {
+        CalculationsTable(
+            double Se,
+            double HeterBio,
+            double CellDeb,
+            double InterVes,
+            double MLVSS,
+            double MLSS,
+            double BiomassProd,
+            double SludgeProd,
+            double SolidProd,
+            double Effluent,
+            double IntentWaste,
+            double OxygenRqd,
+            double FlowMgd,
+            double NRemoved,
+            double NRemovedMgl,
+            double NitO2Dem,
+            double O2Reqd,
+            double EffNH3N,
+            double EffNo3N,
+            double TotalO2Rqd,
+            double WAS,
+            double EstimatedEff,
+            double EstimRas,
+            double FmRatio,
+            double Diff_MLSS,
+            double SRT) : Se(Se),
+                          HeterBio(HeterBio),
+                          CellDeb(CellDeb),
+                          InterVes(InterVes),
+                          MLVSS(MLVSS),
+                          MLSS(MLSS),
+                          BiomassProd(BiomassProd),
+                          SludgeProd(SludgeProd),
+                          Effluent(Effluent),
+                          IntentWaste(IntentWaste),
+                          OxygenRqd(OxygenRqd),
+                          FlowMgd(FlowMgd),
+                          NRemoved(NRemoved),
+                          NRemovedMgl(NRemovedMgl),
+                          NitO2Dem(NitO2Dem),
+                          O2Reqd(O2Reqd),
+                          EffNH3N(EffNH3N),
+                          EffNo3N(EffNo3N),
+                          TotalO2Rqd(TotalO2Rqd),
+                          WAS(WAS),
+                          EstimatedEff(EstimatedEff),
+                          EstimRas(EstimRas),
+                          FmRatio(FmRatio),
+                          Diff_MLSS(Diff_MLSS),
+                          SRT(SRT)
+        {
+        }
+        CalculationsTable() = default;
+        double Se;
+        double HeterBio;
+        double CellDeb;
+        double InterVes;
+        double MLVSS;
+        double MLSS;
+        double BiomassProd;
+        double SludgeProd;
+        double SolidProd;
+        double Effluent;
+        double IntentWaste;
+        double OxygenRqd;
+        double FlowMgd;
+        double NRemoved;
+        double NRemovedMgl;
+        double NitO2Dem;
+        double O2Reqd;
+        double EffNH3N;
+        double EffNo3N;
+        double TotalO2Rqd;
+        double WAS;
+        double EstimatedEff;
+        double EstimRas;
+        double FmRatio;
+        double Diff_MLSS;
+        double SRT;
+    };
     /**
      * Output
      * 
      * 
      * */
+public:
     struct Output
     {
         Output(
@@ -91,7 +175,7 @@ public:
                                FieldOTR(FieldOTR)
         {
         }
-
+        Output() = default;
         double TotalAverageDailyFlowRate;
         double VolumeInService;
         double InfluentBOD5Concentration;
@@ -133,6 +217,7 @@ public:
      *
      *
      * */
+public:
     WasteWaterTreatment(
         double Temperature,
         double So,
@@ -173,6 +258,7 @@ public:
           InfluentTSS(InfluentTSS),
           InertInOrgTSS(InertInOrgTSS),
           EffluentTSS(EffluentTSS),
+          RASTSS(RASTSS),
           MLSSpar(MLSSpar),
           FractionBiomass(FractionBiomass),
           BiomassYeild(BiomassYeild),
@@ -190,9 +276,7 @@ public:
           OperatingTime(OperatingTime),
           TypeAerators(TypeAerators),
           Speed(Speed),
-          EnergyCostUnit(EnergyCostUnit)
-    {
-    }
+          EnergyCostUnit(EnergyCostUnit){};
 
     Output calculate();
 

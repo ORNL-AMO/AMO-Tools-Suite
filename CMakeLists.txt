@@ -198,7 +198,8 @@ set(SOURCE_FILES
         src/calculator/util/SteamReduction.cpp
         src/calculator/pump/PumpData.cpp
         src/calculator/motor/MotorData.cpp
-        src/chillers/CoolingTower.cpp)
+        src/chillers/CoolingTower.cpp
+        src/wasteWater/WasteWaterTreatment.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -382,6 +383,7 @@ set(INCLUDE_FILES
         include/calculator/motor/MotorData.h
         include/sqlite/MotorData.h
         include/chillers/CoolingTower.h
+        include/wasteWater/WasteWaterTreatment.h
         )
 
 # Pending: PumpData calculator unit test
@@ -448,7 +450,8 @@ set(TEST_FILES
         tests/steamapi/OperationsInput.unit.cpp
         tests/steamapi/SteamModeler.unit.cpp
         tests/steamapi/TurbineInput.unit.cpp
-        tests/CoolingTower.unit.cpp)
+        tests/CoolingTower.unit.cpp
+        tests/WasteWaterTreatment.unit.cpp)
 
 #find_package(PythonInterp 2.7 REQUIRED)
 #execute_process( COMMAND ${PYTHON_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/seed_database.py" "${CMAKE_DATABASE_OUTPUT_DIRECTORY}/amo_tools_suite.db")
