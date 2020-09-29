@@ -24,7 +24,8 @@
   "scripts": {
     "test": "tap debug tests/js/*.js",
     "at": "tap debug tests/at/js/*.js",
-    "install": "node-gyp rebuild"
+    "install": "node-gyp rebuild",
+    "test-waste-water": "tap debug tests/js/wasteWater.js"
   },
   "repository": {
     "type": "git",
