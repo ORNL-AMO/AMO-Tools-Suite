@@ -1,10 +1,11 @@
 /**
  * @file
- * @brief Contains the implementation of Bio-Tiger, waste water treatment simulation.
+ * @brief Contains the class definition for Bio-Tiger waste water treatment simulation.
  *
  * 
  *
- * @author Mark Root, Mohsen Maniat
+ * @author Mark Root (mroot)
+ * @author Mohsen Maniat
  * @bug No known bugs.
  *
  */
@@ -12,10 +13,7 @@
 #ifndef AMO_TOOLS_SUITE_WASTEWATERTREATMENT_H
 #define AMO_TOOLS_SUITE_WASTEWATERTREATMENT_H
 
-/**
- * 
- * 
- */
+
 class WasteWaterTreatment
 {
 public:
@@ -102,11 +100,6 @@ public:
         double Diff_MLSS;
         double SRT;
     };
-    /**
-     * Output
-     * 
-     * 
-     * */
 public:
     struct Output
     {
@@ -210,13 +203,39 @@ public:
         double FieldOTR;
     };
 
-    /**
-     *
-     * Constructor
-     *
-     *
-     *
-     * */
+
+	/**
+	 * @param Temperature, double
+	 * @param So, double
+	 * @param Volume, double
+	 * @param FlowRate, double
+	 * @param InertVSS, double
+	 * @param Biomass, double
+	 * @param InfluentTSS, double
+	 * @param InertInOrgTSS, double
+	 * @param EffluentTSS, double
+	 * @param RASTSS, double
+	 * @param MLSSpar, double
+	 * @param FractionBiomass, double
+	 * @param BiomassYeild, double
+	 * @param HalfSaturation, double
+	 * @param MicrobialDecay, double
+	 * @param MaxUtilizationRate, double
+	 * @param MaxDays, double
+	 * @param TimeIncrement, double
+	 * @param OperatingDO, double
+	 * @param Alpha, double
+	 * @param Beta, double
+	 * @param SOTR, double
+	 * @param Aeration, double
+	 * @param Elevation, double
+	 * @param OperatingTime, double
+	 * @param TypeAerators, double
+	 * @param Speed, double
+	 * @param EnergyCostUnit, double
+     * @return WasteWaterTreatment::Output results from calculat() function
+     * 
+	 */
 public:
     WasteWaterTreatment(
         double Temperature,

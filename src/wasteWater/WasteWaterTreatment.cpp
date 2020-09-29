@@ -1,8 +1,9 @@
 /**
  * @file
- * @brief
+ * @brief contains logic to calculate wast water treatment results
  * 
- * @author Mark Root
+ * @author Mark Root (mroot)
+ * @author Mohsen Maniat
  * @bug No known bugs.
  *
  */
