@@ -84,7 +84,7 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
     // flueGasCalculateExcessAir
     // flueGasCalculateO2
     class_<GasCompositions>("GasCompositions")
-        .constructor<string, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<std::string, double, double, double, double, double, double, double, double, double, double, double>()
         .function("getHeatingValue", &GasCompositions::getHeatingValue)
         .function("getHeatingValueVolume", &GasCompositions::getHeatingValueVolume)
         .function("getSpecificGravity", &GasCompositions::getSpecificGravity)
@@ -102,17 +102,18 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
     // flueGasByMassCalculateExcessAir
     class_<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterial")
         .constructor<double, double, double, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor()
         .function("getHeatLoss", &SolidLiquidFlueGasMaterial::getHeatLoss)
         .function("calculateHeatingValueFuel", &SolidLiquidFlueGasMaterial::calculateHeatingValueFuel)
         .function("calculateFlueGasO2", &SolidLiquidFlueGasMaterial::calculateFlueGasO2)
-        .function("calculateExcessAirFromFlueGasO2", &&SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2);
+        .function("calculateExcessAirFromFlueGasO2", &SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2);
 }
 
 // gasCoolingLosses
 EMSCRIPTEN_BINDINGS(gasCoolingLosses)
 {
     class_<GasCoolingLosses>("GasCoolingLosses")
-        .constructor<double, double, double, double, double>()
+        .constructor<double, double, double, double, double, double>()
         .function("getHeatLoss", &GasCoolingLosses::getHeatLoss);
 }
 // gasLoadChargeMaterial
@@ -141,7 +142,7 @@ EMSCRIPTEN_BINDINGS(liquidLoadChargeMaterial)
 {
     class_<LiquidLoadChargeMaterial>("LiquidLoadChargeMaterial")
         .constructor<LoadChargeMaterial::ThermicReactionType, double, double, double, double, double, double, double, double, double, double, double>()
-        .function("getTotalHeat", &LiquidCoolingLosses::getTotalHeat);
+        .function("getTotalHeat", &LiquidLoadChargeMaterial::getTotalHeat);
 }
 // openingLossesCircular
 // openingLossesQuad
@@ -151,8 +152,10 @@ EMSCRIPTEN_BINDINGS(openingLosses)
     class_<OpeningLosses>("OpeningLosses")
         .constructor<double, double, double, double, double, double, double, double>()
         .constructor<double, double, double, double, double, double, double, double, double>()
+        .constructor()
         .function("getHeatLoss", &OpeningLosses::getHeatLoss)
-        .function("calculateViewFactor", &OpeningLosses::calculateViewFactor);
+        .function("calculateViewFactorQuad", select_overload<double(double, double, double)>(&OpeningLosses::calculateViewFactor))
+        .function("calculateViewFactorCircular", select_overload<double(double, double)>(&OpeningLosses::calculateViewFactor));
 }
 // slagOtherMaterialLosses
 EMSCRIPTEN_BINDINGS(slagOtherMaterialLosses)

@@ -28,6 +28,7 @@ public:
      * @param finalTemperature double, Outlet temperature of air or gas in °F
      * @param specificHeat double, Specific heat of gas or air at average air temperature in Btu/(scf*°F)
      * @param correctionFactor double, Correction factor - unitless
+     * @param gasDensity double, 
      *
      * */
 

@@ -60,7 +60,7 @@ public:
      * Calculates excess air percentage given flue gas O2 levels
      * @return double, calculated excess air percentage
      */
-	static double calculateExcessAirFromFlueGasO2(double flueGasO2, double carbon, double hydrogen, double sulphur,
+	double calculateExcessAirFromFlueGasO2(double flueGasO2, double carbon, double hydrogen, double sulphur,
 	                                              double inertAsh, double o2, double moisture, double nitrogen,
 	                                              double moistureInAirCombustion);
 
@@ -68,7 +68,7 @@ public:
      * Calculates excess air percentage given flue gas O2 levels
      * @return double, calculated excess air percentage
      */
-	static double calculateFlueGasO2(double excessAir, double carbon, double hydrogen, double sulphur, double inertAsh,
+	double calculateFlueGasO2(double excessAir, double carbon, double hydrogen, double sulphur, double inertAsh,
 	                                 double o2, double moisture, double nitrogen, double moistureInAirCombustion);
 
 	/**
@@ -234,7 +234,7 @@ public:
      */
 	void setUnburnedCarbonInAsh( const double unburnedCarbon ) { unburnedCarbonInAsh = unburnedCarbon; }
 
-	static double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
+	double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
 	                                        double moisture, double nitrogen);
 
 private:

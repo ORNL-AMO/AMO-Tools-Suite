@@ -167,11 +167,11 @@ function flueGasCalculateO2() {
     var o2 = flueGasCalculateO2.calculateO2(o2InFlueGas);
     testNumberValue(o2, 0.49366866893805417, "PHAST Flue Gas Calculate O2 (calculateO2-1)");
     o2InFlueGas = 15.5223;
-    o2 = flueGasCalculaflueGasCalculateO2teExcessAir.calculateO2(o2InFlueGas);
-    testNumberValue(excessAir, 2.947933114396894, "PHAST Flue Gas Calculate O2 (calculateO2-2)");
+    o2 = flueGasCalculateO2.calculateO2(o2InFlueGas);
+    testNumberValue(o2, 2.947933114396894, "PHAST Flue Gas Calculate O2 (calculateO2-2)");
     o2InFlueGas = 7;
     o2 = flueGasCalculateO2.calculateO2(o2InFlueGas);
-    testNumberValue(excessAir, 6.900194873506535, "PHAST Flue Gas Calculate O2 (calculateO2-3)");
+    testNumberValue(o2, 6.900194873506535, "PHAST Flue Gas Calculate O2 (calculateO2-3)");
     flueGasCalculateO2.delete();
 }
 
@@ -204,7 +204,7 @@ function flueGasLossesByMass() {
         inp.fuelTemperature, inp.moistureInAirComposition, inp.ashDischargeTemperature,
         inp.unburnedCarbonInAsh, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture,
         inp.nitrogen);
-    var heatLoss = gasFlueGasMaterial.getHeatLoss();
+    var heatLoss = flueGasLossesByMass.getHeatLoss();
     testNumberValue(heatLoss, 0.8222977480707968, "PHAST Flue Losses By Mass (heatLoss)");
     flueGasLossesByMass.delete();
 }
@@ -227,13 +227,13 @@ function flueGasByMassCalculateO2() {
         nitrogen: 0.0, moistureInAirCombustion: 1.5
     };
     var solidLiquidFlueGasMaterial = new Module.SolidLiquidFlueGasMaterial();
-    var flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirComposition);
+    var flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
     testNumberValue(flueGasO2, 0.49370451442164515, "PHAST Flue Gas By Mass Calculate O2 (flueGasO2-1)");
     inp.excessAir = 15.36865757;
-    flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirComposition);
+    flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
     testNumberValue(flueGasO2, 2.9440141519451095, "PHAST Flue Gas By Mass Calculate O2 (flueGasO2-2)");
     inp.excessAir = 44.75000362;
-    flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirComposition);
+    flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
     testNumberValue(flueGasO2, 6.875606606194022, "PHAST Flue Gas By Mass Calculate O2 (flueGasO2-3)");
     solidLiquidFlueGasMaterial.delete();
 }
@@ -244,13 +244,13 @@ function flueGasByMassCalculateExcessAir() {
         nitrogen: 0.0, moistureInAirCombustion: 1.5
     };
     var solidLiquidFlueGasMaterial = new Module.SolidLiquidFlueGasMaterial();
-    var excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirComposition);
+    var excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
     testNumberValue(excessAir, 2.29427816716376, "PHAST Flue Gas By Mass Excess Air (excessAir-1)");
     inp.o2InFlueGas = 3.0;
-    excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirComposition);
+    excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
     testNumberValue(excessAir, 15.368657569989644, "PHAST Flue Gas By Mass Excess Air (excessAir-2)");
     inp.o2InFlueGas = 7.0;
-    excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirComposition);
+    excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
     testNumberValue(excessAir, 44.75000361875009, "PHAST Flue Gas By Mass Excess Air (excessAir-3)");
     solidLiquidFlueGasMaterial.delete();
 }
@@ -288,8 +288,8 @@ function leakageLosses() {
         coefficient: 0.8052, specificGravity: 1.02, correctionFactor: 1.0
     };
     var leakingLosses = new Module.LeakageLosses(inp.draftPressure, inp.openingArea, inp.leakageGasTemperature, inp.ambientTemperature, inp.coefficient, inp.specificGravity, inp.correctionFactor);
-    var totalHeat = leakingLosses.getTotalHeat()
-    testNumberValue(totalHeat, 2850767.216228273, "PHAST Leakage Losses (totalHeat)");
+    var exfiltratedGasesHeatContent = leakingLosses.getExfiltratedGasesHeatContent()
+    testNumberValue(exfiltratedGasesHeatContent, 2850767.216228273, "PHAST Leakage Losses (exfiltratedGasesHeatContent)");
     leakingLosses.delete();
 }
 // liquidCoolingLosses
@@ -311,8 +311,8 @@ function liquidLoadChargeMaterial() {
         percentVaporized: 100, percentReacted: 25, reactionHeat: 50, additionalHeat: 0
     };
     var liquidLoadChargeMaterial = new Module.LiquidLoadChargeMaterial(Module.ThermicReactionType.ENDOTHERMIC, inp.specificHeatLiquid, inp.vaporizingTemperature, inp.latentHeat, inp.specificHeatVapor, inp.chargeFeedRate, inp.initialTemperature, inp.dischargeTemperature, inp.percentVaporized, inp.percentReacted, inp.reactionHeat, inp.additionalHeat);
-    var heatLoss = liquidLoadChargeMaterial.getHeatLoss()
-    testNumberValue(heatLoss, 364100.0, "PHAST Liquid Load Charge Material (heatLoss)");
+    var totalHeat = liquidLoadChargeMaterial.getTotalHeat()
+    testNumberValue(totalHeat, 364100.0, "PHAST Liquid Load Charge Material (totalHeat)");
     liquidLoadChargeMaterial.delete();
 }
 // openingLossesCircular
@@ -345,7 +345,7 @@ function viewFactorCalculation() {
         diameter: 5
     };
     var openingLosses = new Module.OpeningLosses();
-    var viewFactor = openingLosses.calculateViewFactor(inp.thickness, inp.diameter);
+    var viewFactor = openingLosses.calculateViewFactorCircular(inp.thickness, inp.diameter);
     testNumberValue(viewFactor, 0.624519890259, "PHAST Opening Losses Circular View Factor (viewFactor)");
     inp = {
         openingShape: 1, // RECTANGULAR
@@ -353,7 +353,7 @@ function viewFactorCalculation() {
         length: 10,
         width: 5
     };
-    var viewFactor = openingLosses.calculateViewFactor(inp.thickness, inp.length, inp.width);
+    var viewFactor = openingLosses.calculateViewFactorQuad(inp.thickness, inp.length, inp.width);
     testNumberValue(viewFactor, 0.786933593749, "PHAST Opening Losses Quad View Factor (viewFactor)");
     openingLosses.delete();
 }
@@ -382,8 +382,8 @@ function solidLoadChargeMaterial() {
         reactionHeat: 100, additionalHeat: 0
     };
     var solidLoadChargeMaterial = new Module.SolidLoadChargeMaterial(Module.ThermicReactionType.EXOTHERMIC, inp.specificHeatSolid, inp.latentHeat, inp.specificHeatLiquid, inp.meltingPoint, inp.chargeFeedRate, inp.waterContentCharged, inp.waterContentDischarged, inp.initialTemperature, inp.dischargeTemperature, inp.waterVaporDischargeTemperature, inp.chargeMelted, inp.chargeReacted, inp.reactionHeat, inp.additionalHeat);
-    var heatLoss = solidLoadChargeMaterial.getHeatLoss()
-    testNumberValue(heatLoss, 3204310.28, "PHAST Solid Load Charge Material (heatLoss)");
+    var totalHeat = solidLoadChargeMaterial.getTotalHeat()
+    testNumberValue(totalHeat, 3204310.28, "PHAST Solid Load Charge Material (totalHeat)");
     solidLoadChargeMaterial.delete();
 }
 // wallLosses
@@ -421,7 +421,7 @@ function efficiencyImprovement() {
         newFlueGasTemp: 1200
     };
 
-    var efficiencyImprovement = new Module.EfficiencyImprovement(inp.currentFlueGasOxygen, inp.newFlueGasOxygen, inp.currentFlueGasTemp, inp.currentCombustionAirTemp, inp.newCombustionAirTemp, inp.currentEnergyInput);
+    var efficiencyImprovement = new Module.EfficiencyImprovement(inp.currentFlueGasOxygen, inp.newFlueGasOxygen, inp.currentFlueGasTemp, inp.newFlueGasTemp, inp.currentCombustionAirTemp, inp.newCombustionAirTemp, inp.currentEnergyInput);
     var currentExcessAir = efficiencyImprovement.getCurrentExcessAir();
     var newExcessAir = efficiencyImprovement.getNewExcessAir();
     var currentAvailableHeat = efficiencyImprovement.getCurrentAvailableHeat();
@@ -446,7 +446,7 @@ function energyEquivalencyElectric() {
         fuelFiredHeatInput: 87.3
     };
 
-    var energyEquivalencyElectric = new Module.FuelFiredEnergyEquivalency(inp.fuelFiredEfficiency, inp.electricallyHeatedEfficiency, inp.fuelFiredHeatInput);
+    var energyEquivalencyElectric = new Module.ElectricalEnergyEquivalency(inp.fuelFiredEfficiency, inp.electricallyHeatedEfficiency, inp.fuelFiredHeatInput);
     var electricalHeatInput = energyEquivalencyElectric.getElectricalHeatInput();
 
     testNumberValue(electricalHeatInput, 3371.268678581893, "PHAST Energy Equivalency Electric (electricalHeatInput)");
@@ -555,7 +555,7 @@ function humidityRatio() {
         relativeHumidity: 30,
         wetBulbTemp: 85
     };
-    var humidityRatio = new Module.HumidityRatio(inp.gasType, inp.specificGravity, inp.orificeDiameter, inp.insidePipeDiameter, inp.sectionType, inp.dischargeCoefficient, inp.gasHeatingValue, inp.gasTemperature, inp.gasPressure, inp.orificePressureDrop, inp.operatingTime);
+    var humidityRatio = new Module.HumidityRatio(inp.atmosphericPressure, inp.dryBulbTemp, inp.relativeHumidity, inp.wetBulbTemp);
     var humidityRatioUsingRH = humidityRatio.getHumidityRatioUsingRH();
     var humidityRatioUsingWBT = humidityRatio.getHumidityRatioUsingWBT();
     testNumberValue(humidityRatioUsingRH, 0.028113628942036617, "PHAST Humidity Ratio (humidityRatioUsingRH)");

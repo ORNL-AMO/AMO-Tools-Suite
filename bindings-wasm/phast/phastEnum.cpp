@@ -1,5 +1,6 @@
 #include "calculator/losses/LoadChargeMaterial.h"
 #include "calculator/furnace/EnergyEquivalency.h"
+#include "calculator/furnace/FlowCalculationsEnergyUse.h"
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -20,7 +21,7 @@ EMSCRIPTEN_BINDINGS(phast_enums)
         .value("EXOTHERMIC_CRACKED_RICH", FlowCalculationsEnergyUse::Gas::EXOTHERMIC_CRACKED_RICH)
         .value("HELIUM", FlowCalculationsEnergyUse::Gas::HELIUM)
         .value("HYDROGEN", FlowCalculationsEnergyUse::Gas::HYDROGEN)
-        .value("NATURAL_GAS", LoadChaFlowCalculationsEnergyUsergeMaterial::Gas::NATURAL_GAS)
+        .value("NATURAL_GAS", FlowCalculationsEnergyUse::Gas::NATURAL_GAS)
         .value("NITROGEN", FlowCalculationsEnergyUse::Gas::NITROGEN)
         .value("OXYGEN", FlowCalculationsEnergyUse::Gas::OXYGEN)
         .value("PROPANE", FlowCalculationsEnergyUse::Gas::PROPANE)
