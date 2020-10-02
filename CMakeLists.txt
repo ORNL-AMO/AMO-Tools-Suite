@@ -214,7 +214,9 @@ set(SOURCE_FILES
         bindings-wasm/fan/fan.cpp
         bindings-wasm/fan/fanEnum.cpp
         bindings-wasm/phast/phast.cpp
-        bindings-wasm/phast/phastEnum.cpp)
+        bindings-wasm/phast/phastEnum.cpp
+        bindings-wasm/standalone/standalone.cpp
+        bindings-wasm/standalone/standaloneEnum.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
