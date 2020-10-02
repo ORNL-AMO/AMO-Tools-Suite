@@ -20,6 +20,7 @@ EMSCRIPTEN_BINDINGS(receiverTank)
         .constructor<ReceiverTank::Option, double, double, double>()
         .constructor<ReceiverTank::Option, double, double, double, double, double>()
         .constructor<ReceiverTank::Option, double, double, double, double, double, double>()
+        .function("calculateSize", &ReceiverTank::calculateSize)
         .function("calculateUsableCapacity", &ReceiverTank::calculateUsableCapacity);
 }
 // pneumaticAirRequirement
@@ -30,7 +31,7 @@ EMSCRIPTEN_BINDINGS(pneumaticAirRequirement)
         .constructor<PneumaticAirRequirement::PistonType, double, double, double>()
         .constructor<ReceiverTank::Option, double, double, double, double, double>()
         .constructor<ReceiverTank::Option, double, double, double, double>()
-        .function("calculate", &ReceiverTank::calculate);
+        .function("calculate", &PneumaticAirRequirement::calculate);
 
     class_<PneumaticAirRequirement::Output>("PneumaticAirRequirementOutput")
         .constructor<double, double, double>()
@@ -42,7 +43,6 @@ EMSCRIPTEN_BINDINGS(pneumaticAirRequirement)
 EMSCRIPTEN_BINDINGS(operatingCost)
 {
     class_<Compressor::OperatingCost>("OperatingCost")
-        .constructor()
         .constructor<double, double, double, double, double, double, double>()
         .function("calculate", &Compressor::OperatingCost::calculate);
 
