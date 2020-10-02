@@ -15,7 +15,7 @@ function CHP() {
         thermalUtilization: 90
     };
 
-    let chp = new Module.CHP(inp.annualOperatingHours, inp.annualElectricityConsumption, inp.annualThermalDemand, inp.boilerThermalFuelCosts, inp.avgElectricityCosts, inp.option, inp.boilerThermalFuelCostsCHPcase, inp.CHPfuelCosts, inp.percentAvgkWhElectricCostAvoidedOrStandbyRate, inp.displacedThermalEfficiency, inp.chpAvailability);
+    let chp = new Module.CHP(inp.annualOperatingHours, inp.annualElectricityConsumption, inp.annualThermalDemand, inp.boilerThermalFuelCosts, inp.avgElectricityCosts, inp.option, inp.boilerThermalFuelCostsCHPcase, inp.CHPfuelCosts, inp.percentAvgkWhElectricCostAvoidedOrStandbyRate, inp.displacedThermalEfficiency, inp.chpAvailability, inp.thermalUtilization);
     let result = chp.getCostInfo();
     testNumberValue(result.annualOperationSavings, 3251705.06182641, "STANDALONE CHP (annualOperationSavings-1)");
     testNumberValue(result.totalInstalledCostsPayback, 11890954.0, "STANDALONE CHP (totalInstalledCostsPayback-1)");

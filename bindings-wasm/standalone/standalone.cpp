@@ -104,7 +104,7 @@ EMSCRIPTEN_BINDINGS(bagMethod)
         .constructor<double, double, double, double, double>()
         .function("calculate", &BagMethod::calculate);
 
-    class_<BagMethod::Output>("PipeSizingOutput")
+    class_<BagMethod::Output>("BagMethodOutput")
         .constructor<double, double>()
         .property("flowRate", &BagMethod::Output::flowRate)
         .property("annualConsumption", &BagMethod::Output::annualConsumption);
