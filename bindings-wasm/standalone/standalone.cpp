@@ -17,9 +17,9 @@ EMSCRIPTEN_BINDINGS(receiverTank)
 {
     class_<ReceiverTank>("ReceiverTank")
         .constructor()
-        .constructor<ReceiverTank::Option, double, double, double>()
-        .constructor<ReceiverTank::Option, double, double, double, double, double>()
-        .constructor<ReceiverTank::Option, double, double, double, double, double, double>()
+        .constructor<ReceiverTank::Method, double, double, double>()
+        .constructor<ReceiverTank::Method, double, double, double, double, double>()
+        .constructor<ReceiverTank::Method, double, double, double, double, double, double>()
         .function("calculateSize", &ReceiverTank::calculateSize)
         .function("calculateUsableCapacity", &ReceiverTank::calculateUsableCapacity);
 }
@@ -28,9 +28,8 @@ EMSCRIPTEN_BINDINGS(pneumaticAirRequirement)
 {
     class_<PneumaticAirRequirement>("PneumaticAirRequirement")
         .constructor()
-        .constructor<PneumaticAirRequirement::PistonType, double, double, double>()
-        .constructor<ReceiverTank::Option, double, double, double, double, double>()
-        .constructor<ReceiverTank::Option, double, double, double, double>()
+        .constructor<PneumaticAirRequirement::PistonType, double, double, double, double>()
+        .constructor<PneumaticAirRequirement::PistonType, double, double, double, double, double>()
         .function("calculate", &PneumaticAirRequirement::calculate);
 
     class_<PneumaticAirRequirement::Output>("PneumaticAirRequirementOutput")
@@ -64,7 +63,7 @@ EMSCRIPTEN_BINDINGS(airSystemCapacity)
         .function("calculate", &Compressor::AirSystemCapacity::calculate);
 
     class_<Compressor::AirSystemCapacity::Output>("AirSystemCapacityOutput")
-        .constructor<double, std::vector<double>, double, double>()
+        .constructor<double, std::vector<double>, double, double, Compressor::PipeData>()
         .property("totalPipeVolume", &Compressor::AirSystemCapacity::Output::totalPipeVolume)
         .property("totalReceiverVol", &Compressor::AirSystemCapacity::Output::totalReceiverVol)
         .property("totalCapacityOfCompressedAirSystem", &Compressor::AirSystemCapacity::Output::totalCapacityOfCompressedAirSystem)
@@ -76,14 +75,14 @@ EMSCRIPTEN_BINDINGS(airVelocity)
 {
     class_<Compressor::AirVelocity>("AirVelocity")
         .constructor<double, double, double>()
-        .function("calculate", Compressor::AirVelocity::calculate);
+        .function("calculate", &Compressor::AirVelocity::calculate);
 }
 // pipeSizing
 EMSCRIPTEN_BINDINGS(pipeSizing)
 {
     class_<Compressor::PipeSizing>("PipeSizing")
         .constructor<double, double, double, double>()
-        .function("calculate", Compressor::PipeSizing::calculate);
+        .function("calculate", &Compressor::PipeSizing::calculate);
 
     class_<Compressor::PipeSizing::Output>("PipeSizingOutput")
         .constructor<double, double>()
@@ -96,14 +95,14 @@ EMSCRIPTEN_BINDINGS(pneumaticValve)
     class_<Compressor::PneumaticValve>("PneumaticValve")
         .constructor<double, double>()
         .constructor<double, double, double>()
-        .function("calculate", Compressor::PneumaticValve::calculate);
+        .function("calculate", &Compressor::PneumaticValve::calculate);
 }
 // bagMethod
 EMSCRIPTEN_BINDINGS(bagMethod)
 {
     class_<BagMethod>("BagMethod")
         .constructor<double, double, double, double, double>()
-        .function("calculate", BagMethod::calculate);
+        .function("calculate", &BagMethod::calculate);
 
     class_<BagMethod::Output>("PipeSizingOutput")
         .constructor<double, double>()

@@ -11,14 +11,14 @@ EMSCRIPTEN_BINDINGS(standalone_enums)
         .value("StandbyRate", CHP::Option::StandbyRate);
 
         
-    enum_<ReceiverTank::Option>("RecieverTankOption")
-        .value("General", ReceiverTank::Option::General)
-        .value("DedicatedStorage", ReceiverTank::Option::DedicatedStorage)
-        .value("MeteredStorage", ReceiverTank::Option::MeteredStorage)
-        .value("BridgingCompressorReactionDelay", ReceiverTank::Option::BridgingCompressorReactionDelay);
+    enum_<ReceiverTank::Method>("ReceiverTankMethod")
+        .value("General", ReceiverTank::Method::General)
+        .value("DedicatedStorage", ReceiverTank::Method::DedicatedStorage)
+        .value("MeteredStorage", ReceiverTank::Method::MeteredStorage)
+        .value("BridgingCompressorReactionDelay", ReceiverTank::Method::BridgingCompressorReactionDelay);
 
 
     enum_<PneumaticAirRequirement::PistonType>("PistonType")
-        .value("SingleActing", ReceiverTank::Option::SingleActing)
-        .value("DoubleActing", ReceiverTank::Option::DoubleActing);
+        .value("SingleActing", PneumaticAirRequirement::PistonType::SingleActing)
+        .value("DoubleActing", PneumaticAirRequirement::PistonType::DoubleActing);
 }

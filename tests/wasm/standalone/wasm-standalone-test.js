@@ -83,7 +83,7 @@ function usableAirCapacity() {
 // Receiver Tank Size
 function receiverTankSize() {
     var input = {
-        method: Module.ReceiverTankOption.General, airDemand: 150, allowablePressureDrop: 3, atmosphericPressure: 14.7
+        method: Module.ReceiverTankMethod.General, airDemand: 150, allowablePressureDrop: 3, atmosphericPressure: 14.7
     };
 
     let receiverTank = new Module.ReceiverTank(input.method, input.airDemand, input.allowablePressureDrop, inp.atmosphericPressure);
@@ -91,42 +91,42 @@ function receiverTankSize() {
     testNumberValue(result, 5497.8, "STANDALONE Receiver Tank (General-1)");
 
     input = {
-        method: Module.ReceiverTankOption.General, airDemand: 190, allowablePressureDrop: 8, atmosphericPressure: 12.7
+        method: Module.ReceiverTankMethod.General, airDemand: 190, allowablePressureDrop: 8, atmosphericPressure: 12.7
     }
     receiverTank = new Module.ReceiverTank(input.method, input.airDemand, input.allowablePressureDrop, inp.atmosphericPressure);
     result = receiverTank.calculateSize();
     testNumberValue(result, 2256.155, "STANDALONE Receiver Tank (General-2)");
 
     input = {
-        method: Module.ReceiverTankOption.DedicatedStorage, lengthOfDemand: 0.5, airFlowRequirement: 100, atmosphericPressure: 14.7, initialTankPressure: 110, finalTankPressure: 100
+        method: Module.ReceiverTankMethod.DedicatedStorage, lengthOfDemand: 0.5, airFlowRequirement: 100, atmosphericPressure: 14.7, initialTankPressure: 110, finalTankPressure: 100
     }
     receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure);
     result = receiverTank.calculateSize();
     testNumberValue(result, 549.78, "STANDALONE Receiver Tank (DedicatedStorage-1)");
 
     input = {
-        method: Module.ReceiverTankOption.DedicatedStorage, lengthOfDemand: 0.5, airFlowRequirement: 100, atmosphericPressure: 14.7, initialTankPressure: 110, finalTankPressure: 100
+        method: Module.ReceiverTankMethod.DedicatedStorage, lengthOfDemand: 0.5, airFlowRequirement: 100, atmosphericPressure: 14.7, initialTankPressure: 110, finalTankPressure: 100
     }
     receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure);
     result = receiverTank.calculateSize();
     testNumberValue(result, 549.78, "STANDALONE Receiver Tank (DedicatedStorage-2)");
 
     input = {
-        method: Module.ReceiverTankOption.DedicatedStorage, lengthOfDemand: 1.5, airFlowRequirement: 120, atmosphericPressure: 11.7, initialTankPressure: 150, finalTankPressure: 100
+        method: Module.ReceiverTankMethod.DedicatedStorage, lengthOfDemand: 1.5, airFlowRequirement: 120, atmosphericPressure: 11.7, initialTankPressure: 150, finalTankPressure: 100
     }
     receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure);
     result = receiverTank.calculateSize();
     testNumberValue(result, 315.0576, "STANDALONE Receiver Tank (DedicatedStorage-3)");
 
     input = {
-        method: Module.ReceiverTankOption.MeteredStorage, lengthOfDemand: 0.5, airFlowRequirement: 900, atmosphericPressure: 14.7, initialTankPressure: 100, finalTankPressure: 70, meteredControl: 45
+        method: Module.ReceiverTankMethod.MeteredStorage, lengthOfDemand: 0.5, airFlowRequirement: 900, atmosphericPressure: 14.7, initialTankPressure: 100, finalTankPressure: 70, meteredControl: 45
     }
     receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure, inp.meteredControl);
     result = receiverTank.calculateSize();
     testNumberValue(result, 1566.873, "STANDALONE Receiver Tank (MeteredStorage-1)");
 
     input = {
-        method: Module.ReceiverTankOption.MeteredStorage, lengthOfDemand: 1.5, airFlowRequirement: 800, atmosphericPressure: 11.7, initialTankPressure: 120, finalTankPressure: 90, meteredControl: 75
+        method: Module.ReceiverTankMethod.MeteredStorage, lengthOfDemand: 1.5, airFlowRequirement: 800, atmosphericPressure: 11.7, initialTankPressure: 120, finalTankPressure: 90, meteredControl: 75
     }
     receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure, inp.meteredControl);
     result = receiverTank.calculateSize();
@@ -134,14 +134,14 @@ function receiverTankSize() {
 
 
     input = {
-        method: Module.ReceiverTankOption.BridgingCompressorReactionDelay, distanceToCompressorRoom: 1000, speedOfAir: 250, atmosphericPressure: 14.7, airDemand: 600, allowablePressureDrop: 2
+        method: Module.ReceiverTankMethod.BridgingCompressorReactionDelay, distanceToCompressorRoom: 1000, speedOfAir: 250, atmosphericPressure: 14.7, airDemand: 600, allowablePressureDrop: 2
     }
     receiverTank = new Module.ReceiverTank(input.method, input.distanceToCompressorRoom, inp.speedOfAir, inp.atmosphericPressure, inp.airDemand, inp.allowablePressureDrop);
     result = receiverTank.calculateSize();
     testNumberValue(result, 2199.12, "STANDALONE Receiver Tank (BridgingCompressorReactionDelay-1)");
 
     input = {
-        method: Module.ReceiverTankOption.BridgingCompressorReactionDelay, distanceToCompressorRoom: 1200, speedOfAir: 350, atmosphericPressure: 11.7, airDemand: 800, allowablePressureDrop: 19
+        method: Module.ReceiverTankMethod.BridgingCompressorReactionDelay, distanceToCompressorRoom: 1200, speedOfAir: 350, atmosphericPressure: 11.7, airDemand: 800, allowablePressureDrop: 19
     }
     receiverTank = new Module.ReceiverTank(input.method, input.distanceToCompressorRoom, inp.speedOfAir, inp.atmosphericPressure, inp.airDemand, inp.allowablePressureDrop);
     result = receiverTank.calculateSize();
