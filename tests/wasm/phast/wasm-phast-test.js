@@ -142,35 +142,44 @@ function flueGasCalculateExcessAir() {
         CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     }
 
-    var o2InFlueGas = .5;
-
+    // /100 convert to decimal
+    var o2InFlueGas = .5 / 100;
     var flueGasCalculateExcessAir = new Module.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
-    var excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas);
+    //x100 to convert to %
+    var excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
     testNumberValue(excessAir, 2.3172209488353976, "PHAST Flue Gas Calculate Excess Air (excessAir1)");
-    o2InFlueGas = 3;
-    excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas);
+    // /100 convert to decimal
+    o2InFlueGas = 3 / 100;
+    //x100 to convert to %
+    excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
     testNumberValue(excessAir, 15.52234414568954, "PHAST Flue Gas Calculate Excess Air (excessAir2)");
-    o2InFlueGas = 7;
-    excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas);
+    // /100 convert to decimal
+    o2InFlueGas = 7 / 100;
+    //x100 to convert to %
+    excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
     testNumberValue(excessAir, 45.197503654937584, "PHAST Flue Gas Calculate Excess Air (excessAir3)");
     flueGasCalculateExcessAir.delete();
 }
 // flueGasCalculateO2
 function flueGasCalculateO2() {
     var inp = {
-        CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
+        excessAir: 2.3172, CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     }
-
-    var o2InFlueGas = 2.3172;
-
+    // /100 convert to decimal
+    var o2InFlueGas = 2.3172 / 100;
     var flueGasCalculateO2 = new Module.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
-    var o2 = flueGasCalculateO2.calculateO2(o2InFlueGas);
+    //x100 to convert to %
+    var o2 = flueGasCalculateO2.calculateO2(o2InFlueGas) * 100;
     testNumberValue(o2, 0.49366866893805417, "PHAST Flue Gas Calculate O2 (calculateO2-1)");
-    o2InFlueGas = 15.5223;
-    o2 = flueGasCalculateO2.calculateO2(o2InFlueGas);
+    // /100 convert to decimal
+    o2InFlueGas = 15.5223 / 100;
+    //x100 to convert to %
+    o2 = flueGasCalculateO2.calculateO2(o2InFlueGas) * 100;
     testNumberValue(o2, 2.947933114396894, "PHAST Flue Gas Calculate O2 (calculateO2-2)");
-    o2InFlueGas = 7;
-    o2 = flueGasCalculateO2.calculateO2(o2InFlueGas);
+    // /100 convert to decimal
+    o2InFlueGas = 45.197 / 100;
+    o2 = flueGasCalculateO2.calculateO2(o2InFlueGas) * 100;
+    //x100 to convert to %
     testNumberValue(o2, 6.900194873506535, "PHAST Flue Gas Calculate O2 (calculateO2-3)");
     flueGasCalculateO2.delete();
 }
@@ -223,34 +232,34 @@ function flueGasByMassCalculateHeatingValue() {
 // flueGasByMassCalculateO2
 function flueGasByMassCalculateO2() {
     var inp = {
-        excessAir: 2.29427817, carbon: 1.0, hydrogen: 75.0, sulphur: 5.0, inertAsh: 1.0, o2: 9.0, moisture: 7.0,
+        excessAir: 2.29427817 / 100, carbon: 1.0, hydrogen: 75.0, sulphur: 5.0, inertAsh: 1.0, o2: 9.0, moisture: 7.0,
         nitrogen: 0.0, moistureInAirCombustion: 1.5
     };
     var solidLiquidFlueGasMaterial = new Module.SolidLiquidFlueGasMaterial();
-    var flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
+    var flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion) * 100;
     testNumberValue(flueGasO2, 0.49370451442164515, "PHAST Flue Gas By Mass Calculate O2 (flueGasO2-1)");
-    inp.excessAir = 15.36865757;
-    flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
+    inp.excessAir = 15.36865757 / 100;
+    flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion) * 100;
     testNumberValue(flueGasO2, 2.9440141519451095, "PHAST Flue Gas By Mass Calculate O2 (flueGasO2-2)");
-    inp.excessAir = 44.75000362;
-    flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
+    inp.excessAir = 44.75000362 / 100;
+    flueGasO2 = solidLiquidFlueGasMaterial.calculateFlueGasO2(inp.excessAir, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion) * 100;
     testNumberValue(flueGasO2, 6.875606606194022, "PHAST Flue Gas By Mass Calculate O2 (flueGasO2-3)");
     solidLiquidFlueGasMaterial.delete();
 }
 // flueGasByMassCalculateExcessAir
 function flueGasByMassCalculateExcessAir() {
     var inp = {
-        o2InFlueGas: 0.5, carbon: 1.0, hydrogen: 75.0, sulphur: 5.0, inertAsh: 1.0, o2: 9.0, moisture: 7.0,
+        o2InFlueGas: 0.5 / 100, carbon: 1.0, hydrogen: 75.0, sulphur: 5.0, inertAsh: 1.0, o2: 9.0, moisture: 7.0,
         nitrogen: 0.0, moistureInAirCombustion: 1.5
     };
     var solidLiquidFlueGasMaterial = new Module.SolidLiquidFlueGasMaterial();
-    var excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
+    var excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion) * 100;
     testNumberValue(excessAir, 2.29427816716376, "PHAST Flue Gas By Mass Excess Air (excessAir-1)");
-    inp.o2InFlueGas = 3.0;
-    excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
+    inp.o2InFlueGas = 3.0 / 100;
+    excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion) * 100;
     testNumberValue(excessAir, 15.368657569989644, "PHAST Flue Gas By Mass Excess Air (excessAir-2)");
-    inp.o2InFlueGas = 7.0;
-    excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion);
+    inp.o2InFlueGas = 7.0 / 100;
+    excessAir = solidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(inp.o2InFlueGas, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture, inp.nitrogen, inp.moistureInAirCombustion) * 100;
     testNumberValue(excessAir, 44.75000361875009, "PHAST Flue Gas By Mass Excess Air (excessAir-3)");
     solidLiquidFlueGasMaterial.delete();
 }
