@@ -10,6 +10,16 @@ EMSCRIPTEN_BINDINGS(CHPcalculator)
     class_<CHP>("CHP")
         .constructor<double, double, double, double, double, CHP::Option, double, double, double, double, double, double>()
         .function("getCostInfo", &CHP::getCostInfo);
+
+    class_<CHP::CostInfoOutput>("CostInfoOutput")
+        .constructor<double, double, double, double, double, double, double>()
+        .property("annualOperationSavings", &CHP::CostInfoOutput::annualOperationSavings)
+        .property("totalInstalledCostsPayback", &CHP::CostInfoOutput::totalInstalledCostsPayback)
+        .property("simplePayback", &CHP::CostInfoOutput::simplePayback)
+        .property("fuelCosts", &CHP::CostInfoOutput::fuelCosts)
+        .property("thermalCredit", &CHP::CostInfoOutput::thermalCredit)
+        .property("incrementalOandMDollarsKwH", &CHP::CostInfoOutput::incrementalOandMDollarsKwH)
+        .property("totalOperatingCostsToGenerate", &CHP::CostInfoOutput::totalOperatingCostsToGenerate);
 }
 // usableAirCapacity
 // receiverTank
