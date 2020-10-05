@@ -858,7 +858,7 @@ NAN_METHOD(flueGasByMassCalculateHeatingValue)
     const double moisture = Get("moisture");
     const double nitrogen = Get("nitrogen");
 
-    auto const hv = SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(carbon, hydrogen,
+    const double hv = SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(carbon, hydrogen,
                                                                           sulphur, inertAsh, o2,
                                                                           moisture, nitrogen);
 
