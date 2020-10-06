@@ -14,9 +14,11 @@
 #include <stdexcept>
 #include <functional>
 
-class PneumaticAirRequirement {
+class PneumaticAirRequirement
+{
 public:
-	enum class PistonType {
+	enum class PistonType
+	{
 		SingleActing,
 		DoubleActing
 	};
@@ -33,7 +35,7 @@ public:
  	 * @param cyclesPerMin double, Number of cycles (1 cycle is a combination of 2 strokes of a piston) by the crankshaft in a minute - strokes
  	 */
 	PneumaticAirRequirement(PistonType pistonType, double cylinderDiameter, double cylinderStroke, double pistonRodDiameter,
-	                        double airPressure, double cyclesPerMin);
+							double airPressure, double cyclesPerMin);
 
 	/**
 	 * Constructor for PneumaticAirRequirement
@@ -46,11 +48,12 @@ public:
  	 * @param cyclesPerMin double, Number of cycles (1 cycle is a combination of 2 strokes of a piston) by the crankshaft in a minute - strokes
  	 */
 	PneumaticAirRequirement(PistonType pistonType, double cylinderDiameter, double cylinderStroke, double airPressure,
-	                        double cyclesPerMin);
+							double cyclesPerMin);
 
 	PneumaticAirRequirement() = default;
 
-	class Output {
+	class Output
+	{
 	public:
 		/**
 		* Constructor for PneumaticAirRequirement::Output
@@ -60,11 +63,12 @@ public:
 		* @param airRequirementPneumaticCylinder const double, Total cubic feet/min of air requirement for a Pneumatic cylinder - scfm
 		*/
 		Output(const double volumeAirIntakePiston, const double compressionRatio,
-		       const double airRequirementPneumaticCylinder)
-				: volumeAirIntakePiston(volumeAirIntakePiston),
-				  compressionRatio(compressionRatio),
-				  airRequirementPneumaticCylinder(airRequirementPneumaticCylinder)
-		{}
+			   const double airRequirementPneumaticCylinder)
+			: volumeAirIntakePiston(volumeAirIntakePiston),
+			  compressionRatio(compressionRatio),
+			  airRequirementPneumaticCylinder(airRequirementPneumaticCylinder)
+		{
+		}
 
 		const double volumeAirIntakePiston, compressionRatio, airRequirementPneumaticCylinder;
 	};
@@ -80,9 +84,11 @@ private:
 	double cylinderDiameter, cylinderStroke, pistonRodDiameter = 0, airPressure, cyclesPerMin;
 };
 
-class ReceiverTank {
+class ReceiverTank
+{
 public:
-	enum class Method {
+	enum class Method
+	{
 		General,
 		DedicatedStorage,
 		MeteredStorage,
@@ -116,7 +122,7 @@ public:
 	 * @param finalTankPressureOrAllowablePressureDrop const double, Tank pressure after release of air OR This decides the pressure drop inside the receiver tank that we can tolerate - psi
 	 */
 	ReceiverTank(Method method, double lengthOfDemandOrDistanceToCompressorRoom, double airFlowRequirementOrSpeedOfAir,
-	             double atmosphericPressure, double initialTankPressureOrAirDemand, double finalTankPressureOrAllowablePressureDrop);
+				 double atmosphericPressure, double initialTankPressureOrAirDemand, double finalTankPressureOrAllowablePressureDrop);
 
 	/**
 	 * Constructor for ReceiverTank - This is required when we need to order a receiver tank to meet our compressed air requirements.
@@ -132,7 +138,7 @@ public:
 	 * @param meteredFlowControl const double, Rate of flow through the metering valve (needle valve) - cfm
 	 */
 	ReceiverTank(Method method, double lengthOfDemand, double airFlowRequirement, double atmosphericPressure,
-	             double initialTankPressure, double finalTankPressure, double meteredFlowControl);
+				 double initialTankPressure, double finalTankPressure, double meteredFlowControl);
 
 	/**
 	 * Calculates and returns receiver tank useable air capacity
@@ -141,7 +147,8 @@ public:
 	 * @param airPressureOut double, a.	Pressure of air leaving the Tank - psi
 	 * @return double, Useable air storage capacity - scf
 	 */
-	static double calculateUsableCapacity(const double tankSize, const double airPressureIn, const double airPressureOut) {
+	double calculateUsableCapacity(const double tankSize, const double airPressureIn, const double airPressureOut)
+	{
 		return (tankSize / 7.48) * (airPressureIn - airPressureOut) / 14.7;
 	}
 
@@ -161,25 +168,27 @@ private:
 	double meteredFlowControl;
 };
 
-namespace Compressor {
-	struct PipeData {
+namespace Compressor
+{
+	struct PipeData
+	{
+		public:
 		/**
 		 * Constructor for Compressor::PipeData - This is used to hold all the pipe lengths in the system
 		 * All params are the english spelling of their numeric equivalents, i.e. one half == 0.5, twoAndOneHalf == 2.5, etc.
 		 * Used in AirSystemCapacity input and output.
 		 */
 		PipeData(const double oneHalf, const double threeFourths, const double one, const double oneAndOneFourth,
-		         const double oneAndOneHalf, const double two, const double twoAndOneHalf, const double three,
-		         const double threeAndOneHalf, const double four, const double five, const double six)
-				: oneHalf(oneHalf * 0.0021), threeFourths(threeFourths * 0.0037), one(one * 0.006),
-				  oneAndOneFourth(oneAndOneFourth * 0.0104), oneAndOneHalf(oneAndOneHalf * 0.0141),
-				  two(two * 0.0233), twoAndOneHalf(twoAndOneHalf * 0.0333), three(three * 0.0513),
-				  threeAndOneHalf(threeAndOneHalf * 0.0687), four(four * 0.0884), five(five * 0.1389),
-				  six(six * 0.2006),
-				  totalPipeVolume(this->oneHalf + this->threeFourths + this->one + this->oneAndOneFourth
-				                  + this->oneAndOneHalf + this->two + this->twoAndOneHalf + this->three
-				                  + this->threeAndOneHalf + this->four + this->five + this->six)
-		{}
+				 const double oneAndOneHalf, const double two, const double twoAndOneHalf, const double three,
+				 const double threeAndOneHalf, const double four, const double five, const double six)
+			: oneHalf(oneHalf * 0.0021), threeFourths(threeFourths * 0.0037), one(one * 0.006),
+			  oneAndOneFourth(oneAndOneFourth * 0.0104), oneAndOneHalf(oneAndOneHalf * 0.0141),
+			  two(two * 0.0233), twoAndOneHalf(twoAndOneHalf * 0.0333), three(three * 0.0513),
+			  threeAndOneHalf(threeAndOneHalf * 0.0687), four(four * 0.0884), five(five * 0.1389),
+			  six(six * 0.2006),
+			  totalPipeVolume(this->oneHalf + this->threeFourths + this->one + this->oneAndOneFourth + this->oneAndOneHalf + this->two + this->twoAndOneHalf + this->three + this->threeAndOneHalf + this->four + this->five + this->six)
+		{
+		}
 
 		/**
 		 * Constructor for Compressor::PipeData - This is used to hold return values for air velocity estimations
@@ -187,20 +196,22 @@ namespace Compressor {
 		 * calculates pipeline velocity given internal area of the pipe in square feet. An example of usage can be found
 		 * in AirVelocity::calculate()
 		 */
-		explicit PipeData(std::function<double (const double)> const & compVel)
-				: oneHalf(compVel(0.3)), threeFourths(compVel(0.53)), one(compVel(0.86)),
-				  oneAndOneFourth(compVel(1.5)), oneAndOneHalf(compVel(2.04)),
-				  two(compVel(3.36)), twoAndOneHalf(compVel(4.79)), three(compVel(7.39)),
-				  threeAndOneHalf(compVel(9.89)), four(compVel(12.73)), five(compVel(20)),
-				  six(compVel(28.89))
-		{}
+		explicit PipeData(std::function<double(const double)> const &compVel)
+			: oneHalf(compVel(0.3)), threeFourths(compVel(0.53)), one(compVel(0.86)),
+			  oneAndOneFourth(compVel(1.5)), oneAndOneHalf(compVel(2.04)),
+			  two(compVel(3.36)), twoAndOneHalf(compVel(4.79)), three(compVel(7.39)),
+			  threeAndOneHalf(compVel(9.89)), four(compVel(12.73)), five(compVel(20)),
+			  six(compVel(28.89))
+		{
+		}
 
 		const double oneHalf, threeFourths, one, oneAndOneFourth, oneAndOneHalf, two;
 		const double twoAndOneHalf, three, threeAndOneHalf, four, five, six;
 		const double totalPipeVolume = 0;
 	};
 
-	class OperatingCost {
+	class OperatingCost
+	{
 	public:
 		/**
 		 * Constructor for Compressor::OperatingCost - This finds the cost of operation of the compressor
@@ -215,14 +226,16 @@ namespace Compressor {
 		 * @param costOfElectricity double, Cost of electricity per kWh - $
 		 */
 		OperatingCost(double motorBhp, double bhpUnloaded, double annualOperatingHours, double runTimeLoaded,
-		              double efficiencyLoaded, double efficiencyUnloaded, double costOfElectricity);
+					  double efficiencyLoaded, double efficiencyUnloaded, double costOfElectricity);
 
-		struct Output {
+		struct Output
+		{
 			Output(const double runTimeUnloaded, const double costForLoaded, const double costForUnloaded,
-			       const double totalAnnualCost)
-					: runTimeUnloaded(runTimeUnloaded), costForLoaded(costForLoaded),
-					  costForUnloaded(costForUnloaded), totalAnnualCost(totalAnnualCost)
-			{}
+				   const double totalAnnualCost)
+				: runTimeUnloaded(runTimeUnloaded), costForLoaded(costForLoaded),
+				  costForUnloaded(costForUnloaded), totalAnnualCost(totalAnnualCost)
+			{
+			}
 
 			const double runTimeUnloaded, costForLoaded, costForUnloaded, totalAnnualCost;
 		};
@@ -234,17 +247,19 @@ namespace Compressor {
 		double efficiencyUnloaded, costOfElectricity;
 	};
 
-
-	class AirSystemCapacity {
+	class AirSystemCapacity
+	{
 	public:
-		struct Output {
+		struct Output
+		{
 			Output(const double totalPipeVolume, std::vector<double> receiverCapacities,
-			       const double totalReceiverVol, const double totalCapacityOfCompressedAirSystem,
-			       PipeData pipeLengths)
-					: totalPipeVolume(totalPipeVolume), totalReceiverVol(totalReceiverVol),
-					  totalCapacityOfCompressedAirSystem(totalCapacityOfCompressedAirSystem),
-					  receiverCapacities(std::move(receiverCapacities)), pipeLengths(pipeLengths)
-			{}
+				   const double totalReceiverVol, const double totalCapacityOfCompressedAirSystem,
+				   PipeData pipeLengths)
+				: totalPipeVolume(totalPipeVolume), totalReceiverVol(totalReceiverVol),
+				  totalCapacityOfCompressedAirSystem(totalCapacityOfCompressedAirSystem),
+				  receiverCapacities(std::move(receiverCapacities)), pipeLengths(pipeLengths)
+			{
+			}
 
 			const double totalPipeVolume, totalReceiverVol, totalCapacityOfCompressedAirSystem;
 			const std::vector<double> receiverCapacities;
@@ -266,7 +281,8 @@ namespace Compressor {
 		std::vector<double> receivers;
 	};
 
-	class AirVelocity {
+	class AirVelocity
+	{
 	public:
 		/**
 		 * Constructor for Compressor::AirVelocity - This calculator finds the velocity of compressed air
@@ -286,12 +302,15 @@ namespace Compressor {
 		double airFlow, pipePressure, atmosphericPressure;
 	};
 
-	class PipeSizing {
+	class PipeSizing
+	{
 	public:
-		struct Output {
+		struct Output
+		{
 			Output(const double crossSectionalArea, const double pipeDiameter)
-					: crossSectionalArea(crossSectionalArea), pipeDiameter(pipeDiameter)
-			{}
+				: crossSectionalArea(crossSectionalArea), pipeDiameter(pipeDiameter)
+			{
+			}
 			const double crossSectionalArea, pipeDiameter;
 		};
 
@@ -316,7 +335,8 @@ namespace Compressor {
 		double airflow, airlinePressure, designVelocity, atmosphericPressure;
 	};
 
-	class PneumaticValve {
+	class PneumaticValve
+	{
 	public:
 		/**
 		 * Constructor for Compressor::PneumaticValve - Can be used for finding flow rate for a pipe with flow coefficient Cv = 1
@@ -341,14 +361,17 @@ namespace Compressor {
 		double inletPressure, outletPressure, flowRate;
 		bool flowRateKnown;
 	};
-}
+} // namespace Compressor
 
-class BagMethod {
+class BagMethod
+{
 public:
-	struct Output {
+	struct Output
+	{
 		Output(const double flowRate, const double annualConsumption)
-				: flowRate(flowRate), annualConsumption(annualConsumption)
-		{}
+			: flowRate(flowRate), annualConsumption(annualConsumption)
+		{
+		}
 
 		const double flowRate, annualConsumption;
 	};
@@ -372,7 +395,5 @@ public:
 private:
 	double operatingTime, bagFillTime, heightOfBag, diameterOfBag, numberOfUnits;
 };
-
-
 
 #endif //AMO_TOOLS_SUITE_COMPRESSEDAIR_H

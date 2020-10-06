@@ -27,7 +27,7 @@ function CHP() {
 
     inp.option = Module.CHPOption.StandbyRate;
     inp.percentAvgkWhElectricCostAvoidedOrStandbyRate = 9.75;
-    chp = new Module.CHP(inp.annualOperatingHours, inp.annualElectricityConsumption, inp.annualThermalDemand, inp.boilerThermalFuelCosts, inp.avgElectricityCosts, inp.option, inp.boilerThermalFuelCostsCHPcase, inp.CHPfuelCosts, inp.percentAvgkWhElectricCostAvoidedOrStandbyRate, inp.displacedThermalEfficiency, inp.chpAvailability);
+    chp = new Module.CHP(inp.annualOperatingHours, inp.annualElectricityConsumption, inp.annualThermalDemand, inp.boilerThermalFuelCosts, inp.avgElectricityCosts, inp.option, inp.boilerThermalFuelCostsCHPcase, inp.CHPfuelCosts, inp.percentAvgkWhElectricCostAvoidedOrStandbyRate, inp.displacedThermalEfficiency, inp.chpAvailability, inp.thermalUtilization);
     result = chp.getCostInfo();
     testNumberValue(result.annualOperationSavings, 3066325.0889664106, "STANDALONE CHP (annualOperationSavings-2)");
     testNumberValue(result.simplePayback, 3.8126922817, "STANDALONE CHP (simplePayback-2)");
@@ -36,7 +36,7 @@ function CHP() {
 
 // PneumaticAirRequirement
 function pneumaticAirRequirement() {
-    var input = {
+    var inp = {
         pistonType: Module.PistonType.SingleActing,
         cylinderDiameter: 1.5,
         cylinderStroke: 6,
@@ -50,8 +50,8 @@ function pneumaticAirRequirement() {
     testNumberValue(result.compressionRatio, 7.802721, "STANDALONE Pneumatic Air Requirement (compressionRatio-1)");
     testNumberValue(result.airRequirementPneumaticCylinder, 2.871158, "STANDALONE CHPneumatic Air RequirementP (airRequirementPneumaticCylinder-1)");
 
-    input.pistonType = Module.PistonType.DoubleActing;
-    input.pistonRodDiameter = 0.375;
+    inp.pistonType = Module.PistonType.DoubleActing;
+    inp.pistonRodDiameter = 0.375;
     pneumaticAirRequirement = new Module.PneumaticAirRequirement(inp.pistonType, inp.cylinderDiameter, inp.cylinderStroke, inp.pistonRodDiameter, inp.airPressure, inp.cyclesPerMinute);
     result = pneumaticAirRequirement.calculate();
     testNumberValue(result.volumeAirIntakePiston, 0.712939, "STANDALONE Pneumatic Air Requirement (volumeAirIntakePiston-2)");
@@ -61,21 +61,21 @@ function pneumaticAirRequirement() {
 }
 // usableAirCapacity
 function usableAirCapacity() {
-    var input = { tankSize: 660, airPressureIn: 110, airPressureOut: 100 };
+    var inp = { tankSize: 660, airPressureIn: 110, airPressureOut: 100 };
 
     let receiverTank = new Module.ReceiverTank();
     let result = receiverTank.calculateUsableCapacity(inp.tankSize, inp.airPressureIn, inp.airPressureOut);
     testNumberValue(result, 60.024009603, "STANDALONE Usable Air Capacity (calculateUsableCapacity-1)");
 
-    input = { tankSize: 760, airPressureIn: 110, airPressureOut: 100 };
+    inp = { tankSize: 760, airPressureIn: 110, airPressureOut: 100 };
     result = receiverTank.calculateUsableCapacity(inp.tankSize, inp.airPressureIn, inp.airPressureOut);
     testNumberValue(result, 69.1185565135, "STANDALONE Usable Air Capacity (calculateUsableCapacity-2)");
 
-    input = { tankSize: 760, airPressureIn: 150, airPressureOut: 100 };
+    inp = { tankSize: 760, airPressureIn: 150, airPressureOut: 100 };
     result = receiverTank.calculateUsableCapacity(inp.tankSize, inp.airPressureIn, inp.airPressureOut);
     testNumberValue(result, 345.5927825676, "STANDALONE Usable Air Capacity (calculateUsableCapacity-3)");
 
-    input = { tankSize: 760, airPressureIn: 150, airPressureOut: 130 };
+    inp = { tankSize: 760, airPressureIn: 150, airPressureOut: 130 };
     result = receiverTank.calculateUsableCapacity(inp.tankSize, inp.airPressureIn, inp.airPressureOut);
     testNumberValue(result, 138.237113027, "STANDALONE Usable Air Capacity (calculateUsableCapacity-4)");
     receiverTank.delete();
@@ -86,49 +86,49 @@ function receiverTankSize() {
         method: Module.ReceiverTankMethod.General, airDemand: 150, allowablePressureDrop: 3, atmosphericPressure: 14.7
     };
 
-    let receiverTank = new Module.ReceiverTank(input.method, input.airDemand, input.allowablePressureDrop, inp.atmosphericPressure);
+    let receiverTank = new Module.ReceiverTank(input.method, input.airDemand, input.allowablePressureDrop, input.atmosphericPressure);
     let result = receiverTank.calculateSize();
     testNumberValue(result, 5497.8, "STANDALONE Receiver Tank (General-1)");
 
     input = {
         method: Module.ReceiverTankMethod.General, airDemand: 190, allowablePressureDrop: 8, atmosphericPressure: 12.7
     }
-    receiverTank = new Module.ReceiverTank(input.method, input.airDemand, input.allowablePressureDrop, inp.atmosphericPressure);
+    receiverTank = new Module.ReceiverTank(input.method, input.airDemand, input.allowablePressureDrop, input.atmosphericPressure);
     result = receiverTank.calculateSize();
     testNumberValue(result, 2256.155, "STANDALONE Receiver Tank (General-2)");
 
     input = {
         method: Module.ReceiverTankMethod.DedicatedStorage, lengthOfDemand: 0.5, airFlowRequirement: 100, atmosphericPressure: 14.7, initialTankPressure: 110, finalTankPressure: 100
     }
-    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure);
+    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure);
     result = receiverTank.calculateSize();
     testNumberValue(result, 549.78, "STANDALONE Receiver Tank (DedicatedStorage-1)");
 
     input = {
         method: Module.ReceiverTankMethod.DedicatedStorage, lengthOfDemand: 0.5, airFlowRequirement: 100, atmosphericPressure: 14.7, initialTankPressure: 110, finalTankPressure: 100
     }
-    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure);
+    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure);
     result = receiverTank.calculateSize();
     testNumberValue(result, 549.78, "STANDALONE Receiver Tank (DedicatedStorage-2)");
 
     input = {
         method: Module.ReceiverTankMethod.DedicatedStorage, lengthOfDemand: 1.5, airFlowRequirement: 120, atmosphericPressure: 11.7, initialTankPressure: 150, finalTankPressure: 100
     }
-    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure);
+    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure);
     result = receiverTank.calculateSize();
     testNumberValue(result, 315.0576, "STANDALONE Receiver Tank (DedicatedStorage-3)");
 
     input = {
         method: Module.ReceiverTankMethod.MeteredStorage, lengthOfDemand: 0.5, airFlowRequirement: 900, atmosphericPressure: 14.7, initialTankPressure: 100, finalTankPressure: 70, meteredControl: 45
     }
-    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure, inp.meteredControl);
+    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure, input.meteredControl);
     result = receiverTank.calculateSize();
     testNumberValue(result, 1566.873, "STANDALONE Receiver Tank (MeteredStorage-1)");
 
     input = {
         method: Module.ReceiverTankMethod.MeteredStorage, lengthOfDemand: 1.5, airFlowRequirement: 800, atmosphericPressure: 11.7, initialTankPressure: 120, finalTankPressure: 90, meteredControl: 75
     }
-    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, inp.atmosphericPressure, inp.initialTankPressure, inp.finalTankPressure, inp.meteredControl);
+    receiverTank = new Module.ReceiverTank(input.method, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure, input.meteredControl);
     result = receiverTank.calculateSize();
     testNumberValue(result, 3172.455, "STANDALONE Receiver Tank (MeteredStorage-2)");
 
@@ -136,14 +136,14 @@ function receiverTankSize() {
     input = {
         method: Module.ReceiverTankMethod.BridgingCompressorReactionDelay, distanceToCompressorRoom: 1000, speedOfAir: 250, atmosphericPressure: 14.7, airDemand: 600, allowablePressureDrop: 2
     }
-    receiverTank = new Module.ReceiverTank(input.method, input.distanceToCompressorRoom, inp.speedOfAir, inp.atmosphericPressure, inp.airDemand, inp.allowablePressureDrop);
+    receiverTank = new Module.ReceiverTank(input.method, input.distanceToCompressorRoom, input.speedOfAir, input.atmosphericPressure, input.airDemand, input.allowablePressureDrop);
     result = receiverTank.calculateSize();
     testNumberValue(result, 2199.12, "STANDALONE Receiver Tank (BridgingCompressorReactionDelay-1)");
 
     input = {
         method: Module.ReceiverTankMethod.BridgingCompressorReactionDelay, distanceToCompressorRoom: 1200, speedOfAir: 350, atmosphericPressure: 11.7, airDemand: 800, allowablePressureDrop: 19
     }
-    receiverTank = new Module.ReceiverTank(input.method, input.distanceToCompressorRoom, inp.speedOfAir, inp.atmosphericPressure, inp.airDemand, inp.allowablePressureDrop);
+    receiverTank = new Module.ReceiverTank(input.method, input.distanceToCompressorRoom, input.speedOfAir, input.atmosphericPressure, input.airDemand, input.allowablePressureDrop);
     result = receiverTank.calculateSize();
     testNumberValue(result, 210.564812, "STANDALONE Receiver Tank (BridgingCompressorReactionDelay-2)");
 
@@ -151,7 +151,7 @@ function receiverTankSize() {
 }
 // Operating Cost
 function operatingCost() {
-    var input = {
+    var inp = {
         motorBhp: 215, bhpUnloaded: 25, annualOperatingHours: 6800, runTimeLoaded: 85, efficiencyLoaded: 95,
         efficiencyUnloaded: 90, costOfElectricity: 0.05
     };
@@ -163,7 +163,7 @@ function operatingCost() {
     testNumberValue(result.costForUnloaded, 2272.191667, "STANDALONE Operating Cost (costForUnloaded-1)");
     testNumberValue(result.totalAnnualCost, 51064.517982, "STANDALONE Operating Cost (totalAnnualCost-1)");
 
-    input = {
+    inp = {
         motorBhp: 255, bhpUnloaded: 35, annualOperatingHours: 6000, runTimeLoaded: 89, efficiencyLoaded: 93,
         efficiencyUnloaded: 90, costOfElectricity: 0.09
     };
@@ -176,26 +176,42 @@ function operatingCost() {
 
     operatingCost.delete();
 }
+function returnDoubleVector(doublesArray)
+{
+    let doubleVector = new Module.DoubleVector();
+
+    for (x of doublesArray)
+    {
+        doubleVector.push_back(x);
+    }
+
+    return doubleVector;
+}
+
 //airSystemCapacity
 function airSystemCapacity() {
     var inp = {
         oneHalf: 3000, threeFourths: 2000, one: 1000, oneAndOneFourth: 200, oneAndOneHalf: 100, two: 500, twoAndOneHalf: 500, three: 300,
         threeAndOneHalf: 0, four: 1000, five: 0, six: 0,
-        receiverCapacities: [
+        receiverCapacities: returnDoubleVector([
             400, 500, 660, 1060
-        ]
+        ])
     };
 
     let pipeData = new Module.PipeData(inp.oneHalf, inp.threeFourths, inp.one, inp.oneAndOneFourth, inp.oneAndOneHalf, inp.two, inp.twoAndOneHalf, inp.three, inp.threeAndOneHalf, inp.four, inp.five, inp.six);
     let airSystemCapacity = new Module.AirSystemCapacity(pipeData, inp.receiverCapacities);
-
     let result = airSystemCapacity.calculate();
+    console.log(result.pipeLengths);
+    let receiverCapacities = new Array();
+    for(let i = 0; i < result.receiverCapacities.size(); i++){
+        receiverCapacities.push(result.receiverCapacities.get(i));
+    }
     testNumberValue(result.totalPipeVolume, 155.28, "STANDALONE Air System Capacity (totalPipeVolume)");
     testNumberValue(result.totalReceiverVolume, 350.26738, "STANDALONE Air System Capacity (totalReceiverVolume)");
     testNumberValue(result.totalCapacityOfCompressedAirSystem, 505.54738, "STANDALONE Air System Capacity (totalCapacityOfCompressedAirSystem)");
     testNumberValue(result.pipeLengths.oneHalf, 6.3, "STANDALONE Air System Capacity (pipeLengths.oneHalf)");
     testNumberValue(result.pipeLengths.threeFourths, 7.4, "STANDALONE Air System Capacity (pipeLengths.threeFourths)");
-    testNumberValue(result.pipeLengths.one, 6, "STANDALON Air System Capacity (pipeLengths.one)");
+    testNumberValue(result.pipeLengths.one, 6, "STANDALONE Air System Capacity (pipeLengths.one)");
     testNumberValue(result.pipeLengths.oneAndOneFourth, 2.08, "STANDALONE Air System Capacity (pipeLengths.oneAndOneFourth)");
     testNumberValue(result.pipeLengths.oneAndOneHalf, 1.41, "STANDALONE Air System Capacity (pipeLengths.oneAndOneHalf)");
     testNumberValue(result.pipeLengths.two, 11.65, "STANDALONE Air System Capacity (pipeLengths.two)");
@@ -205,10 +221,10 @@ function airSystemCapacity() {
     testNumberValue(result.pipeLengths.four, 88.4, "STANDALONE Air System Capacity (pipeLengths.four)");
     testNumberValue(result.pipeLengths.five, 0, "STANDALONE Air System Capacity (pipeLengths.five)");
     testNumberValue(result.pipeLengths.six, 0, "STANDALONE Air System Capacity (pipeLengths.six)");
-    testNumberValue(result.receiverCapacities[0], 53.475936, "STANDALONE Air System Capacity (receiverCapacities-1)");
-    testNumberValue(result.receiverCapacities[1], 66.84492, "STANDALONE Air System Capacity (receiverCapacities-2)");
-    testNumberValue(result.receiverCapacities[2], 88.235294, "STANDALONE Air System Capacity (receiverCapacities-3)");
-    testNumberValue(result.receiverCapacities[3], 141.71123, "STANDALONE Air System Capacity (receiverCapacities-4)");
+    testNumberValue(receiverCapacities[0], 53.475936, "STANDALONE Air System Capacity (receiverCapacities-1)");
+    testNumberValue(receiverCapacities[1], 66.84492, "STANDALONE Air System Capacity (receiverCapacities-2)");
+    testNumberValue(receiverCapacities[2], 88.235294, "STANDALONE Air System Capacity (receiverCapacities-3)");
+    testNumberValue(receiverCapacities[3], 141.71123, "STANDALONE Air System Capacity (receiverCapacities-4)");
     pipeData.delete();
     airSystemCapacity.delete();
 }

@@ -18,8 +18,8 @@ EMSCRIPTEN_BINDINGS(CHPcalculator)
         .property("simplePayback", &CHP::CostInfoOutput::simplePayback)
         .property("fuelCosts", &CHP::CostInfoOutput::fuelCosts)
         .property("thermalCredit", &CHP::CostInfoOutput::thermalCredit)
-        .property("incrementalOandMDollarsKwH", &CHP::CostInfoOutput::incrementalOandMDollarsKwH)
-        .property("totalOperatingCostsToGenerate", &CHP::CostInfoOutput::totalOperatingCostsToGenerate);
+        .property("incrementalOandM", &CHP::CostInfoOutput::incrementalOandMDollarsKwH)
+        .property("totalOperatingCosts", &CHP::CostInfoOutput::totalOperatingCostsToGenerate);
 }
 // usableAirCapacity
 // receiverTank
@@ -66,7 +66,19 @@ EMSCRIPTEN_BINDINGS(operatingCost)
 EMSCRIPTEN_BINDINGS(airSystemCapacity)
 {
     class_<Compressor::PipeData>("PipeData")
-        .constructor<double, double, double, double, double, double, double, double, double, double, double, double>();
+        .constructor<double, double, double, double, double, double, double, double, double, double, double, double>()
+        .property("oneHalf", &Compressor::PipeData::oneHalf)
+        .property("threeFourths", &Compressor::PipeData::threeFourths)
+        .property("one", &Compressor::PipeData::one)
+        .property("oneAndOneFourth", &Compressor::PipeData::oneAndOneFourth)
+        .property("oneAndOneHalf", &Compressor::PipeData::oneAndOneHalf)
+        .property("two", &Compressor::PipeData::two)
+        .property("twoAndOneHalf", &Compressor::PipeData::twoAndOneHalf)
+        .property("three", &Compressor::PipeData::three)
+        .property("threeAndOneHalf", &Compressor::PipeData::threeAndOneHalf)
+        .property("four", &Compressor::PipeData::four)
+        .property("five", &Compressor::PipeData::five)
+        .property("six", &Compressor::PipeData::six);
 
     class_<Compressor::AirSystemCapacity>("AirSystemCapacity")
         .constructor<Compressor::PipeData, std::vector<double>>()
@@ -75,7 +87,7 @@ EMSCRIPTEN_BINDINGS(airSystemCapacity)
     class_<Compressor::AirSystemCapacity::Output>("AirSystemCapacityOutput")
         .constructor<double, std::vector<double>, double, double, Compressor::PipeData>()
         .property("totalPipeVolume", &Compressor::AirSystemCapacity::Output::totalPipeVolume)
-        .property("totalReceiverVol", &Compressor::AirSystemCapacity::Output::totalReceiverVol)
+        .property("totalReceiverVolume", &Compressor::AirSystemCapacity::Output::totalReceiverVol)
         .property("totalCapacityOfCompressedAirSystem", &Compressor::AirSystemCapacity::Output::totalCapacityOfCompressedAirSystem)
         .property("receiverCapacities", &Compressor::AirSystemCapacity::Output::receiverCapacities)
         .property("pipeLengths", &Compressor::AirSystemCapacity::Output::pipeLengths);

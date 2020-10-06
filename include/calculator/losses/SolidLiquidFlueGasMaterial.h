@@ -8,7 +8,8 @@
  * Contains all of the properties of a solid or liquid flue gas material.
  * Used to calculate the heat loss caused by carrying the products of combustion out of the system through the flue.
  */
-class SolidLiquidFlueGasMaterial {
+class SolidLiquidFlueGasMaterial
+{
 public:
 	/**
 	 * Constructor for the SolidLiquidFlueGasMaterial losses with all inputs specified
@@ -24,35 +25,35 @@ public:
 	 *
 	 * */
 	SolidLiquidFlueGasMaterial(
-			const double flueGasTemperature,
-			const double excessAir,
-			const double combustionAirTemperature,
-			const double fuelTemperature,
-			const double moistureInAirCombustion,
-			const double ashDischargeTemperature,
-			const double unburnedCarbonInAsh,
-			const double carbon,
-			const double hydrogen,
-			const double sulphur,
-			const double inertAsh,
-			const double o2,
-			const double moisture,
-			const double nitrogen) :
-			flueGasTemperature(flueGasTemperature),
-			excessAir(excessAir / 100.0),
-			combustionAirTemperature(combustionAirTemperature),
-			fuelTemperature(fuelTemperature),
-			moistureInAirCombustion(moistureInAirCombustion),
-			ashDischargeTemperature(ashDischargeTemperature),
-			unburnedCarbonInAsh(unburnedCarbonInAsh / 100.0),
-			carbon(carbon / 100),
-			hydrogen(hydrogen / 100),
-			sulphur(sulphur / 100),
-			inertAsh(inertAsh / 100),
-			o2(o2 / 100),
-			moisture(moisture / 100),
-			nitrogen(nitrogen / 100)
-	{}
+		const double flueGasTemperature,
+		const double excessAir,
+		const double combustionAirTemperature,
+		const double fuelTemperature,
+		const double moistureInAirCombustion,
+		const double ashDischargeTemperature,
+		const double unburnedCarbonInAsh,
+		const double carbon,
+		const double hydrogen,
+		const double sulphur,
+		const double inertAsh,
+		const double o2,
+		const double moisture,
+		const double nitrogen) : flueGasTemperature(flueGasTemperature),
+								 excessAir(excessAir / 100.0),
+								 combustionAirTemperature(combustionAirTemperature),
+								 fuelTemperature(fuelTemperature),
+								 moistureInAirCombustion(moistureInAirCombustion),
+								 ashDischargeTemperature(ashDischargeTemperature),
+								 unburnedCarbonInAsh(unburnedCarbonInAsh / 100.0),
+								 carbon(carbon / 100),
+								 hydrogen(hydrogen / 100),
+								 sulphur(sulphur / 100),
+								 inertAsh(inertAsh / 100),
+								 o2(o2 / 100),
+								 moisture(moisture / 100),
+								 nitrogen(nitrogen / 100)
+	{
+	}
 
 	SolidLiquidFlueGasMaterial() = default;
 
@@ -60,16 +61,16 @@ public:
      * Calculates excess air percentage given flue gas O2 levels
      * @return double, calculated excess air percentage
      */
-	static double calculateExcessAirFromFlueGasO2(double flueGasO2, double carbon, double hydrogen, double sulphur,
-	                                              double inertAsh, double o2, double moisture, double nitrogen,
-	                                              double moistureInAirCombustion);
+	double calculateExcessAirFromFlueGasO2(double flueGasO2, double carbon, double hydrogen, double sulphur,
+										   double inertAsh, double o2, double moisture, double nitrogen,
+										   double moistureInAirCombustion);
 
 	/**
      * Calculates excess air percentage given flue gas O2 levels
      * @return double, calculated excess air percentage
      */
-	static double calculateFlueGasO2(double excessAir, double carbon, double hydrogen, double sulphur, double inertAsh,
-	                                 double o2, double moisture, double nitrogen, double moistureInAirCombustion);
+	double calculateFlueGasO2(double excessAir, double carbon, double hydrogen, double sulphur, double inertAsh,
+							  double o2, double moisture, double nitrogen, double moistureInAirCombustion);
 
 	/**
      * Gets the total heat loss
@@ -184,80 +185,80 @@ public:
      * Sets the ID of substance
      * @param id int, ID of substance
      */
-	void setID( int const id ) { this->id = id; }
+	void setID(int const id) { this->id = id; }
 
 	/**
      * Sets the name of substance
      * @param substanceName string, name of substance
      */
-	void setSubstance( std::string const & substanceName ) { substance = substanceName; }
+	void setSubstance(std::string const &substanceName) { substance = substanceName; }
 
 	/**
      * Sets the furnace flue gas temperature
      * @param temperature double, flue gas temperature in °F
      */
-	void setFlueGasTemperature( const double temperature ) { flueGasTemperature = temperature; }
+	void setFlueGasTemperature(const double temperature) { flueGasTemperature = temperature; }
 
 	/**
      * Sets the excess air percentage
      * @param excessAir double, % of excess air
      */
-	void setExcessAir( const double excessAir ) { this->excessAir = excessAir; }
+	void setExcessAir(const double excessAir) { this->excessAir = excessAir; }
 
 	/**
      * Sets the combustion air temperature
      * @param temperature double, combustion air temperature in °F
      */
-	void setCombustionAirTemperature( const double temperature ) { combustionAirTemperature = temperature; }
+	void setCombustionAirTemperature(const double temperature) { combustionAirTemperature = temperature; }
 
 	/**
      * Sets the fuel temperature
      * @param temperature double, fuel temperature in °F
      */
-	void setFuelTemperature( const double temperature ) { fuelTemperature = temperature; }
+	void setFuelTemperature(const double temperature) { fuelTemperature = temperature; }
 
 	/**
      * Sets the moisture in air combustion
      * @param moisture double, moisture in air combustion as %
      */
-	void setMoistureInAirCombustion( const double moisture ) { moistureInAirCombustion = moisture; }
+	void setMoistureInAirCombustion(const double moisture) { moistureInAirCombustion = moisture; }
 
 	/**
      * Sets the ash discharge temperature
      * @param temperature double, ash discharge temperature in °F
      */
-	void setAshDischargeTemperature( const double temperature ) { ashDischargeTemperature = temperature; }
+	void setAshDischargeTemperature(const double temperature) { ashDischargeTemperature = temperature; }
 
 	/**
      * Sets the percentage of unburned carbon in ash
      * @param unburnedCarbon double, % of unburned carbon in ash
      */
-	void setUnburnedCarbonInAsh( const double unburnedCarbon ) { unburnedCarbonInAsh = unburnedCarbon; }
+	void setUnburnedCarbonInAsh(const double unburnedCarbon) { unburnedCarbonInAsh = unburnedCarbon; }
 
-	static double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
-	                                        double moisture, double nitrogen);
+	double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
+									 double moisture, double nitrogen);
 
 private:
 	friend class SQLite;
 
 	SolidLiquidFlueGasMaterial(
-			std::string substance,
-			const double carbon,
-			const double hydrogen,
-			const double sulphur,
-			const double inertAsh,
-			const double o2,
-			const double moisture,
-			const double nitrogen) :
-			substance(std::move(substance)),
-			carbon(carbon / 100),
-			hydrogen(hydrogen / 100),
-			sulphur(sulphur / 100),
-			inertAsh(inertAsh / 100),
-			o2(o2 / 100),
-			moisture(moisture / 100),
-			nitrogen(nitrogen / 100)
-	{}
+		std::string substance,
+		const double carbon,
+		const double hydrogen,
+		const double sulphur,
+		const double inertAsh,
+		const double o2,
+		const double moisture,
+		const double nitrogen) : substance(std::move(substance)),
+								 carbon(carbon / 100),
+								 hydrogen(hydrogen / 100),
+								 sulphur(sulphur / 100),
+								 inertAsh(inertAsh / 100),
+								 o2(o2 / 100),
+								 moisture(moisture / 100),
+								 nitrogen(nitrogen / 100)
+	{
+	}
 
 	int id = 0;
 	std::string substance = "UndefinedSubstance";
