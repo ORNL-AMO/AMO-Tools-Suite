@@ -98,7 +98,8 @@ NAN_METHOD(usableAirCapacity)
 	const double tankSize = Get("tankSize");
 	const double airPressureIn = Get("airPressureIn");
 	const double airPressureOut = Get("airPressureOut");
-	info.GetReturnValue().Set(ReceiverTank::calculateUsableCapacity(tankSize, airPressureIn, airPressureOut));
+	ReceiverTank rTank;
+	info.GetReturnValue().Set(rTank.calculateUsableCapacity(tankSize, airPressureIn, airPressureOut));
 }
 
 NAN_METHOD(pneumaticAirRequirement)

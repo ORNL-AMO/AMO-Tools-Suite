@@ -37,15 +37,17 @@ using namespace v8;
 Local<Object> inp;
 Local<Object> r;
 
-double Get(std::string const & nm) {
-	Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
-	v8::Isolate *isolate = v8::Isolate::GetCurrent();
-	v8::Local<v8::Context> context = isolate->GetCurrentContext();
-	Local<Value> rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
-	if (rObj->IsUndefined()) {
-		ThrowTypeError(std::string("Get method in phast.h: " + nm + " not present in object").c_str());
-	}
-	return Nan::To<double>(rObj).FromJust();
+double Get(std::string const &nm)
+{
+    Local<String> getName = Nan::New<String>(nm).ToLocalChecked();
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<Value> rObj = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    if (rObj->IsUndefined())
+    {
+        ThrowTypeError(std::string("Get method in phast.h: " + nm + " not present in object").c_str());
+    }
+    return Nan::To<double>(rObj).FromJust();
 }
 
 void SetR(std::string const &nm, double n)
@@ -858,9 +860,11 @@ NAN_METHOD(flueGasByMassCalculateHeatingValue)
     const double moisture = Get("moisture");
     const double nitrogen = Get("nitrogen");
 
-    const double hv = SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(carbon, hydrogen,
-                                                                          sulphur, inertAsh, o2,
-                                                                          moisture, nitrogen);
+    SolidLiquidFlueGasMaterial slfgm;
+
+    const double hv = slfgm.calculateHeatingValueFuel(carbon, hydrogen,
+                                                      sulphur, inertAsh, o2,
+                                                      moisture, nitrogen);
 
     Local<Number> retval = Nan::New(hv);
     info.GetReturnValue().Set(retval);
@@ -943,10 +947,12 @@ NAN_METHOD(flueGasByMassCalculateO2)
     moisture = Conversion(moisture).percentToFraction();
     nitrogen = Conversion(nitrogen).percentToFraction();
 
-    double v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(excessAir, carbon,
-                                                              hydrogen, sulphur,
-                                                              inertAsh, o2, moisture,
-                                                              nitrogen, moistureInAirCombustion);
+    SolidLiquidFlueGasMaterial slfgm;
+
+    double v = slfgm.calculateFlueGasO2(excessAir, carbon,
+                                        hydrogen, sulphur,
+                                        inertAsh, o2, moisture,
+                                        nitrogen, moistureInAirCombustion);
     v = Conversion(v).fractionToPercent();
 
     Local<Number> rv = Nan::New(v);
@@ -976,10 +982,12 @@ NAN_METHOD(flueGasByMassCalculateExcessAir)
     moisture = Conversion(moisture).percentToFraction();
     nitrogen = Conversion(nitrogen).percentToFraction();
 
-    double v = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(o2InFlueGas, carbon,
-                                                                         hydrogen, sulphur, inertAsh,
-                                                                         o2, moisture, nitrogen,
-                                                                         moistureInAirCombustion);
+    SolidLiquidFlueGasMaterial slfgm;
+
+    double v = slfgm.calculateExcessAirFromFlueGasO2(o2InFlueGas, carbon,
+                                                     hydrogen, sulphur, inertAsh,
+                                                     o2, moisture, nitrogen,
+                                                     moistureInAirCombustion);
     v = Conversion(v).fractionToPercent();
 
     Local<Number> rv = Nan::New(v);
