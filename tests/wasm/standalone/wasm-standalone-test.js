@@ -224,6 +224,7 @@ function airSystemCapacity() {
     testNumberValue(receiverCapacities[1], 66.84492, "STANDALONE Air System Capacity (receiverCapacities-2)");
     testNumberValue(receiverCapacities[2], 88.235294, "STANDALONE Air System Capacity (receiverCapacities-3)");
     testNumberValue(receiverCapacities[3], 141.71123, "STANDALONE Air System Capacity (receiverCapacities-4)");
+    inp.receiverCapacities.delete();
     pipeData.delete();
     airSystemCapacity.delete();
 }

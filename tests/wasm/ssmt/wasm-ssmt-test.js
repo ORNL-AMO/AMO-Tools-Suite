@@ -205,52 +205,68 @@ function deaerator() {
     testNumberValue(inletSteamProperties.energyFlow, 18052836.54737558, 'SSMT Deaerator (inletSteamProperties.energyFlow)');
     deaerator.delete();
 }
-// // header
-// function header() {
-//     var inp = {
-//         headerPressure: 0.173,
-//         inlets: [
-//             {
-//                 pressure: 1.9332,
-//                 thermodynamicQuantity: 0,
-//                 quantityValue: 579.8,
-//                 massFlow: 0.686
-//             },
-//             {
-//                 pressure: 2.8682,
-//                 thermodynamicQuantity: 0,
-//                 quantityValue: 308.5,
-//                 massFlow: 0.5019
-//             },
-//             {
-//                 pressure: 1.0348,
-//                 thermodynamicQuantity: 0,
-//                 quantityValue: 458,
-//                 massFlow: 0.5633
-//             },
-//             {
-//                 pressure: 1.8438,
-//                 thermodynamicQuantity: 0,
-//                 quantityValue: 475.8,
-//                 massFlow: 0.3082
-//             }
-//         ]
-//     }
-//     let header = new Module.Header(inp.deaeratorPressure, inp.ventRate, inp.feedwaterMassFlow, inp.waterPressure, inp.waterThermodynamicQuantity, inp.waterQuantityValue, inp.steamPressure, inp.steamQuantityType, inp.steamQuantityValue);
-//     let inletWaterProperties = Deaerator.getInletWaterProperties();
-//     let inletSteamProperties = Deaerator.getInletSteamProperties();
-//     let feedwaterProperties = Deaerator.getFeedwaterProperties();
-//     let ventedSteamProperties = Deaerator.getVentedSteamProperties();
 
-//     testNumberValue(feedwaterProperties.energyFlow, 21032141.29813274, 'SSMT Deaerator (feedwaterProperties.energyFlow)');
-//     testNumberValue(ventedSteamProperties.massFlow, 166.74, 'SSMT Deaerator (ventedSteamProperties.massFlow)');
-//     testNumberValue(ventedSteamProperties.energyFlow, 451231.0290232193, 'SSMT Deaerator (ventedSteamProperties.energyFlow)');
-//     testNumberValue(inletWaterProperties.massFlow, 34305.35779780327, 'SSMT Deaerator (inletWaterProperties.massFlow)');
-//     testNumberValue(inletWaterProperties.energyFlow, 3430535.779780379, 'SSMT Deaerator (inletWaterProperties.energyFlow)');
-//     testNumberValue(inletSteamProperties.massFlow, 7546.382202196729, 'SSMT Deaerator (inletSteamProperties.massFlow)');
-//     testNumberValue(inletSteamProperties.energyFlow, 18052836.54737558, 'SSMT Deaerator (inletSteamProperties.energyFlow)');
-//     Deaerator.delete();
-// }
+// header
+function returnInletVector(inletsArray)
+{
+    let inletVector = new Module.InletVector();
+
+    for (x of inletsArray)
+    {
+        let inlet = new Module.Inlet(x.pressure, x.thermodynamicQuantity, x.quantityValue, x.massFlow);
+        inletVector.push_back(inlet);
+    }
+
+    return inletVector;
+}
+function header() {
+    var inp = {
+        headerPressure: 0.173,
+        inlets: [
+            {
+                pressure: 1.9332,
+                thermodynamicQuantity: Module.ThermodynamicQuantity.TEMPERATURE,
+                quantityValue: 579.8,
+                massFlow: 0.686
+            },
+            {
+                pressure: 2.8682,
+                thermodynamicQuantity: Module.ThermodynamicQuantity.TEMPERATURE,
+                quantityValue: 308.5,
+                massFlow: 0.5019
+            },
+            {
+                pressure: 1.0348,
+                thermodynamicQuantity: Module.ThermodynamicQuantity.TEMPERATURE,
+                quantityValue: 458,
+                massFlow: 0.5633
+            },
+            {
+                pressure: 1.8438,
+                thermodynamicQuantity: Module.ThermodynamicQuantity.TEMPERATURE,
+                quantityValue: 475.8,
+                massFlow: 0.3082
+            }
+        ]
+    }
+
+    let inletVector = returnInletVector(inp.inlets);
+
+    let header = new Module.Header(inp.headerPressure, inletVector);
+    // let inletWaterProperties = Deaerator.getInletWaterProperties();
+    // let inletSteamProperties = Deaerator.getInletSteamProperties();
+    // let feedwaterProperties = Deaerator.getFeedwaterProperties();
+    // let ventedSteamProperties = Deaerator.getVentedSteamProperties();
+
+    // testNumberValue(feedwaterProperties.energyFlow, 21032141.29813274, 'SSMT Deaerator (feedwaterProperties.energyFlow)');
+    // testNumberValue(ventedSteamProperties.massFlow, 166.74, 'SSMT Deaerator (ventedSteamProperties.massFlow)');
+    // testNumberValue(ventedSteamProperties.energyFlow, 451231.0290232193, 'SSMT Deaerator (ventedSteamProperties.energyFlow)');
+    // testNumberValue(inletWaterProperties.massFlow, 34305.35779780327, 'SSMT Deaerator (inletWaterProperties.massFlow)');
+    // testNumberValue(inletWaterProperties.energyFlow, 3430535.779780379, 'SSMT Deaerator (inletWaterProperties.energyFlow)');
+    // testNumberValue(inletSteamProperties.massFlow, 7546.382202196729, 'SSMT Deaerator (inletSteamProperties.massFlow)');
+    // testNumberValue(inletSteamProperties.energyFlow, 18052836.54737558, 'SSMT Deaerator (inletSteamProperties.energyFlow)');
+    // Deaerator.delete();
+}
 // turbine
 // heatExchanger
 
