@@ -216,7 +216,10 @@ set(SOURCE_FILES
         bindings-wasm/phast/phast.cpp
         bindings-wasm/phast/phastEnum.cpp
         bindings-wasm/standalone/standalone.cpp
-        bindings-wasm/standalone/standaloneEnum.cpp)
+        bindings-wasm/standalone/standaloneEnum.cpp
+        bindings-wasm/ssmt/ssmt.cpp 
+        bindings-wasm/ssmt/ssmtEnum.cpp)
+
 
 set(INCLUDE_FILES
         include/results/Results.h

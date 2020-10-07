@@ -49,7 +49,7 @@ public:
  	* @param headerPressure double, inlet pressure in MPa
  	* @param inletVec std::vector<Inlet>, a vector of Inlet objects, will be std::moved into a class member variable
 	* */
-	Header(double headerPressure, std::vector<Inlet> & inletVec);
+	Header(double headerPressure, std::vector<Inlet> inletVec);
 
     friend std::ostream &operator<<(std::ostream &stream, const Header &header);
 	/**

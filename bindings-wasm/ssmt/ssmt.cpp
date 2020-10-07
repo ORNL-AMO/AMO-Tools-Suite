@@ -1,5 +1,3 @@
-
-
 #include "ssmt/SaturatedProperties.h"
 #include "ssmt/SteamSystemModelerTool.h"
 #include "ssmt/SteamProperties.h"
@@ -13,6 +11,7 @@
 #include "ssmt/Turbine.h"
 #include "ssmt/HeatExchanger.h"
 #include "ssmt/api/SteamModeler.h"
+#include <vector>
 #include <emscripten/bind.h>
 using namespace emscripten;
 
@@ -33,6 +32,7 @@ EMSCRIPTEN_BINDINGS(steamModelerTool)
         .property("evaporationVolume", &SteamSystemModelerTool::SaturatedPropertiesOutput::evaporationSpecificVolume);
 
     class_<SteamSystemModelerTool::SteamPropertiesOutput>("SteamPropertiesOutput")
+        .constructor<double, double, double, double, double, double, double, double>()
         .property("temperature", &SteamSystemModelerTool::SteamPropertiesOutput::temperature)
         .property("pressure", &SteamSystemModelerTool::SteamPropertiesOutput::pressure)
         .property("quality", &SteamSystemModelerTool::SteamPropertiesOutput::quality)
@@ -45,15 +45,7 @@ EMSCRIPTEN_BINDINGS(steamModelerTool)
     class_<SteamSystemModelerTool::FluidProperties>("FluidProperties")
         .constructor<double, double, double, double, double, double, double, double, double, double>()
         .property("massFlow", &SteamSystemModelerTool::FluidProperties::massFlow)
-        .property("energyFlow", &SteamSystemModelerTool::FluidProperties::energyFlow)
-        .property("temperature", &SteamSystemModelerTool::FluidProperties::temperature)
-        .property("pressure", &SteamSystemModelerTool::FluidProperties::pressure)
-        .property("quality", &SteamSystemModelerTool::FluidProperties::quality)
-        .property("specificVolume", &SteamSystemModelerTool::FluidProperties::specificVolume)
-        .property("density", &SteamSystemModelerTool::FluidProperties::density)
-        .property("specificEnthalpy", &SteamSystemModelerTool::FluidProperties::specificEnthalpy)
-        .property("specificEntropy", &SteamSystemModelerTool::FluidProperties::specificEntropy)
-        .property("internalEnergy", &SteamSystemModelerTool::FluidProperties::internalEnergy);
+        .property("energyFlow", &SteamSystemModelerTool::FluidProperties::energyFlow);
 }
 
 // saturatedPressure
@@ -85,7 +77,7 @@ EMSCRIPTEN_BINDINGS(steamProperties)
 {
     class_<SteamProperties>("SteamProperties")
         .constructor<double, SteamProperties::ThermodynamicQuantity, double>()
-        .function("calculate", &SaturatedTemperature::calculate);
+        .function("calculate", &SteamProperties::calculate);
 }
 // boiler
 EMSCRIPTEN_BINDINGS(boiler)
@@ -102,7 +94,7 @@ EMSCRIPTEN_BINDINGS(boiler)
 EMSCRIPTEN_BINDINGS(heatLoss)
 {
     class_<HeatLoss>("HeatLoss")
-        .constructor<double, SteamProperties::ThermodynamicQuantity, double, double, double, double>()
+        .constructor<double, SteamProperties::ThermodynamicQuantity, double, double, double>()
         .function("getInletProperties", &HeatLoss::getInletProperties)
         .function("getOutletProperties", &HeatLoss::getOutletProperties)
         .function("getHeatLoss", &HeatLoss::getHeatLoss);
@@ -131,7 +123,7 @@ EMSCRIPTEN_BINDINGS(prvWithoutDesuperheating)
 // prvWithDesuperheating
 EMSCRIPTEN_BINDINGS(prvWithDesuperheating)
 {
-    class_<PrvWithDesuperheating>("PrvWithoutDesuperheating")
+    class_<PrvWithDesuperheating>("PrvWithDesuperheating")
         .constructor<double, SteamProperties::ThermodynamicQuantity, double, double, double, double, SteamProperties::ThermodynamicQuantity, double, double>()
         .function("getInletProperties", &PrvWithDesuperheating::getInletProperties)
         .function("getOutletProperties", &PrvWithDesuperheating::getOutletProperties)

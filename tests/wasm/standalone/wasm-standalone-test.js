@@ -201,7 +201,6 @@ function airSystemCapacity() {
     let pipeData = new Module.PipeData(inp.oneHalf, inp.threeFourths, inp.one, inp.oneAndOneFourth, inp.oneAndOneHalf, inp.two, inp.twoAndOneHalf, inp.three, inp.threeAndOneHalf, inp.four, inp.five, inp.six);
     let airSystemCapacity = new Module.AirSystemCapacity(pipeData, inp.receiverCapacities);
     let result = airSystemCapacity.calculate();
-    console.log(result.pipeLengths);
     let receiverCapacities = new Array();
     for(let i = 0; i < result.receiverCapacities.size(); i++){
         receiverCapacities.push(result.receiverCapacities.get(i));
