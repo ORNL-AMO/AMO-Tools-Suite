@@ -42,7 +42,7 @@ EMSCRIPTEN_BINDINGS(steamModelerTool)
         .property("specificEntropy", &SteamSystemModelerTool::SteamPropertiesOutput::specificEntropy)
         .property("internalEnergy", &SteamSystemModelerTool::SteamPropertiesOutput::internalEnergy);
 
-    class_<SteamSystemModelerTool::FluidProperties>("FluidProperties")
+    class_<SteamSystemModelerTool::FluidProperties, emscripten::base<SteamSystemModelerTool::SteamPropertiesOutput>>("FluidProperties")
         .constructor<double, double, double, double, double, double, double, double, double, double>()
         .property("massFlow", &SteamSystemModelerTool::FluidProperties::massFlow)
         .property("energyFlow", &SteamSystemModelerTool::FluidProperties::energyFlow);
@@ -148,10 +148,11 @@ EMSCRIPTEN_BINDINGS(deaerator)
 // header
 EMSCRIPTEN_BINDINGS(header)
 {
-
     class_<Inlet>("Inlet")
         .constructor<double, SteamProperties::ThermodynamicQuantity, double, double>()
-        .function("getInletProperties", &Inlet::getInletProperties);
+        .function("getInletProperties", &Inlet::getInletProperties)
+        .function("getInletEnergyFlow", &Inlet::getInletEnergyFlow)
+        .function("getMassFlow", &Inlet::getMassFlow);
 
     register_vector<Inlet>("InletVector");
 
@@ -169,7 +170,7 @@ EMSCRIPTEN_BINDINGS(turbine)
     class_<Turbine>("Turbine")
         .constructor<Turbine::Solve, double, SteamProperties::ThermodynamicQuantity, double, Turbine::TurbineProperty, double, double, double, double>()
         .constructor<Turbine::Solve, double, SteamProperties::ThermodynamicQuantity, double, Turbine::TurbineProperty, double, double, double, SteamProperties::ThermodynamicQuantity, double>()
-        .function("getHeaderProperties", &Turbine::getInletProperties)
+        .function("getInletProperties", &Turbine::getInletProperties)
         .function("getInletEnergyFlow", &Turbine::getInletEnergyFlow)
         .function("getOutletProperties", &Turbine::getOutletProperties)
         .function("getOutletEnergyFlow", &Turbine::getOutletEnergyFlow)

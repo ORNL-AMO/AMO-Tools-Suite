@@ -252,6 +252,8 @@ function header() {
 
     let header = new Module.Header(inp.headerPressure, inletVector);
     let headerProps = header.getHeaderProperties();
+    headerProps.energyFlow = header.getInletEnergyFlow();
+    headerProps.massFlow = header.getInletMassFlow();
     let inlets = header.getInlets();
     let allInletProperties = new Array();
     for (let i = 0; i < inlets.size(); i++) {
@@ -287,7 +289,10 @@ function header() {
     testNumberValue(inlet4.specificEntropy, 2.3554693941761826, 'SSMT Header (inlet4.specificEntropy)');
     testNumberValue(inlet4.temperature, 475.8, 'SSMT Header (inlet4.temperature)');
     header.delete();
-    inletVector.forEach(inlet => { inlet.delete() });
+    for (let i = 0; i < inletVector.size(); i++) {
+        let inlet = inletVector.get(i);
+        inlet.delete();
+    }
 }
 // turbine
 function turbine() {
@@ -296,13 +301,12 @@ function turbine() {
         inletPressure: 4.2112,
         inletQuantity: Module.ThermodynamicQuantity.TEMPERATURE, // SteamProperties::ThermodynamicQuantity::temperature
         inletQuantityValue: 888,
-        turbineProperty: Module.Solve.MassFlow, // massFlow
+        turbineProperty: Module.TurbineProperty.MassFlow, // massFlow
         isentropicEfficiency: 40.1,
         generatorEfficiency: 94.2,
         massFlowOrPowerOut: 15844, // massFlow in this case
         outletSteamPressure: 3.4781
     }
-
     let turbine = new Module.Turbine(inp.solveFor, inp.inletPressure, inp.inletQuantity, inp.inletQuantityValue, inp.turbineProperty, inp.isentropicEfficiency, inp.generatorEfficiency, inp.massFlowOrPowerOut, inp.outletSteamPressure);
     let inletProperties = turbine.getInletProperties();
     inletProperties.energyFlow = turbine.getInletEnergyFlow();
@@ -340,7 +344,7 @@ function turbine() {
         inletPressure: 5.5627,
         inletQuantity: Module.ThermodynamicQuantity.TEMPERATURE, // SteamProperties::ThermodynamicQuantity::temperature
         inletQuantityValue: 823.8,
-        turbineProperty: Module.Solve.PowerOut, // powerOut
+        turbineProperty: Module.TurbineProperty.PowerOut, // powerOut
         generatorEfficiency: 82,
         massFlowOrPowerOut: 1000, // powerOut in this case
         outletSteamPressure: 4.4552,
@@ -385,7 +389,7 @@ function heatExchanger() {
         coldInletEnergyFlow: 262530220.6437767,
         coldInletMassFlow: 6233100.275643423,
         coldInletPressure: 0.101325,
-        coldInletQuality: Module.ThermodynamicQuantity.TEMPERATURE,
+        coldInletQuality: 0,
         coldInletSpecificEnthalpy: 42.11872247100606,
         coldInletSpecificEntropy: 0.15107627374941596,
         coldInletSpecificVolume: 0.0010002985489353622,
@@ -394,19 +398,20 @@ function heatExchanger() {
         hotInletEnergyFlow: 81817968.94625004,
         hotInletMassFlow: 96858.44750370324,
         hotInletPressure: 1.5,
-        hotInletQuality: Module.ThermodynamicQuantity.TEMPERATURE,
+        hotInletQuality: 0,
         hotInletSpecificEnthalpy: 844.716914785588,
         hotInletSpecificEntropy: 2.314681630438997,
         hotInletSpecificVolume: 0.0011538683724309003,
         hotInletTemperature: 471.4452428824141,
     }
 
-
-    let coldInletFluidProps = new Module.FluidProperties(inp.coldInletMassFlow, inp.coldInletEnergyFlow, inp.coldInletTemperature, inp.coldInletPressure, inp.coldInletQuality, inp.coldInletSpecificVolume, inp.coldInletDensity, inp.coldInletSpecificEnthalpy, inp.coldInletSpecificEntropy);
-    let hotInletFluidProps = new Module.FluidProperties(inp.hotInletMassFlow, inp.hotInletEnergyFlow, inp.hotInletTemperature, inp.hotInletPressure, inp.hotInletQuality, inp.hotInletSpecificVolume, inp.hotInletDensity, inp.hotInletSpecificEnthalpy, inp.hotInletSpecificEntropy);
+    let coldInletFluidProps = new Module.FluidProperties(inp.coldInletMassFlow, inp.coldInletEnergyFlow, inp.coldInletTemperature, inp.coldInletPressure, inp.coldInletQuality, inp.coldInletSpecificVolume, inp.coldInletDensity, inp.coldInletSpecificEnthalpy, inp.coldInletSpecificEntropy, 0);
+    let hotInletFluidProps = new Module.FluidProperties(inp.hotInletMassFlow, inp.hotInletEnergyFlow, inp.hotInletTemperature, inp.hotInletPressure, inp.hotInletQuality, inp.hotInletSpecificVolume, inp.hotInletDensity, inp.hotInletSpecificEnthalpy, inp.hotInletSpecificEntropy, 0);
     let heatExchanger = new Module.HeatExchanger(hotInletFluidProps, coldInletFluidProps, inp.approachTemp);
     let results =  heatExchanger.calculate();
 
+    debugger
+    
     testNumberValue(results.hotOutlet.pressure, 1.5, 'SSMT Heat Exchanger (results.hotOutlet.pressure)');
     testNumberValue(results.hotOutlet.temperature, 293.15, 'SSMT Heat Exchanger (results.hotOutlet.temperature)');
     testNumberValue(results.hotOutlet.specificEnthalpy, 85.328522053958, 'SSMT Heat Exchanger (results.hotOutlet.specificEnthalpy)');
@@ -432,7 +437,7 @@ function heatExchanger() {
         coldInletEnergyFlow: 662268.2787552822,
         coldInletMassFlow: 15723.845356686172,
         coldInletPressure: 0.101325,
-        coldInletQuality: Module.ThermodynamicQuantity.TEMPERATURE,
+        coldInletQuality: 0,
         coldInletSpecificEnthalpy: 42.11872247100606,
         coldInletSpecificEntropy: 0.15107627374941596,
         coldInletSpecificVolume: 0.0010002985489353622,
@@ -441,7 +446,7 @@ function heatExchanger() {
         hotInletEnergyFlow: 749645.9791564117,
         hotInletMassFlow: 689.376530177306,
         hotInletPressure: 4,
-        hotInletQuality: Module.ThermodynamicQuantity.TEMPERATURE,
+        hotInletQuality: 0,
         hotInletSpecificEnthalpy: 1087.4260238647878,
         hotInletSpecificEntropy: 2.7966534294996848,
         hotInletSpecificVolume: 0.0012525705778868427,
@@ -449,10 +454,10 @@ function heatExchanger() {
     }
 
 
-    coldInletFluidProps = new Module.FluidProperties(inp.coldInletMassFlow, inp.coldInletEnergyFlow, inp.coldInletTemperature, inp.coldInletPressure, inp.coldInletQuality, inp.coldInletSpecificVolume, inp.coldInletDensity, inp.coldInletSpecificEnthalpy, inp.coldInletSpecificEntropy);
-    hotInletFluidProps = new Module.FluidProperties(inp.hotInletMassFlow, inp.hotInletEnergyFlow, inp.hotInletTemperature, inp.hotInletPressure, inp.hotInletQuality, inp.hotInletSpecificVolume, inp.hotInletDensity, inp.hotInletSpecificEnthalpy, inp.hotInletSpecificEntropy);
+    coldInletFluidProps = new Module.FluidProperties(inp.coldInletMassFlow, inp.coldInletEnergyFlow, inp.coldInletTemperature, inp.coldInletPressure, inp.coldInletQuality, inp.coldInletSpecificVolume, inp.coldInletDensity, inp.coldInletSpecificEnthalpy, inp.coldInletSpecificEntropy, 0);
+    hotInletFluidProps = new Module.FluidProperties(inp.hotInletMassFlow, inp.hotInletEnergyFlow, inp.hotInletTemperature, inp.hotInletPressure, inp.hotInletQuality, inp.hotInletSpecificVolume, inp.hotInletDensity, inp.hotInletSpecificEnthalpy, inp.hotInletSpecificEntropy, 0);
     heatExchanger = new Module.HeatExchanger(hotInletFluidProps, coldInletFluidProps, inp.approachTemp);
-    let results =  heatExchanger.calculate();
+    results =  heatExchanger.calculate();
 
     testNumberValue(results.hotOutlet.pressure, 4, 'SSMT Heat Exchanger (results.hotOutlet.pressure)');
     testNumberValue(results.hotOutlet.temperature, 293.15, 'SSMT Heat Exchanger (results.hotOutlet.temperature)');
