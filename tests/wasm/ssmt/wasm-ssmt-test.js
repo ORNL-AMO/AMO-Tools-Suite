@@ -253,6 +253,15 @@ function header() {
     let inletVector = returnInletVector(inp.inlets);
 
     let header = new Module.Header(inp.headerPressure, inletVector);
+    let headerProps = header.getHeaderProperties();
+    let inlets = header.getInlets();
+    let allInletProperties = new Array();
+    for(let i = 0; i < inlets.size(); i++){
+        let inlet = inlets.get(i);
+        let inletProperties = inlet.getInletProperties();
+        allInletProperties.push(inletProperties);
+    }
+    console.log(allInletProperties);
     // let inletWaterProperties = Deaerator.getInletWaterProperties();
     // let inletSteamProperties = Deaerator.getInletSteamProperties();
     // let feedwaterProperties = Deaerator.getFeedwaterProperties();
@@ -284,7 +293,7 @@ flashTank();
 prvWithoutDesuperheating();
 prvWithDesuperheating();
 deaerator();
-
+header();
 
 
 

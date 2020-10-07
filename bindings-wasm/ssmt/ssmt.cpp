@@ -150,7 +150,8 @@ EMSCRIPTEN_BINDINGS(header)
 {
 
     class_<Inlet>("Inlet")
-        .constructor<double, SteamProperties::ThermodynamicQuantity, double, double>();
+        .constructor<double, SteamProperties::ThermodynamicQuantity, double, double>()
+        .function("getInletProperties", &Inlet::getInletProperties);
 
     register_vector<Inlet>("InletVector");
 
@@ -159,7 +160,8 @@ EMSCRIPTEN_BINDINGS(header)
         .function("getHeaderProperties", &Header::getHeaderProperties)
         .function("getHeaderPressure", &Header::getHeaderPressure)
         .function("getInletEnergyFlow", &Header::getInletEnergyFlow)
-        .function("getInletMassFlow", &Header::getInletMassFlow);
+        .function("getInletMassFlow", &Header::getInletMassFlow)
+        .function("getInlets", &Header::getInlets);
 }
 // turbine
 EMSCRIPTEN_BINDINGS(turbine)
