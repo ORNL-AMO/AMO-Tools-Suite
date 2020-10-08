@@ -29,7 +29,7 @@ using namespace emscripten;
 EMSCRIPTEN_BINDINGS(steamModeler)
 {
     //SteamModelerOutput
-    class_<SteamModelerOutput>(SteamModelerOutput)
+    class_<SteamModelerOutput>("SteamModelerOutput")
         .property("boiler", &SteamModelerOutput::boiler)
         .property("blowdownFlashTank", &SteamModelerOutput::blowdownFlashTank)
         .property("highPressureHeaderCalculationsDomain", &SteamModelerOutput::highPressureHeaderCalculationsDomain)
@@ -41,7 +41,7 @@ EMSCRIPTEN_BINDINGS(steamModeler)
         .property("processSteamUsageCalculationsDomain", &SteamModelerOutput::processSteamUsageCalculationsDomain)
         .property("energyAndCostCalculationsDomain", &SteamModelerOutput::energyAndCostCalculationsDomain);
 
-    class_<HighPressureHeaderCalculationsDomain>(HighPressureHeaderCalculationsDomain)
+    class_<HighPressureHeaderCalculationsDomain>("HighPressureHeaderCalculationsDomain")
         .property("highPressureHeaderOutput", &HighPressureHeaderCalculationsDomain::highPressureHeaderOutput)
         .property("highPressureHeaderHeatLoss", &HighPressureHeaderCalculationsDomain::highPressureHeaderHeatLoss)
         .property("highPressureCondensate", &HighPressureHeaderCalculationsDomain::highPressureCondensate)
@@ -53,7 +53,7 @@ EMSCRIPTEN_BINDINGS(steamModeler)
         .property("highToLowPressureTurbine", &HighPressureHeaderCalculationsDomain::highToLowPressureTurbine)
         .property("highToLowPressureTurbineIdeal", &HighPressureHeaderCalculationsDomain::highToLowPressureTurbineIdeal);
 
-    class_<MediumPressureHeaderCalculationsDomain>(MediumPressureHeaderCalculationsDomain)
+    class_<MediumPressureHeaderCalculationsDomain>("MediumPressureHeaderCalculationsDomain")
         .property("highToMediumPressurePrv", &MediumPressureHeaderCalculationsDomain::highToMediumPressurePrv)
         .property("highPressureCondensateFlashTank", &MediumPressureHeaderCalculationsDomain::highPressureCondensateFlashTank)
         .property("mediumPressureHeaderHeatLoss", &MediumPressureHeaderCalculationsDomain::mediumPressureHeaderHeatLoss)
@@ -64,33 +64,33 @@ EMSCRIPTEN_BINDINGS(steamModeler)
         .property("highToLowPressureTurbineUpdated", &MediumPressureHeaderCalculationsDomain::highToLowPressureTurbineUpdated)
         .property("highToLowPressureTurbineIdealUpdated", &MediumPressureHeaderCalculationsDomain::highToLowPressureTurbineIdealUpdated);
 
-    class_<LowPressureHeaderCalculationsDomain>(LowPressureHeaderCalculationsDomain)
+    class_<LowPressureHeaderCalculationsDomain>("LowPressureHeaderCalculationsDomain")
         .property("lowPressurePrv", &LowPressureHeaderCalculationsDomain::lowPressurePrv)
         .property("lowPressureHeaderOutput", &LowPressureHeaderCalculationsDomain::lowPressureHeaderOutput)
         .property("lowPressureHeaderHeatLoss", &LowPressureHeaderCalculationsDomain::lowPressureHeaderHeatLoss)
         .property("lowPressureCondensate", &LowPressureHeaderCalculationsDomain::lowPressureCondensate)
         .property("lowPressureFlashedSteamIntoHeaderCalculatorDomain", &LowPressureHeaderCalculationsDomain::lowPressureFlashedSteamIntoHeaderCalculatorDomain);
 
-    class_<MakeupWaterAndCondensateHeaderCalculationsDomain>(MakeupWaterAndCondensateHeaderCalculationsDomain)
+    class_<MakeupWaterAndCondensateHeaderCalculationsDomain>("MakeupWaterAndCondensateHeaderCalculationsDomain")
         .property("combinedCondensate", &MakeupWaterAndCondensateHeaderCalculationsDomain::combinedCondensate)
         .property("returnCondensate", &MakeupWaterAndCondensateHeaderCalculationsDomain::returnCondensate)
-        .property("returnCondensateCalculationsDomain", &MakeupWaterAndCondensateHeaderCalculationsDomain::returnCondensateCalculationsDomain)
+        // .property("returnCondensateCalculationsDomain", &MakeupWaterAndCondensateHeaderCalculationsDomain::returnCondensateCalculationsDomain)
         .property("makeupWater", &MakeupWaterAndCondensateHeaderCalculationsDomain::makeupWater)
         .property("makeupWaterVolumeFlowCalculationsDomain", &MakeupWaterAndCondensateHeaderCalculationsDomain::makeupWaterVolumeFlowCalculationsDomain)
         .property("heatExchangerOutput", &MakeupWaterAndCondensateHeaderCalculationsDomain::heatExchangerOutput)
         .property("makeupWaterAndCondensateHeaderOutput", &MakeupWaterAndCondensateHeaderCalculationsDomain::makeupWaterAndCondensateHeaderOutput);
 
-    class_<PowerBalanceCheckerCalculationsDomain>(PowerBalanceCheckerCalculationsDomain)
+    class_<PowerBalanceCheckerCalculationsDomain>("PowerBalanceCheckerCalculationsDomain")
         .property("steamBalance", &PowerBalanceCheckerCalculationsDomain::steamBalance)
         .property("lowPressureVentedSteamCalculationsDomain", &PowerBalanceCheckerCalculationsDomain::lowPressureVentedSteamCalculationsDomain)
         .property("lowPressureVentedSteam", &PowerBalanceCheckerCalculationsDomain::lowPressureVentedSteam);
 
-    class_<ProcessSteamUsageCalculationsDomain>(ProcessSteamUsageCalculationsDomain)
+    class_<ProcessSteamUsageCalculationsDomain>("ProcessSteamUsageCalculationsDomain")
         .property("highPressureProcessSteamUsage", &ProcessSteamUsageCalculationsDomain::highPressureProcessSteamUsage)
         .property("lowPressureProcessUsagePtr", &ProcessSteamUsageCalculationsDomain::lowPressureProcessUsagePtr)
         .property("mediumPressureProcessUsagePtr", &ProcessSteamUsageCalculationsDomain::mediumPressureProcessUsagePtr);
 
-    class_<EnergyAndCostCalculationsDomain>(EnergyAndCostCalculationsDomain)
+    class_<EnergyAndCostCalculationsDomain>("EnergyAndCostCalculationsDomain")
         .property("powerGenerated", &EnergyAndCostCalculationsDomain::powerGenerated)
         .property("sitePowerImport", &EnergyAndCostCalculationsDomain::sitePowerImport)
         .property("powerDemand", &EnergyAndCostCalculationsDomain::powerDemand)
@@ -100,26 +100,26 @@ EMSCRIPTEN_BINDINGS(steamModeler)
         .property("totalOperatingCost", &EnergyAndCostCalculationsDomain::totalOperatingCost)
         .property("boilerFuelUsage", &EnergyAndCostCalculationsDomain::boilerFuelUsage);
 
-    class_<LowPressureFlashedSteamIntoHeaderCalculatorDomain>(LowPressureFlashedSteamIntoHeaderCalculatorDomain)
+    class_<LowPressureFlashedSteamIntoHeaderCalculatorDomain>("LowPressureFlashedSteamIntoHeaderCalculatorDomain")
         .property("mediumPressureCondensateFlashTank", &LowPressureFlashedSteamIntoHeaderCalculatorDomain::mediumPressureCondensateFlashTank)
         .property("highPressureCondensateFlashTank", &LowPressureFlashedSteamIntoHeaderCalculatorDomain::highPressureCondensateFlashTank);
     
-    class_<ReturnCondensateCalculationsDomain>(ReturnCondensateCalculationsDomain)
+    class_<ReturnCondensateCalculationsDomain>("ReturnCondensateCalculationsDomain")
         .property("condensateFlashTank", &ReturnCondensateCalculationsDomain::condensateFlashTank)
         .property("returnCondensateFlashed", &ReturnCondensateCalculationsDomain::returnCondensateFlashed);
 
-    class_<MakeupWaterVolumeFlowCalculationsDomain>(MakeupWaterVolumeFlowCalculationsDomain)
+    class_<MakeupWaterVolumeFlowCalculationsDomain>("MakeupWaterVolumeFlowCalculationsDomain")
         .property("makeupWaterVolumeFlow", &MakeupWaterVolumeFlowCalculationsDomain::makeupWaterVolumeFlow)
         .property("makeupWaterVolumeFlowAnnual", &MakeupWaterVolumeFlowCalculationsDomain::makeupWaterVolumeFlowAnnual);
 
-    class_<LowPressureVentedSteamCalculationsDomain>(LowPressureVentedSteamCalculationsDomain)
+    class_<LowPressureVentedSteamCalculationsDomain>("LowPressureVentedSteamCalculationsDomain")
         .property("lowPressureVentedSteam", &LowPressureVentedSteamCalculationsDomain::lowPressureVentedSteam)
         .property("makeupWater", &LowPressureVentedSteamCalculationsDomain::makeupWater)
         .property("makeupWaterAndCondensateHeaderOutputUpdated", &LowPressureVentedSteamCalculationsDomain::makeupWaterAndCondensateHeaderOutputUpdated)
         .property("makeupWaterVolumeFlowCalculationsDomain", &LowPressureVentedSteamCalculationsDomain::makeupWaterVolumeFlowCalculationsDomain)
         .property("deaerator", &LowPressureVentedSteamCalculationsDomain::deaerator);
 
-    class_<ProcessSteamUsage>(ProcessSteamUsage)
+    class_<ProcessSteamUsage>("ProcessSteamUsage")
         .property("pressure", &ProcessSteamUsage::pressure)
         .property("temperature", &ProcessSteamUsage::temperature)
         .property("energyFlow", &ProcessSteamUsage::energyFlow)
@@ -128,8 +128,8 @@ EMSCRIPTEN_BINDINGS(steamModeler)
 
     //SteamModeler
     class_<SteamModeler>("SteamModeler")
-        .constructor<>()
-        .function("model", &SteamModeler::model);
+        .constructor<>();
+
     //steam modeler input
     class_<SteamModelerInput>("SteamModelerInput")
         .constructor<bool, double, BoilerInput, HeaderInput, OperationsInput, TurbineInput>();
@@ -141,13 +141,16 @@ EMSCRIPTEN_BINDINGS(steamModeler)
     class_<HeaderInput>("HeaderInput")
         .constructor<HeaderWithHighestPressure, std::shared_ptr<HeaderNotHighestPressure>, std::shared_ptr<HeaderNotHighestPressure>>();
 
+//HeaderWithPressure
+    class_<HeaderWithPressure>("HeaderWithPressure")
+        .constructor<double, double, double, double, bool>();
     //HeaderWithHighestPressure
     class_<HeaderWithHighestPressure, emscripten::base<HeaderWithPressure>>("HeaderWithHighestPressure")
-        .constructor<double, double, double, double, bool>();
+        .constructor<double, double, double, double, double, bool>();
 
     //HeaderNotHighestPressure
     class_<HeaderNotHighestPressure, emscripten::base<HeaderWithPressure>>("HeaderNotHighestPressure")
-        .constructor<double, double, double, double, double, bool>();
+        .constructor<double, double, double, double, bool, bool, double>();
 
     //OperationsInput
     class_<OperationsInput>("OperationsInput")
