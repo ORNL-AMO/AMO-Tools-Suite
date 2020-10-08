@@ -187,9 +187,7 @@ EMSCRIPTEN_BINDINGS(heatExchanger)
         .constructor<SteamSystemModelerTool::FluidProperties, SteamSystemModelerTool::FluidProperties, double>()
         .function("calculate", &HeatExchanger::calculate);
 
-    
     class_<HeatExchanger::Output>("HeatExchangerOutput")
         .property("hotOutlet", &HeatExchanger::Output::hotOutlet)
         .property("coldOutlet", &HeatExchanger::Output::coldOutlet);
 }
-// steamModeler
