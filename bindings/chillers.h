@@ -77,7 +77,7 @@ bool GetBool(std::string const &key, Local<Object> obj)
     {
         ThrowTypeError(std::string("GetBool method in calculator.h: Boolean value " + key + " not present in object").c_str());
     }
-    return rObj->BooleanValue(context).ToChecked();
+    return Nan::To<bool>(rObj).FromJust();
 }
 
 std::string GetStr(std::string const &key, Local<Object> obj)

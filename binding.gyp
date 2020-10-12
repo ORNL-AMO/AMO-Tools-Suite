@@ -175,8 +175,12 @@
             'sources' : [
                 'bindings/db.cpp',
                 'third_party/sqlite/sqlite3.c',
-                'src/calculator/pump/PumpData.cpp',
-                'src/calculator/motor/MotorData.cpp',
+                'src/ssmt/SteamSystemModelerTool.cpp',
+                'src/ssmt/SaturatedProperties.cpp',
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/pump/').map(f=>'src/calculator/pump/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/motor/').map(f=>'src/calculator/motor/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/results/').map(f=>'src/results/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
             ],
@@ -251,6 +255,33 @@
             'sources': [
                 'bindings/chillers.cpp',
                 'src/chillers/CoolingTower.cpp'
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
+        },
+        {
+            "target_name": "wasteWater",
+            'include_dirs': [
+                'include',
+                'include/wasteWater/WasteWaterTreatment.h',
+                "<!(node -e \"require('nan')\")"
+            ],
+            'sources': [
+                'bindings/wasteWater.cpp',
+                'src/wasteWater/WasteWaterTreatment.cpp'
             ],
             "conditions": [
                 [ 'OS=="mac"', {

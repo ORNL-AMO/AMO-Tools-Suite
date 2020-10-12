@@ -114,9 +114,7 @@ double getDouble(std::string const &name) {
  */
 bool getBool(std::string const &name, Local <Object> sourceObject) {
     Local <Value> value = getValue(name, sourceObject);
-    v8::Isolate *isolate = v8::Isolate::GetCurrent();
-   	v8::Local<v8::Context> context = isolate->GetCurrentContext();
-    return value->BooleanValue(context).ToChecked();
+    return Nan::To<bool>(value).FromJust();
 }
 
 /**

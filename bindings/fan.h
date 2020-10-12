@@ -62,7 +62,7 @@ bool GetBool(std::string const &key, Local<Object> obj)
 	{
 		ThrowTypeError(std::string("GetBool method in fan.h: Boolean value " + key + " not present in object").c_str());
 	}
-	return rObj->BooleanValue(context).ToChecked();
+	return Nan::To<bool>(rObj).FromJust();
 }
 
 //NAN function for fetching STRING value associated with provided key
