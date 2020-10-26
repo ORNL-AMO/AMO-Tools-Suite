@@ -100,6 +100,38 @@ public:
         double FmRatio;
         double Diff_MLSS;
         double SRT;
+
+        std::vector<double> getArray() {
+            std::vector<double> array{
+                Se,
+                HeterBio,
+                CellDeb,
+                InterVes,
+                MLVSS,
+                MLSS,
+                BiomassProd,
+                SludgeProd,
+                SolidProd,
+                Effluent,
+                IntentWaste,
+                OxygenRqd,
+                FlowMgd,
+                NRemoved,
+                NRemovedMgl,
+                NitO2Dem,
+                O2Reqd,
+                EffNH3N,
+                EffNo3N,
+                TotalO2Rqd,
+                WAS,
+                EstimatedEff,
+                EstimRas,
+                FmRatio,
+                Diff_MLSS,
+                SRT
+            };
+            return array;
+        };
     };
 public:
     struct Output

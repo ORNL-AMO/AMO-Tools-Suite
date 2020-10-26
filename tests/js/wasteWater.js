@@ -75,6 +75,11 @@ test('WasteWaterTreatment 1', function (t) {
     t.equal(rnd(res.FieldOTR), rnd(0.94));
     t.equal(rnd(res.AeEnergy), rnd(70200));
     t.equal(rnd(res.AeCost), rnd(6318));
+
+    console.log(" ");
+    console.log("Calculations Table Begin");
+    console.log(JSON.stringify(res.calculationsTable));
+    console.log("Calculations Table End");
 });
 
 
@@ -148,6 +153,11 @@ test('WasteWaterTreatment 2', function (t) {
     t.equal(rnd(res.FieldOTR), rnd(1.98));
     t.equal(rnd(res.AeEnergy), rnd(982800));
     t.equal(rnd(res.AeCost), rnd(88452));
+
+    console.log(" ");
+    console.log("Calculations Table Begin");
+    console.log(JSON.stringify(res.calculationsTable));
+    console.log("Calculations Table End");
 });
 
 
@@ -220,4 +230,9 @@ test('WasteWaterTreatment 3', function (t) {
     t.equal(rnd(res.FieldOTR), rnd(1.640067));
     t.equal(rnd(res.AeEnergy), rnd(28080));
     t.equal(rnd(res.AeCost), rnd(2527.2));
+
+    console.log(" ");
+    console.log("Calculations Table Begin");
+    console.log(JSON.stringify(res.calculationsTable));
+    console.log("Calculations Table End");
 });
