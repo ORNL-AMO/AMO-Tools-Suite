@@ -28,7 +28,7 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a c
     CHECK(resBOff.kW_Calc == Approx(370.9));
     CHECK(resBOff.C_Calc == Approx(31.38));
     CHECK(resBOff.PerkW == Approx(0.820031));
-    CHECK(resBOff.C_Per == Approx()0.01);
+    CHECK(resBOff.C_Per == Approx(0.01));
     CHECK(resBOff.C_blow == Approx(2478.62));
     CHECK(resBOff.blowPer == Approx(0.789873));
     resBOff = ccBlow.calculateFromVIPFMeasured_BlowOff(440, 0.02152, 50, 0.6798);

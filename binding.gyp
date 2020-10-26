@@ -300,14 +300,14 @@
             ]
         },
         {
-          "target_name": "caCentrifugal",
+          "target_name": "compressedAir",
           'include_dirs': [
               'include',
               'include/calculator/util/CompressedAirCentrifugal.h',
               "<!(node -e \"require('nan')\")"
           ],
           'sources': [
-              'bindings/caCentrifugal.cpp',
+              'bindings/compressedAir.cpp',
               'src/calculator/util/CurveFitVal.cpp',
               'src/calculator/util/CompressedAirCentrifugal.cpp'
           ],
