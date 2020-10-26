@@ -287,6 +287,7 @@ WasteWaterTreatment::Output WasteWaterTreatment::calculate()
         EffluentNO3_N_W_Denit,
         AeEnergy,
         AeCost,
-        FieldOTR);
+        FieldOTR,
+        calcTable);
     return output;
 }

@@ -14,6 +14,7 @@
 #define AMO_TOOLS_SUITE_WASTEWATERTREATMENT_H
 
 
+#include <vector>
 class WasteWaterTreatment
 {
 public:
@@ -135,7 +136,8 @@ public:
 
             double AeEnergy,
             double AeCost,
-            double FieldOTR) : TotalAverageDailyFlowRate(TotalAverageDailyFlowRate),
+            double FieldOTR,
+            std::vector<CalculationsTable> calculationsTable) : TotalAverageDailyFlowRate(TotalAverageDailyFlowRate),
                                VolumeInService(VolumeInService),
                                InfluentBOD5Concentration(InfluentBOD5Concentration),
                                InfluentBOD5MassLoading(InfluentBOD5MassLoading),
@@ -165,7 +167,8 @@ public:
                                EffluentNO3_N_W_Denit(EffluentNO3_N_W_Denit),
                                AeEnergy(AeEnergy),
                                AeCost(AeCost),
-                               FieldOTR(FieldOTR)
+                               FieldOTR(FieldOTR),
+                               calculationsTable(calculationsTable)
         {
         }
         Output() = default;
@@ -201,6 +204,7 @@ public:
         double AeEnergy;
         double AeCost;
         double FieldOTR;
+        std::vector<CalculationsTable> calculationsTable;
     };
 
 
