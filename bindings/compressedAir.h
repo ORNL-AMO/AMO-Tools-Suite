@@ -35,9 +35,12 @@ void compressedAirCentrifugal()
         const double powerAtNoLoad = getDouble("powerAtNoLoad", inp);
         auto cacLUL = CompressedAirCentrifugal_LoadUnload(powerAtFullLoad, capacityAtFullLoad, powerAtNoLoad);
 
-        if(adjustForDischargePressure)
-            cacLUL.AdjustDischargePressure({capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
-                                           {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure});
+        if(adjustForDischargePressure) {
+            const double fullLoadPressure = getDouble("fullLoadPressure", inp);
+            cacLUL.AdjustDischargePressure(
+                    {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
+                    {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure);
+        }
 
         CompressedAirCentrifugalBase::Output output;
         if(computeFrom == CompressedAirCentrifugal::ComputeFrom::PercentagePower)
@@ -64,9 +67,13 @@ void compressedAirCentrifugal()
         const double capacityAtUnload = getDouble("capacityAtUnload", inp);
         auto cacMUL = CompressedAirCentrifugal_ModulationUnload(powerAtFullLoad, capacityAtFullLoad, powerAtNoLoad, capacityAtMaxFullFlow, powerAtUnload, capacityAtUnload);
 
-        if(adjustForDischargePressure)
-            cacMUL.AdjustDischargePressure({capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
-                                           {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure});
+        if(adjustForDischargePressure) {
+            const double fullLoadPressure = getDouble("fullLoadPressure", inp);
+            const double maxPressure = getDouble("maxPressure", inp);
+            cacMUL.AdjustDischargePressure(
+                    {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
+                    {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure, maxPressure);
+        }
 
         CompressedAirCentrifugalBase::Output output;
         if(computeFrom == CompressedAirCentrifugal::ComputeFrom::PercentagePower)
@@ -92,9 +99,12 @@ void compressedAirCentrifugal()
         const double percentageBlowOff = getDouble("percentageBlowOff", inp);
         auto cacBO = CompressedAirCentrifugal_BlowOff(powerAtFullLoad, capacityAtFullLoad, powerAtBlowOff, surgeFlow);
 
-        if(adjustForDischargePressure)
-            cacBO.AdjustDischargePressure({capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
-                                          {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure});
+        if(adjustForDischargePressure) {
+            const double fullLoadPressure = getDouble("fullLoadPressure", inp);
+            cacBO.AdjustDischargePressure(
+                    {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
+                    {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure);
+        }
 
         CompressedAirCentrifugalBase::OutputBlowOff output;
         if(computeFrom == CompressedAirCentrifugal::ComputeFrom::PercentagePower)

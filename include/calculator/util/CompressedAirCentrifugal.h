@@ -75,7 +75,7 @@ private:
     virtual CompressedAirCentrifugalBase::Output calculateFromCMeasured(double) {return Output();}
     virtual CompressedAirCentrifugalBase::Output calculateFromVIPFMeasured(double, double, double) {return Output();}
 
-    virtual void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure) {}
+    virtual void AdjustDischargePressure(std::vector<double>, std::vector<double>, double, double) {}
 };
 
 class CompressedAirCentrifugal: public CompressedAirCentrifugalBase {
@@ -97,14 +97,13 @@ public:
     CompressedAirCentrifugalBase::OutputBlowOff calculateFromCMeasured_BlowOff(double C) override;
     CompressedAirCentrifugalBase::OutputBlowOff calculateFromVIPFMeasured_BlowOff(double V, double I, double PF, double blowPer) override;
 
-    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure) override {
-        CurveFitVal curveFitValPsi(Capacity, DischargePressure, 2);
-        CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
+    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override {
+        if(P_fl > 0) {
+            CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
+            C_fl = curveFitValCap.calculate(P_fl);
 
-        C_fl = curveFitValCap.calculate(curveFitValPsi.calculate(C_fl_raw));
-        C_blow = curveFitValCap.calculate(curveFitValPsi.calculate(C_blow));
-
-        CPer_blow = C_blow / C_fl;
+            CPer_blow = C_blow / C_fl;
+        }
     }
 
 private:
@@ -126,11 +125,11 @@ public:
     CompressedAirCentrifugalBase::Output calculateFromCMeasured(double C) override;
     CompressedAirCentrifugalBase::Output calculateFromVIPFMeasured(double V, double I, double PF) override;
 
-    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure) override {
-        CurveFitVal curveFitValPsi(Capacity, DischargePressure, 2);
-        CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
-
-        C_fl = curveFitValCap.calculate(curveFitValPsi.calculate(C_fl_raw));
+    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override {
+        if(P_fl > 0) {
+            CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
+            C_fl = curveFitValCap.calculate(P_fl);
+        }
     }
 
 private:
@@ -156,16 +155,17 @@ public:
     CompressedAirCentrifugalBase::Output calculateFromCMeasured(double C) override;
     CompressedAirCentrifugalBase::Output calculateFromVIPFMeasured(double V, double I, double PF) override;
 
-    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure) override {
-        CurveFitVal curveFitValPsi(Capacity, DischargePressure, 2);
-        CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
+    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max) override {
+        if(P_fl > 0 || P_max > 0) {
+            CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
 
-        C_fl = curveFitValCap.calculate(curveFitValPsi.calculate(C_fl_raw));
-        C_max = curveFitValCap.calculate(curveFitValPsi.calculate(C_max_raw));
+            if(P_fl > 0) C_fl = curveFitValCap.calculate(P_fl);
+            if(P_max > 0) C_max = curveFitValCap.calculate(P_max);
 
-        CPer_max = C_max / C_fl;
-        CPer_ul = C_ul / C_fl;
-        CPer_ulB = C_ul / C_max;
+            CPer_max = C_max / C_fl;
+            CPer_ul = C_ul / C_fl;
+            CPer_ulB = C_ul / C_max;
+        }
     }
 
 private:

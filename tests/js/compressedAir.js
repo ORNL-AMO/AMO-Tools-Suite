@@ -22,6 +22,8 @@ test('CompressedAirCentrifugal LoadUnload', function (t) {
         controlType: 0,
         computeFrom: 0,
 
+        fullLoadPressure: 100,
+
         powerAtFullLoad: 452.3,
         capacityAtFullLoad: 3138,
 
@@ -95,6 +97,9 @@ test('CompressedAirCentrifugal ModulationUnload', function (t) {
         controlType: 1,
         computeFrom: 0,
 
+        fullLoadPressure: 100,
+        maxPressure: 58.23,
+
         powerAtFullLoad: 452.3,
         capacityAtFullLoad: 3138,
 
@@ -119,7 +124,7 @@ test('CompressedAirCentrifugal ModulationUnload', function (t) {
     input.adjustForDischargePressure = false;
     compare(bindings.CompressedAir(input), [425.162, 2820.95, 0.94, 0.93875]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [425.162, 2807, 0.94, 0.947507]);
+    compare(bindings.CompressedAir(input), [425.162, 2820.92, 0.94, 0.94]);
 
     input.computeFrom = 1;
     input.computeFromVal = 0.24;
@@ -133,7 +138,7 @@ test('CompressedAirCentrifugal ModulationUnload', function (t) {
     input.adjustForDischargePressure = false;
     compare(bindings.CompressedAir(input), [425.162, 2820.95, 0.94, 0.93875]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [425.162, 2807, 0.94, 0.947507]);
+    compare(bindings.CompressedAir(input), [425.162, 2820.92, 0.94, 0.94]);
 
     input.computeFrom = 3;
     input.computeFromVal = 753.12;
@@ -149,7 +154,7 @@ test('CompressedAirCentrifugal ModulationUnload', function (t) {
     input.adjustForDischargePressure = false;
     compare(bindings.CompressedAir(input), [425.174, 2821.02, 0.940026, 0.938777]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [425.174, 2807.06, 0.94, 0.947507]);
+    compare(bindings.CompressedAir(input), [425.174, 2821, 0.94, 0.94]);
 });
 
 test('CompressedAirCentrifugal BlowOff', function (t) {
@@ -169,6 +174,8 @@ test('CompressedAirCentrifugal BlowOff', function (t) {
         compressorType : 0,
         controlType: 2,
         computeFrom: 0,
+
+        fullLoadPressure: 100,
 
         powerAtFullLoad: 452.3,
         capacityAtFullLoad: 3138,
@@ -193,14 +200,14 @@ test('CompressedAirCentrifugal BlowOff', function (t) {
     input.percentageBlowOff = 0.6798;
     compare(bindings.CompressedAir(input), [370.886, 376.788, 0.82, 0.120073, 2133.21, 0.6798]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [370.886, 1080.56, 0.82, 0.344346, 2133.21, 0.6798]);
+    compare(bindings.CompressedAir(input), [370.886, 376.79, 0.82, 0.120073, 2133.21, 0.6798]);
 
     input.computeFrom = 1;
     input.computeFromVal = 0.01;
     input.adjustForDischargePressure = false;
     compare(bindings.CompressedAir(input), [370.9, 31.38, 0.820031, 0.01, 2478.62, 0.789873]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [370.9, 31.38, 0.820031, 0.01, 3182.39, 1.01415]);
+    compare(bindings.CompressedAir(input), [370.9, 31.38, 0.820031, 0.01, 2478.62, 0.789873]);
 
     input.computeFrom = 2;
     input.computeFromVal = 370.9;
@@ -208,14 +215,14 @@ test('CompressedAirCentrifugal BlowOff', function (t) {
     input.adjustForDischargePressure = false;
     compare(bindings.CompressedAir(input), [370.9, 376.788, 0.8200309, 0.120073, 2133.21, 0.6798]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [370.9, 1080.56, 0.8200301, 0.344346, 2133.21, 0.6798]);
+    compare(bindings.CompressedAir(input), [370.9, 376.79, 0.8200301, 0.120073, 2133.21, 0.6798]);
 
     input.computeFrom = 3;
     input.computeFromVal = 31.38;
     input.adjustForDischargePressure = false;
     compare(bindings.CompressedAir(input), [370.9, 31.38, 0.820031, 0.01, 2478.62, 0.789873]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [370.9, 31.38, 0.820031, 0.01, 3182.39, 1.01415]);
+    compare(bindings.CompressedAir(input), [370.9, 31.38, 0.820031, 0.01, 2478.62, 0.789873]);
 
     input.computeFrom = 4;
     input.computeFromVal = 50;
@@ -225,5 +232,5 @@ test('CompressedAirCentrifugal BlowOff', function (t) {
     input.percentageBlowOff = 0.6798;
     compare(bindings.CompressedAir(input), [370.885, 376.788, 0.82, 0.120073, 2133.21, 0.6798]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [370.885, 1080.56, 0.82, 0.344346, 2133.21, 0.6798]);
+    compare(bindings.CompressedAir(input), [370.885, 376.79, 0.82, 0.120073, 2133.21, 0.6798]);
 });
