@@ -118,12 +118,14 @@ NAN_METHOD(WasteWaterTreatment)
 
         auto calculationsTable = output.calculationsTable;
         auto ctArrayTable = New<Array>(calculationsTable.size());
-        for(unsigned i = 0; i < ctArrayTable->Length(); i++) {
+        for (unsigned i = 0; i < ctArrayTable->Length(); i++)
+        {
             auto calculationsTableArray = calculationsTable.at(i).getArray();
             auto ctArray = New<Array>(calculationsTableArray.size());
-            for(unsigned j = 0; j < ctArray->Length(); j++) ctArray->Set(j, New(calculationsTableArray[j]));
+            for (unsigned j = 0; j < ctArray->Length(); j++)
+                ctArray->Set(Nan::GetCurrentContext(), j, New(calculationsTableArray[j]));
 
-            ctArrayTable->Set(i, ctArray);
+            ctArrayTable->Set(Nan::GetCurrentContext(), i, ctArray);
         }
         Nan::Set(r, New("calculationsTable").ToLocalChecked(), ctArrayTable);
     }
