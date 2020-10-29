@@ -85,7 +85,9 @@ public:
 
 class CompressedAirCentrifugal_BlowOff: private CompressedAirCentrifugalBase{
 public:
-    CompressedAirCentrifugal_BlowOff(const double kW_fl, const double C_fl, const double kW_blow, const double C_blow) : CompressedAirCentrifugalBase(kW_fl, C_fl), C_blow(C_blow)
+    double C_fl_Adjusted = 0;
+
+    CompressedAirCentrifugal_BlowOff(const double kW_fl, const double C_fl, const double kW_blow, const double C_blow) : CompressedAirCentrifugalBase(kW_fl, C_fl), C_blow(C_blow), C_fl_Adjusted(C_fl)
     {
         CPer_blow = C_blow / C_fl;
         kWPer_blow = kW_blow / kW_fl;
@@ -100,7 +102,7 @@ public:
     void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override {
         if(P_fl > 0) {
             CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
-            C_fl = curveFitValCap.calculate(P_fl);
+            C_fl_Adjusted = C_fl = curveFitValCap.calculate(P_fl);
 
             CPer_blow = C_blow / C_fl;
         }
@@ -114,7 +116,9 @@ private:
 
 class CompressedAirCentrifugal_LoadUnload: private CompressedAirCentrifugalBase{
 public:
-    CompressedAirCentrifugal_LoadUnload(const double kW_fl, const double C_fl, const double kW_nl) : CompressedAirCentrifugalBase(kW_fl, C_fl)
+    double C_fl_Adjusted = 0;
+
+    CompressedAirCentrifugal_LoadUnload(const double kW_fl, const double C_fl, const double kW_nl) : CompressedAirCentrifugalBase(kW_fl, C_fl), C_fl_Adjusted(C_fl)
     {
         kWPer_nl = kW_nl / kW_fl;
     }
@@ -128,7 +132,7 @@ public:
     void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override {
         if(P_fl > 0) {
             CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
-            C_fl = curveFitValCap.calculate(P_fl);
+            C_fl_Adjusted = C_fl = curveFitValCap.calculate(P_fl);
         }
     }
 
@@ -140,7 +144,10 @@ private:
 
 class CompressedAirCentrifugal_ModulationUnload: private CompressedAirCentrifugalBase{
 public:
-    CompressedAirCentrifugal_ModulationUnload(const double kW_fl, const double C_fl, const double kW_nl, const double C_max, const double kW_ul, const double C_ul) : CompressedAirCentrifugalBase(kW_fl, C_fl), C_max(C_max), C_max_raw(C_max), C_ul(C_ul)
+    double C_fl_Adjusted = 0;
+    double C_max_Adjusted = 0;
+
+    CompressedAirCentrifugal_ModulationUnload(const double kW_fl, const double C_fl, const double kW_nl, const double C_max, const double kW_ul, const double C_ul): CompressedAirCentrifugalBase(kW_fl, C_fl), C_max(C_max), C_max_raw(C_max), C_ul(C_ul), C_fl_Adjusted(C_fl), C_max_Adjusted(C_max)
     {
         kWPer_nl = kW_nl / kW_fl;
         kWPer_ul = kW_ul / kW_fl;
@@ -159,8 +166,8 @@ public:
         if(P_fl > 0 || P_max > 0) {
             CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
 
-            if(P_fl > 0) C_fl = curveFitValCap.calculate(P_fl);
-            if(P_max > 0) C_max = curveFitValCap.calculate(P_max);
+            if(P_fl > 0) C_fl_Adjusted = C_fl = curveFitValCap.calculate(P_fl);
+            if(P_max > 0) C_max_Adjusted = C_max = curveFitValCap.calculate(P_max);
 
             CPer_max = C_max / C_fl;
             CPer_ul = C_ul / C_fl;

@@ -154,7 +154,10 @@ test('CompressedAirCentrifugal ModulationUnload', function (t) {
     input.adjustForDischargePressure = false;
     compare(bindings.CompressedAir(input), [425.174, 2821.02, 0.940026, 0.938777]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressedAir(input), [425.174, 2821, 0.94, 0.94]);
+    let res = bindings.CompressedAir(input);
+    compare(res, [425.174, 2821, 0.94, 0.94]);
+
+    console.log(" \n \nAdjusted Capactiy for Discharge Pressure Change test\nFull Load: ", rnd(res.capacityAtFullLoadAdjusted), "\nMaxFullFlow: ", rnd(res.capacityAtMaxFullFlowAdjusted), "\n ");
 });
 
 test('CompressedAirCentrifugal BlowOff', function (t) {

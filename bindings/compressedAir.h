@@ -40,6 +40,8 @@ void compressedAirCentrifugal()
             cacLUL.AdjustDischargePressure(
                     {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
                     {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure);
+
+            setR("capacityAtFullLoadAdjusted", cacLUL.C_fl_Adjusted);
         }
 
         CompressedAirCentrifugalBase::Output output;
@@ -73,6 +75,9 @@ void compressedAirCentrifugal()
             cacMUL.AdjustDischargePressure(
                     {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
                     {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure, maxPressure);
+
+            setR("capacityAtFullLoadAdjusted", cacMUL.C_fl_Adjusted);
+            setR("capacityAtMaxFullFlowAdjusted", cacMUL.C_max_Adjusted);
         }
 
         CompressedAirCentrifugalBase::Output output;
@@ -104,6 +109,8 @@ void compressedAirCentrifugal()
             cacBO.AdjustDischargePressure(
                     {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
                     {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure);
+
+            setR("capacityAtFullLoadAdjusted", cacBO.C_fl_Adjusted);
         }
 
         CompressedAirCentrifugalBase::OutputBlowOff output;
