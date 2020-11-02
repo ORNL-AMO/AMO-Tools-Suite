@@ -52,7 +52,7 @@ NAN_METHOD(WasteWaterTreatment)
     const double Speed = getDouble("Speed", inp);
     const double EnergyCostUnit = getDouble("EnergyCostUnit", inp);
 
-    WasteWaterTreatment::Output output = WasteWaterTreatment::WasteWaterTreatment(Temperature,
+    auto wwTreatment = WasteWaterTreatment::WasteWaterTreatment(Temperature,
                                                              So,
                                                              Volume,
                                                              FlowRate,
@@ -80,8 +80,8 @@ NAN_METHOD(WasteWaterTreatment)
                                                              OperatingTime,
                                                              TypeAerators,
                                                              Speed,
-                                                             EnergyCostUnit)
-                                             .calculate();
+                                                             EnergyCostUnit);
+    WasteWaterTreatment::Output output = wwTreatment.calculate();
 
     setR("TotalAverageDailyFlowRate", output.TotalAverageDailyFlowRate);
     setR("VolumeInService", output.VolumeInService);
