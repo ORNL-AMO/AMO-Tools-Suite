@@ -276,12 +276,12 @@
             "target_name": "wasteWater",
             'include_dirs': [
                 'include',
-                'include/wasteWater/WasteWaterTreatment.h',
+                'include/wasteWater/WasteWater_Treatment.h',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources': [
                 'bindings/wasteWater.cpp',
-                'src/wasteWater/WasteWaterTreatment.cpp'
+                'src/wasteWater/WasteWater_Treatment.cpp'
             ],
             "conditions": [
                 [ 'OS=="mac"', {
@@ -298,6 +298,34 @@
                     'cflags_cc': ['-fexceptions']
                 }]
             ]
+        },
+        {
+          "target_name": "compressedAir",
+          'include_dirs': [
+              'include',
+              'include/calculator/util/CompressedAirCentrifugal.h',
+              "<!(node -e \"require('nan')\")"
+          ],
+          'sources': [
+              'bindings/compressedAir.cpp',
+              'src/calculator/util/CurveFitVal.cpp',
+              'src/calculator/util/CompressedAirCentrifugal.cpp'
+          ],
+          "conditions": [
+              [ 'OS=="mac"', {
+                  "xcode_settings": {
+                      'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                      'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                      'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                      'CLANG_CXX_LIBRARY': 'libc++',
+                      'GCC_ENABLE_CPP_RTTI': 'YES',
+                      'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                  },
+              }],
+              [ 'OS=="linux"', {
+                  'cflags_cc': ['-fexceptions']
+              }]
+          ]
         }
     ]
 }

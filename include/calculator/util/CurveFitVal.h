@@ -29,7 +29,7 @@ public:
         std::vector<double> xcoord,
         std::vector<double> ycoord,
         const std::size_t pdegree,
-        const double loadFactor
+        const double loadFactor = 0
     ) :
         pdegree(pdegree),
         xcoord(std::move(xcoord)),
@@ -39,6 +39,8 @@ public:
         if (this->xcoord.size() != this->ycoord.size()) {
             throw std::runtime_error("X and Y coordinate vectors must be the same size");
         }
+
+        coeff = Fit_Coefficients();
     }
 
     /**
@@ -46,6 +48,7 @@ public:
      * @return double, curve fit value
      */
     double calculate() const;
+    double calculate(double) const;
 
 private:
     /**
@@ -60,6 +63,12 @@ private:
      * load factor (here is the x coordinate, whose corresponding y coordinate is returned.
      */
     double loadFactor;
+
+    /**
+     * Array to store the coefficients of the curve.
+     */
+    std::vector<double> coeff;
+    std::vector<double> Fit_Coefficients();
 };
 
 

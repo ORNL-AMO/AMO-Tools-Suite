@@ -1,10 +1,10 @@
 #include "catch.hpp"
-#include <wasteWater/WasteWaterTreatment.h>
+#include <wasteWater/WasteWater_Treatment.h>
 
 TEST_CASE("Waste Water Treatment", "[Test 1]")
 {
-    WasteWaterTreatment wasteWaterTreatment(20, 200, 1, 1, 40, 35, 0.85, 200, 20, 8, 10000, 3000, 0.1, 0.6, 60, 0.1, 8, 72, 2,4.5, 0.84, 0.92, 2.7, 150, 200, 24, 1, 100, 0.09);
-    WasteWaterTreatment::Output output = wasteWaterTreatment.calculate();
+    WasteWater_Treatment wasteWaterTreatment(20, 200, 1, 1, 40, 35, 0.85, 200, 20, 8, 10000, 3000, 0.1, 0.6, 60, 0.1, 8, 72, 2, 4.5, 0.84, 0.92, 2.7, 150, 200, 24, 1, 100, 0.09);
+    WasteWater_Treatment::Output output = wasteWaterTreatment.calculate();
 
     REQUIRE(output.TotalAverageDailyFlowRate == Approx(1.00));
     REQUIRE(output.VolumeInService == Approx(1.00));
