@@ -276,12 +276,12 @@
             "target_name": "wasteWater",
             'include_dirs': [
                 'include',
-                'include/wasteWater/WasteWaterTreatment.h',
+                'include/wasteWater/WasteWater_Treatment.h',
                 "<!(node -e \"require('nan')\")"
             ],
             'sources': [
                 'bindings/wasteWater.cpp',
-                'src/wasteWater/WasteWaterTreatment.cpp'
+                'src/wasteWater/WasteWater_Treatment.cpp'
             ],
             "conditions": [
                 [ 'OS=="mac"', {

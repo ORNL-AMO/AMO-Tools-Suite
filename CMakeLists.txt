@@ -200,7 +200,7 @@ set(SOURCE_FILES
         src/calculator/pump/PumpData.cpp
         src/calculator/motor/MotorData.cpp
         src/chillers/CoolingTower.cpp
-        src/wasteWater/WasteWaterTreatment.cpp)
+        src/wasteWater/WasteWater_Treatment.cpp)
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -386,7 +386,7 @@ set(INCLUDE_FILES
         include/sqlite/MotorData.h
         include/fast-cpp-csv-parser/csv.h
         include/chillers/CoolingTower.h
-        include/wasteWater/WasteWaterTreatment.h
+        include/wasteWater/WasteWater_Treatment.h
         )
 
 # Pending: PumpData calculator unit test
