@@ -65,7 +65,7 @@ WasteWaterTreatment::Output WasteWaterTreatment::calculate()
     //----------------------------------- Current Conditions Calculation--------------------------------------
     int numberRows = round(MaxDays / TimeIncrement);
     std::vector<CalculationsTable> calcTable(numberRows);
-    for (int i = 0; i < numberRows + 1; i++)
+    for (int i = 0; i < numberRows; i++)
     {
         calcTable[i].SRT = 1.0 + TimeIncrement * i;
     }

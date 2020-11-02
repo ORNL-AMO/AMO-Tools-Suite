@@ -12,7 +12,7 @@ TEST_CASE("Waste Water Treatment", "[Test 1]")
     REQUIRE(output.InfluentBOD5MassLoading == Approx(1668.00));
     REQUIRE(output.SecWWOxidNLoad == Approx(291.90));
     REQUIRE(output.SecWWTSSLoad == Approx(1668.00));
-    REQUIRE(output.FM_ratio == Approx(0.09));
+    REQUIRE(output.FM_ratio == Approx(0.086914));
     REQUIRE(output.SolidsRetentionTime == Approx(29.00));
     REQUIRE(output.MLSS == Approx(3082.50));
     REQUIRE(output.MLVSS == Approx(2301.12));
@@ -22,19 +22,19 @@ TEST_CASE("Waste Water Treatment", "[Test 1]")
     REQUIRE(output.TotalOxygenReqWDenit == Approx(2698.14));
     REQUIRE(output.TotalOxygenSupplied == Approx(3394.16));
     REQUIRE(output.MixingIntensityInReactor == Approx(150.00));
-    REQUIRE(output.RASFlowRate == Approx(0.45));
-    REQUIRE(output.RASRecyclePercentage == Approx(44.56));
-    REQUIRE(output.WASFlowRate == Approx(0.01));
+    REQUIRE(output.RASFlowRate == Approx(0.4456));
+    REQUIRE(output.RASRecyclePercentage == Approx(44.5608));
+    REQUIRE(output.WASFlowRate == Approx(0.009829));
     REQUIRE(output.RASTSSConcentration == Approx(10000.00));
     REQUIRE(output.TotalSludgeProduction == Approx(886.48));
     REQUIRE(output.ReactorDetentionTime == Approx(24.00));
-    REQUIRE(output.VOLR == Approx(12.48));
-    REQUIRE(output.EffluentCBOD5 == Approx(3.95));
+    REQUIRE(output.VOLR == Approx(12.4766));
+    REQUIRE(output.EffluentCBOD5 == Approx(3.94929));
     REQUIRE(output.EffluentTSS == Approx(8.00));
-    REQUIRE(output.EffluentAmmonia_N == Approx(0.35));
+    REQUIRE(output.EffluentAmmonia_N == Approx(0.34517));
     REQUIRE(output.EffluentNO3_N == Approx(26.17));
-    REQUIRE(output.EffluentNO3_N_W_Denit == Approx(7.85));
-    REQUIRE(output.FieldOTR == Approx(0.94));
+    REQUIRE(output.EffluentNO3_N_W_Denit == Approx(7.85103));
+    REQUIRE(output.FieldOTR == Approx(0.94282));
     REQUIRE(output.AeEnergy == Approx(70200));
     REQUIRE(output.AeCost == Approx(6318));
 }
