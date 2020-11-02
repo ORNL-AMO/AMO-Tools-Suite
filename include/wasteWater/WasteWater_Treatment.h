@@ -13,6 +13,7 @@
 #ifndef AMO_TOOLS_SUITE_WASTEWATER_TREATMENT_H
 #define AMO_TOOLS_SUITE_WASTEWATER_TREATMENT_H
 
+#include <vector>
 
 class WasteWater_Treatment
 {
