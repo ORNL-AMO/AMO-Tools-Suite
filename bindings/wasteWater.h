@@ -3,7 +3,7 @@
 
 #include <nan.h>
 #include <node.h>
-#include "wasteWater/WasteWaterTreatment.h"
+#include "wasteWater/WasteWater_Treatment.h"
 #include <string>
 #include <array>
 #include <vector>
@@ -52,7 +52,7 @@ NAN_METHOD(WasteWaterTreatment)
     const double Speed = getDouble("Speed", inp);
     const double EnergyCostUnit = getDouble("EnergyCostUnit", inp);
 
-    WasteWaterTreatment::Output output = WasteWaterTreatment::WasteWaterTreatment(Temperature,
+    auto wwTreatment = WasteWater_Treatment(Temperature,
                                                              So,
                                                              Volume,
                                                              FlowRate,
@@ -80,8 +80,8 @@ NAN_METHOD(WasteWaterTreatment)
                                                              OperatingTime,
                                                              TypeAerators,
                                                              Speed,
-                                                             EnergyCostUnit)
-                                             .calculate();
+                                                             EnergyCostUnit);
+    WasteWater_Treatment::Output output = wwTreatment.calculate();
 
     setR("TotalAverageDailyFlowRate", output.TotalAverageDailyFlowRate);
     setR("VolumeInService", output.VolumeInService);

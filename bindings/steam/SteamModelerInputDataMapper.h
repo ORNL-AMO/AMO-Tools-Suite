@@ -3,6 +3,7 @@
 
 #include "../NanDataConverters.h"
 #include <ssmt/api/SteamModelerInput.h>
+#include <cmath>
 
 class SteamModelerInputDataMapper {
 public:

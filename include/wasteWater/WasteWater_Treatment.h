@@ -10,11 +10,11 @@
  *
  */
 
-#ifndef AMO_TOOLS_SUITE_WASTEWATERTREATMENT_H
-#define AMO_TOOLS_SUITE_WASTEWATERTREATMENT_H
+#ifndef AMO_TOOLS_SUITE_WASTEWATER_TREATMENT_H
+#define AMO_TOOLS_SUITE_WASTEWATER_TREATMENT_H
 
 
-class WasteWaterTreatment
+class WasteWater_Treatment
 {
 public:
     struct CalculationsTable
@@ -233,11 +233,11 @@ public:
 	 * @param TypeAerators, double
 	 * @param Speed, double
 	 * @param EnergyCostUnit, double
-     * @return WasteWaterTreatment::Output results from calculat() function
+     * @return WasteWater_Treatment::Output results from calculat() function
      * 
 	 */
 public:
-    WasteWaterTreatment(
+    WasteWater_Treatment(
         double Temperature,
         double So,
         double Volume,
@@ -331,4 +331,4 @@ private:
     double Speed;
     double EnergyCostUnit;
 };
-#endif //AMO_TOOLS_SUITE_WASTEWATERTREATMENT_H
+#endif //AMO_TOOLS_SUITE_WASTEWATER_TREATMENT_H

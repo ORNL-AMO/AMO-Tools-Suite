@@ -21,7 +21,18 @@
  * @return curve fit value.
  */
 double CurveFitVal::calculate() const {
-    // Array to store Sigma X values
+    return calculate(loadFactor);
+}
+
+double CurveFitVal::calculate(double fitValue) const {
+    double curveFitVal = 0;
+    for (std::size_t i = 0; i < pdegree + 1; ++i) {
+        curveFitVal += coeff[i] * std::pow(fitValue, i);
+    }
+    return curveFitVal;
+}
+
+std::vector<double> CurveFitVal::Fit_Coefficients() {// Array to store Sigma X values
     std::vector<double> sigmaX(2 * pdegree + 1, 0);
     for (std::size_t i = 0; i < 2 * pdegree + 1; i++) {
         for (auto const val : xcoord) {
@@ -87,13 +98,5 @@ double CurveFitVal::calculate() const {
         }
         coeff[i] = coeff[i] / augMatrix[i][i];
     }
-
-    /**
-     * Returning the value instead of the coefficients
-     */
-    double curveFitVal = 0;
-    for (std::size_t i = 0; i < pdegreeplus; ++i) {
-        curveFitVal += coeff[i] * std::pow(loadFactor, i);
-    }
-    return curveFitVal;
+    return coeff;
 }

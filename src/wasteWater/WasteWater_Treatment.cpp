@@ -8,7 +8,7 @@
  *
  */
 
-#include "wasteWater/WasteWaterTreatment.h"
+#include "wasteWater/WasteWater_Treatment.h"
 #include <cmath>
 #include <vector>
 using namespace std;
@@ -38,7 +38,7 @@ double interpolate(vector<double> &xData, vector<double> &yData, double x, bool 
     return yL + dydx * (x - xL);         // linear interpolation
 }
 
-WasteWaterTreatment::Output WasteWaterTreatment::calculate()
+WasteWater_Treatment::Output WasteWater_Treatment::calculate()
 {
     double AdjustedMicrobialDecay = MicrobialDecay * pow((1.04), (Temperature - 20.0));
     double AdjustedMaxUtilizationRate = MaxUtilizationRate * pow((1.07), (Temperature - 20.0));
@@ -65,7 +65,7 @@ WasteWaterTreatment::Output WasteWaterTreatment::calculate()
     //----------------------------------- Current Conditions Calculation--------------------------------------
     int numberRows = round(MaxDays / TimeIncrement);
     std::vector<CalculationsTable> calcTable(numberRows);
-    for (int i = 0; i < numberRows + 1; i++)
+    for (int i = 0; i < numberRows; i++)
     {
         calcTable[i].SRT = 1.0 + TimeIncrement * i;
     }
@@ -256,7 +256,7 @@ WasteWaterTreatment::Output WasteWaterTreatment::calculate()
     double EffluentNO3_N = calcTable[iCount].EffNo3N;
     double EffluentNO3_N_W_Denit = calcTable[iCount].EffNo3N * 0.3;
 
-    WasteWaterTreatment::Output output(
+    WasteWater_Treatment::Output output(
         TotalAverageDailyFlowRate,
         VolumeInService,
         InfluentBOD5Concentration,

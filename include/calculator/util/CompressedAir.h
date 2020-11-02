@@ -14,6 +14,13 @@
 #include <stdexcept>
 #include <functional>
 
+class CompressedAir{
+public:
+    enum CompressorType {
+        Centrifugal
+    };
+};
+
 class PneumaticAirRequirement {
 public:
 	enum class PistonType {
