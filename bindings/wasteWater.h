@@ -51,69 +51,89 @@ NAN_METHOD(WasteWaterTreatment)
     const int TypeAerators = getInteger("TypeAerators", inp);
     const double Speed = getDouble("Speed", inp);
     const double EnergyCostUnit = getDouble("EnergyCostUnit", inp);
+    try
+    {
+        auto wwTreatment = WasteWater_Treatment(Temperature,
+                                              So,
+                                              Volume,
+                                              FlowRate,
+                                              InertVSS,
+                                              OxidizableN,
+                                              Biomass,
+                                              InfluentTSS,
+                                              InertInOrgTSS,
+                                              EffluentTSS,
+                                              RASTSS,
+                                              MLSSpar,
+                                              FractionBiomass,
+                                              BiomassYeild,
+                                              HalfSaturation,
+                                              MicrobialDecay,
+                                              MaxUtilizationRate,
+                                              MaxDays,
+                                              TimeIncrement,
+                                              OperatingDO,
+                                              Alpha,
+                                              Beta,
+                                              SOTR,
+                                              Aeration,
+                                              Elevation,
+                                              OperatingTime,
+                                              TypeAerators,
+                                              Speed,
+                                              EnergyCostUnit);
+        WasteWater_Treatment::Output output = wwTreatment.calculate();
 
-    auto wwTreatment = WasteWater_Treatment(Temperature,
-                                                             So,
-                                                             Volume,
-                                                             FlowRate,
-                                                             InertVSS,
-                                                             OxidizableN,
-                                                             Biomass,
-                                                             InfluentTSS,
-                                                             InertInOrgTSS,
-                                                             EffluentTSS,
-                                                             RASTSS,
-                                                             MLSSpar,
-                                                             FractionBiomass,
-                                                             BiomassYeild,
-                                                             HalfSaturation,
-                                                             MicrobialDecay,
-                                                             MaxUtilizationRate,
-                                                             MaxDays,
-                                                             TimeIncrement,
-                                                             OperatingDO,
-                                                             Alpha,
-                                                             Beta,
-                                                             SOTR,
-                                                             Aeration,
-                                                             Elevation,
-                                                             OperatingTime,
-                                                             TypeAerators,
-                                                             Speed,
-                                                             EnergyCostUnit);
-    WasteWater_Treatment::Output output = wwTreatment.calculate();
+        setR("TotalAverageDailyFlowRate", output.TotalAverageDailyFlowRate);
+        setR("VolumeInService", output.VolumeInService);
+        setR("InfluentBOD5Concentration", output.InfluentBOD5Concentration);
+        setR("InfluentBOD5MassLoading", output.InfluentBOD5MassLoading);
+        setR("SecWWOxidNLoad", output.SecWWOxidNLoad);
+        setR("SecWWTSSLoad", output.SecWWTSSLoad);
+        setR("FM_ratio", output.FM_ratio);
+        setR("SolidsRetentionTime", output.SolidsRetentionTime);
+        setR("MLSS", output.MLSS);
+        setR("MLVSS", output.MLVSS);
+        setR("TSSSludgeProduction", output.TSSSludgeProduction);
+        setR("TSSInActivatedSludgeEffluent", output.TSSInActivatedSludgeEffluent);
+        setR("TotalOxygenRequirements", output.TotalOxygenRequirements);
+        setR("TotalOxygenReqWDenit", output.TotalOxygenReqWDenit);
+        setR("TotalOxygenSupplied", output.TotalOxygenSupplied);
+        setR("MixingIntensityInReactor", output.MixingIntensityInReactor);
+        setR("RASFlowRate", output.RASFlowRate);
+        setR("RASRecyclePercentage", output.RASRecyclePercentage);
+        setR("WASFlowRate", output.WASFlowRate);
+        setR("RASTSSConcentration", output.RASTSSConcentration);
+        setR("TotalSludgeProduction", output.TotalSludgeProduction);
+        setR("ReactorDetentionTime", output.ReactorDetentionTime);
+        setR("VOLR", output.VOLR);
+        setR("EffluentCBOD5", output.EffluentCBOD5);
+        setR("EffluentTSS", output.EffluentTSS);
+        setR("EffluentAmmonia_N", output.EffluentAmmonia_N);
+        setR("EffluentNO3_N", output.EffluentNO3_N);
+        setR("EffluentNO3_N_W_Denit", output.EffluentNO3_N_W_Denit);
+        setR("AeEnergy", output.AeEnergy);
+        setR("AeCost", output.AeCost);
+        setR("FieldOTR", output.FieldOTR);
 
-    setR("TotalAverageDailyFlowRate", output.TotalAverageDailyFlowRate);
-    setR("VolumeInService", output.VolumeInService);
-    setR("InfluentBOD5Concentration", output.InfluentBOD5Concentration);
-    setR("InfluentBOD5MassLoading", output.InfluentBOD5MassLoading);
-    setR("SecWWOxidNLoad", output.SecWWOxidNLoad);
-    setR("SecWWTSSLoad", output.SecWWTSSLoad);
-    setR("FM_ratio", output.FM_ratio);
-    setR("SolidsRetentionTime", output.SolidsRetentionTime);
-    setR("MLSS", output.MLSS);
-    setR("MLVSS", output.MLVSS);
-    setR("TSSSludgeProduction", output.TSSSludgeProduction);
-    setR("TSSInActivatedSludgeEffluent", output.TSSInActivatedSludgeEffluent);
-    setR("TotalOxygenRequirements", output.TotalOxygenRequirements);
-    setR("TotalOxygenReqWDenit", output.TotalOxygenReqWDenit);
-    setR("TotalOxygenSupplied", output.TotalOxygenSupplied);
-    setR("MixingIntensityInReactor", output.MixingIntensityInReactor);
-    setR("RASFlowRate", output.RASFlowRate);
-    setR("RASRecyclePercentage", output.RASRecyclePercentage);
-    setR("WASFlowRate", output.WASFlowRate);
-    setR("RASTSSConcentration", output.RASTSSConcentration);
-    setR("TotalSludgeProduction", output.TotalSludgeProduction);
-    setR("ReactorDetentionTime", output.ReactorDetentionTime);
-    setR("VOLR", output.VOLR);
-    setR("EffluentCBOD5", output.EffluentCBOD5);
-    setR("EffluentTSS", output.EffluentTSS);
-    setR("EffluentAmmonia_N", output.EffluentAmmonia_N);
-    setR("EffluentNO3_N", output.EffluentNO3_N);
-    setR("EffluentNO3_N_W_Denit", output.EffluentNO3_N_W_Denit);
-    setR("AeEnergy", output.AeEnergy);
-    setR("AeCost", output.AeCost);
-    setR("FieldOTR", output.FieldOTR);
+        auto calculationsTable = output.calculationsTable;
+        auto ctArrayTable = New<Array>(calculationsTable.size());
+        for (unsigned i = 0; i < ctArrayTable->Length(); i++)
+        {
+            auto calculationsTableArray = calculationsTable.at(i).getArray();
+            auto ctArray = New<Array>(calculationsTableArray.size());
+            for (unsigned j = 0; j < ctArray->Length(); j++)
+                ctArray->Set(Nan::GetCurrentContext(), j, New(calculationsTableArray[j]));
+
+            ctArrayTable->Set(Nan::GetCurrentContext(), i, ctArray);
+        }
+        Nan::Set(r, New("calculationsTable").ToLocalChecked(), ctArrayTable);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in WasteWaterTreatment - wasteWater.h: " + what).c_str());
+    }
     info.GetReturnValue().Set(r);
 }
 #endif //AMO_TOOLS_SUITE_WASTEWATER_H

@@ -13,9 +13,13 @@
 #ifndef AMO_TOOLS_SUITE_WASTEWATER_TREATMENT_H
 #define AMO_TOOLS_SUITE_WASTEWATER_TREATMENT_H
 
-#include <vector>
 
+<<<<<<< HEAD:include/wasteWater/WasteWaterTreatment.h
+#include <vector>
+class WasteWaterTreatment
+=======
 class WasteWater_Treatment
+>>>>>>> origin/develop:include/wasteWater/WasteWater_Treatment.h
 {
 public:
     struct CalculationsTable
