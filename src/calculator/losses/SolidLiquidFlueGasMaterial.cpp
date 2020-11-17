@@ -84,6 +84,13 @@ double SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(double carbon, doub
 	return carbonBar * 14100 + hydrogenBar * 61100 + sulphurBar * 3980;
 }
 
+double SolidLiquidFlueGasMaterial::calculateStoichAirFuel(double carbon, double hydrogen, double sulphur,
+                                                             double inertAsh, double o2, double moisture,
+                                                             double nitrogen)
+{
+    return 333.333;//Placeholder
+}
+
 double SolidLiquidFlueGasMaterial::getHeatLoss() {
 	// adjust input by weight - step 1
 	const double percentTotalFuelComponents = carbon + hydrogen + sulphur + inertAsh + o2 + moisture + nitrogen;
