@@ -127,6 +127,7 @@ public:
 		heatingValue = calculateHeatingValueFuel();
 		heatingValueVolume = calculateHeatingValueFuelVolume();
 		specificGravity = calculateSpecificGravity();
+		stoichometricAir = calculateStoichometricAir();
 	}
 
     /**
@@ -145,6 +146,7 @@ public:
 	double getHeatingValue() const { return heatingValue; };
 	double getHeatingValueVolume() const { return heatingValueVolume; };
 	double getSpecificGravity() const { return specificGravity; };
+	double getStoichometricAir() const { return stoichometricAir; };
 
 	double calculateExcessAir(double flueGasO2);
 	double calculateO2(double excessAir);
@@ -176,6 +178,7 @@ private:
 	friend class SQLite;
 
 	double calculateSpecificGravity();
+	double calculateStoichometricAir();
 
 	void calculateCompByWeight();
 	double calculateSensibleHeat(double combustionAirTemp);
@@ -189,7 +192,7 @@ private:
 	GasCompositions(std::string substance, const double CH4, const double C2H6, const double N2,
 	                const double H2, const double C3H8, const double C4H10_CnH2n, const double H2O,
 	                const double CO, const double CO2, const double SO2, const double O2, const double heatingValue,
-	                const double heatingValueVolume, const double specificGravity) :
+	                const double heatingValueVolume, const double specificGravity, const double stoichometricAir = 0) :
 			substance(std::move(substance)),
 			totalPercent(CH4 + C2H6 + N2 + H2 + C3H8 + C4H10_CnH2n + H2O + CO + CO2 + SO2 + O2),
 			CH4(std::make_shared<GasProperties>([] (double t) { return 4.23 + 0.01177 * t; }, 16.042, 0.042417, CH4,
@@ -216,7 +219,8 @@ private:
 			                                   O2 / totalPercent, -32, 0, 0, 0, 0)),
 			heatingValue(heatingValue),
 			specificGravity(specificGravity),
-			heatingValueVolume(heatingValueVolume)
+			heatingValueVolume(heatingValueVolume),
+            stoichometricAir(stoichometricAir)
 	{
 		gasses = {{"CH4", this->CH4}, {"C2H6", this->C2H6}, {"N2", this->N2}, {"H2", this->H2},
 		          {"C3H8", this->C3H8}, {"C4H10_CnH2n", this->C4H10_CnH2n}, {"H2O", this->H2O}, {"CO", this->CO},
@@ -231,7 +235,7 @@ private:
 	double hH2Osat = 0, tH2Osat = 0;
 	double mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
-	double heatingValue = 0, specificGravity = 0, heatingValueVolume = 0;
+	double heatingValue = 0, specificGravity = 0, heatingValueVolume = 0, stoichometricAir = 0;
 };
 
 /**
