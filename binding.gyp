@@ -328,6 +328,33 @@
           ]
         },
         {
+          "target_name": "svi",
+          'include_dirs': [
+              'include',
+              'include/calculator/util/SludgeVolumeIndex.h',
+              "<!(node -e \"require('nan')\")"
+       ],
+       'sources': [
+              'bindings/svi.cpp',
+              'src/calculator/util/SludgeVolumeIndex.cpp'
+       ],
+       "conditions": [
+               [ 'OS=="mac"', {
+                  "xcode_settings": {
+                      'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                      'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                      'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                      'CLANG_CXX_LIBRARY': 'libc++',
+                      'GCC_ENABLE_CPP_RTTI': 'YES',
+                      'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+               },
+           }],
+           [ 'OS=="linux"', {
+                  'cflags_cc': ['-fexceptions']
+           }]
+       ]
+     },
+        {
           "target_name": "processHeat",
           'include_dirs': [
               'include',
