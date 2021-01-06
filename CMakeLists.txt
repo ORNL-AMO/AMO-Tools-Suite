@@ -198,6 +198,7 @@ set(SOURCE_FILES
         src/calculator/util/insulation/services/ReynoldsNumber.cpp
         src/calculator/util/insulation/services/ThermalResistance.cpp
         src/calculator/util/SteamReduction.cpp
+        src/calculator/util/SludgeVolumeIndex.cpp
         src/calculator/pump/PumpData.cpp
         src/calculator/motor/MotorData.cpp
         src/chillers/CoolingTower.cpp
@@ -376,6 +377,7 @@ set(INCLUDE_FILES
         include/calculator/util/insulation/services/ReynoldsNumber.h
         include/calculator/util/insulation/services/ThermalResistance.h
         include/calculator/util/SteamReduction.h
+        include/calculator/util/SludgeVolumeIndex.h
         include/calculator/motor/MotorData.h
         include/fans/CompressibilityFactor.h
         include/results/InputData.h
@@ -430,6 +432,7 @@ set(TEST_FILES
         tests/InsulatedTankReduction.unit.cpp
         tests/InsulationServices.unit.cpp
         tests/SteamReduction.unit.cpp
+        tests/SludgeVolumeIndex.unit.cpp
         tests/O2Enrichment.unit.cpp
         tests/FlowCalculationsEnergyUse.unit.cpp
         tests/EnergyInputExhaustGasLosses.unit.cpp
