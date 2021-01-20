@@ -274,8 +274,8 @@ test('Compressed Air Reduction Basic Test', function (t) {
     };
 
     var res = bindings.compressedAirReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(2211840.0));
-    t.equal(rnd(res.energyCost), rnd(265420.8));
+    t.equal(rnd(res.energyUse), rnd(276480000));
+    t.equal(rnd(res.energyCost), rnd(33177600));
     t.equal(rnd(res.flowRate), rnd(200000.0));
     t.equal(rnd(res.singleNozzleFlowRate), rnd(0.0));
     t.equal(rnd(res.consumption), rnd(103680000000.0));
@@ -419,8 +419,8 @@ test('Compressed Air Reduction Test All', function (t) {
     };
 
     var res = bindings.compressedAirReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(2211881.965779));
-    t.equal(rnd(res.energyCost), rnd(376063.261557));
+    t.equal(rnd(res.energyUse), rnd(276485245.722314));
+    t.equal(rnd(res.energyCost), rnd(33288866.912342));
     t.equal(rnd(res.flowRate), rnd(200005.187354));
     t.equal(rnd(res.singleNozzleFlowRate), rnd(1.778508));
     t.equal(rnd(res.consumption), rnd(103682889124.41486));
@@ -475,8 +475,8 @@ test('Compressed Air Leak Survey Basic Test', function (t) {
     };
 
     var res = bindings.compressedAirLeakSurvey(inp);
-    t.equal(rnd(res.annualTotalElectricity), rnd(55.296));
-    t.equal(rnd(res.annualTotalElectricityCost), rnd(6.63552));
+    t.equal(rnd(res.annualTotalElectricity), rnd(138.24));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(16.5888));
     t.equal(rnd(res.totalFlowRate), rnd(0.1));
     t.equal(rnd(res.annualTotalFlowRate), rnd(51840));
 });
@@ -647,8 +647,8 @@ test('Compressed Air Leak Survey Additional Tests', function (t) {
     };
 
     var res = bindings.compressedAirLeakSurvey(inp);
-    t.equal(rnd(res.annualTotalElectricity), rnd(77477.145735));
-    t.equal(rnd(res.annualTotalElectricityCost), rnd(9297.257488));
+    t.equal(rnd(res.annualTotalElectricity), rnd(309908.582941));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(37189.029953));
     t.equal(rnd(res.totalFlowRate), rnd(221.110576));
     t.equal(rnd(res.annualTotalFlowRate), rnd(116215718.602824));
 });
@@ -839,8 +839,8 @@ test('Compressed Air Leak Survey Test All', function (t) {
     };
 
     var res = bindings.compressedAirLeakSurvey(inp);
-    t.equal(rnd(res.annualTotalElectricity), rnd(1258198.724925));
-    t.equal(rnd(res.annualTotalElectricityCost), rnd(150983.846991));
+    t.equal(rnd(res.annualTotalElectricity), rnd(3145496.812312));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(377459.617477));
     t.equal(rnd(res.totalFlowRate), rnd(2275.388319)); // 2271.979473
     t.equal(rnd(res.annualTotalFlowRate), rnd(1179561304.616953));
 });
