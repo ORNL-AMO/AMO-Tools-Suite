@@ -92,7 +92,7 @@ double PressureMethodData::calculate()
 double CompressorElectricityData::calculate()
 {
     const double c = 1.0 / 60;
-    return c * this->compressorControlAdjustment * this->compressorSpecificPower;
+    return c * this->compressorSpecificPower;
 }
 
 void CompressedAirReduction::setCompressedAirReductionInputVec(std::vector<CompressedAirReductionInput> &compressedAirReductionInputVec)
