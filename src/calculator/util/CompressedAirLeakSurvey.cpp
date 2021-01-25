@@ -42,11 +42,12 @@ CompressedAirLeakSurvey::Output CompressedAirLeakSurvey::calculate()
             tmpAnnualTotalFlowRate = (compressedAirLeakSurveyInput.getHoursPerYear() * tmpTotalFlowRate * 60);
         }
 
-        //electricity calculation
+        //compressed air
         if (compressedAirLeakSurveyInput.getUtilityType() == 0)
         {
             tmpAnnualTotalElectricityCost = compressedAirLeakSurveyInput.getUtilityCost() * tmpAnnualTotalFlowRate;
         }
+        //electricity
         else if (compressedAirLeakSurveyInput.getUtilityType() == 1)
         {
             CompressorElectricityData compressorElectricityData = compressedAirLeakSurveyInput.getCompressorElectricityData();
