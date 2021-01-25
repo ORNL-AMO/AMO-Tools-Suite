@@ -60,6 +60,8 @@ NAN_METHOD(airHeatingUsingExhaust)
         setR("hxColdAir", output.hxColdAir);
         setR("hxOutletExhaust", output.hxOutletExhaust);
         setR("energySavings", output.energySavings);
+        setR("heatCapacityFlue", output.heatCapacityFlue);
+        setR("heatCapacityAir", output.heatCapacityAir);
 
         info.GetReturnValue().Set(r);
     }

@@ -14,10 +14,11 @@ class AirHeatingUsingExhaust {
 public:
     struct Output
     {
-        Output(double hxColdAir, double hxOutletExhaust, double energySavings) : hxColdAir(hxColdAir), hxOutletExhaust(hxOutletExhaust), energySavings(energySavings){}
+        Output(double hxColdAir, double hxOutletExhaust, double energySavings, double heatCapacityFlue, double heatCapacityAir) :
+        hxColdAir(hxColdAir), hxOutletExhaust(hxOutletExhaust), energySavings(energySavings), heatCapacityFlue(heatCapacityFlue), heatCapacityAir(heatCapacityAir) {}
 
         Output() = default;
-        double hxColdAir = 0, hxOutletExhaust = 0, energySavings = 0;
+        double hxColdAir = 0, hxOutletExhaust = 0, energySavings = 0, heatCapacityFlue = 0, heatCapacityAir = 0;
     };
 
     AirHeatingUsingExhaust(GasCompositions gasCompositions) {

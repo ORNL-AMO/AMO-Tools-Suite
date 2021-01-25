@@ -7,24 +7,26 @@ function rnd(value) {
 }
 
 test('AirHeatingUsingExhaust Gas', function (t) {
-    t.plan(4);
+    t.plan(6);
     t.type(bindings.airHeatingUsingExhaust, 'function');
 
     var compare = function(results, expected) {
         t.equal(rnd(results.hxColdAir), rnd(expected[0]));
         t.equal(rnd(results.hxOutletExhaust), rnd(expected[1]));
         t.equal(rnd(results.energySavings), rnd(expected[2]));
+        t.equal(rnd(results.heatCapacityFlue), rnd(expected[3]));
+        t.equal(rnd(results.heatCapacityAir), rnd(expected[4]));
     };
 
     var input = {
         flueTemperature: 400,
-        excessAir: 35.8,
+        excessAir: 0.358,
         fireRate: 8,
         airflow: 4000,
         inletTemperature: 45,
-        heaterEfficiency: 85,
-        hxEfficiency: 60,
-        operatingHours: 24,
+        heaterEfficiency: 0.85,
+        hxEfficiency: 0.60,
+        operatingHours: 4000,
 
         gasFuelType: true,
         substance: 'Gas',
@@ -41,28 +43,30 @@ test('AirHeatingUsingExhaust Gas', function (t) {
         O2: 0
     };
 
-    compare(bindings.airHeatingUsingExhaust(input), [95083200, 272.86, 26.847]);
+    compare(bindings.airHeatingUsingExhaust(input), [197829.27, 187, 930.96, 928.78, 4464]);
 });
 
 test('AirHeatingUsingExhaust Coal', function (t) {
-    t.plan(4);
+    t.plan(6);
     t.type(bindings.airHeatingUsingExhaust, 'function');
 
     var compare = function(results, expected) {
         t.equal(rnd(results.hxColdAir), rnd(expected[0]));
         t.equal(rnd(results.hxOutletExhaust), rnd(expected[1]));
         t.equal(rnd(results.energySavings), rnd(expected[2]));
+        t.equal(rnd(results.heatCapacityFlue), rnd(expected[3]));
+        t.equal(rnd(results.heatCapacityAir), rnd(expected[4]));
     };
 
     var input = {
         flueTemperature: 400,
-        excessAir: 35.8,
+        excessAir: 0.358,
         fireRate: 8,
         airflow: 4000,
         inletTemperature: 45,
-        heaterEfficiency: 85,
-        hxEfficiency: 60,
-        operatingHours: 24,
+        heaterEfficiency: 0.85,
+        hxEfficiency: 0.60,
+        operatingHours: 4000,
 
         gasFuelType: false,
         substance: 'Coal',
@@ -75,5 +79,5 @@ test('AirHeatingUsingExhaust Coal', function (t) {
         nitrogen: 1.5
     };
 
-    compare(bindings.airHeatingUsingExhaust(input), [95083200, -1200.659, 26.847]);
+    compare(bindings.airHeatingUsingExhaust(input), [15621.25, 187, 73.512, 73.339, 4464]);
 });
