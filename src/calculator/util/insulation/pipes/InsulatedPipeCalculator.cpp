@@ -2,6 +2,8 @@
 #include "calculator/util/insulation/objects/AirProperties.h"
 #include <cmath>
 #include <vector>
+#include <string>
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -35,11 +37,11 @@ void InsulatedPipeCalculator::validateInput(InsulatedPipeInput input)
     }
     if (input.getPipeMaterialCoefficients().size() != 5)
     {
-        throw "ERROR : Pipe - expected exactly 5 pipe material coefficients, received " + input.getPipeMaterialCoefficients().size();
+        throw "ERROR : Pipe - expected exactly 5 pipe material coefficients, received " + std::to_string(input.getPipeMaterialCoefficients().size());
     }
     if (input.getInsulationMaterialCoefficients().size() != 5)
     {
-        throw "ERROR : Pipe - expected exactly 5 insulation material coefficients, received " + input.getInsulationMaterialCoefficients().size();
+        throw "ERROR : Pipe - expected exactly 5 insulation material coefficients, received " + std::to_string(input.getInsulationMaterialCoefficients().size());
     }
 }
 

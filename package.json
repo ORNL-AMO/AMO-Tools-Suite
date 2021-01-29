@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-suite",
-  "version": "0.7.0",
+  "version": "0.9.0",
   "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
   "directories": {
     "test": "tests"
@@ -10,7 +10,7 @@
     "d3": "^4.13.0",
     "esm": "^3.2.25",
     "nan": "2.14.0",
-    "node-gyp": "4.0.0",
+    "node-gyp": "7.1.0",
     "utf-8-validate": "5.0.2"
   },
   "devDependencies": {
@@ -24,7 +24,8 @@
   "scripts": {
     "test": "tap debug tests/js/*.js",
     "at": "tap debug tests/at/js/*.js",
-    "install": "node-gyp rebuild"
+    "install": "node-gyp rebuild",
+    "test-waste-water": "tap debug tests/js/wasteWater.js"
   },
   "repository": {
     "type": "git",

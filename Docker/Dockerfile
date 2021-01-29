@@ -141,7 +141,7 @@ RUN npm run test
 
 RUN npm run at
 
-RUN doxygen Doxyfile.in
+#RUN doxygen Doxyfile.in
 #RUN cat debug.txt
 #--------------------------------------------------------------
 

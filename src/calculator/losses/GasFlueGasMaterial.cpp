@@ -87,6 +87,14 @@ double GasCompositions::calculateSpecificGravity() {
     return summationNumerator / (22.4 * 1.205);
 }
 
+double GasCompositions::calculateStoichometricAir() {
+    double o2Required = 0;
+    for ( auto const & compound : gasses ) {
+        o2Required  += compound.second->compAdjByVol * compound.second->o2Generated;
+    }
+    return o2Required * (1+ (1-0.209)/0.209);
+}
+
 double GasCompositions::calculateHeatingValueFuel() {
     double heatValueFuel = 0;
 	for ( auto const & comp : gasses ) {

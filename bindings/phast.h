@@ -97,7 +97,6 @@ NAN_METHOD(auxiliaryPowerLoss)
 {
     /**
  * Constructor
-:q
 
  * @param motorPhase double, current motor phase - this option is greyed out in PHAST 3.0
  * @param supplyVoltage double, supply voltage in volts
