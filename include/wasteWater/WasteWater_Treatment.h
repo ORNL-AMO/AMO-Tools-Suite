@@ -240,6 +240,110 @@ public:
     };
 
 
+public:
+    struct OutputWithoutTable
+    {
+        OutputWithoutTable(
+            double TotalAverageDailyFlowRate,
+            double VolumeInService,
+            double InfluentBOD5Concentration,
+            double InfluentBOD5MassLoading,
+            double SecWWOxidNLoad,
+            double SecWWTSSLoad,
+            double FM_ratio,
+            double SolidsRetentionTime,
+            double MLSS,
+            double MLVSS,
+            double TSSSludgeProduction,
+            double TSSInActivatedSludgeEffluent,
+            double TotalOxygenRequirements,
+            double TotalOxygenReqWDenit,
+            double TotalOxygenSupplied,
+            double MixingIntensityInReactor,
+            double RASFlowRate,
+            double RASRecyclePercentage,
+            double WASFlowRate,
+            double RASTSSConcentration,
+            double TotalSludgeProduction,
+            double ReactorDetentionTime,
+            double VOLR,
+            double EffluentCBOD5,
+            double EffluentTSS,
+            double EffluentAmmonia_N,
+            double EffluentNO3_N,
+            double EffluentNO3_N_W_Denit,
+
+            double AeEnergy,
+            double AeCost,
+            double FieldOTR) : TotalAverageDailyFlowRate(TotalAverageDailyFlowRate),
+                               VolumeInService(VolumeInService),
+                               InfluentBOD5Concentration(InfluentBOD5Concentration),
+                               InfluentBOD5MassLoading(InfluentBOD5MassLoading),
+                               SecWWOxidNLoad(SecWWOxidNLoad),
+                               SecWWTSSLoad(SecWWTSSLoad),
+                               FM_ratio(FM_ratio),
+                               SolidsRetentionTime(SolidsRetentionTime),
+                               MLSS(MLSS),
+                               MLVSS(MLVSS),
+                               TSSSludgeProduction(TSSSludgeProduction),
+                               TSSInActivatedSludgeEffluent(TSSInActivatedSludgeEffluent),
+                               TotalOxygenRequirements(TotalOxygenRequirements),
+                               TotalOxygenReqWDenit(TotalOxygenReqWDenit),
+                               TotalOxygenSupplied(TotalOxygenSupplied),
+                               MixingIntensityInReactor(MixingIntensityInReactor),
+                               RASFlowRate(RASFlowRate),
+                               RASRecyclePercentage(RASRecyclePercentage),
+                               WASFlowRate(WASFlowRate),
+                               RASTSSConcentration(RASTSSConcentration),
+                               TotalSludgeProduction(TotalSludgeProduction),
+                               ReactorDetentionTime(ReactorDetentionTime),
+                               VOLR(VOLR),
+                               EffluentCBOD5(EffluentCBOD5),
+                               EffluentTSS(EffluentTSS),
+                               EffluentAmmonia_N(EffluentAmmonia_N),
+                               EffluentNO3_N(EffluentNO3_N),
+                               EffluentNO3_N_W_Denit(EffluentNO3_N_W_Denit),
+                               AeEnergy(AeEnergy),
+                               AeCost(AeCost),
+                               FieldOTR(FieldOTR)
+        {
+        }
+        OutputWithoutTable() = default;
+        double TotalAverageDailyFlowRate;
+        double VolumeInService;
+        double InfluentBOD5Concentration;
+        double InfluentBOD5MassLoading;
+        double SecWWOxidNLoad;
+        double SecWWTSSLoad;
+        double FM_ratio;
+        double SolidsRetentionTime;
+        double MLSS;
+        double MLVSS;
+        double TSSSludgeProduction;
+        double TSSInActivatedSludgeEffluent;
+        double TotalOxygenRequirements;
+        double TotalOxygenReqWDenit;
+        double TotalOxygenSupplied;
+        double MixingIntensityInReactor;
+        double RASFlowRate;
+        double RASRecyclePercentage;
+        double WASFlowRate;
+        double RASTSSConcentration;
+        double TotalSludgeProduction;
+        double ReactorDetentionTime;
+        double VOLR;
+        double EffluentCBOD5;
+        double EffluentTSS;
+        double EffluentAmmonia_N;
+        double EffluentNO3_N;
+        double EffluentNO3_N_W_Denit;
+
+        double AeEnergy;
+        double AeCost;
+        double FieldOTR;
+    };
+
+
 	/**
 	 * @param Temperature, double
 	 * @param So, double
@@ -302,7 +406,8 @@ public:
         double OperatingTime,
         int TypeAerators,
         double Speed,
-        double EnergyCostUnit)
+        double EnergyCostUnit,
+        double DefinedSRT = 1)
         : Temperature(Temperature),
           So(So),
           Volume(Volume),
@@ -331,9 +436,11 @@ public:
           OperatingTime(OperatingTime),
           TypeAerators(TypeAerators),
           Speed(Speed),
-          EnergyCostUnit(EnergyCostUnit){};
+          EnergyCostUnit(EnergyCostUnit),
+          DefinedSRT(DefinedSRT){};
 
     Output calculate();
+    OutputWithoutTable calculateGivenSRT();
 
 private:
     double Temperature;
@@ -366,5 +473,6 @@ private:
     int TypeAerators;
     double Speed;
     double EnergyCostUnit;
+    double DefinedSRT;
 };
 #endif //AMO_TOOLS_SUITE_WASTEWATER_TREATMENT_H
