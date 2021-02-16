@@ -81,3 +81,29 @@ test('AirHeatingUsingExhaust Coal', function (t) {
 
     compare(bindings.airHeatingUsingExhaust(input), [15621.25, 187, 73.512, 73.339, 4464]);
 });
+
+test('WaterHeatingUsingExhaust ChillerAbsorption', function (t) {
+    t.plan(6);
+    t.type(bindings.waterHeatingUsingExhaust, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.recoveredHeat), rnd(expected[0]));
+        t.equal(rnd(results.hotWaterFlow), rnd(expected[1]));
+        t.equal(rnd(results.tonsRefrigeration), rnd(expected[2]));
+        t.equal(rnd(results.capacityChiller), rnd(expected[3]));
+        t.equal(rnd(results.electricalEnergy), rnd(expected[4]));
+    };
+
+    var input = {
+        availableHeat: 0.69,
+        heatInput: 6000000,
+        hxEfficiency: 0.7,
+        chillerInTemperature: 190,
+        chillerOutTemperature: 170,
+        copChiller: 0.73,
+        chillerEfficiency: 0.88,
+        copCompressor: 5
+    };
+
+    compare(bindings.waterHeatingUsingExhaust(input), [1302000, 7810.437912, 79.205, 69.7004, 167280.96]);
+});
