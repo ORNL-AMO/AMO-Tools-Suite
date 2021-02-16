@@ -17,6 +17,7 @@
 #include <string>
 #include <cmath>
 #include <memory>
+#include <stdexcept>
 
 /**
  * Gas Properties class

@@ -359,13 +359,15 @@
           'include_dirs': [
               'include',
               'include/calculator/processHeat/AirHeatingUsingExhaust.h',
+              'include/calculator/processHeat/WaterHeatingUsingExhaust.h',
               "<!(node -e \"require('nan')\")"
           ],
           'sources': [
               'bindings/processHeat.cpp',
               'src/calculator/losses/GasFlueGasMaterial.cpp',
               'src/calculator/losses/SolidLiquidFlueGasMaterial.cpp',
-              'src/calculator/processHeat/AirHeatingUsingExhaust.cpp'
+              'src/calculator/processHeat/AirHeatingUsingExhaust.cpp',
+              'src/calculator/processHeat/WaterHeatingUsingExhaust.cpp'
           ],
           "conditions": [
               [ 'OS=="mac"', {

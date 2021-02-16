@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include <calculator/processHeat/AirHeatingUsingExhaust.h>
+#include <calculator/processHeat/WaterHeatingUsingExhaust.h>
 
 TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]" ) {
     GasCompositions gas("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
@@ -17,4 +18,12 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
     CHECK(res.energySavings == Approx(73.512));
     CHECK(res.heatCapacityFlue == Approx(73.339));
     CHECK(res.heatCapacityAir == Approx(4464));
+
+
+    auto resChillerAbsorpEnergy = WaterHeatingUsingExhaust().calculate(0.69, 6000000, 0.7, 190, 170, 0.73, 0.88, 5);
+    CHECK(resChillerAbsorpEnergy.recoveredHeat == Approx(1302000));
+    CHECK(resChillerAbsorpEnergy.hotWaterFlow == Approx(7810.437912));
+    CHECK(resChillerAbsorpEnergy.tonsRefrigeration == Approx(79.205));
+    CHECK(resChillerAbsorpEnergy.capacityChiller == Approx(69.7004));
+    CHECK(resChillerAbsorpEnergy.electricalEnergy == Approx(167280.96));
 }
