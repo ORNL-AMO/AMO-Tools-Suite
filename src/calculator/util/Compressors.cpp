@@ -1,6 +1,13 @@
-//
-// Created by 7bo on 10/12/2020.
-//
+/**
+ * @file
+ * @brief Calculate estimated power(kW) consumption and air flow(acfm) for a compressor based on control type.
+ *
+ *
+ *
+ * @author Omer Aziz (omerb)
+ * @bug No known bugs.
+ *
+ */
 
 #include <algorithm>
 #include <math.h>

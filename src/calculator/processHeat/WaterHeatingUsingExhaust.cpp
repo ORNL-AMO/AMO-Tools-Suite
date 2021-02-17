@@ -1,6 +1,13 @@
-//
-// Created by 7bo on 2/16/2021.
-//
+/**
+ * @file
+ * @brief Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in place of a compressor.
+ *
+ *
+ *
+ * @author Omer Aziz (omerb)
+ * @bug No known bugs.
+ *
+ */
 
 #include "calculator/processHeat/WaterHeatingUsingExhaust.h"
 

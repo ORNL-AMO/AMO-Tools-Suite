@@ -1,6 +1,13 @@
-//
-// Created by 7bo on 11/17/2020.
-//
+/**
+ * @file
+ * @brief Estimate maximum air flow that can be heated by using exhaust gas heat of flue gases from a furnace or oven or a boiler.
+ *
+ *
+ *
+ * @author Omer Aziz (omerb)
+ * @bug No known bugs.
+ *
+ */
 
 #include <algorithm>
 #include "calculator/processHeat/AirHeatingUsingExhaust.h"

@@ -1,3 +1,14 @@
+/**
+ * @file
+ * @brief State point analysis for rate of activated sludge.
+ *
+ *
+ *
+ * @author Omer Aziz (omerb)
+ * @bug No known bugs.
+ *
+ */
+
 #ifndef AMO_TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
 #define AMO_TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
 
@@ -33,8 +44,40 @@ public:
         std::vector<GraphDataPoint> GraphData;
     };
 
+    /**
+     *
+     * @param sviParameter double
+     * @param sviValue  double
+     * @param numberOfClarifiers double
+     * @param areaOfClarifier double
+     * @param MLSS double
+     * @param influentFlow double
+     * @param rasFlow double
+     * @param sludgeSettlingVelocity double
+     *
+     */
+
     SludgeVolumeIndex(SVIParameter sviParameter, double sviValue, int numberOfClarifiers, double areaOfClarifier, double MLSS, double influentFlow, double rasFlow, double sludgeSettlingVelocity) :
             sviParameter(sviParameter), sviValue(sviValue), numberOfClarifiers(numberOfClarifiers), areaOfClarifier(areaOfClarifier), MLSS(MLSS), influentFlow(influentFlow), rasFlow(rasFlow), sludgeSettlingVelocity(sludgeSettlingVelocity) {}
+
+    /**
+     *
+     * @return Output
+     * @param TotalAreaClarifier double
+     * @param SurfaceOverflow double
+     * @param AppliedSolidsLoading double
+     * @param RasConcentration double
+     * @param UnderFlowRateX2 double
+     * @param UnderFlowRateY1 double
+     * @param OverFlowRateX2 double
+     * @param OverFlowRateY2 double
+     * @param StatePointX double
+     * @param StatePointY double
+     * @param GraphData (Computes and populates that can be retrieved)
+     * @param          SolidsConcentration double
+     * @param          SolidsFlux double
+     *
+    */
 
     Output calculate();
 

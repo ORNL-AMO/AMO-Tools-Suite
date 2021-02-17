@@ -1,3 +1,14 @@
+/**
+ * @file
+ * @brief State point analysis for rate of activated sludge.
+ *
+ *
+ *
+ * @author Omer Aziz (omerb)
+ * @bug No known bugs.
+ *
+ */
+
 #include <vector>
 #include "calculator/util/SludgeVolumeIndex.h"
 #include <cmath>
