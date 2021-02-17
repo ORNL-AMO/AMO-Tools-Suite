@@ -7,6 +7,7 @@
 #include <iostream>
 #include "./NanDataConverters.h"
 #include "calculator/processHeat/AirHeatingUsingExhaust.h"
+#include "calculator/processHeat/WaterHeatingUsingExhaust.h"
 
 using namespace Nan;
 using namespace v8;
@@ -68,6 +69,39 @@ NAN_METHOD(airHeatingUsingExhaust)
     catch (std::runtime_error const &e)
     {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in ProcessHeat - calculator: " + what).c_str());
+        ThrowError(std::string("std::runtime_error thrown in Air ProcessHeat - calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(waterHeatingUsingExhaust)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double availableHeat = getDouble("availableHeat", inp);
+        const double heatInput = getDouble("heatInput", inp);
+        const double hxEfficiency = getDouble("hxEfficiency", inp);
+        const double chillerInTemperature = getDouble("chillerInTemperature", inp);
+        const double chillerOutTemperature = getDouble("chillerOutTemperature", inp);
+        const double copChiller = getDouble("copChiller", inp);
+        const double chillerEfficiency = getDouble("chillerEfficiency", inp);
+        const double copCompressor = getDouble("copCompressor", inp);
+
+        auto output = WaterHeatingUsingExhaust().calculate(availableHeat,heatInput,hxEfficiency,chillerInTemperature,chillerOutTemperature,copChiller,chillerEfficiency,copCompressor);
+
+        setR("recoveredHeat", output.recoveredHeat);
+        setR("hotWaterFlow", output.hotWaterFlow);
+        setR("tonsRefrigeration", output.tonsRefrigeration);
+        setR("capacityChiller", output.capacityChiller);
+        setR("electricalEnergy", output.electricalEnergy);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Water ProcessHeat - calculator: " + what).c_str());
     }
 }
