@@ -181,7 +181,7 @@ set(SOURCE_FILES
         src/calculator/util/CompressedAirReduction.cpp
         src/calculator/util/CompressedAirPressureReduction.cpp
         src/calculator/util/CompressedAirLeakSurvey.cpp
-        src/calculator/util/CompressedAirCentrifugal.cpp
+        src/calculator/util/Compressors.cpp
         src/calculator/processHeat/AirHeatingUsingExhaust.cpp
         src/calculator/processHeat/WaterHeatingUsingExhaust.cpp
         src/calculator/util/WaterReduction.cpp
@@ -361,7 +361,7 @@ set(INCLUDE_FILES
         include/calculator/util/CompressedAirReduction.h
         include/calculator/util/CompressedAirLeakSurvey.h
         include/calculator/util/CompressedAirPressureReduction.h
-        include/calculator/util/CompressedAirCentrifugal.h
+        include/calculator/util/Compressors.h
         include/calculator/processHeat/AirHeatingUsingExhaust.h
         include/calculator/processHeat/WaterHeatingUsingExhaust.h
         include/calculator/util/WaterReduction.h
@@ -427,7 +427,7 @@ set(TEST_FILES
         tests/CompressedAirReduction.unit.cpp
         tests/CompressedAirLeakSurvey.unit.cpp
         tests/CompressedAirPressureReduction.unit.cpp
-        tests/CompressedAirCentrifugal.unit.cpp
+        tests/Compressors.unit.cpp
         tests/ProcessHeat.unit.cpp
         tests/WaterReduction.unit.cpp
         tests/InsulatedPipeReduction.unit.cpp

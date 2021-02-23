@@ -1,8 +1,8 @@
 #include "catch.hpp"
-#include <calculator/util/CompressedAirCentrifugal.h>
+#include <calculator/util/Compressors.h>
 
-TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a centrifugal compressors based on control type", "[Power-Flow-Calculations]" ) {
-    auto ccBlow = CompressedAirCentrifugal_BlowOff(452.3, 3138, 370.9, 2510);
+TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a Compressor based on control type", "[Power-Flow-Calculations]" ) {
+    auto ccBlow = Compressors_Centrifugal_BlowOff(452.3, 3138, 370.9, 2510);
     auto resBOff = ccBlow.calculateFromPerkW_BlowOff(0.82, 0.6798);
     CHECK(resBOff.kW_Calc == Approx(370.886));
     CHECK(resBOff.C_Calc == Approx(376.788));
@@ -77,7 +77,7 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a c
     CHECK(resBOff.blowPer == Approx(0.6798));
 
 
-    auto cclUL = CompressedAirCentrifugal_LoadUnload(452.3, 3138, 71.3);
+    auto cclUL = Compressors_Centrifugal_LoadUnload(452.3, 3138, 71.3);
     auto resLul = cclUL.calculateFromPerkW(0.36);
     CHECK(resLul.kW_Calc == Approx(162.828));
     CHECK(resLul.C_Calc == Approx(753.12));
@@ -131,7 +131,7 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a c
     CHECK(resLul.PerkW == Approx(0.3600828));
     CHECK(resLul.C_Per == Approx(0.24));
 
-    auto ccMuL = CompressedAirCentrifugal_ModulationUnload(452.3, 3138, 71.3, 3005, 411.9, 2731);
+    auto ccMuL = Compressors_Centrifugal_ModulationUnload(452.3, 3138, 71.3, 3005, 411.9, 2731);
     auto resMuL = ccMuL.calculateFromPerkW(0.94);
     CHECK(resMuL.kW_Calc == Approx(425.162));
     CHECK(resMuL.C_Calc == Approx(2820.95));
@@ -184,4 +184,179 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a c
     CHECK(resMuL.C_Calc == Approx(2821.02));
     CHECK(resMuL.PerkW == Approx(0.940026));
     CHECK(resMuL.C_Per == Approx(0.938777));
+
+
+    auto cMWOuL = Compressors_ModulationWOUnload(85.4, 473, 55.3);
+    auto resMWOuL = cMWOuL.calculateFromPerkW(0.89);
+    CHECK(resMWOuL.kW_Calc == Approx(76.006));
+    CHECK(resMWOuL.C_Calc == Approx(325.38));
+    CHECK(resMWOuL.PerkW == Approx(0.89));
+    CHECK(resMWOuL.C_Per == Approx(0.69));
+    resMWOuL = cMWOuL.calculateFromPerC(1.66173);
+    CHECK(resMWOuL.kW_Calc == Approx(105.32));
+    CHECK(resMWOuL.C_Calc == Approx(786));
+    CHECK(resMWOuL.PerkW == Approx(1.23326));
+    CHECK(resMWOuL.C_Per == Approx(1.66173));
+    resMWOuL = cMWOuL.calculateFromkWMeasured(75.9);
+    CHECK(resMWOuL.kW_Calc == Approx(75.9));
+    CHECK(resMWOuL.C_Calc == Approx(323.71));
+    CHECK(resMWOuL.PerkW == Approx(0.89));
+    CHECK(resMWOuL.C_Per == Approx(0.68));
+    resMWOuL = cMWOuL.calculateFromCMeasured(786);
+    CHECK(resMWOuL.kW_Calc == Approx(105.32));
+    CHECK(resMWOuL.C_Calc == Approx(786));
+    CHECK(resMWOuL.PerkW == Approx(1.23326));
+    CHECK(resMWOuL.C_Per == Approx(1.66173));
+    resMWOuL = cMWOuL.calculateFromVIPFMeasured(440, 0.02467, 50);
+    CHECK(resMWOuL.kW_Calc == Approx(80.278));
+    CHECK(resMWOuL.C_Calc == Approx(392.51));
+    CHECK(resMWOuL.PerkW == Approx(0.94));
+    CHECK(resMWOuL.C_Per == Approx(0.83));
+
+    cMWOuL.Pressure_InletCorrection(473, 105, 1.4, 100, 14.5, 0.917, 110, 110, 14.7, true, 14.7);
+    CHECK(cMWOuL.kW_fl_Adjusted == Approx(90.07));
+    CHECK(cMWOuL.C_fl_Adjusted == Approx(469.46));
+
+    resMWOuL = cMWOuL.calculateFromPerkW(0.89);
+    CHECK(resMWOuL.kW_Calc == Approx(80.1623));
+    CHECK(resMWOuL.C_Calc == Approx(335.69));
+    CHECK(resMWOuL.PerkW == Approx(0.89));
+    CHECK(resMWOuL.C_Per == Approx(0.72));
+    resMWOuL = cMWOuL.calculateFromPerC(1.66173);
+    CHECK(resMWOuL.kW_Calc == Approx(113.08));
+    CHECK(resMWOuL.C_Calc == Approx(780.116));
+    CHECK(resMWOuL.PerkW == Approx(1.25547));
+    CHECK(resMWOuL.C_Per == Approx(1.66173));
+    resMWOuL = cMWOuL.calculateFromkWMeasured(75.9);
+    CHECK(resMWOuL.kW_Calc == Approx(75.9));
+    CHECK(resMWOuL.C_Calc == Approx(278.14));
+    CHECK(resMWOuL.PerkW == Approx(0.84));
+    CHECK(resMWOuL.C_Per == Approx(0.59));
+    resMWOuL = cMWOuL.calculateFromCMeasured(786);
+    CHECK(resMWOuL.kW_Calc == Approx(113.51));
+    CHECK(resMWOuL.C_Calc == Approx(786));
+    CHECK(resMWOuL.PerkW == Approx(1.26024));
+    CHECK(resMWOuL.C_Per == Approx(1.67426));
+    resMWOuL = cMWOuL.calculateFromVIPFMeasured(440, 0.02467, 50);
+    CHECK(resMWOuL.kW_Calc == Approx(84.6681));
+    CHECK(resMWOuL.C_Calc == Approx(396.52));
+    CHECK(resMWOuL.PerkW == Approx(0.94));
+    CHECK(resMWOuL.C_Per == Approx(0.84));
+
+    auto cSS = Compressors_StartStop(89.5, 560, 1.05, 1);
+    auto resSS = cSS.calculateFromPerkW(0.205);
+    CHECK(resSS.kW_Calc == Approx(18.3475));
+    CHECK(resSS.C_Calc == Approx(112));
+    CHECK(resSS.PerkW == Approx(0.21));
+    CHECK(resSS.C_Per == Approx(0.2));
+    resSS = cSS.calculateFromPerC(0.2);
+    CHECK(resSS.kW_Calc == Approx(18.35));
+    CHECK(resSS.C_Calc == Approx(112));
+    CHECK(resSS.PerkW == Approx(0.20503));
+    CHECK(resSS.C_Per == Approx(0.2));
+    resSS = cSS.calculateFromkWMeasured(18.35);
+    CHECK(resSS.kW_Calc == Approx(18.35));
+    CHECK(resSS.C_Calc == Approx(112.015));
+    CHECK(resSS.PerkW == Approx(0.21));
+    CHECK(resSS.C_Per == Approx(0.2));
+    resSS = cSS.calculateFromCMeasured(112);
+    CHECK(resSS.kW_Calc == Approx(18.35));
+    CHECK(resSS.C_Calc == Approx(112));
+    CHECK(resSS.PerkW == Approx(0.20503));
+    CHECK(resSS.C_Per == Approx(0.2));
+    resSS = cSS.calculateFromVIPFMeasured(440, 0.02467, 50);
+    CHECK(resSS.kW_Calc == Approx(84.1323));
+    CHECK(resSS.C_Calc == Approx(513.575));
+    CHECK(resSS.PerkW == Approx(0.94));
+    CHECK(resSS.C_Per == Approx(0.92));
+
+    cSS.Pressure_InletCorrection(473, 105, 1.4, 100, 14.5, 0.917, 110, 110,14.7, true, 14.7);
+    CHECK(cSS.kW_fl_Adjusted == Approx(90.07));
+    CHECK(cSS.C_fl_Adjusted == Approx(469.46));
+
+    resSS = cSS.calculateFromPerkW(0.205);
+    CHECK(resSS.kW_Calc == Approx(18.4643));
+    CHECK(resSS.C_Calc == Approx(93.891998291));
+    CHECK(resSS.PerkW == Approx(0.21));
+    CHECK(resSS.C_Per == Approx(0.2));
+    resSS = cSS.calculateFromPerC(0.2);
+    CHECK(resSS.kW_Calc == Approx(18.46));
+    CHECK(resSS.C_Calc == Approx(93.892));
+    CHECK(resSS.PerkW == Approx(0.2049516948));
+    CHECK(resSS.C_Per == Approx(0.2));
+    resSS = cSS.calculateFromkWMeasured(18.35);
+    CHECK(resSS.kW_Calc == Approx(18.35));
+    CHECK(resSS.C_Calc == Approx(93.3105240357));
+    CHECK(resSS.PerkW == Approx(0.2));
+    CHECK(resSS.C_Per == Approx(0.2));
+    resSS = cSS.calculateFromCMeasured(112);
+    CHECK(resSS.kW_Calc == Approx(22.03));
+    CHECK(resSS.C_Calc == Approx(112));
+    CHECK(resSS.PerkW == Approx(0.2445875515));
+    CHECK(resSS.C_Per == Approx(0.238572));
+    resSS = cSS.calculateFromVIPFMeasured(440, 0.02467, 50);
+    CHECK(resSS.kW_Calc == Approx(84.6681));
+    CHECK(resSS.C_Calc == Approx(430.541));
+    CHECK(resSS.PerkW == Approx(0.94));
+    CHECK(resSS.C_Per == Approx(0.92));
+
+    auto cLUL = Compressors_LoadUnload(166.5, 1048, 175.5, 100, 110, 5, 14.7, Compressors::Screw, Compressors::Injected);
+    auto resLUL = cLUL.calculateFromPerkW(0.94);
+    CHECK(resLUL.kW_Calc == Approx(156.51));
+    CHECK(resLUL.C_Calc == Approx(937.888));
+    CHECK(resLUL.PerkW == Approx(0.94));
+    CHECK(resLUL.C_Per == Approx(0.89493));
+    resLUL = cLUL.calculateFromPerC(0.895);
+    CHECK(resLUL.kW_Calc == Approx(156.442));
+    CHECK(resLUL.C_Calc == Approx(937.96));
+    CHECK(resLUL.PerkW == Approx(0.93959));
+    CHECK(resLUL.C_Per == Approx(0.895));
+    resLUL = cLUL.calculateFromkWMeasured(156);
+    CHECK(resLUL.kW_Calc == Approx(156));
+    CHECK(resLUL.C_Calc == Approx(933.857));
+    CHECK(resLUL.PerkW == Approx(0.93693));
+    CHECK(resLUL.C_Per == Approx(0.89108));
+    resLUL = cLUL.calculateFromCMeasured(937);
+    CHECK(resLUL.kW_Calc == Approx(156.322));
+    CHECK(resLUL.C_Calc == Approx(937));
+    CHECK(resLUL.PerkW == Approx(0.938872));
+    CHECK(resLUL.C_Per == Approx(0.89408));
+    resLUL = cLUL.calculateFromVIPFMeasured(440, 0.02467, 50);
+    CHECK(resLUL.kW_Calc == Approx(156.514));
+    CHECK(resLUL.C_Calc == Approx(937.922));
+    CHECK(resLUL.PerkW == Approx(0.94002));
+    CHECK(resLUL.C_Per == Approx(0.89496));
+
+    auto cMUL = Compressors_ModulationWithUnload(166.5, 1048, 175.5, 107.5,100, 110, 5, 14.7);
+    auto resMUL = cMUL.calculateFromPerkW(0.94);
+    CHECK(resMUL.kW_Calc == Approx(156.51));
+    CHECK(resMUL.C_Calc == Approx(937.888));
+    CHECK(resMUL.PerkW == Approx(0.94));
+    CHECK(resMUL.C_Per == Approx(0.89493));
+    resMUL = cMUL.calculateFromPerC(0.895);
+    CHECK(resMUL.kW_Calc == Approx(156.442));
+    CHECK(resMUL.C_Calc == Approx(937.96));
+    CHECK(resMUL.PerkW == Approx(0.93959));
+    CHECK(resMUL.C_Per == Approx(0.895));
+    resMUL = cMUL.calculateFromkWMeasured(156);
+    CHECK(resMUL.kW_Calc == Approx(156));
+    CHECK(resMUL.C_Calc == Approx(933.857));
+    CHECK(resMUL.PerkW == Approx(0.93693));
+    CHECK(resMUL.C_Per == Approx(0.89108));
+    resMUL = cMUL.calculateFromCMeasured(937);
+    CHECK(resMUL.kW_Calc == Approx(156.322));
+    CHECK(resMUL.C_Calc == Approx(937));
+    CHECK(resMUL.PerkW == Approx(0.938872));
+    CHECK(resMUL.C_Per == Approx(0.89408));
+    resMUL = cMUL.calculateFromVIPFMeasured(440, 0.02467, 50);
+    CHECK(resMUL.kW_Calc == Approx(156.514));
+    CHECK(resMUL.C_Calc == Approx(937.922));
+    CHECK(resMUL.PerkW == Approx(0.94002));
+    CHECK(resMUL.C_Per == Approx(0.89496));
+
+    resMUL = cMUL.calculateFromPerC(0.97);
+    CHECK(resMUL.kW_Calc == Approx(166.032));
+    CHECK(resMUL.C_Calc == Approx(1016.56));
+    CHECK(resMUL.PerkW == Approx(0.997188));
+    CHECK(resMUL.C_Per == Approx(0.97));
 }

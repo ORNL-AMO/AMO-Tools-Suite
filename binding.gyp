@@ -300,16 +300,16 @@
             ]
         },
         {
-          "target_name": "compressedAir",
+          "target_name": "compressorsCalc",
           'include_dirs': [
               'include',
-              'include/calculator/util/CompressedAirCentrifugal.h',
+              'include/calculator/util/Compressors.h',
               "<!(node -e \"require('nan')\")"
           ],
           'sources': [
-              'bindings/compressedAir.cpp',
+              'bindings/compressorsCalc.cpp',
               'src/calculator/util/CurveFitVal.cpp',
-              'src/calculator/util/CompressedAirCentrifugal.cpp'
+              'src/calculator/util/Compressors.cpp'
           ],
           "conditions": [
               [ 'OS=="mac"', {
