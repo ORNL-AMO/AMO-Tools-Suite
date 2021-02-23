@@ -38,30 +38,272 @@ double interpolate(vector<double> &xData, vector<double> &yData, double x, bool 
     return yL + dydx * (x - xL);         // linear interpolation
 }
 
-WasteWater_Treatment::Output WasteWater_Treatment::calculate()
+double calculateAdjustedMicrobialDecay(double MicrobialDecay, double Temperature)
 {
-    double AdjustedMicrobialDecay = MicrobialDecay * pow((1.04), (Temperature - 20.0));
-    double AdjustedMaxUtilizationRate = MaxUtilizationRate * pow((1.07), (Temperature - 20.0));
+    return MicrobialDecay * pow((1.04), (Temperature - 20.0));
+}
 
-    //----------------------------------- Aerator performance --------------------------------------
+double calculateAdjustedMaxUtilizationRate(double MaxUtilizationRate, double Temperature)
+{
+    return MaxUtilizationRate * pow((1.07), (Temperature - 20.0));
+}
+
+double calculateFieldOTR(double Temperature, double Elevation, double SOTR, double Beta, double OperatingDO, double Alpha)
+{
     double temp_abs = Temperature + 273.15;
     double cs = exp(-139.34411 + 157570.1 / temp_abs - 66423080 / pow(temp_abs, 2) + 12438000000 / pow(temp_abs, 3.0) - 862194900000 / pow(temp_abs, 4.0));
     double ro = -3.1682615629984E-05 * Elevation + 1.0;
     double ae = (SOTR * ((Beta * cs * ro) - OperatingDO) * Alpha * pow(1.024, (Temperature - 20))) / 9.17;
-    double FieldOTR = ae;
-    //Compute aerator energy usage
-    double AeEnergy = 0;
+    return ae;
+}
+
+double calculateAeEnergy(double TypeAerators, double Aeration, double OperatingTime, double Speed)
+{
     if ((TypeAerators == 1) || (TypeAerators == 2))
     {
-        AeEnergy = Aeration * OperatingTime * (Speed / 100) * 0.65 * 30;
+        return Aeration * OperatingTime * (Speed / 100) * 0.65 * 30;
     }
     else if (TypeAerators == 3)
     {
-        AeEnergy = Aeration * OperatingTime * pow(Speed / 100, 3) * 0.65 * 30;
+        return Aeration * OperatingTime * pow(Speed / 100, 3) * 0.65 * 30;
     }
+    return 0;
+}
+
+double calculateSe(double HalfSaturation, double AdjustedMicrobialDecay, double SRT, double BiomassYeild, double AdjustedMaxUtilizationRate)
+{
+    return (HalfSaturation * (1 + AdjustedMicrobialDecay * SRT)) / (SRT * (BiomassYeild * AdjustedMaxUtilizationRate - AdjustedMicrobialDecay) - 1);
+}
+
+double calculateHeterBio(double SRT, double Volume, double FlowRate, double BiomassYeild, double So, double Se, double AdjustedMicrobialDecay)
+{
+    return (SRT / (Volume / FlowRate)) * BiomassYeild * (So - Se) / (1 + AdjustedMicrobialDecay * SRT);
+}
+
+double calculateCellDeb(double HeterBio, double FractionBiomass, double AdjustedMicrobialDecay, double SRT)
+{
+    return HeterBio * FractionBiomass * AdjustedMicrobialDecay * SRT;
+}
+
+double calculateInerVes(double InertVSS, double SRT, double Volume, double FlowRate)
+{
+    return InertVSS * SRT / (Volume / FlowRate);
+}
+
+double calculateMLVSS(double HeterBio, double CellDeb, double InterVes)
+{
+    return HeterBio + CellDeb + InterVes;
+}
+
+double calculateMLSS(double HeterBio, double CellDeb, double Biomass, double InterVes, double InertInOrgTSS, double SRT, double Volume, double FlowRate)
+{
+    return (HeterBio + CellDeb) / Biomass + InterVes + InertInOrgTSS * SRT / (Volume / FlowRate);
+}
+
+double calculateBiomassProd(double HeterBio, double CellDeb, double Volume, double SRT)
+{
+    return (HeterBio + CellDeb) * Volume * 8.34 / SRT;
+}
+
+double calculateSludgeProd(double MLVSS, double Volume, double SRT)
+{
+    return MLVSS * Volume * 8.34 / SRT;
+}
+
+double calculateSolidProd(double MLSS, double Volume, double SRT)
+{
+    return MLSS * Volume * 8.34 / SRT;
+}
+
+double calculateEffluent(double EffluentTSS, double FlowRate)
+{
+    return EffluentTSS * FlowRate * 8.34;
+}
+
+double calculateIntentWaste(double SolidProd, double Effluent)
+{
+    return SolidProd - Effluent;
+}
+
+double calculateOxygenRqd(double FlowRate, double So, double Se, double BiomassProd)
+{
+    return 1.5 * FlowRate * (So - Se) * 8.34 - 1.42 * BiomassProd;
+}
+
+double calculateFlowMgd(double IntentWaste, double RASTSS)
+{
+    return IntentWaste / (RASTSS * 8.34);
+}
+
+double calculateNRemoved(double SRT, double BiomassProd, double FlowRate, double OxidizableN)
+{
+    double NRemoved = 0;
+    if (SRT < 40)
+    {
+        NRemoved = BiomassProd * (0.12 + (-0.001 * (SRT - 1)));
+    }
+    else
+    {
+        NRemoved = BiomassProd * 0.08;
+    }
+    if (NRemoved > FlowRate * OxidizableN * 8.34)
+    {
+        NRemoved = FlowRate * OxidizableN * 8.34;
+    }
+    return NRemoved;
+}
+
+double calculateNRemoveMgl(double NRemoved, double FlowRate)
+{
+    return NRemoved / (FlowRate * 8.34);
+}
+
+double calculateFrNox(double Temperature, double SRT)
+{
+    double FrNox;
+    if (Temperature < 15)
+    {
+        if (SRT < 40)
+        {
+            vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
+            vector<double> yData = {0.1, 0.2, 0.3, 0.4, 0.6, 0.78, 0.88, 0.93, 0.955, 0.97, 0.98, 0.99};
+            FrNox = interpolate(xData, yData, SRT, true);
+        }
+        else
+        {
+            FrNox = 0.99;
+        }
+    }
+    else if (Temperature > 15 && Temperature < 24)
+    {
+        if (SRT < 40)
+        {
+            vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
+            vector<double> yData = {0.1, 0.22, 0.33, 0.43, 0.63, 0.82, 0.92, 0.96, 0.975, 0.98, 0.99, 0.995};
+            FrNox = interpolate(xData, yData, SRT, true);
+        }
+        else
+        {
+            FrNox = 0.995;
+        }
+    }
+    else
+    {
+        if (SRT < 40)
+        {
+            vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
+            vector<double> yData = {0.1, 0.25, 0.35, 0.45, 0.65, 0.85, 0.95, 0.98, 0.988, 0.99, 0.995, 0.999};
+            FrNox = interpolate(xData, yData, SRT, true);
+        }
+        else
+        {
+            FrNox = 0.999;
+        }
+    }
+    return FrNox;
+}
+
+double calculateNitO2Dem(double FlowRate, double OxidizableN, double NRemovedMgl, double FrNox)
+{
+    double NitO2Dem = FlowRate * (OxidizableN - NRemovedMgl) * 8.34 * 4.33 * FrNox;
+    if (NitO2Dem < 0)
+    {
+        NitO2Dem = 0;
+    }
+    return NitO2Dem;
+}
+
+double calculateO2Reqd(double OxygenRqd, double NitO2Dem)
+{
+    return OxygenRqd + NitO2Dem;
+}
+
+double calculateEffNH3N(double OxidizableN, double NRemovedMgl, double FrNox)
+{
+    double EffNH3N = (OxidizableN - NRemovedMgl) * (1 - FrNox);
+    if (EffNH3N < 0)
+    {
+        EffNH3N = 0;
+    }
+    return EffNH3N;
+}
+
+double calculateEffNo3N(double OxidizableN, double NRemovedMgl, double SRT, double EffNH3N, double i, double EffNH3NSRT1, double NRemovedMglSRT1)
+{
+    double EffNo3N;
+    if (OxidizableN > NRemovedMgl && i > 0)
+    {
+        if (SRT < 30)
+        {
+            vector<double> xData = {1, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32};
+            vector<double> yData = {0, 0.1, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6, 0.62, 0.63, 0.65, 0.66, 0.68, 0.69, 0.7, 0.7};
+            double Coef = interpolate(xData, yData, SRT, true);
+            EffNo3N = (EffNH3NSRT1 - EffNH3N) + Coef * (NRemovedMglSRT1 - NRemovedMgl);
+        }
+        else
+        {
+            EffNo3N = (EffNH3NSRT1 - EffNH3N) + 0.7 * (NRemovedMglSRT1 - NRemovedMgl);
+        }
+        if (EffNo3N < 0)
+        {
+            EffNo3N = 0;
+        }
+    }
+    else
+    {
+        EffNo3N = 0;
+    }
+    return EffNo3N;
+}
+
+double calculateWAS(double IntentWaste, double RASTSS)
+{
+    return IntentWaste / (RASTSS * 8.34);
+}
+
+double calculateEstimatedEff(double SRT, double Se, double EffluentTSS)
+{
+    if (SRT < 40)
+    {
+        return Se + EffluentTSS * (-0.00000000014086 * pow(SRT, 5) + 0.000000057556 * pow(SRT, 4) - 0.0000091279 * pow(SRT, 3) + 0.0007014 * pow(SRT, 2) - 0.0262 * SRT + 0.6322);
+    }
+    else
+    {
+        return Se + EffluentTSS * (0.25);
+    }
+}
+
+double calculateEstimRas(double MLSS, double RASTSS, double FlowRate)
+{
+    if ((MLSS / (RASTSS - MLSS) * FlowRate) > 0)
+    {
+        return MLSS / (RASTSS - MLSS) * FlowRate;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+double calculateFmRatio(double So, double FlowRate, double MLVSS, double Volume)
+{
+    return (So * FlowRate * 8.34) / (MLVSS * Volume * 8.34);
+}
+
+double calculateTotalO2Rqd(double O2Reqd, double FlowRate, double EffNo3N)
+{
+    return O2Reqd - (FlowRate)*EffNo3N * 8.34 * 2.86 * 0.7;
+}
+WasteWater_Treatment::Output WasteWater_Treatment::calculate()
+{
+    double AdjustedMicrobialDecay = calculateAdjustedMicrobialDecay(MicrobialDecay, Temperature);
+    double AdjustedMaxUtilizationRate = calculateAdjustedMaxUtilizationRate(MaxUtilizationRate, Temperature);
+    //----------------------------------- Aerator performance --------------------------------------
+    double FieldOTR = calculateFieldOTR(Temperature, Elevation, SOTR, Beta, OperatingDO, Alpha);
+    //Compute aerator energy usage
+    double AeEnergy = calculateAeEnergy(TypeAerators, Aeration, OperatingTime, Speed);
     //Compute Aerator Energy Cost ($) for Current Conditions
     double AeCost = AeEnergy * EnergyCostUnit;
-
     //----------------------------------- Current Conditions Calculation--------------------------------------
     int numberRows = round(MaxDays / TimeIncrement);
     std::vector<CalculationsTable> calcTable(numberRows);
@@ -73,147 +315,55 @@ WasteWater_Treatment::Output WasteWater_Treatment::calculate()
     for (int i = 0; i < numberRows; i++)
     {
         // Compute Se
-        calcTable[i].Se = (HalfSaturation * (1 + AdjustedMicrobialDecay * calcTable[i].SRT)) / (calcTable[i].SRT * (BiomassYeild * AdjustedMaxUtilizationRate - AdjustedMicrobialDecay) - 1);
+        calcTable[i].Se = calculateSe(HalfSaturation, AdjustedMicrobialDecay, calcTable[i].SRT, BiomassYeild, AdjustedMaxUtilizationRate);
         //Compute Heter Biomass
-        calcTable[i].HeterBio = (calcTable[i].SRT / (Volume / FlowRate)) * BiomassYeild * (So - calcTable[i].Se) / (1 + AdjustedMicrobialDecay * calcTable[i].SRT);
+        calcTable[i].HeterBio = calculateHeterBio(calcTable[i].SRT, Volume, FlowRate, BiomassYeild, So, calcTable[i].Se, AdjustedMicrobialDecay);
         //Compute CellDeb
-        calcTable[i].CellDeb = calcTable[i].HeterBio * FractionBiomass * AdjustedMicrobialDecay * calcTable[i].SRT;
+        calcTable[i].CellDeb = calculateCellDeb(calcTable[i].HeterBio, FractionBiomass, AdjustedMicrobialDecay, calcTable[i].SRT);
         //Compute InterVes
-        calcTable[i].InterVes = InertVSS * calcTable[i].SRT / (Volume / FlowRate);
+        calcTable[i].InterVes = calculateInerVes(InertVSS, calcTable[i].SRT, Volume, FlowRate);
         //Compute MLVSS
-        calcTable[i].MLVSS = calcTable[i].HeterBio + calcTable[i].CellDeb + calcTable[i].InterVes;
+        calcTable[i].MLVSS = calculateMLVSS(calcTable[i].HeterBio, calcTable[i].CellDeb, calcTable[i].InterVes);
         //Compute MLSS
-        calcTable[i].MLSS = (calcTable[i].HeterBio + calcTable[i].CellDeb) / Biomass + calcTable[i].InterVes + InertInOrgTSS * calcTable[i].SRT / (Volume / FlowRate);
+        calcTable[i].MLSS = calculateMLSS(calcTable[i].HeterBio, calcTable[i].CellDeb, Biomass, calcTable[i].InterVes, InertInOrgTSS, calcTable[i].SRT, Volume, FlowRate);
         //Compute BiomassProd
-        calcTable[i].BiomassProd = (calcTable[i].HeterBio + calcTable[i].CellDeb) * Volume * 8.34 / calcTable[i].SRT;
+        calcTable[i].BiomassProd = calculateBiomassProd(calcTable[i].HeterBio, calcTable[i].CellDeb, Volume, calcTable[i].SRT);
         //Compute SludgeProd
-        calcTable[i].SludgeProd = calcTable[i].MLVSS * Volume * 8.34 / calcTable[i].SRT;
+        calcTable[i].SludgeProd = calculateSludgeProd(calcTable[i].MLVSS, Volume, calcTable[i].SRT);
         //Compute SolidProd
-        calcTable[i].SolidProd = calcTable[i].MLSS * Volume * 8.34 / calcTable[i].SRT;
+        calcTable[i].SolidProd = calculateSolidProd(calcTable[i].MLSS, Volume, calcTable[i].SRT);
         //Compute Effluent
-        calcTable[i].Effluent = EffluentTSS * FlowRate * 8.34;
+        calcTable[i].Effluent = calculateEffluent(EffluentTSS, FlowRate);
         //Compue IntentWaste
-        calcTable[i].IntentWaste = calcTable[i].SolidProd - calcTable[i].Effluent;
+        calcTable[i].IntentWaste = calculateIntentWaste(calcTable[i].SolidProd, calcTable[i].Effluent);
         //Compute OxygenRqd
-        calcTable[i].OxygenRqd = 1.5 * FlowRate * (So - calcTable[i].Se) * 8.34 - 1.42 * calcTable[i].BiomassProd;
+        calcTable[i].OxygenRqd = calculateOxygenRqd(FlowRate, So, calcTable[i].Se, calcTable[i].BiomassProd);
         //Compute FlowMgd
-        calcTable[i].FlowMgd = calcTable[i].IntentWaste / (RASTSS * 8.34);
+        calcTable[i].FlowMgd = calculateFlowMgd(calcTable[i].IntentWaste, RASTSS);
         //Compute NRemoved
-        if (calcTable[i].SRT < 40)
-        {
-            calcTable[i].NRemoved = calcTable[i].BiomassProd * (0.12 + (-0.001 * (calcTable[i].SRT - 1)));
-        }
-        else
-        {
-            calcTable[i].NRemoved = calcTable[i].BiomassProd * 0.08;
-        }
-        if (calcTable[i].NRemoved > FlowRate * OxidizableN * 8.34)
-        {
-            calcTable[i].NRemoved = FlowRate * OxidizableN * 8.34;
-        }
+        calcTable[i].NRemoved = calculateNRemoved(calcTable[i].SRT, calcTable[i].BiomassProd, FlowRate, OxidizableN);
         //Compute NremovedMgl
-        calcTable[i].NRemovedMgl = calcTable[i].NRemoved / (FlowRate * 8.34);
+        calcTable[i].NRemovedMgl = calculateNRemoveMgl(calcTable[i].NRemoved, FlowRate);
         //Compute Fraction Nox : FrNox
-        double FrNox;
-        if (Temperature < 15)
-        {
-            if (calcTable[i].SRT < 40)
-            {
-                vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
-                vector<double> yData = {0.1, 0.2, 0.3, 0.4, 0.6, 0.78, 0.88, 0.93, 0.955, 0.97, 0.98, 0.99};
-                FrNox = interpolate(xData, yData, calcTable[i].SRT, true);
-            }
-            else
-            {
-                FrNox = 0.99;
-            }
-        }
-        else if (Temperature > 15 && Temperature < 24)
-        {
-            if (calcTable[i].SRT < 40)
-            {
-                vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
-                vector<double> yData = {0.1, 0.22, 0.33, 0.43, 0.63, 0.82, 0.92, 0.96, 0.975, 0.98, 0.99, 0.995};
-                FrNox = interpolate(xData, yData, calcTable[i].SRT, true);
-            }
-            else
-            {
-                FrNox = 0.995;
-            }
-        }
-        else
-        {
-            if (calcTable[i].SRT < 40)
-            {
-                vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
-                vector<double> yData = {0.1, 0.25, 0.35, 0.45, 0.65, 0.85, 0.95, 0.98, 0.988, 0.99, 0.995, 0.999};
-                FrNox = interpolate(xData, yData, calcTable[i].SRT, true);
-            }
-            else
-            {
-                FrNox = 0.999;
-            }
-        }
+        double FrNox = calculateFrNox(Temperature, calcTable[i].SRT);
         //Compute NitO2Dem
-        calcTable[i].NitO2Dem = FlowRate * (OxidizableN - calcTable[i].NRemovedMgl) * 8.34 * 4.33 * FrNox;
-        if (calcTable[i].NitO2Dem < 0)
-        {
-            calcTable[i].NitO2Dem = 0;
-        }
+        calcTable[i].NitO2Dem = calculateNitO2Dem(FlowRate, OxidizableN, calcTable[i].NRemovedMgl, FrNox);
         //Compute O2Reqd
-        calcTable[i].O2Reqd = calcTable[i].OxygenRqd + calcTable[i].NitO2Dem;
+        calcTable[i].O2Reqd = calculateO2Reqd(calcTable[i].OxygenRqd, calcTable[i].NitO2Dem);
         //Compute EffNH3N
-        calcTable[i].EffNH3N = (OxidizableN - calcTable[i].NRemovedMgl) * (1 - FrNox);
-        if (calcTable[i].EffNH3N < 0)
-        {
-            calcTable[i].EffNH3N = 0;
-        }
+        calcTable[i].EffNH3N = calculateEffNH3N(OxidizableN, calcTable[i].NRemovedMgl, FrNox);
         //Compute EffNo3N
-        if (OxidizableN > calcTable[i].NRemovedMgl && i > 0)
-        {
-            if (calcTable[i].SRT < 30)
-            {
-                vector<double> xData = {1, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32};
-                vector<double> yData = {0, 0.1, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6, 0.62, 0.63, 0.65, 0.66, 0.68, 0.69, 0.7, 0.7};
-                double Coef = interpolate(xData, yData, calcTable[i].SRT, true);
-                calcTable[i].EffNo3N = (calcTable[0].EffNH3N - calcTable[i].EffNH3N) + Coef * (calcTable[0].NRemovedMgl - calcTable[i].NRemovedMgl);
-            }
-            else
-            {
-                calcTable[i].EffNo3N = (calcTable[0].EffNH3N - calcTable[i].EffNH3N) + 0.7 * (calcTable[0].NRemovedMgl - calcTable[i].NRemovedMgl);
-            }
-            if (calcTable[i].EffNo3N < 0)
-            {
-                calcTable[i].EffNo3N = 0;
-            }
-        }
-        else
-        {
-            calcTable[i].EffNo3N = 0;
-        }
+        calcTable[i].EffNo3N = calculateEffNo3N(OxidizableN, calcTable[i].NRemovedMgl, calcTable[i].SRT, calcTable[i].EffNH3N, i, calcTable[0].EffNH3N, calcTable[0].NRemovedMgl);
         //Compute TotalO2Rqd
-        calcTable[i].TotalO2Rqd = calcTable[i].O2Reqd - (FlowRate)*calcTable[i].EffNo3N * 8.34 * 2.86 * 0.7;
+        calcTable[i].TotalO2Rqd = calculateTotalO2Rqd(calcTable[i].O2Reqd, FlowRate, calcTable[i].EffNo3N);
         //Compute WAS
-        calcTable[i].WAS = calcTable[i].IntentWaste / (RASTSS * 8.34);
+        calcTable[i].WAS = calculateWAS(calcTable[i].IntentWaste, RASTSS);
         //Compute EstimatedEff
-        if (calcTable[i].SRT < 40)
-        {
-            calcTable[i].EstimatedEff = calcTable[i].Se + EffluentTSS * (-0.00000000014086 * pow(calcTable[i].SRT, 5) + 0.000000057556 * pow(calcTable[i].SRT, 4) - 0.0000091279 * pow(calcTable[i].SRT, 3) + 0.0007014 * pow(calcTable[i].SRT, 2) - 0.0262 * calcTable[i].SRT + 0.6322);
-        }
-        else
-        {
-            calcTable[i].EstimatedEff = calcTable[i].Se + EffluentTSS * (0.25);
-        }
-        if ((calcTable[i].MLSS / (RASTSS - calcTable[i].MLSS) * FlowRate) > 0)
-        {
-            calcTable[i].EstimRas = calcTable[i].MLSS / (RASTSS - calcTable[i].MLSS) * FlowRate;
-        }
-        else
-        {
-            calcTable[i].EstimRas = 0;
-        }
+        calcTable[i].EstimatedEff = calculateEstimatedEff(calcTable[i].SRT, calcTable[i].Se, EffluentTSS);
+        //Compute EstimRas
+        calcTable[i].EstimRas = calculateEstimRas(calcTable[i].MLSS, RASTSS, FlowRate);
         //Compute FmRatio
-        calcTable[i].FmRatio = (So * FlowRate * 8.34) / (calcTable[i].MLVSS * Volume * 8.34);
+        calcTable[i].FmRatio = calculateFmRatio(So, FlowRate, calcTable[i].MLVSS, Volume);
         //Compute Square of Differences for The Best Match
         calcTable[i].Diff_MLSS = pow(calcTable[i].MLSS - MLSSpar, 2);
     }
@@ -242,7 +392,7 @@ WasteWater_Treatment::Output WasteWater_Treatment::calculate()
     double TSSInActivatedSludgeEffluent = calcTable[iCount].Effluent;
     double TotalOxygenRequirements = calcTable[iCount].O2Reqd;
     double TotalOxygenReqWDenit = calcTable[iCount].TotalO2Rqd;
-    double TotalOxygenSupplied = Aeration * OperatingTime * Speed * ae / 100;
+    double TotalOxygenSupplied = Aeration * OperatingTime * Speed * FieldOTR / 100;
     double MixingIntensityInReactor = (Aeration * Speed / 100) / Volume;
     double RASFlowRate = calcTable[iCount].EstimRas;
     double RASRecyclePercentage = calcTable[iCount].EstimRas / FlowRate * 100;
@@ -295,200 +445,77 @@ WasteWater_Treatment::Output WasteWater_Treatment::calculate()
 WasteWater_Treatment::OutputWithoutTable WasteWater_Treatment::calculateGivenSRT()
 {
 
-    double AdjustedMicrobialDecay = MicrobialDecay * pow((1.04), (Temperature - 20.0));
-    double AdjustedMaxUtilizationRate = MaxUtilizationRate * pow((1.07), (Temperature - 20.0));
+    double AdjustedMicrobialDecay = calculateAdjustedMicrobialDecay(MicrobialDecay, Temperature);
+    double AdjustedMaxUtilizationRate = calculateAdjustedMaxUtilizationRate(MaxUtilizationRate, Temperature);
 
     //----------------------------------- Aerator performance --------------------------------------
-    double temp_abs = Temperature + 273.15;
-    double cs = exp(-139.34411 + 157570.1 / temp_abs - 66423080 / pow(temp_abs, 2) + 12438000000 / pow(temp_abs, 3.0) - 862194900000 / pow(temp_abs, 4.0));
-    double ro = -3.1682615629984E-05 * Elevation + 1.0;
-    double ae = (SOTR * ((Beta * cs * ro) - OperatingDO) * Alpha * pow(1.024, (Temperature - 20))) / 9.17;
-    double FieldOTR = ae;
+    double FieldOTR = calculateFieldOTR(Temperature, Elevation, SOTR, Beta, OperatingDO, Alpha);
     //Compute aerator energy usage
-    double AeEnergy = 0;
-    if ((TypeAerators == 1) || (TypeAerators == 2))
-    {
-        AeEnergy = Aeration * OperatingTime * (Speed / 100) * 0.65 * 30;
-    }
-    else if (TypeAerators == 3)
-    {
-        AeEnergy = Aeration * OperatingTime * pow(Speed / 100, 3) * 0.65 * 30;
-    }
+    double AeEnergy = calculateAeEnergy(TypeAerators, Aeration, OperatingTime, Speed);
     //Compute Aerator Energy Cost ($) for Current Conditions
     double AeCost = AeEnergy * EnergyCostUnit;
 
     //----------------------------------- Current Conditions Calculation--------------------------------------
 
     // Compute Se
-    double Se = (HalfSaturation * (1 + AdjustedMicrobialDecay * DefinedSRT)) / (DefinedSRT * (BiomassYeild * AdjustedMaxUtilizationRate - AdjustedMicrobialDecay) - 1);
-    double SeSRT1 = (HalfSaturation * (1 + AdjustedMicrobialDecay * 1)) / (1 * (BiomassYeild * AdjustedMaxUtilizationRate - AdjustedMicrobialDecay) - 1);
+    double Se = calculateSe(HalfSaturation, AdjustedMicrobialDecay, DefinedSRT, BiomassYeild, AdjustedMaxUtilizationRate);
+    double SeSRT1 = calculateSe(HalfSaturation, AdjustedMicrobialDecay, 1, BiomassYeild, AdjustedMaxUtilizationRate);
     //Compute Heter Biomass
-    double HeterBio = (DefinedSRT / (Volume / FlowRate)) * BiomassYeild * (So - Se) / (1 + AdjustedMicrobialDecay * DefinedSRT);
-    double HeterBioSRT1 = (1 / (Volume / FlowRate)) * BiomassYeild * (So - SeSRT1) / (1 + AdjustedMicrobialDecay * 1);
+    double HeterBio = calculateHeterBio(DefinedSRT, Volume, FlowRate, BiomassYeild, So, Se, AdjustedMicrobialDecay);
+    double HeterBioSRT1 = calculateHeterBio(1, Volume, FlowRate, BiomassYeild, So, SeSRT1, AdjustedMicrobialDecay);
     //Compute CellDeb
-    double CellDeb = HeterBio * FractionBiomass * AdjustedMicrobialDecay * DefinedSRT;
-    double CellDebSRT1 = HeterBioSRT1 * FractionBiomass * AdjustedMicrobialDecay * 1;
+    double CellDeb = calculateCellDeb(HeterBio, FractionBiomass, AdjustedMicrobialDecay, DefinedSRT);
+    double CellDebSRT1 = calculateCellDeb(HeterBioSRT1, FractionBiomass, AdjustedMicrobialDecay, 1);
     //Compute InterVes
-    double InterVes = InertVSS * DefinedSRT / (Volume / FlowRate);
+    double InterVes = calculateInerVes(InertVSS, DefinedSRT, Volume, FlowRate);
     //Compute MLVSS
-    double MLVSS = HeterBio + CellDeb + InterVes;
+    double MLVSS = calculateMLVSS(HeterBio, CellDeb, InterVes);
     //Compute MLSS
-    double MLSS = (HeterBio + CellDeb) / Biomass + InterVes + InertInOrgTSS * DefinedSRT / (Volume / FlowRate);
+    double MLSS = calculateMLSS(HeterBio, CellDeb, Biomass, InterVes, InertInOrgTSS, DefinedSRT, Volume, FlowRate);
     //Compute BiomassProd
-    double BiomassProd = (HeterBio + CellDeb) * Volume * 8.34 / DefinedSRT;
-    double BiomassProdSRT1 = (HeterBioSRT1 + CellDebSRT1) * Volume * 8.34 / 1;
+    double BiomassProd = calculateBiomassProd(HeterBio, CellDeb, Volume, DefinedSRT);
+    double BiomassProdSRT1 = calculateBiomassProd(HeterBioSRT1, CellDebSRT1, Volume, 1);
     //Compute SludgeProd
-    double SludgeProd = MLVSS * Volume * 8.34 / DefinedSRT;
+    double SludgeProd = calculateSludgeProd(MLVSS, Volume, DefinedSRT);
     //Compute SolidProd
-    double SolidProd = MLSS * Volume * 8.34 / DefinedSRT;
+    double SolidProd = calculateSolidProd(MLSS, Volume, DefinedSRT);
     //Compute Effluent
-    double Effluent = EffluentTSS * FlowRate * 8.34;
+    double Effluent = calculateEffluent(EffluentTSS, FlowRate);
     //Compue IntentWaste
-    double IntentWaste = SolidProd - Effluent;
+    double IntentWaste = calculateIntentWaste(SolidProd, Effluent);
     //Compute OxygenRqd
-    double OxygenRqd = 1.5 * FlowRate * (So - Se) * 8.34 - 1.42 * BiomassProd;
+    double OxygenRqd = calculateOxygenRqd(FlowRate, So, Se, BiomassProd);
     //Compute FlowMgd
-    double FlowMgd = IntentWaste / (RASTSS * 8.34);
+    double FlowMgd = calculateFlowMgd(IntentWaste, RASTSS);
     //Compute NRemoved
-    double NRemoved;
-    if (DefinedSRT < 40)
-    {
-        NRemoved = BiomassProd * (0.12 + (-0.001 * (DefinedSRT - 1)));
-    }
-    else
-    {
-        NRemoved = BiomassProd * 0.08;
-    }
-    if (NRemoved > FlowRate * OxidizableN * 8.34)
-    {
-        NRemoved = FlowRate * OxidizableN * 8.34;
-    }
-
-    double NRemovedSRT1 = BiomassProdSRT1 * 0.12;
-    if (NRemovedSRT1 > FlowRate * OxidizableN * 8.34)
-    {
-        NRemovedSRT1 = FlowRate * OxidizableN * 8.34;
-    }
+    double NRemoved = calculateNRemoved(DefinedSRT, BiomassProd, FlowRate, OxidizableN);
+    double NRemovedSRT1 = calculateNRemoved(1, BiomassProdSRT1, FlowRate, OxidizableN);
 
     //Compute NremovedMgl
-    double NRemovedMgl = NRemoved / (FlowRate * 8.34);
-    double NRemovedMglSRT1 = NRemovedSRT1 / (FlowRate * 8.34);
+    double NRemovedMgl = calculateNRemoveMgl(NRemoved, FlowRate);
+    double NRemovedMglSRT1 = calculateNRemoveMgl(NRemovedSRT1, FlowRate);
     //Compute Fraction Nox : FrNox
-    double FrNox;
-    double FrNoxSRT1;
-    if (Temperature < 15)
-    {
-        vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
-        vector<double> yData = {0.1, 0.2, 0.3, 0.4, 0.6, 0.78, 0.88, 0.93, 0.955, 0.97, 0.98, 0.99};
-        FrNoxSRT1 = interpolate(xData, yData, 1, true);
-        if (DefinedSRT < 40)
-        {
-            FrNox = interpolate(xData, yData, DefinedSRT, true);
-        }
-        else
-        {
-            FrNox = 0.99;
-        }
-    }
-    else if (Temperature > 15 && Temperature < 24)
-    {
-        vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
-        vector<double> yData = {0.1, 0.22, 0.33, 0.43, 0.63, 0.82, 0.92, 0.96, 0.975, 0.98, 0.99, 0.995};
-        FrNoxSRT1 = interpolate(xData, yData, 1, true);
-        if (DefinedSRT < 40)
-        {
-            FrNox = interpolate(xData, yData, DefinedSRT, true);
-        }
-        else
-        {
-            FrNox = 0.995;
-        }
-    }
-    else
-    {
-        vector<double> xData = {1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 30, 40};
-        vector<double> yData = {0.1, 0.25, 0.35, 0.45, 0.65, 0.85, 0.95, 0.98, 0.988, 0.99, 0.995, 0.999};
-        FrNoxSRT1 = interpolate(xData, yData, 1, true);
-        if (DefinedSRT < 40)
-        {
-            FrNox = interpolate(xData, yData, DefinedSRT, true);
-        }
-        else
-        {
-            FrNox = 0.999;
-        }
-    }
+    double FrNox = calculateFrNox(Temperature, DefinedSRT);
+    double FrNoxSRT1 = calculateFrNox(Temperature, 1);
     //Compute NitO2Dem
-    double NitO2Dem = FlowRate * (OxidizableN - NRemovedMgl) * 8.34 * 4.33 * FrNox;
-    if (NitO2Dem < 0)
-    {
-        NitO2Dem = 0;
-    }
+    double NitO2Dem = calculateNitO2Dem(FlowRate, OxidizableN, NRemovedMgl, FrNox);
     //Compute O2Reqd
-    double O2Reqd = OxygenRqd + NitO2Dem;
+    double O2Reqd = calculateO2Reqd(OxygenRqd, NitO2Dem);
     //Compute EffNH3N
-    double EffNH3N = (OxidizableN - NRemovedMgl) * (1 - FrNox);
-    if (EffNH3N < 0)
-    {
-        EffNH3N = 0;
-    }
+    double EffNH3N = calculateEffNH3N(OxidizableN, NRemovedMgl, FrNox);
 
-    double EffNH3NSRT1 = (OxidizableN - NRemovedMglSRT1) * (1 - FrNoxSRT1);
-    if (EffNH3NSRT1 < 0)
-    {
-        EffNH3NSRT1 = 0;
-    }
+    double EffNH3NSRT1 = calculateEffNH3N(OxidizableN, NRemovedMglSRT1, FrNoxSRT1);
     //Compute EffNo3N
-    double EffNo3N;
-    if (OxidizableN > NRemovedMgl)
-    {
-        if (DefinedSRT < 30)
-        {
-            vector<double> xData = {1, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32};
-            vector<double> yData = {0, 0.1, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6, 0.62, 0.63, 0.65, 0.66, 0.68, 0.69, 0.7, 0.7};
-            double Coef = interpolate(xData, yData, DefinedSRT, true);
-            EffNo3N = (EffNH3NSRT1 - EffNH3N) + Coef * (NRemovedMglSRT1 - NRemovedMgl);
-        }
-        else
-        {
-            EffNo3N = (EffNH3NSRT1 - EffNH3N) + 0.7 * (NRemovedMglSRT1 - NRemovedMgl);
-        }
-        if (EffNo3N < 0)
-        {
-            EffNo3N = 0;
-        }
-    }
-    else
-    {
-        EffNo3N = 0;
-    }
+    double EffNo3N = calculateEffNo3N(OxidizableN, NRemovedMgl, DefinedSRT, EffNH3N, DefinedSRT, EffNH3NSRT1, NRemovedMglSRT1);
     //Compute TotalO2Rqd
-    double TotalO2Rqd = O2Reqd - (FlowRate)*EffNo3N * 8.34 * 2.86 * 0.7;
+    double TotalO2Rqd = calculateTotalO2Rqd(O2Reqd, FlowRate, EffNo3N);
     //Compute WAS
-    double WAS = IntentWaste / (RASTSS * 8.34);
+    double WAS = calculateWAS(IntentWaste, RASTSS);
     //Compute EstimatedEff
-    double EstimatedEff;
-    double EstimRas;
-    if (DefinedSRT < 40)
-    {
-        EstimatedEff = Se + EffluentTSS * (-0.00000000014086 * pow(DefinedSRT, 5) + 0.000000057556 * pow(DefinedSRT, 4) - 0.0000091279 * pow(DefinedSRT, 3) + 0.0007014 * pow(DefinedSRT, 2) - 0.0262 * DefinedSRT + 0.6322);
-    }
-    else
-    {
-        EstimatedEff = Se + EffluentTSS * (0.25);
-    }
-    if ((MLSS / (RASTSS - MLSS) * FlowRate) > 0)
-    {
-        EstimRas = MLSS / (RASTSS - MLSS) * FlowRate;
-    }
-    else
-    {
-        EstimRas = 0;
-    }
+    double EstimatedEff = calculateEstimatedEff(DefinedSRT, Se, EffluentTSS);
+    double EstimRas = calculateEstimRas(MLSS, RASTSS, FlowRate);
     //Compute FmRatio
-    double FmRatio = (So * FlowRate * 8.34) / (MLVSS * Volume * 8.34);
-    //Compute Square of Differences for The Best Match
-    double Diff_MLSS = pow(MLSS - MLSSpar, 2);
+    double FmRatio = calculateFmRatio(So, FlowRate, MLVSS, Volume);
 
     //Setting the Output Table
     double TotalAverageDailyFlowRate = FlowRate;
@@ -498,14 +525,11 @@ WasteWater_Treatment::OutputWithoutTable WasteWater_Treatment::calculateGivenSRT
     double SecWWOxidNLoad = FlowRate * OxidizableN * 8.34;
     double SecWWTSSLoad = FlowRate * InfluentTSS * 8.34;
     double FM_ratio = FmRatio;
-    // double SolidsRetentionTime = SRT;
-    // double MLSS = MLSS;
-    // double MLVSS = MLVSS;
     double TSSSludgeProduction = IntentWaste;
     double TSSInActivatedSludgeEffluent = Effluent;
     double TotalOxygenRequirements = O2Reqd;
     double TotalOxygenReqWDenit = TotalO2Rqd;
-    double TotalOxygenSupplied = Aeration * OperatingTime * Speed * ae / 100;
+    double TotalOxygenSupplied = Aeration * OperatingTime * Speed * FieldOTR / 100;
     double MixingIntensityInReactor = (Aeration * Speed / 100) / Volume;
     double RASFlowRate = EstimRas;
     double RASRecyclePercentage = EstimRas / FlowRate * 100;
