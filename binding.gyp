@@ -360,6 +360,7 @@
               'include',
               'include/calculator/processHeat/AirHeatingUsingExhaust.h',
               'include/calculator/processHeat/WaterHeatingUsingExhaust.h',
+              'include/calculator/processHeat/CascadeHeatHighToLow.h',
               "<!(node -e \"require('nan')\")"
           ],
           'sources': [
@@ -367,7 +368,8 @@
               'src/calculator/losses/GasFlueGasMaterial.cpp',
               'src/calculator/losses/SolidLiquidFlueGasMaterial.cpp',
               'src/calculator/processHeat/AirHeatingUsingExhaust.cpp',
-              'src/calculator/processHeat/WaterHeatingUsingExhaust.cpp'
+              'src/calculator/processHeat/WaterHeatingUsingExhaust.cpp',
+              'src/calculator/processHeat/CascadeHeatHighToLow.cpp'
           ],
           "conditions": [
               [ 'OS=="mac"', {

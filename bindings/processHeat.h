@@ -8,6 +8,7 @@
 #include "./NanDataConverters.h"
 #include "calculator/processHeat/AirHeatingUsingExhaust.h"
 #include "calculator/processHeat/WaterHeatingUsingExhaust.h"
+#include "calculator/processHeat/CascadeHeatHighToLow.h"
 
 using namespace Nan;
 using namespace v8;
@@ -103,5 +104,57 @@ NAN_METHOD(waterHeatingUsingExhaust)
     {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in Water ProcessHeat - calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(cascadeHeatHighToLow)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double priFiringRate = getDouble("priFiringRate", inp);
+        const double priExhaustTemperature = getDouble("priExhaustTemperature", inp);
+        const double priExhaustO2 = getDouble("priExhaustO2", inp);
+        const double priCombAirTemperature = getDouble("priCombAirTemperature", inp);
+        const double priOpHours = getDouble("priOpHours", inp);
+        const double priFuelHV = getDouble("priFuelHV", inp);
+
+        const double secExhaustTemperature = getDouble("secExhaustTemperature", inp);
+        const double secCombAirTemperature = getDouble("secCombAirTemperature", inp);
+        const double secOpHours = getDouble("secOpHours", inp);
+        const double secFuelCost = getDouble("secFuelCost", inp);
+
+        const double CH4 = getDouble("CH4", inp);
+        const double C2H6 = getDouble("C2H6", inp);
+        const double N2 = getDouble("N2", inp);
+        const double H2 = getDouble("H2", inp);
+        const double C3H8 = getDouble("C3H8", inp);
+        const double C4H10_CnH2n = getDouble("C4H10_CnH2n", inp);
+        const double H2O = getDouble("H2O", inp);
+        const double CO = getDouble("CO", inp);
+        const double CO2 = getDouble("CO2", inp);
+        const double SO2 = getDouble("SO2", inp);
+        const double O2 = getDouble("O2", inp);
+
+        auto ch = CascadeHeatHighToLow(GasCompositions("Gas", CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2),
+                                       priFiringRate, priExhaustTemperature, priExhaustO2, priCombAirTemperature, priOpHours, priFuelHV,
+                                       secExhaustTemperature, secCombAirTemperature, secOpHours, secFuelCost);
+        auto output = ch.calculate();
+
+        setR("priFlueVolume", output.priFlueVolume);
+        setR("hxEnergyRate", output.hxEnergyRate);
+        setR("eqEnergySupply", output.eqEnergySupply);
+        setR("effOpHours", output.effOpHours);
+        setR("energySavings", output.energySavings);
+        setR("costSavings", output.costSavings);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Cascade Heat HighToLow ProcessHeat - calculator: " + what).c_str());
     }
 }

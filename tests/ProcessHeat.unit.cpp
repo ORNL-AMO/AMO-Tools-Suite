@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include <calculator/processHeat/AirHeatingUsingExhaust.h>
 #include <calculator/processHeat/WaterHeatingUsingExhaust.h>
+#include <calculator/processHeat/CascadeHeatHighToLow.h>
 
 TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]" ) {
     GasCompositions gas("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
@@ -26,4 +27,15 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
     CHECK(resChillerAbsorpEnergy.tonsRefrigeration == Approx(79.205));
     CHECK(resChillerAbsorpEnergy.capacityChiller == Approx(69.7004));
     CHECK(resChillerAbsorpEnergy.electricalEnergy == Approx(167280.96));
+
+
+    GasCompositions gasCH("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
+    auto resCascadeHeatHighToLow = CascadeHeatHighToLow(gasCH, 12.0, 1475, 0.07, 80.0, 8000, 1020,
+                                                        225, 80, 7000, 5.00).calculate();
+    CHECK(resCascadeHeatHighToLow.priFlueVolume == Approx(174619.56));
+    CHECK(resCascadeHeatHighToLow.hxEnergyRate == Approx(4.6929));
+    CHECK(resCascadeHeatHighToLow.eqEnergySupply == Approx(6.4038));
+    CHECK(resCascadeHeatHighToLow.effOpHours == Approx(7000));
+    CHECK(resCascadeHeatHighToLow.energySavings == Approx(44826.53));
+    CHECK(resCascadeHeatHighToLow.costSavings == Approx(224132.65));
 }

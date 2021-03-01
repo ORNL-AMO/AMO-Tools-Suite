@@ -107,3 +107,47 @@ test('WaterHeatingUsingExhaust ChillerAbsorption', function (t) {
 
     compare(bindings.waterHeatingUsingExhaust(input), [1302000, 7810.437912, 79.205, 69.7004, 167280.96]);
 });
+
+test('CascadeHeatHighToLow Gas', function (t) {
+    t.plan(7);
+    t.type(bindings.cascadeHeatHighToLow, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.priFlueVolume), rnd(expected[0]));
+        t.equal(rnd(results.hxEnergyRate), rnd(expected[1]));
+        t.equal(rnd(results.eqEnergySupply), rnd(expected[2]));
+        t.equal(rnd(results.effOpHours), rnd(expected[3]));
+        t.equal(rnd(results.energySavings), rnd(expected[4]));
+        t.equal(rnd(results.costSavings), rnd(expected[5]));
+    };
+
+    var input = {
+        priFiringRate: 12.0,
+        priExhaustTemperature: 1475,
+        priExhaustO2: 0.07,
+        priCombAirTemperature: 80.0,
+        priOpHours: 8000,
+        priFuelHV: 1020,
+
+        secExhaustTemperature: 225,
+        secCombAirTemperature: 80,
+        secOpHours: 7000,
+        secFuelCost: 5.00,
+
+        gasFuelType: true,
+        substance: 'Gas',
+        CH4: 94.0,
+        C2H6: 2.07,
+        N2: 1.41,
+        H2: 0.01,
+        C3H8: 0.42,
+        C4H10_CnH2n: 0.28,
+        H2O: 0.0,
+        CO: 1.0,
+        CO2: 0.71,
+        SO2: 0,
+        O2: 0
+    };
+
+    compare(bindings.cascadeHeatHighToLow(input), [174619.56, 4.6929, 6.4038, 7000, 44826.53, 224132.65]);
+});
