@@ -47,13 +47,13 @@ public:
     /**
      *
      * @param sviParameter double
-     * @param sviValue  double
+     * @param sviValue  double, units L/g
      * @param numberOfClarifiers double
-     * @param areaOfClarifier double
-     * @param MLSS double
-     * @param influentFlow double
-     * @param rasFlow double
-     * @param sludgeSettlingVelocity double
+     * @param areaOfClarifier double, units m2
+     * @param MLSS double, units kg/L
+     * @param influentFlow double, units L/h
+     * @param rasFlow double, units L/h
+     * @param sludgeSettlingVelocity double, units m/h
      *
      */
 
@@ -63,14 +63,14 @@ public:
     /**
      *
      * @return Output
-     * @param TotalAreaClarifier double
-     * @param SurfaceOverflow double
-     * @param AppliedSolidsLoading double
-     * @param RasConcentration double
-     * @param UnderFlowRateX2 double
-     * @param UnderFlowRateY1 double
-     * @param OverFlowRateX2 double
-     * @param OverFlowRateY2 double
+     * @param TotalAreaClarifier double, units m2
+     * @param SurfaceOverflow double, units l/m2h
+     * @param AppliedSolidsLoading double, units kf/m2h
+     * @param RasConcentration double, units kg/L
+     * @param UnderFlowRateX2 double, units g/L
+     * @param UnderFlowRateY1 double, units kg/m2h
+     * @param OverFlowRateX2 double, units g/L
+     * @param OverFlowRateY2 double, units kg/m2h
      * @param StatePointX double
      * @param StatePointY double
      * @param GraphData (Computes and populates that can be retrieved)

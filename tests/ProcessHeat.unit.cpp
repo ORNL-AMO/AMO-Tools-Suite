@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include <calculator/processHeat/AirHeatingUsingExhaust.h>
 #include <calculator/processHeat/WaterHeatingUsingExhaust.h>
+#include <calculator/processHeat/WaterHeatingUsingSteam.h>
 #include <calculator/processHeat/CascadeHeatHighToLow.h>
 
 TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]" ) {
@@ -38,4 +39,20 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
     CHECK(resCascadeHeatHighToLow.effOpHours == Approx(7000));
     CHECK(resCascadeHeatHighToLow.energySavings == Approx(44826.53));
     CHECK(resCascadeHeatHighToLow.costSavings == Approx(224132.65));
+
+
+    auto resSteamEnergy = WaterHeatingUsingSteam().calculate(0.1565, 340.2,285.93,0.5150, 2.7255,285.93, 0.2048);
+    CHECK(resSteamEnergy.tempWaterOut == Approx(352.304));
+    CHECK(resSteamEnergy.bpTempWaterOut == Approx(426.1));
+    CHECK(resSteamEnergy.enthalpySteamIn == Approx(2695.04));
+    CHECK(resSteamEnergy.enthalpySteamOut == Approx(472.5));
+    CHECK(resSteamEnergy.enthalpyMakeUpWater == Approx(53.876));
+
+    resSteamEnergy = WaterHeatingUsingSteam().calculate(0.1703, 226.79,285.93,0.2737, 0.6814,285.93, 0.2048);
+    CHECK(resSteamEnergy.tempWaterOut == Approx(388.75));
+    CHECK(resSteamEnergy.bpTempWaterOut == Approx(403.57));
+    CHECK(resSteamEnergy.enthalpySteamIn == Approx(2698.89));
+    CHECK(resSteamEnergy.enthalpySteamOut == Approx(483.41));
+    CHECK(resSteamEnergy.enthalpyMakeUpWater == Approx(53.876));
+    CHECK(resSteamEnergy.flowByPassSteam == Approx(94.61));
 }

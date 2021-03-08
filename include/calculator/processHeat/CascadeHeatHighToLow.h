@@ -47,17 +47,17 @@ public:
 	 * @param          O2 % - double
      *
      *
-     * @param priFiringRate double
-     * @param priExhaustTemperature double
-     * @param priExhaustO2 double
-     * @param priCombAirTemperature double
-     * @param priOpHours double
-     * @param priFuelHV double
+     * @param priFiringRate double, units MMBtu/hr
+     * @param priExhaustTemperature double, units  F
+     * @param priExhaustO2 double, percentage / fraction
+     * @param priCombAirTemperature double, units F
+     * @param priOpHours double, units hrs/yr
+     * @param priFuelHV double, units Btu/SCF
      *
-     * @param secExhaustTemperature double
-     * @param secCombAirTemperature double
-     * @param secOpHours double
-     * @param secFuelCost double
+     * @param secExhaustTemperature double, units F
+     * @param secCombAirTemperature double, units F
+     * @param secOpHours double, units hrs/yr
+     * @param secFuelCost double, units $/MMBtu
      */
     CascadeHeatHighToLow(GasCompositions gasCompositions, double priFiringRate, double priExhaustTemperature,
                          double priExhaustO2, double priCombAirTemperature, double priOpHours, double priFuelHV,

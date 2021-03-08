@@ -73,18 +73,18 @@ public:
 
     /**
      *
-     * @param flueTemperature double
-     * @param excessAir double
-     * @param fireRate double
-     * @param airflow double
-     * @param inletTemperature double
-     * @param heaterEfficiency double
-     * @param hxEfficiency double
-     * @param operatingHours double
+     * @param flueTemperature double, units F
+     * @param excessAir double, units percentage / fraction
+     * @param fireRate double, units MMBtu/hr
+     * @param airflow double, units scfm
+     * @param inletTemperature double, units F
+     * @param heaterEfficiency double, units percentage / fraction
+     * @param hxEfficiency double, units percentage / fraction
+     * @param operatingHours double, units hr
      * @return Output
-     * @param hxColdAir double
-     * @param hxOutletExhaust double
-     * @param energySavings double
+     * @param hxColdAir double, units Btu/hr
+     * @param hxOutletExhaust double, units F
+     * @param energySavings double, units MMBtu/yr
      * @param heatCapacityFlue double
      * @param heatCapacityAir double
      *

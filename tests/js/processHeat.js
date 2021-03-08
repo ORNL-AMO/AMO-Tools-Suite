@@ -108,6 +108,44 @@ test('WaterHeatingUsingExhaust ChillerAbsorption', function (t) {
     compare(bindings.waterHeatingUsingExhaust(input), [1302000, 7810.437912, 79.205, 69.7004, 167280.96]);
 });
 
+test('WaterHeatingUsingSteam HeatExchanger', function (t) {
+    t.plan(13);
+    t.type(bindings.waterHeatingUsingSteam, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.tempWaterOut), rnd(expected[0]));
+        t.equal(rnd(results.bpTempWaterOut), rnd(expected[1]));
+        t.equal(rnd(results.enthalpySteamIn), rnd(expected[2]));
+        t.equal(rnd(results.enthalpySteamOut), rnd(expected[3]));
+        t.equal(rnd(results.enthalpyMakeUpWater), rnd(expected[4]));
+        t.equal(rnd(results.flowByPassSteam), rnd(expected[5]));
+    };
+
+
+    var input = {
+        pressureSteamIn: 0.1565,
+        flowSteamRate: 340.2,
+        temperatureWaterIn: 285.93,
+        pressureWaterOut: 0.5150,
+        flowWaterRate: 2.7255,
+        tempMakeupWater: 285.93,
+        presMakeupWater: 0.2048
+    };
+    compare(bindings.waterHeatingUsingSteam(input), [352.304, 426.1, 2695.04, 472.5, 53.876, 0]);
+
+
+    input = {
+        pressureSteamIn: 0.1703,
+        flowSteamRate: 226.79,
+        temperatureWaterIn: 285.93,
+        pressureWaterOut: 0.2737,
+        flowWaterRate: 0.6814,
+        tempMakeupWater: 285.93,
+        presMakeupWater: 0.2048
+    };
+    compare(bindings.waterHeatingUsingSteam(input), [388.75, 403.57, 2698.89, 483.41, 53.876, 94.61]);
+});
+
 test('CascadeHeatHighToLow Gas', function (t) {
     t.plan(7);
     t.type(bindings.cascadeHeatHighToLow, 'function');
