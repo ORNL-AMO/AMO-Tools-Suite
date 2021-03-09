@@ -8,6 +8,7 @@
 #include "./NanDataConverters.h"
 #include "calculator/processHeat/AirHeatingUsingExhaust.h"
 #include "calculator/processHeat/WaterHeatingUsingExhaust.h"
+#include "calculator/processHeat/WaterHeatingUsingSteam.h"
 #include "calculator/processHeat/CascadeHeatHighToLow.h"
 
 using namespace Nan;
@@ -103,7 +104,40 @@ NAN_METHOD(waterHeatingUsingExhaust)
     catch (std::runtime_error const &e)
     {
         std::string const what = e.what();
-        ThrowError(std::string("std::runtime_error thrown in Water ProcessHeat - calculator: " + what).c_str());
+        ThrowError(std::string("std::runtime_error thrown in Water ProcessHeat using Exhaust- calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(waterHeatingUsingSteam)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double pressureSteamIn = getDouble("pressureSteamIn", inp);
+        const double flowSteamRate = getDouble("flowSteamRate", inp);
+        const double temperatureWaterIn = getDouble("temperatureWaterIn", inp);
+        const double pressureWaterOut = getDouble("pressureWaterOut", inp);
+        const double flowWaterRate = getDouble("flowWaterRate", inp);
+        const double tempMakeupWater = getDouble("tempMakeupWater", inp);
+        const double presMakeupWater = getDouble("presMakeupWater", inp);
+
+        auto output = WaterHeatingUsingSteam().calculate(pressureSteamIn,flowSteamRate,temperatureWaterIn,pressureWaterOut,flowWaterRate,tempMakeupWater,presMakeupWater);
+
+        setR("tempWaterOut", output.tempWaterOut);
+        setR("bpTempWaterOut", output.bpTempWaterOut);
+        setR("enthalpySteamIn", output.enthalpySteamIn);
+        setR("enthalpySteamOut", output.enthalpySteamOut);
+        setR("enthalpyMakeUpWater", output.enthalpyMakeUpWater);
+        setR("flowByPassSteam", output.flowByPassSteam);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Water ProcessHeat using Steam - calculator: " + what).c_str());
     }
 }
 

@@ -30,20 +30,20 @@ public:
 
     /**
      *
-     * @param availableHeat double
-     * @param heatInput double
-     * @param hxEfficiency double
-     * @param chillerInTemperature double
-     * @param chillerOutTemperature double
-     * @param copChiller double
-     * @param chillerEfficiency double
-     * @param copCompressor double
+     * @param availableHeat double, units percentage / fraction
+     * @param heatInput double, units Btu/hr
+     * @param hxEfficiency double, units percentage / fraction
+     * @param chillerInTemperature double, units F
+     * @param chillerOutTemperature double, units F
+     * @param copChiller double, units percentage / fraction
+     * @param chillerEfficiency double, units percentage / fraction
+     * @param copCompressor double, units percentage / fraction
      * @return Output
-     * @param recoveredHeat
-     * @param hotWaterFlow
-     * @param tonsRefrigeration
-     * @param capacityChiller
-     * @param electricalEnergy
+     * @param recoveredHeat, units btu/hr
+     * @param hotWaterFlow, units gal/hr
+     * @param tonsRefrigeration, units Tons
+     * @param capacityChiller, units Tons
+     * @param electricalEnergy, units btu/hr
      *
      */
     Output calculate(const double availableHeat, const double heatInput, const double hxEfficiency,
