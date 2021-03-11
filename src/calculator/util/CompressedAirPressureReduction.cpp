@@ -13,8 +13,17 @@ CompressedAirPressureReduction::Output CompressedAirPressureReduction::calculate
         //modification calculation
         if (!compressedAirPressureReductionInput.getIsBaseline())
         {
-            tmpEnergyUse = compressedAirPressureReductionInput.getHoursPerYear() * compressedAirPressureReductionInput.getCompressorPower() 
-                           * (1 - (compressedAirPressureReductionInput.getPressure() - compressedAirPressureReductionInput.getProposedPressure()) * 0.005);
+            double pressure = compressedAirPressureReductionInput.getPressure();
+            double atmosphericPressure = compressedAirPressureReductionInput.getAtmosphericPressure();
+            double pressureRated = compressedAirPressureReductionInput.getPressureRated();
+            double compressorPower = compressedAirPressureReductionInput.getCompressorPower();
+
+            double r = (pressureRated + 14.7) / 14.7;
+            double x = (pressure + atmosphericPressure) / atmosphericPressure;
+            double c = .395 / 1.395;
+
+            double energyUse = compressorPower * (pow(x, c) - 1) / (pow(r, c) - 1);
+            tmpEnergyUse = compressedAirPressureReductionInput.getHoursPerYear() * energyUse;
             tmpEnergyCost = tmpEnergyUse * compressedAirPressureReductionInput.getElectricityCost();
         }
         //baseline calculation
