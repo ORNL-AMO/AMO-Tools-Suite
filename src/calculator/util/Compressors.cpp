@@ -10,7 +10,6 @@
  */
 
 #include <algorithm>
-#include <math.h>
 #include "calculator/util/Compressors.h"
 
 CompressorsBase::OutputBlowOff Compressors_Centrifugal_BlowOff::calculateFromPerkW_BlowOff(double PerkW, double blowPer) {

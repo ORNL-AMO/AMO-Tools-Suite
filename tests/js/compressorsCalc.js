@@ -611,3 +611,66 @@ test('Compressors ModulationWithUnload', function (t) {
 
     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
 });
+
+
+test('CompEEM_ReduceAirLeaks', function (t) {
+    t.plan(4);
+    t.type(bindings.CompEEM_ReduceAirLeaks, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.C_lkred), rnd(expected[0]));
+        t.equal(rnd(results.C_usage_lkred), rnd(expected[1]));
+        t.equal(rnd(results.PerC_lkred), rnd(expected[2]));
+    };
+
+    var input = {
+        C_fl: 473,
+        C_usage: 100,
+        C_lk: 10,
+        PerC_lkred: 0.5
+    };
+
+    compare(bindings.CompEEM_ReduceAirLeaks(input), [5, 95, 0.20084]);
+});
+
+test('CompEEM_ImproveEndUseEfficiency', function (t) {
+    t.plan(3);
+    t.type(bindings.CompEEM_ImproveEndUseEfficiency, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.C_af_red), rnd(expected[0]));
+        t.equal(rnd(results.CPer_af_red), rnd(expected[1]));
+    };
+
+    var input = {
+        C_fl: 473,
+        C_usage: 236,
+        C_avgaf_red: 20
+    };
+
+    compare(bindings.CompEEM_ImproveEndUseEfficiency(input), [216, 0.45666]);
+});
+
+test('CompEEM_ReduceSystemAirPressure', function (t) {
+    t.plan(5);
+    t.type(bindings.CompEEM_ReduceSystemAirPressure, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.P_fl_rpred), rnd(expected[0]));
+        t.equal(rnd(results.kW_fl_rpadj), rnd(expected[1]));
+        t.equal(rnd(results.C_usage_rpred), rnd(expected[2]));
+        t.equal(rnd(results.PerC_rpred), rnd(expected[3]));
+    };
+
+    var input = {
+        C_fl: 473,
+        C_usage: 100,
+        P_fl: 100,
+        kW_fl: 85.4,
+        P_rpred: 5,
+        P_alt: 14.7,
+        P_atm: 14.7
+    };
+
+    compare(bindings.CompEEM_ReduceSystemAirPressure(input), [95, 82.972, 97.384, 0.2059]);
+});

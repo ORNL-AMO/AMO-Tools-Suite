@@ -445,3 +445,87 @@ NAN_METHOD(CompressorsCalc)
         ThrowError(std::string("std::runtime_error thrown in Compressors - calculator: " + what).c_str());
     }
 }
+
+
+NAN_METHOD(CompEEM_ReduceAirLeaks)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double C_fl = getDouble("C_fl", inp);
+        const double C_usage = getDouble("C_usage", inp);
+        const double C_lk = getDouble("C_lk", inp);
+        const double PerC_lkred = getDouble("PerC_lkred", inp);
+
+        auto output = CompressorEEMs::ReduceAirLeaks(C_fl,C_usage,C_lk,PerC_lkred);
+
+        setR("C_lkred", output.C_lkred);
+        setR("C_usage_lkred", output.C_usage_lkred);
+        setR("PerC_lkred", output.PerC_lkred);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Compressors - EEM - ReduceAirLeaks: " + what).c_str());
+    }
+}
+
+NAN_METHOD(CompEEM_ImproveEndUseEfficiency)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double C_fl = getDouble("C_fl", inp);
+        const double C_usage = getDouble("C_usage", inp);
+        const double C_avgaf_red = getDouble("C_avgaf_red", inp);
+
+        auto output = CompressorEEMs::ImproveEndUseEfficiency(C_fl,C_usage,C_avgaf_red);
+
+        setR("C_af_red", output.C_af_red);
+        setR("CPer_af_red", output.CPer_af_red);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Compressors - EEM - ImproveEndUseEfficiency: " + what).c_str());
+    }
+}
+
+NAN_METHOD(CompEEM_ReduceSystemAirPressure)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double C_fl = getDouble("C_fl", inp);
+        const double C_usage = getDouble("C_usage", inp);
+        const double P_fl = getDouble("P_fl", inp);
+        const double kW_fl = getDouble("kW_fl", inp);
+        const double P_rpred = getDouble("P_rpred", inp);
+        const double P_alt = getDouble("P_alt", inp);
+        const double P_atm = getDouble("P_atm", inp);
+
+        auto output = CompressorEEMs::ReduceSystemAirPressure(C_fl,C_usage,P_fl,kW_fl,P_rpred, P_alt, P_atm);
+
+        setR("P_fl_rpred", output.P_fl_rpred);
+        setR("kW_fl_rpadj", output.kW_fl_rpadj);
+        setR("C_usage_rpred", output.C_usage_rpred);
+        setR("PerC_rpred", output.PerC_rpred);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Compressors - EEM - ReduceSystemAirPressure: " + what).c_str());
+    }
+}
