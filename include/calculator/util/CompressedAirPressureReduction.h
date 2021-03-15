@@ -8,6 +8,16 @@
 class CompressedAirPressureReductionInput
 {
   public:
+        /**
+        * @param isBaseline boolean
+        * @param hoursPerYear int
+        * @param electricityCost double
+        * @param compressorPower double, kWh
+        * @param pressure double, barg
+        * @param proposedPressure double, barg
+        * @param atmosphericPressure double, bara
+        * @param pressureRated double, barg
+        */
     CompressedAirPressureReductionInput(const bool isBaseline, const int hoursPerYear,
                                         const double electricityCost, const double compressorPower,
                                         const double pressure, const double proposedPressure,
