@@ -857,7 +857,9 @@ test('Compressed Air Pressure Reduction - Baseline', function (t) {
                 electricityCost: 0.005,
                 compressorPower: 500,
                 pressure: 150,
-                proposedPressure: null
+                proposedPressure: null,
+                atmosphericPressure: null,
+                pressureRated: null
             },
             {
                 isBaseline: true,
@@ -865,7 +867,9 @@ test('Compressed Air Pressure Reduction - Baseline', function (t) {
                 electricityCost: 0.005,
                 compressorPower: 250,
                 pressure: 150,
-                proposedPressure: null
+                proposedPressure: null,
+                atmosphericPressure: null,
+                pressureRated: null
             },
             {
                 isBaseline: true,
@@ -873,7 +877,9 @@ test('Compressed Air Pressure Reduction - Baseline', function (t) {
                 electricityCost: 0.005,
                 compressorPower: 500,
                 pressure: 120,
-                proposedPressure: 120
+                proposedPressure: 120,
+                atmosphericPressure: null,
+                pressureRated: null
             },
             {
                 isBaseline: true,
@@ -881,7 +887,9 @@ test('Compressed Air Pressure Reduction - Baseline', function (t) {
                 electricityCost: 0.005,
                 compressorPower: 450,
                 pressure: 170,
-                proposedPressure: 100
+                proposedPressure: 100,
+                atmosphericPressure: null,
+                pressureRated: null
             }
         ]
     };
@@ -899,26 +907,20 @@ test('Compressed Air Pressure Reduction - Modification', function (t) {
         compressedAirPressureReductionInputVec: [
             {
                 isBaseline: false,
-                hoursPerYear: 8640,
+                hoursPerYear: 8760,
                 electricityCost: 0.005,
-                compressorPower: 500,
-                pressure: 150,
-                proposedPressure: 50
-            },
-            {
-                isBaseline: false,
-                hoursPerYear: 8640,
-                electricityCost: 0.005,
-                compressorPower: 250,
-                pressure: 150,
-                proposedPressure: 89
+                compressorPower: 200,
+                pressure: 100,
+                proposedPressure: 90,
+                atmosphericPressure: 14.7,
+                pressureRated: 100
             }
         ]
     };
 
     var res = bindings.compressedAirPressureReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(3661200.0));
-    t.equal(rnd(res.energyCost), rnd(18306.0));
+    t.equal(rnd(res.energyUse), rnd(1650714.710542));
+    t.equal(rnd(res.energyCost), rnd(8253.57355271));
 });
 
 

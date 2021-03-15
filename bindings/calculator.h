@@ -890,8 +890,8 @@ CompressedAirPressureReductionInput constructCompressedAirPressureReductionInput
         compressorPower,
         pressure,
         proposedPressure,
-        pressureRated,
-        atmosphericPressure
+        atmosphericPressure,
+        pressureRated
         };
 }
 
