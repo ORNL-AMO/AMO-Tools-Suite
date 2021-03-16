@@ -359,4 +359,20 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a C
     CHECK(resMUL.C_Calc == Approx(1016.56));
     CHECK(resMUL.PerkW == Approx(0.997188));
     CHECK(resMUL.C_Per == Approx(0.97));
+
+
+    auto redAirLeak = CompressorEEMs::ReduceAirLeaks(473, 100, 10, 0.5);
+    CHECK(redAirLeak.C_lkred == Approx(5));
+    CHECK(redAirLeak.C_usage_lkred == Approx(95));
+    CHECK(redAirLeak.PerC_lkred == Approx(0.20084));
+
+    auto endUseEff = CompressorEEMs::ImproveEndUseEfficiency(473, 236, 20);
+    CHECK(endUseEff.C_af_red == Approx(216));
+    CHECK(endUseEff.CPer_af_red == Approx(0.45666));
+
+    auto redAirPressure = CompressorEEMs::ReduceSystemAirPressure(473, 100, 100, 85.4, 5, 14.7,14.7);
+    CHECK(redAirPressure.P_fl_rpred == Approx(95));
+    CHECK(redAirPressure.kW_fl_rpadj == Approx(82.972));
+    CHECK(redAirPressure.C_usage_rpred == Approx(97.384));
+    CHECK(redAirPressure.PerC_rpred == Approx(0.2059));
 }

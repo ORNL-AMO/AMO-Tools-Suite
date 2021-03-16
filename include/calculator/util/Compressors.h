@@ -34,8 +34,9 @@
 #ifndef AMO_TOOLS_SUITE_COMPRESSORS_H
 #define AMO_TOOLS_SUITE_COMPRESSORS_H
 
-#include "CurveFitVal.h"
+#include <math.h>
 #include <stdexcept>
+#include "CurveFitVal.h"
 
 class CompressorsBase {
 public:
@@ -912,6 +913,96 @@ public:
             Compressors_LoadUnload(kW_fl, C_fl, kW_max, P_fl, P_max, P_mod, P_atm, Compressors::Screw, Compressors::Injected, CntrlType, kW_nl)
             {
 
+    }
+};
+
+
+class CompressorEEMs {
+public:
+    struct ReduceAirLeaksOutput
+    {
+        ReduceAirLeaksOutput(double C_lkred, double C_usage_lkred, double PerC_lkred) : C_lkred(C_lkred), C_usage_lkred(C_usage_lkred), PerC_lkred(PerC_lkred){}
+
+        ReduceAirLeaksOutput() = default;
+        double C_lkred = 0, C_usage_lkred = 0, PerC_lkred = 0;
+    };
+
+    struct ImproveEndUseEfficiencyOutput
+    {
+        ImproveEndUseEfficiencyOutput(double C_af_red, double CPer_af_red) : C_af_red(C_af_red), CPer_af_red(CPer_af_red){}
+
+        ImproveEndUseEfficiencyOutput() = default;
+        double C_af_red = 0, CPer_af_red = 0;
+    };
+
+    struct ReduceSystemAirPressureOutput
+    {
+        ReduceSystemAirPressureOutput(double P_fl_rpred, double kW_fl_rpadj, double C_usage_rpred, double PerC_rpred) :
+        P_fl_rpred(P_fl_rpred), kW_fl_rpadj(kW_fl_rpadj), C_usage_rpred(C_usage_rpred), PerC_rpred(PerC_rpred){}
+
+        ReduceSystemAirPressureOutput() = default;
+        double P_fl_rpred = 0, kW_fl_rpadj = 0, C_usage_rpred = 0, PerC_rpred = 0;
+    };
+
+    /**
+     *
+     * @param C_fl double, units acfm
+     * @param C_usage double, units acfm
+     * @param C_lk double, units acfm
+     * @param PerC_lkred double percentage / fraction
+     *
+     * @return
+     * @param C_lkred double, units acfm
+     * @param C_usage_lkred double, units acfm
+     * @param PerC_lkred double percentage / fraction
+     *
+     */
+    static ReduceAirLeaksOutput ReduceAirLeaks(double C_fl, double C_usage, double C_lk, double PerC_lkred){
+        const double C_lkred = PerC_lkred * C_lk;
+        const double C_usage_lkred = C_usage - C_lkred;
+
+        return ReduceAirLeaksOutput(C_lkred, C_usage_lkred, C_usage_lkred / C_fl);
+    }
+
+    /**
+     *
+     * @param C_fl double, units acfm
+     * @param C_usage double, units acfm
+     * @param C_avgaf_red double, units acfm
+     *
+     * @return
+     * @param C_af_red double, units acfm
+     * @param CPer_af_red double percentage / fraction
+     *
+     */
+    static ImproveEndUseEfficiencyOutput ImproveEndUseEfficiency(double C_fl, double C_usage, double C_avgaf_red){
+        const double C_af_red = C_usage - C_avgaf_red;
+        return ImproveEndUseEfficiencyOutput(C_af_red, C_af_red / C_fl);
+    }
+
+    /**
+     *
+     * @param C_fl double, units acfm
+     * @param C_usage double, units acfm
+     * @param P_fl double, units psig
+     * @param kW_fl double, units kW
+     * @param P_rpred double, units psig
+     * @param P_alt double, units psia
+     * @param P_atm double, units psia
+     *
+     * @return
+     * @param P_fl_rpred double, units psig
+     * @param kW_fl_rpadj double, units kW
+     * @param C_usage_rpred double, units acfm
+     * @param PerC_rpred double percentage / fraction
+     *
+     */
+    static ReduceSystemAirPressureOutput ReduceSystemAirPressure(double C_fl, double C_usage, double P_fl, double kW_fl, double P_rpred, double P_alt = 14.69, double P_atm = 14.69){
+        const double P_fl_rpred = P_fl - P_rpred;
+        const double kW_fl_rpadj = kW_fl * ((pow((P_fl_rpred + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl + P_atm) / P_atm, 0.283) - 1));
+        const double C_usage_rpred  = (C_usage - (C_usage - (C_usage * ((P_fl_rpred + P_alt) / (P_fl + P_atm)))) * 0.6);
+
+        return ReduceSystemAirPressureOutput(P_fl_rpred, kW_fl_rpadj, C_usage_rpred,  C_usage_rpred/ C_fl);
     }
 };
 #endif //AMO_TOOLS_SUITE_COMPRESSORS_H
