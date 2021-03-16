@@ -14,7 +14,7 @@ test('fansExisting', function (t) {
         "efficiencyClass": 1, "specifiedEfficiency": 100, "motorRatedVoltage": 460, "fullLoadAmps": 683.2505707137,
         "sizeMargin": 1, "measuredPower": 460, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
         "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988, "loadEstimationMethod": 0,
-        "operatingHours": 8760, "unitCost": 0.06, "airDensity": 1.02
+        "operatingHours": 8760, "unitCost": 0.06, "airDensity": 1.02, "velocityPressure": 0
     };
 
     var output = bindings.fanResultsExisting(input);
@@ -42,6 +42,7 @@ test('fansModified', function (t) {
         "sizeMargin": 1, "measuredVoltage": 460, "measuredAmps": 660, "flowRate": 129691,
         "inletPressure": -16.36, "outletPressure": 1.1, "compressibilityFactor": 0.988,
         "operatingHours": 8760, "unitCost": 0.06, "airDensity": 1.02, "fanEfficiency": 59.5398315, "isSpecified": false,
+        "velocityPressure": 0
     };
 
     var output = bindings.fanResultsModified(input);

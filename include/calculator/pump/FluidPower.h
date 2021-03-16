@@ -30,9 +30,9 @@ public:
      * @param outletPressure double, in inches of water column, gauge
      * @param compressibilityFactor double, unitless
      */
-    FluidPower(double flowRate, const double inletPressure, const double outletPressure, const double compressibilityFactor)
+    FluidPower(double flowRate, const double inletPressure, const double outletPressure, const double compressibilityFactor, const double velocityPressure)
             : flowRate(flowRate), inletPressure(inletPressure), outletPressure(outletPressure),
-              compressibilityFactor(compressibilityFactor), isPump(false)
+              compressibilityFactor(compressibilityFactor), isPump(false), velocityPressure(velocityPressure)
     {};
 
     /**
@@ -43,14 +43,14 @@ public:
         if (isPump) {
             return 0.746 * flowRate * head * specificGravity / 3961.38;
         }
-        return 0.746 * flowRate * (outletPressure - inletPressure) * compressibilityFactor / 6362;
+        return 0.746 * flowRate * (outletPressure - inletPressure - velocityPressure) * compressibilityFactor / 6362;
     }
 
 private:
     const double specificGravity = 0, flowRate, head = 0;
 
     // used only for fan fluid power calculations
-    const double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
+    const double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0, velocityPressure = 0;
 
     const bool isPump;
 
