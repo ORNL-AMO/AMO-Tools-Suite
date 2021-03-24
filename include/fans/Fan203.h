@@ -56,7 +56,7 @@ public:
 		RelativeHumidity,
 		WetBulbTemp
 	};
- 
+
 	/**
  * @param dryBulbTemp double, temperature of inputted air in °F
  * @param staticPressure const, double, pressure in Hg 
@@ -141,7 +141,7 @@ public:
 		relativeHumidity = calculateRelativeHumidityFromWetBulb(tdo, wetBulbTemp, cpGas);
 
 		calculateFanAttributes(inputType);
-		
+
 		/*
 		std::ofstream fout;
     	fout.open("debug.txt", std::ios::app);
@@ -218,19 +218,30 @@ private:
 	double calculateWetBulbTemperature(double dryBulbTemp, double relativeHumidity, double absolutePressure) const
 	{
 		// Newton-Raphson iteration (solve to within 0.001% accuracy)
-		
+
 		double humidityRatioNormal = calculateRatioRH(dryBulbTemp, relativeHumidity, absolutePressure, 1);
 		double wetBulbTemp = dryBulbTemp; // set initial guess
 		double humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
-		
-		while (fabs((humidityRatioNew - humidityRatioNormal) / humidityRatioNormal) > 0.00001)
+		if (humidityRatioNormal > 0)
 		{
-			double humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
-			double dw_dtwb = (humidityRatioNew - humidityRatioNew2) / 0.001;
-			wetBulbTemp = wetBulbTemp - (humidityRatioNew - humidityRatioNormal) / dw_dtwb;
-			humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
+			while (fabs((humidityRatioNew - humidityRatioNormal) / humidityRatioNormal) > 0.00001)
+			{
+				double humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
+				double dw_dtwb = (humidityRatioNew - humidityRatioNew2) / 0.001;
+				wetBulbTemp = wetBulbTemp - (humidityRatioNew - humidityRatioNormal) / dw_dtwb;
+				humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
+			}
 		}
-
+		else
+		{
+			while (fabs(humidityRatioNew) > 0.00001)
+			{
+				double humidityRatioNew2 = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp - 0.001, 0.24);
+				double dw_dtwb = (humidityRatioNew - humidityRatioNew2) / 0.001;
+				wetBulbTemp = wetBulbTemp - (humidityRatioNew - humidityRatioNormal) / dw_dtwb;
+				humidityRatioNew = calculateHumidityRatioFromWetBulb(dryBulbTemp, wetBulbTemp, 0.24);
+			}
+		}
 		return wetBulbTemp;
 	}
 	/**
@@ -313,7 +324,7 @@ private:
 		fout << "------------------------------" << std::endl << std::endl;
 		fout.close();
 		*/
-		
+
 		return pV / psatDb;
 	}
 	/**
@@ -324,7 +335,7 @@ private:
  * @param cpGas double, BTU/lb-degF
  * @return humidityRatio double, Humidity Ratio, unitless
  */
-	double calculateHumidityRatioFromWetBulb(const double dryBulbTemp, const double wetBulbTemp,  const double cpGas) const
+	double calculateHumidityRatioFromWetBulb(const double dryBulbTemp, const double wetBulbTemp, const double cpGas) const
 	{
 		double const nMol = 0.62198;
 		double const local_pIn = pbo + (pso / 13.608703);
@@ -348,17 +359,17 @@ private:
 
 		absolutePressure = pbo + (pso / 13.608703);
 		saturatedHumidity = nMol * saturationPressure / (absolutePressure - saturationPressure);
-		saturationDegree = relativeHumidity / ( 1 + ( 1 - relativeHumidity) * saturatedHumidity / nMol);
+		saturationDegree = relativeHumidity / (1 + (1 - relativeHumidity) * saturatedHumidity / nMol);
 		humidityRatio = saturationDegree * saturatedHumidity;
 		specificVolume = (10.731557 * (tdo + 459.67) * (1 + 1.6078 * humidityRatio)) / (28.9645 * absolutePressure * 0.4911541);
 		gasDensity = (1 / specificVolume) * (1 + humidityRatio);
 		enthalpy = (0.247 * tdo) + (humidityRatio * (1061 + 0.444 * tdo));
 
-		if(inputType != InputType::DewPoint)
+		if (inputType != InputType::DewPoint)
 		{
 			double const alpha = std::log(absolutePressure * 0.4911541 * humidityRatio / (nMol + humidityRatio));
 
-			if(tdo < 32)
+			if (tdo < 32)
 			{
 				dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
 			}
@@ -366,14 +377,13 @@ private:
 			{
 				dewPoint = 100.45 + 33.193 * alpha + 2.319 * alpha * alpha + 0.17074 * alpha * alpha * alpha + 1.2063 * (std::pow((absolutePressure * 0.4911541 * humidityRatio / (0.62196 + humidityRatio)), 0.1984));
 			}
-			
 		}
 		else
 		{
 			dewPoint = relativeHumidityOrDewPoint;
 		}
 
-		if(inputType != InputType::WetBulbTemp) // If not given as an input, calculate wet bulb temperature
+		if (inputType != InputType::WetBulbTemp) // If not given as an input, calculate wet bulb temperature
 		{
 			wetBulbTemp = calculateWetBulbTemperature(tdo, relativeHumidity, absolutePressure);
 		}
