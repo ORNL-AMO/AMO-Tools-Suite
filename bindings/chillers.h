@@ -9,15 +9,11 @@
 #include <cmath>
 #include <vector>
 #include <iostream>
-
-//#include "calculator.h"
+#include "./NanDataConverters.h"
 #include "chillers/CoolingTower.h"
 
 using namespace Nan;
 using namespace v8;
-
-Local<Object> inp;
-Local<Object> r;
 
 double GetDouble(std::string const &key, Local<Object> obj)
 {
@@ -185,4 +181,180 @@ NAN_METHOD(coolingTowerMakeupWater)
     info.GetReturnValue().Set(r);
 }
 
+
+NAN_METHOD(coolingTowerBasinHeaterEnergyConsumption)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double ratedCapacity = getDouble("ratedCapacity", inp);
+        const double ratedTempSetPoint = getDouble("ratedTempSetPoint", inp);
+        const double ratedTempDryBulb = getDouble("ratedTempDryBulb", inp);
+        const double ratedWindSpeed = getDouble("ratedWindSpeed", inp);
+
+        const double operatingTempDryBulb = getDouble("operatingTempDryBulb", inp);
+        const double operatingWindSpeed = getDouble("operatingWindSpeed", inp);
+        const double operatingHours = getDouble("operatingHours", inp);
+
+        const double baselineTempSetPoint = getDouble("baselineTempSetPoint", inp);
+        const double modTempSetPoint = getDouble("modTempSetPoint", inp);
+
+        auto output = CoolingTower::BasinHeaterEnergyConsumption(
+                ratedCapacity,ratedTempSetPoint,ratedTempDryBulb,ratedWindSpeed,
+                operatingTempDryBulb,operatingWindSpeed,operatingHours,
+                baselineTempSetPoint, modTempSetPoint);
+
+        setR("baselinePower", output.baselinePower);
+        setR("baselineEnergy", output.baselineEnergy);
+        setR("modPower", output.modPower);
+        setR("modEnergy", output.modEnergy);
+        setR("savingsEnergy", output.savingsEnergy);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Cooling Tower Basin Heater Energy Consumption - calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(coolingTowerFanEnergyConsumption)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double ratedFanPower = getDouble("ratedFanPower", inp);
+
+        const double waterLeavingTemp = getDouble("waterLeavingTemp", inp);
+        const double waterEnteringTemp = getDouble("waterEnteringTemp", inp);
+        const double operatingTempWetBulb = getDouble("operatingTempWetBulb", inp);
+        const double operatingHours = getDouble("operatingHours", inp);
+
+        const int baselineSpeedType = getInteger("baselineSpeedType");
+        const int modSpeedType = getInteger("modSpeedType");
+
+        auto output = CoolingTower::FanEnergyConsumption(
+                ratedFanPower,
+                waterLeavingTemp,waterEnteringTemp,operatingTempWetBulb,operatingHours,
+                (CoolingTower::FanControlSpeedType)baselineSpeedType,(CoolingTower::FanControlSpeedType)modSpeedType);
+
+        setR("baselinePower", output.baselinePower);
+        setR("baselineEnergy", output.baselineEnergy);
+        setR("modPower", output.modPower);
+        setR("modEnergy", output.modEnergy);
+        setR("savingsEnergy", output.savingsEnergy);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Cooling Tower Fan Energy Consumption - calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(chillerCapacityEfficiency)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const int chillerType = getInteger("chillerType");
+        const int condenserCoolingType = getInteger("condenserCoolingType");
+        const int compressorConfigType = getInteger("compressorConfigType");
+
+        const double ariCapacity = getDouble("ariCapacity", inp);
+        const double ariEfficiency = getDouble("ariEfficiency", inp);
+        const double maxCapacityRatio = getDouble("maxCapacityRatio", inp);
+
+        const double operatingHours = getDouble("operatingHours", inp);
+        const double waterFlowRate = getDouble("waterFlowRate", inp);
+        const double waterDeltaT = getDouble("waterDeltaT", inp);
+
+        const double baselineWaterSupplyTemp = getDouble("baselineWaterSupplyTemp", inp);
+        const double baselineWaterEnteringTemp = getDouble("baselineWaterEnteringTemp", inp);
+        const double modWaterSupplyTemp = getDouble("modWaterSupplyTemp", inp);
+        const double modWaterEnteringTemp = getDouble("modWaterEnteringTemp", inp);
+
+        auto output = ChillerEfficiency::ChillerCapacityEfficiency(
+                (ChillerEfficiency::ChillerType)chillerType, (ChillerEfficiency::CondenserCoolingType)condenserCoolingType, (ChillerEfficiency::CompressorConfigType)compressorConfigType,
+                ariCapacity,ariEfficiency, maxCapacityRatio, operatingHours, waterFlowRate, waterDeltaT,
+                baselineWaterSupplyTemp, baselineWaterEnteringTemp,
+                modWaterSupplyTemp, modWaterEnteringTemp);
+
+        setR("baselineActualEfficiency", output.baselineActualEfficiency);
+        setR("baselineActualCapacity", output.baselineActualCapacity);
+        setR("baselinePower", output.baselinePower);
+        setR("baselineEnergy", output.baselineEnergy);
+        setR("modActualEfficiency", output.modActualEfficiency);
+        setR("modActualCapacity", output.modActualCapacity);
+        setR("modPower", output.modPower);
+        setR("modEnergy", output.modEnergy);
+        setR("savingsEnergy", output.savingsEnergy);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Chiller Capacity Efficiency Energy Consumption - calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(chillerStaging)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const int chillerType = getInteger("chillerType");
+        const int condenserCoolingType = getInteger("condenserCoolingType");
+        const int compressorConfigType = getInteger("compressorConfigType");
+
+        const double ariCapacity = getDouble("ariCapacity", inp);
+        const double ariEfficiency = getDouble("ariEfficiency", inp);
+        const double maxCapacityRatio = getDouble("maxCapacityRatio", inp);
+
+        const double operatingHours = getDouble("operatingHours", inp);
+        const double waterSupplyTemp = getDouble("waterSupplyTemp", inp);
+        const double waterEnteringTemp = getDouble("waterEnteringTemp", inp);
+
+        std::vector<double> baselineLoadList = GetVector("baselineLoadList", inp);
+        std::vector<double> modLoadList = GetVector("modLoadList", inp);
+
+        auto output = ChillerEfficiency::ChillerStagingEfficiency(
+                (ChillerEfficiency::ChillerType)chillerType, (ChillerEfficiency::CondenserCoolingType)condenserCoolingType, (ChillerEfficiency::CompressorConfigType)compressorConfigType,
+                ariCapacity, ariEfficiency, maxCapacityRatio, operatingHours, waterSupplyTemp, waterEnteringTemp,
+                baselineLoadList, modLoadList);
+
+        setR("baselineTotalPower", output.baselineTotalPower);
+        setR("baselineTotalEnergy", output.baselineTotalEnergy);
+        setR("modTotalPower", output.modTotalPower);
+        setR("modTotalEnergy", output.modTotalEnergy);
+        setR("savingsEnergy", output.savingsEnergy);
+
+        auto baselinePowers = New<Array>(output.baselinePowerList.size());
+        auto modPowers = New<Array>(output.baselinePowerList.size());
+        for (unsigned i = 0; i < baselinePowers->Length(); i++) {
+            baselinePowers->Set(Nan::GetCurrentContext(), i, New(output.baselinePowerList[i]));
+            modPowers->Set(Nan::GetCurrentContext(), i, New(output.modPowerList[i]));
+        }
+        Nan::Set(r, New("baselinePowerList").ToLocalChecked(), baselinePowers);
+        Nan::Set(r, New("modPowerList").ToLocalChecked(), modPowers);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Chiller Staging Energy Consumption - calculator: " + what).c_str());
+    }
+}
 #endif //AMO_TOOLS_SUITE_CHILLERS_H
