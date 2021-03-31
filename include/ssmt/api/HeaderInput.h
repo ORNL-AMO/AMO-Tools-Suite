@@ -8,7 +8,8 @@
 /**
  * Steam Modeler header input data base class.
  */
-class HeaderWithPressure {
+class HeaderWithPressure
+{
 public:
     HeaderWithPressure(double pressure, double processSteamUsage, double condensationRecoveryRate, double heatLoss,
                        bool flashCondensate);
@@ -34,7 +35,8 @@ protected:
 /**
  * Steam Modeler header input data for the header with the highest pressure.
  */
-class HeaderWithHighestPressure : public HeaderWithPressure {
+class HeaderWithHighestPressure : public HeaderWithPressure
+{
 public:
     HeaderWithHighestPressure(double pressure, double processSteamUsage, double condensationRecoveryRate,
                               double heatLoss, double condensateReturnTemperature, bool flashCondensateReturn);
@@ -50,7 +52,8 @@ private:
 /**
  * Steam Modeler header input data for the header with the not highest pressure.
  */
-class HeaderNotHighestPressure : public HeaderWithPressure {
+class HeaderNotHighestPressure : public HeaderWithPressure
+{
 public:
     HeaderNotHighestPressure(double pressure, double processSteamUsage, double condensationRecoveryRate,
                              double heatLoss, bool flashCondensateIntoHeader, bool desuperheatSteamIntoNextHighest,
@@ -70,11 +73,17 @@ private:
 /**
  * Steam Modeler header input data.
  */
-class HeaderInput {
+class HeaderInput
+{
 public:
     HeaderInput(const HeaderWithHighestPressure &highPressureHeader,
                 const std::shared_ptr<HeaderNotHighestPressure> &mediumPressureHeader,
                 const std::shared_ptr<HeaderNotHighestPressure> &lowPressureHeader);
+
+    HeaderInput(const HeaderWithHighestPressure &highPressureHeader,
+                const std::shared_ptr<HeaderNotHighestPressure> &lowPressureHeader);
+
+    HeaderInput(const HeaderWithHighestPressure &highPressureHeader);
 
     friend std::ostream &operator<<(std::ostream &stream, const HeaderInput &headerInput);
 

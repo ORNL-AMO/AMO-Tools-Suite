@@ -103,7 +103,7 @@ EMSCRIPTEN_BINDINGS(steamModeler)
     class_<LowPressureFlashedSteamIntoHeaderCalculatorDomain>("LowPressureFlashedSteamIntoHeaderCalculatorDomain")
         .property("mediumPressureCondensateFlashTank", &LowPressureFlashedSteamIntoHeaderCalculatorDomain::mediumPressureCondensateFlashTank)
         .property("highPressureCondensateFlashTank", &LowPressureFlashedSteamIntoHeaderCalculatorDomain::highPressureCondensateFlashTank);
-    
+
     class_<ReturnCondensateCalculationsDomain>("ReturnCondensateCalculationsDomain")
         .property("condensateFlashTank", &ReturnCondensateCalculationsDomain::condensateFlashTank)
         .property("returnCondensateFlashed", &ReturnCondensateCalculationsDomain::returnCondensateFlashed);
@@ -139,9 +139,14 @@ EMSCRIPTEN_BINDINGS(steamModeler)
 
     //HeaderInput
     class_<HeaderInput>("HeaderInput")
-        .constructor<HeaderWithHighestPressure, std::shared_ptr<HeaderNotHighestPressure>, std::shared_ptr<HeaderNotHighestPressure>>();
+        .constructor<HeaderWithHighestPressure, std::shared_ptr<HeaderNotHighestPressure>, std::shared_ptr<HeaderNotHighestPressure>>()
+        .constructor<HeaderWithHighestPressure, std::shared_ptr<HeaderNotHighestPressure>>()
+        .constructor<HeaderWithHighestPressure>();
 
-//HeaderWithPressure
+    //register nullptr
+    // value_object<nullptr>("nullptr");
+
+    //HeaderWithPressure
     class_<HeaderWithPressure>("HeaderWithPressure")
         .constructor<double, double, double, double, bool>();
     //HeaderWithHighestPressure

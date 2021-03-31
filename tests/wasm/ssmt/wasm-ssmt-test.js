@@ -409,8 +409,6 @@ function heatExchanger() {
     let hotInletFluidProps = new Module.FluidProperties(inp.hotInletMassFlow, inp.hotInletEnergyFlow, inp.hotInletTemperature, inp.hotInletPressure, inp.hotInletQuality, inp.hotInletSpecificVolume, inp.hotInletDensity, inp.hotInletSpecificEnthalpy, inp.hotInletSpecificEntropy, 0);
     let heatExchanger = new Module.HeatExchanger(hotInletFluidProps, coldInletFluidProps, inp.approachTemp);
     let results =  heatExchanger.calculate();
-
-    debugger
     
     testNumberValue(results.hotOutlet.pressure, 1.5, 'SSMT Heat Exchanger (results.hotOutlet.pressure)');
     testNumberValue(results.hotOutlet.temperature, 293.15, 'SSMT Heat Exchanger (results.hotOutlet.temperature)');

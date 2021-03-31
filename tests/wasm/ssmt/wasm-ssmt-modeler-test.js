@@ -120,12 +120,12 @@ function steamModeler() {
 
 
     let modeler = new Module.SteamModeler();
-
+    debugger
     let boilerInputObj = new Module.BoilerInput(boilerInput.fuelType, boilerInput.fuel, boilerInput.combustionEfficiency, boilerInput.blowdownRate, boilerInput.blowdownFlashed, boilerInput.preheatMakeupWater, boilerInput.steamTemperature, boilerInput.deaeratorVentRate, boilerInput.deaeratorPressure, boilerInput.approachTemperature);
     let highPressureHeaderObj = new Module.HeaderWithHighestPressure(header1.pressure, header1.processSteamUsage, header1.condensationRecoveryRate, header1.heatLoss, header1.condensateReturnTemperature, header1.flashCondensateReturn);
-    // let mediumPressureHeader = new Module.HeaderNotHighestPressure();
-    // let lowPressureHeader = new Module.HeaderNotHighestPressure();
-    let headerInputObj = new Module.HeaderInput(highPressureHeaderObj, null, null);
+    // let mediumPressureHeaderObj =  Module.nullptr;
+    // let lowPressureHeaderObj = Module.nullptr;
+    let headerInputObj = new Module.HeaderInput(highPressureHeaderObj);
     let operationsInputObj = new Module.operationsInput(operationsInput.sitePowerImport, operationsInput.makeUpWaterTemperature, operationsInput.operatingHoursPerYear, operationsInput.fuelCosts, operationsInput.electricityCosts, operationsInput.makeUpWaterCosts);
 
     let condensingTurbineObj = new Module.CondensingTurbine(condensingTurbine.isentropicEfficiency, condensingTurbine.generationEfficiency, condensingTurbine.condenserPressure, condensingTurbine.operationType, condensingTurbine.operationValue, condensingTurbine.useTurbine);
