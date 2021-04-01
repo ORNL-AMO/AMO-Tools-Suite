@@ -34,9 +34,8 @@ WaterHeatingUsingSteam::Output WaterHeatingUsingSteam::calculate(const double pr
     {
         bpTempWarningFlag = true;
         tempWaterOut = tempBpWaterOut;
-        const double heatGainRateBypass = 1000 * 4.1796 * (tempWaterOut - temperatureWaterIn) * flowWaterRate;
-        flowByPassSteam = flowSteamRate - (heatGainRateBypass / ( enthalpySteamIn - enthalpySteamOut));
-        heatGainRate = heatGainRateBypass;
+        heatGainRate = 1000 * 4.1796 * (tempWaterOut - temperatureWaterIn) * flowWaterRate;
+        flowByPassSteam = flowSteamRate - (heatGainRate / ( enthalpySteamIn - enthalpySteamOut));
     }
 
     return Output(tempWaterOut, bpTempWaterOut, bpTempWarningFlag, flowByPassSteam,

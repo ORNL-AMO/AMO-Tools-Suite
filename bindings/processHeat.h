@@ -129,6 +129,7 @@ NAN_METHOD(waterHeatingUsingSteam)
         auto output = WaterHeatingUsingSteam().calculate(pressureSteamIn,flowSteamRate,temperatureWaterIn,pressureWaterOut,flowWaterRate,tempMakeupWater,presMakeupWater,
                                                          effWaterHeater, effBoiler, operatingHours);
 
+        setR("bpTempWarningFlag", output.bpTempWarningFlag);
         setR("tempWaterOut", output.tempWaterOut);
         setR("bpTempWaterOut", output.bpTempWaterOut);
         setR("enthalpySteamIn", output.enthalpySteamIn);
