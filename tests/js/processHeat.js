@@ -109,7 +109,7 @@ test('WaterHeatingUsingExhaust ChillerAbsorption', function (t) {
 });
 
 test('WaterHeatingUsingSteam HeatExchanger', function (t) {
-    t.plan(13);
+    t.plan(21);
     t.type(bindings.waterHeatingUsingSteam, 'function');
 
     var compare = function(results, expected) {
@@ -119,6 +119,10 @@ test('WaterHeatingUsingSteam HeatExchanger', function (t) {
         t.equal(rnd(results.enthalpySteamOut), rnd(expected[3]));
         t.equal(rnd(results.enthalpyMakeUpWater), rnd(expected[4]));
         t.equal(rnd(results.flowByPassSteam), rnd(expected[5]));
+        t.equal(rnd(results.energySavedDWH), rnd(expected[6]));
+        t.equal(rnd(results.energySavedBoiler), rnd(expected[7]));
+        t.equal(rnd(results.waterSaved), rnd(expected[8]));
+        t.equal(rnd(results.heatGainRate), rnd(expected[9]));
     };
 
 
@@ -129,10 +133,13 @@ test('WaterHeatingUsingSteam HeatExchanger', function (t) {
         pressureWaterOut: 0.5150,
         flowWaterRate: 2.7255,
         tempMakeupWater: 285.93,
-        presMakeupWater: 0.2048
+        presMakeupWater: 0.2048,
+        effWaterHeater: 0.72,
+        effBoiler: 0.8,
+        operatingHours: 7000
     };
-    compare(bindings.waterHeatingUsingSteam(input), [352.304, 426.1, 2695.04, 472.5, 53.876, 0]);
-
+    compare(bindings.waterHeatingUsingSteam(input), [352.304, 426.1, 2695.04, 472.5, 53.876, 0,
+        7351062329.1926, 1246124501.2457, 2381.4, 756109.2681]);
 
     input = {
         pressureSteamIn: 0.1703,
@@ -141,9 +148,13 @@ test('WaterHeatingUsingSteam HeatExchanger', function (t) {
         pressureWaterOut: 0.2737,
         flowWaterRate: 0.6814,
         tempMakeupWater: 285.93,
-        presMakeupWater: 0.2048
+        presMakeupWater: 0.2048,
+        effWaterHeater: 0.7,
+        effBoiler: 0.7,
+        operatingHours: 8000
     };
-    compare(bindings.waterHeatingUsingSteam(input), [388.75, 403.57, 2698.89, 483.41, 53.876, 94.61]);
+    compare(bindings.waterHeatingUsingSteam(input), [388.75, 403.57, 2698.89, 483.41, 53.876, 94.61,
+        3346757808.4035, 1113312444.0692, 1814.32, 292841.3082]);
 });
 
 test('CascadeHeatHighToLow Gas', function (t) {

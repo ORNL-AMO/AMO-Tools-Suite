@@ -41,18 +41,28 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
     CHECK(resCascadeHeatHighToLow.costSavings == Approx(224132.65));
 
 
-    auto resSteamEnergy = WaterHeatingUsingSteam().calculate(0.1565, 340.2,285.93,0.5150, 2.7255,285.93, 0.2048);
+    auto resSteamEnergy = WaterHeatingUsingSteam().calculate(0.1565, 340.2,285.93,0.5150, 2.7255,285.93, 0.2048,
+                                                             0.72, 0.8, 7000);
     CHECK(resSteamEnergy.tempWaterOut == Approx(352.304));
     CHECK(resSteamEnergy.bpTempWaterOut == Approx(426.1));
     CHECK(resSteamEnergy.enthalpySteamIn == Approx(2695.04));
     CHECK(resSteamEnergy.enthalpySteamOut == Approx(472.5));
     CHECK(resSteamEnergy.enthalpyMakeUpWater == Approx(53.876));
+    CHECK(resSteamEnergy.energySavedDWH == Approx(7351062329.1926));
+    CHECK(resSteamEnergy.energySavedBoiler == Approx(1246124501.2457));
+    CHECK(resSteamEnergy.waterSaved == Approx(2381.4 ));
+    CHECK(resSteamEnergy.heatGainRate == Approx(756109.2681));
 
-    resSteamEnergy = WaterHeatingUsingSteam().calculate(0.1703, 226.79,285.93,0.2737, 0.6814,285.93, 0.2048);
+    resSteamEnergy = WaterHeatingUsingSteam().calculate(0.1703, 226.79,285.93,0.2737, 0.6814,285.93, 0.2048,
+                                                        0.7, 0.7, 8000);
     CHECK(resSteamEnergy.tempWaterOut == Approx(388.75));
     CHECK(resSteamEnergy.bpTempWaterOut == Approx(403.57));
     CHECK(resSteamEnergy.enthalpySteamIn == Approx(2698.89));
     CHECK(resSteamEnergy.enthalpySteamOut == Approx(483.41));
     CHECK(resSteamEnergy.enthalpyMakeUpWater == Approx(53.876));
     CHECK(resSteamEnergy.flowByPassSteam == Approx(94.61));
+    CHECK(resSteamEnergy.energySavedDWH == Approx(3346757808.4035));
+    CHECK(resSteamEnergy.energySavedBoiler == Approx(1113312444.0692));
+    CHECK(resSteamEnergy.waterSaved == Approx(1814.32));
+    CHECK(resSteamEnergy.heatGainRate == Approx(292841.3082));
 }

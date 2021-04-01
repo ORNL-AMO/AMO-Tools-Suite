@@ -122,8 +122,12 @@ NAN_METHOD(waterHeatingUsingSteam)
         const double flowWaterRate = getDouble("flowWaterRate", inp);
         const double tempMakeupWater = getDouble("tempMakeupWater", inp);
         const double presMakeupWater = getDouble("presMakeupWater", inp);
+        const double effWaterHeater = getDouble("effWaterHeater", inp);
+        const double effBoiler = getDouble("effBoiler", inp);
+        const double operatingHours = getDouble("operatingHours", inp);
 
-        auto output = WaterHeatingUsingSteam().calculate(pressureSteamIn,flowSteamRate,temperatureWaterIn,pressureWaterOut,flowWaterRate,tempMakeupWater,presMakeupWater);
+        auto output = WaterHeatingUsingSteam().calculate(pressureSteamIn,flowSteamRate,temperatureWaterIn,pressureWaterOut,flowWaterRate,tempMakeupWater,presMakeupWater,
+                                                         effWaterHeater, effBoiler, operatingHours);
 
         setR("tempWaterOut", output.tempWaterOut);
         setR("bpTempWaterOut", output.bpTempWaterOut);
@@ -131,6 +135,10 @@ NAN_METHOD(waterHeatingUsingSteam)
         setR("enthalpySteamOut", output.enthalpySteamOut);
         setR("enthalpyMakeUpWater", output.enthalpyMakeUpWater);
         setR("flowByPassSteam", output.flowByPassSteam);
+        setR("energySavedDWH", output.energySavedDWH);
+        setR("energySavedBoiler", output.energySavedBoiler);
+        setR("waterSaved", output.waterSaved);
+        setR("heatGainRate", output.heatGainRate);
 
         info.GetReturnValue().Set(r);
     }
