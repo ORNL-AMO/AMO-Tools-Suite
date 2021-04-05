@@ -25,35 +25,60 @@ public:
 	 *
 	 * */
 	SolidLiquidFlueGasMaterial(
-		const double flueGasTemperature,
-		const double excessAir,
-		const double combustionAirTemperature,
-		const double fuelTemperature,
-		const double moistureInAirCombustion,
-		const double ashDischargeTemperature,
-		const double unburnedCarbonInAsh,
-		const double carbon,
-		const double hydrogen,
-		const double sulphur,
-		const double inertAsh,
-		const double o2,
-		const double moisture,
-		const double nitrogen) : flueGasTemperature(flueGasTemperature),
-								 excessAir(excessAir / 100.0),
-								 combustionAirTemperature(combustionAirTemperature),
-								 fuelTemperature(fuelTemperature),
-								 moistureInAirCombustion(moistureInAirCombustion),
-								 ashDischargeTemperature(ashDischargeTemperature),
-								 unburnedCarbonInAsh(unburnedCarbonInAsh / 100.0),
-								 carbon(carbon / 100),
-								 hydrogen(hydrogen / 100),
-								 sulphur(sulphur / 100),
-								 inertAsh(inertAsh / 100),
-								 o2(o2 / 100),
-								 moisture(moisture / 100),
-								 nitrogen(nitrogen / 100)
-	{
+			const double flueGasTemperature,
+			const double excessAir,
+			const double combustionAirTemperature,
+			const double fuelTemperature,
+			const double moistureInAirCombustion,
+			const double ashDischargeTemperature,
+			const double unburnedCarbonInAsh,
+			const double carbon,
+			const double hydrogen,
+			const double sulphur,
+			const double inertAsh,
+			const double o2,
+			const double moisture,
+			const double nitrogen) :
+			flueGasTemperature(flueGasTemperature),
+			excessAir(excessAir / 100.0),
+			combustionAirTemperature(combustionAirTemperature),
+			fuelTemperature(fuelTemperature),
+			moistureInAirCombustion(moistureInAirCombustion),
+			ashDischargeTemperature(ashDischargeTemperature),
+			unburnedCarbonInAsh(unburnedCarbonInAsh / 100.0),
+			carbon(carbon / 100),
+			hydrogen(hydrogen / 100),
+			sulphur(sulphur / 100),
+			inertAsh(inertAsh / 100),
+			o2(o2 / 100),
+			moisture(moisture / 100),
+			nitrogen(nitrogen / 100)
+    {
+        heatingValueFuel = calculateHeatingValueFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
+        stoichometricAir = calculateStoichAirFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
 	}
+
+    SolidLiquidFlueGasMaterial(
+            std::string substance,
+            const double carbon,
+            const double hydrogen,
+            const double sulphur,
+            const double inertAsh,
+            const double o2,
+            const double moisture,
+            const double nitrogen) :
+            substance(std::move(substance)),
+            carbon(carbon / 100),
+            hydrogen(hydrogen / 100),
+            sulphur(sulphur / 100),
+            inertAsh(inertAsh / 100),
+            o2(o2 / 100),
+            moisture(moisture / 100),
+            nitrogen(nitrogen / 100)
+    {
+        heatingValueFuel = calculateHeatingValueFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
+        stoichometricAir = calculateStoichAirFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
+    }
 
 	SolidLiquidFlueGasMaterial() = default;
 
@@ -238,33 +263,20 @@ public:
 	double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
 									 double moisture, double nitrogen);
 
+    static double calculateStoichAirFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
+                                            double moisture, double nitrogen);
+
+    double getStoichAirFuel() const { return stoichometricAir; };
+    double getHeatingValueFuel() const { return heatingValueFuel; };
 private:
 	friend class SQLite;
 
-	SolidLiquidFlueGasMaterial(
-		std::string substance,
-		const double carbon,
-		const double hydrogen,
-		const double sulphur,
-		const double inertAsh,
-		const double o2,
-		const double moisture,
-		const double nitrogen) : substance(std::move(substance)),
-								 carbon(carbon / 100),
-								 hydrogen(hydrogen / 100),
-								 sulphur(sulphur / 100),
-								 inertAsh(inertAsh / 100),
-								 o2(o2 / 100),
-								 moisture(moisture / 100),
-								 nitrogen(nitrogen / 100)
-	{
-	}
-
-	int id = 0;
+    int id = 0;
 	std::string substance = "UndefinedSubstance";
 	double flueGasTemperature, excessAir, combustionAirTemperature;
 	double fuelTemperature, moistureInAirCombustion, ashDischargeTemperature, unburnedCarbonInAsh;
 	double carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen;
+	double heatingValueFuel = 0, stoichometricAir = 0;
 };
 
 #endif //AMO_TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIAL_H

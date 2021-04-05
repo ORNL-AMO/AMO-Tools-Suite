@@ -179,16 +179,22 @@ namespace Compressor
 		 * Used in AirSystemCapacity input and output.
 		 */
 		PipeData(const double oneHalf, const double threeFourths, const double one, const double oneAndOneFourth,
-				 const double oneAndOneHalf, const double two, const double twoAndOneHalf, const double three,
-				 const double threeAndOneHalf, const double four, const double five, const double six)
-			: oneHalf(oneHalf * 0.0021), threeFourths(threeFourths * 0.0037), one(one * 0.006),
-			  oneAndOneFourth(oneAndOneFourth * 0.0104), oneAndOneHalf(oneAndOneHalf * 0.0141),
-			  two(two * 0.0233), twoAndOneHalf(twoAndOneHalf * 0.0333), three(three * 0.0513),
-			  threeAndOneHalf(threeAndOneHalf * 0.0687), four(four * 0.0884), five(five * 0.1389),
-			  six(six * 0.2006),
-			  totalPipeVolume(this->oneHalf + this->threeFourths + this->one + this->oneAndOneFourth + this->oneAndOneHalf + this->two + this->twoAndOneHalf + this->three + this->threeAndOneHalf + this->four + this->five + this->six)
-		{
-		}
+		         const double oneAndOneHalf, const double two, const double twoAndOneHalf, const double three,
+		         const double threeAndOneHalf, const double four, const double five, const double six, const double eight, 
+				 const double ten, const double twelve, const double fourteen, const double sixteen, const double eighteen, 
+				 const double twenty, const double twentyFour)
+				: oneHalf(oneHalf * 0.0021), threeFourths(threeFourths * 0.0037), one(one * 0.006),
+				  oneAndOneFourth(oneAndOneFourth * 0.0104), oneAndOneHalf(oneAndOneHalf * 0.0141),
+				  two(two * 0.0233), twoAndOneHalf(twoAndOneHalf * 0.0333), three(three * 0.0513),
+				  threeAndOneHalf(threeAndOneHalf * 0.0687), four(four * 0.0884), five(five * 0.1389),
+				  six(six * 0.2006), eight(eight * 0.3442), ten(ten * 0.5476), twelve(twelve * 0.7763), fourteen(fourteen * 0.9354), // **ten and twelve**
+				  sixteen(sixteen * 1.223), eighteen(eighteen * 1.555), twenty(twenty * 1.926), twentyFour(twentyFour * 2.793),
+				  totalPipeVolume(this->oneHalf + this->threeFourths + this->one + this->oneAndOneFourth
+				                  + this->oneAndOneHalf + this->two + this->twoAndOneHalf + this->three
+				                  + this->threeAndOneHalf + this->four + this->five + this->six
+								  + this->eight + this->ten + this->twelve + this->fourteen + this->sixteen
+								  + this->eighteen + this->twenty + this->twentyFour)
+		{}
 
 		/**
 		 * Constructor for Compressor::PipeData - This is used to hold return values for air velocity estimations
@@ -196,17 +202,19 @@ namespace Compressor
 		 * calculates pipeline velocity given internal area of the pipe in square feet. An example of usage can be found
 		 * in AirVelocity::calculate()
 		 */
-		explicit PipeData(std::function<double(const double)> const &compVel)
-			: oneHalf(compVel(0.3)), threeFourths(compVel(0.53)), one(compVel(0.86)),
-			  oneAndOneFourth(compVel(1.5)), oneAndOneHalf(compVel(2.04)),
-			  two(compVel(3.36)), twoAndOneHalf(compVel(4.79)), three(compVel(7.39)),
-			  threeAndOneHalf(compVel(9.89)), four(compVel(12.73)), five(compVel(20)),
-			  six(compVel(28.89))
-		{
-		}
+		explicit PipeData(std::function<double (const double)> const & compVel)
+				: oneHalf(compVel(0.3)), threeFourths(compVel(0.53)), one(compVel(0.86)),
+				  oneAndOneFourth(compVel(1.5)), oneAndOneHalf(compVel(2.04)),
+				  two(compVel(3.36)), twoAndOneHalf(compVel(4.79)), three(compVel(7.39)),
+				  threeAndOneHalf(compVel(9.89)), four(compVel(12.73)), five(compVel(20)),
+				  six(compVel(28.89)), eight(compVel(50.02)), ten(compVel(78.85)), twelve(compVel(111.9)),
+				  fourteen(compVel(135.3)), sixteen(compVel(176.7)), eighteen(compVel(224)), twenty(compVel(278)),
+				  twentyFour(compVel(402.10))
+		{}
 
 		const double oneHalf, threeFourths, one, oneAndOneFourth, oneAndOneHalf, two;
 		const double twoAndOneHalf, three, threeAndOneHalf, four, five, six;
+		const double eight, ten, twelve, fourteen, sixteen, eighteen, twenty, twentyFour;
 		const double totalPipeVolume = 0;
 	};
 
@@ -394,6 +402,143 @@ public:
 
 private:
 	double operatingTime, bagFillTime, heightOfBag, diameterOfBag, numberOfUnits;
+};
+
+// enum class CompressorType ???
+
+class EstimateMethod {
+	public:
+		struct Output {
+			Output(const double annualConsumption) : annualConsumption(annualConsumption)
+			{}
+
+			const double annualConsumption;
+		};
+
+		/**
+	 	* Constructor for EstimateMethod - The estimate method estimates the air loss by using visual and audible clues.
+		* @param operatingTime double, operating time of the system per year - hours
+		* @param leakRateEstimate double, estimated leak rate (determined by visual and audible clues)
+	 	*/
+		EstimateMethod(const double operatingTime, const double leakRateEstimate);
+
+		/**
+	 	* @return EstimateMethod::Output, annual consumption
+	 	*/
+		Output calculate();
+
+	private:
+		double operatingTime, leakRateEstimate;
+};
+
+class DecibelsMethod {
+  public:
+	struct Output {
+		Output(const double leakRateEstimate, const double annualConsumption) 
+			: leakRateEstimate(leakRateEstimate), annualConsumption(annualConsumption)
+		{}
+
+		const double leakRateEstimate, annualConsumption;
+	};
+
+	/**
+	* Constructor for DecibelsMethod - The decibels method estimates the air loss by using decibel and line pressure measurements
+	* @param operatingTime double, operating time of the system per year - hours
+	* @param linePressure double, 
+	* @param decibels double, 
+	* @param decibelRatingA double, 
+	* @param pressureA double, 
+	* @param firstFlowA double, 
+	* @param secondFlowA double, 
+	* @param decibelRatingB double, 
+	* @param pressureB double, 
+	* @param firstFlowB double, 
+	* @param secondFlowB double, 
+	*/
+    DecibelsMethod(const double operatingTime, const double linePressure, const double decibels, const double decibelRatingA, 
+		const double pressureA, const double firstFlowA, const double secondFlowA, const double decibelRatingB, const double pressureB,
+		const double firstFlowB, const double secondFlowB);
+
+    /**
+	* @return DecibelsMethod::Output, leak rate estimate, annual consumption
+	*/
+	Output calculate();
+
+  private:
+	double operatingTime;
+    double linePressure; // X
+    double decibels; // Y
+    double decibelRatingA; // Y1
+    double pressureA; // X1
+    double firstFlowA; // Q11
+    double secondFlowA; // Q21
+    double decibelRatingB; // Y2
+    double pressureB; // X2
+    double firstFlowB; // Q12
+    double secondFlowB; // Q22
+};
+
+class OrificeMethod {
+	public:
+		struct Output {
+			Output(const double standardDensity, const double sonicDensity, const double leakVelocity, const double leakRateLBMmin,
+				const double leakRateScfm, const double leakRateEstimate, const double annualConsumption) 
+				: standardDensity(standardDensity), sonicDensity(sonicDensity), leakVelocity(leakVelocity),
+				  leakRateLBMmin(leakRateLBMmin), leakRateScfm(leakRateScfm), leakRateEstimate(leakRateEstimate),
+				  annualConsumption(annualConsumption)
+			{}
+
+			const double standardDensity, sonicDensity, leakVelocity, leakRateLBMmin, leakRateScfm, leakRateEstimate, annualConsumption;
+		};
+
+		/**
+	 	* Constructor for OrificeMethod - The orifice method estimates the air loss by using the pressure and diameter of the orifice
+		* @param operatingTime double, operating time of the system per year - hours
+		* @param airTemp double, compressor air temperature (usually between 200 and 300 degrees F)
+		* @param atmPressure double, atmospheric temperature (standard pressure is 14.7 psia)
+		* @param dischargeCoef double, discharge coefficient used to capture the effect of the shape of the outlet on air loss
+		* @param parameter double, diameter of the orifice in inches
+		* @param supplyPressure double, supply pressure to the orifice in psi
+		* @param numOrifices int, number of orifices
+	 	*/
+		OrificeMethod(const double operatingTime, const double airTemp, const double atmPressure, const double dischargeCoef,
+			const double diameter, const double supplyPressure, const int numOrifices);
+
+		/**
+	 	* @return OrificeMethod::Output, standard density, sonic density, leak velocity, leak rate LBMmin, leak rate Scfm, leak rate estimate, annual consumption
+	 	*/
+		Output calculate();
+
+	private:
+		double operatingTime, airTemp, atmPressure, dischargeCoef, diameter, supplyPressure;
+		int numOrifices;
+
+};
+
+class AirLeakSurvey {
+	/**
+ 	* enum class for Method Type
+ 	* 
+ 	*/
+	enum class MethodType
+	{
+		EstimateMethod,
+		DecibelsMethod,
+		BagMethod,
+		OrificeMethod
+	};
+	/*
+	annualOperatingHours: number;
+  	// 
+  	// leakDescription 
+  	// anualOperatingHours 
+  	// measurementMethod 
+  	// utilityType = 'electricity' or 'compressed air'
+  	// utilityCost comes from TH setup but is editable input
+  	// compressorControlType
+  	// compressorType 
+  	leaks: Array<AirLeakSurveyData>;
+	*/
 };
 
 #endif //AMO_TOOLS_SUITE_COMPRESSEDAIR_H

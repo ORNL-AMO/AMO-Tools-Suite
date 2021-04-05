@@ -232,8 +232,8 @@ test('Natural Gas Reduction test 1', function (t) {
     };
 
     var res = bindings.naturalGasReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(88992000.00), 'res.energyUse is ' + res.energyUse);
-    t.equal(rnd(res.energyCost), rnd(10679040.00), 'res.energyCost is ' + res.energyCost);
+    t.equal(rnd(res.energyUse), rnd(88.992), 'res.energyUse is ' + res.energyUse);
+    t.equal(rnd(res.energyCost), rnd(10.67904), 'res.energyCost is ' + res.energyCost);
 });
 
 
@@ -274,8 +274,8 @@ test('Compressed Air Reduction Basic Test', function (t) {
     };
 
     var res = bindings.compressedAirReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(2211840.0));
-    t.equal(rnd(res.energyCost), rnd(265420.8));
+    t.equal(rnd(res.energyUse), rnd(276480000));
+    t.equal(rnd(res.energyCost), rnd(33177600));
     t.equal(rnd(res.flowRate), rnd(200000.0));
     t.equal(rnd(res.singleNozzleFlowRate), rnd(0.0));
     t.equal(rnd(res.consumption), rnd(103680000000.0));
@@ -419,13 +419,431 @@ test('Compressed Air Reduction Test All', function (t) {
     };
 
     var res = bindings.compressedAirReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(2211881.965779));
-    t.equal(rnd(res.energyCost), rnd(376063.261557));
+    t.equal(rnd(res.energyUse), rnd(276485245.722314));
+    t.equal(rnd(res.energyCost), rnd(33288866.912342));
     t.equal(rnd(res.flowRate), rnd(200005.187354));
     t.equal(rnd(res.singleNozzleFlowRate), rnd(1.778508));
     t.equal(rnd(res.consumption), rnd(103682889124.41486));
 });
 
+test('Compressed Air Leak Survey Basic Test', function (t) {
+    t.plan(5);
+    t.type(bindings.compressedAirLeakSurvey, 'function');
+
+    var inp = {
+        compressedAirLeakSurveyInputVec: [
+            {
+                hoursPerYear: 8640,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 0,
+                estimateMethodData: {
+                    leakRateEstimate: 0.1
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.40,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.compressedAirLeakSurvey(inp);
+    t.equal(rnd(res.annualTotalElectricity), rnd(138.24));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(16.5888));
+    t.equal(rnd(res.totalFlowRate), rnd(0.1));
+    t.equal(rnd(res.annualTotalFlowRate), rnd(51840));
+});
+
+test('Compressed Air Leak Survey Additional Tests', function (t) {
+    t.plan(5);
+    t.type(bindings.compressedAirLeakSurvey, 'function');
+
+    var inp = {
+        compressedAirLeakSurveyInputVec: [
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 0,
+                estimateMethodData: {
+                    leakRateEstimate: 100
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.25,
+                    compressorSpecificPower: 0.16
+                },
+                units: 2
+            },
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 0,
+                estimateMethodData: {
+                    leakRateEstimate: 14
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.25,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            },
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 0,
+                estimateMethodData: {
+                    leakRateEstimate: 0.785398163397448
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.25,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            },
+            {
+                hoursPerYear: 8760,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 0,
+                estimateMethodData: {
+                    leakRateEstimate: 6.32517756495803
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.25,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.compressedAirLeakSurvey(inp);
+    t.equal(rnd(res.annualTotalElectricity), rnd(309908.582941));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(37189.029953));
+    t.equal(rnd(res.totalFlowRate), rnd(221.110576));
+    t.equal(rnd(res.annualTotalFlowRate), rnd(116215718.602824));
+});
+
+test('Compressed Air Leak Survey Test All', function (t) {
+    t.plan(5);
+    t.type(bindings.compressedAirLeakSurvey, 'function');
+
+    var inp = {
+        compressedAirLeakSurveyInputVec: [
+            // estimate method with electricity
+            // energyUse = 55.296
+            // energyCost = 6.63552
+            // flowRate = 0.1
+            // compressedAirUse = 51840
+            {
+                hoursPerYear: 8640,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 0,
+                estimateMethodData: {
+                    leakRateEstimate: 0.1
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.40,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            },
+            // decibels method with electricity
+            // energyUse = 790.17984
+            // energyCost = 94.8215808
+            // flowRate = 1.429
+            // compressedAirUse = 740793.6
+            {
+                hoursPerYear: 8640,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 1,
+                estimateMethodData: {
+                    leakRateEstimate: 0.1
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.40,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            },
+            // bag method with electricity
+            // energyUse = 3769.9111
+            // energyCost = 452.3893
+            // flowRate = 6.8176923906
+            // compressedAirUse = 3534291.73528
+            {
+                hoursPerYear: 8640,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 2,
+                estimateMethodData: {
+                    leakRateEstimate: 0.1
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.40,
+                    compressorSpecificPower: 0.16
+                },
+                units: 2
+            },
+            // orifice method with electricity
+            // energyUse = 1253583.3379004421
+            // energyCost = 150430.000548053
+            // flowRate = 2267.0416267007
+            // compressedAirUse = 1175234379
+            {
+                hoursPerYear: 8640,
+                utilityType: 1,
+                utilityCost: 0.12,
+                measurementMethod: 3,
+                estimateMethodData: {
+                    leakRateEstimate: 0.1
+                },
+                decibelsMethodData: {
+                    linePressure: 130,
+                    decibels: 25,
+                    decibelRatingA: 20,
+                    pressureA: 150,
+                    firstFlowA: 1.04,
+                    secondFlowA: 1.2,
+                    decibelRatingB: 30,
+                    pressureB: 125,
+                    firstFlowB: 1.85,
+                    secondFlowB: 1.65
+                },
+                bagMethodData: {
+                    height: 15,
+                    diameter: 10,
+                    fillTime: 12
+                },
+                orificeMethodData: {
+                    compressorAirTemp: 250.0,
+                    atmosphericPressure: 14.7,
+                    dischargeCoefficient: 1.0,
+                    orificeDiameter: 6.0,
+                    supplyPressure: 6.2,
+                    numberOfOrifices: 4
+                },
+                compressorElectricityData: {
+                    compressorControlAdjustment: 0.40,
+                    compressorSpecificPower: 0.16
+                },
+                units: 1
+            }
+        ]
+    };
+
+    var res = bindings.compressedAirLeakSurvey(inp);
+    t.equal(rnd(res.annualTotalElectricity), rnd(3145496.812312));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(377459.617477));
+    t.equal(rnd(res.totalFlowRate), rnd(2275.388319)); // 2271.979473
+    t.equal(rnd(res.annualTotalFlowRate), rnd(1179561304.616953));
+});
 
 test('Compressed Air Pressure Reduction - Baseline', function (t) {
     t.plan(3);
@@ -439,7 +857,9 @@ test('Compressed Air Pressure Reduction - Baseline', function (t) {
                 electricityCost: 0.005,
                 compressorPower: 500,
                 pressure: 150,
-                proposedPressure: null
+                proposedPressure: null,
+                atmosphericPressure: null,
+                pressureRated: null
             },
             {
                 isBaseline: true,
@@ -447,7 +867,9 @@ test('Compressed Air Pressure Reduction - Baseline', function (t) {
                 electricityCost: 0.005,
                 compressorPower: 250,
                 pressure: 150,
-                proposedPressure: null
+                proposedPressure: null,
+                atmosphericPressure: null,
+                pressureRated: null
             },
             {
                 isBaseline: true,
@@ -455,7 +877,9 @@ test('Compressed Air Pressure Reduction - Baseline', function (t) {
                 electricityCost: 0.005,
                 compressorPower: 500,
                 pressure: 120,
-                proposedPressure: 120
+                proposedPressure: 120,
+                atmosphericPressure: null,
+                pressureRated: null
             },
             {
                 isBaseline: true,
@@ -463,7 +887,9 @@ test('Compressed Air Pressure Reduction - Baseline', function (t) {
                 electricityCost: 0.005,
                 compressorPower: 450,
                 pressure: 170,
-                proposedPressure: 100
+                proposedPressure: 100,
+                atmosphericPressure: null,
+                pressureRated: null
             }
         ]
     };
@@ -481,26 +907,20 @@ test('Compressed Air Pressure Reduction - Modification', function (t) {
         compressedAirPressureReductionInputVec: [
             {
                 isBaseline: false,
-                hoursPerYear: 8640,
+                hoursPerYear: 8760,
                 electricityCost: 0.005,
-                compressorPower: 500,
-                pressure: 150,
-                proposedPressure: 50
-            },
-            {
-                isBaseline: false,
-                hoursPerYear: 8640,
-                electricityCost: 0.005,
-                compressorPower: 250,
-                pressure: 150,
-                proposedPressure: 89
+                compressorPower: 200,
+                pressure: 100,
+                proposedPressure: 90,
+                atmosphericPressure: 14.7,
+                pressureRated: 100
             }
         ]
     };
 
     var res = bindings.compressedAirPressureReduction(inp);
-    t.equal(rnd(res.energyUse), rnd(3661200.0));
-    t.equal(rnd(res.energyCost), rnd(18306.0));
+    t.equal(rnd(res.energyUse), rnd(1650714.710542));
+    t.equal(rnd(res.energyCost), rnd(8253.57355271));
 });
 
 

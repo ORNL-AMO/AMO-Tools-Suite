@@ -33,11 +33,12 @@ public:
      * @param outletPressure
      * @param compressibilityFactor
      * @param fanEfficiency
+     * @param velocityPressure
      */
     OptimalPumpShaftPower(const double flowRate, const double inletPressure, const double outletPressure,
-                          const double compressibilityFactor, const double fanEfficiency)
+                          const double compressibilityFactor, const double fanEfficiency, const double velocityPressure)
             : flowRate(flowRate), efficiency(fanEfficiency), inletPressure(inletPressure), outletPressure(outletPressure),
-              compressibilityFactor(compressibilityFactor), isPump(false)
+              compressibilityFactor(compressibilityFactor), isPump(false), velocityPressure(velocityPressure)
     {}
 
     /**
@@ -114,7 +115,7 @@ public:
 private:
     double flowRate, head = 0, specificGravity = 0, efficiency = 0;
 
-    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
+    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0, velocityPressure = 0;
 
     bool isPump;
 };

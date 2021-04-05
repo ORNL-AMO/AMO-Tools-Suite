@@ -168,12 +168,19 @@
         },
 		{
             "target_name": "db",
-            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses', 'include/calculator/motor',
+            'include_dirs': ['include', 'include/sqlite', 'third_party/sqlite', 'include/calculator/losses',
+                'include/calculator/motor', 'include/calculator/pump',
                 "<!(node -e \"require('nan')\")"
              ],
             'sources' : [
                 'bindings/db.cpp',
                 'third_party/sqlite/sqlite3.c',
+                'src/ssmt/SteamSystemModelerTool.cpp',
+                'src/ssmt/SaturatedProperties.cpp',
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/pump/').map(f=>'src/calculator/pump/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/motor/').map(f=>'src/calculator/motor/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/util/').map(f=>'src/calculator/util/'+f).join(' '))\")",
+                "<!@(node -e \"console.log(require('fs').readdirSync('src/results/').map(f=>'src/results/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/calculator/losses/').map(f=>'src/calculator/losses/'+f).join(' '))\")",
                 "<!@(node -e \"console.log(require('fs').readdirSync('src/sqlite/').map(f=>'src/sqlite/'+f).join(' '))\")",
             ],
@@ -237,6 +244,153 @@
                     'cflags_cc': ['-fexceptions']
                 }]
             ]
+        },
+        {
+            "target_name": "chillers",
+            'include_dirs': [
+                'include',
+                'include/chillers/CoolingTower.h',
+                "<!(node -e \"require('nan')\")"
+            ],
+            'sources': [
+                'bindings/chillers.cpp',
+                'src/chillers/CoolingTower.cpp'
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
+        },
+        {
+            "target_name": "wasteWater",
+            'include_dirs': [
+                'include',
+                'include/wasteWater/WasteWater_Treatment.h',
+                "<!(node -e \"require('nan')\")"
+            ],
+            'sources': [
+                'bindings/wasteWater.cpp',
+                'src/wasteWater/WasteWater_Treatment.cpp'
+            ],
+            "conditions": [
+                [ 'OS=="mac"', {
+                    "xcode_settings": {
+                        'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                        'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                        'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                        'CLANG_CXX_LIBRARY': 'libc++',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
+                        'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                    },
+                }],
+                [ 'OS=="linux"', {
+                    'cflags_cc': ['-fexceptions']
+                }]
+            ]
+        },
+        {
+          "target_name": "compressorsCalc",
+          'include_dirs': [
+              'include',
+              'include/calculator/util/Compressors.h',
+              "<!(node -e \"require('nan')\")"
+          ],
+          'sources': [
+              'bindings/compressorsCalc.cpp',
+              'src/calculator/util/CurveFitVal.cpp',
+              'src/calculator/util/Compressors.cpp'
+          ],
+          "conditions": [
+              [ 'OS=="mac"', {
+                  "xcode_settings": {
+                      'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                      'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                      'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                      'CLANG_CXX_LIBRARY': 'libc++',
+                      'GCC_ENABLE_CPP_RTTI': 'YES',
+                      'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                  },
+              }],
+              [ 'OS=="linux"', {
+                  'cflags_cc': ['-fexceptions']
+              }]
+          ]
+        },
+        {
+          "target_name": "svi",
+          'include_dirs': [
+              'include',
+              'include/calculator/util/SludgeVolumeIndex.h',
+              "<!(node -e \"require('nan')\")"
+       ],
+       'sources': [
+              'bindings/svi.cpp',
+              'src/calculator/util/SludgeVolumeIndex.cpp'
+       ],
+       "conditions": [
+               [ 'OS=="mac"', {
+                  "xcode_settings": {
+                      'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                      'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                      'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                      'CLANG_CXX_LIBRARY': 'libc++',
+                      'GCC_ENABLE_CPP_RTTI': 'YES',
+                      'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+               },
+           }],
+           [ 'OS=="linux"', {
+                  'cflags_cc': ['-fexceptions']
+           }]
+       ]
+     },
+        {
+          "target_name": "processHeat",
+          'include_dirs': [
+              'include',
+              'include/calculator/processHeat/AirHeatingUsingExhaust.h',
+              'include/calculator/processHeat/WaterHeatingUsingExhaust.h',
+              'include/calculator/processHeat/WaterHeatingUsingSteam.h',
+              'include/calculator/processHeat/CascadeHeatHighToLow.h',
+              "<!(node -e \"require('nan')\")"
+          ],
+          'sources': [
+              'bindings/processHeat.cpp',
+              'src/ssmt/SteamProperties.cpp',
+              'src/ssmt/SaturatedProperties.cpp',
+              'src/ssmt/SteamSystemModelerTool.cpp',
+              'src/calculator/losses/GasFlueGasMaterial.cpp',
+              'src/calculator/losses/SolidLiquidFlueGasMaterial.cpp',
+              'src/calculator/processHeat/AirHeatingUsingExhaust.cpp',
+              'src/calculator/processHeat/WaterHeatingUsingExhaust.cpp',
+              'src/calculator/processHeat/WaterHeatingUsingSteam.cpp',
+              'src/calculator/processHeat/CascadeHeatHighToLow.cpp'
+          ],
+          "conditions": [
+              [ 'OS=="mac"', {
+                  "xcode_settings": {
+                      'OTHER_CPLUSPLUSFLAGS' : ['-std=c++11','-stdlib=libc++'],
+                      'OTHER_LDFLAGS': ['-stdlib=libc++'],
+                      'MACOSX_DEPLOYMENT_TARGET': '10.9',
+                      'CLANG_CXX_LIBRARY': 'libc++',
+                      'GCC_ENABLE_CPP_RTTI': 'YES',
+                      'GCC_ENABLE_CPP_EXCEPTIONS': "YES"
+                  },
+              }],
+              [ 'OS=="linux"', {
+                  'cflags_cc': ['-fexceptions']
+              }]
+          ]
         }
     ]
 }

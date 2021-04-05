@@ -2,7 +2,7 @@
  * @file
  * @brief Contains the implementation of the flue gas loss calculations.
  *
- * @author Gina Accawi (accawigk) & Preston Shires (pshires)
+ * @author Gina Accawi (accawigk) & Preston Shires (pshires) & Omer Aziz (omerb)
  * @bug No known bugs.
  *
  */
@@ -17,7 +17,7 @@ std::string GasCompositions::getSubstance() const {
 // used for calculating excess air in flue gas given O2 levels
 double GasCompositions::calculateExcessAir(const double flueGasO2) {
     calculateCompByWeight();
-    double excessAir = (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2));
+    double excessAir = getExcessAir(flueGasO2);
 	if (excessAir == 0) return 0;
 
     for (auto i = 0; i < 100; i++) {
@@ -32,6 +32,47 @@ double GasCompositions::calculateExcessAir(const double flueGasO2) {
         }
     }
 	return excessAir;
+}
+
+double GasCompositions::getExcessAir(const double flueGasO2) const { return (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2)); }
+
+double GasCompositions::getEnthalpyAtSaturation(const double ppH2O) const { return 1096.7 * pow(ppH2O * 29.926, 0.013); }
+
+double GasCompositions::getSaturationTemperature(const double ppH2O) const { return 36.009 * log(ppH2O * 29.926) + 81.054; }
+
+double GasCompositions::getAvailableHeat(const double flueGasTemp, const double excessAir, const double combAirTemperature)
+{
+    double heatValueFuel = 0;
+    double CO2Generated = 0;
+    double H20Generated = 0;
+    double O2Generated = 0;
+    for ( auto const & compound : gasses ) {
+        heatValueFuel += compound.second->compAdjByVol * compound.second->heatingValueVolume;
+        CO2Generated += compound.second->compAdjByVol * compound.second->co2Generated;
+        H20Generated += compound.second->compAdjByVol * compound.second->h2oGenerated;
+        O2Generated += compound.second->compAdjByVol * compound.second->o2Generated;
+    }
+
+    double CO2GeneratedWt = 100 * CO2Generated * 2.2722/10000;
+    double H20GeneratedWt = 100 * H20Generated * 5.5506/10000;
+
+    CO2Generated *= 2.6365/100000;
+    H20Generated *= 2.6365/100000;
+    O2Generated /= 32;
+
+    double O2GeneratedWt = 10 * excessAir * O2Generated;
+    double N2GeneratedWt = 10 * (0.1 + excessAir) * O2Generated * (1 - 0.209) / 0.209;
+    double partialPressureH2O = H20GeneratedWt / (CO2GeneratedWt + H20GeneratedWt + O2GeneratedWt + N2GeneratedWt);
+
+    double H2OHeatContent = (getEnthalpyAtSaturation(partialPressureH2O) + 0.48544 * (flueGasTemp - getSaturationTemperature(partialPressureH2O))) * 10000 * H20Generated;
+    double CO2HeatContent = 0.26426 * (flueGasTemp - 60) * 10000 * CO2Generated;
+    double N2HeatContent = 0.25624 * (flueGasTemp - 60) * 1000 * (0.1 + excessAir) * O2Generated * 0.0744 * (1 - 0.209) / 0.209 ;
+    double O2HeatContent = 0.23400 * (flueGasTemp - 60) * 1000 * excessAir * O2Generated * 0.0846;
+    double preHeatedAirEff = O2Generated * (1+ (1-0.209)/0.209) * (0.019362309 * (combAirTemperature-60));
+
+    double d =(100 * (heatValueFuel + preHeatedAirEff) - (H2OHeatContent + CO2HeatContent + N2HeatContent + O2HeatContent)) / (100 * heatValueFuel);
+
+    return (100 * (heatValueFuel + preHeatedAirEff) - (H2OHeatContent + CO2HeatContent + N2HeatContent + O2HeatContent)) / (100 * heatValueFuel);
 }
 
 // used for calculating O2 in flue gas given excess air as a decimal
@@ -87,6 +128,14 @@ double GasCompositions::calculateSpecificGravity() {
     return summationNumerator / (22.4 * 1.205);
 }
 
+double GasCompositions::calculateStoichometricAir() {
+    double o2Required = 0;
+    for ( auto const & compound : gasses ) {
+        o2Required  += compound.second->compAdjByVol * compound.second->o2Generated;
+    }
+    return o2Required * (1+ (1-0.209)/0.209);
+}
+
 double GasCompositions::calculateHeatingValueFuel() {
     double heatValueFuel = 0;
 	for ( auto const & comp : gasses ) {
@@ -136,8 +185,8 @@ void GasCompositions::calculateEnthalpy() {
             (mCO2 / CO2->specificWeight + mH2O / H2O->specificWeight + mN2 / N2->specificWeight
              + mO2 / O2->specificWeight + mSO2 / SO2->specificWeight);
 
-    hH2Osat = 1096.7 * pow(ppH2O * 29.926, 0.013);
-    tH2Osat = 36.009 * log(ppH2O * 29.926) + 81.054;
+    hH2Osat = getEnthalpyAtSaturation(ppH2O);
+    tH2Osat = getSaturationTemperature(ppH2O);
 }
 
 double GasCompositions::calculateTotalHeatContentFlueGas(const double flueGasTemp) {

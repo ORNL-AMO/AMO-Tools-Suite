@@ -15,6 +15,6 @@ double OptimalPumpShaftPower::calculate() {
         const double fluidPower = FluidPower(specificGravity, flowRate, head).calculate();
         return (fluidPower / efficiency) / 0.746;
     }
-    const double fluidPower = FluidPower(flowRate, inletPressure, outletPressure, compressibilityFactor).calculate();
+    const double fluidPower = FluidPower(flowRate, inletPressure, outletPressure, compressibilityFactor, velocityPressure).calculate();
     return (fluidPower / efficiency) / 0.746;
 }

@@ -12,6 +12,7 @@
 #include "calculator/util/ElectricityReduction.h"
 #include "calculator/util/NaturalGasReduction.h"
 #include "calculator/util/CompressedAirReduction.h"
+#include "calculator/util/CompressedAirLeakSurvey.h"
 #include "calculator/util/CompressedAirPressureReduction.h"
 #include "calculator/util/WaterReduction.h"
 #include "calculator/util/insulation/pipes/InsulatedPipeInput.h"
@@ -101,7 +102,7 @@ bool GetBool(std::string const &key, Local<Object> obj)
     {
         ThrowTypeError(std::string("GetBool method in calculator.h: Boolean value " + key + " not present in object").c_str());
     }
-    return rObj->BooleanValue(context).ToChecked();
+    return Nan::To<bool>(rObj).FromJust();
 }
 
 std::string GetStr(std::string const &key, Local<Object> obj)
@@ -154,8 +155,7 @@ MultimeterData getMultimeterData(Local<Object> obj)
         numberOfPhases,
         supplyVoltage,
         averageCurrent,
-        powerFactor
-    };
+        powerFactor};
 }
 
 NameplateData getNameplateData(Local<Object> obj)
@@ -180,8 +180,7 @@ NameplateData getNameplateData(Local<Object> obj)
         operationalFrequency,
         lineFrequency,
         motorAndDriveEfficiency,
-        loadFactor
-    };
+        loadFactor};
 }
 
 PowerMeterData getPowerMeterData(Local<Object> obj)
@@ -230,8 +229,7 @@ ElectricityReductionInput constructElectricityReductionInput(Local<Object> obj)
         nameplateData,
         powerMeterData,
         otherMethodData,
-        units
-    };
+        units};
 }
 
 std::vector<ElectricityReductionInput> getElectricityReductionInputVec()
@@ -304,8 +302,7 @@ AirMassFlowMeasuredData getAirMassFlowMeasuredData(Local<Object> obj)
     double airVelocity = GetDouble("airVelocity", airMassFlowMeasuredDataV8);
     return {
         areaOfDuct,
-        airVelocity
-    };
+        airVelocity};
 }
 
 AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
@@ -320,8 +317,7 @@ AirMassFlowNameplateData getAirMassFlowNameplateData(Local<Object> obj)
     }
     double airFlow = GetDouble("airFlow", airMassFlowNameplateDataV8);
     return {
-        airFlow
-    };
+        airFlow};
 }
 
 AirMassFlowData getAirMassFlowData(Local<Object> obj)
@@ -346,8 +342,7 @@ AirMassFlowData getAirMassFlowData(Local<Object> obj)
         nameplateData,
         inletTemperature,
         outletTemperature,
-        systemEfficiency
-    };
+        systemEfficiency};
 }
 
 WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
@@ -368,8 +363,7 @@ WaterMassFlowData getWaterMassFlowData(Local<Object> obj)
         waterFlow,
         inletTemperature,
         outletTemperature,
-        systemEfficiency
-    };
+        systemEfficiency};
 }
 
 NaturalGasOtherMethodData naturalGasGetOtherMethodData(Local<Object> obj)
@@ -517,7 +511,7 @@ CompressedAirOtherMethodData getCompressedAirOtherMethodData(Local<Object> obj)
     return {consumption};
 }
 
-CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
+CompressorElectricityData getCompressorElectricityData(Local<Object> obj, bool convert = true)
 {
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
@@ -527,7 +521,15 @@ CompressorElectricityData getCompressorElectricityData(Local<Object> obj)
     {
         ThrowTypeError(std::string("CompressedAirReduction: getCompressorElectricityData method in calculator.h: compressorElectricityData not present in object").c_str());
     }
-    double compressorControlAdjustment = Conversion(GetDouble("compressorControlAdjustment", compressorElectricityDataV8)).percentToFraction();
+    double compressorControlAdjustment;
+    if (convert)
+    {
+        compressorControlAdjustment = Conversion(GetDouble("compressorControlAdjustment", compressorElectricityDataV8)).percentToFraction();
+    }
+    else
+    {
+        compressorControlAdjustment = GetDouble("compressorControlAdjustment", compressorElectricityDataV8);
+    }
     double compressorSpecificPower = GetDouble("compressorSpecificPower", compressorElectricityDataV8);
     return {
         compressorControlAdjustment,
@@ -601,6 +603,148 @@ NAN_METHOD(compressedAirReduction)
 }
 
 // ========== END Compressed Air ==============
+
+// ========== Start Air Leak Survey ===========
+
+EstimateMethodData getEstimateMethodData(Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>("estimateMethodData").ToLocalChecked();
+    Local<Object> estimateMethodDataV8 = Nan::To<Object>(obj->Get(context, getName).ToLocalChecked()).ToLocalChecked();
+    if (estimateMethodDataV8->IsUndefined())
+    {
+        ThrowTypeError(std::string("CompressedAirReduction: getEstimateMethodData method in calculator.h: estimateMethodData not present in object").c_str());
+    }
+    double leakRateEstimate = GetDouble("leakRateEstimate", estimateMethodDataV8);
+    return {
+        leakRateEstimate};
+}
+
+DecibelsMethodData getDecibelsMethodData(Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>("decibelsMethodData").ToLocalChecked();
+    Local<Object> decibelsMethodDataV8 = Nan::To<Object>(obj->Get(context, getName).ToLocalChecked()).ToLocalChecked();
+    if (decibelsMethodDataV8->IsUndefined())
+    {
+        ThrowTypeError(std::string("CompressedAirReduction: getDecibelsMethodData method in calculator.h: decibelsMethodData not present in object").c_str());
+    }
+    double linePressure = GetDouble("linePressure", decibelsMethodDataV8);
+    double decibels = GetDouble("decibels", decibelsMethodDataV8);
+    double decibelRatingA = GetDouble("decibelRatingA", decibelsMethodDataV8);
+    double pressureA = GetDouble("pressureA", decibelsMethodDataV8);
+    double firstFlowA = GetDouble("firstFlowA", decibelsMethodDataV8);
+    double secondFlowA = GetDouble("secondFlowA", decibelsMethodDataV8);
+    double decibelRatingB = GetDouble("decibelRatingB", decibelsMethodDataV8);
+    double pressureB = GetDouble("pressureB", decibelsMethodDataV8);
+    double firstFlowB = GetDouble("firstFlowB", decibelsMethodDataV8);
+    double secondFlowB = GetDouble("secondFlowB", decibelsMethodDataV8);
+    return {
+        linePressure,
+        decibels,
+        decibelRatingA,
+        pressureA,
+        firstFlowA,
+        secondFlowA,
+        decibelRatingB,
+        pressureB,
+        firstFlowB,
+        secondFlowB};
+}
+
+OrificeMethodData getOrificeMethodData(Local<Object> obj)
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>("orificeMethodData").ToLocalChecked();
+    Local<Object> orificeMethodDataV8 = Nan::To<Object>(obj->Get(context, getName).ToLocalChecked()).ToLocalChecked();
+    if (orificeMethodDataV8->IsUndefined())
+    {
+        ThrowTypeError(std::string("CompressedAirReduction: getOrificeMethodData method in calculator.h: orificeMethodData not present in object").c_str());
+    }
+    double airTemp = GetDouble("compressorAirTemp", orificeMethodDataV8);
+    double atmPressure = GetDouble("atmosphericPressure", orificeMethodDataV8);
+    double dischargeCoef = GetDouble("dischargeCoefficient", orificeMethodDataV8);
+    double diameter = GetDouble("orificeDiameter", orificeMethodDataV8);
+    double supplyPressure = GetDouble("supplyPressure", orificeMethodDataV8);
+    int numOrifices = static_cast<int>(GetDouble("numberOfOrifices", orificeMethodDataV8));
+    return {
+        airTemp,
+        atmPressure,
+        dischargeCoef,
+        diameter,
+        supplyPressure,
+        numOrifices};
+}
+
+CompressedAirLeakSurveyInput constructCompressedAirLeakSurveyInput(Local<Object> obj)
+{
+    int hoursPerYear = static_cast<int>(GetDouble("hoursPerYear", obj));
+    int utilityType = static_cast<int>(GetDouble("utilityType", obj));
+    double utilityCost = GetDouble("utilityCost", obj);
+    int measurementMethod = static_cast<int>(GetDouble("measurementMethod", obj));
+    EstimateMethodData estimateMethodData = getEstimateMethodData(obj);
+    DecibelsMethodData decibelsMethodData = getDecibelsMethodData(obj);
+    BagMethodData bagMethodData = getBagMethodData(obj);
+    OrificeMethodData orificeMethodData = getOrificeMethodData(obj);
+    CompressorElectricityData electricityData = getCompressorElectricityData(obj, false);
+    int units = static_cast<int>(GetDouble("units", obj));
+    return {
+        hoursPerYear,
+        utilityType,
+        utilityCost,
+        measurementMethod,
+        estimateMethodData,
+        decibelsMethodData,
+        bagMethodData,
+        orificeMethodData,
+        electricityData,
+        units};
+}
+
+std::vector<CompressedAirLeakSurveyInput> getCompressedAirLeakSurveyInputVec()
+{
+    v8::Isolate *isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    Local<String> getName = Nan::New<String>("compressedAirLeakSurveyInputVec").ToLocalChecked();
+    Local<Value> arrayTmp = Nan::To<Object>(inp).ToLocalChecked()->Get(context, getName).ToLocalChecked();
+    if (arrayTmp->IsUndefined())
+    {
+        ThrowTypeError(std::string("CompressedAirLeakSurvey: getCompressedAirLeakSurveyInputVec method in calculator.h: compressedAirLeakSurveyInputVec not present in object").c_str());
+    }
+    Local<Array> compressedAirLeakSurveyInputArray = v8::Local<v8::Array>::Cast(arrayTmp);
+    std::vector<CompressedAirLeakSurveyInput> inputVec;
+    for (std::size_t i = 0; i < compressedAirLeakSurveyInputArray->Length(); i++)
+    {
+        inputVec.emplace_back(constructCompressedAirLeakSurveyInput(Nan::To<Object>(compressedAirLeakSurveyInputArray->Get(context, i).ToLocalChecked()).ToLocalChecked()));
+    }
+    return inputVec;
+}
+
+NAN_METHOD(compressedAirLeakSurvey)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+    try
+    {
+        std::vector<CompressedAirLeakSurveyInput> inputVec = getCompressedAirLeakSurveyInputVec();
+        CompressedAirLeakSurvey::Output rv = CompressedAirLeakSurvey(inputVec).calculate();
+        SetR("annualTotalElectricity", rv.annualTotalElectricity);
+        SetR("annualTotalElectricityCost", rv.annualTotalElectricityCost);
+        SetR("totalFlowRate", rv.totalFlowRate);
+        SetR("annualTotalFlowRate", rv.annualTotalFlowRate);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in compressedAirLeakSurvey - calculator.h: " + what).c_str());
+    }
+    info.GetReturnValue().Set(r);
+}
+
+// ========== END Air Leak Survey =============
 
 // ========== Start Water Reduction ===========
 
@@ -737,13 +881,18 @@ CompressedAirPressureReductionInput constructCompressedAirPressureReductionInput
     double compressorPower = GetDouble("compressorPower", obj);
     double pressure = GetDouble("pressure", obj);
     double proposedPressure = GetDouble("proposedPressure", obj);
+    double pressureRated = GetDouble("pressureRated", obj);
+    double atmosphericPressure = GetDouble("atmosphericPressure", obj);
     return {
         isBaseline,
         hoursPerYear,
         electricityCost,
         compressorPower,
         pressure,
-        proposedPressure};
+        proposedPressure,
+        atmosphericPressure,
+        pressureRated
+        };
 }
 
 std::vector<CompressedAirPressureReductionInput> getCompressedAirPressureReductionInputVec()

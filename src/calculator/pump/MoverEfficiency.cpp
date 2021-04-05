@@ -7,7 +7,7 @@ double MoverEfficiency::calculate() {
 		return fluidPowerHp / moverShaftPower;
 	}
 
-	double const fluidPower = FluidPower(flowRate, inletPressure, outletPressure, compressibilityFactor).calculate();
+	double const fluidPower = FluidPower(flowRate, inletPressure, outletPressure, compressibilityFactor, velocityPressure).calculate();
 	double const fluidPowerHp = fluidPower / 0.746; // convert to hp
 	return fluidPowerHp / moverShaftPower;
 }

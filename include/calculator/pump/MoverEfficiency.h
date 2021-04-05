@@ -38,11 +38,12 @@ public:
      * @param inletPressure double,
      * @param outletPressure double,
      * @param compressibilityFactor double,
+     * @param velocityPressure double
      */
     MoverEfficiency(double const flowRate, double const  fanShaftPower, double const inletPressure, double const outletPressure,
-                    double const compressibilityFactor)
+                    double const compressibilityFactor, double const velocityPressure)
             : flowRate(flowRate), moverShaftPower(fanShaftPower), inletPressure(inletPressure), outletPressure(outletPressure),
-              compressibilityFactor(compressibilityFactor), isPump(false)
+              compressibilityFactor(compressibilityFactor), isPump(false), velocityPressure(velocityPressure)
     {}
 
     /**
@@ -119,7 +120,7 @@ public:
 private:
     double specificGravity = 0, head = 0;
     double flowRate, moverShaftPower;
-    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
+    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0, velocityPressure = 0;
 
     const bool isPump;
 };
