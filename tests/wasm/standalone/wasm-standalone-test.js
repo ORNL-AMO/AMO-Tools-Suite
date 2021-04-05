@@ -176,12 +176,10 @@ function operatingCost() {
 
     operatingCost.delete();
 }
-function returnDoubleVector(doublesArray)
-{
+function returnDoubleVector(doublesArray) {
     let doubleVector = new Module.DoubleVector();
 
-    for (x of doublesArray)
-    {
+    for (x of doublesArray) {
         doubleVector.push_back(x);
     }
 
@@ -192,17 +190,19 @@ function returnDoubleVector(doublesArray)
 function airSystemCapacity() {
     var inp = {
         oneHalf: 3000, threeFourths: 2000, one: 1000, oneAndOneFourth: 200, oneAndOneHalf: 100, two: 500, twoAndOneHalf: 500, three: 300,
-        threeAndOneHalf: 0, four: 1000, five: 0, six: 0,
+        threeAndOneHalf: 0, four: 1000, five: 0, six: 0, eight: 0, ten: 0, twelve: 0, fourteen: 0, sixteen: 0, eighteen: 0, twenty: 0,
+        twentyFour: 0,
         receiverCapacities: returnDoubleVector([
             400, 500, 660, 1060
         ])
     };
 
-    let pipeData = new Module.PipeData(inp.oneHalf, inp.threeFourths, inp.one, inp.oneAndOneFourth, inp.oneAndOneHalf, inp.two, inp.twoAndOneHalf, inp.three, inp.threeAndOneHalf, inp.four, inp.five, inp.six);
+    let pipeData = new Module.PipeData(inp.oneHalf, inp.threeFourths, inp.one, inp.oneAndOneFourth, inp.oneAndOneHalf, inp.two, inp.twoAndOneHalf, inp.three, inp.threeAndOneHalf, inp.four, inp.five, inp.six,
+        inp.eight, inp.ten, inp.twelve, inp.fourteen, inp.sixteen, inp.eighteen, inp.twenty, inp.twentyFour);
     let airSystemCapacity = new Module.AirSystemCapacity(pipeData, inp.receiverCapacities);
     let result = airSystemCapacity.calculate();
     let receiverCapacities = new Array();
-    for(let i = 0; i < result.receiverCapacities.size(); i++){
+    for (let i = 0; i < result.receiverCapacities.size(); i++) {
         receiverCapacities.push(result.receiverCapacities.get(i));
     }
     testNumberValue(result.totalPipeVolume, 155.28, "STANDALONE Air System Capacity (totalPipeVolume)");

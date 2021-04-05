@@ -138,37 +138,37 @@ EMSCRIPTEN_BINDINGS(steamModeler)
         .constructor<double, double, double, double, bool, bool, double, double, double, double>();
 
     //HeaderInput
-    class_<HeaderInput>("HeaderInput")
-        .constructor<HeaderWithHighestPressure, std::shared_ptr<HeaderNotHighestPressure>, std::shared_ptr<HeaderNotHighestPressure>>()
-        .constructor<HeaderWithHighestPressure, std::shared_ptr<HeaderNotHighestPressure>>()
-        .constructor<HeaderWithHighestPressure>();
+    // class_<HeaderInput>("HeaderInput")
+    //     .constructor<HeaderWithHighestPressure, std::shared_ptr<HeaderNotHighestPressure>, std::shared_ptr<HeaderNotHighestPressure>>()
+    //     .constructor<HeaderWithHighestPressure, std::shared_ptr<HeaderNotHighestPressure>>()
+    //     .constructor<HeaderWithHighestPressure>();
 
     //register nullptr
     // value_object<nullptr>("nullptr");
 
     //HeaderWithPressure
-    class_<HeaderWithPressure>("HeaderWithPressure")
-        .constructor<double, double, double, double, bool>();
-    //HeaderWithHighestPressure
-    class_<HeaderWithHighestPressure, emscripten::base<HeaderWithPressure>>("HeaderWithHighestPressure")
-        .constructor<double, double, double, double, double, bool>();
+    // class_<HeaderWithPressure>("HeaderWithPressure")
+    //     .constructor<double, double, double, double, bool>();
+    // //HeaderWithHighestPressure
+    // class_<HeaderWithHighestPressure, emscripten::base<HeaderWithPressure>>("HeaderWithHighestPressure")
+    //     .constructor<double, double, double, double, double, bool>();
 
-    //HeaderNotHighestPressure
-    class_<HeaderNotHighestPressure, emscripten::base<HeaderWithPressure>>("HeaderNotHighestPressure")
-        .constructor<double, double, double, double, bool, bool, double>();
+    // //HeaderNotHighestPressure
+    // class_<HeaderNotHighestPressure, emscripten::base<HeaderWithPressure>>("HeaderNotHighestPressure")
+    //     .constructor<double, double, double, double, bool, bool, double>();
 
-    //OperationsInput
-    class_<OperationsInput>("OperationsInput")
-        .constructor<double, double, double, double, double, double>();
+    // //OperationsInput
+    // class_<OperationsInput>("OperationsInput")
+    //     .constructor<double, double, double, double, double, double>();
 
-    //TurbineInput
-    class_<TurbineInput>("TurbineInput")
-        .constructor<CondensingTurbine, PressureTurbine, PressureTurbine, PressureTurbine>();
+    // //TurbineInput
+    // class_<TurbineInput>("TurbineInput")
+    //     .constructor<CondensingTurbine, PressureTurbine, PressureTurbine, PressureTurbine>();
 
-    //CondensingTurbine
-    class_<CondensingTurbine>("CondensingTurbine")
-        .constructor<double, double, double, CondensingTurbineOperation, double, bool>();
-    //PressureTurbine
-    class_<PressureTurbine>("PressureTurbine")
-        .constructor<double, double, PressureTurbineOperation, double, double, bool>();
+    // //CondensingTurbine
+    // class_<CondensingTurbine>("CondensingTurbine")
+    //     .constructor<double, double, double, CondensingTurbineOperation, double, bool>();
+    // //PressureTurbine
+    // class_<PressureTurbine>("PressureTurbine")
+    //     .constructor<double, double, PressureTurbineOperation, double, double, bool>();
 }

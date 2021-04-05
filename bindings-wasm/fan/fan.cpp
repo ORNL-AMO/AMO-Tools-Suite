@@ -19,11 +19,11 @@ EMSCRIPTEN_BINDINGS(fsat_results)
 
     //field data basleline
     class_<Fan::FieldDataBaseline>("FieldDataBaseline")
-        .constructor<double, double, double, double, double, double, double, Motor::LoadEstimationMethod>();
+        .constructor<double, double, double, double, double, double, double, Motor::LoadEstimationMethod, double>();
 
     //field data modified
     class_<Fan::FieldDataModified>("FieldDataModified")
-        .constructor<double, double, double, double, double, double>();
+        .constructor<double, double, double, double, double, double, double>();
 
     //fan result
     class_<FanResult>("FanResult")

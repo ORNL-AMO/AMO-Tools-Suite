@@ -32,12 +32,13 @@ function resultsExisting() {
     let operatingHours = 8760;
     let unitCost = .06;
     let airDensity = 1.02;
+    let velocityPressure = 0;
     //unused
     let specifiedDriveEfficiency = 1;
 
     let fanInput = new Module.FanInput(fanSpeed, airDensity, drive, specifiedDriveEfficiency);
     let motor = new Module.Motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
-    let baselineFieldData = new Module.FieldDataBaseline(measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor, loadEstimationMethod);
+    let baselineFieldData = new Module.FieldDataBaseline(measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor, loadEstimationMethod, velocityPressure);
     let fanResult = new Module.FanResult(fanInput, motor, operatingHours, unitCost);
     let output = fanResult.calculateExisting(baselineFieldData);
     fanInput.delete();
@@ -87,9 +88,10 @@ function resultsModified() {
     let fanEfficiency = 59.5398315 / 100;
     let specifiedDriveEfficiency = 100 / 100;
     let isSpecified = false;
+    let velocityPressure = 0;
     //calculate
     let fanInput = new Module.FanInput(fanSpeed, airDensity, drive, specifiedDriveEfficiency);
-    let fanFieldData = new Module.FieldDataModified(measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor)
+    let fanFieldData = new Module.FieldDataModified(measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor, velocityPressure)
     let motor = new Module.Motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
     let fanResult = new Module.FanResult(fanInput, motor, operatingHours, unitCost);
     output = fanResult.calculateModified(fanFieldData, fanEfficiency);

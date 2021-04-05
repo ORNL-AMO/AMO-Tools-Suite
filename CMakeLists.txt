@@ -225,8 +225,7 @@ set(SOURCE_FILES
         bindings-wasm/standalone/standaloneEnum.cpp
         bindings-wasm/ssmt/ssmt.cpp 
         bindings-wasm/ssmt/ssmtEnum.cpp
-        bindings-wasm/ssmt/ssmtModeler.cpp)
-
+        bindings-wasm/ssmt/ssmtModeler.cpp
         src/calculator/util/SludgeVolumeIndex.cpp
         src/calculator/pump/PumpData.cpp
         src/calculator/motor/MotorData.cpp
