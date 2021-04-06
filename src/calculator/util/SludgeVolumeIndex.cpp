@@ -1,4 +1,5 @@
 #include <vector>
+#include <cmath>
 #include "calculator/util/SludgeVolumeIndex.h"
 
 using namespace std;
