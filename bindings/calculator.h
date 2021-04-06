@@ -881,13 +881,18 @@ CompressedAirPressureReductionInput constructCompressedAirPressureReductionInput
     double compressorPower = GetDouble("compressorPower", obj);
     double pressure = GetDouble("pressure", obj);
     double proposedPressure = GetDouble("proposedPressure", obj);
+    double pressureRated = GetDouble("pressureRated", obj);
+    double atmosphericPressure = GetDouble("atmosphericPressure", obj);
     return {
         isBaseline,
         hoursPerYear,
         electricityCost,
         compressorPower,
         pressure,
-        proposedPressure};
+        proposedPressure,
+        atmosphericPressure,
+        pressureRated
+        };
 }
 
 std::vector<CompressedAirPressureReductionInput> getCompressedAirPressureReductionInputVec()

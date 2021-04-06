@@ -85,12 +85,12 @@ namespace Fan {
 		 * @param compressibilityFactor
 		 */
 		FieldDataModified(const double measuredVoltage, const double measuredAmps, const double flowRate, const double inletPressure,
-		                            const double outletPressure, const double compressibilityFactor)
+		                            const double outletPressure, const double compressibilityFactor, const double velocityPressure)
 				: measuredVoltage(measuredVoltage), measuredAmps(measuredAmps), flowRate(flowRate),
-				  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor)
+				  inletPressure(inletPressure), outletPressure(outletPressure), compressibilityFactor(compressibilityFactor), velocityPressure(velocityPressure)
 		{}
 
-		double measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor;
+		double measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor, velocityPressure;
 	};
 
 	struct FieldDataBaseline: public FieldDataModified {
@@ -107,8 +107,8 @@ namespace Fan {
 		 */
 		FieldDataBaseline(const double measuredPower, const double measuredVoltage, const double measuredAmps,
 		                  const double flowRate, const double inletPressure, const double outletPressure,
-		                  const double compressibilityFactor, Motor::LoadEstimationMethod loadEstimationMethod)
-				: FieldDataModified(measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor),
+		                  const double compressibilityFactor, Motor::LoadEstimationMethod loadEstimationMethod, const double velocityPressure)
+				: FieldDataModified(measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure, compressibilityFactor, velocityPressure),
 				  measuredPower(measuredPower), loadEstimationMethod(loadEstimationMethod)
 		{}
 

@@ -300,16 +300,16 @@
             ]
         },
         {
-          "target_name": "compressedAir",
+          "target_name": "compressorsCalc",
           'include_dirs': [
               'include',
-              'include/calculator/util/CompressedAirCentrifugal.h',
+              'include/calculator/util/Compressors.h',
               "<!(node -e \"require('nan')\")"
           ],
           'sources': [
-              'bindings/compressedAir.cpp',
+              'bindings/compressorsCalc.cpp',
               'src/calculator/util/CurveFitVal.cpp',
-              'src/calculator/util/CompressedAirCentrifugal.cpp'
+              'src/calculator/util/Compressors.cpp'
           ],
           "conditions": [
               [ 'OS=="mac"', {
@@ -359,13 +359,22 @@
           'include_dirs': [
               'include',
               'include/calculator/processHeat/AirHeatingUsingExhaust.h',
+              'include/calculator/processHeat/WaterHeatingUsingExhaust.h',
+              'include/calculator/processHeat/WaterHeatingUsingSteam.h',
+              'include/calculator/processHeat/CascadeHeatHighToLow.h',
               "<!(node -e \"require('nan')\")"
           ],
           'sources': [
               'bindings/processHeat.cpp',
+              'src/ssmt/SteamProperties.cpp',
+              'src/ssmt/SaturatedProperties.cpp',
+              'src/ssmt/SteamSystemModelerTool.cpp',
               'src/calculator/losses/GasFlueGasMaterial.cpp',
               'src/calculator/losses/SolidLiquidFlueGasMaterial.cpp',
-              'src/calculator/processHeat/AirHeatingUsingExhaust.cpp'
+              'src/calculator/processHeat/AirHeatingUsingExhaust.cpp',
+              'src/calculator/processHeat/WaterHeatingUsingExhaust.cpp',
+              'src/calculator/processHeat/WaterHeatingUsingSteam.cpp',
+              'src/calculator/processHeat/CascadeHeatHighToLow.cpp'
           ],
           "conditions": [
               [ 'OS=="mac"', {

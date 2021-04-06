@@ -9,7 +9,7 @@
 TEST_CASE( "Fan Output existing", "[Fan results existing]" ) {
 	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE, 1.00};
 	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
-	Fan::FieldDataBaseline fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER};
+	Fan::FieldDataBaseline fanFieldData = {460, 460, 660, 129691, -16.36, 1.1, 0.988, Motor::LoadEstimationMethod::POWER, 0};
 	FanResult result = {fanInput, motor, 8760, 0.06};
 	auto const output = result.calculateExisting(fanFieldData);
 
@@ -30,7 +30,7 @@ TEST_CASE( "Fan Output existing", "[Fan results existing]" ) {
 TEST_CASE( "Fan Output modified", "[Fan results modified]" ) {
 	Fan::Input fanInput = {1180, 0.07024, Motor::Drive::DIRECT_DRIVE, 1.00};
 	Motor motor = {Motor::LineFrequency::FREQ60, 600, 1180, Motor::EfficiencyClass::ENERGY_EFFICIENT, 96, 460, 683.2505707137};
-	Fan::FieldDataModified fanFieldData = {460, 660, 129691, -16.36, 1.1, 0.988};
+	Fan::FieldDataModified fanFieldData = {460, 660, 129691, -16.36, 1.1, 0.988, 0};
 	FanResult result = {fanInput, motor, 8760, 0.06};
 	auto const output = result.calculateModified(fanFieldData, 0.595398315);
 

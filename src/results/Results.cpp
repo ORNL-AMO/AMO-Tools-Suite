@@ -35,7 +35,7 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const &fan
     double const fanShaftPower = pumpShaftPower.pumpShaftPower;
     double const driveEfficiency = pumpShaftPower.driveEfficiency;
     double const fanEfficiency = MoverEfficiency(fanFieldData.flowRate, fanShaftPower, fanFieldData.inletPressure,
-                                                 fanFieldData.outletPressure, fanFieldData.compressibilityFactor)
+                                                 fanFieldData.outletPressure, fanFieldData.compressibilityFactor, fanFieldData.velocityPressure)
                                      .calculate();
     double const annualEnergy = AnnualEnergy(output.power, operatingHours).calculate();
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
@@ -52,7 +52,7 @@ FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const &fan
 {
     double const fanShaftPower = OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure,
                                                        fanFieldData.outletPressure, fanFieldData.compressibilityFactor,
-                                                       fanEfficiency)
+                                                       fanEfficiency, fanFieldData.velocityPressure)
                                      .calculate();
 
     OptimalMotorShaftPower::Output const optimalMotorShaftPower = OptimalMotorShaftPower(fanShaftPower, fanInput.drive, fanInput.specifiedEfficiency).calculate();

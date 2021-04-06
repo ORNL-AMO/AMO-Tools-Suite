@@ -4,7 +4,7 @@
  *
  * This contains the inputs for calculating flue gas heat loss.
  *
- * @author Gina Accawi (accawigk) & Preston Shires (pshires)
+ * @author Gina Accawi (accawigk) & Preston Shires (pshires) & Omer Aziz (omerb)
  * @bug No known bugs.
  *
  */
@@ -17,6 +17,7 @@
 #include <string>
 #include <cmath>
 #include <memory>
+#include <stdexcept>
 
 /**
  * Gas Properties class
@@ -147,6 +148,36 @@ public:
 	double getHeatingValueVolume() const { return heatingValueVolume; };
 	double getSpecificGravity() const { return specificGravity; };
 	double getStoichometricAir() const { return stoichometricAir; };
+
+	/**
+	 *
+	 * @param flueGasO2 double
+	 * @return double
+	 */
+    double getExcessAir(const double flueGasO2) const;
+
+    /**
+     *
+     * @param ppH2O double
+     * @return double
+     */
+    double getSaturationTemperature(const double ppH2O) const;
+
+    /**
+     *
+     * @param ppH2O double
+     * @return double
+     */
+    double getEnthalpyAtSaturation(const double ppH2O) const;
+
+    /**
+     *
+     * @param flueGasTemp double
+     * @param excessAir double
+     * @param combAirTemperature double
+     * @return double
+     */
+    double getAvailableHeat(const double flueGasTemp, const double excessAir, const double combAirTemperature);
 
 	double calculateExcessAir(double flueGasO2);
 	double calculateO2(double excessAir);

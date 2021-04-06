@@ -276,6 +276,7 @@ NAN_METHOD(fanResultsExisting)
 	double const compressibilityFactor = Get("compressibilityFactor", inp);
 	double const operatingHours = Get("operatingHours", inp);
 	double const unitCost = Get("unitCost", inp);
+	const double velocityPressure = Get("velocityPressure", inp);
 	Motor::LoadEstimationMethod const loadEstimationMethod = GetEnumVal<Motor::LoadEstimationMethod>("loadEstimationMethod", inp);
 
 	//Calculation procedure
@@ -283,7 +284,7 @@ NAN_METHOD(fanResultsExisting)
 	Fan::Input input(fanSpeed, airDensity, drive1, specifiedDriveEfficiency);
 	Motor motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
 	Fan::FieldDataBaseline fanFieldData(measuredPower, measuredVoltage, measuredAmps, flowRate, inletPressure, outletPressure,
-										compressibilityFactor, loadEstimationMethod);
+										compressibilityFactor, loadEstimationMethod, velocityPressure);
 	FanResult result(input, motor, operatingHours, unitCost);
 	FanResult::Output output = result.calculateExisting(fanFieldData);
 	//perform conversions for return object
@@ -345,13 +346,14 @@ NAN_METHOD(fanResultsModified)
 	const double operatingHours = Get("operatingHours", inp);
 	const double unitCost = Get("unitCost", inp);
 	double fanEfficiency = Get("fanEfficiency", inp);
+	const double velocityPressure = Get("velocityPressure", inp);
 
 	//Calculation procedure
 	fanEfficiency = Conversion(fanEfficiency).percentToFraction();
 	specifiedDriveEfficiency = Conversion(specifiedDriveEfficiency).percentToFraction();
 	Fan::Input input(fanSpeed, airDensity, drive1, specifiedDriveEfficiency);
 	Fan::FieldDataModified fanFieldData(measuredVoltage, measuredAmps, flowRate, inletPressure,
-										outletPressure, compressibilityFactor);
+										outletPressure, compressibilityFactor, velocityPressure);
 	Motor motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
 	FanResult result(input, motor, operatingHours, unitCost);
 	FanResult::Output output = result.calculateModified(fanFieldData, fanEfficiency);

@@ -1,3 +1,14 @@
+/**
+ * @file
+ * @brief State point analysis for rate of activated sludge.
+ *
+ *
+ *
+ * @author Omer Aziz (omerb)
+ * @bug No known bugs.
+ *
+ */
+
 #ifndef AMO_TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
 #define AMO_TOOLS_SUITE_SLUDGEVOLUMEINDEX_H
 
@@ -33,8 +44,40 @@ public:
         std::vector<GraphDataPoint> GraphData;
     };
 
+    /**
+     *
+     * @param sviParameter double
+     * @param sviValue  double, units L/g
+     * @param numberOfClarifiers double
+     * @param areaOfClarifier double, units m2
+     * @param MLSS double, units kg/L
+     * @param influentFlow double, units L/h
+     * @param rasFlow double, units L/h
+     * @param sludgeSettlingVelocity double, units m/h
+     *
+     */
+
     SludgeVolumeIndex(SVIParameter sviParameter, double sviValue, int numberOfClarifiers, double areaOfClarifier, double MLSS, double influentFlow, double rasFlow, double sludgeSettlingVelocity) :
             sviParameter(sviParameter), sviValue(sviValue), numberOfClarifiers(numberOfClarifiers), areaOfClarifier(areaOfClarifier), MLSS(MLSS), influentFlow(influentFlow), rasFlow(rasFlow), sludgeSettlingVelocity(sludgeSettlingVelocity) {}
+
+    /**
+     *
+     * @return Output
+     * @param TotalAreaClarifier double, units m2
+     * @param SurfaceOverflow double, units l/m2h
+     * @param AppliedSolidsLoading double, units kf/m2h
+     * @param RasConcentration double, units kg/L
+     * @param UnderFlowRateX2 double, units g/L
+     * @param UnderFlowRateY1 double, units kg/m2h
+     * @param OverFlowRateX2 double, units g/L
+     * @param OverFlowRateY2 double, units kg/m2h
+     * @param StatePointX double
+     * @param StatePointY double
+     * @param GraphData (Computes and populates that can be retrieved)
+     * @param          SolidsConcentration double
+     * @param          SolidsFlux double
+     *
+    */
 
     Output calculate();
 
