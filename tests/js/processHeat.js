@@ -154,7 +154,7 @@ test('WaterHeatingUsingSteam HeatExchanger', function (t) {
         operatingHours: 8000
     };
     compare(bindings.waterHeatingUsingSteam(input), [388.75, 403.57, 2698.89, 483.41, 53.876, 94.61,
-        3346757808.4035, 1113312444.0692, 1814.32, 292841.3082]);
+        3346757808.4035, 648872153.14, 1057.44, 292841.3082]);
 });
 
 test('CascadeHeatHighToLow Gas', function (t) {

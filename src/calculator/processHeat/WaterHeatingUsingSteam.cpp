@@ -41,6 +41,6 @@ WaterHeatingUsingSteam::Output WaterHeatingUsingSteam::calculate(const double pr
     return Output(tempWaterOut, bpTempWaterOut, bpTempWarningFlag, flowByPassSteam,
                   enthalpySteamIn, enthalpySteamOut, enthalpyMakeUpWater,
                   heatGainRate * operatingHours / effWaterHeater,
-                  flowSteamRate * (enthalpySteamOut - enthalpyMakeUpWater) * operatingHours / effBoiler,
-                  flowSteamRate * operatingHours / 1000, heatGainRate);
+                  (flowSteamRate - flowByPassSteam) * (enthalpySteamOut - enthalpyMakeUpWater) * operatingHours / effBoiler,
+                  (flowSteamRate - flowByPassSteam) * operatingHours / 1000, heatGainRate);
 }

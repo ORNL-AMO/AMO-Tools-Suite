@@ -62,7 +62,7 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
     CHECK(resSteamEnergy.enthalpyMakeUpWater == Approx(53.876));
     CHECK(resSteamEnergy.flowByPassSteam == Approx(94.61));
     CHECK(resSteamEnergy.energySavedDWH == Approx(3346757808.4035));
-    CHECK(resSteamEnergy.energySavedBoiler == Approx(1113312444.0692));
-    CHECK(resSteamEnergy.waterSaved == Approx(1814.32));
+    CHECK(resSteamEnergy.energySavedBoiler == Approx(648872153.14));
+    CHECK(resSteamEnergy.waterSaved == Approx(1057.44));
     CHECK(resSteamEnergy.heatGainRate == Approx(292841.3082));
 }
