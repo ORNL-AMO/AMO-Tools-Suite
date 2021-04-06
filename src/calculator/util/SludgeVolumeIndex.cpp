@@ -10,6 +10,7 @@
  */
 
 #include <vector>
+#include <cmath>
 #include "calculator/util/SludgeVolumeIndex.h"
 #include <cmath>
 
