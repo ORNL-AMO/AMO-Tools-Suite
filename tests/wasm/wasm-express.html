@@ -11,15 +11,24 @@
     <script>
         var Module = {
             onRuntimeInitialized: function () {
-                $.getScript('tests/test-value.js');
-                $.getScript('tests/wasm-psat-test.js');
-                $.getScript('tests/wasm-motor-test.js');
-                $.getScript('tests/wasm-fan-test.js');
-                $.getScript('tests/wasm-phast-test.js');
-                $.getScript('tests/wasm-standalone-test.js');
-                $.getScript('tests/wasm-ssmt-modeler-test.js');
-                $.getScript('tests/wasm-ssmt-test.js');
-                $.getScript('tests/finish-testing.js');
+                $.getScript('tests/test-value.js').then(() => {
+                    $.getScript('tests/wasm-psat-test.js').then(() => {
+                        $.getScript('tests/wasm-motor-test.js').then(() => {
+                            $.getScript('tests/wasm-fan-test.js').then(() => {
+                                $.getScript('tests/wasm-phast-test.js').then(() => {
+                                    $.getScript('tests/wasm-standalone-test.js').then(() => {
+                                        $.getScript('tests/wasm-ssmt-modeler-test.js').then(() => {
+                                            $.getScript('tests/wasm-ssmt-test.js').then(() => {
+                                                $.getScript('tests/finish-testing.js');
+
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
             }
         }
     </script>
@@ -35,11 +44,12 @@
             padding-top: 3px;
         }
 
-        label{
+        label {
             font-size: larger;
             font-weight: bold;
         }
-        .expected-div{
+
+        .expected-div {
             border-bottom: solid 2px;
             padding-bottom: 3px;
         }
