@@ -26,7 +26,7 @@ public:
   {
     Output(double fanEfficiency, const double motorRatedPower, const double motorShaftPower, const double fanShaftPower,
            double motorEfficiency, double motorPowerFactor, const double motorCurrent, const double motorPower,
-           const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double loadFactor, double driveEfficiency, const double estimatedFLA = 0)
+           const double annualEnergy, double annualCost, const double fanEnergyIndex, const double loadFactor, double driveEfficiency, const double estimatedFLA = 0)
         : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(motorShaftPower),
           fanShaftPower(fanShaftPower), motorEfficiency(motorEfficiency), motorPowerFactor(motorPowerFactor),
           motorCurrent(motorCurrent), motorPower(motorPower), annualEnergy(annualEnergy), annualCost(annualCost),
@@ -35,7 +35,7 @@ public:
     }
 
     Output(const MotorShaftPower::Output output, double fanEfficiency, const double motorRatedPower,
-           const double fanShaftPower, const double annualEnergy, const double annualCost, const double fanEnergyIndex, const double loadFactor, double driveEfficiency,
+           const double fanShaftPower, const double annualEnergy, double annualCost, const double fanEnergyIndex, const double loadFactor, double driveEfficiency,
            const double estimatedFLA = 0)
         : fanEfficiency(fanEfficiency), motorRatedPower(motorRatedPower), motorShaftPower(output.shaftPower),
           fanShaftPower(fanShaftPower), motorEfficiency(output.efficiency), motorPowerFactor(output.powerFactor),
@@ -46,8 +46,8 @@ public:
 
     double fanEfficiency;
     const double motorRatedPower, motorShaftPower, fanShaftPower;
-    double motorEfficiency, motorPowerFactor;
-    const double motorCurrent, motorPower, annualEnergy, annualCost, fanEnergyIndex, loadFactor;
+    double motorEfficiency, motorPowerFactor, annualCost;
+    const double motorCurrent, motorPower, annualEnergy, fanEnergyIndex, loadFactor;
     double driveEfficiency;
     const double estimatedFLA;
 
@@ -57,7 +57,7 @@ public:
     // const double loadFactor, driveEfficiency, estimatedFLA;
   };
 
-  FanResult(Fan::Input &fanInput, Motor &motor, double operatingHours, double unitCost)
+  FanResult(Fan::Input fanInput, Motor motor, double operatingHours, double unitCost)
       : fanInput(fanInput), motor(motor), operatingHours(operatingHours), unitCost(unitCost)
   {
   }
@@ -66,14 +66,14 @@ public:
      * @param fanFieldData, Fan::FieldDataBaseline
      * @return FanResult::Output, the results of an existing fan system assessment
      */
-  Output calculateExisting(Fan::FieldDataBaseline const &fanFieldData);
+  Output calculateExisting(Fan::FieldDataBaseline const fanFieldData);
 
   /**
      * @param fanFieldData, Fan::FieldDataModified
      * @param fanEfficiency, double
      * @return FanResult::Output, the results of a fan system assessment
      */
-  Output calculateModified(Fan::FieldDataModified const &fanFieldData, double fanEfficiency);
+  Output calculateModified(Fan::FieldDataModified const fanFieldData, double fanEfficiency);
 
 private:
   double annualSavingsPotential = 0;
@@ -100,7 +100,7 @@ public:
      * @param operatingHours double, fraction(%) of calendar hours the equipment is operating
      * @param unitCost double, per unit energy cost of electricity in $/kwh
      */
-  PSATResult(Pump::Input &pumpInput, Motor &motor, Pump::FieldData &fieldData, double operatingHours, double unitCost)
+  PSATResult(Pump::Input pumpInput, Motor motor, Pump::FieldData fieldData, double operatingHours, double unitCost)
       : pumpInput(pumpInput), motor(motor), fieldData(fieldData), operatingHours(operatingHours),
         unitCost(unitCost){};
 

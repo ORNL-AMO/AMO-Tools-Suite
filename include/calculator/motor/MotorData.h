@@ -18,11 +18,11 @@ public:
 	MotorData(double hp, int synchronousSpeed, int poles, double nominalEfficiency, Motor::EfficiencyClass efficiencyClass, std::string nemaTable,
 			  std::string enclosureType, Motor::LineFrequency lineFrequency, int voltageLimit, std::string catalog);
 
-	const Motor::EfficiencyClass &getEfficiencyClass() const;
+	const Motor::EfficiencyClass getEfficiencyClass() const;
 
-	const std::string &getNemaTable() const;
-	const std::string &getEnclosureType() const;
-	const std::string &getCatalog() const;
+	const std::string getNemaTable() const;
+	const std::string getEnclosureType() const;
+	const std::string getCatalog() const;
 
 	int getSynchronousSpeed() const;
 	int getPoles() const;

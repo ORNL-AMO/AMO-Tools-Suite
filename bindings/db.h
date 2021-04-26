@@ -1029,13 +1029,13 @@ NAN_METHOD(updateMotor)
     MotorData motor(Get("hp"), Get("synchronousSpeed"), Get("poles"), Get("nominalEfficiency"), efficiencyClassEnum,
                     GetStr("nemaTable"), GetStr("enclosureType"), lineFreqEnum, Get("voltageLimit"), GetStr("catalog"));
     motor.setId(Get("id"));
-    bool success = sql->insertMotorData(motor);
+    bool success = sql->updateMotorData(motor);
     info.GetReturnValue().Set(success);
 };
 
 NAN_METHOD(selectPumps)
 {
-    auto const pumps = sql->getPumpData(); // TODO this returns 0 pumps confirmed, but doesn't in C++. I don't think I can do anything else here anymore.
+    auto const pumps = sql->getPumpData();
 
     auto pumpsNan = Nan::New<v8::Array>();
     for (std::size_t i = 0; i < pumps.size(); i++)

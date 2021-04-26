@@ -23,7 +23,7 @@
 #include "calculator/motor/OptimalMotorPower.h"
 #include "calculator/motor/OptimalMotorSize.h"
 
-FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const &fanFieldData)
+FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const fanFieldData)
 {
     MotorShaftPower motorShaftPower(motor.motorRatedPower, fanFieldData.measuredPower, motor.motorRpm,
                                     motor.lineFrequency, motor.efficiencyClass, motor.specifiedEfficiency,
@@ -48,7 +48,7 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const &fan
             fanEnergyIndex, output.loadFactor, driveEfficiency, output.estimatedFLA};
 }
 
-FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const &fanFieldData, const double fanEfficiency)
+FanResult::Output FanResult::calculateModified(Fan::FieldDataModified const fanFieldData, const double fanEfficiency)
 {
     double const fanShaftPower = OptimalPumpShaftPower(fanFieldData.flowRate, fanFieldData.inletPressure,
                                                        fanFieldData.outletPressure, fanFieldData.compressibilityFactor,

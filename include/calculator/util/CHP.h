@@ -15,6 +15,33 @@
 
 class CHP {
 public:
+	class CostInfoOutput
+	{
+	public:
+	    /**
+	     *
+	     * @param annualOperationSavings double
+	     * @param totalInstalledCostsPayback double
+	     * @param simplePayback double
+	     * @param fuelCosts double
+	     * @param thermalCredit double
+	     * @param incrementalOandMDollarsKwH double
+	     * @param totalOperatingCostsToGenerate double
+	     */
+		CostInfoOutput(double annualOperationSavings, double totalInstalledCostsPayback, double simplePayback,
+					   double fuelCosts, double thermalCredit, double incrementalOandMDollarsKwH, double totalOperatingCostsToGenerate) :
+					   annualOperationSavings(annualOperationSavings), totalInstalledCostsPayback(totalInstalledCostsPayback),
+                       simplePayback(simplePayback), fuelCosts(fuelCosts), thermalCredit(thermalCredit),
+                       incrementalOandMDollarsKwH(incrementalOandMDollarsKwH), totalOperatingCostsToGenerate(totalOperatingCostsToGenerate){};
+		CostInfoOutput() = default;
+		double annualOperationSavings;
+		double totalInstalledCostsPayback;
+		double simplePayback;
+		double fuelCosts;
+		double thermalCredit;
+		double incrementalOandMDollarsKwH;
+		double totalOperatingCostsToGenerate;
+	};
 /**
  * Contructor for the CHP class
  * @param PercentAvgkWhElectricCostAvoided, percent cost saved from CHP electricity, percent
@@ -43,7 +70,7 @@ public:
 	    double percentAvgkWhElectricCostAvoidedOrStandbyRate, double displacedThermalEfficiency, double chpAvailability,
 		double thermalUtilization);
 
-	std::unordered_map<std::string, double> const & getCostInfo() const { return costInfo; }
+	CostInfoOutput getCostInfo() const { return costInfo; }
 /**
  *  Gets the Annual Operating Hours
  * 
@@ -185,7 +212,7 @@ private:
 
 	double avgPowerDemand, avgThermalDemand, netCHPpower;
 
-	std::unordered_map<std::string, double> costInfo;
+	CostInfoOutput costInfo;
 
 	const std::array<std::array<double, 8>, 3> chpSystemByIndex = {
 			{

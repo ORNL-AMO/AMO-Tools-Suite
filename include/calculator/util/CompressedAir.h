@@ -141,7 +141,7 @@ public:
 	 * @param airPressureOut double, a.	Pressure of air leaving the Tank - psi
 	 * @return double, Useable air storage capacity - scf
 	 */
-	static double calculateUsableCapacity(const double tankSize, const double airPressureIn, const double airPressureOut) {
+	double calculateUsableCapacity(const double tankSize, const double airPressureIn, const double airPressureOut) {
 		return (tankSize / 7.48) * (airPressureIn - airPressureOut) / 14.7;
 	}
 

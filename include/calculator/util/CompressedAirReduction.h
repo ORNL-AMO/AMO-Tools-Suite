@@ -128,7 +128,7 @@ class CompressedAirReduction
         double energyUse = 0, energyCost = 0, flowRate = 0, singleNozzleFlowRate, consumption = 0;
     };
 
-    CompressedAirReduction(std::vector<CompressedAirReductionInput> &compressedAirReductionInputVec) : compressedAirReductionInputVec(compressedAirReductionInputVec)
+    CompressedAirReduction(std::vector<CompressedAirReductionInput> compressedAirReductionInputVec) : compressedAirReductionInputVec(compressedAirReductionInputVec)
     {
     }
 

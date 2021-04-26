@@ -133,6 +133,8 @@ double OptimalPrePumpEff::calculate() {
             return aCoeff[0][range] + (aCoeff[1][range] * std::exp(-aCoeff[2][range] * flowRate) +
                                        aCoeff[3][range] * std::exp(-aCoeff[4][range] * flowRate));
 
+        case Pump::Style::SPECIFIED_OPTIMAL_EFFICIENCY : return 0;
     }
-    
+
+    return 0;
 }

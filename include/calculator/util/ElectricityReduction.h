@@ -155,7 +155,7 @@ public:
     };
 
     ElectricityReduction(
-        std::vector<ElectricityReductionInput> &electricityReductionInputVec) : electricityReductionInputVec(electricityReductionInputVec) {}
+        std::vector<ElectricityReductionInput> electricityReductionInputVec) : electricityReductionInputVec(electricityReductionInputVec) {}
 
     ElectricityReduction::Output calculate();
 

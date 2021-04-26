@@ -128,7 +128,7 @@ public:
         double waterUse = 0, waterCost = 0, annualWaterSavings = 0, costSavings = 0;
     };
 
-    WaterReduction(std::vector<WaterReductionInput> &waterReductionInputVec) : waterReductionInputVec(waterReductionInputVec) {}
+    WaterReduction(std::vector<WaterReductionInput> waterReductionInputVec) : waterReductionInputVec(waterReductionInputVec) {}
 
     WaterReduction::Output calculate();
 

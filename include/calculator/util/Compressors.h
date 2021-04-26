@@ -99,6 +99,12 @@ public:
     };
 
 public:
+    int getC_fl_Adjusted() const { return C_fl_Adjusted; }
+    int getkW_fl_Adjusted() const { return kW_fl_Adjusted; }
+    int getC_max_Adjusted() const { return C_max_Adjusted; }
+    int getkW_max_Adjusted() const { return kW_max_Adjusted; }
+
+public:
     double C_fl_Adjusted;
     double kW_fl_Adjusted;
     double C_max_Adjusted;

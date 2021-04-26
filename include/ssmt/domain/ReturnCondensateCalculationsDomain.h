@@ -6,8 +6,8 @@
 
 class ReturnCondensateCalculationsDomain {
 public:
-    const std::shared_ptr<FlashTank> condensateFlashTank;
-    const SteamSystemModelerTool::FluidProperties returnCondensateFlashed;
+    std::shared_ptr<FlashTank> condensateFlashTank;
+    SteamSystemModelerTool::FluidProperties returnCondensateFlashed;
 
     friend std::ostream &operator<<(std::ostream &stream, const ReturnCondensateCalculationsDomain &domain) {
         stream << "ReturnCondensateCalculationsDomain["

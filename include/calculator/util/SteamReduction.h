@@ -120,7 +120,7 @@ public:
     double steamUse = 0, energyUse = 0, energyCost = 0;
   };
 
-  SteamReduction(std::vector<SteamReductionInput> &steamReductionInputVec) : steamReductionInputVec(steamReductionInputVec) {}
+  SteamReduction(std::vector<SteamReductionInput> steamReductionInputVec) : steamReductionInputVec(steamReductionInputVec) {}
   SteamReduction::Output calculate();
 
   std::vector<SteamReductionInput> const &getSteamReductionInputVec() const

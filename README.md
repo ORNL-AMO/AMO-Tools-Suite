@@ -20,6 +20,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - Edit the CMakeCache and enable desired build options via the ccmake tool: `ccmake .` and `make` to build
 - If ccmake isn't available, use `cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./` and `cmake --build .` where config can be `Release`, `Debug`, `MinSizeRel` or `RelWithDebInfo`
 - To build node modules: `npm install` or if already installed, `node-gyp rebuild` to rebuild the modules
+- To build WASM: use -D BUILD_WASM=ON flag in cmake options
 
 ### Unit Tests
 - To run the JavaScript unit tests for the node addons: `npm run test`

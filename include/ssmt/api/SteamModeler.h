@@ -20,6 +20,7 @@ public:
      */
     SteamModelerOutput model(const SteamModelerInput &steamModelerInput);
 
+private:
     /**
      * Entry into the Steam Modeler using individual data objects.
      * @param isBaselineCalc true if this is the baseline calc run.
@@ -31,10 +32,9 @@ public:
      * @return The Steam Modeler processing results.
      */
     SteamModelerOutput
-    model(const bool isBaselineCalc, const double baselinePowerDemand, const HeaderInput &headerInput,
+    modeler(const bool isBaselineCalc, const double baselinePowerDemand, const HeaderInput &headerInput,
           const BoilerInput &boilerInput, const TurbineInput &turbineInput, const OperationsInput &operationsInput);
 
-private:
     SteamModelRunner steamModelRunner = SteamModelRunner();
     SteamModelerOutputFactory steamModelerOutputFactory = SteamModelerOutputFactory();
 
