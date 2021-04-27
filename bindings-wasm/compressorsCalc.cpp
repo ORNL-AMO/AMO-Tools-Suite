@@ -70,6 +70,11 @@ EMSCRIPTEN_BINDINGS(compressors_class)
         .property("C_usage_rpred", &CompressorEEMs::ReduceSystemAirPressureOutput::C_usage_rpred)
         .property("PerC_rpred", &CompressorEEMs::ReduceSystemAirPressureOutput::PerC_rpred);
 
+    class_<CompressorEEMs::AdjustCascadingSetPointOutput>("AdjustCascadingSetPointOutput")
+        .property("kW_fl_adj", &CompressorEEMs::AdjustCascadingSetPointOutput::kW_fl_adj)
+        .property("C_usage_adj", &CompressorEEMs::AdjustCascadingSetPointOutput::C_usage_adj)
+        .property("PerC_adj", &CompressorEEMs::AdjustCascadingSetPointOutput::PerC_adj);
+
     class_<Compressors_Centrifugal_LoadUnload>("Compressors_Centrifugal_LoadUnload")
         .constructor<double, double, double>()
         .function("calculateFromPerkW", &Compressors_Centrifugal_LoadUnload::calculateFromPerkW)
@@ -157,4 +162,5 @@ EMSCRIPTEN_BINDINGS(compressors_class)
     function("ReduceAirLeaks", &CompressorEEMs::ReduceAirLeaks);
     function("ImproveEndUseEfficiency", &CompressorEEMs::ImproveEndUseEfficiency);
     function("ReduceSystemAirPressure", &CompressorEEMs::ReduceSystemAirPressure);
+    function("AdjustCascadingSetPoint", &CompressorEEMs::AdjustCascadingSetPoint);
 }

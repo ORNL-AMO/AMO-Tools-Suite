@@ -731,6 +731,28 @@ function reduceSystemAirPressure(){
         [95, 82.972, 97.384, 0.2059]);
 }
 
+function adjustCascadingSetPoint(){
+    let validate = function(results, expected) {
+        testNumberValue(rnd(results.kW_fl_adj), rnd(expected[0]), "Power at Full Load Operating Pressure adjusted kW_fl_adj");
+        testNumberValue(rnd(results.C_usage_adj), rnd(expected[1]), "Air usage @ adjusted pressure C_usage_adj");
+        testNumberValue(rnd(results.PerC_adj), rnd(expected[2]), "Percent air usage @ adjusted pressure PerC_adj");
+    };
+
+    var input = {
+        C_fl: 2578,
+        C_usage: 1000,
+        P_fl: 100,
+        kW_fl: 414.4,
+        P_fl_adj: 105,
+        P_alt: 14.7,
+        P_atm: 14.7
+    };
+
+    logMessage('Compressors EEM Adjust Cascading Set Point: Test# 1', true);
+    validate(Module.AdjustCascadingSetPoint(input.C_fl, input.C_usage, input.P_fl, input.kW_fl, input.P_fl_adj, input.P_alt, input.P_atm),
+        [425.82, 1026.16, 0.398]);
+}
+
 compressorsCentrifugalLoadUnload();
 compressorsCentrifugalModulationUnload();
 compressorsCentrifugalBlowOff();
@@ -743,3 +765,4 @@ compressorsModulationWithUnload();
 reduceAirLeaks();
 improveEndUseEfficiency();
 reduceSystemAirPressure();
+adjustCascadingSetPoint();
