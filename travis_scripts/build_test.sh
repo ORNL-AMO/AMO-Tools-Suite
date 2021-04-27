@@ -17,6 +17,7 @@ else
   ./bin/amo_tools_suite_tests;
 fi
 
+node-gyp rebuild
 npm run test
 npm run at
 
