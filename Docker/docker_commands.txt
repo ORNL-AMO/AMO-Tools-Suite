@@ -37,4 +37,7 @@ alternatively: cmake --build .
 npm install (OR (if necessary): npm install --unsafe-perm)
 alternatively (if already installed): node-gyp rebuild
 
+npm run test
+
+npm run at
 #--------------------------------------------------------------
