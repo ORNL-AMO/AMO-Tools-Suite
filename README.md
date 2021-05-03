@@ -22,7 +22,10 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - To build node modules: `npm install` or if already installed, `node-gyp rebuild` to rebuild the modules
     - Note: In order to build node modules, edit package.json and change gypfile entry value to true => "gypfile": true 
 - To build WASM: use -D BUILD_WASM=ON flag in cmake options => `emcmake cmake -D BUILD_WASM=ON .` followed by `emmake make`
-    - Note: Emscripten compiler toolchain needs to be installed first from https://emscripten.org/docs/getting_started/index.html
+    - Note:
+      - Emscripten compiler toolchain needs to be installed first from https://emscripten.org/docs/getting_started/index.html
+      - If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
+        example for windows => `emcmake cmake -G "MinGW Makefiles" -D BUILD_WASM=ON .`      
 
 ### Unit Tests
 - To run the JavaScript unit tests for the node addons: `npm run test`
