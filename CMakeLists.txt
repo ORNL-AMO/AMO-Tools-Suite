@@ -18,6 +18,10 @@ option( BUILD_PACKAGE "Build package" ON )
 # Requires:
 option( BUILD_TESTING "Build testing targets" ON )
 
+# Build WASM
+# Requires:
+option( BUILD_WASM "Build wasm" OFF )
+
 # Build C++ documentation using Doxygen
 # Requires: doxygen
 # option( BUILD_DOCUMENTATION "Build Documentation" ON )
@@ -32,7 +36,15 @@ endif()
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(cmake/ProjectMacros.cmake)
-include(cmake/CompilerFlags.cmake)
+
+if(BUILD_WASM)
+  set(BUILD_PACKAGE false)
+  set(BUILD_TESTING false)
+  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_FLAGS "-fexceptions --bind -s WASM=1 -O3 -s ASSERTIONS=1 -std=c++11")
+else ()
+  include(cmake/CompilerFlags.cmake)
+endif ()
 
 # On Windows, things end up under Debug/ or Release/.
 if (WIN32)
@@ -206,6 +218,33 @@ set(SOURCE_FILES
         src/calculator/motor/MotorData.cpp
         src/chillers/CoolingTower.cpp
         src/wasteWater/WasteWater_Treatment.cpp)
+
+if(BUILD_WASM)
+  set(SOURCE_FILES_WASM
+        src/calculator/motor/MotorPerformance.cpp
+        src/calculator/pump/PumpEfficiency.cpp
+        ${CMAKE_SOURCE_DIR}/third_party/sqlite/sqlite3.c
+        bindings-wasm/psat/psat.cpp
+        bindings-wasm/motor/motor.cpp
+        bindings-wasm/motor/motorEnum.cpp
+        bindings-wasm/psat/psatEnum.cpp
+        bindings-wasm/fan/fan.cpp
+        bindings-wasm/fan/fanEnum.cpp
+        bindings-wasm/phast/phast.cpp
+        bindings-wasm/phast/phastEnum.cpp
+        bindings-wasm/standalone/standalone.cpp
+        bindings-wasm/standalone/standaloneEnum.cpp
+        bindings-wasm/ssmt/ssmt.cpp
+        bindings-wasm/ssmt/ssmtEnum.cpp
+        bindings-wasm/ssmt/ssmtModeler.cpp
+        bindings-wasm/processHeat.cpp
+        bindings-wasm/chillers.cpp
+        bindings-wasm/compressorsCalc.cpp
+        bindings-wasm/svi.cpp
+        bindings-wasm/wasteWater.cpp
+        bindings-wasm/calculator.cpp
+        bindings-wasm/db.cpp)
+endif ()
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -480,7 +519,7 @@ endif ()
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # Create amo_tools_suite static library
-add_library(amo_tools_suite STATIC ${SOURCE_FILES} ${INCLUDE_FILES})
+add_library(amo_tools_suite STATIC ${SOURCE_FILES} ${SOURCE_FILES_WASM} ${INCLUDE_FILES})
 
 if( UNIX AND NOT APPLE )
   target_link_libraries( amo_tools_suite dl )
@@ -502,6 +541,8 @@ if( BUILD_TESTING )
     # Create unit testing executable
     add_executable(amo_tools_suite_tests tests/main.unit.cpp ${TEST_FILES})
     target_link_libraries( amo_tools_suite_tests Catch amo_tools_suite )
+else (BUILD_WASM)
+    add_executable(client ${SOURCE_FILES} ${SOURCE_FILES_WASM})
 endif()
 
 #if(BUILD_DOCUMENTATION)

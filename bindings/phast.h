@@ -857,7 +857,7 @@ NAN_METHOD(flueGasByMassCalculateHeatingValue)
     const double moisture = Get("moisture");
     const double nitrogen = Get("nitrogen");
 
-    auto const hv = SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(carbon, hydrogen,
+    auto const hv = SolidLiquidFlueGasMaterial().calculateHeatingValueFuel(carbon, hydrogen,
                                                                           sulphur, inertAsh, o2,
                                                                           moisture, nitrogen);
 
@@ -942,7 +942,7 @@ NAN_METHOD(flueGasByMassCalculateO2)
     moisture = Conversion(moisture).percentToFraction();
     nitrogen = Conversion(nitrogen).percentToFraction();
 
-    double v = SolidLiquidFlueGasMaterial::calculateFlueGasO2(excessAir, carbon,
+    double v = SolidLiquidFlueGasMaterial().calculateFlueGasO2(excessAir, carbon,
                                                               hydrogen, sulphur,
                                                               inertAsh, o2, moisture,
                                                               nitrogen, moistureInAirCombustion);
@@ -975,7 +975,7 @@ NAN_METHOD(flueGasByMassCalculateExcessAir)
     moisture = Conversion(moisture).percentToFraction();
     nitrogen = Conversion(nitrogen).percentToFraction();
 
-    double v = SolidLiquidFlueGasMaterial::calculateExcessAirFromFlueGasO2(o2InFlueGas, carbon,
+    double v = SolidLiquidFlueGasMaterial().calculateExcessAirFromFlueGasO2(o2InFlueGas, carbon,
                                                                          hydrogen, sulphur, inertAsh,
                                                                          o2, moisture, nitrogen,
                                                                          moistureInAirCombustion);

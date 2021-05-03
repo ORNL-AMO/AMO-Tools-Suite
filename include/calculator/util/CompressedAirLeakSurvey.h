@@ -143,7 +143,7 @@ class CompressedAirLeakSurvey
         double annualTotalElectricity = 0, annualTotalElectricityCost = 0, totalFlowRate = 0, annualTotalFlowRate = 0;
     };
 
-    CompressedAirLeakSurvey(std::vector<CompressedAirLeakSurveyInput> &compressedAirLeakSurveyInputVec) : compressedAirLeakSurveyInputVec(compressedAirLeakSurveyInputVec)
+    CompressedAirLeakSurvey(std::vector<CompressedAirLeakSurveyInput> compressedAirLeakSurveyInputVec) : compressedAirLeakSurveyInputVec(compressedAirLeakSurveyInputVec)
     {
     }
 

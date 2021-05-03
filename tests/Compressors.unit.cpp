@@ -375,4 +375,9 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a C
     CHECK(redAirPressure.kW_fl_rpadj == Approx(82.972));
     CHECK(redAirPressure.C_usage_rpred == Approx(97.384));
     CHECK(redAirPressure.PerC_rpred == Approx(0.2059));
+
+    auto cascadingSetPoint = CompressorEEMs::AdjustCascadingSetPoint(2578, 1000, 100, 414.4, 105, 14.7,14.7);
+    CHECK(cascadingSetPoint.kW_fl_adj == Approx(425.82));
+    CHECK(cascadingSetPoint.C_usage_adj == Approx(1026.16));
+    CHECK(cascadingSetPoint.PerC_adj == Approx(0.39804313));
 }

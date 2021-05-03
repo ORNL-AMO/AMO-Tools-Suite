@@ -7,7 +7,7 @@ Inlet::Inlet(const double pressure, const SteamProperties::ThermodynamicQuantity
     calculate();
 }
 
-Header::Header(const double headerPressure, std::vector<Inlet> &inletVec)
+Header::Header(const double headerPressure, std::vector<Inlet> inletVec)
         : headerPressure(headerPressure), inlets(std::move(inletVec)) {
     calculate();
 }

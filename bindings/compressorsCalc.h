@@ -529,3 +529,33 @@ NAN_METHOD(CompEEM_ReduceSystemAirPressure)
         ThrowError(std::string("std::runtime_error thrown in Compressors - EEM - ReduceSystemAirPressure: " + what).c_str());
     }
 }
+
+NAN_METHOD(CompEEM_AdjustCascadingSetPoint)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double C_fl = getDouble("C_fl", inp);
+        const double C_usage = getDouble("C_usage", inp);
+        const double P_fl = getDouble("P_fl", inp);
+        const double kW_fl = getDouble("kW_fl", inp);
+        const double P_fl_adj = getDouble("P_fl_adj", inp);
+        const double P_alt = getDouble("P_alt", inp);
+        const double P_atm = getDouble("P_atm", inp);
+
+        auto output = CompressorEEMs::AdjustCascadingSetPoint(C_fl,C_usage,P_fl,kW_fl,P_fl_adj, P_alt, P_atm);
+
+        setR("kW_fl_adj", output.kW_fl_adj);
+        setR("C_usage_adj", output.C_usage_adj);
+        setR("PerC_adj", output.PerC_adj);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Compressors - EEM - AdjustCascadingSetPoint: " + what).c_str());
+    }
+}

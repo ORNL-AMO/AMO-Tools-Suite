@@ -99,6 +99,12 @@ public:
     };
 
 public:
+    int getC_fl_Adjusted() const { return C_fl_Adjusted; }
+    int getkW_fl_Adjusted() const { return kW_fl_Adjusted; }
+    int getC_max_Adjusted() const { return C_max_Adjusted; }
+    int getkW_max_Adjusted() const { return kW_max_Adjusted; }
+
+public:
     double C_fl_Adjusted;
     double kW_fl_Adjusted;
     double C_max_Adjusted;
@@ -944,6 +950,14 @@ public:
         double P_fl_rpred = 0, kW_fl_rpadj = 0, C_usage_rpred = 0, PerC_rpred = 0;
     };
 
+    struct AdjustCascadingSetPointOutput {
+        AdjustCascadingSetPointOutput(double kW_fl_adj, double C_usage_adj, double PerC_adj) :
+                kW_fl_adj(kW_fl_adj), C_usage_adj(C_usage_adj), PerC_adj(PerC_adj){}
+
+        AdjustCascadingSetPointOutput() = default;
+        double kW_fl_adj = 0, C_usage_adj = 0, PerC_adj = 0;
+    };
+
     /**
      *
      * @param C_fl double, units acfm
@@ -1003,6 +1017,29 @@ public:
         const double C_usage_rpred  = (C_usage - (C_usage - (C_usage * ((P_fl_rpred + P_alt) / (P_fl + P_atm)))) * 0.6);
 
         return ReduceSystemAirPressureOutput(P_fl_rpred, kW_fl_rpadj, C_usage_rpred,  C_usage_rpred/ C_fl);
+    }
+
+    /**
+     *
+     * @param C_fl double, units acfm
+     * @param C_usage double, units acfm
+     * @param P_fl double, units psig
+     * @param kW_fl double, units kW
+     * @param P_fl_adj double, units psig
+     * @param P_alt double, units psia
+     * @param P_atm double, units psia
+     *
+     * @return
+     * @param kW_fl_adj double, units kW
+     * @param C_usage_adj double, units acfm
+     * @param PerC_adj double percentage / fraction
+     *
+     */
+    static AdjustCascadingSetPointOutput AdjustCascadingSetPoint(double C_fl, double C_usage, double P_fl, double kW_fl, double P_fl_adj, double P_alt = 14.69, double P_atm = 14.69){
+        const double kW_fl_adj = kW_fl * ((pow((P_fl_adj + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl + P_atm) / P_atm, 0.283) - 1));
+        const double C_usage_adj  = (C_usage - (C_usage - (C_usage * ((P_fl_adj + P_alt) / (P_fl + P_atm)))) * 0.6);
+
+        return AdjustCascadingSetPointOutput(kW_fl_adj, C_usage_adj, C_usage_adj / C_fl);
     }
 };
 #endif //AMO_TOOLS_SUITE_COMPRESSORS_H

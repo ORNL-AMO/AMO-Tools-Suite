@@ -85,13 +85,13 @@ public:
      * Gets all of the properties of the inlet steam
      * @return SteamSystemModelerTool::SteamPropertiesOutput , inlet steam properties
      */
-    SteamSystemModelerTool::SteamPropertiesOutput const & getInletProperties() const { return inletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const &getInletProperties() const { return inletProperties; };
 
     /**
      * Gets all of the properties of the outlet steam
      * @return SteamSystemModelerTool::SteamPropertiesOutput , outlet steam properties
      */
-    SteamSystemModelerTool::SteamPropertiesOutput const & getOutletProperties() const { return outletProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const &getOutletProperties() const { return outletProperties; };
 
     /**
      * Gets the inlet energy flow
@@ -177,8 +177,6 @@ protected:
 private:
     double inletEnergyFlow;
 };
-
-
 
 /**
 * PRV with Desuperheating calculator class
@@ -285,7 +283,7 @@ public:
      * Gets all of the properties of the feedwater steam
      * @return SteamSystemModelerTool::SteamPropertiesOutput, feedwater steam properties
      */
-    SteamSystemModelerTool::SteamPropertiesOutput const & getFeedwaterProperties() const { return feedwaterProperties; };
+    SteamSystemModelerTool::SteamPropertiesOutput const &getFeedwaterProperties() const { return feedwaterProperties; };
 
 
     /**
@@ -312,6 +310,24 @@ public:
      */
     double getFeedwaterEnergyFlow() const { return feedwaterEnergyFlow; };
 
+    /**
+     * Gets all of the properties of the inlet steam
+     * @return SteamSystemModelerTool::SteamPropertiesOutput , inlet steam properties
+     */
+    SteamSystemModelerTool::SteamPropertiesOutput const &getInletProperties() const { return inletProperties; };
+
+    /**
+     * Gets all of the properties of the outlet steam
+     * @return SteamSystemModelerTool::SteamPropertiesOutput , outlet steam properties
+     */
+    SteamSystemModelerTool::SteamPropertiesOutput const &getOutletProperties() const { return outletProperties; };
+
+    /**
+     * Gets the inlet energy flow
+     * @return double, inlet steam energy flow in MJ/hr
+     */
+    double getInletEnergyFlow() const { return inletEnergyFlow; }
+
 protected:
     void calculateProperties() override;
 
@@ -323,6 +339,14 @@ private:
     // Out values
     SteamSystemModelerTool::SteamPropertiesOutput feedwaterProperties;
     double inletEnergyFlow, outletMassFlow, outletEnergyFlow, feedwaterMassFlow, feedwaterEnergyFlow;
+};
+
+class PrvCastDesuperheating
+{
+public :
+    std::shared_ptr<PrvWithDesuperheating> Cast (std::shared_ptr<PrvWithoutDesuperheating> prvWithout){
+        return std::static_pointer_cast<PrvWithDesuperheating>(prvWithout);
+    }
 };
 
 #endif //AMO_TOOLS_SUITE_PRV_H

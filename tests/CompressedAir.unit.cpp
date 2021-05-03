@@ -30,10 +30,10 @@ TEST_CASE( "PneumaticAirRequirement", "[CompressedAir][PneumaticAirRequirement]"
 }
 
 TEST_CASE( "ReceiverTank - Useable Air Capacity", "[CompressedAir][ReceiverTank][UseableAirCapacity]") {
-	CHECK(ReceiverTank::calculateUsableCapacity(660, 110, 100) == Approx(60.0240096038));
-	CHECK(ReceiverTank::calculateUsableCapacity(760, 110, 100) == Approx(69.1185565135));
-	CHECK(ReceiverTank::calculateUsableCapacity(760, 150, 100) == Approx(345.5927825676));
-	CHECK(ReceiverTank::calculateUsableCapacity(760, 150, 130) == Approx(138.237113027));
+	CHECK(ReceiverTank().calculateUsableCapacity(660, 110, 100) == Approx(60.0240096038));
+	CHECK(ReceiverTank().calculateUsableCapacity(760, 110, 100) == Approx(69.1185565135));
+	CHECK(ReceiverTank().calculateUsableCapacity(760, 150, 100) == Approx(345.5927825676));
+	CHECK(ReceiverTank().calculateUsableCapacity(760, 150, 130) == Approx(138.237113027));
 }
 
 TEST_CASE( "ReceiverTank - Size Calculation", "[CompressedAir][ReceiverTank][SizeCalculation]") {

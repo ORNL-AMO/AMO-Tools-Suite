@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Wasm Testing</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/jquery/jquery.js"></script>
+    <script>
+        var Module = {
+            onRuntimeInitialized: function () {
+                $.getScript('tests/test-value.js').then(() => {
+                    $.getScript('tests/wasm-psat-test.js').then(() => {
+                        $.getScript('tests/wasm-motor-test.js').then(() => {
+                            $.getScript('tests/wasm-fan-test.js').then(() => {
+                                $.getScript('tests/wasm-phast-test.js').then(() => {
+                                    $.getScript('tests/wasm-standalone-test.js').then(() => {
+                                        $.getScript('tests/wasm-ssmt-modeler-test.js').then(() => {
+                                            $.getScript('tests/wasm-ssmt-test.js').then(() => {
+                                                $.getScript('tests/wasm-processHeat-test.js').then(() => {
+                                                    $.getScript('tests/wasm-chillers-test.js').then(() => {
+                                                        $.getScript('tests/wasm-compressorsCalc-test.js').then(() => {
+                                                            $.getScript('tests/wasm-svi-test.js').then(() => {
+                                                                $.getScript('tests/wasm-wasteWater-test.js').then(() => {
+                                                                    $.getScript('tests/wasm-calculator-test.js').then(() => {
+                                                                        $.getScript('tests/wasm-db-test.js').then(() => {
+                                                                            $.getScript('tests/finish-testing.js');
+                                                                        });
+                                                                    });
+                                                                });
+                                                            });
+                                                        });
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            }
+        }
+    </script>
+    <script src="assets/client.js"></script>
+    <style>
+        .invalid {
+            color: red;
+            padding-top: 3px;
+        }
+
+        .valid {
+            color: green;
+            padding-top: 3px;
+        }
+
+        label {
+            font-size: larger;
+            font-weight: bold;
+        }
+
+        .expected-div {
+            border-bottom: solid 2px;
+            padding-bottom: 3px;
+        }
+
+        .header-div {
+            font-weight: bold;
+            font-style: italic;
+            border-bottom: solid 2px;
+            padding-bottom: 3px;
+        }
+
+        .data-dump-div {
+            color: lightgray;
+            font-size: small;
+            font-style: italic;
+            border-bottom: solid 2px;
+            padding-bottom: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <script src="tests/wasm-example-test.js"></script> -->
+    <label>Wasm Tests</label>
+</body>
+
+</html>

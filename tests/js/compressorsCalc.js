@@ -674,3 +674,26 @@ test('CompEEM_ReduceSystemAirPressure', function (t) {
 
     compare(bindings.CompEEM_ReduceSystemAirPressure(input), [95, 82.972, 97.384, 0.2059]);
 });
+
+test('CompEEM_AdjustCascadingSetPoint', function (t) {
+    t.plan(4);
+    t.type(bindings.CompEEM_AdjustCascadingSetPoint, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.kW_fl_adj), rnd(expected[0]));
+        t.equal(rnd(results.C_usage_adj), rnd(expected[1]));
+        t.equal(rnd(results.PerC_adj), rnd(expected[2]));
+    };
+
+    var input = {
+        C_fl: 2578,
+        C_usage: 1000,
+        P_fl: 100,
+        kW_fl: 414.4,
+        P_fl_adj: 105,
+        P_alt: 14.7,
+        P_atm: 14.7
+    };
+
+    compare(bindings.CompEEM_AdjustCascadingSetPoint(input), [425.82, 1026.16, 0.398]);
+});
