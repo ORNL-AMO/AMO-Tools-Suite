@@ -38,7 +38,7 @@ function basinHeaterEnergyConsumption(){
     };
 
     logMessage('Cooling Tower Basin Heater Energy Consumption: Test# 1', true);
-    validate(Module.BasinHeaterEnergyConsumption(1201.67, 40, -10, 45, 28, 9.21, 1, 40, 39), [3.0743, 3.0743, 2.761026, 2.761026, 0.313274]);
+    validate(Module.BasinHeaterEnergyConsumption(1201.67, 40, -10, 45, 28, 9.21, 1, 40, 39, 0.011), [3.842840959, 3.842840959, 3.4512519642, 3.4512519642, 0.3915889948]);
 }
 
 function fanEnergyConsumption(){
