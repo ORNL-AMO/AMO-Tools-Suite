@@ -108,10 +108,11 @@ test('CoolingTower BasinHeaterEnergyConsumption', function (t) {
         operatingHours: 1,
 
         baselineTempSetPoint: 40,
-        modTempSetPoint:39
+        modTempSetPoint:39,
+        panLossRatio: 0.011
     };
 
-    compare(bindings.coolingTowerBasinHeaterEnergyConsumption(input), [3.0743, 3.0743, 2.761026, 2.761026, 0.313274]);
+    compare(bindings.coolingTowerBasinHeaterEnergyConsumption(input), [3.842840959, 3.842840959, 3.4512519642, 3.4512519642, 0.3915889948]);
 });
 
 test('CoolingTower FanEnergyConsumption', function (t) {

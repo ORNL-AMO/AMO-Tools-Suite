@@ -200,11 +200,12 @@ NAN_METHOD(coolingTowerBasinHeaterEnergyConsumption)
 
         const double baselineTempSetPoint = getDouble("baselineTempSetPoint", inp);
         const double modTempSetPoint = getDouble("modTempSetPoint", inp);
+        const double panLossRatio = getDouble("panLossRatio", inp);
 
         auto output = CoolingTower::BasinHeaterEnergyConsumption(
                 ratedCapacity,ratedTempSetPoint,ratedTempDryBulb,ratedWindSpeed,
                 operatingTempDryBulb,operatingWindSpeed,operatingHours,
-                baselineTempSetPoint, modTempSetPoint);
+                baselineTempSetPoint, modTempSetPoint, panLossRatio);
 
         setR("baselinePower", output.baselinePower);
         setR("baselineEnergy", output.baselineEnergy);

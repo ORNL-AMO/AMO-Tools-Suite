@@ -100,12 +100,12 @@ TEST_CASE("Cooling Tower Makeup Water Calculator", "[CoolingTower][Chillers]")
 
 TEST_CASE("Cooling Tower Basin Heater Energy Consumption Calculator", "[CoolingTower][Chillers]")
 {
-    auto res = CoolingTower::BasinHeaterEnergyConsumption(1201.67, 40, -10, 45, 28, 9.21, 1, 40, 39);
-    CHECK(res.baselinePower == Approx(3.0743));
-    CHECK(res.baselineEnergy == Approx(3.0743));
-    CHECK(res.modPower == Approx(2.761));
-    CHECK(res.modEnergy == Approx(2.761));
-    CHECK(res.savingsEnergy == Approx(0.31327));
+    auto res = CoolingTower::BasinHeaterEnergyConsumption(1201.67, 40, -10, 45, 28, 9.21, 1, 40, 39, 0.011);
+    CHECK(res.baselinePower == Approx(3.842840959));
+    CHECK(res.baselineEnergy == Approx(3.842840959));
+    CHECK(res.modPower == Approx(3.4512519642));
+    CHECK(res.modEnergy == Approx(3.4512519642));
+    CHECK(res.savingsEnergy == Approx(0.3915889948));
 }
 
 TEST_CASE("Cooling Tower Fan Energy Consumption Calculator", "[CoolingTower][Chillers]")
