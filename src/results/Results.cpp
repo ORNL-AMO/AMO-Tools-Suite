@@ -41,7 +41,7 @@ FanResult::Output FanResult::calculateExisting(Fan::FieldDataBaseline const fanF
     double const annualCost = AnnualCost(annualEnergy, unitCost).calculate();
 
     double const fanEnergyIndex = FanEnergyIndex(fanFieldData.flowRate, fanFieldData.inletPressure, fanFieldData.outletPressure,
-                                                 fanInput.airDensity, fanFieldData.measuredPower)
+                                                 fanInput.airDensity, output.power)
                                       .calculateEnergyIndex();
 
     return {motorShaftPower.calculate(), fanEfficiency, motor.motorRatedPower, fanShaftPower, annualEnergy, annualCost,
