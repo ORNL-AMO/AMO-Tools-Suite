@@ -42,7 +42,8 @@ EMSCRIPTEN_BINDINGS(processHeat_class)
         .property("eqEnergySupply", &CascadeHeatHighToLow::Output::eqEnergySupply)
         .property("effOpHours", &CascadeHeatHighToLow::Output::effOpHours)
         .property("energySavings", &CascadeHeatHighToLow::Output::energySavings)
-        .property("costSavings", &CascadeHeatHighToLow::Output::costSavings);
+        .property("costSavings", &CascadeHeatHighToLow::Output::costSavings)
+        .property("hourlySavings", &CascadeHeatHighToLow::Output::hourlySavings);
 
     class_<AirHeatingUsingExhaust>("AirHeatingUsingExhaust")
         .constructor<GasCompositions>()
@@ -58,6 +59,6 @@ EMSCRIPTEN_BINDINGS(processHeat_class)
         .function("calculate", &WaterHeatingUsingSteam::calculate);
 
     class_<CascadeHeatHighToLow>("CascadeHeatHighToLow")
-        .constructor<GasCompositions, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<GasCompositions, double, double, double, double, double, double, double, double, double, double, double>()
         .function("calculate", &CascadeHeatHighToLow::calculate);
 }

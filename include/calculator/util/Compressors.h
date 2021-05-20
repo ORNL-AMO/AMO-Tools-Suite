@@ -132,8 +132,6 @@ private:
     virtual void AdjustDischargePressure(std::vector<double>, std::vector<double>, double, double) {}
 
 protected:
-    static double Round(double value) { return (float)((int)(value * 100 + .5)) / 100; }
-
     void PressureInletCorrection(CompressorType CompType, const double capacity, const double full_load_bhp, const double poly_exponent, const double P_ratedDischarge,
                                  const double P_RatedIn, const double Eff, const double P_fl, const double P_max, const double P_in, const bool PresAdj, const double P_atm)
     {
@@ -160,9 +158,9 @@ private:
             Pres_Flow = 0.000258 * pow(P_atm, 3) - 0.0116 * pow(P_atm, 2) + 0.176 * P_atm + 0.09992;
         }
 
-        kW = Round(Pres_kW * (P_atm / P_in) * full_load_bhp * 0.746 / Eff *
+        kW = (Pres_kW * (P_atm / P_in) * full_load_bhp * 0.746 / Eff *
                    PressureInletCorrection_PressRatio(poly_exponent, (P_ratedDischarge + P_RatedIn) / P_RatedIn, dischargePres, CompType == CompressorType::Screw ? P_RatedIn : P_atm));
-        cap = Round(Pres_Flow * capacity * (1 - 0.00075 * (dischargePres - P_ratedDischarge)));
+        cap = (Pres_Flow * capacity * (1 - 0.00075 * (dischargePres - P_ratedDischarge)));
     }
 
     double PressureInletCorrection_PressRatio(double poly_exponent, double PressRatio1, double OpPress, double P_PressRatio2) {

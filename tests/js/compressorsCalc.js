@@ -46,39 +46,39 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
     input.computeFrom = 0;
     input.computeFromVal = 0.36;
     input.adjustForDischargePressure = false;
-    compare(bindings.CompressorsCalc(input), [162.828, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.828, 753.84, 0.36, 0.24]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressorsCalc(input), [162.828, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.828, 753.84, 0.36, 0.24]);
 
     input.computeFrom = 1;
     input.computeFromVal = 0.24;
     input.adjustForDischargePressure = false;
-    compare(bindings.CompressorsCalc(input), [162.828, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.74, 753.12, 0.36, 0.24]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressorsCalc(input), [162.828, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.74, 753.12, 0.36, 0.24]);
 
     input.computeFrom = 2;
     input.computeFromVal = 162.828;
     input.adjustForDischargePressure = false;
-    compare(bindings.CompressorsCalc(input), [162.828, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.83, 753.84, 0.36, 0.24]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressorsCalc(input), [162.828, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.83, 753.84, 0.36, 0.24]);
 
     input.computeFrom = 3;
     input.computeFromVal = 753.12;
     input.adjustForDischargePressure = false;
-    compare(bindings.CompressorsCalc(input), [162.828, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.74, 753.12, 0.36, 0.24]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressorsCalc(input), [162.828, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.74, 753.12, 0.36, 0.24]);
 
     input.computeFrom = 4;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
     input.computeFromPFAmps = 0.00945;
     input.adjustForDischargePressure = false;
-    compare(bindings.CompressorsCalc(input), [162.865, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.865, 754.15, 0.36, 0.24]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressorsCalc(input), [162.865, 753.12, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [162.865, 754.15, 0.36, 0.24]);
 });
 
 test('CompressorsCalcCentrifugal ModulationUnload', function (t) {
@@ -306,14 +306,14 @@ test('Compressors ModulationWOUnload', function (t) {
     input.applyPressureInletCorrection = false;
     compare(bindings.CompressorsCalc(input), [75.9, 323.71, 0.89, 0.68]);
     input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [75.9, 278.69, 0.84, 0.59]);
+    compare(bindings.CompressorsCalc(input), [75.9, 278.72, 0.84, 0.59]);
 
     input.computeFrom = 3;
     input.computeFromVal = 786;
     input.applyPressureInletCorrection = false;
     compare(bindings.CompressorsCalc(input), [105.32, 786, 1.23326, 1.66173]);
     input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [113.4, 786, 1.26024, 1.67426]);
+    compare(bindings.CompressorsCalc(input), [113.39, 786, 1.26024, 1.67426]);
 
     input.computeFrom = 4;
     input.computeFromVal = 50;
@@ -323,7 +323,7 @@ test('Compressors ModulationWOUnload', function (t) {
     compare(bindings.CompressorsCalc(input), [80.278, 392.51, 0.94, 0.83]);
     input.applyPressureInletCorrection = true;
     let res = bindings.CompressorsCalc(input);
-    compare(res, [84.6, 396.43, 0.94, 0.84]);
+    compare(res, [84.6, 396.42, 0.94, 0.84]);
     compare(res, [90, 469.45, 90, 469.45], true);
 
     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
@@ -391,7 +391,7 @@ test('Compressors StartStop', function (t) {
     input.applyPressureInletCorrection = false;
     compare(bindings.CompressorsCalc(input), [18.35, 112, 0.20503, 0.2]);
     input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [18.45, 93.892, 0.21, 0.2]);
+    compare(bindings.CompressorsCalc(input), [18.45, 93.892, 0.2, 0.2]);
 
     input.computeFrom = 2;
     input.computeFromVal = 18.35;
@@ -697,3 +697,5 @@ test('CompEEM_AdjustCascadingSetPoint', function (t) {
 
     compare(bindings.CompEEM_AdjustCascadingSetPoint(input), [425.82, 1026.16, 0.398]);
 });
+
+ //*/});

@@ -34,8 +34,8 @@ function cascadeHeatHighToLow(){
 
     logMessage('Cascade Heat High To Low: Test# 1 Gas', true);
     let gasInstance = new Module.GasCompositions('Gas', 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    let instance = new Module.CascadeHeatHighToLow(gasInstance, 12.0, 1475, 0.07, 80.0, 8000, 1020, 225, 80, 7000, 5.00);
-    validate(instance.calculate(), [174619.56, 4.6929, 6.4038, 7000, 44826.53, 224132.65]);
+    let instance = new Module.CascadeHeatHighToLow(gasInstance, 12.0, 1475, 0.07, 80.0, 8000, 1020, 9.50, 225, 80, 7000, 5.00);
+    validate(instance.calculate(), [174619.56, 4.6929, 6.4038, 7000, 44826.53, 224132.65, 6.4038]);
     instance.delete();
     gasInstance.delete();
 }
