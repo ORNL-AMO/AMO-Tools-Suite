@@ -380,4 +380,11 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a C
     CHECK(cascadingSetPoint.kW_fl_adj == Approx(425.82));
     CHECK(cascadingSetPoint.C_usage_adj == Approx(1026.16));
     CHECK(cascadingSetPoint.PerC_adj == Approx(0.39804313));
+
+    auto pressureReductionSaving = CompressorEEMs::PressureReductionSaving(8760, 0.066, 75, 125, 110, 100,14.7,14.7);
+    CHECK(pressureReductionSaving.kW_savings == Approx(3.6031));
+    CHECK(pressureReductionSaving.kWh_savings == Approx(31563.3423));
+    CHECK(pressureReductionSaving.cost_savings == Approx(2083.18));
+
+    CHECK(CompressorEEMs::kWAdjusted(75, 125, 110, 14.7, 14.7) == Approx(69.9653));
 }

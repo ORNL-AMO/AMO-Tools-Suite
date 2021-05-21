@@ -753,6 +753,49 @@ function adjustCascadingSetPoint(){
         [425.82, 1026.16, 0.398]);
 }
 
+function pressureReductionSaving(){
+    let validate = function(results, expected) {
+        testNumberValue(rnd(results.kW_savings), rnd(expected[0]), "Power Savings kW_savings");
+        testNumberValue(rnd(results.kWh_savings), rnd(expected[1]), "Power hour kWh_savings");
+        testNumberValue(rnd(results.cost_savings), rnd(expected[2]), "Cost cost_savings");
+    };
+
+    var input = {
+        operatingHours: 8760,
+        costPerkWh: 0.066,
+        kW_fl_rated: 75,
+        P_fl_rated: 125,
+        dischargePresBaseline: 110,
+        dischargePresMod: 100,
+        P_alt: 14.7,
+        P_atm: 14.7
+    };
+
+    logMessage('Compressors EEM Pressure Reduction Saving: Test# 1', true);
+    validate(Module.PressureReductionSaving(input.operatingHours, input.costPerkWh, input.kW_fl_rated, input.P_fl_rated,
+        input.dischargePresBaseline, input.dischargePresMod, input.P_alt, input.P_atm),
+        [3.6031, 31563.3423, 2083.18]);
+}
+
+function kW_adjusted(){
+    let validate = function(results, expected) {
+        testNumberValue(rnd(results.kW_savings), rnd(expected[0]), "Power Savings kW_savings");
+        testNumberValue(rnd(results.kWh_savings), rnd(expected[1]), "Power hour kWh_savings");
+        testNumberValue(rnd(results.cost_savings), rnd(expected[2]), "Cost cost_savings");
+    };
+
+    var input = {
+        kW_fl_rated: 75,
+        P_fl_rated: 125,
+        P_discharge: 110,
+        P_alt: 14.7,
+        P_atm: 14.7
+    };
+
+    logMessage('Compressors EEM Adjusted Power: Test# 1', true);
+    testNumberValue(rnd(Module.kWAdjusted(input.kW_fl_rated, input.P_fl_rated, input.P_discharge, input.P_alt, input.P_atm)), 69.97, "Power Adjusted kW_adjusted");
+}
+
 compressorsCentrifugalLoadUnload();
 compressorsCentrifugalModulationUnload();
 compressorsCentrifugalBlowOff();
@@ -766,3 +809,6 @@ reduceAirLeaks();
 improveEndUseEfficiency();
 reduceSystemAirPressure();
 adjustCascadingSetPoint();
+
+pressureReductionSaving();
+kW_adjusted();

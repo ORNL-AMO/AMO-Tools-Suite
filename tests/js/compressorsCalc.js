@@ -698,4 +698,41 @@ test('CompEEM_AdjustCascadingSetPoint', function (t) {
     compare(bindings.CompEEM_AdjustCascadingSetPoint(input), [425.82, 1026.16, 0.398]);
 });
 
- //*/});
+test('CompEEM_PressureReductionSaving', function (t) {
+    t.plan(4);
+    t.type(bindings.CompEEM_PressureReductionSaving, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.kW_savings), rnd(expected[0]));
+        t.equal(rnd(results.kWh_savings), rnd(expected[1]));
+        t.equal(rnd(results.cost_savings), rnd(expected[2]));
+    };
+
+    var input = {
+        operatingHours: 8760,
+        costPerkWh: 0.066,
+        kW_fl_rated: 75,
+        P_fl_rated: 125,
+        dischargePresBaseline: 110,
+        dischargePresMod: 100,
+        P_alt: 14.7,
+        P_atm: 14.7
+    };
+
+    compare(bindings.CompEEM_PressureReductionSaving(input), [3.6031, 31563.3423, 2083.18]);
+});
+
+test('CompEEM_kWAdjusted', function (t) {
+    t.plan(2);
+    t.type(bindings.CompEEM_kWAdjusted, 'function');
+
+    var input = {
+        kW_fl_rated: 75,
+        P_fl_rated: 125,
+        P_discharge: 110,
+        P_alt: 14.7,
+        P_atm: 14.7
+    };
+
+    t.equal(rnd(bindings.CompEEM_kWAdjusted(input).kW_adjusted), rnd(69.97));
+});

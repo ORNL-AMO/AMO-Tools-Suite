@@ -956,6 +956,14 @@ public:
         double kW_fl_adj = 0, C_usage_adj = 0, PerC_adj = 0;
     };
 
+    struct PressureReductionSavingOutput{
+        PressureReductionSavingOutput(double kW_savings, double kWh_savings, double cost_savings) :
+                kW_savings(kW_savings), kWh_savings(kWh_savings), cost_savings(cost_savings){}
+
+        PressureReductionSavingOutput() = default;
+        double kW_savings = 0, kWh_savings = 0, cost_savings = 0;
+    };
+
     /**
      *
      * @param C_fl double, units acfm
@@ -1038,6 +1046,48 @@ public:
         const double C_usage_adj  = (C_usage - (C_usage - (C_usage * ((P_fl_adj + P_alt) / (P_fl + P_atm)))) * 0.6);
 
         return AdjustCascadingSetPointOutput(kW_fl_adj, C_usage_adj, C_usage_adj / C_fl);
+    }
+
+    /**
+     *
+     * @param operatingHours double
+     * @param costPerkWh double, units /kWh
+     * @param kW_fl_rated double, units kW
+     * @param P_fl_rated double, units psig
+     * @param dischargePresBaseline double, units psig
+     * @param dischargePresMod double, units psig
+     * @param P_alt double, units psig
+     * @param P_atm double, units psig
+     *
+     * @return
+     * @param kW_savings double, units kW
+     * @param kWh_savings double, units kWh
+     * @param cost_savings double, units $$$
+     *
+     */
+    static PressureReductionSavingOutput PressureReductionSaving(double operatingHours, double costPerkWh,
+                                                                 double kW_fl_rated, double P_fl_rated,
+                                                                 double dischargePresBaseline, double dischargePresMod,
+                                                                 double P_alt = 14.69, double P_atm = 14.69){
+        const double kW_savings = kWAdjusted(kW_fl_rated, P_fl_rated, dischargePresBaseline, P_alt, P_atm) -
+                                  kWAdjusted(kW_fl_rated, P_fl_rated, dischargePresMod, P_alt, P_atm);
+        const double kWh_savings = kW_savings * operatingHours;
+        return PressureReductionSavingOutput(kW_savings, kWh_savings, kWh_savings * costPerkWh);
+    }
+
+    /**
+     *
+     * @param kW_fl_rated double, units kW
+     * @param P_fl_rated double, units psig
+     * @param P_discharge double, units psig
+     * @param P_alt double, units psig
+     * @param P_atm double, units psig
+     *
+     * @return
+     * @param kWAdjusted double, units kW
+     */
+    static double kWAdjusted(double kW_fl_rated, double P_fl_rated, double P_discharge, double P_alt = 14.69, double P_atm = 14.69) {
+        return kW_fl_rated * ((pow((P_discharge + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl_rated + P_atm) / P_atm, 0.283) - 1));
     }
 };
 #endif //AMO_TOOLS_SUITE_COMPRESSORS_H
