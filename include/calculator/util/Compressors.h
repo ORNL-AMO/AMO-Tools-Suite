@@ -132,8 +132,6 @@ private:
     virtual void AdjustDischargePressure(std::vector<double>, std::vector<double>, double, double) {}
 
 protected:
-    static double Round(double value) { return (float)((int)(value * 100 + .5)) / 100; }
-
     void PressureInletCorrection(CompressorType CompType, const double capacity, const double full_load_bhp, const double poly_exponent, const double P_ratedDischarge,
                                  const double P_RatedIn, const double Eff, const double P_fl, const double P_max, const double P_in, const bool PresAdj, const double P_atm)
     {
@@ -160,9 +158,9 @@ private:
             Pres_Flow = 0.000258 * pow(P_atm, 3) - 0.0116 * pow(P_atm, 2) + 0.176 * P_atm + 0.09992;
         }
 
-        kW = Round(Pres_kW * (P_atm / P_in) * full_load_bhp * 0.746 / Eff *
+        kW = (Pres_kW * (P_atm / P_in) * full_load_bhp * 0.746 / Eff *
                    PressureInletCorrection_PressRatio(poly_exponent, (P_ratedDischarge + P_RatedIn) / P_RatedIn, dischargePres, CompType == CompressorType::Screw ? P_RatedIn : P_atm));
-        cap = Round(Pres_Flow * capacity * (1 - 0.00075 * (dischargePres - P_ratedDischarge)));
+        cap = (Pres_Flow * capacity * (1 - 0.00075 * (dischargePres - P_ratedDischarge)));
     }
 
     double PressureInletCorrection_PressRatio(double poly_exponent, double PressRatio1, double OpPress, double P_PressRatio2) {
@@ -958,6 +956,14 @@ public:
         double kW_fl_adj = 0, C_usage_adj = 0, PerC_adj = 0;
     };
 
+    struct PressureReductionSavingOutput{
+        PressureReductionSavingOutput(double kW_savings, double kWh_savings, double cost_savings) :
+                kW_savings(kW_savings), kWh_savings(kWh_savings), cost_savings(cost_savings){}
+
+        PressureReductionSavingOutput() = default;
+        double kW_savings = 0, kWh_savings = 0, cost_savings = 0;
+    };
+
     /**
      *
      * @param C_fl double, units acfm
@@ -1040,6 +1046,48 @@ public:
         const double C_usage_adj  = (C_usage - (C_usage - (C_usage * ((P_fl_adj + P_alt) / (P_fl + P_atm)))) * 0.6);
 
         return AdjustCascadingSetPointOutput(kW_fl_adj, C_usage_adj, C_usage_adj / C_fl);
+    }
+
+    /**
+     *
+     * @param operatingHours double
+     * @param costPerkWh double, units /kWh
+     * @param kW_fl_rated double, units kW
+     * @param P_fl_rated double, units psig
+     * @param dischargePresBaseline double, units psig
+     * @param dischargePresMod double, units psig
+     * @param P_alt double, units psig
+     * @param P_atm double, units psig
+     *
+     * @return
+     * @param kW_savings double, units kW
+     * @param kWh_savings double, units kWh
+     * @param cost_savings double, units $$$
+     *
+     */
+    static PressureReductionSavingOutput PressureReductionSaving(double operatingHours, double costPerkWh,
+                                                                 double kW_fl_rated, double P_fl_rated,
+                                                                 double dischargePresBaseline, double dischargePresMod,
+                                                                 double P_alt = 14.69, double P_atm = 14.69){
+        const double kW_savings = kWAdjusted(kW_fl_rated, P_fl_rated, dischargePresBaseline, P_alt, P_atm) -
+                                  kWAdjusted(kW_fl_rated, P_fl_rated, dischargePresMod, P_alt, P_atm);
+        const double kWh_savings = kW_savings * operatingHours;
+        return PressureReductionSavingOutput(kW_savings, kWh_savings, kWh_savings * costPerkWh);
+    }
+
+    /**
+     *
+     * @param kW_fl_rated double, units kW
+     * @param P_fl_rated double, units psig
+     * @param P_discharge double, units psig
+     * @param P_alt double, units psig
+     * @param P_atm double, units psig
+     *
+     * @return
+     * @param kWAdjusted double, units kW
+     */
+    static double kWAdjusted(double kW_fl_rated, double P_fl_rated, double P_discharge, double P_alt = 14.69, double P_atm = 14.69) {
+        return kW_fl_rated * ((pow((P_discharge + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl_rated + P_atm) / P_atm, 0.283) - 1));
     }
 };
 #endif //AMO_TOOLS_SUITE_COMPRESSORS_H

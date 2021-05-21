@@ -559,3 +559,61 @@ NAN_METHOD(CompEEM_AdjustCascadingSetPoint)
         ThrowError(std::string("std::runtime_error thrown in Compressors - EEM - AdjustCascadingSetPoint: " + what).c_str());
     }
 }
+
+NAN_METHOD(CompEEM_PressureReductionSaving)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double operatingHours = getDouble("operatingHours", inp);
+        const double costPerkWh = getDouble("costPerkWh", inp);
+        const double kW_fl_rated = getDouble("kW_fl_rated", inp);
+        const double P_fl_rated = getDouble("P_fl_rated", inp);
+        const double dischargePresBaseline = getDouble("dischargePresBaseline", inp);
+        const double dischargePresMod = getDouble("dischargePresMod", inp);
+        const double P_alt = getDouble("P_alt", inp);
+        const double P_atm = getDouble("P_atm", inp);
+
+        auto output = CompressorEEMs::PressureReductionSaving(operatingHours, costPerkWh, kW_fl_rated, P_fl_rated,
+                                                              dischargePresBaseline, dischargePresMod, P_alt, P_atm);
+
+        setR("kW_savings", output.kW_savings);
+        setR("kWh_savings", output.kWh_savings);
+        setR("cost_savings", output.cost_savings);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Compressors - EEM - PressureReductionSaving: " + what).c_str());
+    }
+}
+
+NAN_METHOD(CompEEM_kWAdjusted)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double kW_fl_rated = getDouble("kW_fl_rated", inp);
+        const double P_fl_rated = getDouble("P_fl_rated", inp);
+        const double P_discharge = getDouble("P_discharge", inp);
+        const double P_alt = getDouble("P_alt", inp);
+        const double P_atm = getDouble("P_atm", inp);
+
+        auto kW_adjusted = CompressorEEMs::kWAdjusted(kW_fl_rated, P_fl_rated, P_discharge, P_alt, P_atm);
+
+        setR("kW_adjusted", kW_adjusted);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Compressors - EEM - CompEEM_kWAdjusted: " + what).c_str());
+    }
+}

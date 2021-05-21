@@ -32,13 +32,14 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
 
     GasCompositions gasCH("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
     auto resCascadeHeatHighToLow = CascadeHeatHighToLow(gasCH, 12.0, 1475, 0.07, 80.0, 8000, 1020,
-                                                        225, 80, 7000, 5.00).calculate();
+                                                        9.50, 225, 80, 7000, 5.00).calculate();
     CHECK(resCascadeHeatHighToLow.priFlueVolume == Approx(174619.56));
     CHECK(resCascadeHeatHighToLow.hxEnergyRate == Approx(4.6929));
     CHECK(resCascadeHeatHighToLow.eqEnergySupply == Approx(6.4038));
     CHECK(resCascadeHeatHighToLow.effOpHours == Approx(7000));
     CHECK(resCascadeHeatHighToLow.energySavings == Approx(44826.53));
     CHECK(resCascadeHeatHighToLow.costSavings == Approx(224132.65));
+    CHECK(resCascadeHeatHighToLow.hourlySavings == Approx(6.4038));
 
 
     auto resSteamEnergy = WaterHeatingUsingSteam().calculate(0.1565, 340.2,285.93,0.5150, 2.7255,285.93, 0.2048,

@@ -164,6 +164,7 @@ NAN_METHOD(cascadeHeatHighToLow)
         const double priOpHours = getDouble("priOpHours", inp);
         const double priFuelHV = getDouble("priFuelHV", inp);
 
+        const double secFiringRate = getDouble("secFiringRate", inp);
         const double secExhaustTemperature = getDouble("secExhaustTemperature", inp);
         const double secCombAirTemperature = getDouble("secCombAirTemperature", inp);
         const double secOpHours = getDouble("secOpHours", inp);
@@ -183,7 +184,7 @@ NAN_METHOD(cascadeHeatHighToLow)
 
         auto ch = CascadeHeatHighToLow(GasCompositions("Gas", CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2),
                                        priFiringRate, priExhaustTemperature, priExhaustO2, priCombAirTemperature, priOpHours, priFuelHV,
-                                       secExhaustTemperature, secCombAirTemperature, secOpHours, secFuelCost);
+                                       secFiringRate, secExhaustTemperature, secCombAirTemperature, secOpHours, secFuelCost);
         auto output = ch.calculate();
 
         setR("priFlueVolume", output.priFlueVolume);
@@ -192,6 +193,7 @@ NAN_METHOD(cascadeHeatHighToLow)
         setR("effOpHours", output.effOpHours);
         setR("energySavings", output.energySavings);
         setR("costSavings", output.costSavings);
+        setR("hourlySavings", output.hourlySavings);
 
         info.GetReturnValue().Set(r);
     }
