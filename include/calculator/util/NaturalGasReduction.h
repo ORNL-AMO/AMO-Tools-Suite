@@ -145,7 +145,7 @@ public:
   };
 
   NaturalGasReduction(
-      std::vector<NaturalGasReductionInput> &naturalGasReductionInputVec) : naturalGasReductionInputVec(naturalGasReductionInputVec)
+      std::vector<NaturalGasReductionInput> naturalGasReductionInputVec) : naturalGasReductionInputVec(naturalGasReductionInputVec)
   {
   }
 

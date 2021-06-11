@@ -79,13 +79,13 @@ NAN_METHOD(CHPcalculator) {
 
 	auto const & costInfo = chp.getCostInfo();
 
-	SetR("annualOperationSavings", costInfo.at("annualOperationSavings"));
-	SetR("totalInstalledCostsPayback", costInfo.at("totalInstalledCostsPayback"));
-	SetR("simplePayback", costInfo.at("simplePayback"));
-	SetR("fuelCosts", costInfo.at("fuelCosts"));
-	SetR("thermalCredit", costInfo.at("thermalCredit"));
-	SetR("incrementalOandM", costInfo.at("incrementalOandM"));
-	SetR("totalOperatingCosts", costInfo.at("totalOperatingCosts"));
+	SetR("annualOperationSavings", costInfo.annualOperationSavings);
+	SetR("totalInstalledCostsPayback", costInfo.totalInstalledCostsPayback);
+	SetR("simplePayback", costInfo.simplePayback);
+	SetR("fuelCosts", costInfo.fuelCosts);
+	SetR("thermalCredit", costInfo.thermalCredit);
+	SetR("incrementalOandM", costInfo.incrementalOandMDollarsKwH);
+	SetR("totalOperatingCosts", costInfo.totalOperatingCostsToGenerate);
 	info.GetReturnValue().Set(r);
 }
 
@@ -94,7 +94,7 @@ NAN_METHOD(usableAirCapacity) {
 	const double tankSize = Get("tankSize");
 	const double airPressureIn = Get("airPressureIn");
 	const double airPressureOut = Get("airPressureOut");
-	info.GetReturnValue().Set(ReceiverTank::calculateUsableCapacity(tankSize, airPressureIn, airPressureOut));
+	info.GetReturnValue().Set(ReceiverTank().calculateUsableCapacity(tankSize, airPressureIn, airPressureOut));
 }
 
 NAN_METHOD(pneumaticAirRequirement) {

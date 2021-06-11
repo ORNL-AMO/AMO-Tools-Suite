@@ -15,6 +15,15 @@ NAN_MODULE_INIT(InitCompressorsCalc) {
 
     Nan::Set(target, New<String>("CompEEM_ReduceSystemAirPressure").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(CompEEM_ReduceSystemAirPressure)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("CompEEM_AdjustCascadingSetPoint").ToLocalChecked(),
+        GetFunction(New<FunctionTemplate>(CompEEM_AdjustCascadingSetPoint)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("CompEEM_PressureReductionSaving").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(CompEEM_PressureReductionSaving)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("CompEEM_kWAdjusted").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(CompEEM_kWAdjusted)).ToLocalChecked());
 }
 
 NODE_MODULE(compressorsCalc, InitCompressorsCalc)

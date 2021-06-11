@@ -178,6 +178,7 @@ test('CascadeHeatHighToLow Gas', function (t) {
         priOpHours: 8000,
         priFuelHV: 1020,
 
+        secFiringRate: 9.50,
         secExhaustTemperature: 225,
         secCombAirTemperature: 80,
         secOpHours: 7000,
@@ -198,5 +199,5 @@ test('CascadeHeatHighToLow Gas', function (t) {
         O2: 0
     };
 
-    compare(bindings.cascadeHeatHighToLow(input), [174619.56, 4.6929, 6.4038, 7000, 44826.53, 224132.65]);
+    compare(bindings.cascadeHeatHighToLow(input), [174619.56, 4.6929, 6.4038, 7000, 44826.53, 224132.65, 6.4038]);
 });

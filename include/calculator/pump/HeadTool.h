@@ -19,7 +19,7 @@
  */
 class HeadToolBase
 {
-  protected:
+  public:
 	struct Output
 	{
 		Output(double elevationHead, double pressureHead, double velocityHeadDifferential, double suctionHead, double dischargeHead, double pumpHead)

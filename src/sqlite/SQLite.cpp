@@ -136,6 +136,8 @@ Motor::EfficiencyClass SQLiteWrapper::convert_motor_efficiency_class(int efficie
     {
         return Motor::EfficiencyClass::SPECIFIED;
     }
+
+    return Motor::EfficiencyClass::STANDARD;
 }
 
 Motor::LineFrequency SQLiteWrapper::convert_motor_line_frequency(int lineFrequency)
@@ -148,6 +150,8 @@ Motor::LineFrequency SQLiteWrapper::convert_motor_line_frequency(int lineFrequen
     {
         return Motor::LineFrequency::FREQ50;
     }
+
+    return Motor::LineFrequency::FREQ60;
 }
 
 std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
@@ -1391,6 +1395,7 @@ void SQLite::create_tables()
 
 void SQLite::insert_default_data()
 {
+    std::cout << std::flush;
     for (auto const &material : get_default_solid_load_charge_materials())
     {
         insert_solid_load_charge_materials(material);
@@ -1428,6 +1433,7 @@ void SQLite::insert_default_data()
     // data does not populate. Note that this is true only for the bindings/JS unit tests. C++ unit tests work fine in any case.
     std::ofstream fout;
     //fout.open("debug.txt", std::ios::app);
+    std::cout << std::flush;
     for (auto const &pump : get_default_pump_data())
     {
         insert_pump_data(pump);
@@ -1989,7 +1995,7 @@ bool SQLite::updateMotorData(MotorData const &m)
     bind_value(m_motor_data_update_stmt, 2, m.synchronousSpeed);
     bind_value(m_motor_data_update_stmt, 3, m.poles);
     bind_value(m_motor_data_update_stmt, 4, m.nominalEfficiency);
-    int motorEfficiencyClass;
+    int motorEfficiencyClass = 0;
     if (m.efficiencyClass == Motor::EfficiencyClass::STANDARD)
     {
         motorEfficiencyClass = 0;
@@ -2006,10 +2012,10 @@ bool SQLite::updateMotorData(MotorData const &m)
     {
         motorEfficiencyClass = 3;
     }
-    bind_value(m_motor_data_insert_stmt, 6, motorEfficiencyClass);
+    bind_value(m_motor_data_update_stmt, 5, motorEfficiencyClass);
     bind_value(m_motor_data_update_stmt, 6, m.nemaTable);
     bind_value(m_motor_data_update_stmt, 7, m.enclosureType);
-    int lineFrequency;
+    int lineFrequency = 0;
     if (m.lineFrequency == Motor::LineFrequency::FREQ60)
     {
         lineFrequency = 60;
@@ -2018,7 +2024,7 @@ bool SQLite::updateMotorData(MotorData const &m)
     {
         lineFrequency = 50;
     }
-    bind_value(m_motor_data_insert_stmt, 9, lineFrequency);
+    bind_value(m_motor_data_update_stmt, 8, lineFrequency);
     bind_value(m_motor_data_update_stmt, 9, m.voltageLimit);
     bind_value(m_motor_data_update_stmt, 10, m.catalog);
     bind_value(m_motor_data_update_stmt, 11, m.id);

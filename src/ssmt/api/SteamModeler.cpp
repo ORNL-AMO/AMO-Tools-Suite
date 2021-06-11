@@ -8,11 +8,11 @@ SteamModelerOutput SteamModeler::model(const SteamModelerInput &steamModelerInpu
     const TurbineInput &turbineInput = steamModelerInput.getTurbineInput();
     const OperationsInput &operationsInput = steamModelerInput.getOperationsInput();
 
-    return model(isBaselineCalc, baselinePowerDemand, headerInput, boilerInput, turbineInput, operationsInput);
+    return modeler(isBaselineCalc, baselinePowerDemand, headerInput, boilerInput, turbineInput, operationsInput);
 }
 
 SteamModelerOutput
-SteamModeler::model(const bool isBaselineCalc, const double baselinePowerDemand, const HeaderInput &headerInput,
+SteamModeler::modeler(const bool isBaselineCalc, const double baselinePowerDemand, const HeaderInput &headerInput,
                     const BoilerInput &boilerInput, const TurbineInput &turbineInput,
                     const OperationsInput &operationsInput) {
     const std::string methodName = "SteamModeler::" + std::string(__func__) + ": ";

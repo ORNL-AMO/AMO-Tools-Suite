@@ -53,7 +53,7 @@ class CompressedAirPressureReduction
         double energyUse = 0, energyCost = 0;
     };
 
-    CompressedAirPressureReduction(std::vector<CompressedAirPressureReductionInput> &compressedAirPressureReductionInputVec) : compressedAirPressureReductionInputVec(compressedAirPressureReductionInputVec)
+    CompressedAirPressureReduction(std::vector<CompressedAirPressureReductionInput> compressedAirPressureReductionInputVec) : compressedAirPressureReductionInputVec(compressedAirPressureReductionInputVec)
     {
     }
 

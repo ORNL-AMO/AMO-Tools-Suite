@@ -23,6 +23,7 @@ before_install:
   - node --version
 install:
   - travis_retry npm install
+  - node-gyp rebuild
 script:
   - ./travis_scripts/build_test.sh
   - ls -a

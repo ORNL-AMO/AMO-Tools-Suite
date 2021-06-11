@@ -53,13 +53,13 @@ CompressorsBase::OutputBlowOff Compressors_Centrifugal_BlowOff::calculateFromVIP
 
 
 CompressorsBase::Output Compressors_Centrifugal_LoadUnload::calculateFromPerkW(double PerkW) {
-    const double CPer = Round((PerkW - kWPer_nl) * ((CPer_fl-CPer_nl) / (1 - kWPer_nl)));
+    const double CPer = ((PerkW - kWPer_nl) * ((CPer_fl-CPer_nl) / (1 - kWPer_nl)));
 
     return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }
 
 CompressorsBase::Output Compressors_Centrifugal_LoadUnload::calculateFromPerC(double CPer) {
-    const double PerkW = Round(((1 - kWPer_nl) / (CPer_fl-CPer_nl))*(CPer) + kWPer_nl);
+    const double PerkW = (((1 - kWPer_nl) / (CPer_fl-CPer_nl))*(CPer) + kWPer_nl);
 
     return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }
@@ -119,13 +119,13 @@ CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerkW(doubl
     else if(PerkW >= 1)
         C_Calc  = C_fl;
     else
-        C_Calc  = Round(pow(((PerkW * kW_fl - kW_nl) / (kW_fl - kW_nl)), 1/mod_exp) * C_fl);
+        C_Calc  = (pow(((PerkW * kW_fl - kW_nl) / (kW_fl - kW_nl)), 1/mod_exp) * C_fl);
 
-    return Output(PerkW * kW_fl, C_Calc, Round(PerkW), Round(C_Calc / C_fl));
+    return Output(PerkW * kW_fl, C_Calc, (PerkW), (C_Calc / C_fl));
 }
 
 CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerC(double CPer) {
-    const double kW_Calc = Round((kW_fl - kW_nl) * pow(CPer, mod_exp) + kW_nl);
+    const double kW_Calc = ((kW_fl - kW_nl) * pow(CPer, mod_exp) + kW_nl);
 
     return Output(kW_Calc, C_fl * CPer, kW_Calc / kW_fl, CPer);
 }
@@ -146,11 +146,11 @@ CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromVIPFMeasure
 CompressorsBase::Output Compressors_StartStop::calculateFromPerkW(double PerkW) {
     double C_Calc = C_fl * PerkW/ (( kWPer_fl + kW_max / kW_fl) / 2);
 
-    return Output(PerkW * kW_fl, C_Calc, Round(PerkW), Round(C_Calc / C_fl));
+    return Output(PerkW * kW_fl, C_Calc, (PerkW), (C_Calc / C_fl));
 }
 
 CompressorsBase::Output Compressors_StartStop::calculateFromPerC(double CPer) {
-    const double kW_Calc = Round((( kWPer_fl + kW_max / kW_fl) / 2) * CPer * kW_fl);
+    const double kW_Calc = ((( kWPer_fl + kW_max / kW_fl) / 2) * CPer * kW_fl);
 
     return Output(kW_Calc, C_fl * CPer, kW_Calc / kW_fl, CPer);
 }

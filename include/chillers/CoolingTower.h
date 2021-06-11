@@ -144,6 +144,7 @@ public:
      *
      * @param baselineTempSetPoint double, units F
      * @param modTempSetPoint double, units F
+     * @param panLossRatio double, fraction
      *
      * @return
      *      @param baselinePower double, units kW
@@ -156,8 +157,8 @@ public:
     static PowerEnergyConsumptionOutput BasinHeaterEnergyConsumption(
             const double ratedCapacity, const double ratedTempSetPoint, const double ratedTempDryBulb, const double ratedWindSpeed,
             const double operatingTempDryBulb, const double operatingWindSpeed, const double operatingHours,
-            const double baselineTempSetPoint, const double modTempSetPoint){
-        const double calc1 = ratedCapacity * 0.038676 /        /*0.038676 = 12000 * 0.011 / 3413*/
+            const double baselineTempSetPoint, const double modTempSetPoint, const double panLossRatio){
+        const double calc1 = ratedCapacity * 4.394960445356 * panLossRatio /        /*4.394960445356 = 15000 btu/hr/ton  / 3413 kW/btu*/
                 (ratedTempSetPoint - ratedTempDryBulb) /
                 pow((ratedTempSetPoint + ratedTempDryBulb) / 2,-0.181) /
                 pow((ratedTempSetPoint - ratedTempDryBulb),0.266) /

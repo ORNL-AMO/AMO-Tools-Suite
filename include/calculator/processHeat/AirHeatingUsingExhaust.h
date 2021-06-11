@@ -66,7 +66,7 @@ public:
 	 * @param          carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen content in fuel (as percentage)
 	 *
      */
-    AirHeatingUsingExhaust(SolidLiquidFlueGasMaterial solidLiquidFlueGasMaterial) {
+    AirHeatingUsingExhaust(SolidLiquidFlueGasMaterial solidLiquidFlueGasMaterial, bool solids = true) {
         fuelHeatingValue = solidLiquidFlueGasMaterial.getHeatingValueFuel();
         stoichAir = solidLiquidFlueGasMaterial.getStoichAirFuel();
     }
