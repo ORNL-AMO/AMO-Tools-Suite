@@ -226,7 +226,7 @@ NAN_METHOD(waterHeatingUsingFlue)
         const double opHours = getDouble("opHours", inp);
         const double costFuel = getDouble("costFuel", inp);
         const double hhvFuel = getDouble("hhvFuel", inp);
-        const double condSteam = getDouble("condSteam", inp);
+        const int condSteam = getInteger("condSteam", inp);
 
         const double CH4 = getDouble("CH4", inp);
         const double C2H6 = getDouble("C2H6", inp);
