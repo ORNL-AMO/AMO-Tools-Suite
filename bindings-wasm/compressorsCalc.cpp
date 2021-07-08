@@ -138,7 +138,7 @@ EMSCRIPTEN_BINDINGS(compressors_class)
         .property("kW_max_Adjusted", &Compressors_StartStop::getkW_max_Adjusted);
 
     class_<Compressors_LoadUnload>("Compressors_LoadUnload")
-        .constructor<double, double, double, double, double, double, double,
+        .constructor<double, double, double, double, double, double, double, double,
                 Compressors::CompressorType, Compressors::Lubricant, Compressors::ControlType, double>()
         .function("calculateFromPerkW", &Compressors_LoadUnload::calculateFromPerkW)
         .function("calculateFromPerC", &Compressors_LoadUnload::calculateFromPerC)

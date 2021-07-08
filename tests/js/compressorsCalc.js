@@ -74,11 +74,11 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
     input.computeFrom = 4;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.00945;
+    input.computeFromPFAmps = 2.152;
     input.adjustForDischargePressure = false;
-    compare(bindings.CompressorsCalc(input), [162.865, 754.15, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [82, 88.126,0.1813,0.02808]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressorsCalc(input), [162.865, 754.15, 0.36, 0.24]);
+    compare(bindings.CompressorsCalc(input), [82, 88.126,0.1813,0.02808]);
 });
 
 test('CompressorsCalcCentrifugal ModulationUnload', function (t) {
@@ -150,12 +150,12 @@ test('CompressorsCalcCentrifugal ModulationUnload', function (t) {
     input.computeFrom = 4;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.02467;
+    input.computeFromPFAmps = 2.152;
     input.adjustForDischargePressure = false;
-    compare(bindings.CompressorsCalc(input), [425.174, 2821.02, 0.940026, 0.938777]);
+    compare(bindings.CompressorsCalc(input), [82, 85.7932, 0.1813, 0.027340]);
     input.adjustForDischargePressure = true;
     let res = bindings.CompressorsCalc(input);
-    compare(res, [425.174, 2821, 0.94, 0.94]);
+    compare(res, [82, 85.7932, 0.1813, 0.027340]);
 
     console.log(" \n \nAdjusted Capacity for Discharge Pressure Change test\nFull Load: ", rnd(res.capacityAtFullLoadAdjusted), "\nMaxFullFlow: ", rnd(res.capacityAtMaxFullFlowAdjusted), "\n ");
 });
@@ -233,9 +233,9 @@ test('CompressorsCalcCentrifugal BlowOff', function (t) {
     input.computeFromPFVoltage = 440;
     input.computeFromPFAmps = 0.02152;
     input.percentageBlowOff = 0.6798;
-    compare(bindings.CompressorsCalc(input), [370.885, 376.788, 0.82, 0.120073, 2133.21, 0.6798]);
+    compare(bindings.CompressorsCalc(input), [0.82, 376.788, 0.0018129518, 0.120073, 2133.21, 0.6798]);
     input.adjustForDischargePressure = true;
-    compare(bindings.CompressorsCalc(input), [370.885, 376.79, 0.82, 0.120073, 2133.21, 0.6798]);
+    compare(bindings.CompressorsCalc(input), [0.82, 376.79, 0.0018129518, 0.120073, 2133.21, 0.6798]);
 });
 
 test('Compressors ModulationWOUnload', function (t) {
@@ -318,12 +318,12 @@ test('Compressors ModulationWOUnload', function (t) {
     input.computeFrom = 4;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.02467;
+    input.computeFromPFAmps = 2.467;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [80.278, 392.51, 0.94, 0.83]);
+    compare(bindings.CompressorsCalc(input), [94.0026, 473, 1.10073, 1]);
     input.applyPressureInletCorrection = true;
     let res = bindings.CompressorsCalc(input);
-    compare(res, [84.6, 396.42, 0.94, 0.84]);
+    compare(res, [94.00257, 469.45, 1.04362, 1.0]);
     compare(res, [90, 469.45, 90, 469.45], true);
 
     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
@@ -410,12 +410,12 @@ test('Compressors StartStop', function (t) {
     input.computeFrom = 4;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.02467;
+    input.computeFromPFAmps = 2.467;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [84.1323, 513.575, 0.94, 0.92]);
+    compare(bindings.CompressorsCalc(input), [94.0026, 573.827, 1.0503, 1.0247]);
     input.applyPressureInletCorrection = true;
     let res = bindings.CompressorsCalc(input);
-    compare(res, [84.6, 430.53, 0.94, 0.92]);
+    compare(res, [94.0026, 478.38, 1.04362, 1.01816]);
     compare(res, [90, 469.45, 90, 469.45], true);
 
     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
@@ -453,6 +453,7 @@ test('Compressors LoadUnload', function (t) {
         dischargePsiFullLoad:100,
         dischargePsiMax:110,
         modulatingPsi:5,
+        loadFactorUnloaded:10.1,
         atmosphericPsi:14.7,
 
         //needed for Pressure Inlet Correction for control type ModulationWOUnload
@@ -477,41 +478,41 @@ test('Compressors LoadUnload', function (t) {
     input.computeFrom = 0;
     input.computeFromVal = 0.94;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.51, 937.88, 0.94, 0.89]);
+    compare(bindings.CompressorsCalc(input), [156.51, 967.78, 0.94, 0.92]);
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.51, 937.88, 0.94, 0.89]);
+    compare(bindings.CompressorsCalc(input), [156.51, 967.78, 0.94, 0.92]);
 
     input.computeFrom = 1;
     input.computeFromVal = 0.895;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.442, 937.96, 0.93959, 0.9]);
+    compare(bindings.CompressorsCalc(input), [151.32, 937.96, 0.91, 0.9]);
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.442, 937.96, 0.93959, 0.9]);
+    compare(bindings.CompressorsCalc(input), [151.32, 937.96, 0.91, 0.9]);
 
     input.computeFrom = 2;
     input.computeFromVal = 156;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156, 933.85, 0.93693, 0.89]);
+    compare(bindings.CompressorsCalc(input), [156, 964.72, 0.94, 0.92]);
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156, 933.85, 0.93693, 0.89]);
+    compare(bindings.CompressorsCalc(input), [156, 964.72, 0.94, 0.92]);
 
     input.computeFrom = 3;
     input.computeFromVal = 937;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.322, 937, 0.938872, 0.89]);
+    compare(bindings.CompressorsCalc(input), [151.16, 937, 0.91, 0.89]);
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.322, 937, 0.938872, 0.89]);
+    compare(bindings.CompressorsCalc(input), [151.16, 937, 0.91, 0.89]);
 
     input.computeFrom = 4;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.02467;
+    input.computeFromPFAmps = 2.467;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.514, 937.922, 0.94002, 0.89]);
-    input.applyPressureInletCorrection = false;
+    compare(bindings.CompressorsCalc(input), [94.002568, 574.23, 0.56458, 0.547937]);
+    input.applyPressureInletCorrection = true;
     let res = bindings.CompressorsCalc(input);
-    compare(res, [156.514, 937.922, 0.94002, 0.89]);
-    compare(res, [166.5, 1048, 0, 0], true);
+    compare(res, [94, 489.76, 1.04, 1.04]);
+    compare(res, [90, 469.45, 90, 469.45], true);
 
     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
 });
@@ -573,40 +574,40 @@ test('Compressors ModulationWithUnload', function (t) {
     input.computeFrom = 0;
     input.computeFromVal = 0.94;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.51, 937.89, 0.94, 0.89]);
+    compare(bindings.CompressorsCalc(input), [156.51, 972.06, 0.94, 0.93]);
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.51, 937.89, 0.94, 0.89]);
+    compare(bindings.CompressorsCalc(input), [156.51, 972.06, 0.94, 0.93]);
 
     input.computeFrom = 1;
     input.computeFromVal = 0.895;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.442, 937.96, 0.93959, 0.9]);
+    compare(bindings.CompressorsCalc(input), [150.28, 937.96, 0.9, 0.9]);
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.442, 937.96, 0.93959, 0.9]);
+    compare(bindings.CompressorsCalc(input), [150.28, 937.96, 0.9, 0.9]);
 
     input.computeFrom = 2;
     input.computeFromVal = 156;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156, 933.86, 0.93693, 0.89]);
+    compare(bindings.CompressorsCalc(input), [156, 969.16, 0.93693, 0.92]);
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156, 933.86, 0.93693, 0.89]);
+    compare(bindings.CompressorsCalc(input), [156, 969.16, 0.93693, 0.92]);
 
     input.computeFrom = 3;
     input.computeFromVal = 937;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.322, 937, 0.938872, 0.89]);
+    compare(bindings.CompressorsCalc(input), [150.11, 937, 0.9, 0.89]);
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.322, 937, 0.938872, 0.89]);
+    compare(bindings.CompressorsCalc(input), [150.11, 937, 0.9, 0.89]);
 
     input.computeFrom = 4;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.02467;
+    input.computeFromPFAmps = 2.467;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.514, 937.922, 0.94002, 0.89]);
+    compare(bindings.CompressorsCalc(input), [94, 601.97, 0.56, 0.57]);
     input.applyPressureInletCorrection = false;
     let res = bindings.CompressorsCalc(input);
-    compare(res, [156.514, 937.922, 0.94002, 0.89]);
+    compare(res, [94, 601.97, 0.56, 0.57]);
     compare(res, [166.5, 1048, 0, 0], true);
 
     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");

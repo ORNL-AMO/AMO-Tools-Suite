@@ -4,9 +4,9 @@
 TEST_CASE( "Calculate Heat Loss for flue gas Losses", "[Heat Loss]" ) {
 	GasCompositions composition("unit test gas", 94.1, 2.4, 1.41, 0.03, 0.49, 0.29, 0, 0.42, 0.71, 0, 0);
 
-	CHECK(composition.calculateExcessAir(0.005) == Approx(0.0231722));
-	CHECK(composition.calculateExcessAir(0.03) == Approx(0.1552234));
-	CHECK(composition.calculateExcessAir(0.07) == Approx(0.451975));
+	CHECK(composition.calculateExcessAir(0.005) == Approx(0.0230303207));
+	CHECK(composition.calculateExcessAir(0.03) == Approx(0.156085169));
+	CHECK(composition.calculateExcessAir(0.07) == Approx(0.4563331236));
 
 	CHECK(composition.calculateO2(0.0231722) == Approx(0.0049367284));
 	CHECK(composition.calculateO2(0.1552234) == Approx(0.0294793974));

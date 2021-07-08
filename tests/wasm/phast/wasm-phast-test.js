@@ -147,17 +147,17 @@ function flueGasCalculateExcessAir() {
     var flueGasCalculateExcessAir = new Module.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
     //x100 to convert to %
     var excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
-    testNumberValue(excessAir, 2.3172209488353976, "PHAST Flue Gas Calculate Excess Air (excessAir1)");
+    testNumberValue(excessAir, 2.3030320731904492, "PHAST Flue Gas Calculate Excess Air (excessAir1)");
     // /100 convert to decimal
     o2InFlueGas = 3 / 100;
     //x100 to convert to %
     excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
-    testNumberValue(excessAir, 15.52234414568954, "PHAST Flue Gas Calculate Excess Air (excessAir2)");
+    testNumberValue(excessAir, 15.608516899070093, "PHAST Flue Gas Calculate Excess Air (excessAir2)");
     // /100 convert to decimal
     o2InFlueGas = 7 / 100;
     //x100 to convert to %
     excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
-    testNumberValue(excessAir, 45.197503654937584, "PHAST Flue Gas Calculate Excess Air (excessAir3)");
+    testNumberValue(excessAir, 45.63331236146819, "PHAST Flue Gas Calculate Excess Air (excessAir3)");
     flueGasCalculateExcessAir.delete();
 }
 // flueGasCalculateO2

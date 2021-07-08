@@ -196,6 +196,7 @@ set(SOURCE_FILES
         src/calculator/util/Compressors.cpp
         src/calculator/processHeat/AirHeatingUsingExhaust.cpp
         src/calculator/processHeat/WaterHeatingUsingExhaust.cpp
+        src/calculator/processHeat/WaterHeatingUsingFlue.cpp
         src/calculator/processHeat/WaterHeatingUsingSteam.cpp
         src/calculator/processHeat/CascadeHeatHighToLow.cpp
         src/calculator/util/WaterReduction.cpp
@@ -405,6 +406,7 @@ set(INCLUDE_FILES
         include/calculator/util/Compressors.h
         include/calculator/processHeat/AirHeatingUsingExhaust.h
         include/calculator/processHeat/WaterHeatingUsingExhaust.h
+        include/calculator/processHeat/WaterHeatingUsingFlue.h
         include/calculator/processHeat/WaterHeatingUsingSteam.h
         include/calculator/processHeat/CascadeHeatHighToLow.h
         include/calculator/util/WaterReduction.h

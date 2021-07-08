@@ -14,7 +14,7 @@
 
 CascadeHeatHighToLow::Output CascadeHeatHighToLow::calculate()
 {
-    const double priFlueVolume = priFiringRate * stoichAirVolume / 32 * (1 + priExcessAir) * 1000000 / priFuelHV + priFiringRate * 1000000 / priFuelHV;
+    const double priFlueVolume = priFiringRate * stoichAirVolume * (1 + priExcessAir) * 1000000 / priFuelHV + priFiringRate * 1000000 / priFuelHV;
     const double hxEnergyRate = priFlueVolume * priFlueSpecHeat * (priExhaustTemperature - secExhaustTemperature) / 1000000;
     const double eqEnergySupply = hxEnergyRate / secAvailableHeat;
     const double effOpHours = std::min(priOpHours , secOpHours);

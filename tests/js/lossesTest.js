@@ -114,15 +114,15 @@ test('flueGasCalculateExcessAir', function (t) {
     };
 
     var res = bindings.flueGasCalculateExcessAir(inp);
-    t.equal(rnd(res), rnd(2.3172209488353976));
+    t.equal(rnd(res), rnd(2.303032));
 
     inp.o2InFlueGas = 3;
     res = bindings.flueGasCalculateExcessAir(inp);
-    t.equal(rnd(res), rnd(15.52234414568954));
+    t.equal(rnd(res), rnd(15.608517));
 
     inp.o2InFlueGas = 7;
     res = bindings.flueGasCalculateExcessAir(inp);
-    t.equal(rnd(res), rnd(45.197503654937584));
+    t.equal(rnd(res), rnd(45.633312));
 });
 
 test('flueGasCalculateO2', function (t) {
