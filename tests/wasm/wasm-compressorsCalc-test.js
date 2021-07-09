@@ -452,9 +452,9 @@ function compressorsModulationWOUnload(){
     input.computeFromPFVoltage = 440;
     input.computeFromPFAmps = 2.467;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected ModulationWOUnload : PowerFactor', input, [94, 473, 1.1, 1]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected ModulationWOUnload : PowerFactor', input, [94, 608.18, 1.1, 1.29]);
     input.applyPressureInletCorrection = true;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected ModulationWOUnload : PowerFactor - Press Correction', input, [94, 469.45, 1.04, 1]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected ModulationWOUnload : PowerFactor - Press Correction', input, [94, 523.64, 1.04, 1.12]);
 }
 
 function compressorsStartStop(){

@@ -209,9 +209,9 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a C
     CHECK(resMWOuL.C_Per == Approx(1.66173));
     resMWOuL = cMWOuL.calculateFromVIPFMeasured(440, 2.467, 50);
     CHECK(resMWOuL.kW_Calc == Approx(94.0026));
-    CHECK(resMWOuL.C_Calc == Approx(473));
+    CHECK(resMWOuL.C_Calc == Approx(608.18));
     CHECK(resMWOuL.PerkW == Approx(1.10073));
-    CHECK(resMWOuL.C_Per == Approx(1));
+    CHECK(resMWOuL.C_Per == Approx(1.2858));
 
     cMWOuL.Pressure_InletCorrection(473, 105, 1.4, 100, 14.5, 0.917, 110, 110, 14.7, true, 14.7);
     CHECK(cMWOuL.kW_fl_Adjusted == Approx(90.0736));
@@ -239,9 +239,9 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a C
     CHECK(resMWOuL.C_Per == Approx(1.67426));
     resMWOuL = cMWOuL.calculateFromVIPFMeasured(440, 2.467, 50);
     CHECK(resMWOuL.kW_Calc == Approx(94.00257));
-    CHECK(resMWOuL.C_Calc == Approx(469.4614));
+    CHECK(resMWOuL.C_Calc == Approx(522.5044));
     CHECK(resMWOuL.PerkW == Approx(1.04362));
-    CHECK(resMWOuL.C_Per == Approx(1.0));
+    CHECK(resMWOuL.C_Per == Approx(1.113));
 
     auto cSS = Compressors_StartStop(89.5, 560, 1.05, 1);
     auto resSS = cSS.calculateFromPerkW(0.205);

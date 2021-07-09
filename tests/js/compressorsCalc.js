@@ -320,10 +320,10 @@ test('Compressors ModulationWOUnload', function (t) {
     input.computeFromPFVoltage = 440;
     input.computeFromPFAmps = 2.467;
     input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [94.0026, 473, 1.10073, 1]);
+    compare(bindings.CompressorsCalc(input), [94.0026, 608.18, 1.10073, 1.29]);
     input.applyPressureInletCorrection = true;
     let res = bindings.CompressorsCalc(input);
-    compare(res, [94.00257, 469.45, 1.04362, 1.0]);
+    compare(res, [94.00257, 523.64, 1.04362, 1.12]);
     compare(res, [90, 469.45, 90, 469.45], true);
 
     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
