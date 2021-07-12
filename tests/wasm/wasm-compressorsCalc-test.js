@@ -154,7 +154,7 @@ function compressorsCalc(input, compMethod){
 }
 
 function compressorsCalcModulationWOUnload(input){
-    let compMethod = new Module.Compressors_ModulationWOUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerAtNoLoad, Module.CompressorType.Screw);
+    let compMethod = new Module.Compressors_ModulationWOUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerAtNoLoad, 1, true, Module.CompressorType.Screw);
     let output = compressorsCalc(input,  compMethod);
     compMethod.delete();
     return output;
@@ -170,7 +170,7 @@ function compressorsCalcStartStop(input){
 function compressorsCalcLoadUnload(input){
     let compMethod = new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerMax,
         input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.loadFactorUnloaded, input.atmosphericPsi,
-        input.compressorType, input.lubricantType, input.controlType, 1);
+        input.compressorType, input.lubricantType, input.controlType, 1, 100);
     let output = compressorsCalc(input,  compMethod);
     compMethod.delete();
     return output;
@@ -178,7 +178,7 @@ function compressorsCalcLoadUnload(input){
 
 function compressorsCalcModulationWithUnload(input){
     let compMethod = new Module.Compressors_ModulationWithUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerMax,
-        input.powerAtNolLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, input.controlType);
+        input.powerAtNolLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, 100, input.controlType);
     let output = compressorsCalc(input,  compMethod);
     compMethod.delete();
     return output;
@@ -656,7 +656,7 @@ function compressorsModulationWithUnload(){
     input.applyPressureInletCorrection = false;
     validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerMeasured', input, [156, 969.16, 0.94, 0.92]);
     input.applyPressureInletCorrection = true;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerMeasured - Press Correction', input, [156, 469.46, 1.73,1]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerMeasured - Press Correction', input, [156, 870.69, 1.73, 1.85]);
 
     input.computeFrom = Module.ComputeFrom.CapacityMeasured;
     input.computeFromVal = 937;
