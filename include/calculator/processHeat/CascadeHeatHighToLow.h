@@ -67,9 +67,10 @@ public:
             priExhaustO2(priExhaustO2), priCombAirTemperature(priCombAirTemperature), priOpHours(priOpHours), priFuelHV(priFuelHV),
             secFiringRate(secFiringRate), secExhaustTemperature(secExhaustTemperature), secCombAirTemperature(secCombAirTemperature), secOpHours(secOpHours), secFuelCost(secFuelCost)
     {
-        stoichAirVolume = gasCompositions.getStoichometricAir();
-        priExcessAir = gasCompositions.getExcessAir(priExhaustO2);
-        secAvailableHeat = gasCompositions.getAvailableHeat(secExhaustTemperature, priExcessAir, secCombAirTemperature);
+        const auto res = gasCompositions.getProcessHeatProperties(priExhaustTemperature, priExhaustO2, priCombAirTemperature);
+        stoichAirVolume = res.stoichAir;
+        priExcessAir = res.excessAir;
+        secAvailableHeat = res.availableHeat;
     }
 
     /**

@@ -34,8 +34,8 @@ function cascadeHeatHighToLow(){
 
     logMessage('Cascade Heat High To Low: Test# 1 Gas', true);
     let gasInstance = new Module.GasCompositions('Gas', 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    let instance = new Module.CascadeHeatHighToLow(gasInstance, 12.0, 1475, 0.07, 80.0, 8000, 1020, 9.50, 225, 80, 7000, 5.00);
-    validate(instance.calculate(), [174619.56, 4.6929, 6.4038, 7000, 44826.53, 224132.65, 6.4038]);
+    let instance = new Module.CascadeHeatHighToLow(gasInstance, 12.0, 1074.82, 0.07, 299.82, 8000, 1020, 9.50, 380.37, 299.82, 7000, 5.00);
+    validate(instance.calculate(), [174956.62, 2.6122, 5.3238, 7000, 37273.74, 186368.68, 5.3238]);
     instance.delete();
     gasInstance.delete();
 }
@@ -85,7 +85,40 @@ function waterHeatingUsingSteam(){
     instance.delete();
 }
 
+function waterHeatingUsingFlue(){
+    let validate = function(results, expected) {
+        testNumberValue(rnd(results.tempSteamSat), rnd(expected[0]), "tempSteamSat");
+        testNumberValue(rnd(results.flowFlueGas), rnd(expected[1]), "flowFlueGas");
+        testNumberValue(rnd(results.effBoiler), rnd(expected[2]), "effBoiler");
+        testNumberValue(rnd(results.enthalpySteam), rnd(expected[3]),"enthalpySteam");
+        testNumberValue(rnd(results.enthalpyFW), rnd(expected[4]),"enthalpyFW");
+        testNumberValue(rnd(results.flowSteam), rnd(expected[5]),"flowSteam");
+        testNumberValue(rnd(results.flowFW), rnd(expected[6]), "flowFW");
+        testNumberValue(rnd(results.specheatFG), rnd(expected[7]), "specheatFG");
+        testNumberValue(rnd(results.heatCapacityFG), rnd(expected[8]), "heatCapacityFG");
+        testNumberValue(rnd(results.specheatFW), rnd(expected[9]),"specheatFW");
+        testNumberValue(rnd(results.heatCapacityFW), rnd(expected[10]),"heatCapacityFW");
+        testNumberValue(rnd(results.heatCapacityMin), rnd(expected[11]),"heatCapacityMin");
+        testNumberValue(rnd(results.ratingHeatRecFW), rnd(expected[12]), "ratingHeatRecFW");
+        testNumberValue(rnd(results.tempFlueGasOut), rnd(expected[13]), "tempFlueGasOut");
+        testNumberValue(rnd(results.tempFWOut), rnd(expected[14]),"tempFWOut");
+        testNumberValue(rnd(results.energySavingsBoiler), rnd(expected[15]),"energySavingsBoiler");
+        testNumberValue(rnd(results.costSavingsBoiler), rnd(expected[16]),"costSavingsBoiler");
+    };
+
+    logMessage('Water Heating Using Flue: Test# 1 Gas', true);
+    let gasInstance = new Module.GasCompositions('Gas', 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
+    let instance = new Module.WaterHeatingUsingFlue();
+    let results = instance.calculate(gasInstance, 658.15, 0.05, 299.82, 0.02, 55.88, 3.45, 288.71, 533.15,
+        380.37, 0.04, 0.625, 8000, 5.21, 37706, Module.SteamConditionType.Superheated);
+    validate(results, [514.886, 23538.374, 0.73457, 2865.339, 452.038, 16329.9, 16983.09, 1.13247, 26656.559,
+        4.2285, 71812.94, 26656.56, 4627911.87, 484.537, 444.81, 50397.36, 262570.24]);
+    instance.delete();
+    gasInstance.delete();
+}
+
 airHeatingUsingExhaust();
 waterHeatingUsingExhaust();
 waterHeatingUsingSteam();
 cascadeHeatHighToLow();
+waterHeatingUsingFlue();

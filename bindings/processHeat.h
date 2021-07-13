@@ -10,6 +10,7 @@
 #include "calculator/processHeat/WaterHeatingUsingExhaust.h"
 #include "calculator/processHeat/WaterHeatingUsingSteam.h"
 #include "calculator/processHeat/CascadeHeatHighToLow.h"
+#include "calculator/processHeat/WaterHeatingUsingFlue.h"
 
 using namespace Nan;
 using namespace v8;
@@ -201,5 +202,71 @@ NAN_METHOD(cascadeHeatHighToLow)
     {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in Cascade Heat HighToLow ProcessHeat - calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(waterHeatingUsingFlue)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double tempFlueGas = getDouble("tempFlueGas", inp);
+        const double percO2 = getDouble("percO2", inp);
+        const double tempCombAir = getDouble("tempCombAir", inp);
+        const double moistCombAir = getDouble("moistCombAir", inp);
+        const double ratingBoiler = getDouble("ratingBoiler", inp);
+        const double prSteam = getDouble("prSteam", inp);
+        const double tempAmbientAir = getDouble("tempAmbientAir", inp);
+        const double tempSteam = getDouble("tempSteam", inp);
+        const double tempFW = getDouble("tempFW", inp);
+        const double percBlowDown = getDouble("percBlowDown", inp);
+        const double effHX = getDouble("effHX", inp);
+        const double opHours = getDouble("opHours", inp);
+        const double costFuel = getDouble("costFuel", inp);
+        const double hhvFuel = getDouble("hhvFuel", inp);
+        const int condSteam = getInteger("condSteam", inp);
+
+        const double CH4 = getDouble("CH4", inp);
+        const double C2H6 = getDouble("C2H6", inp);
+        const double N2 = getDouble("N2", inp);
+        const double H2 = getDouble("H2", inp);
+        const double C3H8 = getDouble("C3H8", inp);
+        const double C4H10_CnH2n = getDouble("C4H10_CnH2n", inp);
+        const double H2O = getDouble("H2O", inp);
+        const double CO = getDouble("CO", inp);
+        const double CO2 = getDouble("CO2", inp);
+        const double SO2 = getDouble("SO2", inp);
+        const double O2 = getDouble("O2", inp);
+
+        auto output = WaterHeatingUsingFlue().calculate(GasCompositions("Gas", CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2),
+                                                      tempFlueGas, percO2, tempCombAir, moistCombAir, ratingBoiler, prSteam, tempAmbientAir,
+                                                      tempSteam, tempFW, percBlowDown, effHX, opHours, costFuel, hhvFuel, (WaterHeatingUsingFlue::SteamCondition)condSteam);
+
+        setR("tempSteamSat", output.tempSteamSat);
+        setR("flowFlueGas", output.flowFlueGas);
+        setR("effBoiler", output.effBoiler);
+        setR("enthalpySteam", output.enthalpySteam);
+        setR("enthalpyFW", output.enthalpyFW);
+        setR("flowSteam", output.flowSteam);
+        setR("flowFW", output.flowFW);
+        setR("specheatFG", output.specheatFG);
+        setR("heatCapacityFG", output.heatCapacityFG);
+        setR("specheatFW", output.specheatFW);
+        setR("heatCapacityFW", output.heatCapacityFW);
+        setR("heatCapacityMin", output.heatCapacityMin);
+        setR("ratingHeatRecFW", output.ratingHeatRecFW);
+        setR("tempFlueGasOut", output.tempFlueGasOut);
+        setR("tempFWOut", output.tempFWOut);
+        setR("energySavingsBoiler", output.energySavingsBoiler);
+        setR("costSavingsBoiler", output.costSavingsBoiler);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Water Heating Using Flue ProcessHeat - calculator: " + what).c_str());
     }
 }

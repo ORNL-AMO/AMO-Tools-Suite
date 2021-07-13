@@ -362,6 +362,7 @@
               'include/calculator/processHeat/WaterHeatingUsingExhaust.h',
               'include/calculator/processHeat/WaterHeatingUsingSteam.h',
               'include/calculator/processHeat/CascadeHeatHighToLow.h',
+              'include/calculator/processHeat/WaterHeatingUsingFlue.h',
               "<!(node -e \"require('nan')\")"
           ],
           'sources': [
@@ -374,7 +375,8 @@
               'src/calculator/processHeat/AirHeatingUsingExhaust.cpp',
               'src/calculator/processHeat/WaterHeatingUsingExhaust.cpp',
               'src/calculator/processHeat/WaterHeatingUsingSteam.cpp',
-              'src/calculator/processHeat/CascadeHeatHighToLow.cpp'
+              'src/calculator/processHeat/CascadeHeatHighToLow.cpp',
+              'src/calculator/processHeat/WaterHeatingUsingFlue.cpp'
           ],
           "conditions": [
               [ 'OS=="mac"', {

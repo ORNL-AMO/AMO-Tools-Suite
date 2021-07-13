@@ -15,6 +15,9 @@ NAN_MODULE_INIT(InitProcessHeat) {
 
     Nan::Set(target, New<String>("cascadeHeatHighToLow").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(cascadeHeatHighToLow)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("waterHeatingUsingFlue").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(waterHeatingUsingFlue)).ToLocalChecked());
 }
 
 NODE_MODULE(processHeat, InitProcessHeat)

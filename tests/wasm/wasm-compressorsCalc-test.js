@@ -154,7 +154,7 @@ function compressorsCalc(input, compMethod){
 }
 
 function compressorsCalcModulationWOUnload(input){
-    let compMethod = new Module.Compressors_ModulationWOUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerAtNoLoad, Module.CompressorType.Screw);
+    let compMethod = new Module.Compressors_ModulationWOUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerAtNoLoad, 1, true, Module.CompressorType.Screw);
     let output = compressorsCalc(input,  compMethod);
     compMethod.delete();
     return output;
@@ -169,8 +169,8 @@ function compressorsCalcStartStop(input){
 
 function compressorsCalcLoadUnload(input){
     let compMethod = new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerMax,
-        input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi,
-        input.compressorType, input.lubricantType, input.controlType, 1);
+        input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.loadFactorUnloaded, input.atmosphericPsi,
+        input.compressorType, input.lubricantType, input.controlType, 1, 100);
     let output = compressorsCalc(input,  compMethod);
     compMethod.delete();
     return output;
@@ -178,7 +178,7 @@ function compressorsCalcLoadUnload(input){
 
 function compressorsCalcModulationWithUnload(input){
     let compMethod = new Module.Compressors_ModulationWithUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerMax,
-        input.powerAtNolLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, input.controlType);
+        input.powerAtNolLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, 100, input.controlType);
     let output = compressorsCalc(input,  compMethod);
     compMethod.delete();
     return output;
@@ -249,11 +249,11 @@ function compressorsCentrifugalLoadUnload(){
     input.computeFrom = Module.ComputeFrom.PowerFactor;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.00945;
+    input.computeFromPFAmps = 2.152;
     input.adjustForDischargePressure = false;
-    validateCompressorsCalc('Compressors Centrifugal Load Unload: PowerFactor', input, [162.865, 754.15, 0.36, 0.24]);
+    validateCompressorsCalc('Compressors Centrifugal Load Unload: PowerFactor', input, [82, 88.126,0.1813,0.02808]);
     input.adjustForDischargePressure = true;
-    validateCompressorsCalc('Compressors Centrifugal Load Unload: PowerFactor - Adjust Pressure', input, [162.865, 754.15, 0.36, 0.24]);
+    validateCompressorsCalc('Compressors Centrifugal Load Unload: PowerFactor - Adjust Pressure', input, [82, 88.126,0.1813,0.02808]);
 }
 
 function compressorsCentrifugalModulationUnload(){
@@ -315,11 +315,11 @@ function compressorsCentrifugalModulationUnload(){
     input.computeFrom = Module.ComputeFrom.PowerFactor;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.02467;
+    input.computeFromPFAmps = 2.467;
     input.adjustForDischargePressure = false;
-    validateCompressorsCalc('Compressors Centrifugal Modulation Unload: PowerFactor', input, [425.174, 2821.02, 0.940026, 0.938777]);
+    validateCompressorsCalc('Compressors Centrifugal Modulation Unload: PowerFactor', input, [94, 182.03, 0.21, 0.06]);
     input.adjustForDischargePressure = true;
-    validateCompressorsCalc('Compressors Centrifugal Modulation Unload: PowerFactor - Adjust Pressure', input, [425.174, 2821, 0.94, 0.94]);
+    validateCompressorsCalc('Compressors Centrifugal Modulation Unload: PowerFactor - Adjust Pressure', input, [94, 182.03, 0.21, 0.06]);
 }
 
 function compressorsCentrifugalBlowOff(){
@@ -383,9 +383,9 @@ function compressorsCentrifugalBlowOff(){
     input.computeFromPFVoltage = 440;
     input.computeFromPFAmps = 0.02152;
     input.percentageBlowOff = 0.6798;
-    validateCompressorsCalc('Compressors Centrifugal BlowOff: PowerFactor', input, [370.885, 376.788, 0.82, 0.120073, 2133.21, 0.6798]);
+    validateCompressorsCalc('Compressors Centrifugal BlowOff: PowerFactor', input, [0.82, 376.788, 0.0018129518, 0.120073, 2133.21, 0.6798]);
     input.adjustForDischargePressure = true;
-    validateCompressorsCalc('Compressors Centrifugal BlowOff: PowerFactor - Adjust Pressure', input, [370.885, 376.79, 0.82, 0.120073, 2133.21, 0.6798]);
+    validateCompressorsCalc('Compressors Centrifugal BlowOff: PowerFactor - Adjust Pressure', input, [0.82, 376.788, 0.0018129518, 0.120073, 2133.21, 0.6798]);
 }
 
 function compressorsModulationWOUnload(){
@@ -450,11 +450,11 @@ function compressorsModulationWOUnload(){
     input.computeFrom = Module.ComputeFrom.PowerFactor;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.02467;
+    input.computeFromPFAmps = 2.467;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected ModulationWOUnload : PowerFactor', input, [80.278, 392.51, 0.94, 0.83]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected ModulationWOUnload : PowerFactor', input, [94, 608.18, 1.1, 1.29]);
     input.applyPressureInletCorrection = true;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected ModulationWOUnload : PowerFactor - Press Correction', input, [84.6, 396.42, 0.94, 0.84]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected ModulationWOUnload : PowerFactor - Press Correction', input, [94, 523.64, 1.04, 1.12]);
 }
 
 function compressorsStartStop(){
@@ -522,9 +522,9 @@ function compressorsStartStop(){
     input.computeFromPFVoltage = 440;
     input.computeFromPFAmps = 0.02467;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Two Stage Screw Lubricant Free StartStop : PowerFactor', input, [84.1323, 513.575, 0.94, 0.92]);
+    validateCompressorsCalc('Two Stage Screw Lubricant Free StartStop : PowerFactor', input, [0.94,5.74,0.01,0.01]);
     input.applyPressureInletCorrection = true;
-    validateCompressorsCalc('Two Stage Screw Lubricant Free StartStop : PowerFactor - Press Correction', input, [84.67, 430.54, 0.94, 0.92]);
+    validateCompressorsCalc('Two Stage Screw Lubricant Free StartStop : PowerFactor - Press Correction', input, [0.94,4.78,0.01,0.01]);
 }
 
 function compressorsLoadUnload(){
@@ -541,6 +541,7 @@ function compressorsLoadUnload(){
         dischargePsiFullLoad:100,
         dischargePsiMax:110,
         modulatingPsi:5,
+        loadFactorUnloaded:10.1,
         atmosphericPsi:14.7,
 
         //needed for Pressure Inlet Correction for control type ModulationWOUnload
@@ -565,39 +566,39 @@ function compressorsLoadUnload(){
     input.computeFrom = Module.ComputeFrom.PercentagePower;
     input.computeFromVal = 0.94;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PercentagePower', input, [156.51, 937.88, 0.94, 0.89]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PercentagePower', input, [156.51, 967.78, 0.94, 0.92]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PercentagePower - Press Correction', input, [156.51, 937.88, 0.94, 0.89]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PercentagePower - Press Correction', input, [156.51, 967.78, 0.94, 0.92]);
 
     input.computeFrom = Module.ComputeFrom.PercentageCapacity;
     input.computeFromVal = 0.895;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PercentageCapacity', input, [156.442, 937.96, 0.93959, 0.9]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PercentageCapacity', input, [151.32, 937.96, 0.91, 0.9]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PercentageCapacity - Press Correction', input, [156.442, 937.96, 0.93959, 0.9]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PercentageCapacity - Press Correction', input, [151.32, 937.96, 0.91, 0.9]);
 
     input.computeFrom = Module.ComputeFrom.PowerMeasured;
     input.computeFromVal = 156;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PowerMeasured', input, [156, 933.85, 0.93693, 0.89]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PowerMeasured', input, [156, 964.72, 0.93693, 0.92]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PowerMeasured - Press Correction', input, [156, 933.85, 0.93693, 0.89]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PowerMeasured - Press Correction', input, [156, 964.72, 0.93693, 0.92]);
 
     input.computeFrom = Module.ComputeFrom.CapacityMeasured;
     input.computeFromVal = 937;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : CapacityMeasured', input, [156.322, 937, 0.938872, 0.89]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : CapacityMeasured', input, [151.16, 937, 0.91, 0.89]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : CapacityMeasured - Press Correction', input, [156.322, 937, 0.938872, 0.89]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : CapacityMeasured - Press Correction', input, [151.16, 937, 0.91, 0.89]);
 
     input.computeFrom = Module.ComputeFrom.PowerFactor;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 0.02467;
+    input.computeFromPFAmps = 2.467;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PowerFactor', input, [156.514, 937.922, 0.94002, 0.89]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PowerFactor', input, [94, 574.23, 0.56, 0.55]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PowerFactor - Press Correction', input, [156.514, 937.922, 0.94002, 0.89]);
+    validateCompressorsCalc('Single Stage Reciprocating LoadUnload : PowerFactor - Press Correction', input, [94, 574.23, 0.56, 0.55]);
 }
 
 function compressorsModulationWithUnload(){
@@ -639,39 +640,39 @@ function compressorsModulationWithUnload(){
     input.computeFrom = Module.ComputeFrom.PercentagePower;
     input.computeFromVal = 0.94;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PercentagePower', input, [156.51, 937.89, 0.94, 0.89]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PercentagePower', input, [156.51, 972.06, 0.94, 0.93]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PercentagePower - Press Correction', input, [156.51, 937.89, 0.94, 0.89]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PercentagePower - Press Correction', input, [156.51, 972.06, 0.94, 0.93]);
 
     input.computeFrom = Module.ComputeFrom.PercentageCapacity;
     input.computeFromVal = 0.895;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PercentageCapacity', input, [156.442, 937.96, 0.93959, 0.9]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PercentageCapacity', input, [150.28, 937.96, 0.9, 0.9]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PercentageCapacity - Press Correction', input, [156.442, 937.96, 0.93959, 0.9]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PercentageCapacity - Press Correction', input, [150.28, 937.96, 0.9, 0.9]);
 
     input.computeFrom = Module.ComputeFrom.PowerMeasured;
     input.computeFromVal = 156;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerMeasured', input, [156, 933.86, 0.93693, 0.89]);
-    input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerMeasured - Press Correction', input, [156, 933.86, 0.93693, 0.89]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerMeasured', input, [156, 969.16, 0.94, 0.92]);
+    input.applyPressureInletCorrection = true;
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerMeasured - Press Correction', input, [156, 870.69, 1.73, 1.85]);
 
     input.computeFrom = Module.ComputeFrom.CapacityMeasured;
     input.computeFromVal = 937;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : CapacityMeasured', input, [156.322, 937, 0.938872, 0.89]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : CapacityMeasured', input, [150.11, 937, 0.9, 0.89]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : CapacityMeasured - Press Correction', input, [156.322, 937, 0.938872, 0.89]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : CapacityMeasured - Press Correction', input, [150.11, 937, 0.9, 0.89]);
 
     input.computeFrom = Module.ComputeFrom.PowerFactor;
     input.computeFromVal = 50;
     input.computeFromPFVoltage = 440;
     input.computeFromPFAmps = 0.02467;
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerFactor', input, [156.514, 937.922, 0.94002, 0.89]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerFactor', input, [0.94, 6.05, 0.01, 0.01]);
     input.applyPressureInletCorrection = false;
-    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerFactor - Press Correction', input, [156.514, 937.922, 0.94002, 0.89]);
+    validateCompressorsCalc('Single Stage Screw Lubricant Injected VariableDisplacementUnload : PowerFactor - Press Correction', input, [0.94, 6.05, 0.01, 0.01]);
 }
 
 function reduceAirLeaks(){

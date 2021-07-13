@@ -74,6 +74,15 @@ private:
  */
 class GasCompositions {
 public:
+    struct ProcessHeatPropertiesResults
+    {
+        ProcessHeatPropertiesResults(double stoichAir, double excessAir, double availableHeat, double specificHeat, double density) :
+                stoichAir(stoichAir), excessAir(excessAir), availableHeat(availableHeat), specificHeat(specificHeat), density(density){}
+
+        ProcessHeatPropertiesResults() = default;
+        double stoichAir = 0, excessAir = 0, availableHeat = 0, specificHeat = 0, density = 0;
+    };
+
 	/**
 	 * Constructor for GasCompositions with which flue gas losses will be calculated. All molecule parameters are the
 	 * percentage of that molecule present in the fuel
@@ -175,11 +184,22 @@ public:
      * @param flueGasTemp double
      * @param excessAir double
      * @param combAirTemperature double
-     * @return double
+     * @param combAirMoisturePerc double
+     * @param ambientAirTemp double
+     * @return
+     *
+     * @param stoichAir double
+     * @param excessAir double
+     * @param availableHeat double
+     * @param specificHeat double
+     * @param density double
+     *
      */
-    double getAvailableHeat(const double flueGasTemp, const double excessAir, const double combAirTemperature);
 
-	double calculateExcessAir(double flueGasO2);
+    ProcessHeatPropertiesResults getProcessHeatProperties(const double flueGasTemp, const double flueGasO2, const double combAirTemperature,
+                                    const double ambientAirTemp = 288.71, const double combAirMoisturePerc = 0);
+
+    double calculateExcessAir(double flueGasO2);
 	double calculateO2(double excessAir);
 
     /**

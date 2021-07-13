@@ -34,45 +34,96 @@ double GasCompositions::calculateExcessAir(const double flueGasO2) {
 	return excessAir;
 }
 
-double GasCompositions::getExcessAir(const double flueGasO2) const { return (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2)); }
+double GasCompositions::getExcessAir(const double flueGasO2) const { return ((stoichometricAir / 32 - 1) * flueGasO2) / (2 - (stoichometricAir / 32 * flueGasO2)); }
 
 double GasCompositions::getEnthalpyAtSaturation(const double ppH2O) const { return 1096.7 * pow(ppH2O * 29.926, 0.013); }
 
 double GasCompositions::getSaturationTemperature(const double ppH2O) const { return 36.009 * log(ppH2O * 29.926) + 81.054; }
 
-double GasCompositions::getAvailableHeat(const double flueGasTemp, const double excessAir, const double combAirTemperature)
+GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatProperties(const double flueGasTemp, const double flueGasO2, const double combAirTemperature,
+                                                 const double ambientAirTemp, const double combAirMoisturePerc)
 {
+    const double excessAir = getExcessAir(flueGasO2);
+    const double combAirTemperatureF = (combAirTemperature - 273.15) * 1.8 + 32;
+    const double flueGasTempF = (flueGasTemp - 273.15) * 1.8 + 32;
+    const double ambientAirTempF = (ambientAirTemp - 273.15) * 1.8 + 32;
+
+    const double initialTemp = (460 + combAirTemperatureF);
+    const double finalTemp = (460 + flueGasTempF);
+
+    const double initialTempCpO2 = (11.515 - 172 / pow(initialTemp, 0.5) + 1530 / initialTemp);
+    const double finalTempCpO2 = (11.515 - 172 / pow(finalTemp, 0.5) + 1530 / finalTemp);
+    const double initialTempCpSCFO2 = initialTempCpO2 / 378.2;
+    const double finalTempCpSCFO2 = finalTempCpO2 / 378.2;
+    const double avgCpO2 = (initialTempCpO2 + finalTempCpO2) / 2 / 32;
+
+    const double initialTempCpN2 = (9.47 - 3.47 * 1000 / initialTemp + 1.07 * 1000000 / pow(initialTemp, 2));
+    const double finalTempCpN2 = (9.47 - 3.47 * 1000 / finalTemp + 1.07 * 1000000 / pow(finalTemp, 2));
+    const double initialTempCpSCFN2 = initialTempCpN2 / 378.2;
+    const double finalTempCpSCFN2 = finalTempCpN2 / 378.2;
+    const double avgCpN2 = (initialTempCpN2 + finalTempCpN2) / 2 / 28;
+
+    const double initialTempCpH2O = (19.86 - 597 / pow(initialTemp, 0.5) + 7500 / initialTemp);
+    const double finalTempCpH2O = (19.86 - 597 / pow(finalTemp, 0.5) + 7500 / finalTemp);
+    const double initialTempCpSCFH2O = initialTempCpH2O / 378.2;
+    const double finalTempCpSCFH2O = finalTempCpH2O / 378.2;
+    const double avgCpH2O = (initialTempCpH2O + finalTempCpH2O) / 2 / 18;
+
+    const double initialTempCpCO2 = (16.2 - 6.53 * 1000 / initialTemp + 1.41 * 1000000 / pow(initialTemp,2)) / 44;
+    const double finalTempCpCO2 = (16.2 - 6.53 * 1000 / finalTemp + 1.41 * 1000000 / pow(finalTemp,2)) / 44;
+    const double avgCpCO2 = (initialTempCpCO2 + finalTempCpCO2) / 2;
+
+    const double stdO2PercVol = 20.7;
+    const double stdN2PercVol = 78.3;
+    const double stdH2OPercVol = 1;
+    const double initialTempMeanCP = (stdO2PercVol * initialTempCpSCFO2 + stdN2PercVol * initialTempCpSCFN2 + stdH2OPercVol * initialTempCpSCFH2O) / 100;
+    const double finalTempMeanCP = (stdO2PercVol * finalTempCpSCFO2 + stdN2PercVol * finalTempCpSCFN2 + stdH2OPercVol * finalTempCpSCFH2O) / 100;
+    const double cpB = (finalTempMeanCP - initialTempMeanCP) / (flueGasTempF - ambientAirTempF);
+    const double cpA = finalTempMeanCP - cpB / flueGasTempF;
+
     double heatValueFuel = 0;
-    double CO2Generated = 0;
-    double H20Generated = 0;
-    double O2Generated = 0;
+    double CO2GeneratedWt = 0;
+    double H20GeneratedWt = 0;
+    double O2GeneratedWt = 0;
     for ( auto const & compound : gasses ) {
         heatValueFuel += compound.second->compAdjByVol * compound.second->heatingValueVolume;
-        CO2Generated += compound.second->compAdjByVol * compound.second->co2Generated;
-        H20Generated += compound.second->compAdjByVol * compound.second->h2oGenerated;
-        O2Generated += compound.second->compAdjByVol * compound.second->o2Generated;
+        CO2GeneratedWt += compound.second->compAdjByVol * compound.second->co2Generated;
+        H20GeneratedWt += compound.second->compAdjByVol * compound.second->h2oGenerated;
+        O2GeneratedWt += compound.second->compAdjByVol * compound.second->o2Generated;
     }
 
-    double CO2GeneratedWt = 100 * CO2Generated * 2.2722/10000;
-    double H20GeneratedWt = 100 * H20Generated * 5.5506/10000;
+    const double CO2GeneratedVol = CO2GeneratedWt * 0.022722;
+    const double H20GeneratedVol = H20GeneratedWt * 0.055506;
 
-    CO2Generated *= 2.6365/100000;
-    H20Generated *= 2.6365/100000;
-    O2Generated /= 32;
+    CO2GeneratedWt *= 0.0026365;
+    O2GeneratedWt /= 32;
+    const double stoichAir = O2GeneratedWt * (1 + (1 - 0.209) / 0.209);
+    const double combAirMoisture = combAirMoisturePerc == 0 ? 0 : ((combAirMoisturePerc - 0.009) * (stoichAir * (1 + excessAir)) * 0.0763);
+    H20GeneratedWt *= 0.0026365;
+    H20GeneratedWt += combAirMoisture;
 
-    double O2GeneratedWt = 10 * excessAir * O2Generated;
-    double N2GeneratedWt = 10 * (0.1 + excessAir) * O2Generated * (1 - 0.209) / 0.209;
-    double partialPressureH2O = H20GeneratedWt / (CO2GeneratedWt + H20GeneratedWt + O2GeneratedWt + N2GeneratedWt);
+    const double O2GeneratedVol = excessAir * O2GeneratedWt;
+    const double N2GeneratedVol = (1 + excessAir) * O2GeneratedWt * (1 - 0.209) / 0.209;
 
-    double H2OHeatContent = (getEnthalpyAtSaturation(partialPressureH2O) + 0.48544 * (flueGasTemp - getSaturationTemperature(partialPressureH2O))) * 10000 * H20Generated;
-    double CO2HeatContent = 0.26426 * (flueGasTemp - 60) * 10000 * CO2Generated;
-    double N2HeatContent = 0.25624 * (flueGasTemp - 60) * 1000 * (0.1 + excessAir) * O2Generated * 0.0744 * (1 - 0.209) / 0.209 ;
-    double O2HeatContent = 0.23400 * (flueGasTemp - 60) * 1000 * excessAir * O2Generated * 0.0846;
-    double preHeatedAirEff = O2Generated * (1+ (1-0.209)/0.209) * (0.019362309 * (combAirTemperature-60));
+    const double N2GeneratedWt = N2GeneratedVol * 0.0744;
+    O2GeneratedWt = O2GeneratedVol * 0.0846;
 
-    double d =(100 * (heatValueFuel + preHeatedAirEff) - (H2OHeatContent + CO2HeatContent + N2HeatContent + O2HeatContent)) / (100 * heatValueFuel);
+    const double partialPressureH2O = H20GeneratedVol / (CO2GeneratedVol + H20GeneratedVol + O2GeneratedVol + N2GeneratedVol);
 
-    return (100 * (heatValueFuel + preHeatedAirEff) - (H2OHeatContent + CO2HeatContent + N2HeatContent + O2HeatContent)) / (100 * heatValueFuel);
+    const double H2OHeatContent = (getEnthalpyAtSaturation(partialPressureH2O) + avgCpH2O * (flueGasTempF - getSaturationTemperature(partialPressureH2O))) * 100 * H20GeneratedWt;
+    const double CO2HeatContent = avgCpCO2 * (flueGasTempF - ambientAirTempF) * 100 * CO2GeneratedWt;
+    const double N2HeatContent = avgCpN2 * (flueGasTempF - ambientAirTempF) * 100 * N2GeneratedWt;
+    const double O2HeatContent = avgCpO2 * (flueGasTempF - ambientAirTempF) * 100 * O2GeneratedWt;
+
+    const double preHeatedAirEff = stoichAir * (1 + excessAir) * (((combAirTemperatureF + ambientAirTempF) / 2) * cpB + cpA) * combAirTemperatureF;
+    const double preHeatedAirMoistureEff = combAirMoisture * avgCpH2O * (flueGasTempF - combAirTemperatureF);
+    const double totalGenerated = CO2GeneratedWt + H20GeneratedWt + O2GeneratedWt + N2GeneratedWt;
+
+    const double density = totalGenerated * 0.453592 / 0.0283168;
+    const double specificHeat = 4.1868 * (CO2GeneratedWt * avgCpCO2 + H20GeneratedWt * avgCpH2O + O2GeneratedWt * avgCpO2 + N2GeneratedWt * avgCpN2) / totalGenerated;
+    const double availableHeat = (100 * (heatValueFuel + preHeatedAirEff + preHeatedAirMoistureEff) - (H2OHeatContent + CO2HeatContent + N2HeatContent + O2HeatContent)) / (100 * heatValueFuel);
+
+    return ProcessHeatPropertiesResults(stoichAir, excessAir, availableHeat, specificHeat, density);
 }
 
 // used for calculating O2 in flue gas given excess air as a decimal
