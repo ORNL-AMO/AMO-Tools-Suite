@@ -449,6 +449,7 @@ test('Compressors LoadUnload', function (t) {
 
         powerAtFullLoad: 166.5,
         capacityAtFullLoad: 1048,
+        receiverVolume: 1048/7.481,
         powerMax: 175.5,
         dischargePsiFullLoad:100,
         dischargePsiMax:110,
@@ -545,6 +546,7 @@ test('Compressors ModulationWithUnload', function (t) {
 
         powerAtFullLoad: 166.5,
         capacityAtFullLoad: 1048,
+        receiverVolume: 1048/7.481,
         powerMax: 175.5,
         dischargePsiFullLoad:100,
         dischargePsiMax:110,

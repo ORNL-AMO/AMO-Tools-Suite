@@ -168,7 +168,7 @@ function compressorsCalcStartStop(input){
 }
 
 function compressorsCalcLoadUnload(input){
-    let compMethod = new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerMax,
+    let compMethod = new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad,input.receiverVolume, input.powerMax,
         input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.loadFactorUnloaded, input.atmosphericPsi,
         input.compressorType, input.lubricantType, input.controlType, 1, 100);
     let output = compressorsCalc(input,  compMethod);
@@ -177,7 +177,7 @@ function compressorsCalcLoadUnload(input){
 }
 
 function compressorsCalcModulationWithUnload(input){
-    let compMethod = new Module.Compressors_ModulationWithUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.powerMax,
+    let compMethod = new Module.Compressors_ModulationWithUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax,
         input.powerAtNolLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, 100, input.controlType);
     let output = compressorsCalc(input,  compMethod);
     compMethod.delete();
@@ -537,6 +537,7 @@ function compressorsLoadUnload(){
 
         powerAtFullLoad: 166.5,
         capacityAtFullLoad: 1048,
+        receiverVolume: 1048/7.481,
         powerMax: 175.5,
         dischargePsiFullLoad:100,
         dischargePsiMax:110,
@@ -611,6 +612,7 @@ function compressorsModulationWithUnload(){
 
         powerAtFullLoad: 166.5,
         capacityAtFullLoad: 1048,
+        receiverVolume: 1048/7.481,
         powerMax: 175.5,
         dischargePsiFullLoad:100,
         dischargePsiMax:110,
