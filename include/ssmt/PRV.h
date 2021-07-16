@@ -344,6 +344,7 @@ private:
 class PrvCastDesuperheating
 {
 public :
+    PrvCastDesuperheating(){}
     std::shared_ptr<PrvWithDesuperheating> Cast (std::shared_ptr<PrvWithoutDesuperheating> prvWithout){
         return std::static_pointer_cast<PrvWithDesuperheating>(prvWithout);
     }

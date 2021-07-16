@@ -249,6 +249,7 @@ void compressorsLoadUnload(Compressors::CompressorType compressorType, Compresso
 {
     const double powerAtFullLoad = getDouble("powerAtFullLoad", inp);
     const double capacityAtFullLoad = getDouble("capacityAtFullLoad", inp);
+    const double receiverVolume = getDouble("receiverVolume", inp);
 
     const int computeFrom = getInteger("computeFrom");
     const double computeFromVal = getDouble("computeFromVal", inp);
@@ -260,7 +261,7 @@ void compressorsLoadUnload(Compressors::CompressorType compressorType, Compresso
     const double modulatingPsi = getDouble("modulatingPsi", inp);
     const double loadFactorUnloaded = getDouble("loadFactorUnloaded", inp);
     const double atmosphericPsi = getDouble("atmosphericPsi", inp);
-    auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi);
+    auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi);
 
     if(applyPressureInletCorrection) {
         const double capacity = getDouble("capacity", inp);
@@ -309,6 +310,7 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
 {
     const double powerAtFullLoad = getDouble("powerAtFullLoad", inp);
     const double capacityAtFullLoad = getDouble("capacityAtFullLoad", inp);
+    const double receiverVolume = getDouble("receiverVolume", inp);
 
     const int computeFrom = getInteger("computeFrom");
     const double computeFromVal = getDouble("computeFromVal", inp);
@@ -320,7 +322,7 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
     const double dischargePsiMax = getDouble("dischargePsiMax", inp);
     const double modulatingPsi = getDouble("modulatingPsi", inp);
     const double atmosphericPsi = getDouble("atmosphericPsi", inp);
-    auto compMethod = Compressors_ModulationWithUnload(powerAtFullLoad, capacityAtFullLoad, powerMax, powerAtNolLoad, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, atmosphericPsi);
+    auto compMethod = Compressors_ModulationWithUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, powerAtNolLoad, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, atmosphericPsi);
 
     if(applyPressureInletCorrection) {
         const double capacity = getDouble("capacity", inp);

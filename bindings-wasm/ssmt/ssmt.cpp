@@ -127,7 +127,8 @@ EMSCRIPTEN_BINDINGS(prvWithoutDesuperheating)
         .function("getInletMassFlow", &PrvWithoutDesuperheating::getInletMassFlow)
         .function("getInletEnergyFlow", &PrvWithoutDesuperheating::getInletEnergyFlow)
         .function("getOutletMassFlow", &PrvWithoutDesuperheating::getOutletMassFlow)
-        .function("getOutletEnergyFlow", &PrvWithoutDesuperheating::getOutletEnergyFlow);
+        .function("getOutletEnergyFlow", &PrvWithoutDesuperheating::getOutletEnergyFlow)
+        .function("isWithDesuperheating", &PrvWithoutDesuperheating::isWithDesuperheating);
 }
 // prvWithDesuperheating
 EMSCRIPTEN_BINDINGS(prvWithDesuperheating)
@@ -143,12 +144,14 @@ EMSCRIPTEN_BINDINGS(prvWithDesuperheating)
         .function("getOutletEnergyFlow", &PrvWithDesuperheating::getOutletEnergyFlow)
         .function("getFeedwaterProperties", &PrvWithDesuperheating::getFeedwaterProperties)
         .function("getFeedwaterMassFlow", &PrvWithDesuperheating::getFeedwaterMassFlow)
-        .function("getFeedwaterEnergyFlow", &PrvWithDesuperheating::getFeedwaterEnergyFlow);
+        .function("getFeedwaterEnergyFlow", &PrvWithDesuperheating::getFeedwaterEnergyFlow)
+        .function("isWithDesuperheating", &PrvWithDesuperheating::isWithDesuperheating);
 }
 //prvCastDesuperheating
 EMSCRIPTEN_BINDINGS(PrvCastDesuperheating)
 {
     class_<PrvCastDesuperheating>("PrvCastDesuperheating")
+        .constructor<>()
         .function("Cast", &PrvCastDesuperheating::Cast);
 }
 // deaerator

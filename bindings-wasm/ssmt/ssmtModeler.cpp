@@ -152,8 +152,7 @@ EMSCRIPTEN_BINDINGS(steamModeler)
 
     //HeaderNotHighestPressure
     class_<HeaderNotHighestPressure, emscripten::base<HeaderWithPressure>>("HeaderNotHighestPressure")
-        .constructor<double, double, double, double, bool, bool, double>()
-        .smart_ptr<std::shared_ptr<HeaderNotHighestPressure>>("HeaderNotHighestPressure");
+        .smart_ptr_constructor("HeaderNotHighestPressure", &std::make_shared<HeaderNotHighestPressure, double, double, double, double, bool, bool, double>);
 
     //HeaderInput
     class_<HeaderInput>("HeaderInput")

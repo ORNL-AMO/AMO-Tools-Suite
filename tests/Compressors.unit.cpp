@@ -300,7 +300,7 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a C
     CHECK(resSS.PerkW == Approx(1.04362));
     CHECK(resSS.C_Per == Approx(1.01816));
 
-    auto cLUL = Compressors_LoadUnload(166.5, 1048, 175.5, 100, 110, 5, 10.1, 14.7, Compressors::Screw, Compressors::Injected);
+    auto cLUL = Compressors_LoadUnload(166.5, 1048, 1048/ 7.481, 175.5, 100, 110, 5, 10.1, 14.7, Compressors::Screw, Compressors::Injected);
     auto resLUL = cLUL.calculateFromPerkW(0.94);
     CHECK(resLUL.kW_Calc == Approx(156.51));
     CHECK(resLUL.C_Calc == Approx(967.788));
@@ -327,7 +327,7 @@ TEST_CASE( "Calculate estimated power(kW) consumption and air flow(acfm) for a C
     CHECK(resLUL.PerkW == Approx(0.56458));
     CHECK(resLUL.C_Per == Approx(0.547937));
 
-    auto cMUL = Compressors_ModulationWithUnload(166.5, 1048, 175.5, 107.5,100, 110, 5, 14.7);
+    auto cMUL = Compressors_ModulationWithUnload(166.5, 1048, 1048/7.481, 175.5, 107.5,100, 110, 5, 14.7);
     auto resMUL = cMUL.calculateFromPerkW(0.94);
     CHECK(resMUL.kW_Calc == Approx(156.51));
     CHECK(resMUL.C_Calc == Approx(972.0644));
