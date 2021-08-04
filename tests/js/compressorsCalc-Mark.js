@@ -10,7 +10,7 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
         adjustForDischargePressure: false,
         applyPressureInletCorrection: false,
         atmosphericPsi: 14.7,
-        blowdownTime: 50,
+        blowdownTime: .0003,
         capacityAtFullLoad: 473,
         // capacityAtMaxFullFlow: 65,
         // capacityAtUnload: 33,

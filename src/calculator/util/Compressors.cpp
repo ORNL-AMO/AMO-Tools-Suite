@@ -174,6 +174,7 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
     const double C_ul = C_fl * PerC_ul / 100;
     const double kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
     const double P_ul = P_max + (1 - C_ul / C_fl) * P_mod;
+    
     const double t_bdc = t_blowdown / log(1 / a_tol);
     const double t_spc = t_sdt / log(1 / a_tol);
 
