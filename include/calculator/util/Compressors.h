@@ -776,21 +776,6 @@ public:
         kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul)
     {
 
-        // std::cout << "kW_fl: " <<  kW_fl << std::endl;
-        // std::cout << "C_fl: " <<  C_fl << std::endl;
-        // std::cout << "kW_max: " <<  kW_max << std::endl;
-        // std::cout << "P_fl: " <<  P_fl << std::endl;
-        // std::cout << "P_max: " <<  P_max << std::endl;
-        // std::cout << "P_mod: " <<  P_mod << std::endl;
-        // std::cout << "lf_ul: " <<  lf_ul << std::endl;
-            
-        // std::cout << "lf_nl: " <<  lf_nl << std::endl;
-        // std::cout << "PerC_ul: " <<  PerC_ul << std::endl;
-        // std::cout << "kW_nl: " <<  kW_nl << std::endl;
-        // std::cout << "C_storage: " <<  C_storage << std::endl;
-        // std::cout << "t_blowdown: " <<  t_blowdown << std::endl;
-        // std::cout << "P_sump_ul: " <<  P_sump_ul << std::endl;
-
         if (CompType == CompressorType::Screw && LubricantType == Lubricant::None)
             throw std::invalid_argument("Lubricant needs to be Injected or free for Screw Compressor Type");
 

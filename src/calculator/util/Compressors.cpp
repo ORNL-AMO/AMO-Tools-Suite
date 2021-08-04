@@ -213,13 +213,25 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
         {
             if (C_curve < C_ul)
             {
-                t_rmod = P_mod * C_storage / P_atm / C_fl * log((C_fl - C_curve) / (C_ul - C_curve)) * 60;
+                t_rmod = ((P_mod * C_storage) / (P_atm * C_fl)) * log((C_fl - C_curve) / (C_ul - C_curve)) * 60;
+                std::cout << "t_rmod: " << t_rmod << std::endl;
                 if (t_rmod == 0)
                     t_rmod = 1;
 
-                const double P_avg_mod = (P_max + P_mod - C_curve * P_mod / C_fl) +
-                                         (C_curve * P_mod / C_fl - P_mod) * (P_mod * C_storage / P_atm * C_fl) *
-                                             (1 - exp(-P_atm * C_fl / P_mod / C_storage * t_rmod / 60)) / t_rmod * 60;
+    
+                const double p_avg_mod_1 = (P_max + P_mod - C_curve * P_mod / C_fl);
+                const double p_avg_mod_2 = (C_curve * P_mod / C_fl - P_range);
+                const double p_avg_mod_3 = ((P_mod / P_atm) * (C_storage / C_fl));
+                const double p_avg_mod_4 = (1- exp(-(P_atm / P_mod)* (C_fl / C_storage)*(t_rmod / 60) )) / (t_rmod * 60);
+                const double P_avg_mod = p_avg_mod_1 + p_avg_mod_2 * p_avg_mod_3 * p_avg_mod_4;
+
+                // const double P_avg_mod = (P_max + P_mod - C_curve * P_mod / C_fl) +
+                //                          (C_curve * P_mod / C_fl - P_range) * ((P_mod / P_atm) *  (C_storage / C_fl)) *
+                //                              (1 - exp(-P_atm * C_fl / P_mod / C_storage * t_rmod / 60)) / t_rmod * 60;
+
+                // std::cout << "P_avg_mod_test: " << P_avg_mod_test << std::endl;
+                // std::cout << "P_avg_mod: " << P_avg_mod << std::endl;
+                
                 kW_avg_mod = (kW_max - kW_maxmod) * pow((P_max + P_mod - P_avg_mod) / P_avg_mod, mod_exp) + kW_maxmod;
             }
             else
@@ -228,7 +240,14 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
             }
         }
 
-        double kW_curve = C_curve == C_ul ? kW_fl : kW_avg_mod;
+        // double kW_curve = C_curve == C_ul ? kW_fl : kW_avg_mod;
+        double kW_curve;
+        // if(C_curve == C_ul){
+        //     kW_curve = kW_fl;
+        // }else{
+        //     kW_curve = kW_avg_mod;
+        // }
+
         if (C_curve < C_ul)
         {
             const double t_dd = C_storage * 60 * ((P_ul - P_fl) / (C_curve * P_atm));
@@ -253,8 +272,24 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
             const double t_rpu = 60 * C_storage * (P_max - P_fl + t_rl / 60 * P_atm * C_curve / C_storage) / (P_atm * (C_storage - C_curve));
             const double kW_avg_rpu = ((1 - P_atm * C_curve * t_rl / (C_storage * 60 * 200)) * kW_fl + kW_max) / 2;
 
-            kW_curve = (t_bd * kW_avg_bd + t_ol * kW_avg_ol + t_rl * kW_avg_rl + t_rpu * kW_avg_rpu + ((C_ul != C_fl) ? t_rmod * kW_avg_mod : 0)) /
-                       (t_bd + t_ol + t_rl + t_rpu + (C_ul != C_fl ? (t_rmod == 0 ? 1 : t_rmod) : 1));
+            // kW_curve = (t_bd * kW_avg_bd + t_ol * kW_avg_ol + t_rl * kW_avg_rl + t_rpu * kW_avg_rpu + ((C_ul != C_fl) ? t_rmod * kW_avg_mod : 0)) /
+            //            (t_bd + t_ol + t_rl + t_rpu + (C_ul != C_fl ? (t_rmod == 0 ? 1 : t_rmod) : 1));
+
+            double kW_bd = t_bd * kW_avg_bd;
+            double kW_ol = t_ol * kW_avg_ol;
+            double kW_rl = t_rl * kW_avg_rl;
+            double kW_rpu = t_rpu * kW_avg_rpu;
+            double kW_r_mod;
+            if(C_ul != C_fl){
+                kW_r_mod = t_rmod * kW_avg_mod;
+            }else{
+                kW_r_mod = 0;
+            }
+
+            double t_cycle = t_bd + t_ol + t_rl + t_rpu + t_rmod;
+            kW_curve = (kW_bd + kW_ol + kW_rl + kW_rpu + kW_r_mod) / t_cycle;
+        }else{
+            kW_curve = kW_avg_mod;
         }
 
         PerCapacity.push_back(C_curve / C_fl);
