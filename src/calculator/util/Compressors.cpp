@@ -192,17 +192,11 @@ CompressorsBase::Output Compressors_StartStop::calculateFromVIPFMeasured(double 
 double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
 {
     const double kW_maxmod = lf_fl * kW_max;
-    // std::cout << "kW_fl: " << kW_fl << std::endl;
-    // std::cout << "lf_nl: " << lf_nl << std::endl;
     const double kW_nl = lf_nl * kW_fl;
-    // std::cout << "kW_nl: " << kW_nl << std::endl;
     const double C_ul = C_fl * PerC_ul / 100;
     const double kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
     const double P_ul = P_max + (1 - C_ul / C_fl) * P_mod;
-    // std::cout << "a_tol: " << a_tol << std::endl;
-    // std::cout << "t_blowdown: " << t_blowdown << std::endl;
     const double t_bdc = t_blowdown / log(1 / a_tol);
-    // std::cout << "t_bdc: " << t_bdc << std::endl;
 
     const double t_spc = t_sdt / log(1 / a_tol);
 
@@ -238,44 +232,30 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
         if (C_curve < C_ul)
         {
             const double t_dd = C_storage * 60 * ((P_ul - P_fl) / (C_curve * P_atm));
-            // std::cout << "t_dd: " << t_dd << std::endl;
             const double t_bd = std::min(t_blowdown, t_dd);
-            // std::cout << "t_bd: " << t_bd << std::endl;
             const double P_sump_bla = P_sump_ul + (P_ul - P_sump_ul) * exp(-t_bd / t_bdc);
 
             double kW_min_bd = 0;
             if (t_bd == t_blowdown)
             {
                 kW_min_bd = kW_nl;
-                // std::cout << "kW_min_bd 1: " << kW_min_bd << std::endl;
             }
             else
             {
-                // std::cout << "kW_ul: " << kW_ul << std::endl;
-                // std::cout << "kW_maxmod: " << kW_maxmod << std::endl;
-                // std::cout << "exp(-t_bd / t_spc): " << exp(-t_bd / t_spc) << std::endl;
-                // std::cout << "exp(-t_bd / t_bdc): " << exp(-t_bd / t_bdc) << std::endl;
-                // std::cout << "exp(t_bd / t_spc): " << exp(t_bd / t_spc) << std::endl;
-                // std::cout << "exp(t_bd / t_bdc): " << exp(t_bd / t_bdc) << std::endl;
                 kW_min_bd = kW_nl + ((((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * exp(-t_bd / t_bdc));
-                // std::cout << "kW_min_bd 2: " << kW_min_bd << std::endl;
             }
-            //  = kW_nl + ((t_bd == t_blowdown) ? 0 : ((((kW_ul - kW_maxmod) * exp(t_bd / t_spc) + kW_maxmod) - kW_nl) * exp(t_bd / t_bdc)));
             const double kW_avg_bd = (kW_nl + ((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod - kW_nl) * (1 - exp(-t_bd / t_bdc)) * t_bdc / t_bd);
 
             const double t_ol = t_dd - t_bd;
-            const double kW_avg_ol = kW_nl;
+            const double kW_avg_ol = kW_fl * lf_nl;
             const double t_rl = t_reload * (P_ul - P_sump_bla) / (P_ul - (P_ul - P_sump_ul) * a_tol);
             const double kW_avg_rl = (kW_min_bd + kW_fl) / 2;
-            const double t_rpu = 60 * C_storage * (P_max - P_fl + t_rl / 60 * P_atm * C_curve / C_storage) / (P_atm * (C_fl - C_curve));
+            const double t_rpu = 60 * C_storage * (P_max - P_fl + t_rl / 60 * P_atm * C_curve / C_storage) / (P_atm * (C_storage - C_curve));
             const double kW_avg_rpu = ((1 - P_atm * C_curve * t_rl / (C_storage * 60 * 200)) * kW_fl + kW_max) / 2;
 
             kW_curve = (t_bd * kW_avg_bd + t_ol * kW_avg_ol + t_rl * kW_avg_rl + t_rpu * kW_avg_rpu + ((C_ul != C_fl) ? t_rmod * kW_avg_mod : 0)) /
                        (t_bd + t_ol + t_rl + t_rpu + (C_ul != C_fl ? (t_rmod == 0 ? 1 : t_rmod) : 1));
-            // std::cout << "kW_curve: " <<  kW_curve << std::endl;
         }
-        // std::cout << "kW_curve / kW_fl: " <<  kW_curve / kW_fl << std::endl;
-        // std::cout << "C_curve / C_fl: " <<  C_curve / C_fl << std::endl;
 
         PerCapacity.push_back(C_curve / C_fl);
         PerPower.push_back(kW_curve / kW_fl);

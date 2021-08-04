@@ -799,12 +799,12 @@ public:
                 //From Test data sheet
                 //lf_fl = 1.00;
                 // t_blowdown = 0.001;
-                t_sdt = 1.956;
+                // t_sdt = 1.956;
 
                 //From Algorithm doc
                 //t_blowdown = 20;
-                //t_sdt = 2;
-                //t_reload = 3;
+                t_sdt = 2;
+                t_reload = 3;
             }
             else if (LubricantType == Lubricant::Free) {
 
