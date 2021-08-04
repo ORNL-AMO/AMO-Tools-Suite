@@ -18,7 +18,7 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
         computeFrom: 1,
         computeFromPFAmps: 0,
         computeFromPFVoltage: 0,
-        computeFromVal: 0,
+        computeFromVal: .49,
         controlType: 1,
         dischargePsiFullLoad: 175,
         dischargePsiMax: 175,
@@ -40,5 +40,5 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
     var results = bindings.CompressorsCalc(input);
     results.percentagePower = results.percentagePower * 100;
     console.log('perc capacity: ' + results.percentagePower);
-    t.equal(results.percentagePower, 21.858);
+    t.equal(results.percentagePower, 75);
 });
