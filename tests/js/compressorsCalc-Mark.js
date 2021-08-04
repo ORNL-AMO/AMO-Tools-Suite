@@ -2,26 +2,15 @@ const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../')
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'compressorsCalc'});
 
-function rnd(value) {
-    return Number(Math.round(value + 'e' + 2) + 'e-' + 2);
-}
-
 test('CompressorsCalcCentrifugal LoadUnload', function (t) {
-    t.plan(5);
+    t.plan(2);
     t.type(bindings.CompressorsCalc, 'function');
-
-    var compare = function(results, expected) {
-        t.equal(rnd(results.powerCalculated), rnd(expected[0]));
-        t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
-        t.equal(rnd(results.percentagePower), rnd(expected[2]));
-        t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
-    };
 
     var input = {
         adjustForDischargePressure: false,
         applyPressureInletCorrection: false,
         atmosphericPsi: 14.7,
-        blowdownTime: 5.003,
+        blowdownTime: 50,
         capacityAtFullLoad: 65,
         capacityAtMaxFullFlow: 65,
         capacityAtUnload: 33,
@@ -46,8 +35,10 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
         receiverVolume: 13.3680624455617,
         stageType: 0,
         unloadPointCapacity: 50,
-        unloadSumpPressure: 17
+        unloadSumpPressure: 15
     };
-
-    compare(bindings.CompressorsCalc(input), [162.828, 753.84, 0.36, 0.24]);
+    var results = bindings.CompressorsCalc(input);
+    results.percentagePower = results.percentagePower * 100;
+    console.log('perc capacity: ' + results.percentagePower);
+    t.equal(results.percentagePower, 21.858);
 });
