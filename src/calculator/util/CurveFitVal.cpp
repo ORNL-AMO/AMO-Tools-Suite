@@ -14,7 +14,7 @@
 #include <cmath>
 #include <vector>
 #include "calculator/util/CurveFitVal.h"
-
+#include <iostream>
 /**
  * Given a set of x and y coordinates and degree of polynomial curve to fit, it calculates the curve fit value
  * for a particular x coordinate value (read load factor here).
@@ -27,7 +27,9 @@ double CurveFitVal::calculate() const {
 double CurveFitVal::calculate(double fitValue) const {
     double curveFitVal = 0;
     for (std::size_t i = 0; i < pdegree + 1; ++i) {
+        std::cout << " coeff[i]: " <<  coeff[i] << std::endl;
         curveFitVal += coeff[i] * std::pow(fitValue, i);
+        std::cout << "curveFitVal: " <<  curveFitVal << std::endl;
     }
     return curveFitVal;
 }
