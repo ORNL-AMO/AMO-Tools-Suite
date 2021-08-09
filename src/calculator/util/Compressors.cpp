@@ -191,11 +191,19 @@ CompressorsBase::Output Compressors_StartStop::calculateFromVIPFMeasured(double 
 
 double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
 {
+
     const double kW_maxmod = lf_fl * kW_max;
-    // const double kW_nl = lf_nl * kW_fl;
+    std::cout << "lf_fl: " << lf_fl << std::endl;
+    std::cout << "kW_max: " << kW_max << std::endl;
+    const double kW_nl = lf_nl * kW_fl;
+    std::cout << "lf_nl: " << lf_nl << std::endl;
+    std::cout << "kW_fl: " << kW_fl << std::endl;
+    std::cout << "C_fl: " << C_fl << std::endl;
     const double C_ul = C_fl * PerC_ul / 100;
     const double kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
+    std::cout << "kW_ul: " << kW_ul << std::endl;
     const double P_ul = P_max + (1 - C_ul / C_fl) * P_mod;
+    std::cout << "P_max: " << P_max << std::endl;
     const double t_bdc = t_blowdown / log(1 / a_tol);
 
     const double t_spc = t_sdt / log(1 / a_tol);
@@ -214,10 +222,10 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
             if (C_curve < C_ul)
             {
                 t_rmod = ((P_mod * C_storage) / (P_atm * C_fl)) * log((C_fl - C_curve) / (C_ul - C_curve)) * 60;
-                // if (t_rmod == 0)
-                // {
-                //     t_rmod = 1;
-                // }
+                if (t_rmod == 0)
+                {
+                    t_rmod = 1;
+                }
 
                 const double p_avg_mod_1 = (P_max + P_mod - C_curve * P_mod / C_fl);
                 const double p_avg_mod_2 = (C_curve * P_mod / C_fl - P_range);

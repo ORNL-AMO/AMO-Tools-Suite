@@ -264,23 +264,39 @@ void compressorsStartStop(Compressors::CompressorType compressorType, Compressor
 void compressorsLoadUnload(Compressors::CompressorType compressorType, Compressors::ControlType controlType, Compressors::Stage stageType, Compressors::Lubricant lubricantType)
 {
     const double powerAtFullLoad = getDouble("powerAtFullLoad", inp);
+    std::cout << "powerAtFullLoad: " << powerAtFullLoad << std::endl;
     const double capacityAtFullLoad = getDouble("capacityAtFullLoad", inp);
+    std::cout << "capacityAtFullLoad: " << capacityAtFullLoad << std::endl;
     const double receiverVolume = getDouble("receiverVolume", inp);
+    std::cout << "receiverVolume: " << receiverVolume << std::endl;
 
     const int computeFrom = getInteger("computeFrom");
     const double computeFromVal = getDouble("computeFromVal", inp);
     const bool applyPressureInletCorrection = getBool("applyPressureInletCorrection");
 
     const double powerMax = getDouble("powerMax", inp);
+    std::cout << "powerMax: " << powerMax << std::endl;
     const double dischargePsiFullLoad = getDouble("dischargePsiFullLoad", inp);
+    std::cout << "dischargePsiFullLoad: " << dischargePsiFullLoad << std::endl;
     const double dischargePsiMax = getDouble("dischargePsiMax", inp);
+    std::cout << "dischargePsiMax: " << dischargePsiMax << std::endl;
     const double modulatingPsi = getDouble("modulatingPsi", inp);
+    std::cout << "modulatingPsi: " << modulatingPsi << std::endl;
     const double loadFactorUnloaded = getDouble("loadFactorUnloaded", inp);
+    std::cout << "loadFactorUnloaded: " << loadFactorUnloaded << std::endl;
     const double atmosphericPsi = getDouble("atmosphericPsi", inp);
+    std::cout << "atmosphericPsi: " << atmosphericPsi << std::endl;
     const double unloadPointCapacity = getDouble("unloadPointCapacity", inp);
+    std::cout << "unloadPointCapacity: " << unloadPointCapacity << std::endl;
     const double powerAtNolLoad = getDouble("powerAtNolLoad", inp);
+    std::cout << "powerAtNolLoad: " << powerAtNolLoad << std::endl;
     const double blowdownTime = getDouble("blowdownTime", inp);
+    std::cout << "blowdownTime: " << blowdownTime << std::endl;
     const double unloadSumpPressure = getDouble("unloadSumpPressure", inp);
+    std::cout << "unloadSumpPressure: " << unloadSumpPressure << std::endl;
+
+    
+    std::cout << "LOAD UNLOAD CALCULATOR" << std::endl;
     auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi, compressorType, lubricantType, controlType, powerAtNolLoad, unloadPointCapacity, blowdownTime, unloadSumpPressure);
 
     if (applyPressureInletCorrection)
@@ -317,6 +333,8 @@ void compressorsLoadUnload(Compressors::CompressorType compressorType, Compresso
 
     else
         ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+
+    std::cout << "=================" << std::endl;
 
     setR("reRatedFlow", compMethod.C_fl_Adjusted);
     setR("reRatedPower", compMethod.kW_fl_Adjusted);
