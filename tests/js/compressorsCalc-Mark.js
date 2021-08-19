@@ -53,32 +53,32 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
         capacityAtFullLoad: 29,
         capacityAtMaxFullFlow: 29,
         capacityAtUnload: undefined,
-        compressorType: 1,
+        compressorType: 1, //screw
         computeFrom: 1,
         computeFromPFAmps: 0,
         computeFromPFVoltage: 0,
         computeFromVal: 1,
-        controlType: 0,
+        controlType: 0, //loadUnload
         dischargePsiFullLoad: 175,
         dischargePsiMax: 185,
         loadFactorUnloaded: 1,
-        lubricantType: 0,
+        lubricantType: 0, //injected
         modulatingPsi: -9999,
         // modulatingPsi: 10,
         powerAtFullLoad: 9.1,
         powerAtFullLoadPercentage: 1,
-        powerAtNoLoad: 0,
-        powerAtNolLoad: 0,
+        powerAtNoLoad: 2.5,
+        powerAtNolLoad: 2.5,
         powerAtUnload: undefined,
         powerMax: 9.3,
         powerMaxPercentage: 1.0219780219780221,
         receiverVolume: 13.3680624455617,
-        stageType: 0,
+        stageType: 0, //single
         unloadPointCapacity: 100,
         unloadSumpPressure: 15
     };
 
-    input.computeFromVal = .0;
+    input.computeFromVal = .1;
     var results = bindings.CompressorsCalc(input);
     results.percentagePower = results.percentagePower * 100;
     console.log('perc capacity: ' + results.percentagePower);

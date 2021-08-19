@@ -193,17 +193,10 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
 {
 
     const double kW_maxmod = lf_fl * kW_max;
-    std::cout << "lf_fl: " << lf_fl << std::endl;
-    std::cout << "kW_max: " << kW_max << std::endl;
     const double kW_nl = lf_nl * kW_fl;
-    std::cout << "lf_nl: " << lf_nl << std::endl;
-    std::cout << "kW_fl: " << kW_fl << std::endl;
-    std::cout << "C_fl: " << C_fl << std::endl;
     const double C_ul = C_fl * PerC_ul / 100;
     const double kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
-    std::cout << "kW_ul: " << kW_ul << std::endl;
-    const double P_ul = P_max + (1 - C_ul / C_fl) * P_mod;
-    std::cout << "P_max: " << P_max << std::endl;
+    const double P_ul = P_max + (1 - (C_ul / C_fl)) * P_mod;
     const double t_bdc = t_blowdown / log(1 / a_tol);
 
     const double t_spc = t_sdt / log(1 / a_tol);
@@ -246,7 +239,7 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
         if (C_curve < C_ul)
         {
             //kw_bd
-            const double t_dd = C_storage * 60 * ((P_ul - P_fl) / (C_curve * P_atm));
+            const double t_dd = C_storage * 60 * (P_ul - P_fl) / (C_curve * P_atm);
             const double t_bd = std::min(t_blowdown, t_dd);
             const double kW_avg_bd = kW_nl + (((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * ((1 - exp(-t_bd / t_bdc)) * (t_bdc / t_bd));
             double kW_bd = t_bd * kW_avg_bd;
@@ -255,7 +248,6 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
             const double t_ol = t_dd - t_bd;
             const double kW_avg_ol = kW_fl * lf_nl;
             double kW_ol = t_ol * kW_avg_ol;
-
             //kW_rl
             const double P_sump_bla = P_sump_ul + (P_ul - P_sump_ul) * exp(-t_bd / t_bdc);
             const double t_rl = t_reload * ((P_ul - P_sump_bla) / ((P_ul - (P_ul - P_sump_ul) * a_tol)));
@@ -269,10 +261,11 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
                 kW_min_bd = kW_nl + ((((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * exp(-t_bd / t_bdc));
             }
             const double kW_avg_rl = (kW_min_bd + kW_fl) / 2;
+
             double kW_rl = t_rl * kW_avg_rl;
 
             //kW_rpu
-            const double t_rpu = 60 * C_storage * ((P_max - P_fl + t_rl / 60 * P_atm * (C_curve / C_storage)) / (P_atm * (C_storage - C_curve)));
+            const double t_rpu = 60 * C_storage * ((P_max - P_fl + (t_rl / 60) * P_atm * (C_curve / C_storage)) / (P_atm * (C_fl - C_curve)));
             const double kW_avg_rpu = ((1 - (P_atm * C_curve * t_rl) / (C_storage * 60 * 200)) * kW_fl + kW_max) / 2;
             double kW_rpu = t_rpu * kW_avg_rpu;
 
@@ -339,7 +332,6 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerkW(double PerkW)
 
 CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
 {
-    std::cout << "CPer: " << CPer << std::endl;
     if (CPer == 1)
         return Output(kW_fl, C_fl * CPer, 1, CPer);
 
@@ -349,12 +341,10 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         double C_ul = C_fl * PerC_ul / 100;
         if (C_fl * CPer >= C_ul)
         {
-            std::cout << "Calc modulation with unload" << std::endl;
             return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_max * lf_fl, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false).calculateFromPerC(CPer);
         }
     }
 
-    std::cout << "PerkW: " << PerkW << std::endl;
     return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }
 
