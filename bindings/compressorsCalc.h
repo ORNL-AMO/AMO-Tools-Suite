@@ -281,6 +281,8 @@ void compressorsLoadUnload(Compressors::CompressorType compressorType, Compresso
     const double powerAtNolLoad = getDouble("powerAtNolLoad", inp);
     const double blowdownTime = getDouble("blowdownTime", inp);
     const double unloadSumpPressure = getDouble("unloadSumpPressure", inp);
+
+    
     auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi, compressorType, lubricantType, controlType, powerAtNolLoad, unloadPointCapacity, blowdownTime, unloadSumpPressure);
 
     if (applyPressureInletCorrection)
@@ -388,7 +390,6 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
     else
         ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
-    std::cout << "=================" << std::endl;
     setR("reRatedFlow", compMethod.C_fl_Adjusted);
     setR("reRatedPower", compMethod.kW_fl_Adjusted);
     setR("reRatedFlowMax", compMethod.C_max_Adjusted);

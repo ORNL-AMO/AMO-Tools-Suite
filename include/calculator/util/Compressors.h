@@ -792,7 +792,7 @@ public:
                 t_reload = 3;
             }
             else if (LubricantType == Lubricant::Free) {
-
+                
             }
         }
         else if (CompType == CompressorType::Reciprocating) {
