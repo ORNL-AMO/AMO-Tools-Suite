@@ -195,6 +195,9 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
     const double kW_maxmod = lf_fl * kW_max;
     const double kW_nl = lf_nl * kW_fl;
     const double C_ul = C_fl * PerC_ul / 100;
+    
+            std::cout << "C_ul: " << C_ul << std::endl;
+            std::cout << "C_fl: " << C_fl << std::endl;
     const double kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
     const double P_ul = P_max + (1 - (C_ul / C_fl)) * P_mod;
     const double t_bdc = t_blowdown / log(1 / a_tol);
@@ -303,11 +306,11 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
         }
     } while (C_curve >= 0);
 
-    if (capacityVPower)
-    {
-        CurveFitVal curveFitValCap(PerCapacity, PerPower, 4);
-        return curveFitValCap.calculate(value);
-    }
+    // if (capacityVPower)
+    // {
+    //     CurveFitVal curveFitValCap(PerCapacity, PerPower, 4);
+    //     return curveFitValCap.calculate(value);
+    // }
 
     CurveFitVal curveFitValCap(PerPower, PerCapacity, 6);
     return curveFitValCap.calculate(value);
@@ -335,7 +338,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
     if (CPer == 1)
         return Output(kW_fl, C_fl * CPer, 1, CPer);
 
-    double PerkW = CurveFit(CPer, true);
+    double PerkW = CurveFit(CPer, false);
     if (CntrlType == ControlType::ModulationUnload || CntrlType == ControlType::VariableDisplacementUnload)
     {
         double C_ul = C_fl * PerC_ul / 100;
