@@ -318,7 +318,6 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerkW(double PerkW)
     if (PerkW == 1)
         return Output(PerkW * kW_fl, C_fl, PerkW, 1);
 
-    const double CPer = CurveFit(PerkW, false);
     if (CntrlType == ControlType::ModulationUnload || CntrlType == ControlType::VariableDisplacementUnload)
     {
         const double mffp = kW_max * lf_fl;
@@ -327,6 +326,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerkW(double PerkW)
             return Compressors_ModulationWOUnload(kW_fl, C_fl, mffp, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false).calculateFromPerkW(PerkW);
     }
 
+    const double CPer = CurveFit(PerkW, false);
     return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }
 
@@ -335,7 +335,6 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
     if (CPer == 1)
         return Output(kW_fl, C_fl * CPer, 1, CPer);
 
-    double PerkW = CurveFit(CPer, true);
     if (CntrlType == ControlType::ModulationUnload || CntrlType == ControlType::VariableDisplacementUnload)
     {
         double C_ul = C_fl * PerC_ul / 100;
@@ -344,7 +343,103 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
             return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_max * lf_fl, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false).calculateFromPerC(CPer);
         }
     }
+    std::cout << "C_fl" << C_fl << std::endl;
+    std::cout << "CPer" << CPer << std::endl;
+    double C_curve = C_fl * CPer;
+    std::cout << "C_curve" << C_curve << std::endl;
+    const double kW_maxmod = lf_fl * kW_max;
+    const double kW_nl = lf_nl * kW_fl;
+    const double C_ul = C_fl * PerC_ul / 100;
+    const double kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
+    const double P_ul = P_max + (1 - (C_ul / C_fl)) * P_mod;
+    const double t_bdc = t_blowdown / log(1 / a_tol);
 
+    const double t_spc = t_sdt / log(1 / a_tol);
+
+    double t_rmod = 0;
+    //calculate kW_avg_mod
+    double kW_avg_mod = 0;
+    if (C_ul != C_fl)
+    {
+        if (C_curve < C_ul)
+        {
+            t_rmod = ((P_mod * C_storage) / (P_atm * C_fl)) * log((C_fl - C_curve) / (C_ul - C_curve)) * 60;
+            if (t_rmod == 0)
+            {
+                t_rmod = 1;
+            }
+
+            const double p_avg_mod_1 = (P_max + P_mod - C_curve * P_mod / C_fl);
+            const double p_avg_mod_2 = (C_curve * P_mod / C_fl - P_range);
+            const double p_avg_mod_3 = ((P_mod / P_atm) * (C_storage / C_fl));
+            const double p_avg_mod_4 = (1 - exp((-P_atm / P_mod) * (C_fl / C_storage) * (t_rmod / 60))) / (t_rmod * 60);
+            const double P_avg_mod = p_avg_mod_1 + p_avg_mod_2 * p_avg_mod_3 * p_avg_mod_4;
+
+            kW_avg_mod = (kW_max - kW_maxmod) * pow((P_max + P_mod - P_avg_mod) / P_avg_mod, mod_exp) + kW_maxmod;
+        }
+        else
+        {
+            kW_avg_mod = (kW_max - kW_maxmod) * pow(C_curve / C_fl, mod_exp) + kW_maxmod;
+        }
+    }
+
+    //calculate kW_curve
+    double kW_curve;
+    if (C_curve < C_ul)
+    {
+        //kw_bd
+        const double t_dd = C_storage * 60 * (P_ul - P_fl) / (C_curve * P_atm);
+        const double t_bd = std::min(t_blowdown, t_dd);
+        const double kW_avg_bd = kW_nl + (((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * ((1 - exp(-t_bd / t_bdc)) * (t_bdc / t_bd));
+        double kW_bd = t_bd * kW_avg_bd;
+
+        //kw_ol
+        const double t_ol = t_dd - t_bd;
+        const double kW_avg_ol = kW_fl * lf_nl;
+        double kW_ol = t_ol * kW_avg_ol;
+        //kW_rl
+        const double P_sump_bla = P_sump_ul + (P_ul - P_sump_ul) * exp(-t_bd / t_bdc);
+        const double t_rl = t_reload * ((P_ul - P_sump_bla) / ((P_ul - (P_ul - P_sump_ul) * a_tol)));
+        double kW_min_bd = 0;
+        if (t_bd == t_blowdown)
+        {
+            kW_min_bd = kW_nl;
+        }
+        else
+        {
+            kW_min_bd = kW_nl + ((((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * exp(-t_bd / t_bdc));
+        }
+        const double kW_avg_rl = (kW_min_bd + kW_fl) / 2;
+
+        double kW_rl = t_rl * kW_avg_rl;
+
+        //kW_rpu
+        const double t_rpu = 60 * C_storage * ((P_max - P_fl + (t_rl / 60) * P_atm * (C_curve / C_storage)) / (P_atm * (C_fl - C_curve)));
+        const double kW_avg_rpu = ((1 - (P_atm * C_curve * t_rl) / (C_storage * 60 * 200)) * kW_fl + kW_max) / 2;
+        double kW_rpu = t_rpu * kW_avg_rpu;
+
+        //kW_r_mod
+        double kW_r_mod;
+        if (C_ul != C_fl)
+        {
+            kW_r_mod = t_rmod * kW_avg_mod;
+        }
+        else
+        {
+            kW_r_mod = 0;
+        }
+
+        //kW_curve
+        double t_cycle = t_bd + t_ol + t_rl + t_rpu + t_rmod;
+        kW_curve = (kW_bd + kW_ol + kW_rl + kW_rpu + kW_r_mod) / t_cycle;
+    }
+    else
+    {
+        kW_curve = kW_avg_mod;
+    }
+
+    double PerkW = kW_curve / kW_fl;
+    // double PerkW = CurveFit(CPer, true);
     return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }
 
