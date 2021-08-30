@@ -78,10 +78,10 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
         unloadSumpPressure: 15
     };
 
-    input.computeFromVal = .51;
+    input.computeFromVal = .0;
     var results = bindings.CompressorsCalc(input);
     results.percentagePower = results.percentagePower * 100;
     console.log('perc capacity: ' + results.percentagePower);
-    t.equal(70, results.percentagePower);
+    t.equal(27, results.percentagePower);
 
 });

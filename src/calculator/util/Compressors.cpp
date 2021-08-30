@@ -343,10 +343,13 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
             return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_max * lf_fl, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false).calculateFromPerC(CPer);
         }
     }
-    std::cout << "C_fl" << C_fl << std::endl;
-    std::cout << "CPer" << CPer << std::endl;
+    std::cout << "C_fl: " << C_fl << std::endl;
+    std::cout << "CPer: " << CPer << std::endl;
     double C_curve = C_fl * CPer;
-    std::cout << "C_curve" << C_curve << std::endl;
+    if(C_curve == 0){
+        C_curve = .00000000001;
+    }
+    std::cout << "C_curve: " << C_curve << std::endl;
     const double kW_maxmod = lf_fl * kW_max;
     const double kW_nl = lf_nl * kW_fl;
     const double C_ul = C_fl * PerC_ul / 100;
@@ -389,6 +392,8 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
     {
         //kw_bd
         const double t_dd = C_storage * 60 * (P_ul - P_fl) / (C_curve * P_atm);
+
+        std::cout << "t_dd: " << t_dd << std::endl;
         const double t_bd = std::min(t_blowdown, t_dd);
         const double kW_avg_bd = kW_nl + (((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * ((1 - exp(-t_bd / t_bdc)) * (t_bdc / t_bd));
         double kW_bd = t_bd * kW_avg_bd;
@@ -431,7 +436,13 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
 
         //kW_curve
         double t_cycle = t_bd + t_ol + t_rl + t_rpu + t_rmod;
+        std::cout << "kW_bd: " << kW_bd << std::endl;
+        std::cout << "kW_ol: " << kW_ol << std::endl;
+        std::cout << "kW_rl: " << kW_rl << std::endl;
+        std::cout << "kW_rpu: " << kW_rpu << std::endl;
+        std::cout << "kW_r_mod: " << kW_r_mod << std::endl;
         kW_curve = (kW_bd + kW_ol + kW_rl + kW_rpu + kW_r_mod) / t_cycle;
+        std::cout << "kW_curve: " << kW_curve << std::endl;
     }
     else
     {
@@ -439,6 +450,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
     }
 
     double PerkW = kW_curve / kW_fl;
+    std::cout << "PerkW: " << PerkW << std::endl;
     // double PerkW = CurveFit(CPer, true);
     return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }
