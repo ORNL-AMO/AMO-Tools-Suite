@@ -289,23 +289,8 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
             kW_curve = kW_avg_mod;
         }
 
-        std::cout << "C_curve: " << C_curve << std::endl;
-        std::cout << "percent capacity: " << (C_curve / C_fl) * 100 << std::endl;
         PerCapacity.push_back(C_curve / C_fl);
-
-        if (C_curve != C_fl)
-        {
-            std::cout << "kW_curve: " << kW_curve << std::endl;
-            std::cout << "percent power: " << (kW_curve / kW_fl) * 100 << std::endl;
-            PerPower.push_back(1);
-        }
-        else
-        {
-            std::cout << "FIRST: " << std::endl;
-            std::cout << "percent power: " << 100 << std::endl;
-            PerPower.push_back(kW_curve / kW_fl);
-        }
-        std::cout << "========" << std::endl;
+        PerPower.push_back(kW_curve / kW_fl);
 
         if (C_curve == 0.0001)
         {
@@ -359,8 +344,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         }
     }
     double C_curve = C_fl * CPer;
-    if (C_curve == 0)
-    {
+    if(C_curve == 0){
         C_curve = .00000000001;
     }
     const double kW_maxmod = lf_fl * kW_max;
