@@ -147,10 +147,16 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
         noLoadPowerFM: .57
     }
 
-    input.computeFromVal = .40;
+    // input.computeFromVal = .40;
+    // var results = bindings.CompressorsCalc(input);
+    // results.percentagePower = results.percentagePower * 100;
+    // console.log('perc power: ' + results.percentagePower);
+    // t.equal(63.829, results.percentagePower);
+    input.computeFromVal = .64;
+    input.computeFrom = 0;
     var results = bindings.CompressorsCalc(input);
-    results.percentagePower = results.percentagePower * 100;
-    console.log('perc power: ' + results.percentagePower);
-    t.equal(63.829, results.percentagePower);
+    console.log('perc capacity: ' + results.percentageCapacity);
+    results.percentageCapacity = results.percentageCapacity * 100;
+    t.equal(40, results.percentageCapacity);
 
 });
