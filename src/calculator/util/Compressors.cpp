@@ -203,7 +203,7 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
 
     std::vector<double> PerCapacity;
     std::vector<double> PerPower;
-    const double decrementC = C_fl / 75;
+    const double decrementC = C_fl / 76;
     double C_curve = C_fl;
     do
     {
@@ -297,13 +297,13 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
         {
             std::cout << "kW_curve: " << kW_curve << std::endl;
             std::cout << "percent power: " << (kW_curve / kW_fl) * 100 << std::endl;
-            PerPower.push_back(1);
+            PerPower.push_back(kW_curve / kW_fl);
         }
         else
         {
             std::cout << "FIRST: " << std::endl;
             std::cout << "percent power: " << 100 << std::endl;
-            PerPower.push_back(kW_curve / kW_fl);
+            PerPower.push_back(1);
         }
         std::cout << "========" << std::endl;
 
@@ -318,12 +318,26 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
         }
     } while (C_curve >= 0);
 
+
+
+    std::cout << "PerCapacity Entries: " << PerCapacity.size() << std::endl;
+    std::cout << "PerPower Entries: " << PerPower.size() << std::endl;
+    
+    std::cout << "Index: " << "(Percent Capacity, Percent Power)" << std::endl;
+    
+    for(int i=0; i < PerCapacity.size(); i++){
+        std::cout << PerCapacity.at(i) << " , " << PerPower.at(i) << std::endl;
+    }
+
+
     if (capacityVPower)
     {
+        std::cout << "Cap v Power" << std::endl;
         CurveFitVal curveFitValCap(PerCapacity, PerPower, 6);
         return curveFitValCap.calculate(value);
     }
 
+        std::cout << "Cap v Power" << std::endl;
     CurveFitVal curveFitValCap(PerPower, PerCapacity, 6);
     return curveFitValCap.calculate(value);
 }
