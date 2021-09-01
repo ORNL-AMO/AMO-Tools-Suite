@@ -15,7 +15,7 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
     //     capacityAtMaxFullFlow: 65,
     //     capacityAtUnload: 32,
     //     compressorType: 1, // screw
-    //     computeFrom: 1, //PercentageCapacity
+    //     computeFrom: 0, //PercentagePower
     //     computeFromPFAmps: 0,
     //     computeFromPFVoltage: 0,
     //     computeFromVal: .49,
@@ -54,7 +54,7 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
     //     capacityAtMaxFullFlow: 29,
     //     capacityAtUnload: undefined,
     //     compressorType: 1, //screw
-    //     computeFrom: 1,
+    //     computeFrom: 0,
     //     computeFromPFAmps: 0,
     //     computeFromPFVoltage: 0,
     //     computeFromVal: 1,
@@ -79,44 +79,78 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
     // };
 
 
-    var input = {
+    // var input = {
+    //     adjustForDischargePressure: false,
+    //     applyPressureInletCorrection: false,
+    //     atmosphericPsi: 14.7,
+    //     blowdownTime: -9999,
+    //     capacityAtFullLoad: 270,
+    //     capacityAtMaxFullFlow: 268,
+    //     capacityAtUnload: 9,
+    //     compressorType: 2,
+    //     computeFrom: 0,
+    //     computeFromPFAmps: 0,
+    //     computeFromPFVoltage: 0,
+    //     computeFromVal: 0.95,
+    //     controlType: 0,
+    //     dischargePsiFullLoad: 70,
+    //     dischargePsiMax: 80,
+    //     loadFactorUnloaded: 0.15903614457831325,
+    //     lubricantType: 2,
+    //     modulatingPsi: -9999,
+    //     powerAtFullLoad: 41.5,
+    //     powerAtFullLoadPercentage: 1,
+    //     powerAtNoLoad: 6.6,
+    //     powerAtNolLoad: 6.6,
+    //     powerAtUnload: 4,
+    //     powerMax: 44.9,
+    //     powerMaxPercentage: 1.0819277108433734,
+    //     receiverVolume: 13.3680624455617,
+    //     stageType: 0,
+    //     unloadPointCapacity: 100,
+    //     unloadSumpPressure: -9999
+    // }
+
+
+    //single stage lubricant-injected rotary screw
+    //variable displacement with unloading
+    let input = {
         adjustForDischargePressure: false,
         applyPressureInletCorrection: false,
         atmosphericPsi: 14.7,
-        blowdownTime: -9999,
-        capacityAtFullLoad: 270,
-        capacityAtMaxFullFlow: 268,
-        capacityAtUnload: 9,
-        compressorType: 2,
-        computeFrom: 0,
+        blowdownTime: 40,
+        capacityAtFullLoad: 30,
+        capacityAtMaxFullFlow: 30,
+        capacityAtUnload: 12,
+        compressorType: 1,
+        computeFrom: 1,
         computeFromPFAmps: 0,
         computeFromPFVoltage: 0,
-        computeFromVal: 0.95,
-        controlType: 0,
-        dischargePsiFullLoad: 70,
-        dischargePsiMax: 80,
-        loadFactorUnloaded: 0.15903614457831325,
-        lubricantType: 2,
-        modulatingPsi: -9999,
-        powerAtFullLoad: 41.5,
+        computeFromVal: 0.985,
+        controlType: 5,
+        dischargePsiFullLoad: 175,
+        dischargePsiMax: 175,
+        loadFactorUnloaded: 0.2765957446808511,
+        lubricantType: 0,
+        modulatingPsi: 16.66699982,
+        powerAtFullLoad: 9.4,
         powerAtFullLoadPercentage: 1,
-        powerAtNoLoad: 6.6,
-        powerAtNolLoad: 6.6,
-        powerAtUnload: 4,
-        powerMax: 44.9,
-        powerMaxPercentage: 1.0819277108433734,
+        powerAtNoLoad: 2.6,
+        powerAtNolLoad: 2.6,
+        powerAtUnload: 6,
+        powerMax: 9.4,
+        powerMaxPercentage: 1,
         receiverVolume: 13.3680624455617,
         stageType: 0,
-        unloadPointCapacity: 100,
-        unloadSumpPressure: -9999
+        unloadPointCapacity: 40,
+        unloadSumpPressure: 15,
+        noLoadPowerFM: .57
     }
 
-
-
-    input.computeFromVal = .95;
+    input.computeFromVal = .40;
     var results = bindings.CompressorsCalc(input);
     results.percentagePower = results.percentagePower * 100;
-    console.log('perc capacity: ' + results.percentagePower);
-    t.equal(99.9687, results.percentagePower);
+    console.log('perc power: ' + results.percentagePower);
+    t.equal(63.829, results.percentagePower);
 
 });

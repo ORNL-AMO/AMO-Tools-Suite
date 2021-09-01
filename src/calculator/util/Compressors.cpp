@@ -133,7 +133,16 @@ CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerkW(doubl
     else if (PerkW == 1)
         C_Calc = C_fl;
     else
-        C_Calc = pow(((PerkW * kW_fl - kW_nl) / ((woUnload ? kW_fl : kW_nl / 0.7) - kW_nl)), 1 / mod_exp) * C_fl;
+    {
+        if (woUnload)
+        {
+            C_Calc = pow(((PerkW * kW_fl - kW_nl) / (kW_fl - kW_nl)), 1 / mod_exp) * C_fl;
+        }
+        else
+        {
+            C_Calc = pow(((PerkW * kW_fl - kW_nl) / ((kW_nl / noLoadPowerFM) - kW_nl)), 1 / mod_exp) * C_fl;
+        }
+    }
 
     return Output(PerkW * kW_fl, C_Calc, (PerkW), (C_Calc / C_fl));
 }
@@ -141,7 +150,18 @@ CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerkW(doubl
 CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerC(double CPer)
 {
 
-    const double kW_Calc = ((woUnload ? kW_fl : kW_nl / 0.7) - kW_nl) * pow(CPer, mod_exp) + kW_nl;
+    double kW_Calc;
+    if (woUnload)
+    {
+        kW_Calc = (kW_fl - kW_nl) * pow(CPer, mod_exp) + kW_nl;
+    }
+    else
+    {
+        //for with unload: kw_nl = kw_max
+        double kW_max_mod = (kW_nl * noLoadPowerFM);
+        // kW_Calc = ((kW_nl * .57) - kW_nl) * pow(CPer, mod_exp) + kW_nl;
+        kW_Calc = (kW_nl - kW_max_mod) * pow(CPer, mod_exp) + kW_max_mod;
+    }
 
     return Output(kW_Calc, C_fl * CPer, kW_Calc / kW_fl, CPer);
 }
@@ -203,7 +223,7 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
 
     std::vector<double> PerCapacity;
     std::vector<double> PerPower;
-    const double decrementC = C_fl / 75;
+    const double decrementC = C_fl / 76;
     double C_curve = C_fl;
     do
     {
@@ -290,7 +310,16 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
         }
 
         PerCapacity.push_back(C_curve / C_fl);
-        PerPower.push_back(kW_curve / kW_fl);
+
+        //if C_curve == C_fl then Percent Capacity = 100 and Percent Power = 100
+        if (C_curve != C_fl)
+        {
+            PerPower.push_back(kW_curve / kW_fl);
+        }
+        else
+        {
+            PerPower.push_back(1);
+        }
 
         if (C_curve == 0.0001)
         {
@@ -323,7 +352,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerkW(double PerkW)
         const double mffp = kW_max * lf_fl;
         const double kW_ul = ((kW_max - mffp) * pow((PerC_ul / 100), mod_exp) + mffp);
         if (PerkW * kW_fl >= kW_ul)
-            return Compressors_ModulationWOUnload(kW_fl, C_fl, mffp, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false).calculateFromPerkW(PerkW);
+            return Compressors_ModulationWOUnload(kW_fl, C_fl, mffp, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false, CompType, noLoadPowerFM).calculateFromPerkW(PerkW);
     }
 
     const double CPer = CurveFit(PerkW, false);
@@ -335,16 +364,24 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
     if (CPer == 1)
         return Output(kW_fl, C_fl * CPer, 1, CPer);
 
+    //if modulation or variable displacement
     if (CntrlType == ControlType::ModulationUnload || CntrlType == ControlType::VariableDisplacementUnload)
     {
+        //check if in modulation mode
         double C_ul = C_fl * PerC_ul / 100;
         if (C_fl * CPer >= C_ul)
         {
-            return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_max * lf_fl, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false).calculateFromPerC(CPer);
+            std::cout << noLoadPowerFM << std::endl;
+            //For compressors with modulation... kW_nl = kW_max as a compressor without modulation
+            return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_max, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false, CompType, noLoadPowerFM).calculateFromPerC(CPer);
+            // return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_max * lf_fl, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false).calculateFromPerC(CPer);
         }
     }
+
     double C_curve = C_fl * CPer;
-    if(C_curve == 0){
+    if (C_curve == 0)
+    {
+        //C_curve of 0 breaks algorithm
         C_curve = .00000000001;
     }
     const double kW_maxmod = lf_fl * kW_max;
@@ -431,13 +468,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
 
         //kW_curve
         double t_cycle = t_bd + t_ol + t_rl + t_rpu + t_rmod;
-        // std::cout << "kW_bd: " << kW_bd << std::endl;
-        // std::cout << "kW_ol: " << kW_ol << std::endl;
-        // std::cout << "kW_rl: " << kW_rl << std::endl;
-        // std::cout << "kW_rpu: " << kW_rpu << std::endl;
-        // std::cout << "kW_r_mod: " << kW_r_mod << std::endl;
         kW_curve = (kW_bd + kW_ol + kW_rl + kW_rpu + kW_r_mod) / t_cycle;
-        // std::cout << "kW_curve: " << kW_curve << std::endl;
     }
     else
     {
@@ -445,7 +476,6 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
     }
 
     double PerkW = kW_curve / kW_fl;
-    // std::cout << "PerkW: " << PerkW << std::endl;
     // double PerkW = CurveFit(CPer, true);
     return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }

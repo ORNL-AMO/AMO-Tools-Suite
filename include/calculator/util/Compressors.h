@@ -554,7 +554,7 @@ public:
      *
      */
     Compressors_ModulationWOUnload(const double kW_fl, const double C_fl, const double kW_nl,
-                                   const double mod_exp = 1, const bool woUnload = true, const CompressorType CompType = CompressorType::Screw) : CompressorsBase(kW_fl, C_fl), kW_nl(kW_nl), mod_exp(mod_exp), woUnload(woUnload), CompType(CompType)
+                                   const double mod_exp = 1, const bool woUnload = true, const CompressorType CompType = CompressorType::Screw, double noLoadPowerFM = .7) : CompressorsBase(kW_fl, C_fl), kW_nl(kW_nl), mod_exp(mod_exp), woUnload(woUnload), CompType(CompType), noLoadPowerFM(noLoadPowerFM)
     {
         lf_nl = kW_nl / kW_fl;
     }
@@ -655,6 +655,7 @@ private:
     const double mod_exp = 1;
     const CompressorType CompType;
     double lf_nl = 0;
+    double noLoadPowerFM;
 };
 
 class Compressors_StartStop : public CompressorsBase
@@ -794,9 +795,9 @@ public:
      */
     Compressors_LoadUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double P_fl, const double P_max, const double P_mod, const double lf_ul, const double P_atm = 14.7,
                            const CompressorType CompType = CompressorType::Reciprocating, const Lubricant LubricantType = Lubricant::None, ControlType CntrlType = ControlType::LoadUnload,
-                           const double kW_nl = 1, const double PerC_ul = 100, double t_blowdown = .003, double P_sump_ul = 15) : CompressorsBase(kW_fl, C_fl), kW_max(kW_max), P_atm(P_atm), P_fl(P_fl), P_max(P_max), P_mod(P_mod),
-                                                                                                                                  CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
-                                                                                                                                  kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul)
+                           const double kW_nl = 1, const double PerC_ul = 100, double t_blowdown = .003, double P_sump_ul = 15, double noLoadPowerFM = .7) : CompressorsBase(kW_fl, C_fl), kW_max(kW_max), P_atm(P_atm), P_fl(P_fl), P_max(P_max), P_mod(P_mod),
+                                                                                                                                                                   CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
+                                                                                                                                                                   kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul), noLoadPowerFM(noLoadPowerFM)
     {
 
         if (CompType == CompressorType::Screw && LubricantType == Lubricant::None)
@@ -944,7 +945,7 @@ private:
     Lubricant LubricantType;
     ControlType CntrlType;
 
-    double kW_max;
+    double kW_max, noLoadPowerFM;
     double P_sump_ul = 15, t_blowdown = 0.003, t_sdt = 0.004, a_tol = 0.02, t_reload = 0.001, PerC_ul = 100, lf_fl = 0.7;
 
     double CurveFit(double, bool) const;
@@ -969,7 +970,7 @@ public:
      */
     Compressors_ModulationWithUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double kW_nl,
                                      const double P_fl, const double P_max, const double P_mod, const double P_atm = 14.7, const double PerC_ul = 100, Compressors::ControlType CntrlType = Compressors::VariableDisplacementUnload,
-                                     const double t_blowdown = .003, const double P_sump_ul = 15) : Compressors_LoadUnload(kW_fl, C_fl, C_storage, kW_max, P_fl, P_max, P_mod, 1, P_atm, Compressors::Screw, Compressors::Injected, CntrlType, kW_nl, PerC_ul, t_blowdown, P_sump_ul)
+                                     const double t_blowdown = .003, const double P_sump_ul = 15, const double noLoadPowerFM = .7) : Compressors_LoadUnload(kW_fl, C_fl, C_storage, kW_max, P_fl, P_max, P_mod, 1, P_atm, Compressors::Screw, Compressors::Injected, CntrlType, kW_nl, PerC_ul, t_blowdown, P_sump_ul, noLoadPowerFM)
     {
     }
 };
