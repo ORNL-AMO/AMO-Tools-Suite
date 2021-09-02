@@ -33,6 +33,8 @@ function validateOutput(results) {
     validateCondensateFlashTank(results);
     validateHighPressureCondensateFlashTank(results);
     validateMediumPressureCondensateFlashTank(results);
+
+    validatePowerBalanceCheckerCalculationsDomain(results);
 }
 
 function SectionHead(header){
@@ -1035,6 +1037,65 @@ function validateMediumPressureCondensateFlashTank(results){
         temperature: 471.445
     };
     validateFluidProperties('Medium Pressure Condensate Flash Tank - outletLiquid', flashTank.getOutletLiquidSaturatedProperties(), expected);
+}
+
+function validatePowerBalanceCheckerCalculationsDomain(results){
+    console.log(results.powerBalanceCheckerCalculationsDomain);
+
+    let pbCheck = results.powerBalanceCheckerCalculationsDomain;
+    let lowPrVentedCalc = pbCheck.lowPressureVentedSteamCalculationsDomain;
+
+    let expected = {
+        density: 7.314,
+        energyFlow: 9155412.5,
+        massFlow: 3241.35,
+        pressure: 1.5,
+        quality: 1,
+        specificVolume: 0.137,
+        specificEnthalpy: 2824.568,
+        specificEntropy: 6.513,
+        temperature: 483.396
+    };
+    validateFluidProperties('Power Balance Checker Calculations Domain - Fluid Properties', pbCheck.lowPressureVentedSteam, expected);
+
+    logMessage('Steam Modeler: Test# 1 - Power Balance Checker Calculations Domain Results ', true);
+    testNumberValue(pbCheck.steamBalance, 4.6567e-10, "Steam Balance");
+
+    if(lowPrVentedCalc != null) {
+        logMessage('Steam Modeler: Test# 1 - Power Balance Checker Calculations Domain Low Pressure Vented Steam Calculations Domain Results ', true);
+        testNumberValue(lowPrVentedCalc.lowPressureVentedSteam, 3241.35, "Low Pressure Vented Steam");
+
+        if(lowPrVentedCalc.makeupWaterVolumeFlowCalculationsDomain != null) {
+            testNumberValue(lowPrVentedCalc.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlow, 6276.7573, "Makeup Water Volume Flow");
+            testNumberValue(lowPrVentedCalc.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlowAnnual, 50214058.404, "Makeup Water Volume Flow Annual");
+        }
+
+        let expected = {
+            density: 999.7,
+            energyFlow: 264290095.231,
+            massFlow: 6274883.9406,
+            pressure: 0.101,
+            quality: 0,
+            specificVolume: 0.001,
+            specificEnthalpy: 42.119,
+            specificEntropy: 0.1511,
+            temperature: 283.15
+        };
+        validateFluidProperties('Power Balance Checker Calculations Domain Makeup Water - Fluid Properties', lowPrVentedCalc.makeupWater, expected);
+
+        expected = {
+            density: 997.92,
+            energyFlow: 619955082.577,
+            massFlow: 6942819.171,
+            pressure: 0.07,
+            quality: 0,
+            specificVolume: 0.001,
+            specificEnthalpy: 89.294,
+            specificEntropy: 0.314,
+            temperature: 294.419
+        };
+        validateFluidProperties('Power Balance Checker Calculations Domain Makeup Water And Condensate Header Output Updated - Fluid Properties', lowPrVentedCalc.makeupWaterAndCondensateHeaderOutputUpdated, expected);
+    }
 }
 
 function steamModeler() {
