@@ -115,6 +115,7 @@ EMSCRIPTEN_BINDINGS(steamModeler)
         .property("makeupWaterVolumeFlowAnnual", &MakeupWaterVolumeFlowCalculationsDomain::makeupWaterVolumeFlowAnnual);
 
     class_<LowPressureVentedSteamCalculationsDomain>("LowPressureVentedSteamCalculationsDomain")
+        .smart_ptr<std::shared_ptr<LowPressureVentedSteamCalculationsDomain>>("LowPressureVentedSteamCalculationsDomain")
         .property("lowPressureVentedSteam", &LowPressureVentedSteamCalculationsDomain::lowPressureVentedSteam)
         .property("makeupWater", &LowPressureVentedSteamCalculationsDomain::makeupWater)
         .property("makeupWaterAndCondensateHeaderOutputUpdated", &LowPressureVentedSteamCalculationsDomain::makeupWaterAndCondensateHeaderOutputUpdated)
