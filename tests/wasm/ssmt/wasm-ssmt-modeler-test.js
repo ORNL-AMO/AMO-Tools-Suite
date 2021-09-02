@@ -1040,8 +1040,6 @@ function validateMediumPressureCondensateFlashTank(results){
 }
 
 function validatePowerBalanceCheckerCalculationsDomain(results){
-    console.log(results.powerBalanceCheckerCalculationsDomain);
-
     let pbCheck = results.powerBalanceCheckerCalculationsDomain;
     let lowPrVentedCalc = pbCheck.lowPressureVentedSteamCalculationsDomain;
 
