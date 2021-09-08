@@ -350,6 +350,7 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
     const double blowdownTime = getDouble("blowdownTime", inp);
     const double unloadSumpPressure = getDouble("unloadSumpPressure", inp);
     const double noLoadPowerFM = getDouble("noLoadPowerFM", inp);
+    std::cout << "noLoadPowerFM: " << noLoadPowerFM << std::endl;
     const double powerAtUnload = getDouble("powerAtUnload", inp);
     auto compMethod = Compressors_ModulationWithUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, powerAtNolLoad, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, atmosphericPsi, unloadPointCapacity, controlType, blowdownTime, unloadSumpPressure, noLoadPowerFM, powerAtUnload);
 

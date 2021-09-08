@@ -798,24 +798,18 @@ public:
     Compressors_LoadUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double P_fl, const double P_max, const double P_mod, const double lf_ul, const double P_atm = 14.7,
                            const CompressorType CompType = CompressorType::Reciprocating, const Lubricant LubricantType = Lubricant::None, ControlType CntrlType = ControlType::LoadUnload,
                            const double kW_nl = 1, const double PerC_ul = 100, double t_blowdown = .003, double P_sump_ul = 15, double noLoadPowerFM = .7, double kW_ul = 0) : CompressorsBase(kW_fl, C_fl), kW_max(kW_max), P_atm(P_atm), P_fl(P_fl), P_max(P_max), P_mod(P_mod),
-                                                                                                                                                                   CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
-                                                                                                                                                                   kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul), noLoadPowerFM(noLoadPowerFM), kW_ul(kW_ul)
+                                                                                                                                                                               CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
+                                                                                                                                                                               kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul), noLoadPowerFM(noLoadPowerFM), kW_ul(kW_ul)
     {
-        
         if (CompType == CompressorType::Screw && LubricantType == Lubricant::None)
             throw std::invalid_argument("Lubricant needs to be Injected or free for Screw Compressor Type");
+
+        setNoLoadPowerFM(noLoadPowerFM);
 
         if (CompType == CompressorType::Screw)
         {
             if (LubricantType == Lubricant::Injected)
             {
-                //From Test data sheet
-                //lf_fl = 1.00;
-                // t_blowdown = 0.001;
-                // t_sdt = 1.956;
-
-                //From Algorithm doc
-                //t_blowdown = 20;
                 t_sdt = 2;
                 t_reload = 3;
             }
@@ -844,6 +838,11 @@ public:
     void setUnloadSumpPressure(double sumpPressure)
     {
         P_sump_ul = sumpPressure;
+    }
+
+    void setNoLoadPowerFM(double noLoadPowerFM)
+    {
+        lf_fl = noLoadPowerFM;
     }
 
     /**
