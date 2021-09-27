@@ -128,6 +128,7 @@ CompressorsBase::Output Compressors_Centrifugal_ModulationUnload::calculateFromV
 
 CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerkW(double PerkW)
 {
+    std::cout << "lf_nl: " << lf_nl << std::endl;
     double C_Calc = 1;
     if (PerkW < lf_nl)
         C_Calc = 0;
@@ -224,12 +225,7 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
 {
 
     const double kW_maxmod = lf_fl * kW_max;
-    const double kW_nl = lf_nl * kW_fl;
-    const double C_ul = C_fl * PerC_ul / 100;
-    const double kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
-    const double P_ul = P_max + (1 - (C_ul / C_fl)) * P_mod;
     const double t_bdc = t_blowdown / log(1 / a_tol);
-
     const double t_spc = t_sdt / log(1 / a_tol);
 
     std::vector<double> PerCapacity;
@@ -251,13 +247,12 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
                     t_rmod = 1;
                 }
 
-                const double p_avg_mod_1 = (P_max + P_mod - C_curve * P_mod / C_fl);
-                const double p_avg_mod_2 = (C_curve * P_mod / C_fl - P_range);
-                const double p_avg_mod_3 = ((P_mod / P_atm) * (C_storage / C_fl));
-                const double p_avg_mod_4 = (1 - exp((-P_atm / P_mod) * (C_fl / C_storage) * (t_rmod / 60))) / (t_rmod * 60);
+                const double p_avg_mod_1 = P_max + P_mod - C_curve * P_mod / C_fl;
+                const double p_avg_mod_2 = (((C_curve * P_mod) / C_fl) - P_mod);
+                const double p_avg_mod_3 = (P_mod * C_storage / P_atm / C_fl);
+                const double p_avg_mod_4 = (1 - exp(-P_atm * C_fl / P_mod / C_storage * t_rmod / 60)) / t_rmod * 60;
                 const double P_avg_mod = p_avg_mod_1 + p_avg_mod_2 * p_avg_mod_3 * p_avg_mod_4;
-
-                kW_avg_mod = (kW_max - kW_maxmod) * pow((P_max + P_mod - P_avg_mod) / P_avg_mod, mod_exp) + kW_maxmod;
+                kW_avg_mod = (kW_max - kW_maxmod) * pow((P_max + P_mod - P_avg_mod) / P_mod, mod_exp) + kW_maxmod;
             }
             else
             {
@@ -272,6 +267,7 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
             //kw_bd
             const double t_dd = C_storage * 60 * (P_ul - P_fl) / (C_curve * P_atm);
             const double t_bd = std::min(t_blowdown, t_dd);
+
             const double kW_avg_bd = kW_nl + (((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * ((1 - exp(-t_bd / t_bdc)) * (t_bdc / t_bd));
             double kW_bd = t_bd * kW_avg_bd;
 
@@ -348,7 +344,6 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
         CurveFitVal curveFitValCap(PerCapacity, PerPower, 6);
         return curveFitValCap.calculate(value);
     }
-
     CurveFitVal curveFitValCap(PerPower, PerCapacity, 6);
     return curveFitValCap.calculate(value);
 }
@@ -363,6 +358,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerkW(double PerkW)
         const double kW_avg = PerkW * kW_fl;
         if (kW_avg >= kW_ul)
         {
+            std::cout << "ModulationWOUnload" << std::endl;
             //pass kW_avg as kW_nl in ModulationWOUnload
             return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_avg, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false, CompType, noLoadPowerFM, kW_max).calculateFromPerkW(PerkW);
         }
@@ -383,6 +379,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         double C_ul = C_fl * PerC_ul / 100;
         if (C_fl * CPer >= C_ul)
         {
+            std::cout << "MODULATION WO UNLOAD" << std::endl;
             //For compressors with modulation... kW_nl = kW_max as a compressor without modulation
             return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_max, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false, CompType, noLoadPowerFM).calculateFromPerC(CPer);
         }
@@ -395,10 +392,6 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         C_curve = .00000000001;
     }
     const double kW_maxmod = lf_fl * kW_max;
-    const double kW_nl = lf_nl * kW_fl;
-    const double C_ul = C_fl * PerC_ul / 100;
-    const double kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
-    const double P_ul = P_max + (1 - (C_ul / C_fl)) * P_mod;
     const double t_bdc = t_blowdown / log(1 / a_tol);
 
     const double t_spc = t_sdt / log(1 / a_tol);
@@ -416,13 +409,12 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
                 t_rmod = 1;
             }
 
-            const double p_avg_mod_1 = (P_max + P_mod - C_curve * P_mod / C_fl);
-            const double p_avg_mod_2 = (C_curve * P_mod / C_fl - P_range);
-            const double p_avg_mod_3 = ((P_mod / P_atm) * (C_storage / C_fl));
-            const double p_avg_mod_4 = (1 - exp((-P_atm / P_mod) * (C_fl / C_storage) * (t_rmod / 60))) / (t_rmod * 60);
+            const double p_avg_mod_1 = P_max + P_mod - C_curve * P_mod / C_fl;
+            const double p_avg_mod_2 = (((C_curve * P_mod) / C_fl) - P_mod);
+            const double p_avg_mod_3 = (P_mod * C_storage / P_atm / C_fl);
+            const double p_avg_mod_4 = (1 - exp(-P_atm * C_fl / P_mod / C_storage * t_rmod / 60)) / t_rmod * 60;
             const double P_avg_mod = p_avg_mod_1 + p_avg_mod_2 * p_avg_mod_3 * p_avg_mod_4;
-
-            kW_avg_mod = (kW_max - kW_maxmod) * pow((P_max + P_mod - P_avg_mod) / P_avg_mod, mod_exp) + kW_maxmod;
+            kW_avg_mod = (kW_max - kW_maxmod) * pow((P_max + P_mod - P_avg_mod) / P_mod, mod_exp) + kW_maxmod;
         }
         else
         {
@@ -437,6 +429,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         //kw_bd
         const double t_dd = C_storage * 60 * (P_ul - P_fl) / (C_curve * P_atm);
         const double t_bd = std::min(t_blowdown, t_dd);
+
         const double kW_avg_bd = kW_nl + (((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * ((1 - exp(-t_bd / t_bdc)) * (t_bdc / t_bd));
         double kW_bd = t_bd * kW_avg_bd;
 
@@ -492,6 +485,7 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
 
 CompressorsBase::Output Compressors_LoadUnload::calculateFromkWMeasured(double kW)
 {
+    std::cout << "Calc from kW Measure: " << kW / kW_fl << std::endl;
     return Compressors_LoadUnload::calculateFromPerkW(kW / kW_fl);
 }
 

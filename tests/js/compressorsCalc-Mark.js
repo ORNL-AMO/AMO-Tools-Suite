@@ -114,49 +114,98 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
 
     //single stage lubricant-injected rotary screw
     //variable displacement with unloading
-    let input = {
-        adjustForDischargePressure: false,
-        applyPressureInletCorrection: false,
-        atmosphericPsi: 14.7,
-        blowdownTime: 40,
-        capacityAtFullLoad: 30,
-        capacityAtMaxFullFlow: 30,
-        capacityAtUnload: 12,
-        compressorType: 1,
-        computeFrom: 1,
-        computeFromPFAmps: 0,
-        computeFromPFVoltage: 0,
-        computeFromVal: 0.985,
-        controlType: 5,
-        dischargePsiFullLoad: 175,
-        dischargePsiMax: 175,
-        loadFactorUnloaded: 0.2765957446808511,
-        lubricantType: 0,
-        modulatingPsi: 16.66699982,
-        powerAtFullLoad: 9.4,
-        powerAtFullLoadPercentage: 1,
-        powerAtNoLoad: 2.6,
-        powerAtNolLoad: 2.6,
-        powerAtUnload: 6,
-        powerMax: 9.4,
-        powerMaxPercentage: 1,
-        receiverVolume: 13.3680624455617,
-        stageType: 0,
-        unloadPointCapacity: 40,
-        unloadSumpPressure: 15,
-        noLoadPowerFM: .57
-    }
+    // let input = {
+    //     adjustForDischargePressure: false,
+    //     applyPressureInletCorrection: false,
+    //     atmosphericPsi: 14.7,
+    //     blowdownTime: 40,
+    //     capacityAtFullLoad: 30,
+    //     capacityAtMaxFullFlow: 30,
+    //     capacityAtUnload: 12,
+    //     compressorType: 1,
+    //     computeFrom: 1,
+    //     computeFromPFAmps: 0,
+    //     computeFromPFVoltage: 0,
+    //     computeFromVal: 0.985,
+    //     controlType: 5,
+    //     dischargePsiFullLoad: 175,
+    //     dischargePsiMax: 175,
+    //     loadFactorUnloaded: 0.2765957446808511,
+    //     lubricantType: 0,
+    //     modulatingPsi: 16.66699982,
+    //     powerAtFullLoad: 9.4,
+    //     powerAtFullLoadPercentage: 1,
+    //     powerAtNoLoad: 2.6,
+    //     powerAtNolLoad: 2.6,
+    //     powerAtUnload: 6,
+    //     powerMax: 9.4,
+    //     powerMaxPercentage: 1,
+    //     receiverVolume: 13.3680624455617,
+    //     stageType: 0,
+    //     unloadPointCapacity: 40,
+    //     unloadSumpPressure: 15,
+    //     noLoadPowerFM: .57
+    // }
 
     // input.computeFromVal = .40;
     // var results = bindings.CompressorsCalc(input);
     // results.percentagePower = results.percentagePower * 100;
     // console.log('perc power: ' + results.percentagePower);
     // t.equal(63.829, results.percentagePower);
-    input.computeFromVal = .64;
-    input.computeFrom = 0;
+    // input.computeFromVal = .64;
+    // input.computeFrom = 0;
+    // var results = bindings.CompressorsCalc(input);
+    // console.log('perc capacity: ' + results.percentageCapacity);
+    // results.percentageCapacity = results.percentageCapacity * 100;
+    // t.equal(40, results.percentageCapacity);
+
+
+    var input = {
+        adjustForDischargePressure: false,
+        applyPressureInletCorrection: false,
+        atmosphericPsi: 14.7,
+        blowdownTime: 40,
+        capacityAtFullLoad: 637,
+        capacityAtMaxFullFlow: 637,
+        capacityAtUnload: 318,
+        compressorType: 1,
+        computeFrom: 1,
+        computeFromPFAmps: 0,
+        computeFromPFVoltage: 0,
+        computeFromVal: 0.54,
+        controlType: 1,
+        dischargePsiFullLoad: 115,
+        dischargePsiMax: 115,
+        loadFactorUnloaded: 0.20630630630630628,
+        lubricantType: 0,
+        modulatingPsi: 20,
+        noLoadPowerFM: 0.65,
+        powerAtFullLoad: 111,
+        powerAtFullLoadPercentage: 1,
+        powerAtNoLoad: 22.9,
+        powerAtNolLoad: 22.9,
+        powerAtUnload: 91.5,
+        powerMax: 111,
+        powerMaxPercentage: 1,
+        pressureAtUnload: 116,
+        receiverVolume: 13.3680624455617,
+        stageType: 1,
+        unloadPointCapacity: 50,
+        unloadSumpPressure: 15,
+    }
+
+    // input.computeFromVal = .64;
+    // input.computeFrom = 0;
+    // var results = bindings.CompressorsCalc(input);
+    // console.log('perc capacity: ' + results.percentageCapacity);
+    // results.percentageCapacity = results.percentageCapacity * 100;
+    // t.equal(0, results.percentageCapacity);
+
+    input.computeFromVal = .44;
+    input.computeFrom = 1;
     var results = bindings.CompressorsCalc(input);
-    console.log('perc capacity: ' + results.percentageCapacity);
-    results.percentageCapacity = results.percentageCapacity * 100;
-    t.equal(40, results.percentageCapacity);
+    console.log('perc power: ' + results.percentagePower);
+    results.percentagePower = results.percentagePower * 100;
+    t.equal(88, results.percentagePower);
 
 });
