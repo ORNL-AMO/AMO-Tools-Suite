@@ -166,31 +166,32 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
         atmosphericPsi: 14.7,
         blowdownTime: 40,
         capacityAtFullLoad: 637,
-        capacityAtMaxFullFlow: 636,
-        capacityAtUnload: 319,
+        capacityAtMaxFullFlow: 637,
+        capacityAtUnload: 318,
         compressorType: 1,
-        computeFrom: 2,
+        computeFrom: 1,
         computeFromPFAmps: 0,
         computeFromPFVoltage: 0,
-        computeFromVal: 59,
+        computeFromVal: 0.54,
         controlType: 1,
         dischargePsiFullLoad: 115,
         dischargePsiMax: 115,
         loadFactorUnloaded: 0.20630630630630628,
         lubricantType: 0,
-        modulatingPsi: 2,
+        modulatingPsi: 20,
         noLoadPowerFM: 0.65,
         powerAtFullLoad: 111,
         powerAtFullLoadPercentage: 1,
         powerAtNoLoad: 22.9,
         powerAtNolLoad: 22.9,
-        powerAtUnload: 91.6,
+        powerAtUnload: 91.5,
         powerMax: 111,
         powerMaxPercentage: 1,
+        pressureAtUnload: 116,
         receiverVolume: 13.3680624455617,
         stageType: 1,
         unloadPointCapacity: 50,
-        unloadSumpPressure: 15
+        unloadSumpPressure: 15,
     }
 
     // input.computeFromVal = .64;
@@ -203,8 +204,8 @@ test('CompressorsCalcCentrifugal LoadUnload', function (t) {
     input.computeFromVal = .44;
     input.computeFrom = 1;
     var results = bindings.CompressorsCalc(input);
-    console.log('perc capacity: ' + results.percentagePower);
+    console.log('perc power: ' + results.percentagePower);
     results.percentagePower = results.percentagePower * 100;
-    t.equal(99.5, results.percentagePower);
+    t.equal(88, results.percentagePower);
 
 });
