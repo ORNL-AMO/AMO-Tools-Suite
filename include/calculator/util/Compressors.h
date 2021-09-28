@@ -798,8 +798,8 @@ public:
     Compressors_LoadUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double P_fl, const double P_max, const double P_mod, const double lf_ul, const double P_atm = 14.7,
                            const CompressorType CompType = CompressorType::Reciprocating, const Lubricant LubricantType = Lubricant::None, ControlType CntrlType = ControlType::LoadUnload,
                            const double kW_nl = 1, const double PerC_ul = 100, double t_blowdown = .003, double P_sump_ul = 15, double noLoadPowerFM = .7, double kW_ul = 0, double P_ul = 0, double C_ul = 0) : CompressorsBase(kW_fl, C_fl), kW_max(kW_max), P_atm(P_atm), P_fl(P_fl), P_max(P_max), P_mod(P_mod),
-                                                                                                                                                                               CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
-                                                                                                                                                                               kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul), noLoadPowerFM(noLoadPowerFM), kW_ul(kW_ul), P_ul(P_ul), C_ul(C_ul)
+                                                                                                                                                                                                                 CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
+                                                                                                                                                                                                                 kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul), noLoadPowerFM(noLoadPowerFM), kW_ul(kW_ul), P_ul(P_ul), C_ul(C_ul)
     {
         if (CompType == CompressorType::Screw && LubricantType == Lubricant::None)
             throw std::invalid_argument("Lubricant needs to be Injected or free for Screw Compressor Type");
@@ -828,6 +828,14 @@ public:
             setBlowdown(.003);
             setUnloadSumpPressure(15);
         }
+
+        //if not modulation unload set unload points
+        if(CntrlType != ControlType::ModulationUnload){
+            setC_ul();
+            setKW_ul();
+            setP_ul();
+        }
+
     }
 
     void setBlowdown(double blowdown)
@@ -843,6 +851,21 @@ public:
     void setNoLoadPowerFM(double noLoadPowerFM)
     {
         lf_fl = noLoadPowerFM;
+    }
+
+    void setC_ul()
+    {
+        C_ul = C_fl * PerC_ul / 100;
+    }
+
+    void setKW_ul()
+    {
+        double kW_maxmod = lf_fl * kW_max;
+        kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
+    }
+
+    void setP_ul(){
+        P_ul = P_max + (1 - (C_ul / C_fl)) * P_mod;
     }
 
     /**

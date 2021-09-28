@@ -282,11 +282,11 @@ void compressorsLoadUnload(Compressors::CompressorType compressorType, Compresso
     const double blowdownTime = getDouble("blowdownTime", inp);
     const double unloadSumpPressure = getDouble("unloadSumpPressure", inp);
     const double noLoadPowerFM = getDouble("noLoadPowerFM");
-    const double powerAtUnload = getDouble("powerAtUnload");
-    const double pressureAtUnload = getDouble("pressureAtUnload");
-    const double capacityAtUnload = getDouble("capacityAtUnload");
+    // const double powerAtUnload = getDouble("powerAtUnload");
+    // const double pressureAtUnload = getDouble("pressureAtUnload");
+    // const double capacityAtUnload = getDouble("capacityAtUnload");
 
-    auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi, compressorType, lubricantType, controlType, powerAtNolLoad, unloadPointCapacity, blowdownTime, unloadSumpPressure, noLoadPowerFM, powerAtUnload, pressureAtUnload, capacityAtUnload);
+    auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi, compressorType, lubricantType, controlType, powerAtNolLoad, unloadPointCapacity, blowdownTime, unloadSumpPressure, noLoadPowerFM);
 
     if (applyPressureInletCorrection)
     {
@@ -354,9 +354,16 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
     const double blowdownTime = getDouble("blowdownTime", inp);
     const double unloadSumpPressure = getDouble("unloadSumpPressure", inp);
     const double noLoadPowerFM = getDouble("noLoadPowerFM", inp);
-    const double powerAtUnload = getDouble("powerAtUnload", inp);
-    const double pressureAtUnload = getDouble("pressureAtUnload");
-    const double capacityAtUnload = getDouble("capacityAtUnload");
+    double powerAtUnload;
+    double pressureAtUnload;
+    double capacityAtUnload;
+    //compressorsModulationWithUnload also called for Variable Displacement but does not have these performance points data
+    if (controlType == Compressors::ControlType::ModulationUnload)
+    {
+        powerAtUnload = getDouble("powerAtUnload", inp);
+        pressureAtUnload = getDouble("pressureAtUnload");
+        capacityAtUnload = getDouble("capacityAtUnload");
+    }
     auto compMethod = Compressors_ModulationWithUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, powerAtNolLoad, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, atmosphericPsi, unloadPointCapacity, controlType, blowdownTime, unloadSumpPressure, noLoadPowerFM, powerAtUnload, pressureAtUnload, capacityAtUnload);
 
     if (applyPressureInletCorrection)
