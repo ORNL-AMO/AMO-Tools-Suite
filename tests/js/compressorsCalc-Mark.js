@@ -3,7 +3,7 @@ const test = require('tap').test
     , bindings = require('bindings')({ module_root: testRoot, bindings: 'compressorsCalc' });
 
 test('CompressorsCalcCentrifugal LoadUnload', function (t) {
-    t.plan(2);
+    t.plan(3);
     t.type(bindings.CompressorsCalc, 'function');
 
     // var input = {
