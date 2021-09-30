@@ -127,7 +127,6 @@ CompressorsBase::Output Compressors_Centrifugal_ModulationUnload::calculateFromV
 
 CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerkW(double PerkW)
 {
-    std::cout << "lf_nl: " << lf_nl << std::endl;
     double C_Calc = 1;
     if (PerkW < lf_nl)
         C_Calc = 0;
@@ -357,7 +356,6 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerkW(double PerkW)
         const double kW_avg = PerkW * kW_fl;
         if (kW_avg >= kW_ul)
         {
-            std::cout << "ModulationWOUnload" << std::endl;
             //pass kW_avg as kW_nl in ModulationWOUnload
             return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_avg, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false, CompType, noLoadPowerFM, kW_max).calculateFromPerkW(PerkW);
         }
@@ -378,7 +376,6 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         double C_ul = C_fl * PerC_ul / 100;
         if (C_fl * CPer >= C_ul)
         {
-            std::cout << "MODULATION WO UNLOAD" << std::endl;
             //For compressors with modulation... kW_nl = kW_max as a compressor without modulation
             return Compressors_ModulationWOUnload(kW_fl, C_fl, kW_max, CntrlType == ControlType::VariableDisplacementUnload ? 2 : 1, false, CompType, noLoadPowerFM).calculateFromPerC(CPer);
         }
