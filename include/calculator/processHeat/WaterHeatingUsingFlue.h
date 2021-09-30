@@ -22,19 +22,19 @@ public:
 
     struct Output
     {
-        Output(double tempSteamSat, double flowFlueGas, double effBoiler,
+        Output(double flowFlueGas, double effBoiler,
                double enthalpySteam, double enthalpyFW, double flowSteam,
                double flowFW, double specheatFG, double heatCapacityFG, double specheatFW, double heatCapacityFW,
                double heatCapacityMin, double ratingHeatRecFW, double tempFlueGasOut, double tempFWOut,
                double energySavingsBoiler, double costSavingsBoiler) :
-                tempSteamSat(tempSteamSat), flowFlueGas(flowFlueGas), effBoiler(effBoiler),
+                flowFlueGas(flowFlueGas), effBoiler(effBoiler),
                 enthalpySteam(enthalpySteam), enthalpyFW(enthalpyFW), flowSteam(flowSteam),
                 flowFW(flowFW), specheatFG(specheatFG), heatCapacityFG(heatCapacityFG), specheatFW(specheatFW), heatCapacityFW(heatCapacityFW),
                 heatCapacityMin(heatCapacityMin), ratingHeatRecFW(ratingHeatRecFW), tempFlueGasOut(tempFlueGasOut), tempFWOut(tempFWOut),
                 energySavingsBoiler(energySavingsBoiler), costSavingsBoiler(costSavingsBoiler) {}
 
         Output() = default;
-        double tempSteamSat = 0, flowFlueGas = 0, effBoiler = 0,
+        double flowFlueGas = 0, effBoiler = 0,
                 enthalpySteam = 0, enthalpyFW = 0, flowSteam = 0,
                 flowFW = 0, specheatFG = 0, heatCapacityFG = 0, specheatFW = 0, heatCapacityFW = 0,
                 heatCapacityMin = 0, ratingHeatRecFW = 0, tempFlueGasOut = 0, tempFWOut = 0,
@@ -82,7 +82,6 @@ public:
      *
      *
      * @return Output
-     * @param tempSteamSat double, units K
      * @param flowFlueGas double, units kg/hr
      * @param effBoiler
      * @param enthalpySteam double, units KJ/kg

@@ -203,27 +203,26 @@ test('CascadeHeatHighToLow Gas', function (t) {
 });
 
 test('WaterHeatingUsingFlue Gas', function (t) {
-    t.plan(18);
+    t.plan(17);
     t.type(bindings.waterHeatingUsingFlue, 'function');
 
     var compare = function(results, expected) {
-        t.equal(rnd(results.tempSteamSat), rnd(expected[0]));
-        t.equal(rnd(results.flowFlueGas), rnd(expected[1]));
-        t.equal(rnd(results.effBoiler), rnd(expected[2]));
-        t.equal(rnd(results.enthalpySteam), rnd(expected[3]));
-        t.equal(rnd(results.enthalpyFW), rnd(expected[4]));
-        t.equal(rnd(results.flowSteam), rnd(expected[5]));
-        t.equal(rnd(results.flowFW), rnd(expected[6]));
-        t.equal(rnd(results.specheatFG), rnd(expected[7]));
-        t.equal(rnd(results.heatCapacityFG), rnd(expected[8]));
-        t.equal(rnd(results.specheatFW), rnd(expected[9]));
-        t.equal(rnd(results.heatCapacityFW), rnd(expected[10]));
-        t.equal(rnd(results.heatCapacityMin), rnd(expected[11]));
-        t.equal(rnd(results.ratingHeatRecFW), rnd(expected[12]));
-        t.equal(rnd(results.tempFlueGasOut), rnd(expected[13]));
-        t.equal(rnd(results.tempFWOut), rnd(expected[14]));
-        t.equal(rnd(results.energySavingsBoiler), rnd(expected[15]));
-        t.equal(rnd(results.costSavingsBoiler), rnd(expected[16]));
+        t.equal(rnd(results.flowFlueGas), rnd(expected[0]));
+        t.equal(rnd(results.effBoiler), rnd(expected[1]));
+        t.equal(rnd(results.enthalpySteam), rnd(expected[2]));
+        t.equal(rnd(results.enthalpyFW), rnd(expected[3]));
+        t.equal(rnd(results.flowSteam), rnd(expected[4]));
+        t.equal(rnd(results.flowFW), rnd(expected[5]));
+        t.equal(rnd(results.specheatFG), rnd(expected[6]));
+        t.equal(rnd(results.heatCapacityFG), rnd(expected[7]));
+        t.equal(rnd(results.specheatFW), rnd(expected[8]));
+        t.equal(rnd(results.heatCapacityFW), rnd(expected[9]));
+        t.equal(rnd(results.heatCapacityMin), rnd(expected[10]));
+        t.equal(rnd(results.ratingHeatRecFW), rnd(expected[11]));
+        t.equal(rnd(results.tempFlueGasOut), rnd(expected[12]));
+        t.equal(rnd(results.tempFWOut), rnd(expected[13]));
+        t.equal(rnd(results.energySavingsBoiler), rnd(expected[14]));
+        t.equal(rnd(results.costSavingsBoiler), rnd(expected[15]));
     };
 
     var input = {
@@ -258,6 +257,6 @@ test('WaterHeatingUsingFlue Gas', function (t) {
         O2: 0
     };
 
-    compare(bindings.waterHeatingUsingFlue(input), [514.886, 23538.374, 0.73457, 2865.339, 452.038, 16329.9,
+    compare(bindings.waterHeatingUsingFlue(input), [23538.374, 0.73457, 2865.339, 452.038, 16329.9,
         16983.09, 1.13247, 26656.559, 4.2285, 71812.94, 26656.56, 4627911.87, 484.537, 444.81, 50397.36, 262570.24]);
 });

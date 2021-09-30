@@ -51,7 +51,6 @@ EMSCRIPTEN_BINDINGS(processHeat_class)
         .property("hourlySavings", &CascadeHeatHighToLow::Output::hourlySavings);
 
     class_<WaterHeatingUsingFlue::Output>("WaterHeatingUsingFlueOutput")
-        .property("tempSteamSat", &WaterHeatingUsingFlue::Output::tempSteamSat)
         .property("flowFlueGas", &WaterHeatingUsingFlue::Output::flowFlueGas)
         .property("effBoiler", &WaterHeatingUsingFlue::Output::effBoiler)
         .property("enthalpySteam", &WaterHeatingUsingFlue::Output::enthalpySteam)

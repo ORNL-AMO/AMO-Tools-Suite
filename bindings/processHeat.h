@@ -244,7 +244,6 @@ NAN_METHOD(waterHeatingUsingFlue)
                                                       tempFlueGas, percO2, tempCombAir, moistCombAir, ratingBoiler, prSteam, tempAmbientAir,
                                                       tempSteam, tempFW, percBlowDown, effHX, opHours, costFuel, hhvFuel, (WaterHeatingUsingFlue::SteamCondition)condSteam);
 
-        setR("tempSteamSat", output.tempSteamSat);
         setR("flowFlueGas", output.flowFlueGas);
         setR("effBoiler", output.effBoiler);
         setR("enthalpySteam", output.enthalpySteam);

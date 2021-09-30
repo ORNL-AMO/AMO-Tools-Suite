@@ -75,7 +75,6 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
                                                          0.02, 55.88, 3.45, 288.71,
                                                          533.15, 380.37, 0.04, 0.625,
                                                          8000, 5.21, 37706, WaterHeatingUsingFlue::Superheated);
-    CHECK(resFlueHeat.tempSteamSat == Approx(514.886));
     CHECK(resFlueHeat.flowFlueGas == Approx(23538.374));
     CHECK(resFlueHeat.effBoiler == Approx(0.734627));
     CHECK(resFlueHeat.enthalpySteam == Approx(2865.339));

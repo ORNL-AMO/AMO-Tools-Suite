@@ -21,8 +21,9 @@ WaterHeatingUsingFlue::Output WaterHeatingUsingFlue::calculate(GasCompositions g
     const double specificHeatFG = res.specificHeat;
     const double flowFlueGas = res.density * ratingBoiler * 1000000 / hhvFuel;
 
-    const double tempSteamSat = SaturatedTemperature(prSteam).calculate();
-    const double enthalpySteam = SaturatedProperties(prSteam, tempSteam).calculate().gasSpecificEnthalpy;
+    const double enthalpySteam = condSteam == SteamCondition::Saturated ?
+            SteamProperties(prSteam, SteamProperties::ThermodynamicQuantity::QUALITY, 1).calculate().specificEnthalpy :
+            SteamProperties(prSteam, SteamProperties::ThermodynamicQuantity::TEMPERATURE, tempSteam).calculate().specificEnthalpy;
     const double enthalpyFW = SaturatedProperties(prSteam, tempFW).calculate().liquidSpecificEnthalpy;
     const double specificHeatFW =
             +0.000000000000326658 * pow(tempFW,6)
@@ -43,7 +44,7 @@ WaterHeatingUsingFlue::Output WaterHeatingUsingFlue::calculate(GasCompositions g
     const double tempFWOut = tempFW + ratingHeatRecFW / heatCapacityFW;
     const double energySavingsBoiler = ratingHeatRecFW / effBoiler * opHours / 1000000;
 
-    return Output(tempSteamSat, flowFlueGas, effBoiler,
+    return Output(flowFlueGas, effBoiler,
                   enthalpySteam, enthalpyFW, flowSteam,
                   flowFW, specificHeatFG, heatCapacityFG, specificHeatFW, heatCapacityFW,
                   heatCapacityMin, ratingHeatRecFW, tempFlueGasOut, tempFWOut,
