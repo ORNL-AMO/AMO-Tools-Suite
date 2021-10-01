@@ -387,9 +387,14 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         //C_curve of 0 breaks algorithm
         C_curve = .00000000001;
     }
+
     const double kW_maxmod = lf_fl * kW_max;
+    std::cout << "kW_max: " << kW_max << std::endl;
+    std::cout << "lf_fl: " << lf_fl << std::endl;
+    std::cout << "kW_maxmod: " << kW_maxmod << std::endl;
     const double t_bdc = t_blowdown / log(1 / a_tol);
 
+    // std::cout << "a_tol: " << a_tol << std::endl;
     const double t_spc = t_sdt / log(1 / a_tol);
 
     double t_rmod = 0;
@@ -423,10 +428,15 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
     if (C_curve < C_ul)
     {
         //kw_bd
+        std::cout << "t_blowdown: " << t_blowdown << std::endl;
         const double t_dd = C_storage * 60 * (P_ul - P_fl) / (C_curve * P_atm);
+        std::cout << "t_dd: " << t_dd << std::endl;
         const double t_bd = std::min(t_blowdown, t_dd);
+        std::cout << "kW_maxmod: " << kW_maxmod << std::endl;
 
-        const double kW_avg_bd = kW_nl + (((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * ((1 - exp(-t_bd / t_bdc)) * (t_bdc / t_bd));
+        const double kW_avg_bd = kW_nl + (((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * ((1 - exp(-t_bd / t_bdc)) * t_bdc / t_bd);
+
+        std::cout << "kW_avg_bd: " << kW_avg_bd << std::endl;
         double kW_bd = t_bd * kW_avg_bd;
 
         //kw_ol
@@ -440,10 +450,12 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         if (t_bd == t_blowdown)
         {
             kW_min_bd = kW_nl;
+            // std::cout << "IF: " << kW_min_bd << std::endl;
         }
         else
         {
             kW_min_bd = kW_nl + ((((kW_ul - kW_maxmod) * exp(-t_bd / t_spc) + kW_maxmod) - kW_nl) * exp(-t_bd / t_bdc));
+            std::cout << "kW_min_bd: " << kW_min_bd << std::endl;
         }
         const double kW_avg_rl = (kW_min_bd + kW_fl) / 2;
 
@@ -466,7 +478,17 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
         }
 
         //kW_curve
+        std::cout << "t_bd: " << t_bd << std::endl;
+        // std::cout << "t_ol: " << t_ol << std::endl;
+        // std::cout << "t_rl: " << t_rl << std::endl;
+        // std::cout << "t_rpu: " << t_rpu << std::endl;
+        // std::cout << "t_rmod: " << t_rmod << std::endl;
         double t_cycle = t_bd + t_ol + t_rl + t_rpu + t_rmod;
+        std::cout << "kW_bd: " << kW_bd << std::endl;
+        // std::cout << "kW_ol: " << kW_ol << std::endl;
+        // std::cout << "kW_rl: " << kW_rl << std::endl;
+        // std::cout << "kW_rpu: " << kW_rpu << std::endl;
+        // std::cout << "kW_r_mod: " << kW_r_mod << std::endl;
         kW_curve = (kW_bd + kW_ol + kW_rl + kW_rpu + kW_r_mod) / t_cycle;
     }
     else

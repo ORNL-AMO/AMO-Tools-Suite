@@ -804,7 +804,7 @@ public:
         if (CompType == CompressorType::Screw && LubricantType == Lubricant::None)
             throw std::invalid_argument("Lubricant needs to be Injected or free for Screw Compressor Type");
 
-        setNoLoadPowerFM(noLoadPowerFM);
+        setNoLoadPowerFM(noLoadPowerFM, LubricantType, CntrlType);
 
         if (CompType == CompressorType::Screw)
         {
@@ -848,9 +848,13 @@ public:
         P_sump_ul = sumpPressure;
     }
 
-    void setNoLoadPowerFM(double noLoadPowerFM)
+    void setNoLoadPowerFM(double noLoadPowerFM, Lubricant LubricantType, ControlType ControlType)
     {
-        lf_fl = noLoadPowerFM;
+        if(LubricantType == Lubricant::Injected && ControlType == ControlType::LoadUnload){
+            lf_fl = .92;
+        }else{
+            lf_fl = noLoadPowerFM;
+        }
     }
 
     void setC_ul()
