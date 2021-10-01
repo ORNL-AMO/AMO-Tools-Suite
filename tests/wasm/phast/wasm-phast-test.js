@@ -206,11 +206,11 @@ function flueGasLossesByVolume() {
 function flueGasLossesByMass() {
     var inp = {
         flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 70,
-        moistureInAirComposition: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
+        moistureInAirCombustion: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
         carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5
     };
     var flueGasLossesByMass = new Module.SolidLiquidFlueGasMaterial(inp.flueGasTemperature, inp.excessAirPercentage, inp.combustionAirTemperature,
-        inp.fuelTemperature, inp.moistureInAirComposition, inp.ashDischargeTemperature,
+        inp.fuelTemperature, inp.moistureInAirCombustion, inp.ashDischargeTemperature,
         inp.unburnedCarbonInAsh, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture,
         inp.nitrogen);
     var heatLoss = flueGasLossesByMass.getHeatLoss();
@@ -221,7 +221,7 @@ function flueGasLossesByMass() {
 function flueGasByMassCalculateHeatingValue() {
     var inp = {
         flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 70,
-        moistureInAirComposition: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
+        moistureInAirCombustion: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
         carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5
     };
     var solidLiquidFlueGasMaterial = new Module.SolidLiquidFlueGasMaterial();
