@@ -804,8 +804,8 @@ public:
         if (CompType == CompressorType::Screw && LubricantType == Lubricant::None)
             throw std::invalid_argument("Lubricant needs to be Injected or free for Screw Compressor Type");
 
-        setNoLoadPowerFM(noLoadPowerFM);
-
+        setNoLoadPowerFM(noLoadPowerFM, LubricantType, CntrlType);
+        setModExp(CntrlType);
         if (CompType == CompressorType::Screw)
         {
             if (LubricantType == Lubricant::Injected)
@@ -848,9 +848,13 @@ public:
         P_sump_ul = sumpPressure;
     }
 
-    void setNoLoadPowerFM(double noLoadPowerFM)
+    void setNoLoadPowerFM(double noLoadPowerFM, Lubricant LubricantType, ControlType ControlType)
     {
-        lf_fl = noLoadPowerFM;
+        if(LubricantType == Lubricant::Injected && ControlType == ControlType::LoadUnload){
+            lf_fl = .92;
+        }else{
+            lf_fl = noLoadPowerFM;
+        }
     }
 
     void setC_ul()
@@ -866,6 +870,15 @@ public:
 
     void setP_ul(){
         P_ul = P_max + (1 - (C_ul / C_fl)) * P_mod;
+    }
+
+    void setModExp(ControlType ControlType){
+        /*Throttle=1, Variable Displacement=2*/;
+        if(ControlType == ControlType::VariableDisplacementUnload){
+            mod_exp = 2;
+        }else{
+            mod_exp = 1;
+        }
     }
 
     /**
@@ -963,12 +976,12 @@ public:
 private:
     const double kW_nl = 1;
     const double P_fl, P_max, P_mod, P_atm, lf_nl, C_storage;
-    const double P_range = 0, mod_exp = 1 /*Throttle=1, Variable Displacement=2*/;
+    const double P_range = 0;
     CompressorType CompType;
     Lubricant LubricantType;
     ControlType CntrlType;
 
-    double kW_max, noLoadPowerFM, kW_ul, C_ul, P_ul;
+    double kW_max, noLoadPowerFM, kW_ul, C_ul, P_ul, mod_exp /*Throttle=1, Variable Displacement=2*/;
     double P_sump_ul = 15, t_blowdown = 0.003, t_sdt = 0.004, a_tol = 0.02, t_reload = 0.001, PerC_ul = 100, lf_fl = 0.7;
 
     double CurveFit(double, bool) const;

@@ -29,7 +29,8 @@
     "at": "tap debug tests/at/js/*.js",
     "test-waste-water": "tap debug tests/js/wasteWater.js",
     "test-wasm": "node tests/wasm/wasm-express.js",
-    "test-compressors": "tap debug tests/js/compressorsCalc-Mark.js"
+    "test-compressors": "tap debug tests/js/compressorsCalc-Mark.js",
+    "test-c": "tap debug tests/js/compressorsCalc-Testing.js"
   },
   "repository": {
     "type": "git",

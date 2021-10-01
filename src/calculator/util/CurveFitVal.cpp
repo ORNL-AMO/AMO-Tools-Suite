@@ -27,7 +27,6 @@ double CurveFitVal::calculate() const {
 double CurveFitVal::calculate(double fitValue) const {
     double curveFitVal = 0;
     for (std::size_t i = 0; i < pdegree + 1; ++i) {
-        std::cout << i << ": " << coeff[i] << std::endl; 
         curveFitVal += coeff[i] * std::pow(fitValue, i);
     }
     return curveFitVal;
