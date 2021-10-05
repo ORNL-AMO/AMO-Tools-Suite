@@ -48,15 +48,15 @@ public:
      *
      *
      * @param priFiringRate double, units MMBtu/hr
-     * @param priExhaustTemperature double, units  F
+     * @param priExhaustTemperature double, units  K
      * @param priExhaustO2 double, percentage / fraction
-     * @param priCombAirTemperature double, units F
+     * @param priCombAirTemperature double, units K
      * @param priOpHours double, units hrs/yr
      * @param priFuelHV double, units Btu/SCF
      *
      * @param secFiringRate double, units MMBtu/hr
-     * @param secExhaustTemperature double, units F
-     * @param secCombAirTemperature double, units F
+     * @param secExhaustTemperature double, units K
+     * @param secCombAirTemperature double, units K
      * @param secOpHours double, units hrs/yr
      * @param secFuelCost double, units $/MMBtu
      */
