@@ -129,7 +129,7 @@ function getBaseGasDensity() {
     let relativeHumidityInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, relativeHumidity, gasType, inputType, specificGravity);
     let relativeHumidityResult = relativeHumidityInstance.getGasDensity();
     relativeHumidityInstance.delete();
-    testNumberValue(relativeHumidityResult, 0.06231117736966, "Gas Density (relativeHumidity)");
+    testNumberValue(relativeHumidityResult, 0.05637830145287457, "Gas Density (relativeHumidity)");
 
     inputType = Module.BaseGasDensityInputType.DewPoint;
     dewPoint = 0.35;
@@ -137,7 +137,7 @@ function getBaseGasDensity() {
     let dewPointInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, dewPoint, gasType, inputType, specificGravity);
     let dewPointResult = dewPointInstance.getGasDensity();
     dewPointInstance.delete();
-    testNumberValue(dewPointResult, 0.06551801779516826, "Gas Density (dewPoint)");
+    testNumberValue(dewPointResult, 0.057473768082717605, "Gas Density (dewPoint)");
 
     inputType = Module.BaseGasDensityInputType.WetBulbTemp;
     let wetBulbTemp = 110;
@@ -146,7 +146,7 @@ function getBaseGasDensity() {
     let wetBulbInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, wetBulbTemp, gasType, inputType, specificGravity, specificHeatGas);
     let wetBulbResult = wetBulbInstance.getGasDensity();
     wetBulbInstance.delete();
-    testNumberValue(wetBulbResult, 0.065456, "Gas Density (wetBulb)");
+    testNumberValue(wetBulbResult, 0.05565305574153729, "Gas Density (wetBulb)");
 }
 
 function getVelocityPressureData()

@@ -101,13 +101,13 @@ double SolidLiquidFlueGasMaterial::getHeatLoss() {
 	const double moistureBar = moisture / percentTotalFuelComponents;
 
 	// steps 2 and 3
-	const double hFuel = 0.24 * (1 - moistureBar) * (fuelTemperature - 60);
+	const double hFuel = 0.24 * (1 - moistureBar) * (fuelTemperature - ambientAirTempF);
 	const double cpCombustionAir = 0.01788166862315 + 0.0000016704748 * combustionAirTemperature;
 	const double o2sair = carbonBar * (32.0 / 12) + hydrogenBar * 8 + sulphurBar - o2Bar;
 	const double n2sair = o2sair * (76.85 / 23.15);
 	const double msair = o2sair + n2sair;
 	const double mCombustionAir = msair * (1 + excessAir);
-	const double hCombustionAir = mCombustionAir * cpCombustionAir * (combustionAirTemperature - 60) / 0.075;
+	const double hCombustionAir = mCombustionAir * cpCombustionAir * (combustionAirTemperature - ambientAirTempF) / 0.075;
 
 	// steps 4 and 5
 	const double heatingValueFuel = carbonBar * 14100 + hydrogenBar * 61100 + sulphurBar * 3980;
@@ -127,20 +127,20 @@ double SolidLiquidFlueGasMaterial::getHeatLoss() {
 	auto const cpO2 = [] (double t) { return 11.515 - 172 / pow(t, 0.5) + 1530 / t; };
 	auto const cpN2 = [] (double t) { return 9.47 - 3.47 * 1000 / t + 1.07 * 1000000 / (t * t); };
 
-	const double hCO2 = carbonBar * (44.0 / 12) * (cpCO2(flueGasTemperature + 460) / 44.01) * (flueGasTemperature - 60);
+	const double hCO2 = carbonBar * (44.0 / 12) * (cpCO2(flueGasTemperature + 460) / 44.01) * (flueGasTemperature - ambientAirTempF);
 	const double hH2O = (hydrogenBar * 9 + moistureBar)
-	                    * (hSat + ((cpH2O(flueGasTemperature + 460) / 18.016) * (flueGasTemperature - 60)))
+	                    * (hSat + ((cpH2O(flueGasTemperature + 460) / 18.016) * (flueGasTemperature - ambientAirTempF)))
 	                    + ((moistureInAirCombustion / 100.0) * mCombustionAir)
-	                      * ((cpH2O(flueGasTemperature + 460) / 18.016) * (flueGasTemperature - 60));
-	const double hSO2 = (sulphurBar * 2) * (17.472 / 64.06) * (flueGasTemperature - 60);
-	const double hO2 = mO2 * (cpO2(flueGasTemperature + 460) / 32) * (flueGasTemperature - 60);
-	const double hN2 = mN2 * (cpN2(flueGasTemperature + 460) / 28.016) * (flueGasTemperature - 60);
+	                      * ((cpH2O(flueGasTemperature + 460) / 18.016) * (flueGasTemperature - ambientAirTempF));
+	const double hSO2 = (sulphurBar * 2) * (17.472 / 64.06) * (flueGasTemperature - ambientAirTempF);
+	const double hO2 = mO2 * (cpO2(flueGasTemperature + 460) / 32) * (flueGasTemperature - ambientAirTempF);
+	const double hN2 = mN2 * (cpN2(flueGasTemperature + 460) / 28.016) * (flueGasTemperature - ambientAirTempF);
 	const double hFG = hH2O + hCO2 + hN2 + hO2 + hSO2;
 
 	// steps 7, 8 and 9
-	const double hMoisture = moisture * (flueGasTemperature - 60);
+	const double hMoisture = moisture * (flueGasTemperature - ambientAirTempF);
 	const double hCarbon = 14093 * unburnedCarbonInAsh * (inertAsh / percentTotalFuelComponents);
-	const double hAsh = (inertAsh / percentTotalFuelComponents) * 0.25 * (1.8 * ashDischargeTemperature + 32 - 60);
+	const double hAsh = (inertAsh / percentTotalFuelComponents) * 0.25 * (1.8 * ashDischargeTemperature + 32 - ambientAirTempF);
 	const double hIn = hFuel + hCombustionAir + heatingValueFuel + hMoisture;
 
 	const double availableHeatPercent = (hIn - hFG - hAsh - hCarbon) / heatingValueFuel;

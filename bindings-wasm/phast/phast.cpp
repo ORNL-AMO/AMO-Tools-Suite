@@ -89,12 +89,19 @@ EMSCRIPTEN_BINDINGS(exhaustGasEAF)
 }
 EMSCRIPTEN_BINDINGS(flueGasLosses)
 {
+    class_<GasCompositions::ProcessHeatPropertiesResults>("ProcessHeatPropertiesResults")
+        .property("stoichAir", &GasCompositions::ProcessHeatPropertiesResults::stoichAir)
+        .property("excessAir", &GasCompositions::ProcessHeatPropertiesResults::excessAir)
+        .property("availableHeat", &GasCompositions::ProcessHeatPropertiesResults::availableHeat)
+        .property("specificHeat", &GasCompositions::ProcessHeatPropertiesResults::specificHeat)
+        .property("density", &GasCompositions::ProcessHeatPropertiesResults::density);
 
     // flueGasByVolumeCalculateHeatingValue
     // flueGasCalculateExcessAir
     // flueGasCalculateO2
     class_<GasCompositions>("GasCompositions")
         .constructor<std::string, double, double, double, double, double, double, double, double, double, double, double>()
+        .function("getProcessHeatProperties", &GasCompositions::getProcessHeatProperties)
         .function("getHeatingValue", &GasCompositions::getHeatingValue)
         .function("getHeatingValueVolume", &GasCompositions::getHeatingValueVolume)
         .function("getSpecificGravity", &GasCompositions::getSpecificGravity)
@@ -118,7 +125,7 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
     // flueGasByMassCalculateExcessAir
     class_<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterial")
         .constructor<std::string, double, double, double, double, double, double, double>()
-        .constructor<double, double, double, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<double, double, double, double, double, double, double, double, double, double, double, double, double, double, double>()
         .constructor()
         .function("getHeatLoss", &SolidLiquidFlueGasMaterial::getHeatLoss)
         .function("calculateHeatingValueFuel", &SolidLiquidFlueGasMaterial::calculateHeatingValueFuel)
@@ -141,7 +148,9 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
         .function("setInertAsh", &SolidLiquidFlueGasMaterial::setInertAsh)
         .function("setO2", &SolidLiquidFlueGasMaterial::setO2)
         .function("setMoisture", &SolidLiquidFlueGasMaterial::setMoisture)
-        .function("setNitrogen", &SolidLiquidFlueGasMaterial::setNitrogen);
+        .function("setNitrogen", &SolidLiquidFlueGasMaterial::setNitrogen)
+		.function("getAmbientAirTempF", &SolidLiquidFlueGasMaterial::getAmbientAirTempF)
+		.function("setAmbientAirTempF", &SolidLiquidFlueGasMaterial::setAmbientAirTempF);
 
     register_vector<SolidLiquidFlueGasMaterial>("SolidLiquidFlueGasMaterialV");
 }

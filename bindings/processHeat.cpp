@@ -18,6 +18,9 @@ NAN_MODULE_INIT(InitProcessHeat) {
 
     Nan::Set(target, New<String>("waterHeatingUsingFlue").ToLocalChecked(),
              GetFunction(New<FunctionTemplate>(waterHeatingUsingFlue)).ToLocalChecked());
+
+    Nan::Set(target, New<String>("airWaterCoolingUsingFlue").ToLocalChecked(),
+             GetFunction(New<FunctionTemplate>(airWaterCoolingUsingFlue)).ToLocalChecked());
 }
 
 NODE_MODULE(processHeat, InitProcessHeat)

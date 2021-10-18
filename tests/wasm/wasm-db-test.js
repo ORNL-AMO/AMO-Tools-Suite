@@ -117,7 +117,7 @@ function solidLiquidFlueGasMaterialsLog(item){
 function solidLiquidFlueGasMaterials(sql){
     logMessage('Solid Liquid Flue Gas Materials', true);
 
-    let item = new Module.SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7);
+    let item = new Module.SolidLiquidFlueGasMaterial(0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8);
     item.setSubstance('DB Test item');
     testNumberValue(sql.insertSolidLiquidFlueGasMaterial(item), true, "Insert");
 

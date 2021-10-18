@@ -834,11 +834,12 @@ NAN_METHOD(flueGasLossesByMass)
     const double o2 = Get("o2");
     const double moisture = Get("moisture");
     const double nitrogen = Get("nitrogen");
+	const double ambientAirTempF = Get("ambientAirTempF");
 
     SolidLiquidFlueGasMaterial slfgm(flueGasTemperature, excessAirPercentage, combustionAirTemperature,
                                      fuelTemperature, moistureInAirComposition, ashDischargeTemperature,
                                      unburnedCarbonInAsh, carbon, hydrogen, sulphur, inertAsh, o2, moisture,
-                                     nitrogen);
+                                     nitrogen, ambientAirTempF);
     double heatLoss = slfgm.getHeatLoss();
 
     Local<Number> retval = Nan::New(heatLoss);

@@ -65,14 +65,15 @@ public:
 	 * @param          SO2 % - double
 	 * @param          O2 % - double
      *
-     * @param tempFlueGas double, units K
+     * @param tempFlueGasF double, units F
      * @param percO2 double, units percentage / fraction
-     * @param tempCombAir double, units K
+     * @param tempCombAirF double, units F
      * @param moistCombAir double, units percentage / fraction
      * @param ratingBoiler double, units Gj/hr
      * @param prSteam double, units MPa
-     * @param tempSteam double, units K
-     * @param tempFW double, units K
+     * @param tempAmbientAirF double, units F
+     * @param tempSteamF double, units F
+     * @param tempFW double, units F
      * @param percBlowDown double, units percentage / fraction
      * @param effHX double, units percentage / fraction
      * @param opHours double, units Hr
@@ -100,10 +101,13 @@ public:
      * @param costSavingsBoiler double, units $/yr
      *
      */
-    Output calculate(GasCompositions gasCompositions, const double tempFlueGas, const double percO2, const double tempCombAir,
-                     const double moistCombAir, const double ratingBoiler, const double prSteam, const double tempAmbientAir,
-                     const double tempSteam, const double tempFW, const double percBlowDown, const double effHX,
-                     const double opHours, const double costFuel, const double hhvFuel, const SteamCondition condSteam = Superheated);
+    Output calculate(GasCompositions gasCompositions, const double tempFlueGasF, const double percO2, const double tempCombAirF,
+                     const double moistCombAir, const double ratingBoiler, const double prSteam, const double tempAmbientAirF,
+                     const double tempSteamF, const double tempFW, const double percBlowDown, const double effHX,
+                     const double opHours, const double costFuel, const double hhvFuel, const SteamCondition condSteam = Superheated, const double fuelTempF = 60);
+
+private:
+    inline double TempFtoK(double tempF) const { return ((tempF - 32) / 1.8) + 273.15; }
 };
 
 #endif //AMO_TOOLS_SUITE_WATERHEATINGUSINGFLUE_H

@@ -405,6 +405,7 @@ set(INCLUDE_FILES
         include/calculator/util/CompressedAirPressureReduction.h
         include/calculator/util/Compressors.h
         include/calculator/processHeat/AirHeatingUsingExhaust.h
+        include/calculator/processHeat/AirWaterCoolingUsingFlue.h
         include/calculator/processHeat/WaterHeatingUsingExhaust.h
         include/calculator/processHeat/WaterHeatingUsingFlue.h
         include/calculator/processHeat/WaterHeatingUsingSteam.h

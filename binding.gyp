@@ -363,6 +363,7 @@
               'include/calculator/processHeat/WaterHeatingUsingSteam.h',
               'include/calculator/processHeat/CascadeHeatHighToLow.h',
               'include/calculator/processHeat/WaterHeatingUsingFlue.h',
+              'include/calculator/processHeat/AirWaterCoolingUsingFlue.h',
               "<!(node -e \"require('nan')\")"
           ],
           'sources': [
