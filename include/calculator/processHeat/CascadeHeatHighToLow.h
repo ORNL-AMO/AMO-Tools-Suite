@@ -30,10 +30,10 @@ public:
                 priExcessAir = 0, priAvailableHeat = 0, secExcessAir = 0, secAvailableHeat = 0;
     };
 
-    /**
-     *
-     * @param gasCompositions
-     * Constructor for GasCompositions with which flue gas losses will be calculated. All molecule parameters are the
+  /**
+   *
+   * @param gasCompositions
+   * Constructor for GasCompositions with which flue gas losses will be calculated. All molecule parameters are the
 	 * percentage of that molecule present in the fuel
 	 *
 	 * @param          substance name - string
@@ -48,23 +48,23 @@ public:
 	 * @param          CO2 % - double
 	 * @param          SO2 % - double
 	 * @param          O2 % - double
-     *
-     *
-     * @param fuelHV double, units Btu/SCF
-     * @param fuelCost double, units $/MMBtu
+   *
+   *
+   * @param fuelHV double, units Btu/SCF
+   * @param fuelCost double, units $/MMBtu
 
-     * @param priFiringRate double, units MMBtu/hr
-     * @param priExhaustTemperature double, units  F
-     * @param priExhaustO2 double, percentage / fraction
-     * @param priCombAirTemperature double, units F
-     * @param priOpHours double, units hrs/yr
-     *
-     * @param secFiringRate double, units MMBtu/hr
-     * @param secExhaustTemperature double, units F
-     * @param secExhaustO2 double, percentage / fraction
-     * @param secCombAirTemperature double, units F
-     * @param secOpHours double, units hrs/yr
-     */
+   * @param priFiringRate double, units MMBtu/hr
+   * @param priExhaustTemperature double, units  F
+   * @param priExhaustO2 double, percentage / fraction
+   * @param priCombAirTemperature double, units F
+   * @param priOpHours double, units hrs/yr
+   *
+   * @param secFiringRate double, units MMBtu/hr
+   * @param secExhaustTemperature double, units F
+   * @param secExhaustO2 double, percentage / fraction
+   * @param secCombAirTemperature double, units F
+   * @param secOpHours double, units hrs/yr
+   */
     CascadeHeatHighToLow(GasCompositions gasCompositions, double fuelHV, double fuelCost,
                          double priFiringRate, double priExhaustTemperature, double priExhaustO2, double priCombAirTemperature, double priOpHours,
                          double secFiringRate, double secExhaustTemperature, double secExhaustO2, double secCombAirTemperature, double secOpHours,

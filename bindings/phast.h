@@ -810,7 +810,7 @@ NAN_METHOD(flueGasLossesByMass)
 	 * @param excessAirPercentage double, excess air as %
 	 * @param combustionAirTemperature double, combustion air temperature in °F
 	 * @param fuelTemperature double, temperature of fuel in °F
-	 * @param moistureInAirComposition double, moisture in air composition as %
+	 * @param moistureInAirCombustion double, moisture in air composition as %
 	 * @param ashDischargeTemperature double, temperature of ash discharge in °F
 	 * @param unburnedCarbonInAsh double, amount of unburned carbon in ash as %
 	 * @param fuel double, composition of: carbon, hydrogen, sulphur, inertAsh, o2, moisture and nitrogen (in %)
@@ -824,7 +824,7 @@ NAN_METHOD(flueGasLossesByMass)
     const double excessAirPercentage = Get("excessAirPercentage");
     const double combustionAirTemperature = Get("combustionAirTemperature");
     const double fuelTemperature = Get("fuelTemperature");
-    const double moistureInAirComposition = Get("moistureInAirComposition");
+    const double moistureInAirCombustion = Get("moistureInAirCombustion");
     const double ashDischargeTemperature = Get("ashDischargeTemperature");
     const double unburnedCarbonInAsh = Get("unburnedCarbonInAsh");
     const double carbon = Get("carbon");
@@ -837,7 +837,7 @@ NAN_METHOD(flueGasLossesByMass)
 	const double ambientAirTempF = Get("ambientAirTempF");
 
     SolidLiquidFlueGasMaterial slfgm(flueGasTemperature, excessAirPercentage, combustionAirTemperature,
-                                     fuelTemperature, moistureInAirComposition, ashDischargeTemperature,
+                                     fuelTemperature, moistureInAirCombustion, ashDischargeTemperature,
                                      unburnedCarbonInAsh, carbon, hydrogen, sulphur, inertAsh, o2, moisture,
                                      nitrogen, ambientAirTempF);
     double heatLoss = slfgm.getHeatLoss();
