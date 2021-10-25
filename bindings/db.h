@@ -515,10 +515,11 @@ NAN_METHOD(insertSolidLiquidFlueGasMaterial)
     double moisture = Get("moisture") * 100.0;
     double nitrogen = Get("nitrogen") * 100.0;
     std::string substance = GetStr("substance");
+	double ambientAirTempF = Get("ambientAirTempF");
 
     SolidLiquidFlueGasMaterial slfgm(0, 0, 0, 0, 0, 0, 0, carbon, hydrogen,
                                      sulphur, inertAsh, o2,
-                                     moisture, nitrogen);
+                                     moisture, nitrogen, ambientAirTempF);
     slfgm.setSubstance(substance);
     bool success = sql->insertSolidLiquidFlueGasMaterial(slfgm);
 

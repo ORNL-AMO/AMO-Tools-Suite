@@ -12,11 +12,9 @@ TEST_CASE( "Calculate Heat Loss for flue gas Losses", "[Heat Loss]" ) {
 	CHECK(composition.calculateO2(0.1552234) == Approx(0.0294793974));
 	CHECK(composition.calculateO2(0.451975) == Approx(0.0690024841));
 
-	CHECK(GasFlueGasMaterial(700, 2.31722095, 125, composition, 125).getHeatLoss() == Approx(0.7758857341));
-	CHECK(GasFlueGasMaterial(700, 15.52234415, 125, composition, 125).getHeatLoss() == Approx(0.7622712145));
-	CHECK(GasFlueGasMaterial(700, 45.19750365, 125, composition, 125).getHeatLoss() == Approx(0.7316834966));
-	CHECK(GasFlueGasMaterial(700, 9.0, 125, composition, 125).getHeatLoss() == Approx(0.76899));
-
+	CHECK(composition.getProcessHeatProperties(700, 0.0231722095, 125, 125, 60, 0).availableHeat == Approx(0.78354503));
+    CHECK(composition.getProcessHeatProperties(700, 0.1552234415, 125, 125, 60, 0).availableHeat == Approx(0.5241678247));
+    CHECK(composition.getProcessHeatProperties(700, 0.09, 125, 125, 60, 0).availableHeat == Approx(0.7248426969));
 
 	composition = GasCompositions("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
 	CHECK(composition.getHeatingValue() == Approx(22030.67089880065));

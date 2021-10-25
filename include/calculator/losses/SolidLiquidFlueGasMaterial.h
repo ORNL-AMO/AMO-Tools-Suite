@@ -37,7 +37,8 @@ public:
 			const double inertAsh,
 			const double o2,
 			const double moisture,
-			const double nitrogen) :
+			const double nitrogen,
+			const double ambientAirTempF = 60) :
 			flueGasTemperature(flueGasTemperature),
 			excessAir(excessAir / 100.0),
 			combustionAirTemperature(combustionAirTemperature),
@@ -51,7 +52,8 @@ public:
 			inertAsh(inertAsh / 100),
 			o2(o2 / 100),
 			moisture(moisture / 100),
-			nitrogen(nitrogen / 100)
+			nitrogen(nitrogen / 100),
+            ambientAirTempF(ambientAirTempF)
     {
         heatingValueFuel = calculateHeatingValueFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
         stoichometricAir = calculateStoichAirFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
@@ -205,6 +207,17 @@ public:
 	double getNitrogen() const { return nitrogen; }
 	void setNitrogen(const double nitrogen) { this->nitrogen = nitrogen; }
 
+    /**
+     * Gets the ambientAirTempF
+     * @return double, units F
+     */
+    double getAmbientAirTempF() const { return ambientAirTempF; }
+    /**
+     * Set the ambientAirTempF
+     * @param ambientAirTempF double, units F
+     */
+    void setAmbientAirTempF(const double ambientAirTempF) { this->ambientAirTempF = ambientAirTempF; }
+
 	/**
      * Sets the ID of substance
      * @param id int, ID of substance
@@ -275,7 +288,7 @@ private:
 	double flueGasTemperature, excessAir, combustionAirTemperature;
 	double fuelTemperature, moistureInAirCombustion, ashDischargeTemperature, unburnedCarbonInAsh;
 	double carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen;
-	double heatingValueFuel = 0, stoichometricAir = 0;
+	double heatingValueFuel = 0, stoichometricAir = 0, ambientAirTempF = 60;
 };
 
 #endif //AMO_TOOLS_SUITE_SOLIDLIQUIDFLUEGASMATERIAL_H

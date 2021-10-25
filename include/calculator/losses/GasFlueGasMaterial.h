@@ -181,23 +181,24 @@ public:
 
     /**
      *
-     * @param flueGasTemp double
-     * @param excessAir double
-     * @param combAirTemperature double
-     * @param combAirMoisturePerc double
-     * @param ambientAirTemp double
+     * @param flueGasTempF double, units F
+     * @param flueGasO2 double, percentage / fraction
+     * @param combAirTemperatureF double, units F
+     * @param fuelTempF double, units F, default value 60
+     * @param ambientAirTempF double, units F, default value 60
+     * @param combAirMoisturePerc double, percentage / fraction, default value 0
      * @return
      *
      * @param stoichAir double
-     * @param excessAir double
-     * @param availableHeat double
-     * @param specificHeat double
-     * @param density double
+     * @param excessAir double, percentage / fraction
+     * @param availableHeat double, percentage / fraction
+     * @param specificHeat double, units Btu/(# F)
+     * @param density double, units # / cu.ft
      *
      */
 
-    ProcessHeatPropertiesResults getProcessHeatProperties(const double flueGasTemp, const double flueGasO2, const double combAirTemperature,
-                                    const double ambientAirTemp = 288.71, const double combAirMoisturePerc = 0);
+    ProcessHeatPropertiesResults getProcessHeatProperties(const double flueGasTempF, const double flueGasO2, const double combAirTemperatureF,
+                                                          const double fuelTempF = 60, const double ambientAirTempF = 60, const double combAirMoisturePerc = 0);
 
     double calculateExcessAir(double flueGasO2);
 	double calculateO2(double excessAir);
@@ -293,6 +294,8 @@ private:
  * Gas Flue Gas Material class
  * Contains all of the properties of a gas flue gas material.
  * Used to calculate the heat loss caused by carrying the products of combustion out of the system through the flue.
+ *
+ * @deprecated Do not use this class getHeatLoss function, use enhanced GasComposition's getProcessHeatProperties function
  */
 class GasFlueGasMaterial {
 public:
@@ -317,6 +320,8 @@ public:
      * Gets the heat loss
      *
      * @return double, heat loss in btu/hr
+     *
+     * @deprecated Do not use this class getHeatLoss function, use enhanced GasComposition's getProcessHeatProperties function
      */
     double getHeatLoss();
 

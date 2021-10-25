@@ -4,6 +4,7 @@
 #include <calculator/processHeat/WaterHeatingUsingFlue.h>
 #include <calculator/processHeat/WaterHeatingUsingSteam.h>
 #include <calculator/processHeat/CascadeHeatHighToLow.h>
+#include <calculator/processHeat/AirWaterCoolingUsingFlue.h>
 
 TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", "[processHeat]" ) {
     GasCompositions gas("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
@@ -32,15 +33,21 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
 
 
     GasCompositions gasCH("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    auto resCascadeHeatHighToLow = CascadeHeatHighToLow(gasCH, 12.0, 1074.82, 0.07, 299.82, 8000, 1020,
-                                                        9.50, 380.37, 299.82, 7000, 5.00).calculate();
+    auto resCascadeHeatHighToLow = CascadeHeatHighToLow(gasCH, 1020, 5.00,
+                                                        12.0, 1475, 0.07, 80, 8000,
+                                                        9.50, 225, 17.5, 80, 7000,
+                                                        60, 60, 0).calculate();
     CHECK(resCascadeHeatHighToLow.priFlueVolume == Approx(174956.62));
-    CHECK(resCascadeHeatHighToLow.hxEnergyRate == Approx(2.6122));
-    CHECK(resCascadeHeatHighToLow.eqEnergySupply == Approx(5.3248));
+    CHECK(resCascadeHeatHighToLow.hxEnergyRate == Approx(4.22636));
+    CHECK(resCascadeHeatHighToLow.eqEnergySupply == Approx(4.7352));
     CHECK(resCascadeHeatHighToLow.effOpHours == Approx(7000));
-    CHECK(resCascadeHeatHighToLow.energySavings == Approx(37273.736));
-    CHECK(resCascadeHeatHighToLow.costSavings == Approx(186368.68));
-    CHECK(resCascadeHeatHighToLow.hourlySavings == Approx(5.3248));
+    CHECK(resCascadeHeatHighToLow.energySavings == Approx(33146.54626));
+    CHECK(resCascadeHeatHighToLow.costSavings == Approx(165732.7313));
+    CHECK(resCascadeHeatHighToLow.hourlySavings == Approx(4.7352));
+    CHECK(resCascadeHeatHighToLow.priExcessAir == Approx(0.4505));
+    CHECK(resCascadeHeatHighToLow.priAvailableHeat == Approx(0.47287));
+    CHECK(resCascadeHeatHighToLow.secExcessAir == Approx(-0.90626));
+    CHECK(resCascadeHeatHighToLow.secAvailableHeat == Approx(0.89254));
 
 
     auto resSteamEnergy = WaterHeatingUsingSteam().calculate(0.1565, 340.2,285.93,0.5150, 2.7255,285.93, 0.2048,
@@ -71,25 +78,32 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
 
 
     GasCompositions gasFlue("Gas", 94.0, 2.07, 1.41, 0.01, 0.42, 0.28, 0.0, 1.0, 0.71, 0, 0);
-    auto resFlueHeat = WaterHeatingUsingFlue().calculate(gasFlue, 658.15, 0.05, 299.82,
-                                                         0.02, 55.88, 3.45, 288.71,
-                                                         533.15, 380.37, 0.04, 0.625,
-                                                         8000, 5.21, 37706, WaterHeatingUsingFlue::Superheated);
-    CHECK(resFlueHeat.tempSteamSat == Approx(514.886));
+    auto resFlueHeat = WaterHeatingUsingFlue().calculate(gasFlue, 725, 0.05, 80,
+                                                         0.02, 55.88, 3.45, 60,
+                                                         500, 225, 0.04, 0.625,
+                                                         8000, 5.21, 37706, WaterHeatingUsingFlue::Superheated, 60);
     CHECK(resFlueHeat.flowFlueGas == Approx(23538.374));
-    CHECK(resFlueHeat.effBoiler == Approx(0.734627));
+    CHECK(resFlueHeat.effBoiler == Approx(0.72023));
     CHECK(resFlueHeat.enthalpySteam == Approx(2865.339));
-    CHECK(resFlueHeat.enthalpyFW == Approx(452.038));
-    CHECK(resFlueHeat.flowSteam == Approx(16329.899));
-    CHECK(resFlueHeat.flowFW == Approx(16983.0949));
+    CHECK(resFlueHeat.enthalpyFW == Approx(452.0478));
+    CHECK(resFlueHeat.flowSteam == Approx(16009.968));
+    CHECK(resFlueHeat.flowFW == Approx(16650.3671));
     CHECK(resFlueHeat.specheatFG == Approx(1.13247));
-    CHECK(resFlueHeat.heatCapacityFG == Approx(26656.559));
+    CHECK(resFlueHeat.heatCapacityFG == Approx(26656.5711));
     CHECK(resFlueHeat.specheatFW == Approx(4.2285));
-    CHECK(resFlueHeat.heatCapacityFW == Approx(71812.936));
-    CHECK(resFlueHeat.heatCapacityMin == Approx(26656.55));
-    CHECK(resFlueHeat.ratingHeatRecFW == Approx(4627911.87));
+    CHECK(resFlueHeat.heatCapacityFW == Approx(70405.8525));
+    CHECK(resFlueHeat.heatCapacityMin == Approx(26656.5711));
+    CHECK(resFlueHeat.ratingHeatRecFW == Approx(4627876.93));
     CHECK(resFlueHeat.tempFlueGasOut == Approx(484.537));
-    CHECK(resFlueHeat.tempFWOut == Approx(444.818));
-    CHECK(resFlueHeat.energySavingsBoiler == Approx(50397.36));
-    CHECK(resFlueHeat.costSavingsBoiler == Approx(262570.24));
+    CHECK(resFlueHeat.tempFWOut == Approx(446.1036));
+    CHECK(resFlueHeat.energySavingsBoiler == Approx(51404.2721));
+    CHECK(resFlueHeat.costSavingsBoiler == Approx(267816.2576));
+
+    GasCompositions gasFlueCond("Gas", 94.1, 3.02, 1.41, 0.01, 0.42, 0.28, 0.0, 0.0, 0.7, 0, 0.01);
+    auto resHeatRecovery = AirWaterCoolingUsingFlue().calculate(gasFlueCond, 116, 300, 125,
+                                                                70, 60, 0.04, 60, 0);
+    CHECK(resHeatRecovery.effThermal == Approx(0.8444));
+    CHECK(resHeatRecovery.effThermalLH == Approx(0.86454));
+    CHECK(resHeatRecovery.effLH == Approx(0.02014));
+    CHECK(resHeatRecovery.heatRecovery == Approx(2.3362));
 }

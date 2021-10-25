@@ -739,6 +739,8 @@ NAN_METHOD(flueGasLossesByVolume)
 	 * @param excessAirPercentage double, excess air as %
 	 * @param combustionAirTemperature double, temperature of combustion air in °F
 	 * @param gasComposition double, percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
+	 * @param ambientAirTemp double, units °F
+	 * @param combAirMoisturePerc double, %
 	 * @return heatLoss / available heat
 	 *
 	 * */
@@ -761,12 +763,12 @@ NAN_METHOD(flueGasLossesByVolume)
     const double excessAirPercentage = Get("excessAirPercentage");
     const double combustionAirTemperature = Get("combustionAirTemperature");
     const double fuelTemperature = Get("fuelTemperature");
+    const double ambientAirTemp = Get("ambientAirTemp");
+    const double combAirMoisturePerc = Get("combAirMoisturePerc");
 
     GasCompositions comps("", CH4, C2H6, N2, H2, C3H8,
                           C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
-    GasFlueGasMaterial fg(flueGasTemperature, excessAirPercentage, combustionAirTemperature,
-                          comps, fuelTemperature);
-    double heatLoss = fg.getHeatLoss();
+    const double heatLoss = comps.getProcessHeatProperties(flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature, ambientAirTemp, combAirMoisturePerc).availableHeat;
 
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);
@@ -834,11 +836,12 @@ NAN_METHOD(flueGasLossesByMass)
     const double o2 = Get("o2");
     const double moisture = Get("moisture");
     const double nitrogen = Get("nitrogen");
+	const double ambientAirTempF = Get("ambientAirTempF");
 
     SolidLiquidFlueGasMaterial slfgm(flueGasTemperature, excessAirPercentage, combustionAirTemperature,
                                      fuelTemperature, moistureInAirCombustion, ashDischargeTemperature,
                                      unburnedCarbonInAsh, carbon, hydrogen, sulphur, inertAsh, o2, moisture,
-                                     nitrogen);
+                                     nitrogen, ambientAirTempF);
     double heatLoss = slfgm.getHeatLoss();
 
     Local<Number> retval = Nan::New(heatLoss);

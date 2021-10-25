@@ -3,6 +3,7 @@
 #include "calculator/processHeat/WaterHeatingUsingExhaust.h"
 #include "calculator/processHeat/WaterHeatingUsingSteam.h"
 #include "calculator/processHeat/WaterHeatingUsingFlue.h"
+#include "calculator/processHeat/AirWaterCoolingUsingFlue.h"
 #include <emscripten/bind.h>
 #include <string>
 
@@ -48,10 +49,13 @@ EMSCRIPTEN_BINDINGS(processHeat_class)
         .property("effOpHours", &CascadeHeatHighToLow::Output::effOpHours)
         .property("energySavings", &CascadeHeatHighToLow::Output::energySavings)
         .property("costSavings", &CascadeHeatHighToLow::Output::costSavings)
-        .property("hourlySavings", &CascadeHeatHighToLow::Output::hourlySavings);
+        .property("hourlySavings", &CascadeHeatHighToLow::Output::hourlySavings)
+        .property("priExcessAir", &CascadeHeatHighToLow::Output::priExcessAir)
+        .property("priAvailableHeat", &CascadeHeatHighToLow::Output::priAvailableHeat)
+        .property("secExcessAir", &CascadeHeatHighToLow::Output::secExcessAir)
+        .property("secAvailableHeat", &CascadeHeatHighToLow::Output::secAvailableHeat);
 
     class_<WaterHeatingUsingFlue::Output>("WaterHeatingUsingFlueOutput")
-        .property("tempSteamSat", &WaterHeatingUsingFlue::Output::tempSteamSat)
         .property("flowFlueGas", &WaterHeatingUsingFlue::Output::flowFlueGas)
         .property("effBoiler", &WaterHeatingUsingFlue::Output::effBoiler)
         .property("enthalpySteam", &WaterHeatingUsingFlue::Output::enthalpySteam)
@@ -69,6 +73,12 @@ EMSCRIPTEN_BINDINGS(processHeat_class)
         .property("energySavingsBoiler", &WaterHeatingUsingFlue::Output::energySavingsBoiler)
         .property("costSavingsBoiler", &WaterHeatingUsingFlue::Output::costSavingsBoiler);
 
+    class_<AirWaterCoolingUsingFlue::Output>("AirWaterCoolingUsingFlueOutput")
+        .property("effThermal", &AirWaterCoolingUsingFlue::Output::effThermal)
+        .property("effThermalLH", &AirWaterCoolingUsingFlue::Output::effThermalLH)
+        .property("effLH", &AirWaterCoolingUsingFlue::Output::effLH)
+        .property("heatRecovery", &AirWaterCoolingUsingFlue::Output::heatRecovery);
+
     class_<AirHeatingUsingExhaust>("AirHeatingUsingExhaust")
         .constructor<GasCompositions>()
         .constructor<SolidLiquidFlueGasMaterial, bool>()
@@ -83,10 +93,15 @@ EMSCRIPTEN_BINDINGS(processHeat_class)
         .function("calculate", &WaterHeatingUsingSteam::calculate);
 
     class_<CascadeHeatHighToLow>("CascadeHeatHighToLow")
-        .constructor<GasCompositions, double, double, double, double, double, double, double, double, double, double, double>()
+        .constructor<GasCompositions, double, double, double, double, double, double,
+        double, double, double, double, double, double, double, double, double>()
         .function("calculate", &CascadeHeatHighToLow::calculate);
 
     class_<WaterHeatingUsingFlue>("WaterHeatingUsingFlue")
         .constructor<>()
         .function("calculate", &WaterHeatingUsingFlue::calculate);
+
+    class_<AirWaterCoolingUsingFlue>("AirWaterCoolingUsingFlue")
+        .constructor<>()
+        .function("calculate", &AirWaterCoolingUsingFlue::calculate);
 }
