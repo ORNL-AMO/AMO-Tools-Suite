@@ -123,17 +123,22 @@ function waterHeatingUsingFlue(){
 
 function airWaterCoolingUsingFlue(){
     let validate = function(results, expected) {
-        testNumberValue(rnd(results.effThermal), rnd(expected[0]), "effThermal");
-        testNumberValue(rnd(results.effThermalLH), rnd(expected[1]), "effThermalLH");
-        testNumberValue(rnd(results.effLH), rnd(expected[2]),"effLH");
-        testNumberValue(rnd(results.heatRecovery), rnd(expected[3]),"heatRecovery");
+        testNumberValue(rnd(results.excessAir), rnd(expected[0]), "excessAir");
+        testNumberValue(rnd(results.flowFlueGas), rnd(expected[1]), "flowFlueGas");
+        testNumberValue(rnd(results.specHeat), rnd(expected[2]),"specHeat");
+        testNumberValue(rnd(results.fracCondensed), rnd(expected[3]),"fracCondensed");
+        testNumberValue(rnd(results.effThermal), rnd(expected[4]), "effThermal");
+        testNumberValue(rnd(results.effThermalLH), rnd(expected[5]), "effThermalLH");
+        testNumberValue(rnd(results.effLH), rnd(expected[6]),"effLH");
+        testNumberValue(rnd(results.heatRecovery), rnd(expected[7]),"heatRecovery");
+        testNumberValue(rnd(results.sensibleHeatRecovery), rnd(expected[8]),"sensibleHeatRecovery");
     };
 
     logMessage('Air Water Cooling Using Flue: Test# 1', true);
     let gasInstance = new Module.GasCompositions('Gas', 94.1, 3.02, 1.41, 0.01, 0.42, 0.28, 0.0, 0.0, 0.7, 0, 0.01);
     let instance = new Module.AirWaterCoolingUsingFlue();
     let results = instance.calculate(gasInstance, 116, 300, 125, 70, 60, 0.04, 60, 0);
-    validate(results, [0.8444, 0.86454, 0.02014, 2.3362]);
+    validate(results, [0.21596, 106938.4282, 0.2578, 0.19816, 0.8444, 0.86454, 0.02014, 2.3362, 4.8247]);
     instance.delete();
     gasInstance.delete();
 }
