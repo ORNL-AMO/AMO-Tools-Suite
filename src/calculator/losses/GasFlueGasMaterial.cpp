@@ -125,7 +125,7 @@ GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatPro
     const double sensibleHeat = 1 * specificHeat * (fuelTempF - ambientAirTempF);
     const double availableHeat = (100 * (sensibleHeat + heatValueFuel + preHeatedAirEff + preHeatedAirMoistureEff) - (H2OHeatContent + CO2HeatContent + N2HeatContent + O2HeatContent)) / (100 * heatValueFuel);
 
-    return ProcessHeatPropertiesResults(stoichAir, excessAir, availableHeat, specificHeat, totalGenerated);
+    return ProcessHeatPropertiesResults(stoichAir, excessAir, availableHeat, specificHeat, totalGenerated, heatValueFuel);
 }
 
 // used for calculating O2 in flue gas given excess air as a decimal

@@ -274,14 +274,19 @@ test('WaterHeatingUsingFlue Gas', function (t) {
 });
 
 test('AirWaterCoolingUsingFlue Gas', function (t) {
-    t.plan(5);
+    t.plan(10);
     t.type(bindings.airWaterCoolingUsingFlue, 'function');
 
     var compare = function(results, expected) {
-        t.equal(rnd(results.effThermal), rnd(expected[0]));
-        t.equal(rnd(results.effThermalLH), rnd(expected[1]));
-        t.equal(rnd(results.effLH), rnd(expected[2]));
-        t.equal(rnd(results.heatRecovery), rnd(expected[3]));
+        t.equal(rnd(results.excessAir), rnd(expected[0]));
+        t.equal(rnd(results.flowFlueGas), rnd(expected[1]));
+        t.equal(rnd(results.specHeat), rnd(expected[2]));
+        t.equal(rnd(results.fracCondensed), rnd(expected[3]));
+        t.equal(rnd(results.effThermal), rnd(expected[4]));
+        t.equal(rnd(results.effThermalLH), rnd(expected[5]));
+        t.equal(rnd(results.effLH), rnd(expected[6]));
+        t.equal(rnd(results.heatRecovery), rnd(expected[7]));
+        t.equal(rnd(results.sensibleHeatRecovery), rnd(expected[8]));
     };
 
     var input = {
@@ -308,5 +313,5 @@ test('AirWaterCoolingUsingFlue Gas', function (t) {
         O2: 0.01
     };
 
-    compare(bindings.airWaterCoolingUsingFlue(input), [0.8444, 0.86454, 0.02014, 2.3362]);
+    compare(bindings.airWaterCoolingUsingFlue(input), [0.21596, 106938.4282, 0.2578, 0.19816, 0.8444, 0.86454, 0.02014, 2.3362, 4.8247]);
 });

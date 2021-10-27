@@ -76,11 +76,11 @@ class GasCompositions {
 public:
     struct ProcessHeatPropertiesResults
     {
-        ProcessHeatPropertiesResults(double stoichAir, double excessAir, double availableHeat, double specificHeat, double density) :
-                stoichAir(stoichAir), excessAir(excessAir), availableHeat(availableHeat), specificHeat(specificHeat), density(density){}
+        ProcessHeatPropertiesResults(double stoichAir, double excessAir, double availableHeat, double specificHeat, double density, double heatValueFuel) :
+                stoichAir(stoichAir), excessAir(excessAir), availableHeat(availableHeat), specificHeat(specificHeat), density(density), heatValueFuel(heatValueFuel){}
 
         ProcessHeatPropertiesResults() = default;
-        double stoichAir = 0, excessAir = 0, availableHeat = 0, specificHeat = 0, density = 0;
+        double stoichAir = 0, excessAir = 0, availableHeat = 0, specificHeat = 0, density = 0, heatValueFuel = 0;
     };
 
 	/**
@@ -194,6 +194,7 @@ public:
      * @param availableHeat double, percentage / fraction
      * @param specificHeat double, units Btu/(# F)
      * @param density double, units # / cu.ft
+     * @param heatValueFuel double, units Btu / cu.ft
      *
      */
 

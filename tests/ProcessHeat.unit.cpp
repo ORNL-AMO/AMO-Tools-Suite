@@ -102,8 +102,13 @@ TEST_CASE( "Estimate maximum air flow that can be heated by using exhaust gas", 
     GasCompositions gasFlueCond("Gas", 94.1, 3.02, 1.41, 0.01, 0.42, 0.28, 0.0, 0.0, 0.7, 0, 0.01);
     auto resHeatRecovery = AirWaterCoolingUsingFlue().calculate(gasFlueCond, 116, 300, 125,
                                                                 70, 60, 0.04, 60, 0);
+    CHECK(resHeatRecovery.excessAir == Approx(0.21596));
+    CHECK(resHeatRecovery.flowFlueGas == Approx(106938.4282));
+    CHECK(resHeatRecovery.specHeat == Approx(0.2578));
+    CHECK(resHeatRecovery.fracCondensed == Approx(0.19816));
     CHECK(resHeatRecovery.effThermal == Approx(0.8444));
     CHECK(resHeatRecovery.effThermalLH == Approx(0.86454));
     CHECK(resHeatRecovery.effLH == Approx(0.02014));
     CHECK(resHeatRecovery.heatRecovery == Approx(2.3362));
+    CHECK(resHeatRecovery.sensibleHeatRecovery == Approx(4.8247));
 }

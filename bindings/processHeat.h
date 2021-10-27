@@ -314,10 +314,15 @@ NAN_METHOD(airWaterCoolingUsingFlue)
         auto output = AirWaterCoolingUsingFlue().calculate(GasCompositions("Gas", CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2),
                                                         heatInput, tempFlueGasInF, tempFlueGasOutF, tempCombAirF, fuelTempF, percO2, ambientAirTempF, moistCombAir);
 
+        setR("excessAir", output.excessAir);
+        setR("flowFlueGas", output.flowFlueGas);
+        setR("specHeat", output.specHeat);
+        setR("fracCondensed", output.fracCondensed);
         setR("effThermal", output.effThermal);
         setR("effThermalLH", output.effThermalLH);
         setR("effLH", output.effLH);
         setR("heatRecovery", output.heatRecovery);
+        setR("sensibleHeatRecovery", output.sensibleHeatRecovery);
 
         info.GetReturnValue().Set(r);
     }
