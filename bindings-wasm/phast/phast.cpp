@@ -94,7 +94,8 @@ EMSCRIPTEN_BINDINGS(flueGasLosses)
         .property("excessAir", &GasCompositions::ProcessHeatPropertiesResults::excessAir)
         .property("availableHeat", &GasCompositions::ProcessHeatPropertiesResults::availableHeat)
         .property("specificHeat", &GasCompositions::ProcessHeatPropertiesResults::specificHeat)
-        .property("density", &GasCompositions::ProcessHeatPropertiesResults::density);
+        .property("density", &GasCompositions::ProcessHeatPropertiesResults::density)
+        .property("flueGasO2", &GasCompositions::ProcessHeatPropertiesResults::flueGasO2);
 
     // flueGasByVolumeCalculateHeatingValue
     // flueGasCalculateExcessAir

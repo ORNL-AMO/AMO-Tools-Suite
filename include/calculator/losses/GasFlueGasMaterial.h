@@ -76,11 +76,11 @@ class GasCompositions {
 public:
     struct ProcessHeatPropertiesResults
     {
-        ProcessHeatPropertiesResults(double stoichAir, double excessAir, double availableHeat, double specificHeat, double density, double heatValueFuel) :
-                stoichAir(stoichAir), excessAir(excessAir), availableHeat(availableHeat), specificHeat(specificHeat), density(density), heatValueFuel(heatValueFuel){}
+        ProcessHeatPropertiesResults(double stoichAir, double excessAir, double availableHeat, double specificHeat, double density, double heatValueFuel, double flueGasO2) :
+                stoichAir(stoichAir), excessAir(excessAir), availableHeat(availableHeat), specificHeat(specificHeat), density(density), heatValueFuel(heatValueFuel), flueGasO2(flueGasO2){}
 
         ProcessHeatPropertiesResults() = default;
-        double stoichAir = 0, excessAir = 0, availableHeat = 0, specificHeat = 0, density = 0, heatValueFuel = 0;
+        double stoichAir = 0, excessAir = 0, availableHeat = 0, specificHeat = 0, density = 0, heatValueFuel = 0, flueGasO2 = 0;
     };
 
 	/**
@@ -187,6 +187,7 @@ public:
      * @param fuelTempF double, units F, default value 60
      * @param ambientAirTempF double, units F, default value 60
      * @param combAirMoisturePerc double, percentage / fraction, default value 0
+     * @param excessAir double, percentage / fraction
      * @return
      *
      * @param stoichAir double
@@ -199,7 +200,8 @@ public:
      */
 
     ProcessHeatPropertiesResults getProcessHeatProperties(const double flueGasTempF, const double flueGasO2, const double combAirTemperatureF,
-                                                          const double fuelTempF = 60, const double ambientAirTempF = 60, const double combAirMoisturePerc = 0);
+                                                          const double fuelTempF = 60, const double ambientAirTempF = 60, const double combAirMoisturePerc = 0,
+                                                          const double excessAir = 0);
 
     double calculateExcessAir(double flueGasO2);
 	double calculateO2(double excessAir);
@@ -289,6 +291,8 @@ private:
 	double mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
 	double heatingValue = 0, specificGravity = 0, heatingValueVolume = 0, stoichometricAir = 0;
+
+    void flueGasO2AdjustForCalcError(const double excessAir, double &flueO2) const;
 };
 
 /**
