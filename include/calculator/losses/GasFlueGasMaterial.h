@@ -196,6 +196,7 @@ public:
      * @param specificHeat double, units Btu/(# F)
      * @param density double, units # / cu.ft
      * @param heatValueFuel double, units Btu / cu.ft
+     * @param flueGasO2 double, percentage / fraction
      *
      */
 
