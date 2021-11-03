@@ -747,6 +747,7 @@ NAN_METHOD(flueGasLossesByVolume)
 	 * */
 
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
 
     const double CH4 = Get("CH4");
     const double C2H6 = Get("C2H6");
@@ -770,12 +771,19 @@ NAN_METHOD(flueGasLossesByVolume)
 
     GasCompositions comps("", CH4, C2H6, N2, H2, C3H8,
                           C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
-    const double heatLoss = comps.getProcessHeatProperties(flueGasTemperature, flueGasO2Percentage/100, combustionAirTemperature,
+    auto output = comps.getProcessHeatProperties(flueGasTemperature, flueGasO2Percentage/100, combustionAirTemperature,
                                                            fuelTemperature, ambientAirTemp, combAirMoisturePerc,
-                                                           excessAirPercentage/100).availableHeat;
+                                                           excessAirPercentage/100);
 
-    Local<Number> retval = Nan::New(heatLoss);
-    info.GetReturnValue().Set(retval);
+    SetR("stoichAir", output.stoichAir);
+    SetR("excessAir", output.excessAir);
+    SetR("availableHeat", output.availableHeat);
+    SetR("specificHeat", output.specificHeat);
+    SetR("density", output.density);
+    SetR("heatValueFuel", output.heatValueFuel);
+    SetR("flueGasO2", output.flueGasO2);
+
+    info.GetReturnValue().Set(r);
 }
 
 NAN_METHOD(flueGasByVolumeCalculateHeatingValue)
