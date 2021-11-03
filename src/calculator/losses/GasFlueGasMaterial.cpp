@@ -41,9 +41,19 @@ double GasCompositions::getEnthalpyAtSaturation(const double ppH2O) const { retu
 double GasCompositions::getSaturationTemperature(const double ppH2O) const { return 36.009 * log(ppH2O * 29.926) + 81.054; }
 
 GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatProperties(const double flueGasTempF, const double flueGasO2, const double combAirTemperatureF,
-                                                                                        const double fuelTempF, const double ambientAirTempF, const double combAirMoisturePerc)
+                                                                                        const double fuelTempF, const double ambientAirTempF, const double combAirMoisturePerc,
+                                                                                        const double excessAir)
 {
-    const double excessAir = getExcessAir(flueGasO2);
+    double exsAir = 0;
+    double flueO2 = 0;
+    if(excessAir != 0){
+        exsAir = excessAir;
+        flueO2 = calculateO2(exsAir);
+        flueGasO2AdjustForCalcError(excessAir, flueO2);
+    }else {
+        exsAir = getExcessAir(flueGasO2);
+        flueO2 = flueGasO2;
+    }
 
     const double initialTemp = (460 + combAirTemperatureF);
     const double finalTemp = (460 + flueGasTempF);
@@ -97,12 +107,12 @@ GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatPro
     CO2GeneratedWt *= 0.0026365;
     O2GeneratedWt /= 32;
     const double stoichAir = O2GeneratedWt * (1 + (1 - 0.209) / 0.209);
-    const double combAirMoisture = combAirMoisturePerc == 0 ? 0 : ((combAirMoisturePerc - 0.009) * (stoichAir * (1 + excessAir)) * 0.0763);
+    const double combAirMoisture = combAirMoisturePerc == 0 ? 0 : ((combAirMoisturePerc - 0.009) * (stoichAir * (1 + exsAir)) * 0.0763);
     H20GeneratedWt *= 0.0026365;
     H20GeneratedWt += combAirMoisture;
 
-    const double O2GeneratedVol = excessAir * O2GeneratedWt;
-    const double N2GeneratedVol = (1 + excessAir) * O2GeneratedWt * (1 - 0.209) / 0.209;
+    const double O2GeneratedVol = exsAir * O2GeneratedWt;
+    const double N2GeneratedVol = (1 + exsAir) * O2GeneratedWt * (1 - 0.209) / 0.209;
 
     const double N2GeneratedWt = N2GeneratedVol * 0.0744;
     O2GeneratedWt = O2GeneratedVol * 0.0846;
@@ -115,7 +125,7 @@ GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatPro
     const double O2HeatContent = avgCpO2 * (flueGasTempF - ambientAirTempF) * 100 * O2GeneratedWt;
 
     //heat in preheated combustion air
-    const double preHeatedAirEff = stoichAir * (1 + excessAir) * (((combAirTemperatureF + ambientAirTempF) / 2) * cpB + cpA) * (combAirTemperatureF - ambientAirTempF);
+    const double preHeatedAirEff = stoichAir * (1 + exsAir) * (((combAirTemperatureF + ambientAirTempF) / 2) * cpB + cpA) * (combAirTemperatureF - ambientAirTempF);
     //heat content of air moisture
     const double preHeatedAirMoistureEff = combAirMoisture * avgCpH2O * (flueGasTempF - combAirTemperatureF);
 
@@ -125,7 +135,18 @@ GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatPro
     const double sensibleHeat = 1 * specificHeat * (fuelTempF - ambientAirTempF);
     const double availableHeat = (100 * (sensibleHeat + heatValueFuel + preHeatedAirEff + preHeatedAirMoistureEff) - (H2OHeatContent + CO2HeatContent + N2HeatContent + O2HeatContent)) / (100 * heatValueFuel);
 
-    return ProcessHeatPropertiesResults(stoichAir, excessAir, availableHeat, specificHeat, totalGenerated, heatValueFuel);
+    return ProcessHeatPropertiesResults(stoichAir, exsAir, availableHeat, specificHeat, totalGenerated, heatValueFuel, flueO2);
+}
+
+void GasCompositions::flueGasO2AdjustForCalcError(const double excessAir, double &flueO2) const {
+    if (flueO2 > 0){
+        for (auto i = 0; i < 100; i++) {
+            flueO2 = (double)((int)(flueO2 * 1000 + .5)) / 1000;
+            double excessAirNew = getExcessAir(flueO2);
+            if (fabs(1 - excessAirNew/excessAir) < 0.02) break;
+            flueO2 *= excessAirNew > excessAir ? 0.99 : 1.01;
+        }
+    }
 }
 
 // used for calculating O2 in flue gas given excess air as a decimal

@@ -736,11 +736,12 @@ NAN_METHOD(flueGasLossesByVolume)
 	 * Constructor for the flue gas losses by volume with all inputs specified
 	 *
 	 * @param flueGasTemperature double, temperature of flue gas in °F
-	 * @param excessAirPercentage double, excess air as %
+	 * @param flueGasO2Percentage double, as %
 	 * @param combustionAirTemperature double, temperature of combustion air in °F
 	 * @param gasComposition double, percentages for CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2 and O2
 	 * @param ambientAirTemp double, units °F
 	 * @param combAirMoisturePerc double, %
+	 * @param excessAirPercentage double, excess air as %
 	 * @return heatLoss / available heat
 	 *
 	 * */
@@ -760,15 +761,18 @@ NAN_METHOD(flueGasLossesByVolume)
     const double O2 = Get("O2");
 
     const double flueGasTemperature = Get("flueGasTemperature");
-    const double excessAirPercentage = Get("excessAirPercentage");
+    const double flueGasO2Percentage = Get("flueGasO2Percentage");
     const double combustionAirTemperature = Get("combustionAirTemperature");
     const double fuelTemperature = Get("fuelTemperature");
     const double ambientAirTemp = Get("ambientAirTemp");
     const double combAirMoisturePerc = Get("combAirMoisturePerc");
+    const double excessAirPercentage = Get("excessAirPercentage");
 
     GasCompositions comps("", CH4, C2H6, N2, H2, C3H8,
                           C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
-    const double heatLoss = comps.getProcessHeatProperties(flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature, ambientAirTemp, combAirMoisturePerc).availableHeat;
+    const double heatLoss = comps.getProcessHeatProperties(flueGasTemperature, flueGasO2Percentage/100, combustionAirTemperature,
+                                                           fuelTemperature, ambientAirTemp, combAirMoisturePerc,
+                                                           excessAirPercentage/100).availableHeat;
 
     Local<Number> retval = Nan::New(heatLoss);
     info.GetReturnValue().Set(retval);

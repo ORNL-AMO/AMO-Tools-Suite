@@ -191,15 +191,16 @@ function flueGasLossesByVolume() {
         H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     }
     var flueGasTemperature = 700;
-    var excessAirPercentage = 9.0;
+    var flueGasO2Percentage = 0.0;
     var combustionAirTemperature = 125;
     var fuelTemperature = 125;
 	var ambientAirTemp = 60;
 	var combAirMoisturePerc = 0;
-
+	var excessAirPercentage = 0.09;
+    
     var gasComposition = new Module.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
-    var heatLoss = gasComposition.getProcessHeatProperties(flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature, ambientAirTemp, combAirMoisturePerc).availableHeat;
-    testNumberValue(heatLoss, 0.900089147885744, "PHAST Flue Gas By Volume (heatLoss)");
+    var heatLoss = gasComposition.getProcessHeatProperties(flueGasTemperature, flueGasO2Percentage, combustionAirTemperature, fuelTemperature, ambientAirTemp, combAirMoisturePerc, excessAirPercentage).availableHeat;
+    testNumberValue(heatLoss, 0.785877, "PHAST Flue Gas By Volume (heatLoss)");
     gasComposition.delete();
 }
 // flueGasLossesByMass
