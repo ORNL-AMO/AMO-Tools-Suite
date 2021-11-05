@@ -18,7 +18,7 @@
 class EnergyInputExhaustGasLosses {
 public:
     /**
-     * Constructor for the energy input - exhaust gas losses - Will calculate availableHeat given input parameters
+     * Constructor for the energy input - exhaust gas losses - Will calculate effThermal given input parameters
      * and calculate heatDelivered and exhaustGasLosses
      * @param excessAir double, excess air as %
      * @param combustionAirTemp double, temperature of combustion air in °F

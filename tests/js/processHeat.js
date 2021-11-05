@@ -158,7 +158,7 @@ test('WaterHeatingUsingSteam HeatExchanger', function (t) {
 });
 
 test('CascadeHeatHighToLow Gas', function (t) {
-    t.plan(7);
+    t.plan(12);
     t.type(bindings.cascadeHeatHighToLow, 'function');
 
     var compare = function(results, expected) {
@@ -168,21 +168,32 @@ test('CascadeHeatHighToLow Gas', function (t) {
         t.equal(rnd(results.effOpHours), rnd(expected[3]));
         t.equal(rnd(results.energySavings), rnd(expected[4]));
         t.equal(rnd(results.costSavings), rnd(expected[5]));
+        t.equal(rnd(results.hourlySavings), rnd(expected[6]));
+        t.equal(rnd(results.priExcessAir), rnd(expected[7]));
+        t.equal(rnd(results.priAvailableHeat), rnd(expected[8]));
+        t.equal(rnd(results.secExcessAir), rnd(expected[9]));
+        t.equal(rnd(results.secAvailableHeat), rnd(expected[10]));
     };
 
     var input = {
+        fuelHV: 1020,
+        fuelCost: 5.00,
+
         priFiringRate: 12.0,
-        priExhaustTemperature: 1074.82,
+        priExhaustTemperature: 1475,
         priExhaustO2: 0.07,
-        priCombAirTemperature: 299.82,
+        priCombAirTemperature: 80,
         priOpHours: 8000,
-        priFuelHV: 1020,
 
         secFiringRate: 9.50,
-        secExhaustTemperature: 380.37,
-        secCombAirTemperature: 299.82,
+        secExhaustTemperature: 225,
+        secExhaustO2:17.5,
+        secCombAirTemperature: 80,
         secOpHours: 7000,
-        secFuelCost: 5.00,
+
+        fuelTempF: 60,
+        ambientAirTempF: 60,
+        combAirMoisturePerc:0,
 
         gasFuelType: true,
         substance: 'Gas',
@@ -199,49 +210,49 @@ test('CascadeHeatHighToLow Gas', function (t) {
         O2: 0
     };
 
-    compare(bindings.cascadeHeatHighToLow(input), [174956.62, 2.6122, 5.3238, 7000, 37273.74, 186368.68, 5.3238]);
+    compare(bindings.cascadeHeatHighToLow(input), [174956.62, 4.22636, 4.71, 7000, 33003.13, 165015.65, 4.71, 0.4505, 0.47287, -1.06, 0.9]);
 });
 
 test('WaterHeatingUsingFlue Gas', function (t) {
-    t.plan(18);
+    t.plan(17);
     t.type(bindings.waterHeatingUsingFlue, 'function');
 
     var compare = function(results, expected) {
-        t.equal(rnd(results.tempSteamSat), rnd(expected[0]));
-        t.equal(rnd(results.flowFlueGas), rnd(expected[1]));
-        t.equal(rnd(results.effBoiler), rnd(expected[2]));
-        t.equal(rnd(results.enthalpySteam), rnd(expected[3]));
-        t.equal(rnd(results.enthalpyFW), rnd(expected[4]));
-        t.equal(rnd(results.flowSteam), rnd(expected[5]));
-        t.equal(rnd(results.flowFW), rnd(expected[6]));
-        t.equal(rnd(results.specheatFG), rnd(expected[7]));
-        t.equal(rnd(results.heatCapacityFG), rnd(expected[8]));
-        t.equal(rnd(results.specheatFW), rnd(expected[9]));
-        t.equal(rnd(results.heatCapacityFW), rnd(expected[10]));
-        t.equal(rnd(results.heatCapacityMin), rnd(expected[11]));
-        t.equal(rnd(results.ratingHeatRecFW), rnd(expected[12]));
-        t.equal(rnd(results.tempFlueGasOut), rnd(expected[13]));
-        t.equal(rnd(results.tempFWOut), rnd(expected[14]));
-        t.equal(rnd(results.energySavingsBoiler), rnd(expected[15]));
-        t.equal(rnd(results.costSavingsBoiler), rnd(expected[16]));
+        t.equal(rnd(results.flowFlueGas), rnd(expected[0]));
+        t.equal(rnd(results.effBoiler), rnd(expected[1]));
+        t.equal(rnd(results.enthalpySteam), rnd(expected[2]));
+        t.equal(rnd(results.enthalpyFW), rnd(expected[3]));
+        t.equal(rnd(results.flowSteam), rnd(expected[4]));
+        t.equal(rnd(results.flowFW), rnd(expected[5]));
+        t.equal(rnd(results.specheatFG), rnd(expected[6]));
+        t.equal(rnd(results.heatCapacityFG), rnd(expected[7]));
+        t.equal(rnd(results.specheatFW), rnd(expected[8]));
+        t.equal(rnd(results.heatCapacityFW), rnd(expected[9]));
+        t.equal(rnd(results.heatCapacityMin), rnd(expected[10]));
+        t.equal(rnd(results.ratingHeatRecFW), rnd(expected[11]));
+        t.equal(rnd(results.tempFlueGasOut), rnd(expected[12]));
+        t.equal(rnd(results.tempFWOut), rnd(expected[13]));
+        t.equal(rnd(results.energySavingsBoiler), rnd(expected[14]));
+        t.equal(rnd(results.costSavingsBoiler), rnd(expected[15]));
     };
 
     var input = {
-        tempFlueGas: 658.15,
+        tempFlueGas: 725,
         percO2: 0.05,
-        tempCombAir: 299.82,
+        tempCombAir: 80,
         moistCombAir: 0.02,
         ratingBoiler: 55.88,
         prSteam: 3.45,
-        tempAmbientAir: 288.71,
-        tempSteam: 533.15,
-        tempFW: 380.37,
+        tempAmbientAir: 60,
+        tempSteam: 500,
+        tempFW: 225,
         percBlowDown: 0.04,
         effHX: 0.625,
         opHours: 8000,
         costFuel: 5.21,
         hhvFuel: 37706,
         condSteam: 0,
+        fuelTempF: 60,
 
         gasFuelType: true,
         substance: 'Gas',
@@ -258,6 +269,49 @@ test('WaterHeatingUsingFlue Gas', function (t) {
         O2: 0
     };
 
-    compare(bindings.waterHeatingUsingFlue(input), [514.886, 23538.374, 0.73457, 2865.339, 452.038, 16329.9,
-        16983.09, 1.13247, 26656.559, 4.2285, 71812.94, 26656.56, 4627911.87, 484.537, 444.81, 50397.36, 262570.24]);
+    compare(bindings.waterHeatingUsingFlue(input), [23637.68, 0.72023, 2865.339, 452.0478, 15994.47,
+        16634.25, 1.13247, 26759.76, 4.2285, 70337.7, 26759.76, 4645791.13, 484.537, 446.42, 51653.25, 269113.45]);
+});
+
+test('AirWaterCoolingUsingFlue Gas', function (t) {
+    t.plan(10);
+    t.type(bindings.airWaterCoolingUsingFlue, 'function');
+
+    var compare = function(results, expected) {
+        t.equal(rnd(results.excessAir), rnd(expected[0]));
+        t.equal(rnd(results.flowFlueGas), rnd(expected[1]));
+        t.equal(rnd(results.specHeat), rnd(expected[2]));
+        t.equal(rnd(results.fracCondensed), rnd(expected[3]));
+        t.equal(rnd(results.effThermal), rnd(expected[4]));
+        t.equal(rnd(results.effThermalLH), rnd(expected[5]));
+        t.equal(rnd(results.effLH), rnd(expected[6]));
+        t.equal(rnd(results.heatRecovery), rnd(expected[7]));
+        t.equal(rnd(results.sensibleHeatRecovery), rnd(expected[8]));
+    };
+
+    var input = {
+        heatInput: 116,
+        tempFlueGasInF: 300,
+        tempFlueGasOutF: 125,
+        tempCombAirF: 70,
+        fuelTempF: 60,
+        percO2: 0.04,
+        ambientAirTempF: 60,
+        moistCombAir: 0,
+
+        substance: 'Gas',
+        CH4: 94.1,
+        C2H6: 3.02,
+        N2: 1.41,
+        H2: 0.01,
+        C3H8: 0.42,
+        C4H10_CnH2n: 0.28,
+        H2O: 0.0,
+        CO: 0.0,
+        CO2: 0.7,
+        SO2: 0,
+        O2: 0.01
+    };
+
+    compare(bindings.airWaterCoolingUsingFlue(input), [0.21596, 107119.17, 0.2578, 0.19816, 0.8444, 0.86454, 0.02014, 2.3362, 4.83]);
 });

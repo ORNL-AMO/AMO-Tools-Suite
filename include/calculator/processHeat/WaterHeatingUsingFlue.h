@@ -22,19 +22,19 @@ public:
 
     struct Output
     {
-        Output(double tempSteamSat, double flowFlueGas, double effBoiler,
+        Output(double flowFlueGas, double effBoiler,
                double enthalpySteam, double enthalpyFW, double flowSteam,
                double flowFW, double specheatFG, double heatCapacityFG, double specheatFW, double heatCapacityFW,
                double heatCapacityMin, double ratingHeatRecFW, double tempFlueGasOut, double tempFWOut,
                double energySavingsBoiler, double costSavingsBoiler) :
-                tempSteamSat(tempSteamSat), flowFlueGas(flowFlueGas), effBoiler(effBoiler),
+                flowFlueGas(flowFlueGas), effBoiler(effBoiler),
                 enthalpySteam(enthalpySteam), enthalpyFW(enthalpyFW), flowSteam(flowSteam),
                 flowFW(flowFW), specheatFG(specheatFG), heatCapacityFG(heatCapacityFG), specheatFW(specheatFW), heatCapacityFW(heatCapacityFW),
                 heatCapacityMin(heatCapacityMin), ratingHeatRecFW(ratingHeatRecFW), tempFlueGasOut(tempFlueGasOut), tempFWOut(tempFWOut),
                 energySavingsBoiler(energySavingsBoiler), costSavingsBoiler(costSavingsBoiler) {}
 
         Output() = default;
-        double tempSteamSat = 0, flowFlueGas = 0, effBoiler = 0,
+        double flowFlueGas = 0, effBoiler = 0,
                 enthalpySteam = 0, enthalpyFW = 0, flowSteam = 0,
                 flowFW = 0, specheatFG = 0, heatCapacityFG = 0, specheatFW = 0, heatCapacityFW = 0,
                 heatCapacityMin = 0, ratingHeatRecFW = 0, tempFlueGasOut = 0, tempFWOut = 0,
@@ -65,14 +65,15 @@ public:
 	 * @param          SO2 % - double
 	 * @param          O2 % - double
      *
-     * @param tempFlueGas double, units K
+     * @param tempFlueGasF double, units F
      * @param percO2 double, units percentage / fraction
-     * @param tempCombAir double, units K
+     * @param tempCombAirF double, units F
      * @param moistCombAir double, units percentage / fraction
      * @param ratingBoiler double, units Gj/hr
      * @param prSteam double, units MPa
-     * @param tempSteam double, units K
-     * @param tempFW double, units K
+     * @param tempAmbientAirF double, units F
+     * @param tempSteamF double, units F
+     * @param tempFW double, units F
      * @param percBlowDown double, units percentage / fraction
      * @param effHX double, units percentage / fraction
      * @param opHours double, units Hr
@@ -82,7 +83,6 @@ public:
      *
      *
      * @return Output
-     * @param tempSteamSat double, units K
      * @param flowFlueGas double, units kg/hr
      * @param effBoiler
      * @param enthalpySteam double, units KJ/kg
@@ -101,10 +101,13 @@ public:
      * @param costSavingsBoiler double, units $/yr
      *
      */
-    Output calculate(GasCompositions gasCompositions, const double tempFlueGas, const double percO2, const double tempCombAir,
-                     const double moistCombAir, const double ratingBoiler, const double prSteam, const double tempAmbientAir,
-                     const double tempSteam, const double tempFW, const double percBlowDown, const double effHX,
-                     const double opHours, const double costFuel, const double hhvFuel, const SteamCondition condSteam = Superheated);
+    Output calculate(GasCompositions gasCompositions, const double tempFlueGasF, const double percO2, const double tempCombAirF,
+                     const double moistCombAir, const double ratingBoiler, const double prSteam, const double tempAmbientAirF,
+                     const double tempSteamF, const double tempFW, const double percBlowDown, const double effHX,
+                     const double opHours, const double costFuel, const double hhvFuel, const SteamCondition condSteam = Superheated, const double fuelTempF = 60);
+
+private:
+    inline double TempFtoK(double tempF) const { return ((tempF - 32) / 1.8) + 273.15; }
 };
 
 #endif //AMO_TOOLS_SUITE_WATERHEATINGUSINGFLUE_H

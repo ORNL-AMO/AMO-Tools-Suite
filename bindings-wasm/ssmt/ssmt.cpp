@@ -44,6 +44,7 @@ EMSCRIPTEN_BINDINGS(steamModelerTool)
 
     class_<SteamSystemModelerTool::FluidProperties, emscripten::base<SteamSystemModelerTool::SteamPropertiesOutput>>("FluidProperties")
         .constructor<double, double, double, double, double, double, double, double, double, double>()
+        .smart_ptr<std::shared_ptr<SteamSystemModelerTool::FluidProperties>>("FluidProperties")
         .property("massFlow", &SteamSystemModelerTool::FluidProperties::massFlow)
         .property("energyFlow", &SteamSystemModelerTool::FluidProperties::energyFlow);
 }

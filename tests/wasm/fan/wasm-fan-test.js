@@ -127,26 +127,89 @@ function getBaseGasDensity() {
     let specificGravity = 1.05;
 
     let relativeHumidityInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, relativeHumidity, gasType, inputType, specificGravity);
-    let relativeHumidityResult = relativeHumidityInstance.getGasDensity();
+    let gasDensityResult = relativeHumidityInstance.getGasDensity();
+    let AbsolutePressureInResult = relativeHumidityInstance.getAbsolutePressureIn();
+    let SaturatedHumidityRatioResult = relativeHumidityInstance.getSaturatedHumidityRatio();
+    let DegreeOfSaturationResult = relativeHumidityInstance.getDegreeOfSaturation();
+    let HumidityRatioResult = relativeHumidityInstance.getHumidityRatio();
+    let SpecificVolumeResult = relativeHumidityInstance.getSpecificVolume();
+    let EnthalpyResult = relativeHumidityInstance.getEnthalpy();
+    let DewPointResult = relativeHumidityInstance.getDewPoint();
+    let RelativeHumidityResult = relativeHumidityInstance.getRelativeHumidity();
+    let SaturationPressureResult = relativeHumidityInstance.getSaturationPressure();
+    let WetBulbTempResult = relativeHumidityInstance.getWetBulbTemp();
     relativeHumidityInstance.delete();
-    testNumberValue(relativeHumidityResult, 0.06231117736966, "Gas Density (relativeHumidity)");
+
+    testNumberValue(gasDensityResult, 0.05637830145287457, "Gas Density (relativeHumidity)");
+    testNumberValue(AbsolutePressureInResult, 25.2767099634697, "AbsolutePressureInResult (relativeHumidity)");
+    testNumberValue(SaturatedHumidityRatioResult, 0.10830760118401817, "SaturatedHumidityRatioResult (relativeHumidity)");
+    testNumberValue(DegreeOfSaturationResult, 0.3144126326912711, "DegreeOfSaturationResult (relativeHumidity)");
+    testNumberValue(HumidityRatioResult, 0.03405327802874338, "HumidityRatioResult (relativeHumidity)");
+    testNumberValue(SpecificVolumeResult, 18.34133436767489, "SpecificVolumeResult (relativeHumidity)");
+    testNumberValue(EnthalpyResult, 68.37124560820246, "EnthalpyResult (relativeHumidity)");
+    testNumberValue(DewPointResult, 87.40387101362482, "DewPointResult (relativeHumidity)");
+    testNumberValue(RelativeHumidityResult, 0.35, "RelativeHumidityResult (relativeHumidity)");
+    testNumberValue(SaturationPressureResult, 3.7487420264687445, "SaturationPressureResult (relativeHumidity)");
+    testNumberValue(WetBulbTempResult, 93.25804647868017, "WetBulbTempResult (relativeHumidity)");
 
     inputType = Module.BaseGasDensityInputType.DewPoint;
     dewPoint = 0.35;
 
     let dewPointInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, dewPoint, gasType, inputType, specificGravity);
-    let dewPointResult = dewPointInstance.getGasDensity();
+    gasDensityResult = dewPointInstance.getGasDensity();
+    AbsolutePressureInResult = dewPointInstance.getAbsolutePressureIn();
+    SaturatedHumidityRatioResult = dewPointInstance.getSaturatedHumidityRatio();
+    DegreeOfSaturationResult = dewPointInstance.getDegreeOfSaturation();
+    HumidityRatioResult = dewPointInstance.getHumidityRatio();
+    SpecificVolumeResult = dewPointInstance.getSpecificVolume();
+    EnthalpyResult = dewPointInstance.getEnthalpy();
+    DewPointResult = dewPointInstance.getDewPoint();
+    RelativeHumidityResult = dewPointInstance.getRelativeHumidity();
+    SaturationPressureResult = dewPointInstance.getSaturationPressure();
+    WetBulbTempResult = dewPointInstance.getWetBulbTemp();
     dewPointInstance.delete();
-    testNumberValue(dewPointResult, 0.06551801779516826, "Gas Density (dewPoint)");
+
+    testNumberValue(gasDensityResult, 0.057473768082717605, "Gas Density (relativeHumidity)");
+    testNumberValue(AbsolutePressureInResult, 25.2767099634697, "AbsolutePressureInResult (relativeHumidity)");
+    testNumberValue(SaturatedHumidityRatioResult, 0.10830760118401817, "SaturatedHumidityRatioResult (relativeHumidity)");
+    testNumberValue(DegreeOfSaturationResult, 0.008730399075033634, "DegreeOfSaturationResult (relativeHumidity)");
+    testNumberValue(HumidityRatioResult, 0.0009455685811960639, "HumidityRatioResult (relativeHumidity)");
+    testNumberValue(SpecificVolumeResult, 17.415694184877726, "SpecificVolumeResult (relativeHumidity)");
+    testNumberValue(EnthalpyResult, 31.435887656005303, "EnthalpyResult (relativeHumidity)");
+    testNumberValue(DewPointResult, 0.35, "DewPointResult (relativeHumidity)");
+    testNumberValue(RelativeHumidityResult, 1.0235094719915057, "RelativeHumidityResult (relativeHumidity)");
+    testNumberValue(SaturationPressureResult, 3.7487420264687445, "SaturationPressureResult (relativeHumidity)");
+    testNumberValue(WetBulbTempResult, 62.94970394555405, "WetBulbTempResult (relativeHumidity)");
 
     inputType = Module.BaseGasDensityInputType.WetBulbTemp;
     let wetBulbTemp = 110;
     let specificHeatGas = 1.03;
 
     let wetBulbInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, wetBulbTemp, gasType, inputType, specificGravity, specificHeatGas);
-    let wetBulbResult = wetBulbInstance.getGasDensity();
+    gasDensityResult = wetBulbInstance.getGasDensity();
+    AbsolutePressureInResult = wetBulbInstance.getAbsolutePressureIn();
+    SaturatedHumidityRatioResult = wetBulbInstance.getSaturatedHumidityRatio();
+    DegreeOfSaturationResult = wetBulbInstance.getDegreeOfSaturation();
+    HumidityRatioResult = wetBulbInstance.getHumidityRatio();
+    SpecificVolumeResult = wetBulbInstance.getSpecificVolume();
+    EnthalpyResult = wetBulbInstance.getEnthalpy();
+    DewPointResult = wetBulbInstance.getDewPoint();
+    RelativeHumidityResult = wetBulbInstance.getRelativeHumidity();
+    SaturationPressureResult = wetBulbInstance.getSaturationPressure();
+    WetBulbTempResult = wetBulbInstance.getWetBulbTemp();
     wetBulbInstance.delete();
-    testNumberValue(wetBulbResult, 0.065456, "Gas Density (wetBulb)");
+
+    testNumberValue(gasDensityResult, 0.05536774050618011, "Gas Density (relativeHumidity)");
+    testNumberValue(AbsolutePressureInResult, 25.2767099634697, "AbsolutePressureInResult (relativeHumidity)");
+    testNumberValue(SaturatedHumidityRatioResult, 0.10830760118401817, "SaturatedHumidityRatioResult (relativeHumidity)");
+    testNumberValue(DegreeOfSaturationResult, 0.6267018765874393, "DegreeOfSaturationResult (relativeHumidity)");
+    testNumberValue(HumidityRatioResult, 0.06787657691070814, "HumidityRatioResult (relativeHumidity)");
+    testNumberValue(SpecificVolumeResult, 19.286981320675572, "SpecificVolumeResult (relativeHumidity)");
+    testNumberValue(EnthalpyResult, 106.10492372050894, "EnthalpyResult (relativeHumidity)");
+    testNumberValue(DewPointResult, 108.44107215070429, "DewPointResult (relativeHumidity)");
+    testNumberValue(RelativeHumidityResult, 66.34315384222288, "RelativeHumidityResult (relativeHumidity)");
+    testNumberValue(SaturationPressureResult, 3.7487420264687445, "SaturationPressureResult (relativeHumidity)");
+    testNumberValue(WetBulbTempResult, 110, "WetBulbTempResult (relativeHumidity)");
 }
 
 function getVelocityPressureData()
@@ -263,18 +326,18 @@ function getPlaneResults()
         [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
         [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
     ];
-    
+
     let traverseDataVector = returnDoubleVector(traversePlaneTraverseDoubles[0]);
     let traverseDataVector2 = returnDoubleVector(traversePlaneTraverseDoubles[1]);
     let traverseDataVector3 = returnDoubleVector(traversePlaneTraverseDoubles[2]);
-    
+
     traversePlaneTraverseData.push_back(traverseDataVector);
     traversePlaneTraverseData.push_back(traverseDataVector2);
     traversePlaneTraverseData.push_back(traverseDataVector3);
 
     // area, dryBulbTemp, barometricPressure, staticPressure, pitotTubeCoefficient, traverseInputData
     let traversePlaneInstance = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
-    
+
     // Release memory
     traverseDataVector.delete();
     traverseDataVector2.delete();
@@ -334,13 +397,13 @@ function getPlaneResults()
     traversePlaneTraverseData.push_back(traverseDataVector3);
 
     traversePlaneInstance3 = new Module.TraversePlane(traverseArea, traverseDryBulbTemp, traverseBarometricPressure, traverseStaticPressure, pitotTubeCoefficient, traversePlaneTraverseData);
-    
+
     // Release memory
     traverseDataVector.delete();
     traverseDataVector2.delete();
     traverseDataVector3.delete();
     traversePlaneTraverseData.delete();
-    
+
     let AddlTraversePlanes = new Module.TraversePlaneVector();
     AddlTraversePlanes.push_back(traversePlaneInstance2);
     AddlTraversePlanes.push_back(traversePlaneInstance3);
@@ -391,7 +454,7 @@ function getPlaneResults()
     let output = Module.PlaneDataNodeBindingCalculate(planeDataInstance, baseGasDensityInstance);
 
     baseGasDensityInstance.delete();
-    
+
     function testEq(results, expected, isStaticPressure, testNum) {
         testNumberValue(results.gasDensity, expected.gasDensity, "PlaneResults: gasDensity" + ' (' + testNum.toString() + ')');
         testNumberValue(results.gasVolumeFlowRate, expected.gasVolumeFlowRate, "PlaneResults: gasVolumeFlowRate" + ' (' + testNum.toString() + ')');
@@ -402,7 +465,7 @@ function getPlaneResults()
             testNumberValue(results.staticPressure, expected.staticPressure, "PlaneResults: staticPressure" + ' (' + testNum.toString() + ')');
         }
     }
-    
+
     testEq(output.fanInletFlange, {
         "gasDensity": 0.054707937910736096,
         "gasVolumeFlowRate": 368484.70105160266,
@@ -454,7 +517,7 @@ function getPlaneResults()
             "gasVolumeFlowRate": 117995.19024728928,
             "gasVelocity": 3625.472060975973,
             "gasVelocityPressure": 0.599426,
-            "gasTotalPressure": -15.900574 
+            "gasTotalPressure": -15.900574
         }
     ];
 
@@ -477,7 +540,7 @@ function fan203()
     let fanSpeedCorrected = 1170;
     let densityCorrected = 0.05;
     let pressureBarometricCorrected = 26.28;
-    
+
     //getFanRatedInfo()
     let fanRatedInfoInstance = new Module.FanRatedInfo(fanSpeed, motorSpeed, fanSpeedCorrected, densityCorrected, pressureBarometricCorrected);
 
@@ -516,11 +579,11 @@ function fan203()
         [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
         [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
     ];
-    
+
     let traverseDataVector = returnDoubleVector(traversePlaneTraverseDoubles[0]);
     let traverseDataVector2 = returnDoubleVector(traversePlaneTraverseDoubles[1]);
     let traverseDataVector3 = returnDoubleVector(traversePlaneTraverseDoubles[2]);
-    
+
     traversePlaneTraverseData.push_back(traverseDataVector);
     traversePlaneTraverseData.push_back(traverseDataVector2);
     traversePlaneTraverseData.push_back(traverseDataVector3);
@@ -564,7 +627,7 @@ function fan203()
     traverseDataVector2.delete();
     traverseDataVector3.delete();
     traversePlaneTraverseData.delete();
-    
+
     let AddlTraversePlanes = new Module.TraversePlaneVector();
     AddlTraversePlanes.push_back(traversePlaneInstance2);
     traversePlaneInstance2.delete();
@@ -618,7 +681,7 @@ function fan203()
 
     //getFanShaftPower()
     let fanShaftPowerInstance = new Module.FanShaftPower(fspMotorShaftPower, fspEfficiencyMotor, fspEfficiencyVFD, fspEfficiencyBelt, fspSumSEF);
-    
+
     //Calculation procedure
     //Fan203::Output const rv = Fan203(fanRatedInfo, planeData, baseGasDensity, fanShaftPower).calculate();
     let fan203Instance = new Module.Fan203(fanRatedInfoInstance, planeDataInstance, baseGasDensityInstance, fanShaftPowerInstance);
@@ -630,11 +693,11 @@ function fan203()
     fan203Instance.delete();
 
     //Tests
-    
+
     testNumberValue(fan203Output.fanEfficiencyTotalPressure, 53.60738684355601, "Fan203: Fan Efficiency Total Pressure");
     testNumberValue(fan203Output.fanEfficiencyStaticPressure, 49.20691409764023, "Fan203: Fan Efficiency Static Pressure");
     testNumberValue(fan203Output.fanEfficiencyStaticPressureRise, 50.768875240824116, "Fan203: Fan Efficiency Static Pressure Rise");
-    
+
     testNumberValue(fan203Output.asTested.flow, 250332.6394178045, "Fan203: Flow");
     testNumberValue(fan203Output.asTested.kpc, 0.9982905074, "Fan203: KPC");
     testNumberValue(fan203Output.asTested.power, 1671.2107816151, "Fan203: Power");
@@ -656,7 +719,7 @@ function fan203()
 }
 
 function optimalFanEfficiency()
-{   
+{
     //fanType = 0;
     let fanType = Module.FanType.AirfoilSISW
     let fanSpeed = 1180;
@@ -730,7 +793,7 @@ function compressibilityFactor()
     testNumberValue(compressibilityFactorResult, 0.9879934727, "Compressibility Factor (input 2)");
 
     compressibilityFactor.delete();
-    
+
     moverShaftPower = 623;
     inletPressure = -8.92;
     outletPressure = 2.28;
