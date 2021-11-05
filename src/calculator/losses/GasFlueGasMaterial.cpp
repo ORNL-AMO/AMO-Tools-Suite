@@ -51,7 +51,7 @@ GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatPro
         flueO2 = calculateO2(exsAir);
         flueGasO2AdjustForCalcError(excessAir, flueO2);
     }else {
-        exsAir = getExcessAir(flueGasO2);
+        exsAir = calculateExcessAir(flueGasO2);
         flueO2 = flueGasO2;
     }
 

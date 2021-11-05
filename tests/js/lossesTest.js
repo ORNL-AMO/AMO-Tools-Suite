@@ -59,7 +59,7 @@ test('fixtureLosses', function (t) {
 });
 
 test('flueGasByVolume', function (t) {
-    t.plan(6);
+    t.plan(8);
     t.type(bindings.flueGasLossesByVolume, 'function');
     var inp = {
         flueGasTemperature: 700, flueGasO2Percentage: 0, combustionAirTemperature: 125, fuelTemperature: 125, ambientAirTemp: 60, combAirMoisturePerc:0, excessAirPercentage: 9.0,
@@ -68,8 +68,9 @@ test('flueGasByVolume', function (t) {
     };
 
     var res = bindings.flueGasLossesByVolume(inp);
-    t.equal(rnd(res), rnd( 0.785877), res + ' !=  0.785877');
-
+    t.equal(rnd(res.availableHeat), rnd( 0.785877), res + ' !=  0.785877');
+    t.equal(rnd(res.excessAir), rnd(0.09));
+    t.equal(rnd(res.flueGasO2), rnd(0.01818));
 
     inp = {
         CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0,
