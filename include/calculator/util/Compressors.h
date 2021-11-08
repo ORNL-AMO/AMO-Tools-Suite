@@ -27,6 +27,7 @@
  *             Volts, Amps, Power Factor(PF) and BlowOff%
  *
  * @author Omer Aziz (omerb)
+ * @author Mark Root (mroot)
  * @bug No known bugs.
  *
  */
@@ -780,19 +781,26 @@ class Compressors_LoadUnload : public CompressorsBase
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_max double
-     * @param P_fl double
-     * @param P_max double
-     * @param P_mod double
-     * @param P_atm double
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param C_storage double, ft3
+     * @param kW_max double, kW
+     * @param P_fl double, psig
+     * @param P_max double, psig
+     * @param P_mod double, psig
+     * @param lf_ul double, decimal
+     * @param P_atm double, psia
      * @param CompType double
      * @param LubricantType double
      * @param CntrlType double
-     * @param kW_nl double
-     * @param PerC_ul double
-     *      Units for power kW and Capacity acfm
+     * @param kW_nl double, kW
+     * @param PerC_ul double, %
+     * @param t_blowdown double, sec
+     * @param P_sump_ul double, psig
+     * @param noLoadPowerFM double, decimal
+     * @param kW_ul double, kW
+     * @param P_ul double, psig
+     * @param C_ul double, acfm
      *
      */
     Compressors_LoadUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double P_fl, const double P_max, const double P_mod, const double lf_ul, const double P_atm = 14.7,
@@ -883,52 +891,48 @@ public:
 
     /**
      *
-     * @param PerkW double
+     * @param PerkW double, %
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromPerkW(double PerkW) override;
 
     /**
      *
-     * @param C_Per double
+     * @param C_Per double, %
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromPerC(double C_Per) override;
 
     /**
      *
-     * @param kW double
+     * @param kW double, kW
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromkWMeasured(double kW) override;
 
     /**
      *
-     * @param C double
+     * @param C double, acfm
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromCMeasured(double C) override;
@@ -938,31 +942,29 @@ public:
      * @param V, Voltage double
      * @param I, Current double
      * @param PF, Power Factor double
-     * @param blowPer double
+     * @param blowPer double, %
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromVIPFMeasured(double V, double I, double PF) override;
 
     /**
      *
-     * @param capacity double
-     * @param full_load_bhp double
+     * @param capacity double, acfm
+     * @param full_load_bhp double, hp
      * @param poly_exponent double
-     * @param P_ratedDischarge double
-     * @param P_RatedIn double
-     * @param Eff double
-     * @param P_fl double
-     * @param P_max double
-     * @param P_in double
-     * @param PresAdj double
-     * @param P_atm double
-     *      Units for power kW and Capacity acfm
+     * @param P_ratedDischarge double, psig
+     * @param P_RatedIn double, psig
+     * @param Eff double, %
+     * @param P_fl double, psig
+     * @param P_max double, psig
+     * @param P_in double, psig
+     * @param PresAdj double, psig
+     * @param P_atm double, psia
      *
      */
     void Pressure_InletCorrection(const double capacity, const double full_load_bhp, const double poly_exponent, const double P_ratedDischarge, const double P_RatedIn,
@@ -992,16 +994,23 @@ class Compressors_ModulationWithUnload : public Compressors_LoadUnload
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_max double
-     * @param kW_nl double
-     * @param P_fl double
-     * @param P_max double
-     * @param P_mod double
-     * @param P_atm double
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param C_storage dobule, ft3
+     * @param kW_max double, kW
+     * @param kW_nl double, kW
+     * @param P_fl double, psig
+     * @param P_max double, psig
+     * @param P_mod double, psig
+     * @param P_atm double, psia
+     * @param PerC_ul double, %
      * @param CntrlType double
-     *      Units for power kW and Capacity acfm
+     * @param t_blowdown double, sec
+     * @param P_sump_ul double, psig
+     * @param noLoadPowerFM double, decimal
+     * @param kW_ul double, kW
+     * @param P_ul double, psig
+     * @param C_ul double, acfm
      *
      */
     Compressors_ModulationWithUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double kW_nl,
