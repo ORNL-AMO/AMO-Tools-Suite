@@ -14,7 +14,7 @@
 #include <cmath>
 #include <vector>
 #include "calculator/util/CurveFitVal.h"
-
+#include <iostream>
 /**
  * Given a set of x and y coordinates and degree of polynomial curve to fit, it calculates the curve fit value
  * for a particular x coordinate value (read load factor here).

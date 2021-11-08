@@ -29,100 +29,109 @@ void compressorsCalcCentrifugal(Compressors::ControlType controlType)
     const double computeFromPFVoltage = getDouble("computeFromPFVoltage", inp);
     const double computeFromPFAmps = getDouble("computeFromPFAmps", inp);
 
-    if(controlType == Compressors::ControlType::LoadUnload) {
+    if (controlType == Compressors::ControlType::LoadUnload)
+    {
         const double powerAtNoLoad = getDouble("powerAtNoLoad", inp);
         auto cacLUL = Compressors_Centrifugal_LoadUnload(powerAtFullLoad, capacityAtFullLoad, powerAtNoLoad);
 
-        if(adjustForDischargePressure) {
+        if (adjustForDischargePressure)
+        {
             const double fullLoadPressure = getDouble("fullLoadPressure", inp);
             cacLUL.AdjustDischargePressure(
-                    {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
-                    {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure);
+                {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
+                {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure);
 
             setR("capacityAtFullLoadAdjusted", cacLUL.C_fl_Adjusted);
         }
 
         Compressors::Output output;
-        if(computeFrom == Compressors::ComputeFrom::PercentagePower)
+        if (computeFrom == Compressors::ComputeFrom::PercentagePower)
             output = cacLUL.calculateFromPerkW(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+        else if (computeFrom == Compressors::ComputeFrom::PercentageCapacity)
             output = cacLUL.calculateFromPerC(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::PowerMeasured)
+        else if (computeFrom == Compressors::ComputeFrom::PowerMeasured)
             output = cacLUL.calculateFromkWMeasured(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::CapacityMeasured)
+        else if (computeFrom == Compressors::ComputeFrom::CapacityMeasured)
             output = cacLUL.calculateFromCMeasured(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::PowerFactor)
+        else if (computeFrom == Compressors::ComputeFrom::PowerFactor)
             output = cacLUL.calculateFromVIPFMeasured(computeFromVal, computeFromPFVoltage, computeFromPFAmps);
-        else ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+        else
+            ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
         setR("powerCalculated", output.kW_Calc);
         setR("capacityCalculated", output.C_Calc);
         setR("percentagePower", output.PerkW);
         setR("percentageCapacity", output.C_Per);
     }
-    else if(controlType == Compressors::ControlType::ModulationUnload) {
+    else if (controlType == Compressors::ControlType::ModulationUnload)
+    {
         const double powerAtNoLoad = getDouble("powerAtNoLoad", inp);
         const double capacityAtMaxFullFlow = getDouble("capacityAtMaxFullFlow", inp);
         const double powerAtUnload = getDouble("powerAtUnload", inp);
         const double capacityAtUnload = getDouble("capacityAtUnload", inp);
         auto cacMUL = Compressors_Centrifugal_ModulationUnload(powerAtFullLoad, capacityAtFullLoad, powerAtNoLoad, capacityAtMaxFullFlow, powerAtUnload, capacityAtUnload);
 
-        if(adjustForDischargePressure) {
+        if (adjustForDischargePressure)
+        {
             const double fullLoadPressure = getDouble("fullLoadPressure", inp);
             const double maxPressure = getDouble("maxPressure", inp);
             cacMUL.AdjustDischargePressure(
-                    {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
-                    {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure, maxPressure);
+                {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
+                {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure, maxPressure);
 
             setR("capacityAtFullLoadAdjusted", cacMUL.C_fl_Adjusted);
             setR("capacityAtMaxFullFlowAdjusted", cacMUL.C_max_Adjusted);
         }
 
         Compressors::Output output;
-        if(computeFrom == Compressors::ComputeFrom::PercentagePower)
+        if (computeFrom == Compressors::ComputeFrom::PercentagePower)
             output = cacMUL.calculateFromPerkW(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+        else if (computeFrom == Compressors::ComputeFrom::PercentageCapacity)
             output = cacMUL.calculateFromPerC(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::PowerMeasured)
+        else if (computeFrom == Compressors::ComputeFrom::PowerMeasured)
             output = cacMUL.calculateFromkWMeasured(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::CapacityMeasured)
+        else if (computeFrom == Compressors::ComputeFrom::CapacityMeasured)
             output = cacMUL.calculateFromCMeasured(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::PowerFactor)
+        else if (computeFrom == Compressors::ComputeFrom::PowerFactor)
             output = cacMUL.calculateFromVIPFMeasured(computeFromVal, computeFromPFVoltage, computeFromPFAmps);
-        else ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+        else
+            ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
         setR("powerCalculated", output.kW_Calc);
         setR("capacityCalculated", output.C_Calc);
         setR("percentagePower", output.PerkW);
         setR("percentageCapacity", output.C_Per);
     }
-    else if(controlType == Compressors::ControlType::BlowOff) {
+    else if (controlType == Compressors::ControlType::BlowOff)
+    {
         const double powerAtBlowOff = getDouble("powerAtBlowOff", inp);
         const double surgeFlow = getDouble("surgeFlow", inp);
         const double percentageBlowOff = getDouble("percentageBlowOff", inp);
         auto cacBO = Compressors_Centrifugal_BlowOff(powerAtFullLoad, capacityAtFullLoad, powerAtBlowOff, surgeFlow);
 
-        if(adjustForDischargePressure) {
+        if (adjustForDischargePressure)
+        {
             const double fullLoadPressure = getDouble("fullLoadPressure", inp);
             cacBO.AdjustDischargePressure(
-                    {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
-                    {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure);
+                {capacityAtFullLoad, capacityAtMinFullLoadPressure, capacityAtMaxFullLoadPressure},
+                {fullLoadPressure, minFullLoadPressure, maxFullLoadPressure}, fullLoadPressure);
 
             setR("capacityAtFullLoadAdjusted", cacBO.C_fl_Adjusted);
         }
 
         Compressors::OutputBlowOff output;
-        if(computeFrom == Compressors::ComputeFrom::PercentagePower)
+        if (computeFrom == Compressors::ComputeFrom::PercentagePower)
             output = cacBO.calculateFromPerkW_BlowOff(computeFromVal, percentageBlowOff);
-        else if(computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+        else if (computeFrom == Compressors::ComputeFrom::PercentageCapacity)
             output = cacBO.calculateFromPerC_BlowOff(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::PowerMeasured)
+        else if (computeFrom == Compressors::ComputeFrom::PowerMeasured)
             output = cacBO.calculateFromkWMeasured_BlowOff(computeFromVal, percentageBlowOff);
-        else if(computeFrom == Compressors::ComputeFrom::CapacityMeasured)
+        else if (computeFrom == Compressors::ComputeFrom::CapacityMeasured)
             output = cacBO.calculateFromCMeasured_BlowOff(computeFromVal);
-        else if(computeFrom == Compressors::ComputeFrom::PowerFactor)
+        else if (computeFrom == Compressors::ComputeFrom::PowerFactor)
             output = cacBO.calculateFromVIPFMeasured_BlowOff(computeFromVal, computeFromPFVoltage, computeFromPFAmps, percentageBlowOff);
-        else ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+        else
+            ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
         setR("powerCalculated", output.kW_Calc);
         setR("capacityCalculated", output.C_Calc);
@@ -131,7 +140,8 @@ void compressorsCalcCentrifugal(Compressors::ControlType controlType)
         setR("percentageBlowOff", output.blowPer);
         setR("surgeFlow", output.C_blow);
     }
-    else ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Control Type in input").c_str());
+    else
+        ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Control Type in input").c_str());
 }
 
 void compressorsModulationWOUnload(Compressors::CompressorType compressorType, Compressors::ControlType controlType, Compressors::Stage stageType, Compressors::Lubricant lubricantType)
@@ -146,7 +156,8 @@ void compressorsModulationWOUnload(Compressors::CompressorType compressorType, C
     const double powerAtNoLoad = getDouble("powerAtNoLoad", inp);
     auto compMethod = Compressors_ModulationWOUnload(powerAtFullLoad, capacityAtFullLoad, powerAtNoLoad);
 
-    if(applyPressureInletCorrection) {
+    if (applyPressureInletCorrection)
+    {
         const double capacity = getDouble("capacity", inp);
         const double fullLoadPower = getDouble("fullLoadPower", inp);
         const double polyExponent = getDouble("polyExponent", inp);
@@ -162,21 +173,23 @@ void compressorsModulationWOUnload(Compressors::CompressorType compressorType, C
     }
 
     Compressors::Output output;
-    if(computeFrom == Compressors::ComputeFrom::PercentagePower)
+    if (computeFrom == Compressors::ComputeFrom::PercentagePower)
         output = compMethod.calculateFromPerkW(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+    else if (computeFrom == Compressors::ComputeFrom::PercentageCapacity)
         output = compMethod.calculateFromPerC(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PowerMeasured)
+    else if (computeFrom == Compressors::ComputeFrom::PowerMeasured)
         output = compMethod.calculateFromkWMeasured(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::CapacityMeasured)
+    else if (computeFrom == Compressors::ComputeFrom::CapacityMeasured)
         output = compMethod.calculateFromCMeasured(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PowerFactor){
+    else if (computeFrom == Compressors::ComputeFrom::PowerFactor)
+    {
         const double computeFromPFVoltage = getDouble("computeFromPFVoltage", inp);
         const double computeFromPFAmps = getDouble("computeFromPFAmps", inp);
         output = compMethod.calculateFromVIPFMeasured(computeFromVal, computeFromPFVoltage, computeFromPFAmps);
     }
 
-    else ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+    else
+        ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
     setR("reRatedFlow", compMethod.C_fl_Adjusted);
     setR("reRatedPower", compMethod.kW_fl_Adjusted);
@@ -202,7 +215,8 @@ void compressorsStartStop(Compressors::CompressorType compressorType, Compressor
     const double powerAtFullLoadPercentage = getDouble("powerAtFullLoadPercentage", inp);
     auto compMethod = Compressors_StartStop(powerAtFullLoad, capacityAtFullLoad, powerMaxPercentage, powerAtFullLoadPercentage);
 
-    if(applyPressureInletCorrection) {
+    if (applyPressureInletCorrection)
+    {
         const double capacity = getDouble("capacity", inp);
         const double fullLoadPower = getDouble("fullLoadPower", inp);
         const double polyExponent = getDouble("polyExponent", inp);
@@ -218,21 +232,23 @@ void compressorsStartStop(Compressors::CompressorType compressorType, Compressor
     }
 
     Compressors::Output output;
-    if(computeFrom == Compressors::ComputeFrom::PercentagePower)
+    if (computeFrom == Compressors::ComputeFrom::PercentagePower)
         output = compMethod.calculateFromPerkW(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+    else if (computeFrom == Compressors::ComputeFrom::PercentageCapacity)
         output = compMethod.calculateFromPerC(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PowerMeasured)
+    else if (computeFrom == Compressors::ComputeFrom::PowerMeasured)
         output = compMethod.calculateFromkWMeasured(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::CapacityMeasured)
+    else if (computeFrom == Compressors::ComputeFrom::CapacityMeasured)
         output = compMethod.calculateFromCMeasured(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PowerFactor){
+    else if (computeFrom == Compressors::ComputeFrom::PowerFactor)
+    {
         const double computeFromPFVoltage = getDouble("computeFromPFVoltage", inp);
         const double computeFromPFAmps = getDouble("computeFromPFAmps", inp);
         output = compMethod.calculateFromVIPFMeasured(computeFromVal, computeFromPFVoltage, computeFromPFAmps);
     }
 
-    else ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+    else
+        ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
     setR("reRatedFlow", compMethod.C_fl_Adjusted);
     setR("reRatedPower", compMethod.kW_fl_Adjusted);
@@ -261,9 +277,19 @@ void compressorsLoadUnload(Compressors::CompressorType compressorType, Compresso
     const double modulatingPsi = getDouble("modulatingPsi", inp);
     const double loadFactorUnloaded = getDouble("loadFactorUnloaded", inp);
     const double atmosphericPsi = getDouble("atmosphericPsi", inp);
-    auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi);
+    const double unloadPointCapacity = getDouble("unloadPointCapacity", inp);
+    const double powerAtNolLoad = getDouble("powerAtNolLoad", inp);
+    const double blowdownTime = getDouble("blowdownTime", inp);
+    const double unloadSumpPressure = getDouble("unloadSumpPressure", inp);
+    const double noLoadPowerFM = getDouble("noLoadPowerFM");
+    // const double powerAtUnload = getDouble("powerAtUnload");
+    // const double pressureAtUnload = getDouble("pressureAtUnload");
+    // const double capacityAtUnload = getDouble("capacityAtUnload");
 
-    if(applyPressureInletCorrection) {
+    auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi, compressorType, lubricantType, controlType, powerAtNolLoad, unloadPointCapacity, blowdownTime, unloadSumpPressure, noLoadPowerFM);
+
+    if (applyPressureInletCorrection)
+    {
         const double capacity = getDouble("capacity", inp);
         const double fullLoadPower = getDouble("fullLoadPower", inp);
         const double polyExponent = getDouble("polyExponent", inp);
@@ -279,21 +305,23 @@ void compressorsLoadUnload(Compressors::CompressorType compressorType, Compresso
     }
 
     Compressors::Output output;
-    if(computeFrom == Compressors::ComputeFrom::PercentagePower)
+    if (computeFrom == Compressors::ComputeFrom::PercentagePower)
         output = compMethod.calculateFromPerkW(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+    else if (computeFrom == Compressors::ComputeFrom::PercentageCapacity)
         output = compMethod.calculateFromPerC(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PowerMeasured)
+    else if (computeFrom == Compressors::ComputeFrom::PowerMeasured)
         output = compMethod.calculateFromkWMeasured(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::CapacityMeasured)
+    else if (computeFrom == Compressors::ComputeFrom::CapacityMeasured)
         output = compMethod.calculateFromCMeasured(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PowerFactor){
+    else if (computeFrom == Compressors::ComputeFrom::PowerFactor)
+    {
         const double computeFromPFVoltage = getDouble("computeFromPFVoltage", inp);
         const double computeFromPFAmps = getDouble("computeFromPFAmps", inp);
         output = compMethod.calculateFromVIPFMeasured(computeFromVal, computeFromPFVoltage, computeFromPFAmps);
     }
 
-    else ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+    else
+        ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
     setR("reRatedFlow", compMethod.C_fl_Adjusted);
     setR("reRatedPower", compMethod.kW_fl_Adjusted);
@@ -322,9 +350,24 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
     const double dischargePsiMax = getDouble("dischargePsiMax", inp);
     const double modulatingPsi = getDouble("modulatingPsi", inp);
     const double atmosphericPsi = getDouble("atmosphericPsi", inp);
-    auto compMethod = Compressors_ModulationWithUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, powerAtNolLoad, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, atmosphericPsi);
+    const double unloadPointCapacity = getDouble("unloadPointCapacity", inp);
+    const double blowdownTime = getDouble("blowdownTime", inp);
+    const double unloadSumpPressure = getDouble("unloadSumpPressure", inp);
+    const double noLoadPowerFM = getDouble("noLoadPowerFM", inp);
+    double powerAtUnload;
+    double pressureAtUnload;
+    double capacityAtUnload;
+    //compressorsModulationWithUnload also called for Variable Displacement but does not have these performance points data
+    if (controlType == Compressors::ControlType::ModulationUnload)
+    {
+        powerAtUnload = getDouble("powerAtUnload", inp);
+        pressureAtUnload = getDouble("pressureAtUnload");
+        capacityAtUnload = getDouble("capacityAtUnload");
+    }
+    auto compMethod = Compressors_ModulationWithUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, powerAtNolLoad, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, atmosphericPsi, unloadPointCapacity, controlType, blowdownTime, unloadSumpPressure, noLoadPowerFM, powerAtUnload, pressureAtUnload, capacityAtUnload);
 
-    if(applyPressureInletCorrection) {
+    if (applyPressureInletCorrection)
+    {
         const double capacity = getDouble("capacity", inp);
         const double fullLoadPower = getDouble("fullLoadPower", inp);
         const double polyExponent = getDouble("polyExponent", inp);
@@ -340,21 +383,24 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
     }
 
     Compressors::Output output;
-    if(computeFrom == Compressors::ComputeFrom::PercentagePower)
+    if (computeFrom == Compressors::ComputeFrom::PercentagePower)
         output = compMethod.calculateFromPerkW(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+    else if (computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+    {
         output = compMethod.calculateFromPerC(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PowerMeasured)
+    }
+    else if (computeFrom == Compressors::ComputeFrom::PowerMeasured)
         output = compMethod.calculateFromkWMeasured(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::CapacityMeasured)
+    else if (computeFrom == Compressors::ComputeFrom::CapacityMeasured)
         output = compMethod.calculateFromCMeasured(computeFromVal);
-    else if(computeFrom == Compressors::ComputeFrom::PowerFactor){
+    else if (computeFrom == Compressors::ComputeFrom::PowerFactor)
+    {
         const double computeFromPFVoltage = getDouble("computeFromPFVoltage", inp);
         const double computeFromPFAmps = getDouble("computeFromPFAmps", inp);
         output = compMethod.calculateFromVIPFMeasured(computeFromVal, computeFromPFVoltage, computeFromPFAmps);
     }
-
-    else ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+    else
+        ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
     setR("reRatedFlow", compMethod.C_fl_Adjusted);
     setR("reRatedPower", compMethod.kW_fl_Adjusted);
@@ -369,12 +415,10 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
 
 void compressorMultiStepUnloading(Compressors::CompressorType compressorType, Compressors::ControlType controlType, Compressors::Stage stageType, Compressors::Lubricant lubricantType)
 {
-
 }
 
 void compressorVFD(Compressors::CompressorType compressorType, Compressors::ControlType controlType, Compressors::Stage stageType, Compressors::Lubricant lubricantType)
 {
-
 }
 
 NAN_METHOD(CompressorsCalc)
@@ -390,50 +434,73 @@ NAN_METHOD(CompressorsCalc)
         Compressors::CompressorType CompressorType = (Compressors::CompressorType)compressorType;
         Compressors::ControlType ControlType = (Compressors::ControlType)controlType;
 
-        if(compressorType == Compressors::CompressorType::Centrifugal) compressorsCalcCentrifugal(ControlType);
-        else{
+        if (compressorType == Compressors::CompressorType::Centrifugal)
+            compressorsCalcCentrifugal(ControlType);
+        else
+        {
             int stageType = getInteger("stageType");
             int lubricantType = getInteger("lubricantType");
 
             Compressors::Stage StageType = (Compressors::Stage)stageType;
             Compressors::Lubricant LubricantType = (Compressors::Lubricant)lubricantType;
 
-            if(compressorType == Compressors::CompressorType::Screw) {
-                if (lubricantType == Compressors::Lubricant::Injected && (stageType == Compressors::Stage::Single || stageType == Compressors::Stage::Two)){
-                    if(controlType == Compressors::ControlType::LoadUnload) {
+            if (compressorType == Compressors::CompressorType::Screw)
+            {
+                if (lubricantType == Compressors::Lubricant::Injected && (stageType == Compressors::Stage::Single || stageType == Compressors::Stage::Two))
+                {
+                    if (controlType == Compressors::ControlType::LoadUnload)
+                    {
                         compressorsLoadUnload(CompressorType, ControlType, StageType, LubricantType);
                     }
-                    else if(controlType == Compressors::ControlType::ModulationWOUnload) {
+                    else if (controlType == Compressors::ControlType::ModulationWOUnload)
+                    {
                         compressorsModulationWOUnload(CompressorType, ControlType, StageType, LubricantType);
                     }
-                    else if(controlType == Compressors::ControlType::ModulationUnload || controlType == Compressors::ControlType::VariableDisplacementUnload) {
+                    else if (controlType == Compressors::ControlType::ModulationUnload || controlType == Compressors::ControlType::VariableDisplacementUnload)
+                    {
                         compressorsModulationWithUnload(CompressorType, ControlType, StageType, LubricantType);
                     }
-                    else if(controlType == Compressors::ControlType::VFD) {
+                    else if (controlType == Compressors::ControlType::VFD)
+                    {
                         compressorVFD(CompressorType, ControlType, StageType, LubricantType);
                     }
-                }
-                else if (lubricantType == Compressors::Lubricant::Free && stageType == Compressors::Stage::Two) {
-                    if(controlType == Compressors::ControlType::LoadUnload) {
-                        compressorsLoadUnload(CompressorType, ControlType, StageType, LubricantType);
-                    }
-                    else if(controlType == Compressors::ControlType::StartStop) {
+                    else if (controlType == Compressors::ControlType::StartStop)
+                    {
                         compressorsStartStop(CompressorType, ControlType, StageType, LubricantType);
                     }
-                    else if(controlType == Compressors::ControlType::VFD) {
+                }
+                else if (lubricantType == Compressors::Lubricant::Free && stageType == Compressors::Stage::Two)
+                {
+                    if (controlType == Compressors::ControlType::LoadUnload)
+                    {
+                        compressorsLoadUnload(CompressorType, ControlType, StageType, LubricantType);
+                    }
+                    else if (controlType == Compressors::ControlType::StartStop)
+                    {
+                        compressorsStartStop(CompressorType, ControlType, StageType, LubricantType);
+                    }
+                    else if (controlType == Compressors::ControlType::VFD)
+                    {
                         compressorVFD(CompressorType, ControlType, StageType, LubricantType);
                     }
                 }
             }
-            else if(compressorType == Compressors::CompressorType::Reciprocating) {
-                if (stageType == Compressors::Stage::Two && controlType == Compressors::ControlType::MultiStepUnloading) {
-                    compressorMultiStepUnloading(CompressorType, ControlType, StageType, LubricantType);
+            else if (compressorType == Compressors::CompressorType::Reciprocating)
+            {
+                if (stageType == Compressors::Stage::Two && controlType == Compressors::ControlType::MultiStepUnloading)
+                {
+                    //Per Alex Botts: "multi step unloading is identical to LoadUnload"
+                    // compressorMultiStepUnloading(CompressorType, ControlType, StageType, LubricantType);
+                    compressorsLoadUnload(CompressorType, ControlType, StageType, LubricantType);
                 }
-                else if (stageType == Compressors::Stage::Single || stageType == Compressors::Stage::Two) {
-                    if(controlType == Compressors::ControlType::LoadUnload) {
+                else if (stageType == Compressors::Stage::Single || stageType == Compressors::Stage::Two)
+                {
+                    if (controlType == Compressors::ControlType::LoadUnload)
+                    {
                         compressorsLoadUnload(CompressorType, ControlType, StageType, LubricantType);
                     }
-                    else if(controlType == Compressors::ControlType::StartStop) {
+                    else if (controlType == Compressors::ControlType::StartStop)
+                    {
                         compressorsStartStop(CompressorType, ControlType, StageType, LubricantType);
                     }
                 }
@@ -449,7 +516,6 @@ NAN_METHOD(CompressorsCalc)
     }
 }
 
-
 NAN_METHOD(CompEEM_ReduceAirLeaks)
 {
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
@@ -462,7 +528,7 @@ NAN_METHOD(CompEEM_ReduceAirLeaks)
         const double C_lk = getDouble("C_lk", inp);
         const double PerC_lkred = getDouble("PerC_lkred", inp);
 
-        auto output = CompressorEEMs::ReduceAirLeaks(C_fl,C_usage,C_lk,PerC_lkred);
+        auto output = CompressorEEMs::ReduceAirLeaks(C_fl, C_usage, C_lk, PerC_lkred);
 
         setR("C_lkred", output.C_lkred);
         setR("C_usage_lkred", output.C_usage_lkred);
@@ -488,7 +554,7 @@ NAN_METHOD(CompEEM_ImproveEndUseEfficiency)
         const double C_usage = getDouble("C_usage", inp);
         const double C_avgaf_red = getDouble("C_avgaf_red", inp);
 
-        auto output = CompressorEEMs::ImproveEndUseEfficiency(C_fl,C_usage,C_avgaf_red);
+        auto output = CompressorEEMs::ImproveEndUseEfficiency(C_fl, C_usage, C_avgaf_red);
 
         setR("C_af_red", output.C_af_red);
         setR("CPer_af_red", output.CPer_af_red);
@@ -517,7 +583,7 @@ NAN_METHOD(CompEEM_ReduceSystemAirPressure)
         const double P_alt = getDouble("P_alt", inp);
         const double P_atm = getDouble("P_atm", inp);
 
-        auto output = CompressorEEMs::ReduceSystemAirPressure(C_fl,C_usage,P_fl,kW_fl,P_rpred, P_alt, P_atm);
+        auto output = CompressorEEMs::ReduceSystemAirPressure(C_fl, C_usage, P_fl, kW_fl, P_rpred, P_alt, P_atm);
 
         setR("P_fl_rpred", output.P_fl_rpred);
         setR("kW_fl_rpadj", output.kW_fl_rpadj);
@@ -548,7 +614,7 @@ NAN_METHOD(CompEEM_AdjustCascadingSetPoint)
         const double P_alt = getDouble("P_alt", inp);
         const double P_atm = getDouble("P_atm", inp);
 
-        auto output = CompressorEEMs::AdjustCascadingSetPoint(C_fl,C_usage,P_fl,kW_fl,P_fl_adj, P_alt, P_atm);
+        auto output = CompressorEEMs::AdjustCascadingSetPoint(C_fl, C_usage, P_fl, kW_fl, P_fl_adj, P_alt, P_atm);
 
         setR("kW_fl_adj", output.kW_fl_adj);
         setR("C_usage_adj", output.C_usage_adj);
