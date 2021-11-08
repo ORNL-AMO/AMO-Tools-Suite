@@ -238,382 +238,382 @@ test('CompressorsCalcCentrifugal BlowOff', function (t) {
     compare(bindings.CompressorsCalc(input), [0.82, 376.79, 0.0018129518, 0.120073, 2133.21, 0.6798]);
 });
 
-test('Compressors ModulationWOUnload', function (t) {
-    t.plan(45);
-    t.type(bindings.CompressorsCalc, 'function');
+// test('Compressors ModulationWOUnload', function (t) {
+//     t.plan(45);
+//     t.type(bindings.CompressorsCalc, 'function');
 
-    var compare = function(results, expected, rating = false) {
-        if(rating) {
-            t.equal(rnd(results.reRatedPower), rnd(expected[0]));
-            t.equal(rnd(results.reRatedFlow), rnd(expected[1]));
-            t.equal(rnd(results.reRatedPowerMax), rnd(expected[2]));
-            t.equal(rnd(results.reRatedFlowMax), rnd(expected[3]));
-        }
-        else {
-            t.equal(rnd(results.powerCalculated), rnd(expected[0]));
-            t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
-            t.equal(rnd(results.percentagePower), rnd(expected[2]));
-            t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
-        }
-    };
+//     var compare = function(results, expected, rating = false) {
+//         if(rating) {
+//             t.equal(rnd(results.reRatedPower), rnd(expected[0]));
+//             t.equal(rnd(results.reRatedFlow), rnd(expected[1]));
+//             t.equal(rnd(results.reRatedPowerMax), rnd(expected[2]));
+//             t.equal(rnd(results.reRatedFlowMax), rnd(expected[3]));
+//         }
+//         else {
+//             t.equal(rnd(results.powerCalculated), rnd(expected[0]));
+//             t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
+//             t.equal(rnd(results.percentagePower), rnd(expected[2]));
+//             t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
+//         }
+//     };
 
-    var input = {
-        //required
-        compressorType : 1,
-        controlType: 3,
-        stageType:0,
-        lubricantType:0,
+//     var input = {
+//         //required
+//         compressorType : 1,
+//         controlType: 3,
+//         stageType:0,
+//         lubricantType:0,
 
-        powerAtFullLoad: 85.4,
-        capacityAtFullLoad: 473,
-        powerAtNoLoad: 55.3,
+//         powerAtFullLoad: 85.4,
+//         capacityAtFullLoad: 473,
+//         powerAtNoLoad: 55.3,
 
-        //needed for Pressure Inlet Correction for control type ModulationWOUnload
-        capacity: 473,
-        fullLoadPower: 105,
-        polyExponent:1.4,
-        ratedDischargePressure : 100,
-        ratedInletPressure: 14.5,
-        motorEfficiency: 0.917,
-        fullLoadDischargePressure : 110,
-        maxDischargePressure : 110,
-        inletPressure : 14.7,
-        atmosphericPressure:14.7,
+//         //needed for Pressure Inlet Correction for control type ModulationWOUnload
+//         capacity: 473,
+//         fullLoadPower: 105,
+//         polyExponent:1.4,
+//         ratedDischargePressure : 100,
+//         ratedInletPressure: 14.5,
+//         motorEfficiency: 0.917,
+//         fullLoadDischargePressure : 110,
+//         maxDischargePressure : 110,
+//         inletPressure : 14.7,
+//         atmosphericPressure:14.7,
 
-        //compute method
-        computeFrom: 0,
-        computeFromVal: 0,
-        computeFromPFVoltage : 0,
-        computeFromPFAmps : 0
-    };
+//         //compute method
+//         computeFrom: 0,
+//         computeFromVal: 0,
+//         computeFromPFVoltage : 0,
+//         computeFromPFAmps : 0
+//     };
 
-    input.computeFrom = 0;
-    input.computeFromVal = 0.89;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [76.006, 325.38, 0.89, 0.69]);
-    input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [80.1, 335.51, 0.89, 0.71]);
+//     input.computeFrom = 0;
+//     input.computeFromVal = 0.89;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [76.006, 325.38, 0.89, 0.69]);
+//     input.applyPressureInletCorrection = true;
+//     compare(bindings.CompressorsCalc(input), [80.1, 335.51, 0.89, 0.71]);
 
-    input.computeFrom = 1;
-    input.computeFromVal = 1.66173;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [105.32, 786, 1.23326, 1.66173]);
-    input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [112.96, 780.1, 1.25547, 1.66173]);
+//     input.computeFrom = 1;
+//     input.computeFromVal = 1.66173;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [105.32, 786, 1.23326, 1.66173]);
+//     input.applyPressureInletCorrection = true;
+//     compare(bindings.CompressorsCalc(input), [112.96, 780.1, 1.25547, 1.66173]);
 
-    input.computeFrom = 2;
-    input.computeFromVal = 75.9;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [75.9, 323.71, 0.89, 0.68]);
-    input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [75.9, 278.72, 0.84, 0.59]);
+//     input.computeFrom = 2;
+//     input.computeFromVal = 75.9;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [75.9, 323.71, 0.89, 0.68]);
+//     input.applyPressureInletCorrection = true;
+//     compare(bindings.CompressorsCalc(input), [75.9, 278.72, 0.84, 0.59]);
 
-    input.computeFrom = 3;
-    input.computeFromVal = 786;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [105.32, 786, 1.23326, 1.66173]);
-    input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [113.39, 786, 1.26024, 1.67426]);
+//     input.computeFrom = 3;
+//     input.computeFromVal = 786;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [105.32, 786, 1.23326, 1.66173]);
+//     input.applyPressureInletCorrection = true;
+//     compare(bindings.CompressorsCalc(input), [113.39, 786, 1.26024, 1.67426]);
 
-    input.computeFrom = 4;
-    input.computeFromVal = 50;
-    input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 2.467;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [94.0026, 608.18, 1.10073, 1.29]);
-    input.applyPressureInletCorrection = true;
-    let res = bindings.CompressorsCalc(input);
-    compare(res, [94.00257, 523.64, 1.04362, 1.12]);
-    compare(res, [90, 469.45, 90, 469.45], true);
+//     input.computeFrom = 4;
+//     input.computeFromVal = 50;
+//     input.computeFromPFVoltage = 440;
+//     input.computeFromPFAmps = 2.467;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [94.0026, 608.18, 1.10073, 1.29]);
+//     input.applyPressureInletCorrection = true;
+//     let res = bindings.CompressorsCalc(input);
+//     compare(res, [94.00257, 523.64, 1.04362, 1.12]);
+//     compare(res, [90, 469.45, 90, 469.45], true);
 
-    console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
-});
+//     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
+// });
 
-test('Compressors StartStop', function (t) {
-    t.plan(45);
-    t.type(bindings.CompressorsCalc, 'function');
+// test('Compressors StartStop', function (t) {
+//     t.plan(45);
+//     t.type(bindings.CompressorsCalc, 'function');
 
-    var compare = function(results, expected, rating = false) {
-        if(rating) {
-            t.equal(rnd(results.reRatedPower), rnd(expected[0]));
-            t.equal(rnd(results.reRatedFlow), rnd(expected[1]));
-            t.equal(rnd(results.reRatedPowerMax), rnd(expected[2]));
-            t.equal(rnd(results.reRatedFlowMax), rnd(expected[3]));
-        }
-        else {
-            t.equal(rnd(results.powerCalculated), rnd(expected[0]));
-            t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
-            t.equal(rnd(results.percentagePower), rnd(expected[2]));
-            t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
-        }
-    };
+//     var compare = function(results, expected, rating = false) {
+//         if(rating) {
+//             t.equal(rnd(results.reRatedPower), rnd(expected[0]));
+//             t.equal(rnd(results.reRatedFlow), rnd(expected[1]));
+//             t.equal(rnd(results.reRatedPowerMax), rnd(expected[2]));
+//             t.equal(rnd(results.reRatedFlowMax), rnd(expected[3]));
+//         }
+//         else {
+//             t.equal(rnd(results.powerCalculated), rnd(expected[0]));
+//             t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
+//             t.equal(rnd(results.percentagePower), rnd(expected[2]));
+//             t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
+//         }
+//     };
 
-    var input = {
-        //required
-        compressorType : 1,
-        controlType: 4,
-        stageType:1,
-        lubricantType:1,
+//     var input = {
+//         //required
+//         compressorType : 1,
+//         controlType: 4,
+//         stageType:1,
+//         lubricantType:1,
 
-        powerAtFullLoad: 89.5,
-        capacityAtFullLoad: 560,
-        powerMaxPercentage: 1.05,
-        powerAtFullLoadPercentage:1,
+//         powerAtFullLoad: 89.5,
+//         capacityAtFullLoad: 560,
+//         powerMaxPercentage: 1.05,
+//         powerAtFullLoadPercentage:1,
 
-        //needed for Pressure Inlet Correction for control type ModulationWOUnload
-        capacity: 473,
-        fullLoadPower: 105,
-        polyExponent:1.4,
-        ratedDischargePressure : 100,
-        ratedInletPressure: 14.5,
-        motorEfficiency: 0.917,
-        fullLoadDischargePressure : 110,
-        maxDischargePressure : 110,
-        inletPressure : 14.7,
-        atmosphericPressure:14.7,
+//         //needed for Pressure Inlet Correction for control type ModulationWOUnload
+//         capacity: 473,
+//         fullLoadPower: 105,
+//         polyExponent:1.4,
+//         ratedDischargePressure : 100,
+//         ratedInletPressure: 14.5,
+//         motorEfficiency: 0.917,
+//         fullLoadDischargePressure : 110,
+//         maxDischargePressure : 110,
+//         inletPressure : 14.7,
+//         atmosphericPressure:14.7,
 
-        //compute method
-        computeFrom: 0,
-        computeFromVal: 0,
-        computeFromPFVoltage : 0,
-        computeFromPFAmps : 0
-    };
+//         //compute method
+//         computeFrom: 0,
+//         computeFromVal: 0,
+//         computeFromPFVoltage : 0,
+//         computeFromPFAmps : 0
+//     };
 
-    input.computeFrom = 0;
-    input.computeFromVal = 0.205;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [18.3475, 112, 0.21, 0.2]);
-    input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [18.45, 93.891998291, 0.21, 0.2]);
+//     input.computeFrom = 0;
+//     input.computeFromVal = 0.205;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [18.3475, 112, 0.21, 0.2]);
+//     input.applyPressureInletCorrection = true;
+//     compare(bindings.CompressorsCalc(input), [18.45, 93.891998291, 0.21, 0.2]);
 
-    input.computeFrom = 1;
-    input.computeFromVal = 0.2;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [18.35, 112, 0.20503, 0.2]);
-    input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [18.45, 93.892, 0.2, 0.2]);
+//     input.computeFrom = 1;
+//     input.computeFromVal = 0.2;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [18.35, 112, 0.20503, 0.2]);
+//     input.applyPressureInletCorrection = true;
+//     compare(bindings.CompressorsCalc(input), [18.45, 93.892, 0.2, 0.2]);
 
-    input.computeFrom = 2;
-    input.computeFromVal = 18.35;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [18.35, 112.015, 0.21, 0.2]);
-    input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [18.35, 93.38, 0.2, 0.2]);
+//     input.computeFrom = 2;
+//     input.computeFromVal = 18.35;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [18.35, 112.015, 0.21, 0.2]);
+//     input.applyPressureInletCorrection = true;
+//     compare(bindings.CompressorsCalc(input), [18.35, 93.38, 0.2, 0.2]);
 
-    input.computeFrom = 3;
-    input.computeFromVal = 112;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [18.35, 112, 0.21, 0.2]);
-    input.applyPressureInletCorrection = true;
-    compare(bindings.CompressorsCalc(input), [22.01, 112, 0.2445875515, 0.238572]);
+//     input.computeFrom = 3;
+//     input.computeFromVal = 112;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [18.35, 112, 0.21, 0.2]);
+//     input.applyPressureInletCorrection = true;
+//     compare(bindings.CompressorsCalc(input), [22.01, 112, 0.2445875515, 0.238572]);
 
-    input.computeFrom = 4;
-    input.computeFromVal = 50;
-    input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 2.467;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [94.0026, 573.827, 1.0503, 1.0247]);
-    input.applyPressureInletCorrection = true;
-    let res = bindings.CompressorsCalc(input);
-    compare(res, [94.0026, 478.38, 1.04362, 1.01816]);
-    compare(res, [90, 469.45, 90, 469.45], true);
+//     input.computeFrom = 4;
+//     input.computeFromVal = 50;
+//     input.computeFromPFVoltage = 440;
+//     input.computeFromPFAmps = 2.467;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [94.0026, 573.827, 1.0503, 1.0247]);
+//     input.applyPressureInletCorrection = true;
+//     let res = bindings.CompressorsCalc(input);
+//     compare(res, [94.0026, 478.38, 1.04362, 1.01816]);
+//     compare(res, [90, 469.45, 90, 469.45], true);
 
-    console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
-});
+//     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
+// });
 
-test('Compressors LoadUnload', function (t) {
-    t.plan(45);
-    t.type(bindings.CompressorsCalc, 'function');
+// test('Compressors LoadUnload', function (t) {
+//     t.plan(45);
+//     t.type(bindings.CompressorsCalc, 'function');
 
-    var compare = function(results, expected, rating = false) {
-        if(rating) {
-            t.equal(rnd(results.reRatedPower), rnd(expected[0]));
-            t.equal(rnd(results.reRatedFlow), rnd(expected[1]));
-            t.equal(rnd(results.reRatedPowerMax), rnd(expected[2]));
-            t.equal(rnd(results.reRatedFlowMax), rnd(expected[3]));
-        }
-        else {
-            t.equal(rnd(results.powerCalculated), rnd(expected[0]));
-            t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
-            t.equal(rnd(results.percentagePower), rnd(expected[2]));
-            t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
-        }
-    };
+//     var compare = function(results, expected, rating = false) {
+//         if(rating) {
+//             t.equal(rnd(results.reRatedPower), rnd(expected[0]));
+//             t.equal(rnd(results.reRatedFlow), rnd(expected[1]));
+//             t.equal(rnd(results.reRatedPowerMax), rnd(expected[2]));
+//             t.equal(rnd(results.reRatedFlowMax), rnd(expected[3]));
+//         }
+//         else {
+//             t.equal(rnd(results.powerCalculated), rnd(expected[0]));
+//             t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
+//             t.equal(rnd(results.percentagePower), rnd(expected[2]));
+//             t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
+//         }
+//     };
 
-    var input = {
-        //required
-        compressorType : 2,
-        controlType: 0,
-        stageType:0,
-        lubricantType:2,
+//     var input = {
+//         //required
+//         compressorType : 2,
+//         controlType: 0,
+//         stageType:0,
+//         lubricantType:2,
 
-        powerAtFullLoad: 166.5,
-        capacityAtFullLoad: 1048,
-        receiverVolume: 1048/7.481,
-        powerMax: 175.5,
-        dischargePsiFullLoad:100,
-        dischargePsiMax:110,
-        modulatingPsi:5,
-        loadFactorUnloaded:10.1,
-        atmosphericPsi:14.7,
+//         powerAtFullLoad: 166.5,
+//         capacityAtFullLoad: 1048,
+//         receiverVolume: 1048/7.481,
+//         powerMax: 175.5,
+//         dischargePsiFullLoad:100,
+//         dischargePsiMax:110,
+//         modulatingPsi:5,
+//         loadFactorUnloaded:10.1,
+//         atmosphericPsi:14.7,
 
-        //needed for Pressure Inlet Correction for control type ModulationWOUnload
-        capacity: 473,
-        fullLoadPower: 105,
-        polyExponent:1.4,
-        ratedDischargePressure : 100,
-        ratedInletPressure: 14.5,
-        motorEfficiency: 0.917,
-        fullLoadDischargePressure : 110,
-        maxDischargePressure : 110,
-        inletPressure : 14.7,
-        atmosphericPressure:14.7,
+//         //needed for Pressure Inlet Correction for control type ModulationWOUnload
+//         capacity: 473,
+//         fullLoadPower: 105,
+//         polyExponent:1.4,
+//         ratedDischargePressure : 100,
+//         ratedInletPressure: 14.5,
+//         motorEfficiency: 0.917,
+//         fullLoadDischargePressure : 110,
+//         maxDischargePressure : 110,
+//         inletPressure : 14.7,
+//         atmosphericPressure:14.7,
 
-        //compute method
-        computeFrom: 0,
-        computeFromVal: 0,
-        computeFromPFVoltage : 0,
-        computeFromPFAmps : 0
-    };
+//         //compute method
+//         computeFrom: 0,
+//         computeFromVal: 0,
+//         computeFromPFVoltage : 0,
+//         computeFromPFAmps : 0
+//     };
 
-    input.computeFrom = 0;
-    input.computeFromVal = 0.94;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.51, 967.78, 0.94, 0.92]);
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.51, 967.78, 0.94, 0.92]);
+//     input.computeFrom = 0;
+//     input.computeFromVal = 0.94;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [156.51, 967.78, 0.94, 0.92]);
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [156.51, 967.78, 0.94, 0.92]);
 
-    input.computeFrom = 1;
-    input.computeFromVal = 0.895;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [151.32, 937.96, 0.91, 0.9]);
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [151.32, 937.96, 0.91, 0.9]);
+//     input.computeFrom = 1;
+//     input.computeFromVal = 0.895;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [151.32, 937.96, 0.91, 0.9]);
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [151.32, 937.96, 0.91, 0.9]);
 
-    input.computeFrom = 2;
-    input.computeFromVal = 156;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156, 964.72, 0.94, 0.92]);
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156, 964.72, 0.94, 0.92]);
+//     input.computeFrom = 2;
+//     input.computeFromVal = 156;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [156, 964.72, 0.94, 0.92]);
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [156, 964.72, 0.94, 0.92]);
 
-    input.computeFrom = 3;
-    input.computeFromVal = 937;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [151.16, 937, 0.91, 0.89]);
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [151.16, 937, 0.91, 0.89]);
+//     input.computeFrom = 3;
+//     input.computeFromVal = 937;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [151.16, 937, 0.91, 0.89]);
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [151.16, 937, 0.91, 0.89]);
 
-    input.computeFrom = 4;
-    input.computeFromVal = 50;
-    input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 2.467;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [94.002568, 574.23, 0.56458, 0.547937]);
-    input.applyPressureInletCorrection = true;
-    let res = bindings.CompressorsCalc(input);
-    compare(res, [94, 489.76, 1.04, 1.04]);
-    compare(res, [90, 469.45, 90, 469.45], true);
+//     input.computeFrom = 4;
+//     input.computeFromVal = 50;
+//     input.computeFromPFVoltage = 440;
+//     input.computeFromPFAmps = 2.467;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [94.002568, 574.23, 0.56458, 0.547937]);
+//     input.applyPressureInletCorrection = true;
+//     let res = bindings.CompressorsCalc(input);
+//     compare(res, [94, 489.76, 1.04, 1.04]);
+//     compare(res, [90, 469.45, 90, 469.45], true);
 
-    console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
-});
+//     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
+// });
 
-test('Compressors ModulationWithUnload', function (t) {
-    t.plan(45);
-    t.type(bindings.CompressorsCalc, 'function');
+// test('Compressors ModulationWithUnload', function (t) {
+//     t.plan(45);
+//     t.type(bindings.CompressorsCalc, 'function');
 
-    var compare = function(results, expected, rating = false) {
-        if(rating) {
-            t.equal(rnd(results.reRatedPower), rnd(expected[0]));
-            t.equal(rnd(results.reRatedFlow), rnd(expected[1]));
-            t.equal(rnd(results.reRatedPowerMax), rnd(expected[2]));
-            t.equal(rnd(results.reRatedFlowMax), rnd(expected[3]));
-        }
-        else {
-            t.equal(rnd(results.powerCalculated), rnd(expected[0]));
-            t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
-            t.equal(rnd(results.percentagePower), rnd(expected[2]));
-            t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
-        }
-    };
+//     var compare = function(results, expected, rating = false) {
+//         if(rating) {
+//             t.equal(rnd(results.reRatedPower), rnd(expected[0]));
+//             t.equal(rnd(results.reRatedFlow), rnd(expected[1]));
+//             t.equal(rnd(results.reRatedPowerMax), rnd(expected[2]));
+//             t.equal(rnd(results.reRatedFlowMax), rnd(expected[3]));
+//         }
+//         else {
+//             t.equal(rnd(results.powerCalculated), rnd(expected[0]));
+//             t.equal(rnd(results.capacityCalculated), rnd(expected[1]));
+//             t.equal(rnd(results.percentagePower), rnd(expected[2]));
+//             t.equal(rnd(results.percentageCapacity), rnd(expected[3]));
+//         }
+//     };
 
-    var input = {
-        //required
-        compressorType : 1,
-        controlType: 5,
-        stageType:0,
-        lubricantType:0,
+//     var input = {
+//         //required
+//         compressorType : 1,
+//         controlType: 5,
+//         stageType:0,
+//         lubricantType:0,
 
-        powerAtFullLoad: 166.5,
-        capacityAtFullLoad: 1048,
-        receiverVolume: 1048/7.481,
-        powerMax: 175.5,
-        dischargePsiFullLoad:100,
-        dischargePsiMax:110,
-        modulatingPsi:5,
-        atmosphericPsi:14.7,
-        powerAtNolLoad:107.5,
+//         powerAtFullLoad: 166.5,
+//         capacityAtFullLoad: 1048,
+//         receiverVolume: 1048/7.481,
+//         powerMax: 175.5,
+//         dischargePsiFullLoad:100,
+//         dischargePsiMax:110,
+//         modulatingPsi:5,
+//         atmosphericPsi:14.7,
+//         powerAtNolLoad:107.5,
 
-        //needed for Pressure Inlet Correction for control type ModulationWOUnload
-        capacity: 473,
-        fullLoadPower: 105,
-        polyExponent:1.4,
-        ratedDischargePressure : 100,
-        ratedInletPressure: 14.5,
-        motorEfficiency: 0.917,
-        fullLoadDischargePressure : 110,
-        maxDischargePressure : 110,
-        inletPressure : 14.7,
-        atmosphericPressure:14.7,
+//         //needed for Pressure Inlet Correction for control type ModulationWOUnload
+//         capacity: 473,
+//         fullLoadPower: 105,
+//         polyExponent:1.4,
+//         ratedDischargePressure : 100,
+//         ratedInletPressure: 14.5,
+//         motorEfficiency: 0.917,
+//         fullLoadDischargePressure : 110,
+//         maxDischargePressure : 110,
+//         inletPressure : 14.7,
+//         atmosphericPressure:14.7,
 
-        //compute method
-        computeFrom: 0,
-        computeFromVal: 0,
-        computeFromPFVoltage : 0,
-        computeFromPFAmps : 0
-    };
+//         //compute method
+//         computeFrom: 0,
+//         computeFromVal: 0,
+//         computeFromPFVoltage : 0,
+//         computeFromPFAmps : 0
+//     };
 
-    input.computeFrom = 0;
-    input.computeFromVal = 0.94;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.51, 972.06, 0.94, 0.93]);
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156.51, 972.06, 0.94, 0.93]);
+//     input.computeFrom = 0;
+//     input.computeFromVal = 0.94;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [156.51, 972.06, 0.94, 0.93]);
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [156.51, 972.06, 0.94, 0.93]);
 
-    input.computeFrom = 1;
-    input.computeFromVal = 0.895;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [150.28, 937.96, 0.9, 0.9]);
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [150.28, 937.96, 0.9, 0.9]);
+//     input.computeFrom = 1;
+//     input.computeFromVal = 0.895;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [150.28, 937.96, 0.9, 0.9]);
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [150.28, 937.96, 0.9, 0.9]);
 
-    input.computeFrom = 2;
-    input.computeFromVal = 156;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156, 969.16, 0.93693, 0.92]);
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [156, 969.16, 0.93693, 0.92]);
+//     input.computeFrom = 2;
+//     input.computeFromVal = 156;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [156, 969.16, 0.93693, 0.92]);
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [156, 969.16, 0.93693, 0.92]);
 
-    input.computeFrom = 3;
-    input.computeFromVal = 937;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [150.11, 937, 0.9, 0.89]);
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [150.11, 937, 0.9, 0.89]);
+//     input.computeFrom = 3;
+//     input.computeFromVal = 937;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [150.11, 937, 0.9, 0.89]);
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [150.11, 937, 0.9, 0.89]);
 
-    input.computeFrom = 4;
-    input.computeFromVal = 50;
-    input.computeFromPFVoltage = 440;
-    input.computeFromPFAmps = 2.467;
-    input.applyPressureInletCorrection = false;
-    compare(bindings.CompressorsCalc(input), [94, 601.97, 0.56, 0.57]);
-    input.applyPressureInletCorrection = false;
-    let res = bindings.CompressorsCalc(input);
-    compare(res, [94, 601.97, 0.56, 0.57]);
-    compare(res, [166.5, 1048, 0, 0], true);
+//     input.computeFrom = 4;
+//     input.computeFromVal = 50;
+//     input.computeFromPFVoltage = 440;
+//     input.computeFromPFAmps = 2.467;
+//     input.applyPressureInletCorrection = false;
+//     compare(bindings.CompressorsCalc(input), [94, 601.97, 0.56, 0.57]);
+//     input.applyPressureInletCorrection = false;
+//     let res = bindings.CompressorsCalc(input);
+//     compare(res, [94, 601.97, 0.56, 0.57]);
+//     compare(res, [166.5, 1048, 0, 0], true);
 
-    console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
-});
+//     console.log(" \n \nReRated Pressure Inlet Correction values\nNew Power: ", rnd(res.reRatedPower), "\nNew Flow: ", rnd(res.reRatedFlow), "\nNew Power Max: ", rnd(res.reRatedPowerMax), "\nNew Flow Max: ", rnd(res.reRatedFlowMax), "\n ");
+// });
 
 
 test('CompEEM_ReduceAirLeaks', function (t) {

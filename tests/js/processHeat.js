@@ -210,7 +210,7 @@ test('CascadeHeatHighToLow Gas', function (t) {
         O2: 0
     };
 
-    compare(bindings.cascadeHeatHighToLow(input), [174956.62, 4.22636, 4.7352, 7000, 33146.57, 165732.87, 4.7352, 0.4505, 0.47287, -0.90626, 0.89254]);
+    compare(bindings.cascadeHeatHighToLow(input), [174956.62, 4.22636, 4.71, 7000, 33003.13, 165015.65, 4.71, 0.4505, 0.47287, -1.06, 0.9]);
 });
 
 test('WaterHeatingUsingFlue Gas', function (t) {
@@ -269,8 +269,8 @@ test('WaterHeatingUsingFlue Gas', function (t) {
         O2: 0
     };
 
-    compare(bindings.waterHeatingUsingFlue(input), [23538.35, 0.72023, 2865.339, 452.0478, 16009.968,
-        16650.3671, 1.13247, 26656.55, 4.2285, 70405.8525, 26656.55, 4627872.98, 484.537, 446.1036, 51404.23, 267816.03]);
+    compare(bindings.waterHeatingUsingFlue(input), [23637.68, 0.72023, 2865.339, 452.0478, 15994.47,
+        16634.25, 1.13247, 26759.76, 4.2285, 70337.7, 26759.76, 4645791.13, 484.537, 446.42, 51653.25, 269113.45]);
 });
 
 test('AirWaterCoolingUsingFlue Gas', function (t) {
@@ -313,5 +313,5 @@ test('AirWaterCoolingUsingFlue Gas', function (t) {
         O2: 0.01
     };
 
-    compare(bindings.airWaterCoolingUsingFlue(input), [0.21596, 106938.4282, 0.2578, 0.19816, 0.8444, 0.86454, 0.02014, 2.3362, 4.8247]);
+    compare(bindings.airWaterCoolingUsingFlue(input), [0.21596, 107119.17, 0.2578, 0.19816, 0.8444, 0.86454, 0.02014, 2.3362, 4.83]);
 });

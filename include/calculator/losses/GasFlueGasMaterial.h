@@ -159,13 +159,6 @@ public:
 	double getStoichometricAir() const { return stoichometricAir; };
 
 	/**
-	 *
-	 * @param flueGasO2 double
-	 * @return double
-	 */
-    double getExcessAir(const double flueGasO2) const;
-
-    /**
      *
      * @param ppH2O double
      * @return double
@@ -292,6 +285,13 @@ private:
 	double mH2O = 0, mCO2 = 0, mO2 = 0, mN2 = 0, mSO2 = 0;
 	std::shared_ptr<GasProperties> CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2;
 	double heatingValue = 0, specificGravity = 0, heatingValueVolume = 0, stoichometricAir = 0;
+
+    /**
+	 *
+	 * @param flueGasO2 double
+	 * @return double
+	 */
+    double getExcessAir(const double flueGasO2) const;
 
     void flueGasO2AdjustForCalcError(const double excessAir, double &flueO2) const;
 };
