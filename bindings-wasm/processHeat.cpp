@@ -13,7 +13,7 @@ EMSCRIPTEN_BINDINGS(processHeat_class)
 {
     enum_<WaterHeatingUsingFlue::SteamCondition>("SteamConditionType")
         .value("Superheated", WaterHeatingUsingFlue::SteamCondition::Superheated)
-        .value("Screw", WaterHeatingUsingFlue::SteamCondition::Saturated);
+        .value("Saturated", WaterHeatingUsingFlue::SteamCondition::Saturated);
 
     class_<AirHeatingUsingExhaust::Output>("AirHeatingUsingExhaustOutput")
         .property("hxColdAir", &AirHeatingUsingExhaust::Output::hxColdAir)
