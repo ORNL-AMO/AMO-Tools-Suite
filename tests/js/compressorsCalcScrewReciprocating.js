@@ -275,7 +275,7 @@ test('COMP ID: 629 Lubricant inject screw load/unload', function (t) {
     t.equal(rnd(results.percentageCapacity), rnd(91), "% Capacity 2");
     t.equal(rnd(results.powerCalculated), rnd(86.54), "Power Calaculated 4");
 });
-//TODO ID: 629 Lubricant injected screw start/stop
+//ID: 629 Lubricant injected screw start/stop
 test('COMP ID: 629 Lubricant inject screw start/stop', function (t) {
     t.plan(4);
     var input = {
@@ -330,7 +330,7 @@ test('COMP ID: 629 Lubricant inject screw start/stop', function (t) {
     t.equal(rnd(results.powerCalculated), rnd(30.7), "Power Calculated 2");
 });
 
-// //ID: 861 Lubricant free screw Load/Unload
+//ID: 861 Lubricant free screw Load/Unload
 test('COMP ID: 861 Lubricant free screw Load/Unload', function (t) {
     t.plan(4);
     var input = {
@@ -562,7 +562,7 @@ test('COMP ID: 1156 Reciprocating Start/Stop', function (t) {
     t.equal(rnd(results.percentageCapacity), rnd(35), "% Capacity");
     t.equal(rnd(results.powerCalculated), rnd(23), "Power Calculated 2");
 });
-// //ID: 1187 Reciprocating multi-step unloading
+//ID: 1187 Reciprocating multi-step unloading
 test('COMP ID: 1187 Reciprocating multi-step unloading', function (t) {
     t.plan(8);
     var input = {

@@ -286,7 +286,8 @@ void compressorsLoadUnload(Compressors::CompressorType compressorType, Compresso
     // const double pressureAtUnload = getDouble("pressureAtUnload");
     // const double capacityAtUnload = getDouble("capacityAtUnload");
 
-    auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, atmosphericPsi, compressorType, lubricantType, controlType, powerAtNolLoad, unloadPointCapacity, blowdownTime, unloadSumpPressure, noLoadPowerFM);
+    auto compMethod = Compressors_LoadUnload(powerAtFullLoad, capacityAtFullLoad, receiverVolume, powerMax, dischargePsiFullLoad, dischargePsiMax, modulatingPsi, loadFactorUnloaded, 
+            atmosphericPsi, compressorType, lubricantType, controlType, powerAtNolLoad, unloadPointCapacity, blowdownTime, unloadSumpPressure, noLoadPowerFM);
 
     if (applyPressureInletCorrection)
     {

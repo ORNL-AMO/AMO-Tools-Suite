@@ -310,10 +310,9 @@ class Compressors_Centrifugal_LoadUnload : public CompressorsBase
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_nl double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param kW_nl double, kW
      *
      */
     Compressors_Centrifugal_LoadUnload(const double kW_fl, const double C_fl, const double kW_nl) : CompressorsBase(kW_fl, C_fl)
@@ -418,13 +417,12 @@ class Compressors_Centrifugal_ModulationUnload : public CompressorsBase
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_nl double
-     * @param C_max double
-     * @param kW_ul double
-     * @param C_ul double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param kW_nl double, kW
+     * @param C_max double, acfm
+     * @param kW_ul double, kW
+     * @param C_ul double, acfm
      *
      */
     Compressors_Centrifugal_ModulationUnload(const double kW_fl, const double C_fl, const double kW_nl, const double C_max, const double kW_ul, const double C_ul) : CompressorsBase(kW_fl, C_fl), C_max(C_max), C_max_raw(C_max), C_ul(C_ul)
@@ -547,11 +545,14 @@ class Compressors_ModulationWOUnload : public CompressorsBase
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_nl double
-     * @param CompType double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param kW_nl double, kW
+     * @param mod_exp double
+     * @param woUnload boolean
+     * @param CompType CompressorType
+     * @param noLoadPowerFM double
+     * @param kW_max double, kW
      *
      */
     Compressors_ModulationWOUnload(const double kW_fl, const double C_fl, const double kW_nl,
@@ -666,11 +667,10 @@ class Compressors_StartStop : public CompressorsBase
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kWPer_max double
-     * @param kWPer_fl double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param kWPer_max double, percent
+     * @param kWPer_fl double, percent
      *
      */
     Compressors_StartStop(const double kW_fl, const double C_fl, const double kWPer_max, const double kWPer_fl) : CompressorsBase(kW_fl, C_fl), kWPer_max(kWPer_max), kWPer_fl(kWPer_fl)
@@ -790,9 +790,9 @@ public:
      * @param P_mod double, psig
      * @param lf_ul double, decimal
      * @param P_atm double, psia
-     * @param CompType double
-     * @param LubricantType double
-     * @param CntrlType double
+     * @param CompType CompressorType
+     * @param LubricantType Lubricant
+     * @param CntrlType ControlType
      * @param kW_nl double, kW
      * @param PerC_ul double, %
      * @param t_blowdown double, sec
@@ -996,7 +996,7 @@ public:
      *
      * @param kW_fl double, kW
      * @param C_fl double, acfm
-     * @param C_storage dobule, ft3
+     * @param C_storage double, ft3
      * @param kW_max double, kW
      * @param kW_nl double, kW
      * @param P_fl double, psig
@@ -1004,7 +1004,7 @@ public:
      * @param P_mod double, psig
      * @param P_atm double, psia
      * @param PerC_ul double, %
-     * @param CntrlType double
+     * @param CntrlType ControlType
      * @param t_blowdown double, sec
      * @param P_sump_ul double, psig
      * @param noLoadPowerFM double, decimal
