@@ -112,7 +112,7 @@ EMSCRIPTEN_BINDINGS(compressors_class)
         .property("C_fl_Adjusted", &Compressors_Centrifugal_BlowOff::getC_fl_Adjusted);
 
     class_<Compressors_ModulationWOUnload>("Compressors_ModulationWOUnload")
-        .constructor<double, double, double, double, bool, Compressors::CompressorType>()
+        .constructor<double, double, double>()
         .function("calculateFromPerkW", &Compressors_ModulationWOUnload::calculateFromPerkW)
         .function("calculateFromPerC", &Compressors_ModulationWOUnload::calculateFromPerC)
         .function("calculateFromkWMeasured", &Compressors_ModulationWOUnload::calculateFromkWMeasured)
@@ -139,7 +139,8 @@ EMSCRIPTEN_BINDINGS(compressors_class)
 
     class_<Compressors_LoadUnload>("Compressors_LoadUnload")
         .constructor<double, double, double, double, double, double, double, double, double,
-                Compressors::CompressorType, Compressors::Lubricant, Compressors::ControlType, double, double>()
+                     Compressors::CompressorType, Compressors::Lubricant, Compressors::ControlType, double, double,
+                     double, double, double>()
         .function("calculateFromPerkW", &Compressors_LoadUnload::calculateFromPerkW)
         .function("calculateFromPerC", &Compressors_LoadUnload::calculateFromPerC)
         .function("calculateFromkWMeasured", &Compressors_LoadUnload::calculateFromkWMeasured)
@@ -152,7 +153,10 @@ EMSCRIPTEN_BINDINGS(compressors_class)
         .property("kW_max_Adjusted", &Compressors_LoadUnload::getkW_max_Adjusted);
 
     class_<Compressors_ModulationWithUnload, base<Compressors_LoadUnload>>("Compressors_ModulationWithUnload")
-        .constructor<double, double, double, double, double, double, double, double, double, double, Compressors::ControlType>()
+        .constructor<double, double, double, double, double, double, double, double, double, double, Compressors::ControlType,
+                     double, double, double, double, double, double>()
+        .constructor<double, double, double, double, double, double, double, double, double, double, Compressors::ControlType,
+                     double, double, double>()
         .function("calculateFromPerkW", &Compressors_ModulationWithUnload::calculateFromPerkW)
         .function("calculateFromPerC", &Compressors_ModulationWithUnload::calculateFromPerC)
         .function("calculateFromkWMeasured", &Compressors_ModulationWithUnload::calculateFromkWMeasured)
