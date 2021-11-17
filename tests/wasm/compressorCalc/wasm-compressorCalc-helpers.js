@@ -75,10 +75,6 @@ function compressorsCalcStartStop(input) {
 }
 
 function compressorsCalcLoadUnload(input) {
-    // return new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax,
-    //     input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.loadFactorUnloaded, input.atmosphericPsi,
-    //     input.compressorType, input.lubricantType, input.controlType, input.powerAtNoLoad, input.unloadPointCapacity, input.blowdownTime,
-    //     input.unloadSumpPressure, input.noLoadPowerFM, input.powerAtUnload, input.pressureAtUnload, input.capacityAtUnload);
     return new Module.Compressors_LoadUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax,
         input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.loadFactorUnloaded, input.atmosphericPsi,
         input.compressorType, input.lubricantType, input.controlType, input.powerAtNoLoad, input.unloadPointCapacity, input.blowdownTime,
@@ -91,7 +87,7 @@ function compressorsCalcModulationWithUnload(input) {
 
 
 function compressorsCalcVariableDisplacement(input) {
-    return new Module.Compressors_ModulationWithUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax, input.powerAtNoLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, input.unloadPointCapacity, input.controlType, input.blowdownTime, input.unloadSumpPressure, input.noLoadPowerFM);
+     return new Module.Compressors_ModulationWithUnload(input.powerAtFullLoad, input.capacityAtFullLoad, input.receiverVolume, input.powerMax, input.powerAtNoLoad, input.dischargePsiFullLoad, input.dischargePsiMax, input.modulatingPsi, input.atmosphericPsi, input.unloadPointCapacity, input.controlType, input.blowdownTime, input.unloadSumpPressure, input.noLoadPowerFM, 0, 0, 0);
 }
 
 
