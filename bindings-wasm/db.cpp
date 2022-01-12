@@ -16,7 +16,7 @@ EMSCRIPTEN_BINDINGS(db_class)
 {
     class_<SQLite>("SQLite")
         .constructor<std::string, bool>()
-
+        .function("enableSharedCache", &SQLite::enableSharedCache)
         .function("getCustomSolidLoadChargeMaterials", &SQLite::getCustomSolidLoadChargeMaterials)
         .function("getSolidLoadChargeMaterials", &SQLite::getSolidLoadChargeMaterials)
         .function("getSolidLoadChargeMaterialById", &SQLite::getSolidLoadChargeMaterialById)

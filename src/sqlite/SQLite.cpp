@@ -154,6 +154,11 @@ Motor::LineFrequency SQLiteWrapper::convert_motor_line_frequency(int lineFrequen
     return Motor::LineFrequency::FREQ60;
 }
 
+int SQLite::enableSharedCache(int sharing_enabled) const
+{
+    return sqlite3_enable_shared_cache(sharing_enabled);
+}
+
 std::vector<SolidLoadChargeMaterial> SQLite::getSolidLoadChargeMaterials() const
 {
     auto cb = [](sqlite3_stmt *stmt) {

@@ -395,10 +395,22 @@ function pumpData(sql){
         pumpDataLog(listItems.get(i));
 }
 
+function enableSharedCache(sql) {
+    logMessage('Enable Shared Cache', true);
+
+    let share_cache = 1;
+
+    let success = sql.enableSharedCache(share_cache);
+    console.log('sql', sql);
+    console.log('db success', success);
+    testNumberValue(success, 0, "Return SQLITE_OK (0) result code");
+}
+
 function db(){
     logMessage('DB Test:', true);
 
     let instance = new Module.SQLite(":memory:", true);
+    enableSharedCache(instance);
 
     solidLoadChargeMaterials(instance);
     gasLoadChargeMaterials(instance);
@@ -413,4 +425,25 @@ function db(){
     instance.delete();
 }
 
-db();
+function shared_db(){
+    logMessage('Shared DB Test:', true);
+
+    let instance = new Module.SQLite("file::memory:?cache=shared", true);
+    enableSharedCache(instance);
+
+    solidLoadChargeMaterials(instance);
+    gasLoadChargeMaterials(instance);
+    liquidLoadChargeMaterials(instance);
+    solidLiquidFlueGasMaterials(instance);
+    gasFlueGasMaterials(instance);
+    wallLossesSurface(instance);
+    atmosphereData(instance);
+    motorData(instance);
+    pumpData(instance);
+
+    instance.delete();
+}
+
+
+// db();
+shared_db();

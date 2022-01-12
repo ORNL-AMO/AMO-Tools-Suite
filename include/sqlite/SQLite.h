@@ -111,6 +111,7 @@ public:
     // Close database and free prepared statements
     virtual ~SQLite();
 
+    int enableSharedCache(int sharedCache) const;
     std::vector<SolidLoadChargeMaterial> getSolidLoadChargeMaterials() const;
     SolidLoadChargeMaterial getSolidLoadChargeMaterialById(int id) const;
     std::vector<SolidLoadChargeMaterial> getCustomSolidLoadChargeMaterials() const;
