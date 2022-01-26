@@ -60,11 +60,11 @@ void Turbine::solveForIsentropicEfficiency() {
 	inletProperties = SteamProperties(inletPressure, inletQuantity, inletQuantityValue).calculate();
 	auto const inletSpecificEnthalpy = inletProperties.specificEnthalpy;
 
-	outletProperties = SteamProperties(outletSteamPressure, SteamProperties::ThermodynamicQuantity::ENTROPY,
+	outletProperties = SteamProperties(outletSteamPressure, outletQuantity,
 	                                   inletProperties.specificEntropy).calculate();
 	auto const idealOutletSpecificEnthalpy = outletProperties.specificEnthalpy;
 
-	outletProperties = SteamProperties(outletSteamPressure, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
+	outletProperties = SteamProperties(outletSteamPressure, outletQuantity,
 	                                   outletQuantityValue).calculate();
 
 	isentropicEfficiency = (inletSpecificEnthalpy - outletProperties.specificEnthalpy)
