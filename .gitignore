@@ -5,6 +5,8 @@ cmake-build-*
 *.db
 docs
 
+.nyc_output
+
 ### Vim template
 # swap
 [._]*.s[a-w][a-z]
