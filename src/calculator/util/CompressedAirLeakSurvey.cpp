@@ -94,7 +94,7 @@ double OrificeMethodData::calculate()
 
     const double caDensity = caPressurePSIA * 144 / (53.34 * airTempRankine);
     const double standardDensity = atmPressure * 144 / (53.34 * airTempRankine);
-    const double sonicDensity = std::pow((caDensity * (2 / 2.4)), (1 / .4));
+    const double sonicDensity = caDensity * std::pow((2 / 2.4), (1 / .4));
 
     const double leakVelocity = std::pow(((2 * 1.4) / (1.4 + 1)) * 53.34 * airTempRankine * 32.2, 0.5);
     const double leakRateLBMmin = sonicDensity * (diameter * diameter) * (M_PI / (4 * 144)) * leakVelocity * 60 * dischargeCoef;
