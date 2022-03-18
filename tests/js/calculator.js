@@ -839,10 +839,10 @@ test('Compressed Air Leak Survey Test All', function (t) {
     };
 
     var res = bindings.compressedAirLeakSurvey(inp);
-    t.equal(rnd(res.annualTotalElectricity), rnd(315616.881621));
-    t.equal(rnd(res.annualTotalElectricityCost), rnd(37874.025795));
-    t.equal(rnd(res.totalFlowRate), rnd(228.310823));
-    t.equal(rnd(res.annualTotalFlowRate), rnd(118356330.608026));
+    t.equal(rnd(res.annualTotalElectricity), rnd(1801919.310026));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(216230.317203));
+    t.equal(rnd(res.totalFlowRate), rnd(1303.471723));
+    t.equal(rnd(res.annualTotalFlowRate), rnd(675719741.259564));
 });
 
 test('Compressed Air Pressure Reduction - Baseline', function (t) {

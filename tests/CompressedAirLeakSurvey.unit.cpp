@@ -103,8 +103,9 @@ TEST_CASE("Compressed Air Leak Survey Orifice Method and Electricity", "[Compres
 
     auto compressedAirLeakSurvey = CompressedAirLeakSurvey(compressedAirLeakSurveyInputVec);
     auto testOutput = compressedAirLeakSurvey.calculate();
-    CHECK(testOutput.annualTotalElectricity == Approx(304078));
-    CHECK(testOutput.annualTotalElectricityCost == Approx(36489.4));
-    CHECK(testOutput.totalFlowRate == Approx(219.964));
-    CHECK(testOutput.annualTotalFlowRate == Approx(114029000));
+    CHECK(testOutput.annualTotalElectricity == Approx(1790380.8424647334));
+    CHECK(testOutput.annualTotalElectricityCost == Approx(214845.701095768));
+    CHECK(testOutput.totalFlowRate == Approx(1295.1250307181));
+    CHECK(testOutput.annualTotalFlowRate == Approx(671392815.9242750406
+));
 }
