@@ -362,7 +362,8 @@ test('dbInsertSolidLiquidFlueGasMaterial', function (t) {
         inertAsh: 9.8,
         o2: 2.1,
         moisture: 7.1,
-        nitrogen: 0.8
+        nitrogen: 0.8,
+        ambientAirTempF:60
     };
 
     var size = res.length;
@@ -832,7 +833,8 @@ test('dbDeletions', function (t) {
         inertAsh: 9.8 / 100,
         o2: 2.1 / 100,
         moisture: 7.1 / 100,
-        nitrogen: 0.8 / 100
+        nitrogen: 0.8 / 100,
+        ambientAirTempF:60
     };
     bindings.insertSolidLiquidFlueGasMaterial(obj);
     bindings.deleteSolidLiquidFlueGasMaterial(bindings.selectSolidLiquidFlueGasMaterials().length);
@@ -966,7 +968,8 @@ test('dbUpdates', function (t) {
         inertAsh: 9.8,
         o2: 2.1,
         moisture: 7.1,
-        nitrogen: 0.8
+        nitrogen: 0.8,
+        ambientAirTempF:60
     };
     bindings.insertSolidLiquidFlueGasMaterial(obj);
     mat = bindings.selectSolidLiquidFlueGasMaterialById(bindings.selectSolidLiquidFlueGasMaterials().length);

@@ -147,17 +147,17 @@ function flueGasCalculateExcessAir() {
     var flueGasCalculateExcessAir = new Module.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
     //x100 to convert to %
     var excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
-    testNumberValue(excessAir, 2.3172209488353976, "PHAST Flue Gas Calculate Excess Air (excessAir1)");
+    testNumberValue(excessAir, 2.3030320731904492, "PHAST Flue Gas Calculate Excess Air (excessAir1)");
     // /100 convert to decimal
     o2InFlueGas = 3 / 100;
     //x100 to convert to %
     excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
-    testNumberValue(excessAir, 15.52234414568954, "PHAST Flue Gas Calculate Excess Air (excessAir2)");
+    testNumberValue(excessAir, 15.608516899070093, "PHAST Flue Gas Calculate Excess Air (excessAir2)");
     // /100 convert to decimal
     o2InFlueGas = 7 / 100;
     //x100 to convert to %
     excessAir = flueGasCalculateExcessAir.calculateExcessAir(o2InFlueGas) * 100;
-    testNumberValue(excessAir, 45.197503654937584, "PHAST Flue Gas Calculate Excess Air (excessAir3)");
+    testNumberValue(excessAir, 45.63331236146819, "PHAST Flue Gas Calculate Excess Air (excessAir3)");
     flueGasCalculateExcessAir.delete();
 }
 // flueGasCalculateO2
@@ -191,28 +191,29 @@ function flueGasLossesByVolume() {
         H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     }
     var flueGasTemperature = 700;
-    var excessAirPercentage = 9.0;
+    var flueGasO2Percentage = 0.0;
     var combustionAirTemperature = 125;
     var fuelTemperature = 125;
-
+	var ambientAirTemp = 60;
+	var combAirMoisturePerc = 0;
+	var excessAirPercentage = 0.09;
+    
     var gasComposition = new Module.GasCompositions('some substance', inp.CH4, inp.C2H6, inp.N2, inp.H2, inp.C3H8, inp.C4H10_CnH2n, inp.H2O, inp.CO, inp.CO2, inp.SO2, inp.O2);
-    var gasFlueGasMaterial = new Module.GasFlueGasMaterial(flueGasTemperature, excessAirPercentage, combustionAirTemperature, gasComposition, fuelTemperature);
-    var heatLoss = gasFlueGasMaterial.getHeatLoss();
-    testNumberValue(heatLoss, 0.7689954663391211, "PHAST Flue Gas By Volume (heatLoss)");
-    gasFlueGasMaterial.delete();
+    var heatLoss = gasComposition.getProcessHeatProperties(flueGasTemperature, flueGasO2Percentage, combustionAirTemperature, fuelTemperature, ambientAirTemp, combAirMoisturePerc, excessAirPercentage).availableHeat;
+    testNumberValue(heatLoss, 0.785877, "PHAST Flue Gas By Volume (heatLoss)");
     gasComposition.delete();
 }
 // flueGasLossesByMass
 function flueGasLossesByMass() {
     var inp = {
         flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 70,
-        moistureInAirComposition: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
-        carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5
+        moistureInAirCombustion: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
+        carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5, ambientAirTempF : 60
     };
     var flueGasLossesByMass = new Module.SolidLiquidFlueGasMaterial(inp.flueGasTemperature, inp.excessAirPercentage, inp.combustionAirTemperature,
-        inp.fuelTemperature, inp.moistureInAirComposition, inp.ashDischargeTemperature,
+        inp.fuelTemperature, inp.moistureInAirCombustion, inp.ashDischargeTemperature,
         inp.unburnedCarbonInAsh, inp.carbon, inp.hydrogen, inp.sulphur, inp.inertAsh, inp.o2, inp.moisture,
-        inp.nitrogen);
+        inp.nitrogen, inp.ambientAirTempF);
     var heatLoss = flueGasLossesByMass.getHeatLoss();
     testNumberValue(heatLoss, 0.8222977480707968, "PHAST Flue Losses By Mass (heatLoss)");
     flueGasLossesByMass.delete();
@@ -221,7 +222,7 @@ function flueGasLossesByMass() {
 function flueGasByMassCalculateHeatingValue() {
     var inp = {
         flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 70,
-        moistureInAirComposition: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
+        moistureInAirCombustion: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
         carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5
     };
     var solidLiquidFlueGasMaterial = new Module.SolidLiquidFlueGasMaterial();

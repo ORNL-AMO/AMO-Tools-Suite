@@ -33,6 +33,8 @@ function validateOutput(results) {
     validateCondensateFlashTank(results);
     validateHighPressureCondensateFlashTank(results);
     validateMediumPressureCondensateFlashTank(results);
+
+    validatePowerBalanceCheckerCalculationsDomain(results);
 }
 
 function SectionHead(header){
@@ -127,7 +129,8 @@ function validatePrvOutput(header, prv, expected) {
     if(defined(expected.outletTemperature)) testNumberValue(steamProperties.temperature, expected.outletTemperature, "outletTemperature");
 
     if(prv.isWithDesuperheating()) {
-        let prvWith = PrvCastDesuperheating.Cast(prv);
+        let prvCast = new Module.PrvCastDesuperheating();
+        let prvWith = prvCast.Cast(prv);
         if(prvWith != null) {
             steamProperties = prvWith.getFeedwaterProperties();
             if (defined(expected.feedwaterEnergyFlow)) testNumberValue(prvWith.getFeedwaterEnergyFlow(), expected.feedwaterEnergyFlow, "feedwaterEnergyFlow");
@@ -139,65 +142,66 @@ function validatePrvOutput(header, prv, expected) {
             if (defined(expected.feedwaterSpecificEntropy)) testNumberValue(steamProperties.specificEntropy, expected.feedwaterSpecificEntropy, "feedwaterSpecificEntropy");
             if (defined(expected.feedwaterTemperature)) testNumberValue(steamProperties.temperature, expected.feedwaterTemperature, "feedwaterTemperature");
         }
+        prvCast.delete();
     }
 }
 
 function validateOperations(results) {
     SectionHead('Energy And Cost Calculations Domain');
 
-    testNumberValue(results.energyAndCostCalculationsDomain.powerGenerated, 1, "powerGenerated");
-    testNumberValue(results.energyAndCostCalculationsDomain.boilerFuelCost, 3270792.6312980186, "boilerFuelCost");
-    testNumberValue(results.energyAndCostCalculationsDomain.makeupWaterCost, 62865.242016338656, "makeupWaterCost");
-    testNumberValue(results.energyAndCostCalculationsDomain.totalOperatingCost, 5335257.873314357, "totalOperatingCost");
-    testNumberValue(results.energyAndCostCalculationsDomain.powerGenerationCost, 2001600.0000000002, "powerGenerationCost");
-    testNumberValue(results.energyAndCostCalculationsDomain.boilerFuelUsage, 597077880850.3137, "boilerFuelUsage");
-    testNumberValue(results.energyAndCostCalculationsDomain.sitePowerImport, 18000000, "sitePowerImport");
-    testNumberValue(results.energyAndCostCalculationsDomain.powerDemand, 18000001, "powerDemand");
-    testNumberValue(results.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlow, 11.906295836427775, "makeupWaterVolumeFlow");
-    testNumberValue(results.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlowAnnual, 95250.3666914222, "makeupWaterVolumeFlowAnnual");
+    testNumberValue(results.energyAndCostCalculationsDomain.powerGenerated, 5588284.77, "powerGenerated");
+    testNumberValue(results.energyAndCostCalculationsDomain.boilerFuelCost, 514732367.9866, "boilerFuelCost");
+    testNumberValue(results.energyAndCostCalculationsDomain.makeupWaterCost, 6628255709.3289, "makeupWaterCost");
+    testNumberValue(results.energyAndCostCalculationsDomain.totalOperatingCost,  7143388397.3155, "totalOperatingCost");
+    testNumberValue(results.energyAndCostCalculationsDomain.powerGenerationCost,  400320, "powerGenerationCost");
+    testNumberValue(results.energyAndCostCalculationsDomain.boilerFuelUsage, 183832988566659.5, "boilerFuelUsage");
+    testNumberValue(results.energyAndCostCalculationsDomain.sitePowerImport, 3600000, "sitePowerImport");
+    testNumberValue(results.energyAndCostCalculationsDomain.powerDemand, 9188284.77, "powerDemand");
+    testNumberValue(results.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlow, 6276.7573, "makeupWaterVolumeFlow");
+    testNumberValue(results.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlowAnnual, 50214058.40, "makeupWaterVolumeFlowAnnual");
 }
 
 function validateBoiler(results){
     SectionHead('Boiler');
 
     let expected = {
-        pressure: 1.136,
-        temperature: 514.2,
-        specificEnthalpy: 2917.838793476974,
-        specificEntropy: 6.8211883441380285,
-        quality: 1,
-        specificVolume: 0.19960611293064956,
-        massFlow: 26261.30665156052,
-        energyFlow: 76626259.31531818,
+        pressure:2.2,
+        temperature:644,
+        specificEnthalpy:3180.157,
+        specificEntropy:6.98,
+        quality:1,
+        specificVolume: 0.13037,
+        massFlow:6939154.63,
+        energyFlow:22067600433.75
     };
     validateFluidProperties('Boiler Steam', results.boiler.getSteamProperties(), expected);
 
     expected = {
-        pressure: 1.136,
-        temperature: 458.65273574845287,
-        specificEnthalpy: 787.5557825431341,
-        specificEntropy: 2.1926588668498703,
+        pressure: 2.2,
+        temperature: 490.406,
+        specificEnthalpy: 930.98,
+        specificEntropy: 2.49,
         quality: 0,
         specificVolume: 0.001135002372530348,
-        massFlow: 535.9450337053167,
-        energyFlow: 422086.61041989713,
+        massFlow: 141615.4,
+        energyFlow: 131841177.21,
     };
     validateFluidProperties('Boiler Blowdown', results.boiler.getBlowdownProperties(), expected);
 
     expected = {
-        pressure: 0.204747,
-        temperature: 394.1047658380901,
-        specificEnthalpy: 507.8439104587324,
-        specificEntropy: 1.5381113180769446,
+        pressure: 0.07,
+        temperature: 363.0815,
+        specificEnthalpy: 376.68,
+        specificEntropy: 1.192,
         quality: 0,
         specificVolume: 0.0010611946777477246,
-        massFlow: 26797.251685265837,
-        energyFlow: 13608821.08539226,
+        massFlow: 7080770.035,
+        energyFlow: 2667186575.75,
     };
     validateFluidProperties('Boiler Feed water', results.boiler.getFeedwaterProperties(), expected);
 
-    testNumberValue(results.boiler.getBoilerEnergy(), 63439524.84034582, "boilerEnergy");
-    testNumberValue(results.boiler.getFuelEnergy(), 74634735.10628921, "fuelEnergy");
+    testNumberValue(results.boiler.getBoilerEnergy(), 19532255035.21, "boilerEnergy");
+    testNumberValue(results.boiler.getFuelEnergy(), 22979123570.83, "fuelEnergy");
     testNumberValue(results.boiler.getBlowdownRate(), 2, "blowdownRate");
     testNumberValue(results.boiler.getCombustionEfficiency(), 85, "combustionEff");
 }
@@ -206,50 +210,50 @@ function validateDeaerator(results){
     SectionHead('Deaerator');
 
     let expected = {
-        energyFlow: 13608821.09,
-        massFlow: 26797.25169,
-        pressure: 0.204747,
+        energyFlow: 2923708211.85,
+        massFlow: 7761776.28,
+        pressure: 0.07,
         quality: 0,
-        specificEnthalpy: 507.8439105,
-        specificEntropy: 1.538111318,
-        temperature: 394.1047658,
+        specificEnthalpy: 376.68,
+        specificEntropy: 1.192,
+        temperature: 363.08,
         specificVolume: 0.001061195
     };
     validateFluidProperties('Deaerator Feed water', results.deaerator.getFeedwaterProperties(), expected);
 
     expected = {
-        energyFlow: 9413116.877,
-        massFlow: 3229.287182,
-        pressure: 1.136,
+        energyFlow:  2324044686.068,
+        massFlow: 822796.53,
+        pressure: 1.5,
         quality: 1,
-        specificEnthalpy: 2914.920955,
-        specificEntropy: 6.815506757,
-        specificVolume: 0.199008043,
-        temperature: 512.9220161
+        specificEnthalpy: 2824.568,
+        specificEntropy: 6.513,
+        specificVolume: 0.137,
+        temperature: 483.395
     };
     validateFluidProperties('Deaerator Inlet Steam', results.deaerator.getInletSteamProperties(), expected);
 
     expected = {
-        energyFlow: 4268252.883,
-        massFlow: 23594.76175,
-        pressure: 0.204747,
+        energyFlow: 620305327.12,
+        massFlow: 6946741.527,
+        pressure: 0.07,
         quality: 0,
-        specificEnthalpy: 180.8983251,
-        specificEntropy: 0.614238341,
+        specificEnthalpy: 89.29,
+        specificEntropy: 0.315,
         specificVolume: 0.001009054,
-        temperature: 316.3049435
+        temperature: 294.42
     };
     validateFluidProperties('Deaerator Inlet Water', results.deaerator.getInletWaterProperties(), expected);
 
     expected = {
-        energyFlow: 72548.67398,
-        massFlow: 26.79725169,
-        pressure: 0.204747,
+        energyFlow: 20641801.34,
+        massFlow: 7761.776,
+        pressure: 0.07,
         quality: 1,
-        specificEnthalpy: 2707.317707,
-        specificEntropy: 7.119028215,
-        specificVolume: 0.866496191,
-        temperature: 394.1047658
+        specificEnthalpy: 2659.42,
+        specificEntropy: 7.4789,
+        specificVolume: 2.3645,
+        temperature: 363.08
     };
     validateFluidProperties('Deaerator Vented Steam', results.deaerator.getVentedSteamProperties(), expected);
 }
@@ -261,83 +265,83 @@ function validateHeatExchanger(results){
 
     let expected = {
         pressure:0.101325,
-        temperature:290.69887071203436,
-        specificEnthalpy:73.75333181427386,
-        specificEntropy:0.26133728484659247,
+        temperature:287.058,
+        specificEnthalpy:58.506,
+        specificEntropy:0.208,
         quality:0,
         specificVolume:0.0010013222396414172,
-        massFlow:11902.742285390581,
-        energyFlow:877866.9012742
+        massFlow:6271642.59,
+        energyFlow:366928230.98
     };
     validateFluidProperties('HeatExchanger - Cold Outlet', heatExchangerOutput.coldOutlet, expected);
 
     expected = {
-        pressure:1.136,
+        pressure:1.5,
         temperature:293.15,
-        specificEnthalpy:84.9863423364548,
+        specificEnthalpy:85.328,
         specificEntropy:0.2962677232029907,
         quality:0,
         specificVolume:0.0010013228612033836,
-        massFlow:535.9450337053167,
-        energyFlow:45548.008108002854
+        massFlow:135338.725,
+        energyFlow:11548253.427
     };
     validateFluidProperties('HeatExchanger - Hot Outlet', heatExchangerOutput.hotOutlet, expected);
 }
 
 function validateCombinedCondensate(results){
     let expected = {
-        pressure:1.136,
-        temperature:458.65273574845287,
-        specificEnthalpy:787.5557825431341,
-        specificEntropy:2.1926588668498703,
+        pressure:1.5,
+        temperature:471.445,
+        specificEnthalpy:844.717,
+        specificEntropy:2.3147,
         quality:0,
-        specificVolume:0.001135002372530348,
-        massFlow:11340,
-        energyFlow:8930882.57403914
+        specificVolume:0.001186,
+        massFlow:666299.675,
+        energyFlow:562834606.11
     };
     validateFluidProperties('Combined Condensate', results.makeupWaterAndCondensateHeaderCalculationsDomain.combinedCondensate, expected);
 }
 
 function validateReturnCondensate(results){
     let expected = {
-        pressure:1.136,
-        temperature:338.6999999999999,
-        specificEnthalpy:275.300414292446,
-        specificEntropy:0.8997137118482235,
-        quality:0,
-        specificVolume:0.001019660335144356,
-        massFlow:11340,
-        energyFlow:3121906.698076338
+        energyFlow: 250897925.52,
+        massFlow:  666076.58,
+        pressure: 0.07,
+        quality: 0,
+        specificVolume: 0.001019660335144356,
+        specificEnthalpy: 376.68,
+        specificEntropy: 1.19,
+        temperature: 363.08
     };
     validateFluidProperties('Return Condensate', results.makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensate, expected);
 }
 
 function validateProcessSteamUsage(results){
     let expected = {
-        pressure: 1.136,
-        temperature: 512.922016091814,
+        pressure: 2.2,
+        temperature: 642.576,
         specificEnthalpy: undefined,
         specificEntropy: undefined,
         quality: undefined,
         specificVolume: undefined,
-        massFlow: 22680,
-        energyFlow: 66110407.252221674,
-        processUsage:48248642.10414339
+        massFlow: 2270000,
+        energyFlow: 7211737188.13,
+        processUsage:5098411442.64
     };
     validateFluidProperties('High Pressure Process Steam Usage', results.processSteamUsageCalculationsDomain.highPressureProcessSteamUsage, expected);
 
     let steamUsage = results.processSteamUsageCalculationsDomain.mediumPressureProcessUsagePtr;
     if(steamUsage != null) {
         expected = {
-            pressure: 1.136,
-            temperature: 512.922016091814,
+            pressure: 1.8,
+            temperature: 482.22,
             specificEnthalpy: undefined,
             specificEntropy: undefined,
             quality: undefined,
             specificVolume: undefined,
-            massFlow: 22680,
-            energyFlow: 66110407.252221674,
-            processUsage:48248642.10414339
+            massFlow: 2270000,
+            energyFlow: 6360441835.33,
+            processUsage:4352367355.177
         };
         validateFluidProperties('Medium Pressure Process Steam Usage', steamUsage, expected);
     }
@@ -345,15 +349,15 @@ function validateProcessSteamUsage(results){
     steamUsage = results.processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr;
     if(steamUsage != null) {
         expected = {
-            pressure: 1.136,
-            temperature: 512.922016091814,
+            pressure: 1.5,
+            temperature: 483.396,
             specificEnthalpy: undefined,
             specificEntropy: undefined,
             quality: undefined,
             specificVolume: undefined,
-            massFlow: 22680,
-            energyFlow: 66110407.252221674,
-            processUsage:48248642.10414339
+            massFlow: 2270000,
+            energyFlow: 6411769190.88,
+            processUsage:4494261794.32
         };
         validateFluidProperties('Low Pressure Process Steam Usage', steamUsage, expected);
     }
@@ -361,41 +365,41 @@ function validateProcessSteamUsage(results){
 
 function validateCondensate(results){
     let expected = {
-        pressure:1.136,
-        temperature:458.65273574845287,
-        specificEnthalpy:787.5557825431341,
-        specificEntropy:2.1926588668498703,
+        pressure:2.2,
+        temperature:490.4058,
+        specificEnthalpy:930.98,
+        specificEntropy:2.49,
         quality:0,
         specificVolume:0.001135002372530348,
-        massFlow:11340,
-        energyFlow:8930882.57403914
+        massFlow:227000,
+        energyFlow:211332574.55
     };
     validateFluidProperties('High Pressure Condensate', results.highPressureHeaderCalculationsDomain.highPressureCondensate, expected);
 
     if(results.mediumPressureHeaderCalculationsDomain != null) {
         expected = {
-            pressure: 1.136,
-            temperature: 458.65273574845287,
-            specificEnthalpy: 787.5557825431341,
-            specificEntropy: 2.1926588668498703,
+            pressure: 1.8,
+            temperature: 480.27,
+            specificEnthalpy:  884.61,
+            specificEntropy: 2.3978,
             quality: 0,
             specificVolume: 0.001135002372530348,
-            massFlow: 11340,
-            energyFlow: 8930882.57403914
+            massFlow: 227000,
+            energyFlow: 200807448.015
         };
         validateFluidProperties('Medium Pressure Condensate', results.mediumPressureHeaderCalculationsDomain.mediumPressureCondensate, expected);
     }
 
     if(results.lowPressureHeaderCalculationsDomain != null) {
         expected = {
-            pressure: 1.136,
-            temperature: 458.65273574845287,
-            specificEnthalpy: 787.5557825431341,
-            specificEntropy: 2.1926588668498703,
+            pressure: 1.5,
+            temperature: 471.445,
+            specificEnthalpy: 844.717,
+            specificEntropy: 2.3146,
             quality: 0,
-            specificVolume: 0.001135002372530348,
-            massFlow: 11340,
-            energyFlow: 8930882.57403914
+            specificVolume: 0.0011538,
+            massFlow: 227000,
+            energyFlow: 191750739.656
         };
         validateFluidProperties('Low Pressure Condensate', results.lowPressureHeaderCalculationsDomain.lowPressureCondensate, expected);
     }
@@ -403,73 +407,73 @@ function validateCondensate(results){
 
 function validateHeaderHeatLoss(results){
     let expectedInlet = {
-        pressure:1.136,
-        temperature:514.1999999999996,
-        specificEnthalpy:2917.8387934769735,
-        specificEntropy:6.821188344138027,
+        pressure:2.2,
+        temperature:644,
+        specificEnthalpy:3180.157,
+        specificEntropy:6.98,
         quality:1,
-        specificVolume:0.1996061129306493,
-        massFlow:26261.30665156052,
-        energyFlow:76626259.31531817
+        specificVolume: 0.13037,
+        massFlow:6939154.63,
+        energyFlow:22067600433.75
     };
     let expectedOutlet = {
-        pressure:1.136,
-        temperature:512.922016091814,
-        specificEnthalpy:2914.9209546834954,
-        specificEntropy:6.81550675722266,
+        pressure:2.2,
+        temperature:642.575,
+        specificEnthalpy:3176.976,
+        specificEntropy:6.978,
         quality:1,
-        specificVolume:0.19900804292495916,
-        massFlow:26261.30665156052,
-        energyFlow:76549633.05600286
+        specificVolume:0.13,
+        massFlow: 6939154.6344,
+        energyFlow:22045532833.313
     };
-    validateHeatLoss('High', results.highPressureHeaderCalculationsDomain.highPressureHeaderHeatLoss, 76626.25931531191, expectedInlet, expectedOutlet);
+    validateHeatLoss('High', results.highPressureHeaderCalculationsDomain.highPressureHeaderHeatLoss, 22067600.433746338, expectedInlet, expectedOutlet);
 
     if(results.mediumPressureHeaderCalculationsDomain != null) {
         expectedInlet = {
-            pressure:1.136,
-            temperature:514.1999999999996,
-            specificEnthalpy:2917.8387934769735,
-            specificEntropy:6.821188344138027,
+            pressure:1.8,
+            temperature:483.15,
+            specificEnthalpy:2804.76,
+            specificEntropy:6.3958,
             quality:1,
-            specificVolume:0.1996061129306493,
-            massFlow:26261.30665156052,
-            energyFlow:76626259.31531817
+            specificVolume:0.111439520680989,
+            massFlow:5332623.68770465,
+            energyFlow:14956737704.817
         };
         expectedOutlet = {
-            pressure:1.136,
-            temperature:512.922016091814,
-            specificEnthalpy:2914.9209546834954,
-            specificEntropy:6.81550675722266,
+            pressure:1.8,
+            temperature:482.22,
+            specificEnthalpy:2801.957,
+            specificEntropy:6.39,
             quality:1,
-            specificVolume:0.19900804292495916,
-            massFlow:26261.30665156052,
-            energyFlow:76549633.05600286
+            specificVolume:0.111,
+            massFlow:5332623.687,
+            energyFlow:14941780967.112
         };
-        validateHeatLoss('High', results.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderHeatLoss, 76626.25931531191, expectedInlet, expectedOutlet);
+        validateHeatLoss('High', results.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderHeatLoss, 14956737.705, expectedInlet, expectedOutlet);
     }
 
     if(results.lowPressureHeaderCalculationsDomain != null) {
         expectedInlet = {
-            pressure:1.136,
-            temperature:514.1999999999996,
-            specificEnthalpy:2917.8387934769735,
-            specificEntropy:6.821188344138027,
+            pressure:1.5,
+            temperature:484.45,
+            specificEnthalpy:2827.395,
+            specificEntropy:6.519,
             quality:1,
-            specificVolume:0.1996061129306493,
-            massFlow:26261.30665156052,
-            energyFlow:76626259.31531817
+            specificVolume:0.13715,
+            massFlow:3096037.88,
+            energyFlow:8753723012.46
         };
         expectedOutlet = {
-            pressure:1.136,
-            temperature:512.922016091814,
-            specificEnthalpy:2914.9209546834954,
-            specificEntropy:6.81550675722266,
+            pressure:1.5,
+            temperature:483.396,
+            specificEnthalpy:2824.568,
+            specificEntropy:6.51336,
             quality:1,
-            specificVolume:0.19900804292495916,
-            massFlow:26261.30665156052,
-            energyFlow:76549633.05600286
+            specificVolume:0.1367,
+            massFlow:3096037.88,
+            energyFlow:8744969289.45
         };
-        validateHeatLoss('High', results.lowPressureHeaderCalculationsDomain.lowPressureHeaderHeatLoss, 76626.25931531191, expectedInlet, expectedOutlet);
+        validateHeatLoss('High', results.lowPressureHeaderCalculationsDomain.lowPressureHeaderHeatLoss, 8753723.012, expectedInlet, expectedOutlet);
     }
 }
 
@@ -484,14 +488,14 @@ function validateHeatLoss(pressureLevel, heatLoss, heatLossValue, expectedInlet,
 
 function validateHighPressureHeaderSteam(results){
     let expected = {
-        pressure: 1.136,
-        temperature: 512.922016091814,
-        specificEnthalpy: 2914.9209546834954,
-        specificEntropy: 6.81550675722266,
-        quality: 1,
-        specificVolume: 0.19900804292495916,
-        massFlow: 26261.30665156052,
-        energyFlow: 76549633.05600286,
+        pressure:2.2,
+        temperature:642.575,
+        specificEnthalpy:3176.977,
+        specificEntropy:6.97798,
+        quality:1,
+        specificVolume:0.13,
+        massFlow:6939154.63,
+        energyFlow:22045532833.31
     };
 
     validateFluidProperties('High Pressure Header Steam', results.highPressureHeaderCalculationsDomain.highPressureHeaderOutput, expected);
@@ -505,47 +509,47 @@ function validateMakeupWater(results){
         specificEntropy: 0.15107627374941596,
         quality: 0,
         specificVolume: 0.0010002985489353622,
-        massFlow: 11902.742285390581,
-        energyFlow: 501328.2989622743,
+        massFlow: 6274883.941,
+        energyFlow:  264290095.23
     };
     validateFluidProperties('Makeup Water', results.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWater, expected);
 }
 
 function validateMakeupWaterAndCondensate(results){
     let expected = {
-        pressure: 0.204747,
-        temperature: 316.30494350601737,
-        specificEnthalpy: 180.8983251038269,
-        specificEntropy: 0.6142383405729469,
+        pressure: 0.07,
+        temperature: 294.42,
+        specificEnthalpy: 89.29,
+        specificEntropy: 0.3145,
         quality: 0,
         specificVolume: 0.0010090535069731171,
-        massFlow: 23594.761880492584,
-        energyFlow: 4268252.905404726,
+        massFlow: 6942819.171,
+        energyFlow: 619955082.58,
     };
     validateFluidProperties('Makeup Water And Condensate', results.makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput, expected);
 }
 
 function validateCondensingTurbine(results){
     let expected = {
-        energyOut: 100,
-        generatorEfficiency: 1,
-        inletEnergyFlow: 1026109.2942220301,
-        inletPressure: 1.136,
+        energyOut: 2134794.337,
+        generatorEfficiency: 98,
+        inletEnergyFlow: 16202581.348,
+        inletPressure: 2.2,
         inletQuality: 1,
-        inletVolume: 0.199008042924959,
-        inletSpecificEnthalpy: 2914.920954683495,
-        inletSpecificEntropy: 6.815506757222659,
-        inletTemperature: 512.9220160918137,
-        isentropicEfficiency: 1,
-        massFlow: 352.01959510200373,
-        outletEnergyFlow: 1026009.2942220301,
-        outletPressure: 1,
+        inletVolume: 0.13,
+        inletSpecificEnthalpy: 3176.976,
+        inletSpecificEntropy: 6.978,
+        inletTemperature: 642.575,
+        isentropicEfficiency: 65,
+        massFlow: 5100,
+        outletEnergyFlow: 14067787.011,
+        outletPressure: 0.1,
         outletQuality: 1,
-        outletVolume: 0.22607153693359688,
-        outletSpecificEnthalpy: 2914.636879588268,
-        outletSpecificEntropy: 6.871299121498748,
-        outletTemperature: 510.32081495211025,
-        powerOut: 1,
+        outletVolume: 1.8932,
+        outletSpecificEnthalpy: 2758.39,
+        outletSpecificEntropy: 7.57,
+        outletTemperature: 413.998,
+        powerOut:  2092098.45,
         outletIdealPressure: undefined,
         outletIdealTemperature: undefined,
         outletIdealSpecificEnthalpy: undefined,
@@ -558,25 +562,25 @@ function validateCondensingTurbine(results){
 
 function validateCondensingTurbineIdeal(results){
     let expected = {
-        energyOut:100,
-        generatorEfficiency:1,
-        inletEnergyFlow:10261.092942223258,
-        inletPressure:1.136,
+        energyOut:3284298.9797,
+        generatorEfficiency:98,
+        inletEnergyFlow:16202581.348,
+        inletPressure:2.2,
         inletQuality:1,
-        inletVolume:0.199008042924959,
-        inletSpecificEnthalpy:2914.920954683495,
-        inletSpecificEntropy:6.815506757222659,
-        inletTemperature:512.9220160918137,
+        inletVolume: 0.13,
+        inletSpecificEnthalpy:3176.976,
+        inletSpecificEntropy:6.9779,
+        inletTemperature:642.575,
         isentropicEfficiency:100,
-        massFlow:3.520195951021052,
-        outletEnergyFlow:10161.092942223258,
-        outletPressure:1,
-        outletQuality:1,
-        outletVolume:0.21951743334913756,
-        outletSpecificEnthalpy:2886.51344516091,
-        outletSpecificEntropy:6.815506757222662,
-        outletTemperature:497.91639145694285,
-        powerOut:1,
+        massFlow:5100,
+        outletEnergyFlow:12918282.368,
+        outletPressure:0.1,
+        outletQuality:0.937,
+        outletVolume:1.587,
+        outletSpecificEnthalpy:2532.9965,
+        outletSpecificEntropy:6.9779,
+        outletTemperature:372.7559,
+        powerOut:3218613,
         outletIdealPressure: undefined,
         outletIdealTemperature: undefined,
         outletIdealSpecificEnthalpy: undefined,
@@ -589,25 +593,25 @@ function validateCondensingTurbineIdeal(results){
 
 function validateHighPressureToMediumPressureTurbine(results){
     let expected = {
-        energyOut: undefined,
-        generatorEfficiency: undefined,
-        inletEnergyFlow: undefined,
-        inletPressure: undefined,
-        inletQuality: undefined,
-        inletVolume: undefined,
-        inletSpecificEnthalpy: undefined,
-        inletSpecificEntropy: undefined,
-        inletTemperature: undefined,
-        isentropicEfficiency: undefined,
-        massFlow: undefined,
-        outletEnergyFlow: undefined,
-        outletPressure: undefined,
-        outletQuality: undefined,
-        outletVolume: undefined,
-        outletSpecificEnthalpy: undefined,
-        outletSpecificEntropy: undefined,
-        outletTemperature: undefined,
-        powerOut: undefined,
+        energyOut: 918.37,
+        generatorEfficiency: 98,
+        inletEnergyFlow: 79964.27,
+        inletPressure: 2.2,
+        inletQuality: 1,
+        inletVolume: 0.13,
+        inletSpecificEnthalpy: 3176.977,
+        inletSpecificEntropy: 6.98,
+        inletTemperature: 642.5755,
+        isentropicEfficiency: 65,
+        massFlow: 25.17,
+        outletEnergyFlow: 79045.90,
+        outletPressure: 1.8,
+        outletQuality: 1,
+        outletVolume: 0.154,
+        outletSpecificEnthalpy: 3140.49,
+        outletSpecificEntropy: 7.01,
+        outletTemperature: 622.54,
+        powerOut: 900,
         outletIdealPressure: undefined,
         outletIdealTemperature: undefined,
         outletIdealSpecificEnthalpy: undefined,
@@ -620,56 +624,56 @@ function validateHighPressureToMediumPressureTurbine(results){
 
 function validateHighPressureToMediumPressureTurbineIdeal(results){
     let expected = {
-        energyOut: undefined,
-        generatorEfficiency: undefined,
-        inletEnergyFlow: undefined,
-        inletPressure: undefined,
-        inletQuality: undefined,
-        inletVolume: undefined,
-        inletSpecificEnthalpy: undefined,
-        inletSpecificEntropy: undefined,
-        inletTemperature: undefined,
-        isentropicEfficiency: undefined,
-        massFlow: undefined,
-        outletEnergyFlow: undefined,
-        outletPressure: undefined,
-        outletQuality: undefined,
-        outletVolume: undefined,
-        outletSpecificEnthalpy: undefined,
-        outletSpecificEntropy: undefined,
-        outletTemperature: undefined,
-        powerOut: undefined,
-        outletIdealPressure: undefined,
-        outletIdealTemperature: undefined,
-        outletIdealSpecificEnthalpy: undefined,
-        outletIdealSpecificEntropy: undefined,
-        outletIdealQuality: undefined,
-        outletIdealVolume: undefined,
+        energyOut: 3306000,
+        generatorEfficiency: 98,
+        inletEnergyFlow: 287871000,
+        inletPressure: 2.2,
+        inletQuality: 1,
+        inletVolume: 0.13,
+        inletSpecificEnthalpy: 3177,
+        inletSpecificEntropy: 6.978,
+        inletTemperature: 642.6,
+        isentropicEfficiency: 100,
+        massFlow: 90612,
+        outletEnergyFlow: 294565000,
+        outletPressure: 1.8,
+        outletQuality: 1,
+        outletVolume: 0.152,
+        outletSpecificEnthalpy: 3120.8,
+        outletSpecificEntropy: 6.978,
+        outletTemperature: 613.7,
+        powerOut: 3239880,
+        outletIdealPressure: 1.8,
+        outletIdealTemperature: 613.7,
+        outletIdealSpecificEnthalpy: 3120.8,
+        outletIdealSpecificEntropy: 6.978,
+        outletIdealQuality: 1,
+        outletIdealVolume: 0.152,
     };
     validateTurbineOutput('High Pressure To Medium Pressure Turbine Ideal', results.highPressureHeaderCalculationsDomain.highToMediumPressureTurbineIdle, expected);
 }
 
 function validateHighPressureToLowPressureTurbine(results){
     let expected = {
-        energyOut: undefined,
-        generatorEfficiency: undefined,
-        inletEnergyFlow: undefined,
-        inletPressure: undefined,
-        inletQuality: undefined,
-        inletVolume: undefined,
-        inletSpecificEnthalpy: undefined,
-        inletSpecificEntropy: undefined,
-        inletTemperature: undefined,
-        isentropicEfficiency: undefined,
-        massFlow: undefined,
-        outletEnergyFlow: undefined,
-        outletPressure: undefined,
-        outletQuality: undefined,
-        outletVolume: undefined,
-        outletSpecificEnthalpy: undefined,
-        outletSpecificEntropy: undefined,
-        outletTemperature: undefined,
-        powerOut: undefined,
+        energyOut: 3070426.64,
+        generatorEfficiency: 98,
+        inletEnergyFlow: 142963953.07,
+        inletPressure: 2.2,
+        inletQuality: 1,
+        inletVolume: 0.13,
+        inletSpecificEnthalpy: 3176.98,
+        inletSpecificEntropy: 6.978,
+        inletTemperature: 642.5755,
+        isentropicEfficiency: 65,
+        massFlow: 45000,
+        outletEnergyFlow: 139893526.43,
+        outletPressure: 1.5,
+        outletQuality: 1,
+        outletVolume: 0.18056,
+        outletSpecificEnthalpy: 3108.745,
+        outletSpecificEntropy: 7.0396,
+        outletTemperature: 605.13,
+        powerOut: 3009018.11,
         outletIdealPressure: undefined,
         outletIdealTemperature: undefined,
         outletIdealSpecificEnthalpy: undefined,
@@ -682,25 +686,25 @@ function validateHighPressureToLowPressureTurbine(results){
 
 function validateHighPressureToLowPressureTurbineIdeal(results){
     let expected = {
-        energyOut: undefined,
-        generatorEfficiency: undefined,
-        inletEnergyFlow: undefined,
-        inletPressure: undefined,
-        inletQuality: undefined,
-        inletVolume: undefined,
-        inletSpecificEnthalpy: undefined,
-        inletSpecificEntropy: undefined,
-        inletTemperature: undefined,
-        isentropicEfficiency: undefined,
-        massFlow: undefined,
-        outletEnergyFlow: undefined,
-        outletPressure: undefined,
-        outletQuality: undefined,
-        outletVolume: undefined,
-        outletSpecificEnthalpy: undefined,
-        outletSpecificEntropy: undefined,
-        outletTemperature: undefined,
-        powerOut: undefined,
+        energyOut: 4723733.295,
+        generatorEfficiency: 98,
+        inletEnergyFlow: 142963953.068,
+        inletPressure: 2.2,
+        inletQuality: 1,
+        inletVolume: 0.13,
+        inletSpecificEnthalpy: 3176.977,
+        inletSpecificEntropy: 6.978,
+        inletTemperature: 642.575,
+        isentropicEfficiency: 100,
+        massFlow: 45000,
+        outletEnergyFlow: 138240219.77,
+        outletPressure: 1.5,
+        outletQuality: 1,
+        outletVolume: 0.175,
+        outletSpecificEnthalpy: 3072.005,
+        outletSpecificEntropy: 6.97799,
+        outletTemperature: 588.389,
+        powerOut: 4629258.63,
         outletIdealPressure: undefined,
         outletIdealTemperature: undefined,
         outletIdealSpecificEnthalpy: undefined,
@@ -713,25 +717,25 @@ function validateHighPressureToLowPressureTurbineIdeal(results){
 
 function validateMediumPressureToLowPressureTurbine(results){
     let expected = {
-        energyOut: undefined,
-        generatorEfficiency: undefined,
-        inletEnergyFlow: undefined,
-        inletPressure: undefined,
-        inletQuality: undefined,
-        inletVolume: undefined,
-        inletSpecificEnthalpy: undefined,
-        inletSpecificEntropy: undefined,
-        inletTemperature: undefined,
-        isentropicEfficiency: undefined,
-        massFlow: undefined,
-        outletEnergyFlow: undefined,
-        outletPressure: undefined,
-        outletQuality: undefined,
-        outletVolume: undefined,
-        outletSpecificEnthalpy: undefined,
-        outletSpecificEntropy: undefined,
-        outletTemperature: undefined,
-        powerOut: undefined,
+        energyOut: 496192.056,
+        generatorEfficiency: 98,
+        inletEnergyFlow: 128890010.76,
+        inletPressure: 1.8,
+        inletQuality: 1,
+        inletVolume: 0.111,
+        inletSpecificEnthalpy: 2801.96,
+        inletSpecificEntropy: 6.39,
+        inletTemperature: 482.22,
+        isentropicEfficiency: 30,
+        massFlow: 46000,
+        outletEnergyFlow: 128393818.70373154,
+        outletPressure: 1.5,
+        outletQuality: 1,
+        outletVolume: 0.132,
+        outletSpecificEnthalpy: 2791.17,
+        outletSpecificEntropy: 6.44,
+        outletTemperature: 471.499,
+        powerOut: 486268.215,
         outletIdealPressure: undefined,
         outletIdealTemperature: undefined,
         outletIdealSpecificEnthalpy: undefined,
@@ -745,25 +749,25 @@ function validateMediumPressureToLowPressureTurbine(results){
 
 function validateMediumPressureToLowPressureTurbineIdeal(results){
     let expected = {
-        energyOut: undefined,
-        generatorEfficiency: undefined,
-        inletEnergyFlow: undefined,
-        inletPressure: undefined,
-        inletQuality: undefined,
-        inletVolume: undefined,
-        inletSpecificEnthalpy: undefined,
-        inletSpecificEntropy: undefined,
-        inletTemperature: undefined,
-        isentropicEfficiency: undefined,
-        massFlow: undefined,
-        outletEnergyFlow: undefined,
-        outletPressure: undefined,
-        outletQuality: undefined,
-        outletVolume: undefined,
-        outletSpecificEnthalpy: undefined,
-        outletSpecificEntropy: undefined,
-        outletTemperature: undefined,
-        powerOut: undefined,
+        energyOut: 1653973.52,
+        generatorEfficiency: 98,
+        inletEnergyFlow: 128890010.76,
+        inletPressure: 1.8,
+        inletQuality: 1,
+        inletVolume: 0.111,
+        inletSpecificEnthalpy: 2801.96,
+        inletSpecificEntropy: 6.39,
+        inletTemperature: 482.217,
+        isentropicEfficiency: 100,
+        massFlow: 46000,
+        outletEnergyFlow: 127236037.239,
+        outletPressure: 1.5,
+        outletQuality: 0.987,
+        outletVolume: 0.13,
+        outletSpecificEnthalpy: 2766,
+        outletSpecificEntropy: 6.39,
+        outletTemperature: 471.445,
+        powerOut: 1620894.05,
         outletIdealPressure: undefined,
         outletIdealTemperature: undefined,
         outletIdealSpecificEnthalpy: undefined,
@@ -777,14 +781,14 @@ function validateMediumPressureToLowPressureTurbineIdeal(results){
 
 function validateMediumPressureHeaderSteam(results){
     let expected = {
-        pressure: undefined,
-        temperature: undefined,
-        specificEnthalpy: undefined,
-        specificEntropy: undefined,
-        quality: undefined,
-        specificVolume: undefined,
-        massFlow: undefined,
-        energyFlow: undefined,
+        pressure: 1.8,
+        temperature: 482.2174,
+        specificEnthalpy: 2801.957,
+        specificEntropy: 6.39,
+        quality: 1,
+        specificVolume: 0.111,
+        massFlow: 5332623.687,
+        energyFlow: 14941780967.111,
     };
     if(results.mediumPressureHeaderCalculationsDomain != null)
         validateFluidProperties('Medium Pressure Header Steam', results.mediumPressureHeaderCalculationsDomain.mediumPressureHeaderOutput, expected);
@@ -792,14 +796,14 @@ function validateMediumPressureHeaderSteam(results){
 
 function validateLowPressureHeaderSteam(results){
     let expected = {
-        pressure: undefined,
-        temperature: undefined,
-        specificEnthalpy: undefined,
-        specificEntropy: undefined,
-        quality: undefined,
-        specificVolume: undefined,
-        massFlow: undefined,
-        energyFlow: undefined,
+        pressure: 1.5,
+        temperature: 483.396,
+        specificEnthalpy: 2824.568,
+        specificEntropy: 6.513,
+        quality: 1,
+        specificVolume: 0.137,
+        massFlow: 3096037.88,
+        energyFlow: 8744969289.45,
     };
     if(results.lowPressureHeaderCalculationsDomain != null)
         validateFluidProperties('Low Pressure Header Steam', results.lowPressureHeaderCalculationsDomain.lowPressureHeaderOutput, expected);
@@ -807,30 +811,30 @@ function validateLowPressureHeaderSteam(results){
 
 function validateHighPressureToMediumPressurePrv(results){
     let expected = {
-        feedwaterEnergyFlow: undefined,
-        feedwaterMassFlow: undefined,
-        feedwaterPressure: undefined,
-        feedwaterQuality: undefined,
-        feedwaterVolume: undefined,
-        feedwaterSpecificEnthalpy: undefined,
-        feedwaterSpecificEntropy: undefined,
-        feedwaterTemperature: undefined,
-        inletEnergyFlow: undefined,
-        inletMassFlow: undefined,
-        inletPressure: undefined,
-        inletQuality: undefined,
-        inletVolume: undefined,
-        inletSpecificEnthalpy: undefined,
-        inletSpecificEntropy: undefined,
-        inletTemperature: undefined,
-        outletEnergyFlow: undefined,
-        outletMassFlow: undefined,
-        outletPressure: undefined,
-        outletQuality: undefined,
-        outletVolume: undefined,
-        outletSpecificEnthalpy: undefined,
-        outletSpecificEntropy: undefined,
-        outletTemperature: undefined,
+        feedwaterEnergyFlow: 266713182.727,
+        feedwaterMassFlow: 708062.4690502095,
+        feedwaterPressure: 0.07,
+        feedwaterQuality: 0,
+        feedwaterVolume: 0.00103,
+        feedwaterSpecificEnthalpy: 376.68,
+        feedwaterSpecificEntropy: 1.19,
+        feedwaterTemperature: 363.08,
+        inletEnergyFlow: 14674549146.495258,
+        inletMassFlow: 4619029.464546394,
+        inletPressure: 2.2,
+        inletQuality: 1,
+        inletVolume: 0.13,
+        inletSpecificEnthalpy: 3176.977,
+        inletSpecificEntropy: 6.978,
+        inletTemperature: 642.5755,
+        outletEnergyFlow: 5327091.933596604,
+        outletMassFlow: 14941262329.222578,
+        outletPressure: 1.8,
+        outletQuality: 1,
+        outletVolume: 0.111,
+        outletSpecificEnthalpy: 2804.77,
+        outletSpecificEntropy: 6.396,
+        outletTemperature: 483.15,
     };
     if(results.mediumPressureHeaderCalculationsDomain != null)
         validatePrvOutput('High Pressure To Medium Pressure Prv', results.mediumPressureHeaderCalculationsDomain.highToMediumPressurePrv, expected);
@@ -838,30 +842,30 @@ function validateHighPressureToMediumPressurePrv(results){
 
 function validateMediumPressureToLowPressurePrv(results){
     let expected = {
-        feedwaterEnergyFlow: undefined,
-        feedwaterMassFlow: undefined,
-        feedwaterPressure: undefined,
-        feedwaterQuality: undefined,
-        feedwaterVolume: undefined,
-        feedwaterSpecificEnthalpy: undefined,
-        feedwaterSpecificEntropy: undefined,
-        feedwaterTemperature: undefined,
-        inletEnergyFlow: undefined,
-        inletMassFlow: undefined,
-        inletPressure: undefined,
-        inletQuality: undefined,
-        inletVolume: undefined,
-        inletSpecificEnthalpy: undefined,
-        inletSpecificEntropy: undefined,
-        inletTemperature: undefined,
-        outletEnergyFlow: undefined,
-        outletMassFlow: undefined,
-        outletPressure: undefined,
-        outletQuality: undefined,
-        outletVolume: undefined,
-        outletSpecificEnthalpy: undefined,
-        outletSpecificEntropy: undefined,
-        outletTemperature: undefined,
+        feedwaterEnergyFlow: -10191546.627202913,
+        feedwaterMassFlow: -27056.22419749442,
+        feedwaterPressure: 0.07,
+        feedwaterQuality: 0,
+        feedwaterVolume: 0.001,
+        feedwaterSpecificEnthalpy: 376.68,
+        feedwaterSpecificEntropy: 1.192,
+        feedwaterTemperature: 363.08,
+        inletEnergyFlow: 8452449121.022741,
+        inletMassFlow: 3016623.6877046498,
+        inletPressure: 1.8,
+        inletQuality: 1,
+        inletVolume: 0.111,
+        inletSpecificEnthalpy: 2801.96,
+        inletSpecificEntropy: 6.39,
+        inletTemperature: 482.217,
+        outletEnergyFlow: 2989567.46,
+        outletMassFlow: 8442257574.395539,
+        outletPressure: 1.5,
+        outletQuality: 1,
+        outletVolume: 0.1366,
+        outletSpecificEnthalpy: 2823.906,
+        outletSpecificEntropy: 6.512,
+        outletTemperature: 483.15,
     };
     if(results.lowPressureHeaderCalculationsDomain != null)
         validatePrvOutput('Medium Pressure To Low Pressure Prv', results.lowPressureHeaderCalculationsDomain.lowPressurePrv, expected);
@@ -870,38 +874,38 @@ function validateMediumPressureToLowPressurePrv(results){
 function validateBlowdownFlashTank(results){
     if(results.blowdownFlashTank != null) {
         let expected = {
-            energyFlow: 422086.61041989713,
-            massFlow: 535.9450337053167,
-            pressure: 1.136,
+            energyFlow: 131841177.21,
+            massFlow: 141615.4,
+            pressure: 2.2,
             quality: 0,
             specificVolume: 0.001135002372530348,
-            specificEnthalpy: 787.5557825431341,
-            specificEntropy: 2.1926588668498703,
-            temperature: 458.65273574845287
+            specificEnthalpy: 930.98,
+            specificEntropy: 2.49,
+            temperature: 490.4057
         };
         validateFluidProperties('Blowdown Flash Tank - inletWater', results.blowdownFlashTank.getInletWaterProperties(), expected);
 
         expected = {
-            energyFlow: 0,
-            massFlow: 0,
-            pressure: 1.136,
+            energyFlow: 17518266.52,
+            massFlow: 6276.675,
+            pressure: 1.5,
             quality: 1,
-            specificVolume: 0.17205143404254775,
-            specificEnthalpy: 2781.8312880011326,
-            specificEntropy: 6.540793415910698,
-            temperature: 458.65273574845287
+            specificVolume: 0.1317,
+            specificEnthalpy: 2791.01,
+            specificEntropy:  6.44,
+            temperature: 471.445
         };
         validateFluidProperties('Blowdown Flash Tank - outletGas', results.blowdownFlashTank.getOutletGasSaturatedProperties(), expected);
 
         expected = {
-            energyFlow: 422086.61041989713,
-            massFlow: 535.9450337053167,
-            pressure: 1.136,
+            energyFlow: 114322910.6866,
+            massFlow: 135338.725,
+            pressure: 1.5,
             quality: 0,
             specificVolume: 0.001135002372530348,
-            specificEnthalpy: 787.5557825431341,
-            specificEntropy: 2.1926588668498703,
-            temperature: 458.65273574845287
+            specificEnthalpy: 844.717,
+            specificEntropy: 2.31468,
+            temperature: 471.445
         };
         validateFluidProperties('Blowdown Flash Tank - outletLiquid', results.blowdownFlashTank.getOutletLiquidSaturatedProperties(), expected);
     }
@@ -913,38 +917,38 @@ function validateCondensateFlashTank(results){
     if(flashTank == null) return;
 
     let expected = {
-        energyFlow: 3121906.698076338,
-        massFlow: 11340,
-        pressure: 1.136,
+        energyFlow: 251491228.92,
+        massFlow:  666299.675,
+        pressure: 1.5,
         quality: 0,
         specificVolume: 0.001019660335144356,
-        specificEnthalpy: 275.300414292446,
-        specificEntropy: 0.8997137118482235,
-        temperature: 338.6999999999999
+        specificEnthalpy: 377.44,
+        specificEntropy: 1.1898,
+        temperature: 363
     };
     validateFluidProperties('Condensate Flash Tank - inletWater', flashTank.getInletWaterProperties(), expected);
 
     expected = {
-        energyFlow: 0,
-        massFlow: 0,
-        pressure: 0.204747,
+        energyFlow: 593303.404,
+        massFlow: 223.095,
+        pressure: 0.07,
         quality: 1,
-        specificVolume: 0.8664961907839751,
-        specificEnthalpy: 2707.3177066592766,
-        specificEntropy: 7.11902821487601,
-        temperature: 394.1047658380901
+        specificVolume: 2.3648,
+        specificEnthalpy: 2659.417,
+        specificEntropy: 7.4789,
+        temperature: 363.08
     };
     validateFluidProperties('Condensate Flash Tank - outletGas', flashTank.getOutletGasSaturatedProperties(), expected);
 
     expected = {
-        energyFlow: 3121906.698076338,
-        massFlow: 11340,
-        pressure: 1.136,
+        energyFlow: 250897925.52,
+        massFlow:  666076.58,
+        pressure: 0.07,
         quality: 0,
         specificVolume: 0.001019660335144356,
-        specificEnthalpy: 275.300414292446,
-        specificEntropy: 0.8997137118482235,
-        temperature: 338.6999999999999
+        specificEnthalpy: 376.68,
+        specificEntropy: 1.19,
+        temperature: 363.08
     };
     validateFluidProperties('Condensate Flash Tank - outletLiquid', flashTank.getOutletLiquidSaturatedProperties(), expected);
 }
@@ -955,38 +959,38 @@ function validateHighPressureCondensateFlashTank(results){
     if(flashTank == null) return;
 
     let expected = {
-        energyFlow: undefined,
-        massFlow: undefined,
-        pressure: undefined,
-        quality: undefined,
-        specificVolume: undefined,
-        specificEnthalpy: undefined,
-        specificEntropy: undefined,
-        temperature: undefined
+        energyFlow: 211332574.55,
+        massFlow: 227000,
+        pressure: 2.2,
+        quality: 0,
+        specificVolume: 0.00118,
+        specificEnthalpy: 930.98,
+        specificEntropy: 2.49,
+        temperature: 490.4057
     };
     validateFluidProperties('High Pressure Condensate Flash Tank - inletWater', flashTank.getInletWaterProperties(), expected);
 
     expected = {
-        energyFlow: undefined,
-        massFlow: undefined,
-        pressure: undefined,
-        quality: undefined,
-        specificVolume: undefined,
-        specificEnthalpy: undefined,
-        specificEntropy: undefined,
-        temperature: undefined
+        energyFlow: 15396329.69,
+        massFlow: 5506.58,
+        pressure: 1.8,
+        quality: 1,
+        specificVolume: 0.11,
+        specificEnthalpy: 2795.9855,
+        specificEntropy: 6.3776,
+        temperature: 480.27
     };
     validateFluidProperties('High Pressure Condensate Flash Tank - outletGas', flashTank.getOutletGasSaturatedProperties(), expected);
 
     expected = {
-        energyFlow: undefined,
-        massFlow: undefined,
-        pressure: undefined,
-        quality: undefined,
-        specificVolume: undefined,
-        specificEnthalpy: undefined,
-        specificEntropy: undefined,
-        temperature: undefined
+        energyFlow: 195936244.86,
+        massFlow: 221493.42,
+        pressure: 1.8,
+        quality: 0,
+        specificVolume: 0.00116,
+        specificEnthalpy: 884.61,
+        specificEntropy: 2.398,
+        temperature: 480.269
     };
     validateFluidProperties('High Pressure Condensate Flash Tank - outletLiquid', flashTank.getOutletLiquidSaturatedProperties(), expected);
 }
@@ -999,40 +1003,97 @@ function validateMediumPressureCondensateFlashTank(results){
     if(flashTank == null) return;
 
     let expected = {
-        energyFlow: undefined,
-        massFlow: undefined,
-        pressure: undefined,
-        quality: undefined,
-        specificVolume: undefined,
-        specificEnthalpy: undefined,
-        specificEntropy: undefined,
-        temperature: undefined
+        energyFlow: 396743692.87,
+        massFlow: 448493.42,
+        pressure: 1.5,
+        quality: 0.02,
+        specificVolume: 0.0038,
+        specificEnthalpy: 884.61,
+        specificEntropy: 2.399,
+        temperature: 471.445
     };
     validateFluidProperties('Medium Pressure Condensate Flash Tank - inletWater', flashTank.getInletWaterProperties(), expected);
 
     expected = {
-        energyFlow: undefined,
-        massFlow: undefined,
-        pressure: undefined,
-        quality: undefined,
-        specificVolume: undefined,
-        specificEnthalpy: undefined,
-        specificEntropy: undefined,
-        temperature: undefined
+        energyFlow: 25659826.414,
+        massFlow: 9193.74,
+        pressure: 1.5,
+        quality: 1,
+        specificVolume: 0.1317,
+        specificEnthalpy: 2791.01,
+        specificEntropy: 6.44,
+        temperature: 471.445
     };
     validateFluidProperties('Medium Pressure Condensate Flash Tank - outletGas', flashTank.getOutletGasSaturatedProperties(), expected);
 
     expected = {
-        energyFlow: undefined,
-        massFlow: undefined,
-        pressure: undefined,
-        quality: undefined,
-        specificVolume: undefined,
-        specificEnthalpy: undefined,
-        specificEntropy: undefined,
-        temperature: undefined
+        energyFlow: 371083866.458,
+        massFlow: 439299.675,
+        pressure: 1.5,
+        quality: 0,
+        specificVolume: 0.0015,
+        specificEnthalpy: 844.7169,
+        specificEntropy: 2.31,
+        temperature: 471.445
     };
     validateFluidProperties('Medium Pressure Condensate Flash Tank - outletLiquid', flashTank.getOutletLiquidSaturatedProperties(), expected);
+}
+
+function validatePowerBalanceCheckerCalculationsDomain(results){
+    let pbCheck = results.powerBalanceCheckerCalculationsDomain;
+    let lowPrVentedCalc = pbCheck.lowPressureVentedSteamCalculationsDomain;
+
+    let expected = {
+        density: 7.314,
+        energyFlow: 9155412.5,
+        massFlow: 3241.35,
+        pressure: 1.5,
+        quality: 1,
+        specificVolume: 0.137,
+        specificEnthalpy: 2824.568,
+        specificEntropy: 6.513,
+        temperature: 483.396
+    };
+    validateFluidProperties('Power Balance Checker Calculations Domain - Fluid Properties', pbCheck.lowPressureVentedSteam, expected);
+
+    logMessage('Steam Modeler: Test# 1 - Power Balance Checker Calculations Domain Results ', true);
+    testNumberValue(pbCheck.steamBalance, 4.6567e-10, "Steam Balance");
+
+    if(lowPrVentedCalc != null) {
+        logMessage('Steam Modeler: Test# 1 - Power Balance Checker Calculations Domain Low Pressure Vented Steam Calculations Domain Results ', true);
+        testNumberValue(lowPrVentedCalc.lowPressureVentedSteam, 3241.35, "Low Pressure Vented Steam");
+
+        if(lowPrVentedCalc.makeupWaterVolumeFlowCalculationsDomain != null) {
+            testNumberValue(lowPrVentedCalc.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlow, 6276.7573, "Makeup Water Volume Flow");
+            testNumberValue(lowPrVentedCalc.makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlowAnnual, 50214058.404, "Makeup Water Volume Flow Annual");
+        }
+
+        let expected = {
+            density: 999.7,
+            energyFlow: 264290095.231,
+            massFlow: 6274883.9406,
+            pressure: 0.101,
+            quality: 0,
+            specificVolume: 0.001,
+            specificEnthalpy: 42.119,
+            specificEntropy: 0.1511,
+            temperature: 283.15
+        };
+        validateFluidProperties('Power Balance Checker Calculations Domain Makeup Water - Fluid Properties', lowPrVentedCalc.makeupWater, expected);
+
+        expected = {
+            density: 997.92,
+            energyFlow: 619955082.577,
+            massFlow: 6942819.171,
+            pressure: 0.07,
+            quality: 0,
+            specificVolume: 0.001,
+            specificEnthalpy: 89.294,
+            specificEntropy: 0.314,
+            temperature: 294.419
+        };
+        validateFluidProperties('Power Balance Checker Calculations Domain Makeup Water And Condensate Header Output Updated - Fluid Properties', lowPrVentedCalc.makeupWaterAndCondensateHeaderOutputUpdated, expected);
+    }
 }
 
 function steamModeler() {
@@ -1043,99 +1104,99 @@ function steamModeler() {
         blowdownRate: 2,
         blowdownFlashed: true,
         preheatMakeupWater: true,
-        steamTemperature: 514.2,
+        steamTemperature: 644,
         deaeratorVentRate: 0.1,
-        deaeratorPressure: 0.204747,
+        deaeratorPressure: 0.07,
         approachTemperature: 10,
     };
 
     let header1 = {
-        pressure: 1.136,
-        processSteamUsage: 22680,
-        condensationRecoveryRate: 50,
+        pressure: 2.2,
+        processSteamUsage: 2270000,
+        condensationRecoveryRate: 10,
         heatLoss: 0.1,
 
         flashCondensateIntoHeader: true,
         desuperheatSteamIntoNextHighest: true,
         desuperheatSteamTemperature: 1,
 
-        condensateReturnTemperature: 338.7,
+        condensateReturnTemperature: 363,
         flashCondensateReturn: true,
     };
     let header2 = {
-        pressure: 2,
-        processSteamUsage: 2,
-        condensationRecoveryRate: 2,
-        heatLoss: 2,
+        pressure: 1.8,
+        processSteamUsage: 2270000,
+        condensationRecoveryRate: 10,
+        heatLoss: 0.1,
 
         flashCondensateIntoHeader: true,
         desuperheatSteamIntoNextHighest: true,
-        desuperheatSteamTemperature: 338.7,
+        desuperheatSteamTemperature: 483.15,
 
         condensateReturnTemperature: null,
         flashCondensateReturn: null,
     };
     let header3 = {
-        pressure: 3,
-        processSteamUsage: 3,
-        condensationRecoveryRate: 3,
-        heatLoss: 3,
+        pressure: 1.5,
+        processSteamUsage: 2270000,
+        condensationRecoveryRate: 10,
+        heatLoss: 0.1,
 
         flashCondensateIntoHeader: true,
         desuperheatSteamIntoNextHighest: true,
-        desuperheatSteamTemperature: 338.7,
+        desuperheatSteamTemperature: 483.15,
 
         condensateReturnTemperature: null,
         flashCondensateReturn: null,
     };
     let headerInput = {
         highPressureHeader: header1,
-        mediumPressureHeader: null,
-        lowPressureHeader: null,
+        mediumPressureHeader: header2,
+        lowPressureHeader: header3,
     };
 
     let operationsInput = {
-        sitePowerImport: 18000000,
+        sitePowerImport: 3600000,
         makeUpWaterTemperature: 283.15,
         operatingHoursPerYear: 8000,
-        fuelCosts: 0.000005478,
-        electricityCosts: 1.39E-05,
-        makeUpWaterCosts: 0.66,
+        fuelCosts: 0.0000028,
+        electricityCosts: 0.0000139,
+        makeUpWaterCosts: 132,
     };
 
     let condensingTurbine = {
-        isentropicEfficiency: 1,
-        generationEfficiency: 1,
-        condenserPressure: 1,
-        operationType: Module.CondensingTurbineOperation.POWER_GENERATION,
-        operationValue: 1,
+        isentropicEfficiency: 65,
+        generationEfficiency: 98,
+        condenserPressure: 0.1,
+        operationType: Module.CondensingTurbineOperation.STEAM_FLOW,
+        operationValue: 5100,
         useTurbine: true,
     };
     let highToLowTurbine = {
-        isentropicEfficiency: 2,
-        generationEfficiency: 2,
-        condenserPressure: 2,
-        operationType: Module.PressureTurbineOperation.BALANCE_HEADER,
-        operationValue1: 2,
-        operationValue2: 2,
+        isentropicEfficiency: 65,
+        generationEfficiency: 98,
+        condenserPressure: 0.1,
+        operationType: Module.PressureTurbineOperation.STEAM_FLOW,
+        operationValue1: 45000,
+        operationValue2: 1,
         useTurbine: true,
     };
     let highToMediumTurbine = {
-        isentropicEfficiency: 3,
-        generationEfficiency: 3,
+        isentropicEfficiency: 65,
+        generationEfficiency: 98,
         condenserPressure: 3,
         operationType: Module.PressureTurbineOperation.POWER_RANGE,
-        operationValue1: 3,
-        operationValue2: 3,
+        operationValue1: 800,
+        operationValue2: 900,
         useTurbine: true,
     };
     let mediumToLowTurbine = {
-        isentropicEfficiency: 4,
-        generationEfficiency: 4,
-        condenserPressure: 4,
+        isentropicEfficiency: 30,
+        generationEfficiency: 98,
+        condenserPressure: 0.1,
         operationType: Module.PressureTurbineOperation.FLOW_RANGE,
-        operationValue1: 4,
-        operationValue2: 4,
+        operationValue1: 40000,
+        operationValue2: 46000,
         useTurbine: true,
     };
     let turbineInput = {
@@ -1156,7 +1217,9 @@ function steamModeler() {
 
     let boilerInputObj = new Module.BoilerInput(boilerInput.fuelType, boilerInput.fuel, boilerInput.combustionEfficiency, boilerInput.blowdownRate, boilerInput.blowdownFlashed, boilerInput.preheatMakeupWater, boilerInput.steamTemperature, boilerInput.deaeratorVentRate, boilerInput.deaeratorPressure, boilerInput.approachTemperature);
     let highPressureHeaderObj = new Module.HeaderWithHighestPressure(header1.pressure, header1.processSteamUsage, header1.condensationRecoveryRate, header1.heatLoss, header1.condensateReturnTemperature, header1.flashCondensateReturn);
-    let headerInputObj = new Module.HeaderInput(highPressureHeaderObj, null, null);
+    let medPressureHeaderObj = new Module.HeaderNotHighestPressure(header2.pressure, header2.processSteamUsage, header2.condensationRecoveryRate, header2.heatLoss, header2.flashCondensateIntoHeader, header2.desuperheatSteamIntoNextHighest, header2.desuperheatSteamTemperature);
+    let lowPressureHeaderObj = new Module.HeaderNotHighestPressure(header3.pressure, header3.processSteamUsage, header3.condensationRecoveryRate, header3.heatLoss, header3.flashCondensateIntoHeader, header3.desuperheatSteamIntoNextHighest, header3.desuperheatSteamTemperature);
+    let headerInputObj = new Module.HeaderInput(highPressureHeaderObj, medPressureHeaderObj, lowPressureHeaderObj);
     let operationsInputObj = new Module.OperationsInput(operationsInput.sitePowerImport, operationsInput.makeUpWaterTemperature, operationsInput.operatingHoursPerYear, operationsInput.fuelCosts, operationsInput.electricityCosts, operationsInput.makeUpWaterCosts);
 
     let condensingTurbineObj = new Module.CondensingTurbine(condensingTurbine.isentropicEfficiency, condensingTurbine.generationEfficiency, condensingTurbine.condenserPressure, condensingTurbine.operationType, condensingTurbine.operationValue, condensingTurbine.useTurbine);

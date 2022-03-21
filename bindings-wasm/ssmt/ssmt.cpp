@@ -44,6 +44,7 @@ EMSCRIPTEN_BINDINGS(steamModelerTool)
 
     class_<SteamSystemModelerTool::FluidProperties, emscripten::base<SteamSystemModelerTool::SteamPropertiesOutput>>("FluidProperties")
         .constructor<double, double, double, double, double, double, double, double, double, double>()
+        .smart_ptr<std::shared_ptr<SteamSystemModelerTool::FluidProperties>>("FluidProperties")
         .property("massFlow", &SteamSystemModelerTool::FluidProperties::massFlow)
         .property("energyFlow", &SteamSystemModelerTool::FluidProperties::energyFlow);
 }
@@ -127,7 +128,8 @@ EMSCRIPTEN_BINDINGS(prvWithoutDesuperheating)
         .function("getInletMassFlow", &PrvWithoutDesuperheating::getInletMassFlow)
         .function("getInletEnergyFlow", &PrvWithoutDesuperheating::getInletEnergyFlow)
         .function("getOutletMassFlow", &PrvWithoutDesuperheating::getOutletMassFlow)
-        .function("getOutletEnergyFlow", &PrvWithoutDesuperheating::getOutletEnergyFlow);
+        .function("getOutletEnergyFlow", &PrvWithoutDesuperheating::getOutletEnergyFlow)
+        .function("isWithDesuperheating", &PrvWithoutDesuperheating::isWithDesuperheating);
 }
 // prvWithDesuperheating
 EMSCRIPTEN_BINDINGS(prvWithDesuperheating)
@@ -143,12 +145,14 @@ EMSCRIPTEN_BINDINGS(prvWithDesuperheating)
         .function("getOutletEnergyFlow", &PrvWithDesuperheating::getOutletEnergyFlow)
         .function("getFeedwaterProperties", &PrvWithDesuperheating::getFeedwaterProperties)
         .function("getFeedwaterMassFlow", &PrvWithDesuperheating::getFeedwaterMassFlow)
-        .function("getFeedwaterEnergyFlow", &PrvWithDesuperheating::getFeedwaterEnergyFlow);
+        .function("getFeedwaterEnergyFlow", &PrvWithDesuperheating::getFeedwaterEnergyFlow)
+        .function("isWithDesuperheating", &PrvWithDesuperheating::isWithDesuperheating);
 }
 //prvCastDesuperheating
 EMSCRIPTEN_BINDINGS(PrvCastDesuperheating)
 {
     class_<PrvCastDesuperheating>("PrvCastDesuperheating")
+        .constructor<>()
         .function("Cast", &PrvCastDesuperheating::Cast);
 }
 // deaerator

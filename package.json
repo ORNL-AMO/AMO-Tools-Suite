@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-suite",
-  "version": "0.9.2",
+  "version": "1.0.0",
   "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
   "directories": {
     "test": "tests"
@@ -10,25 +10,27 @@
     "assert": "^2.0.0",
     "d3": "^4.13.0",
     "esm": "^3.2.25",
-    "nan": "2.14.0",
-    "node-gyp": "7.1.0",
+    "nan": "2.15.0",
+    "node-gyp": "9.0.0",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
     "utf-8-validate": "5.0.2"
   },
   "devDependencies": {
     "bindings": "1.5.0",
-    "tap": "12.6.0"
+    "tap": "^16.0.0"
   },
   "engines": {
-    "node": "12.8.0",
-    "npm": "6.13.4"
+    "node": "14.15.0",
+    "npm": "6.14.8"
   },
   "scripts": {
-    "test": "tap debug tests/js/*.js",
-    "at": "tap debug tests/at/js/*.js",
-    "test-waste-water": "tap debug tests/js/wasteWater.js",
-    "test-wasm": "node tests/wasm/wasm-express.js"
+    "test": "tap tests/js/*.js",
+    "at": "tap tests/at/js/*.js",
+    "test-waste-water": "tap tests/js/wasteWater.js",
+    "test-wasm": "node tests/wasm/wasm-express.js",
+    "test-CA": "tap tests/js/compressorsCalcScrewReciprocating.js",
+    "test-calculator": "tap tests/js/calculator.js"
   },
   "repository": {
     "type": "git",

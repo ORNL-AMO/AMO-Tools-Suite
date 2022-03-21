@@ -115,6 +115,7 @@ EMSCRIPTEN_BINDINGS(steamModeler)
         .property("makeupWaterVolumeFlowAnnual", &MakeupWaterVolumeFlowCalculationsDomain::makeupWaterVolumeFlowAnnual);
 
     class_<LowPressureVentedSteamCalculationsDomain>("LowPressureVentedSteamCalculationsDomain")
+        .smart_ptr<std::shared_ptr<LowPressureVentedSteamCalculationsDomain>>("LowPressureVentedSteamCalculationsDomain")
         .property("lowPressureVentedSteam", &LowPressureVentedSteamCalculationsDomain::lowPressureVentedSteam)
         .property("makeupWater", &LowPressureVentedSteamCalculationsDomain::makeupWater)
         .property("makeupWaterAndCondensateHeaderOutputUpdated", &LowPressureVentedSteamCalculationsDomain::makeupWaterAndCondensateHeaderOutputUpdated)
@@ -152,8 +153,7 @@ EMSCRIPTEN_BINDINGS(steamModeler)
 
     //HeaderNotHighestPressure
     class_<HeaderNotHighestPressure, emscripten::base<HeaderWithPressure>>("HeaderNotHighestPressure")
-        .constructor<double, double, double, double, bool, bool, double>()
-        .smart_ptr<std::shared_ptr<HeaderNotHighestPressure>>("HeaderNotHighestPressure");
+        .smart_ptr_constructor("HeaderNotHighestPressure", &std::make_shared<HeaderNotHighestPressure, double, double, double, double, bool, bool, double>);
 
     //HeaderInput
     class_<HeaderInput>("HeaderInput")

@@ -59,17 +59,18 @@ test('fixtureLosses', function (t) {
 });
 
 test('flueGasByVolume', function (t) {
-    t.plan(6);
+    t.plan(8);
     t.type(bindings.flueGasLossesByVolume, 'function');
     var inp = {
-        flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 125,
+        flueGasTemperature: 700, flueGasO2Percentage: 0, combustionAirTemperature: 125, fuelTemperature: 125, ambientAirTemp: 60, combAirMoisturePerc:0, excessAirPercentage: 9.0,
         substance: 'test substance', CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29,
         H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0, O2: 0
     };
 
     var res = bindings.flueGasLossesByVolume(inp);
-    t.equal(rnd(res), rnd(0.7689954663391211), res + ' != 0.7689954663391211');
-
+    t.equal(rnd(res.availableHeat), rnd( 0.785877), res + ' !=  0.785877');
+    t.equal(rnd(res.excessAir), rnd(0.09));
+    t.equal(rnd(res.flueGasO2), rnd(0.01818));
 
     inp = {
         CH4: 94.1, C2H6: 2.4, N2: 1.41, H2: 0.03, C3H8: 0.49, C4H10_CnH2n: 0.29, H2O: 0, CO: 0.42, CO2: 0.71, SO2: 0,
@@ -89,8 +90,8 @@ test('flueGasByMass', function (t) {
 
     var inp = {
         flueGasTemperature: 700, excessAirPercentage: 9.0, combustionAirTemperature: 125, fuelTemperature: 70,
-        moistureInAirComposition: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
-        carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5
+        moistureInAirCombustion: 1.0, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1.5,
+        carbon: 75.0, hydrogen: 5.0, sulphur: 1.0, inertAsh: 9.0, o2: 7.0, moisture: 0.0, nitrogen: 1.5, ambientAirTempF:60
     };
 
     var res = bindings.flueGasLossesByMass(inp);
@@ -114,15 +115,15 @@ test('flueGasCalculateExcessAir', function (t) {
     };
 
     var res = bindings.flueGasCalculateExcessAir(inp);
-    t.equal(rnd(res), rnd(2.3172209488353976));
+    t.equal(rnd(res), rnd(2.303032));
 
     inp.o2InFlueGas = 3;
     res = bindings.flueGasCalculateExcessAir(inp);
-    t.equal(rnd(res), rnd(15.52234414568954));
+    t.equal(rnd(res), rnd(15.608517));
 
     inp.o2InFlueGas = 7;
     res = bindings.flueGasCalculateExcessAir(inp);
-    t.equal(rnd(res), rnd(45.197503654937584));
+    t.equal(rnd(res), rnd(45.633312));
 });
 
 test('flueGasCalculateO2', function (t) {

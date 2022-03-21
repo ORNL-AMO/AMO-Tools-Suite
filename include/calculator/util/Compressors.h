@@ -27,6 +27,7 @@
  *             Volts, Amps, Power Factor(PF) and BlowOff%
  *
  * @author Omer Aziz (omerb)
+ * @author Mark Root (mroot)
  * @bug No known bugs.
  *
  */
@@ -37,16 +38,20 @@
 #include <math.h>
 #include <stdexcept>
 #include "CurveFitVal.h"
+#include <iostream>
 
-class CompressorsBase {
+class CompressorsBase
+{
 public:
-    enum CompressorType {
+    enum CompressorType
+    {
         Centrifugal,
         Screw,
         Reciprocating
     };
 
-    enum ControlType {
+    enum ControlType
+    {
         LoadUnload,
         ModulationUnload,
         BlowOff,
@@ -57,24 +62,28 @@ public:
         VFD
     };
 
-    enum Stage {
+    enum Stage
+    {
         Single,
         Two,
         Multiple
     };
 
-    enum Lubricant {
+    enum Lubricant
+    {
         Injected,
         Free,
         None
     };
 
-    enum Modulation{
+    enum Modulation
+    {
         Throttle,
         VariableDisplacement
     };
 
-    enum ComputeFrom {
+    enum ComputeFrom
+    {
         PercentagePower,
         PercentageCapacity,
         PowerMeasured,
@@ -84,7 +93,7 @@ public:
 
     struct Output
     {
-        Output(double kW_Calc, double C_Calc, double PerkW, double C_Per) : kW_Calc(kW_Calc), C_Calc(C_Calc), PerkW(PerkW), C_Per(C_Per){}
+        Output(double kW_Calc, double C_Calc, double PerkW, double C_Per) : kW_Calc(kW_Calc), C_Calc(C_Calc), PerkW(PerkW), C_Per(C_Per) {}
 
         Output() = default;
         double kW_Calc = 0, C_Calc = 0, PerkW = 0, C_Per = 0;
@@ -92,7 +101,7 @@ public:
 
     struct OutputBlowOff
     {
-        OutputBlowOff(double kW_Calc, double C_Calc, double PerkW, double C_Per, double C_blow, double blowPer) : kW_Calc(kW_Calc), C_Calc(C_Calc), PerkW(PerkW), C_Per(C_Per), C_blow(C_blow), blowPer(blowPer){}
+        OutputBlowOff(double kW_Calc, double C_Calc, double PerkW, double C_Per, double C_blow, double blowPer) : kW_Calc(kW_Calc), C_Calc(C_Calc), PerkW(PerkW), C_Per(C_Per), C_blow(C_blow), blowPer(blowPer) {}
 
         OutputBlowOff() = default;
         double kW_Calc = 0, C_Calc = 0, PerkW = 0, C_Per = 0, C_blow = 0, blowPer = 0;
@@ -111,23 +120,23 @@ public:
     double kW_max_Adjusted;
 
 protected:
-    CompressorsBase(const double kW_fl, const double C_fl) : kW_fl(kW_fl), C_fl(C_fl), C_fl_raw(C_fl), kW_fl_raw(kW_fl), kW_fl_Adjusted(kW_fl), C_fl_Adjusted(C_fl), C_max_Adjusted(0), kW_max_Adjusted(0) { }
+    CompressorsBase(const double kW_fl, const double C_fl) : kW_fl(kW_fl), C_fl(C_fl), C_fl_raw(C_fl), kW_fl_raw(kW_fl), kW_fl_Adjusted(kW_fl), C_fl_Adjusted(C_fl), C_max_Adjusted(0), kW_max_Adjusted(0) {}
 
     const double C_fl_raw, kW_fl_raw;
     double kW_fl, C_fl;
 
 private:
-    virtual CompressorsBase::OutputBlowOff calculateFromPerkW_BlowOff(double, double) {return OutputBlowOff();}
-    virtual CompressorsBase::OutputBlowOff calculateFromPerC_BlowOff(double) {return OutputBlowOff();}
-    virtual CompressorsBase::OutputBlowOff calculateFromkWMeasured_BlowOff(double, double) {return OutputBlowOff();}
-    virtual CompressorsBase::OutputBlowOff calculateFromCMeasured_BlowOff(double) {return OutputBlowOff();}
-    virtual CompressorsBase::OutputBlowOff calculateFromVIPFMeasured_BlowOff(double, double, double, double) {return OutputBlowOff();}
+    virtual CompressorsBase::OutputBlowOff calculateFromPerkW_BlowOff(double, double) { return OutputBlowOff(); }
+    virtual CompressorsBase::OutputBlowOff calculateFromPerC_BlowOff(double) { return OutputBlowOff(); }
+    virtual CompressorsBase::OutputBlowOff calculateFromkWMeasured_BlowOff(double, double) { return OutputBlowOff(); }
+    virtual CompressorsBase::OutputBlowOff calculateFromCMeasured_BlowOff(double) { return OutputBlowOff(); }
+    virtual CompressorsBase::OutputBlowOff calculateFromVIPFMeasured_BlowOff(double, double, double, double) { return OutputBlowOff(); }
 
-    virtual CompressorsBase::Output calculateFromPerkW(double) {return Output();}
-    virtual CompressorsBase::Output calculateFromPerC(double) {return Output();}
-    virtual CompressorsBase::Output calculateFromkWMeasured(double) {return Output();}
-    virtual CompressorsBase::Output calculateFromCMeasured(double) {return Output();}
-    virtual CompressorsBase::Output calculateFromVIPFMeasured(double, double, double) {return Output();}
+    virtual CompressorsBase::Output calculateFromPerkW(double) { return Output(); }
+    virtual CompressorsBase::Output calculateFromPerC(double) { return Output(); }
+    virtual CompressorsBase::Output calculateFromkWMeasured(double) { return Output(); }
+    virtual CompressorsBase::Output calculateFromCMeasured(double) { return Output(); }
+    virtual CompressorsBase::Output calculateFromVIPFMeasured(double, double, double) { return Output(); }
 
     virtual void AdjustDischargePressure(std::vector<double>, std::vector<double>, double, double) {}
 
@@ -150,33 +159,37 @@ private:
     void PressureInletCorrection(double &cap, double &kW, CompressorType CompType, const double capacity, const double full_load_bhp, const double poly_exponent, const double P_ratedDischarge,
                                  const double P_RatedIn, const double Eff, const double dischargePres, const double P_in, const bool PresAdj, const double P_atm)
     {
-        if(CompType == CompressorType::Centrifugal) return;
+        if (CompType == CompressorType::Centrifugal)
+            return;
 
         double Pres_kW = 1, Pres_Flow = 1;
-        if(PresAdj) {
+        if (PresAdj)
+        {
             Pres_kW = -0.0000577 * pow(P_atm, 3) + 0.000251 * pow(P_atm, 2) + 0.0466 * P_atm + 0.4442;
             Pres_Flow = 0.000258 * pow(P_atm, 3) - 0.0116 * pow(P_atm, 2) + 0.176 * P_atm + 0.09992;
         }
 
         kW = (Pres_kW * (P_atm / P_in) * full_load_bhp * 0.746 / Eff *
-                   PressureInletCorrection_PressRatio(poly_exponent, (P_ratedDischarge + P_RatedIn) / P_RatedIn, dischargePres, CompType == CompressorType::Screw ? P_RatedIn : P_atm));
+              PressureInletCorrection_PressRatio(poly_exponent, (P_ratedDischarge + P_RatedIn) / P_RatedIn, dischargePres, CompType == CompressorType::Screw ? P_RatedIn : P_atm));
         cap = (Pres_Flow * capacity * (1 - 0.00075 * (dischargePres - P_ratedDischarge)));
     }
 
-    double PressureInletCorrection_PressRatio(double poly_exponent, double PressRatio1, double OpPress, double P_PressRatio2) {
-        double PressRatio2  = (OpPress + P_PressRatio2) / P_PressRatio2;
+    double PressureInletCorrection_PressRatio(double poly_exponent, double PressRatio1, double OpPress, double P_PressRatio2)
+    {
+        double PressRatio2 = (OpPress + P_PressRatio2) / P_PressRatio2;
         double PolyPower = ((poly_exponent - 1) / poly_exponent);
         return (pow(PressRatio2, PolyPower) - 1) / (pow(PressRatio1, PolyPower) - 1);
     }
 };
 
-class Compressors: public CompressorsBase {
+class Compressors : public CompressorsBase
+{
 public:
     Compressors(const double kW_fl, const double C_fl) : CompressorsBase(kW_fl, C_fl) {}
 };
 
-
-class Compressors_Centrifugal_BlowOff: public CompressorsBase{
+class Compressors_Centrifugal_BlowOff : public CompressorsBase
+{
 public:
     /**
      *
@@ -275,8 +288,10 @@ public:
      *      Units for power kW and Capacity acfm
      *
      */
-    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override {
-        if(P_fl > 0) {
+    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override
+    {
+        if (P_fl > 0)
+        {
             CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
             C_fl_Adjusted = C_fl = curveFitValCap.calculate(P_fl);
 
@@ -290,14 +305,14 @@ private:
     double kWPer_blow = 0;
 };
 
-class Compressors_Centrifugal_LoadUnload: public CompressorsBase{
+class Compressors_Centrifugal_LoadUnload : public CompressorsBase
+{
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_nl double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param kW_nl double, kW
      *
      */
     Compressors_Centrifugal_LoadUnload(const double kW_fl, const double C_fl, const double kW_nl) : CompressorsBase(kW_fl, C_fl)
@@ -382,8 +397,10 @@ public:
      *      Units for power kW and Capacity acfm
      *
      */
-    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override {
-        if(P_fl > 0) {
+    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override
+    {
+        if (P_fl > 0)
+        {
             CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
             C_fl_Adjusted = C_fl = curveFitValCap.calculate(P_fl);
         }
@@ -395,20 +412,20 @@ private:
     double kWPer_nl = 0;
 };
 
-class Compressors_Centrifugal_ModulationUnload: public CompressorsBase{
+class Compressors_Centrifugal_ModulationUnload : public CompressorsBase
+{
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_nl double
-     * @param C_max double
-     * @param kW_ul double
-     * @param C_ul double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param kW_nl double, kW
+     * @param C_max double, acfm
+     * @param kW_ul double, kW
+     * @param C_ul double, acfm
      *
      */
-    Compressors_Centrifugal_ModulationUnload(const double kW_fl, const double C_fl, const double kW_nl, const double C_max, const double kW_ul, const double C_ul): CompressorsBase(kW_fl, C_fl), C_max(C_max), C_max_raw(C_max), C_ul(C_ul)
+    Compressors_Centrifugal_ModulationUnload(const double kW_fl, const double C_fl, const double kW_nl, const double C_max, const double kW_ul, const double C_ul) : CompressorsBase(kW_fl, C_fl), C_max(C_max), C_max_raw(C_max), C_ul(C_ul)
     {
         C_max_Adjusted = C_max;
 
@@ -495,12 +512,16 @@ public:
      *      Units for power kW and Capacity acfm
      *
      */
-    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max) override {
-        if(P_fl > 0 || P_max > 0) {
+    void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max) override
+    {
+        if (P_fl > 0 || P_max > 0)
+        {
             CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
 
-            if(P_fl > 0) C_fl_Adjusted = C_fl = curveFitValCap.calculate(P_fl);
-            if(P_max > 0) C_max_Adjusted = C_max = curveFitValCap.calculate(P_max);
+            if (P_fl > 0)
+                C_fl_Adjusted = C_fl = curveFitValCap.calculate(P_fl);
+            if (P_max > 0)
+                C_max_Adjusted = C_max = curveFitValCap.calculate(P_max);
 
             CPer_max = C_max / C_fl;
             CPer_ul = C_ul / C_fl;
@@ -519,21 +540,25 @@ private:
     const double CPer_nl = 0;
 };
 
-
-class Compressors_ModulationWOUnload: public CompressorsBase{
+class Compressors_ModulationWOUnload : public CompressorsBase
+{
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_nl double
-     * @param CompType double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param kW_nl double, kW
+     * @param mod_exp double
+     * @param woUnload boolean
+     * @param CompType CompressorType
+     * @param noLoadPowerFM double
+     * @param kW_max double, kW
      *
      */
-    Compressors_ModulationWOUnload(const double kW_fl, const double C_fl, const double kW_nl, const CompressorType CompType = CompressorType::Screw): CompressorsBase(kW_fl, C_fl), kW_nl(kW_nl), CompType(CompType)
+    Compressors_ModulationWOUnload(const double kW_fl, const double C_fl, const double kW_nl,
+                                   const double mod_exp = 1, const bool woUnload = true, const CompressorType CompType = CompressorType::Screw, double noLoadPowerFM = .7,
+                                   const double kW_max = 0) : CompressorsBase(kW_fl, C_fl), kW_nl(kW_nl), mod_exp(mod_exp), woUnload(woUnload), CompType(CompType), noLoadPowerFM(noLoadPowerFM), kW_max(kW_max)
     {
-        mod_exp = 1;
         lf_nl = kW_nl / kW_fl;
     }
 
@@ -622,29 +647,33 @@ public:
      *
      */
     void Pressure_InletCorrection(const double capacity, const double full_load_bhp, const double poly_exponent, const double P_ratedDischarge, const double P_RatedIn,
-                                  const double Eff, const double P_fl, const double P_max, const double P_in, const bool PresAdj, const double P_atm = 14.69) {
+                                  const double Eff, const double P_fl, const double P_max, const double P_in, const bool PresAdj, const double P_atm = 14.69)
+    {
         PressureInletCorrection(CompType, capacity, full_load_bhp, poly_exponent, P_ratedDischarge, P_RatedIn, Eff, P_fl, P_max, P_in, PresAdj, P_atm);
     }
 
 private:
+    const bool woUnload = true;
     const double kW_nl = 1;
+    const double mod_exp = 1;
+    const CompressorType CompType;
     double lf_nl = 0;
-    double mod_exp = 1;
-    CompressorType CompType;
+    double noLoadPowerFM;
+    double kW_max;
 };
 
-class Compressors_StartStop: public CompressorsBase{
+class Compressors_StartStop : public CompressorsBase
+{
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kWPer_max double
-     * @param kWPer_fl double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param kWPer_max double, percent
+     * @param kWPer_fl double, percent
      *
      */
-    Compressors_StartStop(const double kW_fl, const double C_fl, const double kWPer_max, const double kWPer_fl): CompressorsBase(kW_fl, C_fl), kWPer_max(kWPer_max), kWPer_fl(kWPer_fl)
+    Compressors_StartStop(const double kW_fl, const double C_fl, const double kWPer_max, const double kWPer_fl) : CompressorsBase(kW_fl, C_fl), kWPer_max(kWPer_max), kWPer_fl(kWPer_fl)
     {
         kW_max = kWPer_max * kW_fl;
     }
@@ -734,7 +763,8 @@ public:
      *
      */
     void Pressure_InletCorrection(const double capacity, const double full_load_bhp, const double poly_exponent, const double P_ratedDischarge, const double P_RatedIn,
-                                  const double Eff, const double P_fl, const double P_max, const double P_in, const bool PresAdj, const double P_atm = 14.69) {
+                                  const double Eff, const double P_fl, const double P_max, const double P_in, const bool PresAdj, const double P_atm = 14.69)
+    {
         PressureInletCorrection(CompressorType::Screw, capacity, full_load_bhp, poly_exponent, P_ratedDischarge, P_RatedIn, Eff, P_fl, P_max, P_in, PresAdj, P_atm);
 
         kW_max = kWPer_max * kW_fl;
@@ -746,99 +776,163 @@ private:
     double kW_max;
 };
 
-class Compressors_LoadUnload: public CompressorsBase{
+class Compressors_LoadUnload : public CompressorsBase
+{
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_max double
-     * @param P_fl double
-     * @param P_max double
-     * @param P_mod double
-     * @param P_atm double
-     * @param CompType double
-     * @param LubricantType double
-     * @param CntrlType double
-     * @param kW_nl double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param C_storage double, ft3
+     * @param kW_max double, kW
+     * @param P_fl double, psig
+     * @param P_max double, psig
+     * @param P_mod double, psig
+     * @param lf_ul double, decimal
+     * @param P_atm double, psia
+     * @param CompType CompressorType
+     * @param LubricantType Lubricant
+     * @param CntrlType ControlType
+     * @param kW_nl double, kW
+     * @param PerC_ul double, %
+     * @param t_blowdown double, sec
+     * @param P_sump_ul double, psig
+     * @param noLoadPowerFM double, decimal
+     * @param kW_ul double, kW
+     * @param P_ul double, psig
+     * @param C_ul double, acfm
      *
      */
-    Compressors_LoadUnload(const double kW_fl, const double C_fl, const double kW_max, const double P_fl, const double P_max, const double P_mod, const double P_atm = 14.7,
-                           const CompressorType CompType = CompressorType::Reciprocating, const Lubricant LubricantType = Lubricant::None, ControlType CntrlType = ControlType::LoadUnload, const double kW_nl = 1) :
-                            CompressorsBase(kW_fl, C_fl), kW_max(kW_max), P_atm(P_atm), P_fl(P_fl), P_max(P_max), P_mod(P_mod),
-                            CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(34.1 / kW_fl), C_storage(C_fl*1/7.481), kW_nl(kW_nl)
+    Compressors_LoadUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double P_fl, const double P_max, const double P_mod, const double lf_ul, const double P_atm = 14.7,
+                           const CompressorType CompType = CompressorType::Reciprocating, const Lubricant LubricantType = Lubricant::None, ControlType CntrlType = ControlType::LoadUnload,
+                           const double kW_nl = 1, const double PerC_ul = 100, double t_blowdown = .003, double P_sump_ul = 15, double noLoadPowerFM = .7, double kW_ul = 0, double P_ul = 0, double C_ul = 0) : CompressorsBase(kW_fl, C_fl), kW_max(kW_max), P_atm(P_atm), P_fl(P_fl), P_max(P_max), P_mod(P_mod),
+                                                                                                                                                                                                                 CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
+                                                                                                                                                                                                                 kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul), noLoadPowerFM(noLoadPowerFM), kW_ul(kW_ul), P_ul(P_ul), C_ul(C_ul)
     {
-        if(CompType == CompressorType::Screw && LubricantType == Lubricant::None)
-            throw std::invalid_argument( "Lubricant needs to be Injected or free for Screw Compressor Type" );
+        if (CompType == CompressorType::Screw && LubricantType == Lubricant::None)
+            throw std::invalid_argument("Lubricant needs to be Injected or free for Screw Compressor Type");
 
-        if(CompType == CompressorType::Screw) {
-            if(LubricantType == Lubricant::Injected){
-                lf_fl = 1.00;
-                t_blowdown = 0.001;
-                t_sdt = 1.956;
-
-                PerC_ul = 100;
-                a_tol = 0.02;
-                t_reload = 0.001;
+        setNoLoadPowerFM(noLoadPowerFM, LubricantType, CntrlType);
+        setModExp(CntrlType);
+        if (CompType == CompressorType::Screw)
+        {
+            if (LubricantType == Lubricant::Injected)
+            {
+                t_sdt = 2;
+                t_reload = 3;
             }
-            else if(LubricantType == Lubricant::Free){
-
+            else if (LubricantType == Lubricant::Free)
+            {
+                t_sdt = .004;
+                t_reload = .001;
+                setBlowdown(.003);
+                setUnloadSumpPressure(15);
             }
         }
-        else if(CompType == CompressorType::Reciprocating) {
+        else if (CompType == CompressorType::Reciprocating)
+        {
+            t_sdt = .004;
+            t_reload = .001;
+            setBlowdown(.003);
+            setUnloadSumpPressure(15);
+        }
 
+        //if not modulation unload set unload points
+        if(CntrlType != ControlType::ModulationUnload){
+            setC_ul();
+            setKW_ul();
+            setP_ul();
+        }
+
+    }
+
+    void setBlowdown(double blowdown)
+    {
+        t_blowdown = blowdown;
+    }
+
+    void setUnloadSumpPressure(double sumpPressure)
+    {
+        P_sump_ul = sumpPressure;
+    }
+
+    void setNoLoadPowerFM(double noLoadPowerFM, Lubricant LubricantType, ControlType ControlType)
+    {
+        if(LubricantType == Lubricant::Injected && ControlType == ControlType::LoadUnload){
+            lf_fl = .92;
+        }else{
+            lf_fl = noLoadPowerFM;
+        }
+    }
+
+    void setC_ul()
+    {
+        C_ul = C_fl * PerC_ul / 100;
+    }
+
+    void setKW_ul()
+    {
+        double kW_maxmod = lf_fl * kW_max;
+        kW_ul = (kW_max - kW_maxmod) * pow(C_ul / C_fl, mod_exp) + kW_maxmod;
+    }
+
+    void setP_ul(){
+        P_ul = P_max + (1 - (C_ul / C_fl)) * P_mod;
+    }
+
+    void setModExp(ControlType ControlType){
+        /*Throttle=1, Variable Displacement=2*/;
+        if(ControlType == ControlType::VariableDisplacementUnload){
+            mod_exp = 2;
+        }else{
+            mod_exp = 1;
         }
     }
 
     /**
      *
-     * @param PerkW double
+     * @param PerkW double, %
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromPerkW(double PerkW) override;
 
     /**
      *
-     * @param C_Per double
+     * @param C_Per double, %
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromPerC(double C_Per) override;
 
     /**
      *
-     * @param kW double
+     * @param kW double, kW
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromkWMeasured(double kW) override;
 
     /**
      *
-     * @param C double
+     * @param C double, acfm
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromCMeasured(double C) override;
@@ -848,35 +942,34 @@ public:
      * @param V, Voltage double
      * @param I, Current double
      * @param PF, Power Factor double
-     * @param blowPer double
+     * @param blowPer double, %
      * @return
-     * @param kW_Calc double
-     * @param C_Calc double
-     * @param PerkW double
-     * @param C_Per double
-     *      Units for power kW and Capacity acfm
+     * @param kW_Calc double, kW
+     * @param C_Calc double, acfm
+     * @param PerkW double, %
+     * @param C_Per double, acfm
      *
      */
     CompressorsBase::Output calculateFromVIPFMeasured(double V, double I, double PF) override;
 
     /**
      *
-     * @param capacity double
-     * @param full_load_bhp double
+     * @param capacity double, acfm
+     * @param full_load_bhp double, hp
      * @param poly_exponent double
-     * @param P_ratedDischarge double
-     * @param P_RatedIn double
-     * @param Eff double
-     * @param P_fl double
-     * @param P_max double
-     * @param P_in double
-     * @param PresAdj double
-     * @param P_atm double
-     *      Units for power kW and Capacity acfm
+     * @param P_ratedDischarge double, psig
+     * @param P_RatedIn double, psig
+     * @param Eff double, %
+     * @param P_fl double, psig
+     * @param P_max double, psig
+     * @param P_in double, psig
+     * @param PresAdj double, psig
+     * @param P_atm double, psia
      *
      */
     void Pressure_InletCorrection(const double capacity, const double full_load_bhp, const double poly_exponent, const double P_ratedDischarge, const double P_RatedIn,
-                                  const double Eff, const double P_fl, const double P_max, const double P_in, const bool PresAdj, const double P_atm = 14.69) {
+                                  const double Eff, const double P_fl, const double P_max, const double P_in, const bool PresAdj, const double P_atm = 14.69)
+    {
         PressureInletCorrection(CompressorType::Screw, capacity, full_load_bhp, poly_exponent, P_ratedDischarge, P_RatedIn, Eff, P_fl, P_max, P_in, PresAdj, P_atm);
 
         kW_max = kW_max_Adjusted;
@@ -885,47 +978,54 @@ public:
 private:
     const double kW_nl = 1;
     const double P_fl, P_max, P_mod, P_atm, lf_nl, C_storage;
-    const double P_range = 0, x_mod = 1/*Throttle=1, Variable Displacement=2*/;
+    const double P_range = 0;
     CompressorType CompType;
     Lubricant LubricantType;
     ControlType CntrlType;
 
-    double kW_max;
+    double kW_max, noLoadPowerFM, kW_ul, C_ul, P_ul, mod_exp /*Throttle=1, Variable Displacement=2*/;
     double P_sump_ul = 15, t_blowdown = 0.003, t_sdt = 0.004, a_tol = 0.02, t_reload = 0.001, PerC_ul = 100, lf_fl = 0.7;
 
     double CurveFit(double, bool) const;
 };
 
-class Compressors_ModulationWithUnload: public Compressors_LoadUnload{
+class Compressors_ModulationWithUnload : public Compressors_LoadUnload
+{
 public:
     /**
      *
-     * @param kW_fl double
-     * @param C_fl double
-     * @param kW_max double
-     * @param kW_nl double
-     * @param P_fl double
-     * @param P_max double
-     * @param P_mod double
-     * @param P_atm double
-     * @param CntrlType double
-     *      Units for power kW and Capacity acfm
+     * @param kW_fl double, kW
+     * @param C_fl double, acfm
+     * @param C_storage double, ft3
+     * @param kW_max double, kW
+     * @param kW_nl double, kW
+     * @param P_fl double, psig
+     * @param P_max double, psig
+     * @param P_mod double, psig
+     * @param P_atm double, psia
+     * @param PerC_ul double, %
+     * @param CntrlType ControlType
+     * @param t_blowdown double, sec
+     * @param P_sump_ul double, psig
+     * @param noLoadPowerFM double, decimal
+     * @param kW_ul double, kW
+     * @param P_ul double, psig
+     * @param C_ul double, acfm
      *
      */
-    Compressors_ModulationWithUnload(const double kW_fl, const double C_fl, const double kW_max, const double kW_nl,
-                                     const double P_fl, const double P_max, const double P_mod, const double P_atm = 14.7, Compressors::ControlType CntrlType = Compressors::VariableDisplacementUnload) :
-            Compressors_LoadUnload(kW_fl, C_fl, kW_max, P_fl, P_max, P_mod, P_atm, Compressors::Screw, Compressors::Injected, CntrlType, kW_nl)
-            {
-
+    Compressors_ModulationWithUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double kW_nl,
+                                     const double P_fl, const double P_max, const double P_mod, const double P_atm = 14.7, const double PerC_ul = 100, Compressors::ControlType CntrlType = Compressors::VariableDisplacementUnload,
+                                     const double t_blowdown = .003, const double P_sump_ul = 15, const double noLoadPowerFM = .7, double kW_ul = 0, double P_ul = 0, double C_ul = 0) : Compressors_LoadUnload(kW_fl, C_fl, C_storage, kW_max, P_fl, P_max, P_mod, 1, P_atm, Compressors::Screw, Compressors::Injected, CntrlType, kW_nl, PerC_ul, t_blowdown, P_sump_ul, noLoadPowerFM, kW_ul, P_ul, C_ul)
+    {
     }
 };
 
-
-class CompressorEEMs {
+class CompressorEEMs
+{
 public:
     struct ReduceAirLeaksOutput
     {
-        ReduceAirLeaksOutput(double C_lkred, double C_usage_lkred, double PerC_lkred) : C_lkred(C_lkred), C_usage_lkred(C_usage_lkred), PerC_lkred(PerC_lkred){}
+        ReduceAirLeaksOutput(double C_lkred, double C_usage_lkred, double PerC_lkred) : C_lkred(C_lkred), C_usage_lkred(C_usage_lkred), PerC_lkred(PerC_lkred) {}
 
         ReduceAirLeaksOutput() = default;
         double C_lkred = 0, C_usage_lkred = 0, PerC_lkred = 0;
@@ -933,7 +1033,7 @@ public:
 
     struct ImproveEndUseEfficiencyOutput
     {
-        ImproveEndUseEfficiencyOutput(double C_af_red, double CPer_af_red) : C_af_red(C_af_red), CPer_af_red(CPer_af_red){}
+        ImproveEndUseEfficiencyOutput(double C_af_red, double CPer_af_red) : C_af_red(C_af_red), CPer_af_red(CPer_af_red) {}
 
         ImproveEndUseEfficiencyOutput() = default;
         double C_af_red = 0, CPer_af_red = 0;
@@ -941,24 +1041,23 @@ public:
 
     struct ReduceSystemAirPressureOutput
     {
-        ReduceSystemAirPressureOutput(double P_fl_rpred, double kW_fl_rpadj, double C_usage_rpred, double PerC_rpred) :
-        P_fl_rpred(P_fl_rpred), kW_fl_rpadj(kW_fl_rpadj), C_usage_rpred(C_usage_rpred), PerC_rpred(PerC_rpred){}
+        ReduceSystemAirPressureOutput(double P_fl_rpred, double kW_fl_rpadj, double C_usage_rpred, double PerC_rpred) : P_fl_rpred(P_fl_rpred), kW_fl_rpadj(kW_fl_rpadj), C_usage_rpred(C_usage_rpred), PerC_rpred(PerC_rpred) {}
 
         ReduceSystemAirPressureOutput() = default;
         double P_fl_rpred = 0, kW_fl_rpadj = 0, C_usage_rpred = 0, PerC_rpred = 0;
     };
 
-    struct AdjustCascadingSetPointOutput {
-        AdjustCascadingSetPointOutput(double kW_fl_adj, double C_usage_adj, double PerC_adj) :
-                kW_fl_adj(kW_fl_adj), C_usage_adj(C_usage_adj), PerC_adj(PerC_adj){}
+    struct AdjustCascadingSetPointOutput
+    {
+        AdjustCascadingSetPointOutput(double kW_fl_adj, double C_usage_adj, double PerC_adj) : kW_fl_adj(kW_fl_adj), C_usage_adj(C_usage_adj), PerC_adj(PerC_adj) {}
 
         AdjustCascadingSetPointOutput() = default;
         double kW_fl_adj = 0, C_usage_adj = 0, PerC_adj = 0;
     };
 
-    struct PressureReductionSavingOutput{
-        PressureReductionSavingOutput(double kW_savings, double kWh_savings, double cost_savings) :
-                kW_savings(kW_savings), kWh_savings(kWh_savings), cost_savings(cost_savings){}
+    struct PressureReductionSavingOutput
+    {
+        PressureReductionSavingOutput(double kW_savings, double kWh_savings, double cost_savings) : kW_savings(kW_savings), kWh_savings(kWh_savings), cost_savings(cost_savings) {}
 
         PressureReductionSavingOutput() = default;
         double kW_savings = 0, kWh_savings = 0, cost_savings = 0;
@@ -977,7 +1076,8 @@ public:
      * @param PerC_lkred double percentage / fraction
      *
      */
-    static ReduceAirLeaksOutput ReduceAirLeaks(double C_fl, double C_usage, double C_lk, double PerC_lkred){
+    static ReduceAirLeaksOutput ReduceAirLeaks(double C_fl, double C_usage, double C_lk, double PerC_lkred)
+    {
         const double C_lkred = PerC_lkred * C_lk;
         const double C_usage_lkred = C_usage - C_lkred;
 
@@ -995,7 +1095,8 @@ public:
      * @param CPer_af_red double percentage / fraction
      *
      */
-    static ImproveEndUseEfficiencyOutput ImproveEndUseEfficiency(double C_fl, double C_usage, double C_avgaf_red){
+    static ImproveEndUseEfficiencyOutput ImproveEndUseEfficiency(double C_fl, double C_usage, double C_avgaf_red)
+    {
         const double C_af_red = C_usage - C_avgaf_red;
         return ImproveEndUseEfficiencyOutput(C_af_red, C_af_red / C_fl);
     }
@@ -1017,12 +1118,13 @@ public:
      * @param PerC_rpred double percentage / fraction
      *
      */
-    static ReduceSystemAirPressureOutput ReduceSystemAirPressure(double C_fl, double C_usage, double P_fl, double kW_fl, double P_rpred, double P_alt = 14.69, double P_atm = 14.69){
+    static ReduceSystemAirPressureOutput ReduceSystemAirPressure(double C_fl, double C_usage, double P_fl, double kW_fl, double P_rpred, double P_alt = 14.69, double P_atm = 14.69)
+    {
         const double P_fl_rpred = P_fl - P_rpred;
         const double kW_fl_rpadj = kW_fl * ((pow((P_fl_rpred + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl + P_atm) / P_atm, 0.283) - 1));
-        const double C_usage_rpred  = (C_usage - (C_usage - (C_usage * ((P_fl_rpred + P_alt) / (P_fl + P_atm)))) * 0.6);
+        const double C_usage_rpred = (C_usage - (C_usage - (C_usage * ((P_fl_rpred + P_alt) / (P_fl + P_atm)))) * 0.6);
 
-        return ReduceSystemAirPressureOutput(P_fl_rpred, kW_fl_rpadj, C_usage_rpred,  C_usage_rpred/ C_fl);
+        return ReduceSystemAirPressureOutput(P_fl_rpred, kW_fl_rpadj, C_usage_rpred, C_usage_rpred / C_fl);
     }
 
     /**
@@ -1041,9 +1143,10 @@ public:
      * @param PerC_adj double percentage / fraction
      *
      */
-    static AdjustCascadingSetPointOutput AdjustCascadingSetPoint(double C_fl, double C_usage, double P_fl, double kW_fl, double P_fl_adj, double P_alt = 14.69, double P_atm = 14.69){
+    static AdjustCascadingSetPointOutput AdjustCascadingSetPoint(double C_fl, double C_usage, double P_fl, double kW_fl, double P_fl_adj, double P_alt = 14.69, double P_atm = 14.69)
+    {
         const double kW_fl_adj = kW_fl * ((pow((P_fl_adj + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl + P_atm) / P_atm, 0.283) - 1));
-        const double C_usage_adj  = (C_usage - (C_usage - (C_usage * ((P_fl_adj + P_alt) / (P_fl + P_atm)))) * 0.6);
+        const double C_usage_adj = (C_usage - (C_usage - (C_usage * ((P_fl_adj + P_alt) / (P_fl + P_atm)))) * 0.6);
 
         return AdjustCascadingSetPointOutput(kW_fl_adj, C_usage_adj, C_usage_adj / C_fl);
     }
@@ -1068,7 +1171,8 @@ public:
     static PressureReductionSavingOutput PressureReductionSaving(double operatingHours, double costPerkWh,
                                                                  double kW_fl_rated, double P_fl_rated,
                                                                  double dischargePresBaseline, double dischargePresMod,
-                                                                 double P_alt = 14.69, double P_atm = 14.69){
+                                                                 double P_alt = 14.69, double P_atm = 14.69)
+    {
         const double kW_savings = kWAdjusted(kW_fl_rated, P_fl_rated, dischargePresBaseline, P_alt, P_atm) -
                                   kWAdjusted(kW_fl_rated, P_fl_rated, dischargePresMod, P_alt, P_atm);
         const double kWh_savings = kW_savings * operatingHours;
@@ -1086,7 +1190,8 @@ public:
      * @return
      * @param kWAdjusted double, units kW
      */
-    static double kWAdjusted(double kW_fl_rated, double P_fl_rated, double P_discharge, double P_alt = 14.69, double P_atm = 14.69) {
+    static double kWAdjusted(double kW_fl_rated, double P_fl_rated, double P_discharge, double P_alt = 14.69, double P_atm = 14.69)
+    {
         return kW_fl_rated * ((pow((P_discharge + P_alt) / P_alt, 0.283) - 1) / (pow((P_fl_rated + P_atm) / P_atm, 0.283) - 1));
     }
 };

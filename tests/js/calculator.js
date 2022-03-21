@@ -792,10 +792,10 @@ test('Compressed Air Leak Survey Test All', function (t) {
                 units: 2
             },
             // orifice method with electricity
-            // energyUse = 1253583.3379004421
-            // energyCost = 150430.000548053
-            // flowRate = 2267.0416267007
-            // compressedAirUse = 1175234379
+            // energyUse = 304078
+            // energyCost = 36489.4
+            // flowRate = 219.964
+            // compressedAirUse = 114029000
             {
                 hoursPerYear: 8640,
                 utilityType: 1,
@@ -822,11 +822,11 @@ test('Compressed Air Leak Survey Test All', function (t) {
                     fillTime: 12
                 },
                 orificeMethodData: {
-                    compressorAirTemp: 250.0,
+                    compressorAirTemp: 550,
                     atmosphericPressure: 14.7,
                     dischargeCoefficient: 1.0,
-                    orificeDiameter: 6.0,
-                    supplyPressure: 6.2,
+                    orificeDiameter: .375,
+                    supplyPressure: 100,
                     numberOfOrifices: 4
                 },
                 compressorElectricityData: {
@@ -839,10 +839,10 @@ test('Compressed Air Leak Survey Test All', function (t) {
     };
 
     var res = bindings.compressedAirLeakSurvey(inp);
-    t.equal(rnd(res.annualTotalElectricity), rnd(3145496.812312));
-    t.equal(rnd(res.annualTotalElectricityCost), rnd(377459.617477));
-    t.equal(rnd(res.totalFlowRate), rnd(2275.388319)); // 2271.979473
-    t.equal(rnd(res.annualTotalFlowRate), rnd(1179561304.616953));
+    t.equal(rnd(res.annualTotalElectricity), rnd(1801919.310026));
+    t.equal(rnd(res.annualTotalElectricityCost), rnd(216230.317203));
+    t.equal(rnd(res.totalFlowRate), rnd(1303.471723));
+    t.equal(rnd(res.annualTotalFlowRate), rnd(675719741.259564));
 });
 
 test('Compressed Air Pressure Reduction - Baseline', function (t) {

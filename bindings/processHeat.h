@@ -10,6 +10,8 @@
 #include "calculator/processHeat/WaterHeatingUsingExhaust.h"
 #include "calculator/processHeat/WaterHeatingUsingSteam.h"
 #include "calculator/processHeat/CascadeHeatHighToLow.h"
+#include "calculator/processHeat/WaterHeatingUsingFlue.h"
+#include "calculator/processHeat/AirWaterCoolingUsingFlue.h"
 
 using namespace Nan;
 using namespace v8;
@@ -156,19 +158,25 @@ NAN_METHOD(cascadeHeatHighToLow)
     r = Nan::New<Object>();
 
     try
-    {
+    {		
+        const double fuelHV = getDouble("fuelHV", inp);		
+        const double fuelCost = getDouble("fuelCost", inp);
+		
         const double priFiringRate = getDouble("priFiringRate", inp);
         const double priExhaustTemperature = getDouble("priExhaustTemperature", inp);
         const double priExhaustO2 = getDouble("priExhaustO2", inp);
         const double priCombAirTemperature = getDouble("priCombAirTemperature", inp);
         const double priOpHours = getDouble("priOpHours", inp);
-        const double priFuelHV = getDouble("priFuelHV", inp);
 
         const double secFiringRate = getDouble("secFiringRate", inp);
         const double secExhaustTemperature = getDouble("secExhaustTemperature", inp);
+        const double secExhaustO2 = getDouble("secExhaustO2", inp);
         const double secCombAirTemperature = getDouble("secCombAirTemperature", inp);
         const double secOpHours = getDouble("secOpHours", inp);
-        const double secFuelCost = getDouble("secFuelCost", inp);
+		
+		const double fuelTempF = getDouble("fuelTempF", inp);
+		const double ambientAirTempF = getDouble("ambientAirTempF", inp);
+		const double combAirMoisturePerc = getDouble("combAirMoisturePerc", inp);
 
         const double CH4 = getDouble("CH4", inp);
         const double C2H6 = getDouble("C2H6", inp);
@@ -182,9 +190,10 @@ NAN_METHOD(cascadeHeatHighToLow)
         const double SO2 = getDouble("SO2", inp);
         const double O2 = getDouble("O2", inp);
 
-        auto ch = CascadeHeatHighToLow(GasCompositions("Gas", CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2),
-                                       priFiringRate, priExhaustTemperature, priExhaustO2, priCombAirTemperature, priOpHours, priFuelHV,
-                                       secFiringRate, secExhaustTemperature, secCombAirTemperature, secOpHours, secFuelCost);
+        auto ch = CascadeHeatHighToLow(GasCompositions("Gas", CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2), fuelHV, fuelCost,
+                                       priFiringRate, priExhaustTemperature, priExhaustO2, priCombAirTemperature, priOpHours, 
+                                       secFiringRate, secExhaustTemperature, secExhaustO2, secCombAirTemperature, secOpHours,
+									   fuelTempF, ambientAirTempF, combAirMoisturePerc);
         auto output = ch.calculate();
 
         setR("priFlueVolume", output.priFlueVolume);
@@ -194,6 +203,10 @@ NAN_METHOD(cascadeHeatHighToLow)
         setR("energySavings", output.energySavings);
         setR("costSavings", output.costSavings);
         setR("hourlySavings", output.hourlySavings);
+		setR("priExcessAir", output.priExcessAir);
+		setR("priAvailableHeat", output.priAvailableHeat);
+		setR("secExcessAir", output.secExcessAir);
+		setR("secAvailableHeat", output.secAvailableHeat);
 
         info.GetReturnValue().Set(r);
     }
@@ -201,5 +214,121 @@ NAN_METHOD(cascadeHeatHighToLow)
     {
         std::string const what = e.what();
         ThrowError(std::string("std::runtime_error thrown in Cascade Heat HighToLow ProcessHeat - calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(waterHeatingUsingFlue)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double tempFlueGas = getDouble("tempFlueGas", inp);
+        const double percO2 = getDouble("percO2", inp);
+        const double tempCombAir = getDouble("tempCombAir", inp);
+        const double moistCombAir = getDouble("moistCombAir", inp);
+        const double ratingBoiler = getDouble("ratingBoiler", inp);
+        const double prSteam = getDouble("prSteam", inp);
+        const double tempAmbientAir = getDouble("tempAmbientAir", inp);
+        const double tempSteam = getDouble("tempSteam", inp);
+        const double tempFW = getDouble("tempFW", inp);
+        const double percBlowDown = getDouble("percBlowDown", inp);
+        const double effHX = getDouble("effHX", inp);
+        const double opHours = getDouble("opHours", inp);
+        const double costFuel = getDouble("costFuel", inp);
+        const double hhvFuel = getDouble("hhvFuel", inp);
+        const int condSteam = getInteger("condSteam", inp);
+		const double fuelTempF = getDouble("fuelTempF", inp);
+
+        const double CH4 = getDouble("CH4", inp);
+        const double C2H6 = getDouble("C2H6", inp);
+        const double N2 = getDouble("N2", inp);
+        const double H2 = getDouble("H2", inp);
+        const double C3H8 = getDouble("C3H8", inp);
+        const double C4H10_CnH2n = getDouble("C4H10_CnH2n", inp);
+        const double H2O = getDouble("H2O", inp);
+        const double CO = getDouble("CO", inp);
+        const double CO2 = getDouble("CO2", inp);
+        const double SO2 = getDouble("SO2", inp);
+        const double O2 = getDouble("O2", inp);
+
+        auto output = WaterHeatingUsingFlue().calculate(GasCompositions("Gas", CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2),
+                                                      tempFlueGas, percO2, tempCombAir, moistCombAir, ratingBoiler, prSteam, tempAmbientAir,
+                                                      tempSteam, tempFW, percBlowDown, effHX, opHours, costFuel, hhvFuel, (WaterHeatingUsingFlue::SteamCondition)condSteam, fuelTempF);
+
+        setR("flowFlueGas", output.flowFlueGas);
+        setR("effBoiler", output.effBoiler);
+        setR("enthalpySteam", output.enthalpySteam);
+        setR("enthalpyFW", output.enthalpyFW);
+        setR("flowSteam", output.flowSteam);
+        setR("flowFW", output.flowFW);
+        setR("specheatFG", output.specheatFG);
+        setR("heatCapacityFG", output.heatCapacityFG);
+        setR("specheatFW", output.specheatFW);
+        setR("heatCapacityFW", output.heatCapacityFW);
+        setR("heatCapacityMin", output.heatCapacityMin);
+        setR("ratingHeatRecFW", output.ratingHeatRecFW);
+        setR("tempFlueGasOut", output.tempFlueGasOut);
+        setR("tempFWOut", output.tempFWOut);
+        setR("energySavingsBoiler", output.energySavingsBoiler);
+        setR("costSavingsBoiler", output.costSavingsBoiler);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Water Heating Using Flue ProcessHeat - calculator: " + what).c_str());
+    }
+}
+
+NAN_METHOD(airWaterCoolingUsingFlue)
+{
+    inp = Nan::To<Object>(info[0]).ToLocalChecked();
+    r = Nan::New<Object>();
+
+    try
+    {
+        const double heatInput = getDouble("heatInput", inp);
+        const double tempFlueGasInF = getDouble("tempFlueGasInF", inp);
+        const double tempFlueGasOutF = getDouble("tempFlueGasOutF", inp);
+        const double tempCombAirF = getDouble("tempCombAirF", inp);
+        const double fuelTempF = getDouble("fuelTempF", inp);
+        const double percO2 = getDouble("percO2", inp);
+        const double ambientAirTempF = getDouble("ambientAirTempF", inp);
+        const double moistCombAir = getDouble("moistCombAir", inp);
+
+        const double CH4 = getDouble("CH4", inp);
+        const double C2H6 = getDouble("C2H6", inp);
+        const double N2 = getDouble("N2", inp);
+        const double H2 = getDouble("H2", inp);
+        const double C3H8 = getDouble("C3H8", inp);
+        const double C4H10_CnH2n = getDouble("C4H10_CnH2n", inp);
+        const double H2O = getDouble("H2O", inp);
+        const double CO = getDouble("CO", inp);
+        const double CO2 = getDouble("CO2", inp);
+        const double SO2 = getDouble("SO2", inp);
+        const double O2 = getDouble("O2", inp);
+
+        auto output = AirWaterCoolingUsingFlue().calculate(GasCompositions("Gas", CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2),
+                                                        heatInput, tempFlueGasInF, tempFlueGasOutF, tempCombAirF, fuelTempF, percO2, ambientAirTempF, moistCombAir);
+
+        setR("excessAir", output.excessAir);
+        setR("flowFlueGas", output.flowFlueGas);
+        setR("specHeat", output.specHeat);
+        setR("fracCondensed", output.fracCondensed);
+        setR("effThermal", output.effThermal);
+        setR("effThermalLH", output.effThermalLH);
+        setR("effLH", output.effLH);
+        setR("heatRecovery", output.heatRecovery);
+        setR("sensibleHeatRecovery", output.sensibleHeatRecovery);
+
+        info.GetReturnValue().Set(r);
+    }
+    catch (std::runtime_error const &e)
+    {
+        std::string const what = e.what();
+        ThrowError(std::string("std::runtime_error thrown in Air Water Cooling Using Flue ProcessHeat - calculator: " + what).c_str());
     }
 }

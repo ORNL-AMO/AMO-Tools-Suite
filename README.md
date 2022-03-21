@@ -8,24 +8,34 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 #### C++
 - make
 - CMake (cmake-curses to use the ccmake gui)
-- GCC 4.8.5 or later
+- GCC 4.8.5 or later 
+  - Windows: Visual Studio Build Tools or Cygwin with other C++ compiler
 - Doxygen (only for building documentation)
 
+#### Web Assembly Compilation SDK
+- Emscripten (emsdk) - Follow instructions for install, using '2.0.16' in place of 'latest' https://emscripten.org/docs/getting_started/downloads.html
+
 #### Node
-- Node [https://nodejs.org/en/](https://nodejs.org/en/) v8, v9 or v10
+- Node [https://nodejs.org/en/](https://nodejs.org/en/) v12.8.0
 - gyp: follow instructions for the OS at [https://github.com/nodejs/node-gyp](node-gyp)
   - depending on platform and instructions, it states the correct python version to install or installs it
 
 ### Building
+- Install node_modules dependencies: `cd` into AMO-Tools-Suite directory and run  
+	 `npm install`
+- `cd` into the emsdk directory: 
+	- run `emsdk activate 2.0.16` (Build must target this version)
+- `cd` into AMO-Tools-Suite directory:  
+    -  run `emcmake cmake -DBUILD_WASM=ON -G "MinGW Makefiles"` 
+        -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
+        example for windows => `emcmake cmake -D BUILD_WASM=ON -G "MinGW Makefiles"`  
+    - run `emmake mingw32-make` (or other make-file)
+
+### Building for NAN module use (Legacy)
 - Edit the CMakeCache and enable desired build options via the ccmake tool: `ccmake .` and `make` to build
 - If ccmake isn't available, use `cmake -D BUILD_TESTING:BOOL=ON -D BUILD_PACKAGE:BOOL=OFF --config Debug ./` and `cmake --build .` where config can be `Release`, `Debug`, `MinSizeRel` or `RelWithDebInfo`
 - To build node modules: `npm install` or if already installed, `node-gyp rebuild` to rebuild the modules
-    - Note: In order to build node modules, edit package.json and change gypfile entry value to true => "gypfile": true 
-- To build WASM: use -D BUILD_WASM=ON flag in cmake options => `emcmake cmake -D BUILD_WASM=ON .` followed by `emmake make`
-    - Note:
-      - Emscripten compiler toolchain needs to be installed first from https://emscripten.org/docs/getting_started/index.html
-      - If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
-        example for windows => `emcmake cmake -G "MinGW Makefiles" -D BUILD_WASM=ON .`      
+
 
 ### Unit Tests
 - To run the JavaScript unit tests for the node addons: `npm run test`

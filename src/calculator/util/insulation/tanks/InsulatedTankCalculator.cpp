@@ -52,7 +52,7 @@ InsulatedTankOutput InsulatedTankCalculator::calculateInsulation(InsulatedTankIn
     AirProperties airProperties = InsulatedTankCalculator::calculateAirProperties(input.getAmbientTemperature());
     thermalDiffusivity = airProperties.getConductivity() / (airProperties.getDensity() * airProperties.getSpecificHeat());
     thermalExpansionCoefficient = 1.0 / input.getAmbientTemperature();
-    airRayleigh = (32.174 * thermalExpansionCoefficient * (input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(input.getTankDiameter(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
+    airRayleigh = (32.174 * thermalExpansionCoefficient * std::fabs(input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(input.getTankDiameter(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
     airProperties.setRayleigh(airRayleigh);
     naturalConvectionCoefficient = 0.125 * std::pow(airProperties.getRayleigh(), 1.0 / 3.0) * airProperties.getConductivity() / input.getTankDiameter();
     innerTankRadius = input.getTankDiameter() / 2.0;
@@ -84,7 +84,7 @@ InsulatedTankOutput InsulatedTankCalculator::calculateNoInsulation(InsulatedTank
     AirProperties airProperties = InsulatedTankCalculator::calculateAirProperties(input.getAmbientTemperature());
     thermalDiffusivity = airProperties.getConductivity() / (airProperties.getDensity() * airProperties.getSpecificHeat());
     thermalExpansionCoefficient = 1.0 / input.getAmbientTemperature();
-    airRayleigh = (32.174 * thermalExpansionCoefficient * (input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(input.getTankDiameter(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
+    airRayleigh = (32.174 * thermalExpansionCoefficient * std::fabs(input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(input.getTankDiameter(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
     airProperties.setRayleigh(airRayleigh);
     naturalConvectionCoefficient = 0.125 * std::pow(airProperties.getRayleigh(), 1.0 / 3.0) * airProperties.getConductivity() / input.getTankDiameter();
     innerTankRadius = input.getTankDiameter() / 2.0;
