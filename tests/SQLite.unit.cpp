@@ -314,16 +314,106 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
     // }
 
     {
+        PumpData pump1(
+            "manufacturerCustom1", 
+            "modelCustom1", 
+            "serialNumberCustom1", 
+            "statusCustom1", 
+            "pumpTypeCustom1",
+            "radialBearingTypeCustom1", 
+            "thrustBearingTypeCustom1", 
+            "shaftOrientationCustom1", 
+            "shaftSealTypeCustom1", 
+            "fluidTypeCustom1",
+            "priorityCustom1", 
+            "driveTypeCustom1", 
+            "flangeConnectionClassCustom1", 
+            "flangeConnectionSizeCustom1",
+            "motorEfficiencyClassCustom1",
+			"componentIdCustom1", 
+            2, 
+			1, 
+			9000, 
+			2018, 
+			1780, 
+			33,
+			5, 
+			6,
+			15, 
+			11, 
+			13, 
+			250, 
+			85, 
+			1.5, 
+			600, 
+			400, 
+			70, 
+			20, 
+			88, 
+			15, 
+			15, 
+			15,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			1,
+			1);
 
-		PumpData pump1("manufacturerCustom1", "modelCustom1", "typeCustom1", "serialNumberCustom1", "statusCustom1", "pumpTypeCustom1",
-                    "radialBearingTypeCustom1", "thrustBearingTypeCustom1", "shaftOrientationCustom1", "shaftSealTypeCustom1", "fluidTypeCustom1",
-                    "priorityCustom1", "driveTypeCustom1", "flangeConnectionClassCustom1", "flangeConnectionSizeCustom1", 1, 2, 1, 9000, 2018, 1780,
-                    5, 90, 6, 89, 90, 85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1);
 
-        PumpData pump2("manufacturerCustom2", "modelCustom2", "typeCustom2", "serialNumberCustom2", "statusCustom2", "pumpTypeCustom2",
-                    "radialBearingTypeCustom2", "thrustBearingTypeCustom2", "shaftOrientationCustom2", "shaftSealTypeCustom2", "fluidTypeCustom2",
-                    "priorityCustom2", "driveTypeCustom2", "flangeConnectionClassCustom2", "flangeConnectionSizeCustom2", 1, 2, 1, 9000, 2018, 1780,
-                    5, 90, 6, 89, 90, 85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1);
+        PumpData pump2(
+            "manufacturerCustom2", 
+            "modelCustom2", 
+            "serialNumberCustom2", 
+            "statusCustom2", 
+            "pumpTypeCustom2",
+            "radialBearingTypeCustom2", 
+            "thrustBearingTypeCustom2", 
+            "shaftOrientationCustom2", 
+            "shaftSealTypeCustom2", 
+            "fluidTypeCustom2",
+            "priorityCustom2", 
+            "driveTypeCustom2", 
+            "flangeConnectionClassCustom2", 
+            "flangeConnectionSizeCustom2", 
+            "motorEfficiencyClassCustom2",
+			"componentIdCustom2", 
+            2, 
+			1, 
+			9000, 
+			2018, 
+			1780, 
+			33,
+			5, 
+			6,
+			15, 
+			11, 
+			13, 
+			250, 
+			85, 
+			1.5, 
+			600, 
+			400, 
+			70, 
+			20, 
+			88, 
+			15, 
+			15, 
+			15,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			1,
+			1);
 
 		sqlite.insertPumpData(pump1);
         sqlite.insertPumpData(pump2);
@@ -459,10 +549,43 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
         auto const output = sqlite.getPumpData();
         auto const last = output.back().getManufacturer();
         PumpData pump(
-                "throw this pump away delete", "model", "type", "serialNumber", "status", "pumpType", "radial",
-                "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
-                "flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
-                85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1 );
+            "throw this pump away delete", "model","serialNumber", "status", "pumpType", "radial",
+            "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
+            "flangeConnectionClass", "flangeConnectionSize",
+			"componentId", 
+            "motorEfficiencyClass",
+            2, 
+			1, 
+			9000, 
+			2018, 
+			1780, 
+			33,
+			5, 
+			6,
+			15, 
+			11, 
+			13, 
+			250, 
+			85, 
+			1.5, 
+			600, 
+			400, 
+			70, 
+			20, 
+			88, 
+			15, 
+			15, 
+			15,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			33,
+			1,
+			1);
 
         sqlite.insertPumpData(pump);
         sqlite.deletePumpData(sqlite.getPumpData().back().getId());
@@ -1258,7 +1381,6 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
     auto const compare = [](PumpData result, PumpData expected) {
         CHECK(result.getManufacturer() == expected.getManufacturer());
         CHECK(result.getModel() == expected.getModel());
-        CHECK(result.getType() == expected.getType());
         CHECK(result.getSerialNumber() == expected.getSerialNumber());
         CHECK(result.getStatus() == expected.getStatus());
         CHECK(result.getPumpType() == expected.getPumpType());
@@ -1271,37 +1393,40 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         CHECK(result.getDriveType() == expected.getDriveType());
         CHECK(result.getFlangeConnectionClass() == expected.getFlangeConnectionClass());
         CHECK(result.getFlangeConnectionSize() == expected.getFlangeConnectionSize());
-        CHECK(result.getNumShafts() == expected.getNumShafts());
+        CHECK(result.getComponentId() == expected.getComponentId());
+        CHECK(result.getMotorEfficiencyClass() == expected.getMotorEfficiencyClass());
         CHECK(result.getSpeed() == expected.getSpeed());
         CHECK(result.getNumStages() == expected.getNumStages());
         CHECK(result.getYearlyOperatingHours() == expected.getYearlyOperatingHours());
         CHECK(result.getYearInstalled() == expected.getYearInstalled());
         CHECK(result.getFinalMotorRpm() == expected.getFinalMotorRpm());
+        CHECK(result.getMotorRatedVoltage() == expected.getMotorRatedVoltage());
         CHECK(result.getInletDiameter() == expected.getInletDiameter());
-        CHECK(result.getWeight() == expected.getWeight());
         CHECK(result.getOutletDiameter() == expected.getOutletDiameter());
-        CHECK(result.getPercentageOfSchedule() == expected.getPercentageOfSchedule());
-        CHECK(result.getDailyPumpCapacity() == expected.getDailyPumpCapacity());
-        CHECK(result.getMeasuredPumpCapacity() == expected.getMeasuredPumpCapacity());
-        CHECK(result.getPumpPerformance() == expected.getPumpPerformance());
         CHECK(result.getStaticSuctionHead() == expected.getStaticSuctionHead());
         CHECK(result.getStaticDischargeHead() == expected.getStaticDischargeHead());
         CHECK(result.getFluidDensity() == expected.getFluidDensity());
-        CHECK(result.getLengthOfDischargePipe() == expected.getLengthOfDischargePipe());
-        CHECK(result.getPipeDesignFrictionLosses() == expected.getPipeDesignFrictionLosses());
         CHECK(result.getMaxWorkingPressure() == expected.getMaxWorkingPressure());
         CHECK(result.getMaxAmbientTemperature() == expected.getMaxAmbientTemperature());
         CHECK(result.getMaxSuctionLift() == expected.getMaxSuctionLift());
         CHECK(result.getDisplacement() == expected.getDisplacement());
         CHECK(result.getStartingTorque() == expected.getStartingTorque());
         CHECK(result.getRatedSpeed() == expected.getRatedSpeed());
-        CHECK(result.getShaftDiameter() == expected.getShaftDiameter());
         CHECK(result.getImpellerDiameter() == expected.getImpellerDiameter());
         CHECK(result.getEfficiency() == expected.getEfficiency());
-        CHECK(result.getOutput60Hz() == expected.getOutput60Hz());
+        CHECK(result.getLineFrequency() == expected.getLineFrequency());
         CHECK(result.getMinFlowSize() == expected.getMinFlowSize());
         CHECK(result.getPumpSize() == expected.getPumpSize());
+        CHECK(result.getDesignHead() == expected.getDesignHead());
+        CHECK(result.getDesignFlow() == expected.getDesignFlow());
+        CHECK(result.getDesignEfficiency() == expected.getDesignEfficiency());
+        CHECK(result.getMotorRatedPower() == expected.getMotorRatedPower());
+        CHECK(result.getMotorFullLoadAmps() == expected.getMotorFullLoadAmps());
+        CHECK(result.getOperatingFlowRate() == expected.getOperatingFlowRate());
+        CHECK(result.getOperatingHead() == expected.getOperatingHead());
+        CHECK(result.getMotorEfficiency() == expected.getPumpSize());
         CHECK(result.getOutOfService() == expected.getOutOfService());
+        CHECK(result.getSpare() == expected.getSpare());
         CHECK(result.getId() == expected.getId());
     };
 
@@ -1313,20 +1438,97 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         auto const pumps = sqlite.getPumpData();
 
         auto expected = PumpData(
-                "manufacturer", "model", "type", "serialNumber", "status", "pumpType", "radialBearingType",
-                "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
-                "flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
-                85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1 );
+                "manufacturer", 
+                "model", 
+                "serialNumber", 
+                "status", 
+                "pumpType", 
+                "radialBearingType",
+                "thrustBearingType", 
+                "shaftOrientation", 
+                "shaftSealType", 
+                "fluidType", 
+                "priority", 
+                "driveType",
+                "flangeConnectionClass", 
+                "flangeConnectionSize", 
+                "componentId", 
+			    "motorEfficiencyClass",
+			    2, 
+			    1, 
+			    9000, 
+			    2018, 
+			    1780, 
+			    33,
+			    5, 
+			    6,
+			    15, 
+			    11, 
+			    13, 
+			    250, 
+			    85, 
+			    1.5, 
+			    600, 
+			    400, 
+			    70, 
+			    20, 
+			    88, 
+			    15, 
+			    15, 
+			    15,
+			    33,
+			    33,
+			    33,
+			    33,
+			    33,
+			    33,
+			    33,
+			    33,
+			    1,
+			    1
+                );
                 
         expected.setId(1);
 
         compare(pumps.at(0), expected);
 
         auto pump = PumpData(
-                "test-manufacturer", "test-model", "test-type", "test-serialNumber", "status", "pumpType", "radialBearingType",
+                "test-manufacturer", "test-model", "test-serialNumber", "status", "pumpType", "radialBearingType",
                 "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
-                "flangeConnectionClass", "flangeConnectionSize", 1, 2, 1, 9000, 2018, 1780, 5, 90, 6, 89, 90,
-                85, 99, 15, 11, 13, 14, 0.5, 250, 85, 1.5, 600, 400, 70, 15, 20, 88, 15, 15, 15, 1 );
+                "flangeConnectionClass", "flangeConnectionSize",
+                "componentId", "motorEfficiencyClass", 
+                2, 
+			    1, 
+			    9000, 
+			    2018, 
+			    1780, 
+			    33,
+			    5, 
+			    6,
+			    15, 
+			    11, 
+			    13, 
+			    250, 
+			    85, 
+			    1.5, 
+			    600, 
+			    400, 
+			    70, 
+			    20, 
+			    88, 
+			    15, 
+			    15, 
+			    15,
+			    33,
+			    33,
+			    33,
+			    33,
+			    33,
+			    33,
+			    33,
+			    33,
+			    1,
+			    1);
 
         sqlite.insertPumpData(pump);
         pump.setId(2);

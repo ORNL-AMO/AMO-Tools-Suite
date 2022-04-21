@@ -1,6 +1,7 @@
 //
 // Created by zf9 on 7/16/18.
 // Re-implemented by causeyc on 1/27/2020
+// Changes made nbintertech 4/21/2022
 
 #ifndef AMO_TOOLS_SUITE_PUMPDATA_H
 #define AMO_TOOLS_SUITE_PUMPDATA_H
@@ -9,18 +10,55 @@
 
 class PumpData {
 public:
-    PumpData(std::string manufacturer, std::string model, std::string type, std::string serialNumber,
-             std::string status, std::string pumpType, std::string radialBearingType,  std::string thrustBearingType,
-             std::string shaftOrientation, std::string shaftSealType, std::string fluidType, std::string priority,
-             std::string driveType, std::string flangeConnectionClass, std::string flangeConnectionSize,
-             int numShafts, int speed, int numStages,  int yearlyOperatingHours, int yearInstalled, int finalMotorRpm,
-             double inletDiameter, double weight, double outletDiameter, double percentageOfSchedule,
-             double dailyPumpCapacity, double measuredPumpCapacity, double pumpPerformance, double staticSuctionHead,
-             double staticDischargeHead, double fluidDensity, double lengthOfDischargePipe,
-             double pipeDesignFrictionLosses,  double maxWorkingPressure, double maxAmbientTemperature,
-             double maxSuctionLift,  double displacement, double startingTorque, double ratedSpeed,
-             double shaftDiameter, double impellerDiameter, double efficiency, double output60Hz, double minFlowSize,
-             double pumpSize,  bool outOfService);
+    PumpData(std::string manufacturer, 
+             std::string model, 
+             std::string serialNumber,
+             std::string status, 
+             std::string pumpType, 
+             std::string radialBearingType,  
+             std::string thrustBearingType,
+             std::string shaftOrientation, 
+             std::string shaftSealType, 
+             std::string fluidType, 
+             std::string priority,
+             std::string driveType, 
+             std::string flangeConnectionClass, 
+             std::string flangeConnectionSize,
+             std::string componentId,
+             std::string motorEfficiencyClass,
+             int speed, 
+             int numStages,  
+             int yearlyOperatingHours, 
+             int yearInstalled, 
+             int finalMotorRpm,
+             int motorRatedVoltage,
+             double inletDiameter, 
+             double outletDiameter,
+             double staticSuctionHead,
+             double staticDischargeHead, 
+             double fluidDensity, 
+             double maxWorkingPressure, 
+             double maxAmbientTemperature,
+             double maxSuctionLift,  
+             double displacement, 
+             double startingTorque, 
+             double ratedSpeed,
+             double impellerDiameter, 
+             double efficiency, 
+             double lineFrequency, 
+             double minFlowSize,
+             double pumpSize,  
+             double designHead,
+             double designFlow,
+             double designEfficiency,
+             double motorRatedPower,
+             double motorFullLoadAmps,
+             double operatingFlowRate,
+             double operatingHead,
+             double motorEfficiency,
+             bool outOfService,
+             bool spare
+             );
 
     const bool getOutOfService() const;
 
@@ -34,22 +72,6 @@ public:
 
     void setOutletDiameter(const double &outletDiameter);
 
-    const double getPercentageOfSchedule() const;
-
-    void setPercentageOfSchedule(const double &percentageOfSchedule);
-
-    const double getDailyPumpCapacity() const;
-
-    void setDailyPumpCapacity(const double &dailyPumpCapacity);
-
-    const double getMeasuredPumpCapacity() const;
-
-    void setMeasuredPumpCapacity(const double &measuredPumpCapacity);
-
-    const double getPumpPerformance() const;
-
-    void setPumpPerformance(const double &pumpPerformance);
-
     const double getStaticSuctionHead() const;
 
     void setStaticSuctionHead(const double &staticSuctionHead);
@@ -61,14 +83,6 @@ public:
     const double getFluidDensity() const;
 
     void setFluidDensity(const double &fluidDensity);
-
-    const double getLengthOfDischargePipe() const;
-
-    void setLengthOfDischargePipe(const double &lengthOfDischargePipe);
-
-    const double getPipeDesignFrictionLosses() const;
-
-    void setPipeDesignFrictionLosses(const double &pipeDesignFrictionLosses);
 
     const double getMaxWorkingPressure() const;
 
@@ -102,10 +116,6 @@ public:
 
     void setPumpSize(const double &pumpSize);
 
-    const double getShaftDiameter() const;
-
-    void setShaftDiameter(const double &shaftDiameter);
-
     const double getImpellerDiameter() const;
 
     void setImpellerDiameter(const double &impellerDiameter);
@@ -114,17 +124,13 @@ public:
 
     void setEfficiency(const double &efficiency);
 
-    const double getOutput60Hz() const;
+    const double getLineFrequency() const;
 
-    void setOutput60Hz(const double &output60Hz);
+    void setLineFrequency(const double &lineFrequency);
 
     const int getSpeed() const;
 
     void setSpeed(const int &speed);
-
-    const int getNumShafts() const;
-
-    void setNumShafts(const int &numShafts);
 
     const int getNumStages() const;
 
@@ -182,10 +188,6 @@ public:
 
     void setFlangeConnectionSize(const std::string &flangeConnectionSize);
 
-    const std::string getType() const;
-
-    void setType(const std::string &type);
-
     const std::string getManufacturer() const;
 
     void setManufacturer(const std::string &manufacturer);
@@ -202,9 +204,54 @@ public:
 
     void setFinalMotorRpm(int finalMotorRpm);
 
-    double getWeight() const;
+    const double getDesignHead() const;
 
-    void setWeight(double weight);
+    void setDesignHead(const double &designHead);
+
+    const double getDesignFlow() const;
+
+    void setDesignFlow(const double &designFlow);
+
+    const double getDesignEfficiency() const;
+
+    void setDesignEfficiency(const double &designEfficiency);
+
+    const double getMotorRatedPower() const;
+
+    void setMotorRatedPower(const double &motorRatedPower);
+
+    const double getMotorFullLoadAmps() const;
+
+    void setMotorFullLoadAmps(const double &motorFullLoadAmps);
+
+    const double getOperatingFlowRate() const;
+
+    void setOperatingFlowRate(const double &operatingFlowRate);
+
+    const double getOperatingHead() const;
+
+    void setOperatingHead(const double &operatingHead);
+
+    const double getMotorEfficiency() const;
+
+    void setMotorEfficiency(const double &motorEfficiency);
+
+    const std::string getMotorEfficiencyClass() const;
+
+    void setMotorEfficiencyClass(const std::string &motorEfficiencyClass);
+
+    const std::string getComponentId() const;
+
+    void setComponentId(const std::string &componentId);
+    
+    const int getMotorRatedVoltage() const;
+
+    void setMotorRatedVoltage(const int &motorRatedVoltage);
+
+    const bool getSpare() const;
+
+    void setSpare(const bool &spare);
+
 
     bool isOutOfService() const;
 
@@ -214,21 +261,18 @@ public:
 
 
 private:
-    std::string manufacturer, model, serialNumber, type, status, pumpType, radialBearingType, thrustBearingType;
+    std::string manufacturer, model, serialNumber, status, pumpType, radialBearingType, thrustBearingType, motorEfficiencyClass, componentId;
     std::string shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass;
     std::string flangeConnectionSize;
 
-    int numShafts, speed, numStages, yearlyOperatingHours, yearInstalled, finalMotorRpm;
+    int speed, numStages, yearlyOperatingHours, yearInstalled, finalMotorRpm, motorRatedVoltage;
 
-    double inletDiameter, weight, outletDiameter, percentageOfSchedule, dailyPumpCapacity,
-            measuredPumpCapacity, pumpPerformance;
-    double staticSuctionHead, staticDischargeHead, fluidDensity, lengthOfDischargePipe,
-            pipeDesignFrictionLosses, maxWorkingPressure;
-    double maxAmbientTemperature, maxSuctionLift, displacement, startingTorque, ratedSpeed,
-            shaftDiameter, impellerDiameter;
-    double efficiency, output60Hz, minFlowSize, pumpSize;
+    double inletDiameter, outletDiameter, designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, operatingFlowRate, operatingHead, motorEfficiency;
+    double staticSuctionHead, staticDischargeHead, fluidDensity, maxWorkingPressure;
+    double maxAmbientTemperature, maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter;
+    double efficiency, lineFrequency, minFlowSize, pumpSize;
 
-    bool outOfService;
+    bool outOfService, spare;
 
     int id; // used for the database
 
