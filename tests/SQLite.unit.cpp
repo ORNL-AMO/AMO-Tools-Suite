@@ -1424,7 +1424,7 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         CHECK(result.getMotorFullLoadAmps() == expected.getMotorFullLoadAmps());
         CHECK(result.getOperatingFlowRate() == expected.getOperatingFlowRate());
         CHECK(result.getOperatingHead() == expected.getOperatingHead());
-        CHECK(result.getMotorEfficiency() == expected.getPumpSize());
+        CHECK(result.getMotorEfficiency() == expected.getMotorEfficiency());
         CHECK(result.getOutOfService() == expected.getOutOfService());
         CHECK(result.getSpare() == expected.getSpare());
         CHECK(result.getId() == expected.getId());
