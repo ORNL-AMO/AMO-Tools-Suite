@@ -4,31 +4,102 @@
 
 #include "calculator/pump/PumpData.h"
 
-PumpData::PumpData(std::string manufacturer, std::string model, std::string type, std::string serialNumber,
-                   std::string status,  std::string pumpType, std::string radialBearingType, std::string thrustBearingType,
-                   std::string shaftOrientation, std::string shaftSealType, std::string fluidType, std::string priority,
-                   std::string driveType, std::string flangeConnectionClass, std::string flangeConnectionSize,
-                   int numShafts, int speed, int numStages,  int yearlyOperatingHours, int yearInstalled,
-                   int finalMotorRpm, double inletDiameter, double weight, double outletDiameter,
-                   double percentageOfSchedule, double dailyPumpCapacity, double measuredPumpCapacity,
-                   double pumpPerformance, double staticSuctionHead, double staticDischargeHead, double fluidDensity,
-                   double lengthOfDischargePipe, double pipeDesignFrictionLosses, double maxWorkingPressure,
-                   double maxAmbientTemperature, double maxSuctionLift, double displacement, double startingTorque,
-                   double ratedSpeed, double shaftDiameter, double impellerDiameter, double efficiency,
-                   double output60Hz, double minFlowSize, double pumpSize, bool outOfService)
-        : manufacturer(std::move(manufacturer)), model(std::move(model)), type(std::move(type)), serialNumber(std::move(serialNumber)),
-          status(std::move(status)),  pumpType(std::move(pumpType)), radialBearingType(std::move(radialBearingType)),
-          thrustBearingType(std::move(thrustBearingType)), shaftOrientation(std::move(shaftOrientation)), shaftSealType(std::move(shaftSealType)),
-          fluidType(std::move(fluidType)), priority(std::move(priority)), driveType(std::move(driveType)), flangeConnectionClass(std::move(flangeConnectionClass)),
-          flangeConnectionSize(std::move(flangeConnectionSize)), numShafts(numShafts), speed(speed), numStages(numStages),
-          yearlyOperatingHours(yearlyOperatingHours), yearInstalled(yearInstalled), finalMotorRpm(finalMotorRpm),
-          inletDiameter(inletDiameter), weight(weight), outletDiameter(outletDiameter), percentageOfSchedule(percentageOfSchedule), dailyPumpCapacity(dailyPumpCapacity),
-          measuredPumpCapacity(measuredPumpCapacity), pumpPerformance(pumpPerformance), staticSuctionHead(staticSuctionHead),
-          staticDischargeHead(staticDischargeHead), fluidDensity(fluidDensity), lengthOfDischargePipe(lengthOfDischargePipe),
-          pipeDesignFrictionLosses(pipeDesignFrictionLosses),  maxWorkingPressure(maxWorkingPressure),
-          maxAmbientTemperature(maxAmbientTemperature), maxSuctionLift(maxSuctionLift),  displacement(displacement),
-          startingTorque(startingTorque), ratedSpeed(ratedSpeed), shaftDiameter(shaftDiameter), impellerDiameter(impellerDiameter),
-          efficiency(efficiency), output60Hz(output60Hz), minFlowSize(minFlowSize), pumpSize(pumpSize), outOfService(outOfService)
+PumpData::PumpData(std::string manufacturer, 
+             std::string model, 
+             std::string serialNumber,
+             std::string status, 
+             std::string pumpType, 
+             std::string radialBearingType,  
+             std::string thrustBearingType,
+             std::string shaftOrientation, 
+             std::string shaftSealType, 
+             std::string fluidType, 
+             std::string priority,
+             std::string driveType, 
+             std::string flangeConnectionClass, 
+             std::string flangeConnectionSize,
+             std::string componentId,
+             std::string motorEfficiencyClass,
+             int speed, 
+             int numStages,  
+             int yearlyOperatingHours, 
+             int yearInstalled, 
+             int finalMotorRpm,
+             int motorRatedVoltage,
+             double inletDiameter, 
+             double outletDiameter,
+             double staticSuctionHead,
+             double staticDischargeHead, 
+             double fluidDensity, 
+             double maxWorkingPressure, 
+             double maxAmbientTemperature,
+             double maxSuctionLift,  
+             double displacement, 
+             double startingTorque, 
+             double ratedSpeed,
+             double impellerDiameter, 
+             double efficiency, 
+             double lineFrequency, 
+             double minFlowSize,
+             double pumpSize,  
+             double designHead,
+             double designFlow,
+             double designEfficiency,
+             double motorRatedPower,
+             double motorFullLoadAmps,
+             double operatingFlowRate,
+             double operatingHead,
+             double motorEfficiency,
+             bool outOfService,
+             bool spare)
+        : manufacturer(std::move(manufacturer)), 
+          model(std::move(model)), 
+          serialNumber(std::move(serialNumber)),
+          status(std::move(status)),  
+          pumpType(std::move(pumpType)), 
+          radialBearingType(std::move(radialBearingType)),
+          thrustBearingType(std::move(thrustBearingType)), 
+          shaftOrientation(std::move(shaftOrientation)), 
+          shaftSealType(std::move(shaftSealType)),
+          fluidType(std::move(fluidType)), 
+          priority(std::move(priority)), 
+          driveType(std::move(driveType)), 
+          flangeConnectionClass(std::move(flangeConnectionClass)),
+          flangeConnectionSize(std::move(flangeConnectionSize)), 
+          componentId(std::move(componentId)), 
+          motorEfficiencyClass(std::move(motorEfficiencyClass)), 
+          speed(speed), 
+          numStages(numStages),
+          yearlyOperatingHours(yearlyOperatingHours), 
+          yearInstalled(yearInstalled), 
+          finalMotorRpm(finalMotorRpm),
+          motorRatedVoltage(motorRatedVoltage),
+          inletDiameter(inletDiameter), 
+          outletDiameter(outletDiameter),
+          staticSuctionHead(staticSuctionHead),
+          staticDischargeHead(staticDischargeHead), 
+          fluidDensity(fluidDensity), 
+          maxWorkingPressure(maxWorkingPressure),
+          maxAmbientTemperature(maxAmbientTemperature),
+          maxSuctionLift(maxSuctionLift),  
+          displacement(displacement),
+          startingTorque(startingTorque),
+          ratedSpeed(ratedSpeed), 
+          impellerDiameter(impellerDiameter),
+          efficiency(efficiency), 
+          lineFrequency(lineFrequency), 
+          minFlowSize(minFlowSize), 
+          pumpSize(pumpSize), 
+          designHead(designHead), 
+          designFlow(designFlow), 
+          designEfficiency(designEfficiency), 
+          motorRatedPower(motorRatedPower), 
+          motorFullLoadAmps(motorFullLoadAmps), 
+          operatingFlowRate(operatingFlowRate), 
+          operatingHead(operatingHead), 
+          motorEfficiency(motorEfficiency), 
+          outOfService(outOfService),
+          spare(spare)
 {}
 
 
@@ -38,6 +109,14 @@ const bool PumpData::getOutOfService() const {
 
 void PumpData::setOutOfService(const bool &outOfService)  {
     PumpData::outOfService = outOfService;
+}
+
+const bool PumpData::getSpare() const {
+    return spare;
+}
+
+void PumpData::setSpare(const bool &spare)  {
+    PumpData::spare = spare;
 }
 
 const double PumpData::getInletDiameter() const {
@@ -56,37 +135,6 @@ void PumpData::setOutletDiameter(const double &outletDiameter) {
     PumpData::outletDiameter = outletDiameter;
 }
 
-const double PumpData::getPercentageOfSchedule() const {
-    return percentageOfSchedule;
-}
-
-void PumpData::setPercentageOfSchedule(const double &percentageOfSchedule) {
-    PumpData::percentageOfSchedule = percentageOfSchedule;
-}
-
-const double PumpData::getDailyPumpCapacity() const {
-    return dailyPumpCapacity;
-}
-
-void PumpData::setDailyPumpCapacity(const double &dailyPumpCapacity) {
-    PumpData::dailyPumpCapacity = dailyPumpCapacity;
-}
-
-const double PumpData::getMeasuredPumpCapacity() const {
-    return measuredPumpCapacity;
-}
-
-void PumpData::setMeasuredPumpCapacity(const double &measuredPumpCapacity) {
-    PumpData::measuredPumpCapacity = measuredPumpCapacity;
-}
-
-const double PumpData::getPumpPerformance() const {
-    return pumpPerformance;
-}
-
-void PumpData::setPumpPerformance(const double &pumpPerformance) {
-    PumpData::pumpPerformance = pumpPerformance;
-}
 
 const double PumpData::getStaticSuctionHead() const {
     return staticSuctionHead;
@@ -110,22 +158,6 @@ const double PumpData::getFluidDensity() const {
 
 void PumpData::setFluidDensity(const double &fluidDensity) {
     PumpData::fluidDensity = fluidDensity;
-}
-
-const double PumpData::getLengthOfDischargePipe() const {
-    return lengthOfDischargePipe;
-}
-
-void PumpData::setLengthOfDischargePipe(const double &lengthOfDischargePipe) {
-    PumpData::lengthOfDischargePipe = lengthOfDischargePipe;
-}
-
-const double PumpData::getPipeDesignFrictionLosses() const {
-    return pipeDesignFrictionLosses;
-}
-
-void PumpData::setPipeDesignFrictionLosses(const double &pipeDesignFrictionLosses) {
-    PumpData::pipeDesignFrictionLosses = pipeDesignFrictionLosses;
 }
 
 const double PumpData::getMaxWorkingPressure() const {
@@ -192,13 +224,7 @@ void PumpData::setPumpSize(const double &pumpSize)  {
 	PumpData::pumpSize = pumpSize;
 }
 
-const double PumpData::getShaftDiameter() const {
-    return shaftDiameter;
-}
 
-void PumpData::setShaftDiameter(const double &shaftDiameter)  {
-	PumpData::shaftDiameter = shaftDiameter;
-}
 
 const double PumpData::getImpellerDiameter() const {
     return impellerDiameter;
@@ -216,13 +242,83 @@ void PumpData::setEfficiency(const double &efficiency)  {
 	PumpData::efficiency = efficiency;
 }
 
-const double PumpData::getOutput60Hz() const {
-    return output60Hz;
+const double PumpData::getLineFrequency() const {
+    return lineFrequency;
 }
 
-void PumpData::setOutput60Hz(const double &output60Hz)  {
-	PumpData::output60Hz = output60Hz;
+void PumpData::setLineFrequency(const double &lineFrequency)  {
+	PumpData::lineFrequency = lineFrequency;
 }
+
+
+const double PumpData::getDesignHead() const {
+    return designHead;
+}
+
+void PumpData::setDesignHead(const double &designHead)  {
+	PumpData::designHead = designHead;
+}
+
+const double PumpData::getDesignFlow() const {
+    return designFlow;
+}
+
+void PumpData::setDesignFlow(const double &designFlow)  {
+	PumpData::designFlow = designFlow;
+}
+
+const double PumpData::getDesignEfficiency() const {
+    return designFlow;
+}
+
+void PumpData::setDesignEfficiency(const double &designEfficiency)  {
+	PumpData::designEfficiency = designEfficiency;
+}
+
+
+const double PumpData::getMotorRatedPower() const {
+    return motorRatedPower;
+}
+
+void PumpData::setMotorRatedPower(const double &motorRatedPower)  {
+	PumpData::motorRatedPower = motorRatedPower;
+}
+
+
+const double PumpData::getMotorFullLoadAmps() const {
+    return motorFullLoadAmps;
+}
+
+void PumpData::setMotorFullLoadAmps(const double &motorFullLoadAmps)  {
+	PumpData::motorFullLoadAmps = motorFullLoadAmps;
+}
+
+
+const double PumpData::getOperatingFlowRate() const {
+    return operatingFlowRate;
+}
+
+void PumpData::setOperatingFlowRate(const double &operatingFlowRate)  {
+	PumpData::operatingFlowRate = operatingFlowRate;
+}
+
+
+const double PumpData::getOperatingHead() const {
+    return operatingHead;
+}
+
+void PumpData::setOperatingHead(const double &operatingHead)  {
+	PumpData::operatingHead = operatingHead;
+}
+
+const double PumpData::getMotorEfficiency() const {
+    return motorEfficiency;
+}
+
+void PumpData::setMotorEfficiency(const double &motorEfficiency)  {
+	PumpData::motorEfficiency = motorEfficiency;
+}
+
 
 const int PumpData::getSpeed() const {
     return speed;
@@ -230,14 +326,6 @@ const int PumpData::getSpeed() const {
 
 void PumpData::setSpeed(const int &speed)  {
 	PumpData::speed = speed;
-}
-
-const int PumpData::getNumShafts() const {
-    return numShafts;
-}
-
-void PumpData::setNumShafts(const int &numShafts)  {
-	PumpData::numShafts = numShafts;
 }
 
 const int PumpData::getNumStages() const {
@@ -352,14 +440,6 @@ void PumpData::setFlangeConnectionSize(const std::string &flangeConnectionSize) 
 	PumpData::flangeConnectionSize = flangeConnectionSize;
 }
 
-const std::string PumpData::getType() const {
-    return type;
-}
-
-void PumpData::setType(const std::string &type)  {
-	PumpData::type = type;
-}
-
 const std::string PumpData::getManufacturer() const {
     return manufacturer;
 }
@@ -374,6 +454,32 @@ const std::string PumpData::getModel() const {
 
 void PumpData::setModel(const std::string &model)  {
 	PumpData::model = model;
+}
+
+
+const std::string PumpData::getMotorEfficiencyClass() const {
+    return motorEfficiencyClass;
+}
+
+void PumpData::setMotorEfficiencyClass(const std::string &motorEfficiencyClass)  {
+	PumpData::motorEfficiencyClass = motorEfficiencyClass;
+}
+
+
+const std::string PumpData::getComponentId() const {
+    return componentId;
+}
+
+void PumpData::setComponentId(const std::string &componentId)  {
+	PumpData::componentId = componentId;
+}
+
+const int PumpData::getMotorRatedVoltage() const {
+    return motorRatedVoltage;
+}
+
+void PumpData::setMotorRatedVoltage(const int &motorRatedVoltage)  {
+	PumpData::motorRatedVoltage = motorRatedVoltage;
 }
 
 const std::string PumpData::getPriority() const {
@@ -392,13 +498,6 @@ void PumpData::setFinalMotorRpm(int finalMotorRpm)  {
 	PumpData::finalMotorRpm = finalMotorRpm;
 }
 
-double PumpData::getWeight() const {
-    return weight;
-}
-
-void PumpData::setWeight(double weight)  {
-	PumpData::weight = weight;
-}
 
 bool PumpData::isOutOfService() const {
     return outOfService;

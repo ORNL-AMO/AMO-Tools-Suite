@@ -117,7 +117,6 @@ void SetPumpData(Local<Object> &obj, const PumpData &pump)
     SetObj(obj, "id", pump.getId());
     SetObj(obj, "manufacturer", pump.getManufacturer());
     SetObj(obj, "model", pump.getModel());
-    SetObj(obj, "type", pump.getType());
     SetObj(obj, "serialNumber", pump.getSerialNumber());
     SetObj(obj, "status", pump.getStatus());
     SetObj(obj, "pumpType", pump.getPumpType());
@@ -130,37 +129,40 @@ void SetPumpData(Local<Object> &obj, const PumpData &pump)
     SetObj(obj, "driveType", pump.getDriveType());
     SetObj(obj, "flangeConnectionClass", pump.getFlangeConnectionClass());
     SetObj(obj, "flangeConnectionSize", pump.getFlangeConnectionSize());
-    SetObj(obj, "numShafts", pump.getNumShafts());
+    SetObj(obj, "componentId", pump.getComponentId());
+    SetObj(obj, "motorEfficiencyClass", pump.getMotorEfficiencyClass());
     SetObj(obj, "speed", pump.getSpeed());
     SetObj(obj, "numStages", pump.getNumStages());
     SetObj(obj, "yearlyOperatingHours", pump.getYearlyOperatingHours());
     SetObj(obj, "yearInstalled", pump.getYearInstalled());
     SetObj(obj, "finalMotorRpm", pump.getFinalMotorRpm());
+    SetObj(obj, "motorRatedVoltage", pump.getMotorRatedVoltage());
     SetObj(obj, "inletDiameter", pump.getInletDiameter());
-    SetObj(obj, "weight", pump.getWeight());
     SetObj(obj, "outletDiameter", pump.getOutletDiameter());
-    SetObj(obj, "percentageOfSchedule", pump.getPercentageOfSchedule());
-    SetObj(obj, "dailyPumpCapacity", pump.getDailyPumpCapacity());
-    SetObj(obj, "measuredPumpCapacity", pump.getMeasuredPumpCapacity());
-    SetObj(obj, "pumpPerformance", pump.getPumpPerformance());
     SetObj(obj, "staticSuctionHead", pump.getStaticSuctionHead());
     SetObj(obj, "staticDischargeHead", pump.getStaticDischargeHead());
     SetObj(obj, "fluidDensity", pump.getFluidDensity());
-    SetObj(obj, "lengthOfDischargePipe", pump.getLengthOfDischargePipe());
-    SetObj(obj, "pipeDesignFrictionLosses", pump.getPipeDesignFrictionLosses());
     SetObj(obj, "maxWorkingPressure", pump.getMaxWorkingPressure());
     SetObj(obj, "maxAmbientTemperature", pump.getMaxAmbientTemperature());
     SetObj(obj, "maxSuctionLift", pump.getMaxSuctionLift());
     SetObj(obj, "displacement", pump.getDisplacement());
     SetObj(obj, "startingTorque", pump.getStartingTorque());
     SetObj(obj, "ratedSpeed", pump.getRatedSpeed());
-    SetObj(obj, "shaftDiameter", pump.getShaftDiameter());
     SetObj(obj, "impellerDiameter", pump.getImpellerDiameter());
     SetObj(obj, "efficiency", pump.getEfficiency());
-    SetObj(obj, "output60Hz", pump.getOutput60Hz());
+    SetObj(obj, "lineFrequency", pump.getLineFrequency());
     SetObj(obj, "minFlowSize", pump.getMinFlowSize());
     SetObj(obj, "pumpSize", pump.getPumpSize());
+    SetObj(obj, "designHead", pump.getDesignHead());
+    SetObj(obj, "designFlow", pump.getDesignFlow());
+    SetObj(obj, "designEfficiency", pump.getDesignEfficiency());
+    SetObj(obj, "motorRatedPower", pump.getMotorRatedPower());
+    SetObj(obj, "motorFullLoadAmps", pump.getMotorFullLoadAmps());
+    SetObj(obj, "operatingFlowRate", pump.getOperatingFlowRate());
+    SetObj(obj, "operatingHead", pump.getOperatingHead());
+    SetObj(obj, "motorEfficiency", pump.getMotorEfficiency());
     SetObj(obj, "outOfService", pump.getOutOfService());
+    SetObj(obj, "spare", pump.getSpare());
 }
 
 // when creating sqlite, add table that has history, put in tools-suite number and the date so that we know where db's came from
@@ -1072,17 +1074,32 @@ NAN_METHOD(insertPump)
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
     PumpData pump(
-        GetStr("manufacturer"), GetStr("model"), GetStr("type"), GetStr("serialNumber"), GetStr("status"),
+        GetStr("manufacturer"), GetStr("model"), GetStr("serialNumber"), GetStr("status"),
         GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"), GetStr("shaftOrientation"),
         GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"), GetStr("driveType"),
-        GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"), Get("numShafts"), Get("speed"),
-        Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
-        Get("inletDiameter"), Get("weight"), Get("outletDiameter"), Get("percentageOfSchedule"),
-        Get("dailyPumpCapacity"), Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"),
-        Get("staticDischargeHead"), Get("fluidDensity"), Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"),
+        GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"),
+        GetStr("componentId"), GetStr("motorEfficiencyClass"),
+        Get("speed"),
+        Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), 
+        Get("finalMotorRpm"),
+        Get("motorRatedVoltage"),
+        Get("inletDiameter"), Get("outletDiameter"),
+        Get("staticSuctionHead"),
+        Get("staticDischargeHead"), Get("fluidDensity"),
         Get("maxWorkingPressure"), Get("maxAmbientTemperature"), Get("maxSuctionLift"), Get("displacement"),
-        Get("startingTorque"), Get("ratedSpeed"), Get("shaftDiameter"), Get("impellerDiameter"),
-        Get("efficiency"), Get("output60Hz"), Get("minFlowSize"), Get("pumpSize"), Get("outOfService"));
+        Get("startingTorque"), Get("ratedSpeed"), Get("impellerDiameter"),
+        Get("efficiency"), Get("lineFrequency"), Get("minFlowSize"), Get("pumpSize"), 
+        Get("designHead"),
+        Get("designFlow"),
+        Get("designEfficiency"),
+        Get("motorRatedPower"),
+        Get("motorFullLoadAmps"),
+        Get("operatingFlowRate"),
+        Get("operatingHead"),
+        Get("motorEfficiency"),
+        Get("outOfService"),
+        Get("spare")
+        );
     bool success = sql->insertPumpData(pump);
     info.GetReturnValue().Set(success);
 };
@@ -1100,17 +1117,29 @@ NAN_METHOD(updatePump)
     inp = Nan::To<Object>(info[0]).ToLocalChecked();
 
     PumpData pump(
-        GetStr("manufacturer"), GetStr("model"), GetStr("type"), GetStr("serialNumber"), GetStr("status"),
+        GetStr("manufacturer"), GetStr("model"), GetStr("serialNumber"), GetStr("status"),
         GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"),
         GetStr("shaftOrientation"), GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"),
-        GetStr("driveType"), GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"), Get("numShafts"),
+        GetStr("driveType"), GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"),
+        GetStr("componentId"), GetStr("motorEfficiencyClass"),
         Get("speed"), Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
-        Get("inletDiameter"), Get("weight"), Get("outletDiameter"), Get("percentageOfSchedule"), Get("dailyPumpCapacity"),
-        Get("measuredPumpCapacity"), Get("pumpPerformance"), Get("staticSuctionHead"), Get("staticDischargeHead"),
-        Get("fluidDensity"), Get("lengthOfDischargePipe"), Get("pipeDesignFrictionLosses"), Get("maxWorkingPressure"),
+        Get("motorRatedVoltage"),
+        Get("inletDiameter"), Get("outletDiameter"),
+        Get("staticSuctionHead"), Get("staticDischargeHead"),
+        Get("fluidDensity"), Get("maxWorkingPressure"),
         Get("maxAmbientTemperature"), Get("maxSuctionLift"), Get("displacement"), Get("startingTorque"),
-        Get("ratedSpeed"), Get("shaftDiameter"), Get("impellerDiameter"), Get("efficiency"),
-        Get("output60Hz"), Get("minFlowSize"), Get("pumpSize"), Get("outOfService"));
+        Get("ratedSpeed"), Get("impellerDiameter"), Get("efficiency"),
+        Get("lineFrequency"), Get("minFlowSize"), Get("pumpSize"),
+        Get("designHead"),
+        Get("designFlow"),
+        Get("designEfficiency"),
+        Get("motorRatedPower"),
+        Get("motorFullLoadAmps"),
+        Get("operatingFlowRate"),
+        Get("operatingHead"),
+        Get("motorEfficiency"),
+        Get("outOfService"),
+        Get("spare"));
 
     pump.setId(Get("id"));
     bool success = sql->updatePumpData(pump);

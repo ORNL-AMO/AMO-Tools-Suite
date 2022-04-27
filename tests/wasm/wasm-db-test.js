@@ -294,7 +294,6 @@ function pumpDataLog(item){
     logMessage(item.getId() + ', ' +
         item.getManufacturer() + ', ' +
         item.getModel() + ', ' +
-        item.getType() + ', ' +
         item.getSerialNumber() + ', ' +
         item.getStatus() + ', ' +
         item.getRadialBearingType() + ', ' +
@@ -306,81 +305,119 @@ function pumpDataLog(item){
         item.getDriveType() + ', ' +
         item.getFlangeConnectionClass() + ', ' +
         item.getFlangeConnectionSize() + ', ' +
-        item.getNumShafts() + ', ' +
+        item.getComponentId() + ', ' +
+        item.getMotorEfficiencyClass() + ', ' +
         item.getSpeed() + ', ' +
         item.getNumStages() + ', ' +
         item.getYearlyOperatingHours() + ', ' +
         item.getYearInstalled() + ', ' +
         item.getPumpType() + ', ' +
         item.getFinalMotorRpm() + ', ' +
+        item.getMotorRatedVoltage() + ', ' +
         item.getInletDiameter() + ', ' +
-        item.getWeight() + ', ' +
         item.getOutletDiameter() + ', ' +
-        item.getPercentageOfSchedule() + ', ' +
-        item.getDailyPumpCapacity() + ', ' +
-        item.getMeasuredPumpCapacity() + ', ' +
-        item.getPumpPerformance() + ', ' +
         item.getStaticSuctionHead() + ', ' +
         item.getStaticDischargeHead() + ', ' +
         item.getFluidDensity() + ', ' +
-        item.getLengthOfDischargePipe() + ', ' +
-        item.getPipeDesignFrictionLosses() + ', ' +
         item.getMaxWorkingPressure() + ', ' +
         item.getMaxAmbientTemperature() + ', ' +
         item.getMaxSuctionLift() + ', ' +
         item.getDisplacement() + ', ' +
         item.getStartingTorque() + ', ' +
         item.getRatedSpeed() + ', ' +
-        item.getShaftDiameter() + ', ' +
         item.getImpellerDiameter() + ', ' +
         item.getEfficiency() + ', ' +
-        item.getOutput60Hz() + ', ' +
+        item.getLineFrequency() + ', ' +
         item.getMinFlowSize() + ', ' +
         item.getPumpSize() + ', ' +
-        item.getOutOfService());
+        item.getDesignHead() + ', ' +
+        item.getDesignFlow() + ', ' +
+        item.getMotorRatedPower() + ', ' +
+        item.getMotorFullLoadAmps() + ', ' +
+        item.getOperatingFlowRate() + ', ' +
+        item.getOperatingHead() + ', ' +
+        item.getMotorEfficiency() + ', ' +
+        item.getOutOfService() + ', ' +
+        item.getSpare());
 }
 
 function pumpData(sql){
     logMessage('Pump Data', true);
 
     let pump = {
-        id: 2, manufacturer: "manufacturer2", model: "model2", type: "type2", serialNumber: "serialNumber2",
+        id: 2, manufacturer: "manufacturer2", model: "model2", serialNumber: "serialNumber2",
         status: "status2",  pumpType: "pumpType2", radialBearingType: "radialBearingType2", thrustBearingType: "thrustBearingType2",
         shaftOrientation: "shaftOrientation2", shaftSealType: "shaftSealType2", fluidType: "fluidType2", priority: "priority2",
         driveType: "driveType2", flangeConnectionClass: "flangeConnectionClass2", flangeConnectionSize: "flangeConnectionSize2",
-        numShafts: 1, speed: 2, numStages: 1,  yearlyOperatingHours: 9000, yearInstalled: 2018,
-        finalMotorRpm: 1780, inletDiameter: 5, weight: 90, outletDiameter: 6,
-        percentageOfSchedule: 89, dailyPumpCapacity: 90, measuredPumpCapacity: 85,
-        pumpPerformance: 99, staticSuctionHead: 15, staticDischargeHead: 11, fluidDensity: 13,
-        lengthOfDischargePipe: 14, pipeDesignFrictionLosses: 0.5, maxWorkingPressure: 250,
-        maxAmbientTemperature: 85, maxSuctionLift: 1.5, displacement: 600, startingTorque: 400,
-        ratedSpeed: 70, shaftDiameter: 15, impellerDiameter: 20, efficiency: 88,
-        output60Hz: 15, minFlowSize: 15, pumpSize: 15, outOfService: 1
+        componentId: "componentId2", motorEfficiencyClass: "motorEfficiencyClass2",
+        speed: 2, 
+        numStages: 1,  
+        yearlyOperatingHours: 9000, 
+        yearInstalled: 2018,
+        finalMotorRpm: 1780, 
+        motorRatedVoltage: 33,
+        inletDiameter: 5, 
+        outletDiameter: 6,
+        staticSuctionHead: 15, 
+        staticDischargeHead: 11, 
+        fluidDensity: 13,
+        maxWorkingPressure: 250,
+        maxAmbientTemperature: 85, 
+        maxSuctionLift: 1.5, 
+        displacement: 600, 
+        startingTorque: 400,
+        ratedSpeed: 70, 
+        impellerDiameter: 20, 
+        efficiency: 88,
+        lineFrequency: 15, 
+        minFlowSize: 15, 
+        pumpSize: 15, 
+        designHead: 33,
+        designFlow: 33,
+        designEfficiency: 33,
+        motorRatedPower: 33,
+        motorFullLoadAmps: 33,
+        operatingFlowRate: 33,
+        operatingHead: 33,
+        motorEfficiency: 33,
+        outOfService: 1,
+        spare: 1,
     };
 
-    let item = new Module.PumpData(pump.manufacturer, pump.model, pump.type, pump.serialNumber,
+    let item = new Module.PumpData(pump.manufacturer, pump.model, pump.serialNumber,
         pump.status, pump.pumpType, pump.radialBearingType,  pump.thrustBearingType,
         pump.shaftOrientation, pump.shaftSealType, pump.fluidType, pump.priority,
         pump.driveType, pump.flangeConnectionClass, pump.flangeConnectionSize,
-        pump.numShafts, pump.speed, pump.numStages,  pump.yearlyOperatingHours, pump.yearInstalled, pump.finalMotorRpm,
-        pump.inletDiameter, pump.weight, pump.outletDiameter, pump.percentageOfSchedule,
-        pump.dailyPumpCapacity, pump.measuredPumpCapacity, pump.pumpPerformance, pump.staticSuctionHead,
-        pump.staticDischargeHead, pump.fluidDensity, pump.lengthOfDischargePipe,
-        pump.pipeDesignFrictionLosses,  pump.maxWorkingPressure, pump.maxAmbientTemperature,
+        pump.componentId, pump.motorEfficiencyClass,
+        pump.speed, pump.numStages,  pump.yearlyOperatingHours, pump.yearInstalled, pump.finalMotorRpm, pump.motorRatedVoltage,
+        pump.inletDiameter, pump.outletDiameter,
+        pump.staticSuctionHead,
+        pump.staticDischargeHead, pump.fluidDensity, 
+        pump.maxWorkingPressure, pump.maxAmbientTemperature,
         pump.maxSuctionLift,  pump.displacement, pump.startingTorque, pump.ratedSpeed,
-        pump.shaftDiameter, pump.impellerDiameter, pump.efficiency, pump.output60Hz, pump.minFlowSize,
-        pump.pumpSize,  pump.outOfService);
+        pump.impellerDiameter, pump.efficiency, pump.lineFrequency, pump.minFlowSize,
+        pump.pumpSize,  
+        pump.designHead,
+        pump.designFlow,
+        pump.designEfficiency,
+        pump.motorRatedPower,
+        pump.motorFullLoadAmps,
+        pump.operatingFlowRate,
+        pump.operatingHead,
+        pump.motorEfficiency,
+        pump.outOfService,
+        pump.spare);
     item.setId(pump.id);
     testNumberValue(sql.insertPumpData(item), true, "Insert");
 
     let listItems = sql.getPumpData();
     let newId = listItems.get(listItems.size()-1).getId();
     item.setId(newId);
-    item.setWeight(999.666);
+    item.setSpeed(5);
     testNumberValue(sql.updatePumpData(item), true, "Update");
 
     let newItem = sql.getPumpDataById(newId);
-    testNumberValue(newItem.getWeight(), 999.666, "Select By ID");
+    testNumberValue(newItem.getSpeed(), 5, "Select By ID");
 
     testNumberValue(sql.deletePumpData(newId), true, "Delete");
 
