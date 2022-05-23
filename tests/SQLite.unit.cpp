@@ -361,6 +361,9 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 			33,
 			33,
 			33,
+            33,
+            33,
+            33,
 			1,
 			1);
 
@@ -412,6 +415,9 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 			33,
 			33,
 			33,
+            33,
+            33,
+            33,
 			1,
 			1);
 
@@ -584,6 +590,9 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 			33,
 			33,
 			33,
+            33,
+            33,
+            33,
 			1,
 			1);
 
@@ -1424,6 +1433,9 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         CHECK(result.getMotorFullLoadAmps() == expected.getMotorFullLoadAmps());
         CHECK(result.getOperatingFlowRate() == expected.getOperatingFlowRate());
         CHECK(result.getOperatingHead() == expected.getOperatingHead());
+        CHECK(result.getMeasuredCurrent() == expected.getMeasuredCurrent());
+        CHECK(result.getMeasuredPower() == expected.getMeasuredPower());
+        CHECK(result.getMeasuredVoltage() == expected.getMeasuredVoltage());
         CHECK(result.getMotorEfficiency() == expected.getMotorEfficiency());
         CHECK(result.getOutOfService() == expected.getOutOfService());
         CHECK(result.getSpare() == expected.getSpare());
@@ -1484,6 +1496,9 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
 			    33,
 			    33,
 			    33,
+                33,
+                33,
+                33,
 			    1,
 			    1
                 );
@@ -1527,6 +1542,9 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
 			    33,
 			    33,
 			    33,
+                33,
+                33,
+                33,
 			    1,
 			    1);
 

@@ -336,6 +336,9 @@ function pumpDataLog(item){
         item.getMotorFullLoadAmps() + ', ' +
         item.getOperatingFlowRate() + ', ' +
         item.getOperatingHead() + ', ' +
+        item.getMeasuredCurrent() + ', ' +
+        item.getMeasuredPower() + ', ' +
+        item.getMeasuredVoltage() + ', ' +
         item.getMotorEfficiency() + ', ' +
         item.getOutOfService() + ', ' +
         item.getSpare());
@@ -379,6 +382,9 @@ function pumpData(sql){
         motorFullLoadAmps: 33,
         operatingFlowRate: 33,
         operatingHead: 33,
+        measuredCurrent: 33,
+        measuredPower: 33,
+        measuredVoltage: 33,
         motorEfficiency: 33,
         outOfService: 1,
         spare: 1,
@@ -404,6 +410,9 @@ function pumpData(sql){
         pump.motorFullLoadAmps,
         pump.operatingFlowRate,
         pump.operatingHead,
+        pump.measuredCurrent,
+        pump.measuredPower,
+        pump.measuredVoltage,
         pump.motorEfficiency,
         pump.outOfService,
         pump.spare);

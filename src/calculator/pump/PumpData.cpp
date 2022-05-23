@@ -49,6 +49,9 @@ PumpData::PumpData(std::string manufacturer,
              double motorFullLoadAmps,
              double operatingFlowRate,
              double operatingHead,
+             double measuredCurrent,
+             double measuredPower,
+             double measuredVoltage,
              double motorEfficiency,
              bool outOfService,
              bool spare)
@@ -97,6 +100,9 @@ PumpData::PumpData(std::string manufacturer,
           motorFullLoadAmps(motorFullLoadAmps), 
           operatingFlowRate(operatingFlowRate), 
           operatingHead(operatingHead), 
+          measuredCurrent(measuredCurrent), 
+          measuredPower(measuredPower), 
+          measuredVoltage(measuredVoltage), 
           motorEfficiency(motorEfficiency), 
           outOfService(outOfService),
           spare(spare)
@@ -310,6 +316,31 @@ const double PumpData::getOperatingHead() const {
 void PumpData::setOperatingHead(const double &operatingHead)  {
 	PumpData::operatingHead = operatingHead;
 }
+
+const double PumpData::getMeasuredCurrent() const {
+    return measuredCurrent;
+}
+
+void PumpData::setMeasuredCurrent(const double &measuredCurrent)  {
+	PumpData::measuredCurrent = measuredCurrent;
+}
+
+const double PumpData::getMeasuredPower() const {
+    return measuredPower;
+}
+
+void PumpData::setMeasuredPower(const double &measuredPower)  {
+	PumpData::measuredPower = measuredPower;
+}
+
+const double PumpData::getMeasuredVoltage() const {
+    return measuredVoltage;
+}
+
+void PumpData::setMeasuredVoltage(const double &measuredVoltage)  {
+	PumpData::measuredVoltage = measuredVoltage;
+}
+
 
 const double PumpData::getMotorEfficiency() const {
     return motorEfficiency;

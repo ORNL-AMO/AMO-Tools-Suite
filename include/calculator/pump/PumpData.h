@@ -55,6 +55,9 @@ public:
              double motorFullLoadAmps,
              double operatingFlowRate,
              double operatingHead,
+             double measuredCurrent,
+             double measuredPower,
+             double measuredVoltage,
              double motorEfficiency,
              bool outOfService,
              bool spare
@@ -232,6 +235,18 @@ public:
 
     void setOperatingHead(const double &operatingHead);
 
+    const double getMeasuredCurrent() const;
+
+    void setMeasuredCurrent(const double &measuredCurrent);
+
+    const double getMeasuredPower() const;
+
+    void setMeasuredPower(const double &measuredPower);
+
+    const double getMeasuredVoltage() const;
+
+    void setMeasuredVoltage(const double &measuredVoltage);
+
     const double getMotorEfficiency() const;
 
     void setMotorEfficiency(const double &motorEfficiency);
@@ -252,7 +267,6 @@ public:
 
     void setSpare(const bool &spare);
 
-
     bool isOutOfService() const;
 
     int getId() const;
@@ -267,7 +281,7 @@ private:
 
     int speed, numStages, yearlyOperatingHours, yearInstalled, finalMotorRpm, motorRatedVoltage;
 
-    double inletDiameter, outletDiameter, designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, operatingFlowRate, operatingHead, motorEfficiency;
+    double inletDiameter, outletDiameter, designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency;
     double staticSuctionHead, staticDischargeHead, fluidDensity, maxWorkingPressure;
     double maxAmbientTemperature, maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter;
     double efficiency, lineFrequency, minFlowSize, pumpSize;

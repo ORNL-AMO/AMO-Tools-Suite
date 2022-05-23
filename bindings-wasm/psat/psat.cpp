@@ -59,6 +59,9 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             double, 
             double, 
             double, 
+            double, 
+            double,
+            double,
             bool,
             bool>()
             .function("getId", &PumpData::getId)
@@ -98,6 +101,9 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             .function("getMotorFullLoadAmps", &PumpData::getMotorFullLoadAmps)
             .function("getOperatingFlowRate", &PumpData::getOperatingFlowRate)
             .function("getOperatingHead", &PumpData::getOperatingHead)
+            .function("getMeasuredCurrent", &PumpData::getMeasuredCurrent)
+            .function("getMeasuredPower", &PumpData::getMeasuredPower)
+            .function("getMeasuredVoltage", &PumpData::getMeasuredVoltage)
             .function("getMotorEfficiency", &PumpData::getMotorEfficiency)
             .function("getSpare", &PumpData::getSpare)
             .function("getDriveType", &PumpData::getDriveType)
@@ -157,6 +163,9 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             .function("setMotorFullLoadAmps", &PumpData::setMotorFullLoadAmps)
             .function("setOperatingFlowRate", &PumpData::setOperatingFlowRate)
             .function("setOperatingHead", &PumpData::setOperatingHead)
+            .function("setMeasuredCurrent", &PumpData::setMeasuredCurrent)
+            .function("setMeasuredPower", &PumpData::setMeasuredPower)
+            .function("setMeasuredVoltage", &PumpData::setMeasuredVoltage)
             .function("setMotorEfficiency", &PumpData::setMotorEfficiency);
 
     register_vector<PumpData>("PumpDataV");

@@ -50,6 +50,9 @@ std::vector<PumpData> SQLite::get_default_pump_data() {
 				33,
 				33,
 				33,
+				33,
+				33,
+				33,
 				1,
 				1
 		      }	/*

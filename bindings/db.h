@@ -160,6 +160,9 @@ void SetPumpData(Local<Object> &obj, const PumpData &pump)
     SetObj(obj, "motorFullLoadAmps", pump.getMotorFullLoadAmps());
     SetObj(obj, "operatingFlowRate", pump.getOperatingFlowRate());
     SetObj(obj, "operatingHead", pump.getOperatingHead());
+    SetObj(obj, "measuredCurrent", pump.getMeasuredCurrent());
+    SetObj(obj, "measuredPower", pump.getMeasuredPower());
+    SetObj(obj, "measuredVoltage", pump.getMeasuredVoltage());
     SetObj(obj, "motorEfficiency", pump.getMotorEfficiency());
     SetObj(obj, "outOfService", pump.getOutOfService());
     SetObj(obj, "spare", pump.getSpare());
@@ -1096,6 +1099,9 @@ NAN_METHOD(insertPump)
         Get("motorFullLoadAmps"),
         Get("operatingFlowRate"),
         Get("operatingHead"),
+        Get("measuredCurrent"),
+        Get("measuredPower"),
+        Get("measuredVoltage"),
         Get("motorEfficiency"),
         Get("outOfService"),
         Get("spare")
@@ -1137,6 +1143,9 @@ NAN_METHOD(updatePump)
         Get("motorFullLoadAmps"),
         Get("operatingFlowRate"),
         Get("operatingHead"),
+        Get("measuredCurrent"),
+        Get("measuredPower"),
+        Get("measuredVoltage"),
         Get("motorEfficiency"),
         Get("outOfService"),
         Get("spare"));

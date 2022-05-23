@@ -646,9 +646,12 @@ std::vector<PumpData> SQLite::getPumpData() const
         auto const motorFullLoadAmps = sqlite3_column_double(stmt, 44);
         auto const operatingFlowRate = sqlite3_column_double(stmt, 45);
         auto const operatingHead = sqlite3_column_double(stmt, 46);
-        auto const motorEfficiency = sqlite3_column_double(stmt, 47);
-        auto const outOfService = static_cast<bool>(sqlite3_column_int(stmt, 48));
-        auto const spare = static_cast<bool>(sqlite3_column_int(stmt, 49));
+        auto const measuredCurrent = sqlite3_column_double(stmt, 47);
+        auto const measuredPower = sqlite3_column_double(stmt, 48);
+        auto const measuredVoltage = sqlite3_column_double(stmt, 49);
+        auto const motorEfficiency = sqlite3_column_double(stmt, 50);
+        auto const outOfService = static_cast<bool>(sqlite3_column_int(stmt, 51));
+        auto const spare = static_cast<bool>(sqlite3_column_int(stmt, 52));
 
         auto pump = PumpData(manufacturer, model, serialNumber, status, pumpType, radialBearingType, thrustBearingType,
                              shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass,
@@ -659,7 +662,7 @@ std::vector<PumpData> SQLite::getPumpData() const
                              maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter,
                              efficiency, lineFrequency, minFlowSize, pumpSize,
                              designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, 
-                             operatingFlowRate, operatingHead, motorEfficiency, outOfService, spare);
+                             operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency, outOfService, spare);
         pump.setId(id);
         return pump;
     };
@@ -716,9 +719,12 @@ std::vector<PumpData> SQLite::getCustomPumpData() const
         auto const motorFullLoadAmps = sqlite3_column_double(stmt, 44);
         auto const operatingFlowRate = sqlite3_column_double(stmt, 45);
         auto const operatingHead = sqlite3_column_double(stmt, 46);
-        auto const motorEfficiency = sqlite3_column_double(stmt, 47);
-        auto const outOfService = static_cast<bool>(sqlite3_column_int(stmt, 48));
-        auto const spare = static_cast<bool>(sqlite3_column_int(stmt, 49));
+        auto const measuredCurrent = sqlite3_column_double(stmt, 47);
+        auto const measuredPower = sqlite3_column_double(stmt, 48);
+        auto const measuredVoltage = sqlite3_column_double(stmt, 49);
+        auto const motorEfficiency = sqlite3_column_double(stmt, 50);
+        auto const outOfService = static_cast<bool>(sqlite3_column_int(stmt, 51));
+        auto const spare = static_cast<bool>(sqlite3_column_int(stmt, 52));
 
         auto pump = PumpData(manufacturer, model, serialNumber, status, pumpType, radialBearingType, thrustBearingType,
                              shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass,
@@ -729,7 +735,7 @@ std::vector<PumpData> SQLite::getCustomPumpData() const
                              maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter,
                              efficiency, lineFrequency, minFlowSize, pumpSize,
                              designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, 
-                             operatingFlowRate, operatingHead, motorEfficiency, outOfService, spare);
+                             operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency, outOfService, spare);
         pump.setId(id);
         return pump;
     };
@@ -786,9 +792,12 @@ PumpData SQLite::getPumpDataById(int id) const
         auto const motorFullLoadAmps = sqlite3_column_double(stmt, 44);
         auto const operatingFlowRate = sqlite3_column_double(stmt, 45);
         auto const operatingHead = sqlite3_column_double(stmt, 46);
-        auto const motorEfficiency = sqlite3_column_double(stmt, 47);
-        auto const outOfService = static_cast<bool>(sqlite3_column_int(stmt, 48));
-        auto const spare = static_cast<bool>(sqlite3_column_int(stmt, 49));
+        auto const measuredCurrent = sqlite3_column_double(stmt, 47);
+        auto const measuredPower = sqlite3_column_double(stmt, 48);
+        auto const measuredVoltage = sqlite3_column_double(stmt, 49);
+        auto const motorEfficiency = sqlite3_column_double(stmt, 50);
+        auto const outOfService = static_cast<bool>(sqlite3_column_int(stmt, 51));
+        auto const spare = static_cast<bool>(sqlite3_column_int(stmt, 52));
 
         auto pump = PumpData(manufacturer, model, serialNumber, status, pumpType, radialBearingType, thrustBearingType,
                              shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass,
@@ -799,10 +808,11 @@ PumpData SQLite::getPumpDataById(int id) const
                              maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter,
                              efficiency, lineFrequency, minFlowSize, pumpSize,
                              designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, 
-                             operatingFlowRate, operatingHead, motorEfficiency, outOfService, spare);
+                             operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency, outOfService, spare);
         pump.setId(dbId);
         return pump;
     };
+    // std::cout << "id: " << id << std::endl;
     return get_object<PumpData>(m_pump_data_select_single_stmt, id, cb);
 }
 
@@ -991,7 +1001,7 @@ void SQLite::create_select_stmt()
                       maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter,
                       efficiency, lineFrequency, minFlowSize, pumpSize,
                       designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, 
-                      operatingFlowRate, operatingHead, motorEfficiency, outOfService, spare
+                      operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency, outOfService, spare
             FROM pump_data)";
 
     prepare_statement(m_pump_data_select_stmt, select_pump_data);
@@ -1007,7 +1017,7 @@ void SQLite::create_select_stmt()
                       maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter,
                       efficiency, lineFrequency, minFlowSize, pumpSize,
                       designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, 
-                      operatingFlowRate, operatingHead, motorEfficiency, outOfService, spare
+                      operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency, outOfService, spare
             FROM pump_data
             WHERE id = ?)";
 
@@ -1024,7 +1034,7 @@ void SQLite::create_select_stmt()
             maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter,
             efficiency, lineFrequency, minFlowSize, pumpSize,
             designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, 
-            operatingFlowRate, operatingHead, motorEfficiency, outOfService, spare
+            operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency, outOfService, spare
             FROM pump_data
             WHERE sid = 1)";
 
@@ -1147,7 +1157,7 @@ void SQLite::create_update_and_delete_stmt()
                maxSuctionLift=?, displacement=?, startingTorque=?, ratedSpeed=?, impellerDiameter=?,
                efficiency=?, lineFrequency=?, minFlowSize=?, pumpSize=?, 
                designHead=?, designFlow=?, designEfficiency=?, motorRatedPower=?, motorFullLoadAmps=?, 
-               operatingFlowRate=?, operatingHead=?, motorEfficiency=?,
+               operatingFlowRate=?, operatingHead=?, measuredCurrent=?, measuredPower=?, measuredVoltage=?, motorEfficiency=?,
                outOfService=?, spare=?
                WHERE id=? AND sid = 1)";
 
@@ -1259,10 +1269,13 @@ void SQLite::create_insert_stmt()
          motorFullLoadAmps, 
          operatingFlowRate, 
          operatingHead, 
+         measuredCurrent,
+         measuredPower, 
+         measuredVoltage,
          motorEfficiency,
          outOfService,
          spare)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?))";
 
 
     prepare_statement(m_pump_data_insert_stmt, pump_data_insert_sql);
@@ -1443,6 +1456,9 @@ void SQLite::create_tables()
              motorFullLoadAmps real NOT NULL,
              operatingFlowRate real NOT NULL,
              operatingHead real NOT NULL,
+             measuredCurrent real NOT NULL,
+             measuredPower real NOT NULL,
+             measuredVoltage real NOT NULL,
              motorEfficiency real NOT NULL,
              outOfService integer NOT NULL,
              spare integer NOT NULL,
@@ -1455,7 +1471,7 @@ void SQLite::create_tables()
                     maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter,
                     efficiency, lineFrequency, minFlowSize, pumpSize,
                     designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, 
-                    operatingFlowRate, operatingHead, motorEfficiency, outOfService, spare)
+                    operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency, outOfService, spare)
       );)";
 
     execute_command(pump_table_sql);
@@ -1464,38 +1480,38 @@ void SQLite::create_tables()
 void SQLite::insert_default_data()
 {
     std::cout << std::flush;
-    for (auto const &material : get_default_solid_load_charge_materials())
-    {
-        insert_solid_load_charge_materials(material);
-    }
-    for (auto const &material : get_default_gas_load_charge_materials())
-    {
-        insert_gas_load_charge_materials(material);
-    }
-    for (auto const &material : get_default_liquid_load_charge_materials())
-    {
-        insert_liquid_load_charge_materials(material);
-    }
-    for (auto const &material : get_default_solid_liquid_flue_gas_materials())
-    {
-        insert_solid_liquid_flue_gas_materials(material);
-    }
-    for (auto const &material : get_default_gas_flue_gas_materials())
-    {
-        insert_gas_flue_gas_materials(material);
-    }
-    for (auto const &material : get_default_atmosphere_specific_heat())
-    {
-        insert_atmosphere_specific_heat(material);
-    }
-    for (auto const &surface : get_default_wall_losses_surface())
-    {
-        insert_wall_losses_surface(surface);
-    }
-    for (auto const &motor : get_default_motor_data())
-    {
-        insert_motor_data(motor);
-    }
+    // for (auto const &material : get_default_solid_load_charge_materials())
+    // {
+    //     insert_solid_load_charge_materials(material);
+    // }
+    // for (auto const &material : get_default_gas_load_charge_materials())
+    // {
+    //     insert_gas_load_charge_materials(material);
+    // }
+    // for (auto const &material : get_default_liquid_load_charge_materials())
+    // {
+    //     insert_liquid_load_charge_materials(material);
+    // }
+    // for (auto const &material : get_default_solid_liquid_flue_gas_materials())
+    // {
+    //     insert_solid_liquid_flue_gas_materials(material);
+    // }
+    // for (auto const &material : get_default_gas_flue_gas_materials())
+    // {
+    //     insert_gas_flue_gas_materials(material);
+    // }
+    // for (auto const &material : get_default_atmosphere_specific_heat())
+    // {
+    //     insert_atmosphere_specific_heat(material);
+    // }
+    // for (auto const &surface : get_default_wall_losses_surface())
+    // {
+    //     insert_wall_losses_surface(surface);
+    // }
+    // for (auto const &motor : get_default_motor_data())
+    // {
+    //     insert_motor_data(motor);
+    // }
     ///*
     // On Linux at least, if this ofstream variable is declared, pump table default data correctly populates. If it is not declared, the pump default
     // data does not populate. Note that this is true only for the bindings/JS unit tests. C++ unit tests work fine in any case.
@@ -2151,9 +2167,12 @@ bool SQLite::insertPumpData(PumpData const &pump)
     bind_value(m_pump_data_insert_stmt, 44, pump.motorFullLoadAmps);
     bind_value(m_pump_data_insert_stmt, 45, pump.operatingFlowRate);
     bind_value(m_pump_data_insert_stmt, 46, pump.operatingHead);
-    bind_value(m_pump_data_insert_stmt, 47, pump.motorEfficiency);
-    bind_value(m_pump_data_insert_stmt, 48, pump.outOfService);
-    bind_value(m_pump_data_insert_stmt, 49, pump.spare);
+    bind_value(m_pump_data_insert_stmt, 47, pump.measuredCurrent);
+    bind_value(m_pump_data_insert_stmt, 48, pump.measuredPower);
+    bind_value(m_pump_data_insert_stmt, 49, pump.measuredVoltage);
+    bind_value(m_pump_data_insert_stmt, 50, pump.motorEfficiency);
+    bind_value(m_pump_data_insert_stmt, 51, pump.outOfService);
+    bind_value(m_pump_data_insert_stmt, 52, pump.spare);
 
     int rc = step_command(m_pump_data_insert_stmt);
     bool valid_insert = step_validity(rc);
@@ -2226,10 +2245,13 @@ bool SQLite::updatePumpData(PumpData const &pump)
     bind_value(m_pump_data_update_stmt, 43, pump.motorFullLoadAmps);
     bind_value(m_pump_data_update_stmt, 44, pump.operatingFlowRate);
     bind_value(m_pump_data_update_stmt, 45, pump.operatingHead);
-    bind_value(m_pump_data_update_stmt, 46, pump.motorEfficiency);
-    bind_value(m_pump_data_update_stmt, 47, pump.outOfService);
-    bind_value(m_pump_data_update_stmt, 48, pump.spare);
-    bind_value(m_pump_data_update_stmt, 49, pump.id);
+    bind_value(m_pump_data_update_stmt, 46, pump.measuredCurrent);
+    bind_value(m_pump_data_update_stmt, 47, pump.measuredPower);
+    bind_value(m_pump_data_update_stmt, 48, pump.measuredVoltage);
+    bind_value(m_pump_data_update_stmt, 49, pump.motorEfficiency);
+    bind_value(m_pump_data_update_stmt, 50, pump.outOfService);
+    bind_value(m_pump_data_update_stmt, 51, pump.spare);
+    bind_value(m_pump_data_update_stmt, 52, pump.id);
 
     int rc = step_command(m_pump_data_update_stmt);
     bool valid_insert = step_validity(rc);
@@ -2290,9 +2312,12 @@ bool SQLite::insert_pump_data(PumpData const &pump)
     bind_value(m_pump_data_insert_stmt, 44, pump.motorFullLoadAmps);
     bind_value(m_pump_data_insert_stmt, 45, pump.operatingFlowRate);
     bind_value(m_pump_data_insert_stmt, 46, pump.operatingHead);
-    bind_value(m_pump_data_insert_stmt, 47, pump.motorEfficiency);
-    bind_value(m_pump_data_insert_stmt, 48, pump.outOfService);
-    bind_value(m_pump_data_insert_stmt, 49, pump.spare);
+    bind_value(m_pump_data_insert_stmt, 47, pump.measuredCurrent);
+    bind_value(m_pump_data_insert_stmt, 48, pump.measuredPower);
+    bind_value(m_pump_data_insert_stmt, 49, pump.measuredVoltage);
+    bind_value(m_pump_data_insert_stmt, 50, pump.motorEfficiency);
+    bind_value(m_pump_data_insert_stmt, 51, pump.outOfService);
+    bind_value(m_pump_data_insert_stmt, 52, pump.spare);
 
 
     int rc = step_command(m_pump_data_insert_stmt);
@@ -2424,6 +2449,8 @@ int SQLiteWrapper::bind_value(sqlite3_stmt *stmt, int const stmt_insert_col_inde
 
 int SQLiteWrapper::bind_value(sqlite3_stmt *stmt, int const stmt_insert_col_index, double const double_to_insert) const
 {
+    std::cout << "col index: " << stmt_insert_col_index << std::endl;
+    std::cout << "double to insert " << double_to_insert << std::endl;
     int rc = sqlite3_bind_double(stmt, stmt_insert_col_index, double_to_insert);
     if (rc != SQLITE_OK)
     {
