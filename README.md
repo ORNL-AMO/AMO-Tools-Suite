@@ -24,7 +24,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - Install node_modules dependencies: `cd` into AMO-Tools-Suite directory and run  
 	 `npm install`
 - `cd` into the emsdk directory: 
-	- run `emsdk activate 2.0.16` (Build must target this version)
+	- run `emsdk activate latest` (Build must target this version, if trouble try version 2.0.16)
 - `cd` into AMO-Tools-Suite directory:  
     -  run `emcmake cmake -DBUILD_WASM=ON -G "MinGW Makefiles"` 
         -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
