@@ -8,7 +8,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 #### C++
 - make
 - CMake (cmake-curses to use the ccmake gui)
-- GCC 4.8.5 or later 
+- GCC 4.8.5 or later
   - Windows: Visual Studio Build Tools or Cygwin with other C++ compiler
 - Doxygen (only for building documentation)
 
