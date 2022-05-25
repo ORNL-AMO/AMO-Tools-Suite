@@ -2239,7 +2239,7 @@ bool SQLite::updatePumpData(PumpData const &pump)
 
 bool SQLite::insert_pump_data(PumpData const &pump)
 {
-    if (isDefaultMaterial(pump.id, get_default_pump_data().size()))
+    if (pump.id && isDefaultMaterial(pump.id, get_default_pump_data().size()))
     {
         return false;
     }

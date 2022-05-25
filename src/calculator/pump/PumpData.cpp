@@ -99,7 +99,8 @@ PumpData::PumpData(std::string manufacturer,
           operatingHead(operatingHead), 
           motorEfficiency(motorEfficiency), 
           outOfService(outOfService),
-          spare(spare)
+          spare(spare),
+          id(NULL)
 {}
 
 
