@@ -328,6 +328,13 @@ public:
      */
     double getInletEnergyFlow() const { return inletEnergyFlow; }
 
+
+    /**
+     * Gets the inlet energy flow
+     * @return double, inlet mass flow in kg/hr
+     */
+    double getInletMassFlow() const { return inletMassFlow; }
+
 protected:
     void calculateProperties() override;
 
