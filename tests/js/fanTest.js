@@ -269,19 +269,47 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res.saturationPressure), rnd(0.739659));
     t.equal(rnd(res.wetBulbTemp), rnd(61.19374));
 
+    // inp = {
+    //     dryBulbTemp: 123,
+    //     staticPressure: -17.6,
+    //     barometricPressure: 26.57,
+    //     gasDensity: 0.0547,
+    //     gasType: 'AIR',
+    //     inputType: 'wetBulb',
+    //     wetBulbTemp: 110,
+    //     specificGravity: 1.05,
+    //     specificHeatGas: 1.03
+    // };
+
+    // res = bindings.getBaseGasDensityWetBulb(inp);
+    // //t.equal(rnd(res), rnd(0.065456));
+    // t.equal(rnd(res.gasDensity), rnd(0.055653));
+    // t.equal(rnd(res.absolutePressure), rnd(25.27671));
+    // t.equal(rnd(res.saturatedHumidity), rnd(0.108308));
+    // t.equal(rnd(res.saturationDegree), rnd(0.535317));
+    // t.equal(rnd(res.humidityRatio), rnd(0.057979));
+    // t.equal(rnd(res.specificVolume), rnd(19.010256));
+    // t.equal(rnd(res.enthalpy), rnd(95.062901));
+    // t.equal(rnd(res.dewPoint), rnd(103.567304));
+    // t.equal(rnd(res.relativeHumidity), rnd(0.574939));
+    // t.equal(rnd(res.saturationPressure), rnd(3.748742));
+    // t.equal(rnd(res.wetBulbTemp), rnd(110));
     inp = {
         dryBulbTemp: 123,
-        staticPressure: -17.6,
+        staticPressure: 0,
         barometricPressure: 26.57,
         gasDensity: 0.0547,
         gasType: 'AIR',
         inputType: 'wetBulb',
-        wetBulbTemp: 110,
-        specificGravity: 1.05,
-        specificHeatGas: 1.03
+        wetBulbTemp: 62,
+        // use 1?
+        specificGravity: 1,
+        specificHeatGas: .24
     };
+    console.log('===============  inp', inp)
 
     res = bindings.getBaseGasDensityWetBulb(inp);
+    console.log('=============  res', res)
     //t.equal(rnd(res), rnd(0.065456));
     t.equal(rnd(res.gasDensity), rnd(0.055653));
     t.equal(rnd(res.absolutePressure), rnd(25.27671));
@@ -294,6 +322,7 @@ test('getBaseGasDensity', function (t) {
     t.equal(rnd(res.relativeHumidity), rnd(0.574939));
     t.equal(rnd(res.saturationPressure), rnd(3.748742));
     t.equal(rnd(res.wetBulbTemp), rnd(110));
+
 
     inp = {
         dryBulbTemp: 70,

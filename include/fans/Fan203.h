@@ -267,14 +267,18 @@ private:
 		double const C13 = 6.5459673;
 
 		double const tKelvin = (dryBulbTemp + 459.67) * 0.555556;
+        	std::cout << "======== dryBulbTemp" << dryBulbTemp << std::endl;
+        	std::cout << "======== tKelvin" << tKelvin << std::endl;
 
 		if (tKelvin < 273.15)
 		{
 			double const p = std::exp(C1 / tKelvin + C2 + tKelvin * C3 + tKelvin * tKelvin * (C4 + tKelvin * (C5 + C6 * tKelvin)) + C7 * std::log(tKelvin));
+        	std::cout << "======== p < 273" << p << std::endl;
 			return p * (29.9216 / 101325);
 		}
 		double const p = std::exp(C8 / tKelvin + C9 + tKelvin * (C10 + tKelvin * (C11 + tKelvin * C12)) + C13 * std::log(tKelvin));
 
+        	std::cout << "======== saturationPressure" << p * (29.9216 / 101325) << std::endl;
 		return p * (29.9216 / 101325);
 	}
 	/**
@@ -368,7 +372,15 @@ private:
 		if (inputType != InputType::DewPoint)
 		{
 			double const alpha = std::log(absolutePressure * 0.4911541 * humidityRatio / (nMol + humidityRatio));
-
+        	
+			std::cout << "======== saturationPressure" << humidityRatio << std::endl;
+        	std::cout << "======== relativeHumidity" << relativeHumidity << std::endl;
+        	std::cout << "======== saturatedHumidity" << saturatedHumidity << std::endl;
+        	std::cout << "======== humidityRatio" << humidityRatio << std::endl;
+        	std::cout << "======== humidityRatio" << humidityRatio << std::endl;
+        	std::cout << "======== absolutePressure" << absolutePressure << std::endl;
+        	std::cout << "======== alpha" << alpha << std::endl;
+			
 			if (tdo < 32)
 			{
 				dewPoint = 90.12 + 26.412 * alpha + 0.8927 * alpha * alpha;
@@ -380,6 +392,7 @@ private:
 		}
 		else
 		{
+        	std::cout << "======== dewpoint == relative humidity ratio" << std::endl;
 			dewPoint = relativeHumidityOrDewPoint;
 		}
 
