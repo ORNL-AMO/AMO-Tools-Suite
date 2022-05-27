@@ -50,11 +50,11 @@ private:
     const double specificGravity = 0, flowRate, head = 0;
 
     // used only for fan fluid power calculations
-    const double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0, velocityPressure = 0;
+    const double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
 
     const bool isPump;
 
-
+    const double velocityPressure = 0;
 };
 
 #endif //AMO_LIBRARY_FLUIDPOWER_H

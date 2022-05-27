@@ -243,7 +243,7 @@ public:
 private:
     static double CalculatePowerFactor(const double var) { return (0.01055507 - 0.05704023 * var + 0.14686301 * var * var + 0.92961746 * var * var * var); }
 
-    static const double CalculateFactor(const std::vector<double> &cf, const double operatingTempWetBulb, const double deltaTemp) {
+    static double CalculateFactor(const std::vector<double> &cf, const double operatingTempWetBulb, const double deltaTemp) {
         return cf[0] +
                cf[1] * deltaTemp + cf[2] * deltaTemp * deltaTemp +
                cf[3] * operatingTempWetBulb + cf[4] * operatingTempWetBulb * operatingTempWetBulb +
@@ -401,7 +401,7 @@ public:
             const double ariCapacity, const double ariEfficiency, const double maxCapacityRatio,
             const double operatingHours, const double waterSupplyTemp, const double waterEnteringTemp,
             const std::vector<double> baselineLoadList, const std::vector<double> modLoadList) {
-        int chillersCount = baselineLoadList.size();
+        unsigned int chillersCount = baselineLoadList.size();
 
         if(chillersCount != modLoadList.size())
             throw std::runtime_error("Chiller counts for baseline and modification does not match");
@@ -423,7 +423,7 @@ public:
         baselinePowerList.assign(chillersCount, 0);
         modPowerList.assign(chillersCount, 0);
 
-        for (int i = 0; i < chillersCount; i++)
+        for (unsigned int i = 0; i < chillersCount; i++)
         {
             if(baselineLoadList[i] > 0) {
                 auto baselineOutput = ChillerPowerConsumption(waterSupplyTemp, waterEnteringTemp, cCAP, cCHWT, cPLR,

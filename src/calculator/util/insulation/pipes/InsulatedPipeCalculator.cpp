@@ -146,9 +146,9 @@ double InsulatedPipeCalculator::noInsulationRecursive(InsulatedPipeInput input, 
     double bareRayleigh = RayleighNumber(airProperties.getExpansionCoefficient(), surfaceTemperature, input.getAmbientTemperature(), input.getPipeDiameter(), airProperties.getKinViscosity(), airProperties.getAlpha()).calculate();
     double bareRadiativeHeatTransferCoefficient = RadiativeHeatTransferCoefficient(input.getPipeEmissivity(), surfaceTemperature, input.getAmbientTemperature()).calculate();
     double bareNusseltForced = NusseltNumber(bareReynolds, airProperties.getPrandtl()).calculateForcedConvection();
-    double bareConvectionForced = ConvectiveHeatTransferCoefficient(bareNusseltForced, airProperties.getConductivity(), input.getPipeDiameter()).calculate();
+    //double bareConvectionForced = ConvectiveHeatTransferCoefficient(bareNusseltForced, airProperties.getConductivity(), input.getPipeDiameter()).calculate();
     double bareNusseltFree = NusseltNumber(bareRayleigh, airProperties.getPrandtl()).calculateFreeConvection();
-    double bareConvectionFree = ConvectiveHeatTransferCoefficient(bareNusseltFree, airProperties.getConductivity(), input.getPipeDiameter()).calculate();
+    //double bareConvectionFree = ConvectiveHeatTransferCoefficient(bareNusseltFree, airProperties.getConductivity(), input.getPipeDiameter()).calculate();
     double bareNusseltCombined = NusseltNumber(bareNusseltForced, bareNusseltFree).calculate();
     double bareConvection = ConvectiveHeatTransferCoefficient(bareNusseltCombined, airProperties.getConductivity(), input.getPipeDiameter()).calculate();
     double bareHeatTransferAir = bareRadiativeHeatTransferCoefficient + bareConvection;

@@ -38,7 +38,7 @@ class CompressedAirPressureReductionInput
   private:
     bool isBaseline;
     int hoursPerYear;
-    double electricityCost, compressorPower, pressure, proposedPressure, atmosphericPressure, pressureRated;
+    double electricityCost, compressorPower, pressure, proposedPressure, pressureRated, atmosphericPressure;
 };
 
 class CompressedAirPressureReduction

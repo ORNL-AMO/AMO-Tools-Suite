@@ -96,6 +96,7 @@ EnergyAndCostCalculator::calcPowerGenerated(
 double
 EnergyAndCostCalculator::addPowerOutToPowerGenerated(const std::string &name, const std::shared_ptr<Turbine> &turbine,
                                                      const double powerGenerated) const {
+    std::string name_ = name; name_ = name_;//keep this or fix unused variable
     const std::string methodName = std::string("EnergyAndCostCalculator::") + std::string(__func__) + ": ";
 
     double result = powerGenerated;

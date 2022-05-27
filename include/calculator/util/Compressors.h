@@ -113,17 +113,17 @@ public:
     int getC_max_Adjusted() const { return C_max_Adjusted; }
     int getkW_max_Adjusted() const { return kW_max_Adjusted; }
 
-public:
-    double C_fl_Adjusted;
-    double kW_fl_Adjusted;
-    double C_max_Adjusted;
-    double kW_max_Adjusted;
-
 protected:
     CompressorsBase(const double kW_fl, const double C_fl) : kW_fl(kW_fl), C_fl(C_fl), C_fl_raw(C_fl), kW_fl_raw(kW_fl), kW_fl_Adjusted(kW_fl), C_fl_Adjusted(C_fl), C_max_Adjusted(0), kW_max_Adjusted(0) {}
 
-    const double C_fl_raw, kW_fl_raw;
     double kW_fl, C_fl;
+    const double C_fl_raw, kW_fl_raw;
+
+public:
+    double kW_fl_Adjusted;
+    double C_fl_Adjusted;
+    double C_max_Adjusted;
+    double kW_max_Adjusted;
 
 private:
     virtual CompressorsBase::OutputBlowOff calculateFromPerkW_BlowOff(double, double) { return OutputBlowOff(); }
@@ -290,6 +290,7 @@ public:
      */
     void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override
     {
+        P_max = P_max;//keep or fix unused variable
         if (P_fl > 0)
         {
             CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
@@ -399,6 +400,7 @@ public:
      */
     void AdjustDischargePressure(std::vector<double> Capacity, std::vector<double> DischargePressure, double P_fl, double P_max = 0) override
     {
+        P_max = P_max;//keep or fix unused variable
         if (P_fl > 0)
         {
             CurveFitVal curveFitValCap(DischargePressure, Capacity, 2);
@@ -530,10 +532,10 @@ public:
     }
 
 private:
+    double C_max = 1;
     const double kWPer_max = 1, C_max_raw = 1, C_ul = 1;
     double kWPer_nl = 0;
     double kWPer_ul = 1;
-    double C_max = 1;
     double CPer_max = 1;
     double CPer_ul = 1;
     double CPer_ulB = 1;
@@ -653,9 +655,9 @@ public:
     }
 
 private:
-    const bool woUnload = true;
     const double kW_nl = 1;
     const double mod_exp = 1;
+    const bool woUnload = true;
     const CompressorType CompType;
     double lf_nl = 0;
     double noLoadPowerFM;
@@ -805,10 +807,12 @@ public:
      */
     Compressors_LoadUnload(const double kW_fl, const double C_fl, const double C_storage, const double kW_max, const double P_fl, const double P_max, const double P_mod, const double lf_ul, const double P_atm = 14.7,
                            const CompressorType CompType = CompressorType::Reciprocating, const Lubricant LubricantType = Lubricant::None, ControlType CntrlType = ControlType::LoadUnload,
-                           const double kW_nl = 1, const double PerC_ul = 100, double t_blowdown = .003, double P_sump_ul = 15, double noLoadPowerFM = .7, double kW_ul = 0, double P_ul = 0, double C_ul = 0) : CompressorsBase(kW_fl, C_fl), kW_max(kW_max), P_atm(P_atm), P_fl(P_fl), P_max(P_max), P_mod(P_mod),
-                                                                                                                                                                                                                 CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
-                                                                                                                                                                                                                 kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul), noLoadPowerFM(noLoadPowerFM), kW_ul(kW_ul), P_ul(P_ul), C_ul(C_ul)
+                           const double kW_nl = 1, const double PerC_ul = 100, double t_blowdown = .003, double P_sump_ul = 15, double noLoadPowerFM = .7, double kW_ul = 0, double P_ul = 0, double C_ul = 0) :
+                           CompressorsBase(kW_fl, C_fl), kW_max(kW_max), P_atm(P_atm), P_fl(P_fl), P_max(P_max), P_mod(P_mod),
+                           CompType(CompType), LubricantType(LubricantType), CntrlType(CntrlType), lf_nl(kW_nl / kW_fl), C_storage(C_storage),
+                           kW_nl(kW_nl), PerC_ul(PerC_ul), t_blowdown(t_blowdown), P_sump_ul(P_sump_ul), noLoadPowerFM(noLoadPowerFM), kW_ul(kW_ul), P_ul(P_ul), C_ul(C_ul)
     {
+        double lf_ul_ = lf_ul; lf_ul_ = lf_ul_;//keep or fix unused variable
         if (CompType == CompressorType::Screw && LubricantType == Lubricant::None)
             throw std::invalid_argument("Lubricant needs to be Injected or free for Screw Compressor Type");
 
@@ -976,15 +980,16 @@ public:
     }
 
 private:
-    const double kW_nl = 1;
-    const double P_fl, P_max, P_mod, P_atm, lf_nl, C_storage;
+    double kW_max;
+    const double P_atm, P_fl, P_max, P_mod;
     const double P_range = 0;
     CompressorType CompType;
     Lubricant LubricantType;
     ControlType CntrlType;
+    const double lf_nl, C_storage, kW_nl = 1;
 
-    double kW_max, noLoadPowerFM, kW_ul, C_ul, P_ul, mod_exp /*Throttle=1, Variable Displacement=2*/;
-    double P_sump_ul = 15, t_blowdown = 0.003, t_sdt = 0.004, a_tol = 0.02, t_reload = 0.001, PerC_ul = 100, lf_fl = 0.7;
+    double PerC_ul = 100, t_blowdown = 0.003, P_sump_ul = 15, t_sdt = 0.004, a_tol = 0.02, t_reload = 0.001, lf_fl = 0.7;
+    double noLoadPowerFM, kW_ul, P_ul, C_ul, mod_exp /*Throttle=1, Variable Displacement=2*/;
 
     double CurveFit(double, bool) const;
 };

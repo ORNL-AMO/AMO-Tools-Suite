@@ -4,7 +4,7 @@
 TEST_CASE("Compressed Air Pressure Reduction Baseline", "[CompressedAirPressureReduction][Util]")
 {
     std::vector<CompressedAirPressureReductionInput> compressedAirPressureReductionInputVec = {
-        CompressedAirPressureReductionInput(true, 8640, 0.005, 500, 150, NULL, NULL, NULL)};
+        CompressedAirPressureReductionInput(true, 8640, 0.005, 500, 150, 0, 0, 0)};
 
     auto compressedAirPressureReduction = CompressedAirPressureReduction(compressedAirPressureReductionInputVec);
     auto testOutput = compressedAirPressureReduction.calculate();
@@ -26,10 +26,10 @@ TEST_CASE("Compressed Air Pressure Reduction Modification", "[CompressedAirPress
 TEST_CASE("Compressed Air Pressure Reduction Baseline List", "[CompressedAirPressureReduction][Util]")
 {
     std::vector<CompressedAirPressureReductionInput> compressedAirPressureReductionInputVec = {
-        CompressedAirPressureReductionInput(true, 8640, 0.005, 500, 150, NULL, NULL, NULL),
-        CompressedAirPressureReductionInput(true, 8640, 0.005, 250, 150, NULL, NULL, NULL),
-        CompressedAirPressureReductionInput(true, 8640, 0.005, 500, 120, 120, NULL, NULL),
-        CompressedAirPressureReductionInput(true, 8640, 0.005, 450, 170, 100, NULL, NULL)};
+        CompressedAirPressureReductionInput(true, 8640, 0.005, 500, 150, 0, 0, 0),
+        CompressedAirPressureReductionInput(true, 8640, 0.005, 250, 150, 0, 0, 0),
+        CompressedAirPressureReductionInput(true, 8640, 0.005, 500, 120, 120, 0, 0),
+        CompressedAirPressureReductionInput(true, 8640, 0.005, 450, 170, 100, 0, 0)};
 
     auto compressedAirPressureReduction = CompressedAirPressureReduction(compressedAirPressureReductionInputVec);
     auto testOutput = compressedAirPressureReduction.calculate();

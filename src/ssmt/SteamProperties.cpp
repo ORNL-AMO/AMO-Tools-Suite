@@ -38,7 +38,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
             break;
 	}
 	return {0, 0, 0, 0, 0, 0, 0};
-};
+}
 
 // TODO combine this with waterPropertiesPressureEntropy?
 SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureEnthalpy(const double pressure, const double enthalpy) {
@@ -101,7 +101,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
     }
 
     return SteamSystemModelerTool::region2(temperature, pressure);
-};
+}
 
 SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureEntropy(const double pressure, const double entropy) {
     SteamSystemModelerTool::SaturatedPropertiesOutput pressureSatProps;
@@ -165,7 +165,7 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
     }
 
     return SteamSystemModelerTool::region2(temperature, pressure);
-};
+}
 
 SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPressureQuality(const double pressure, const double quality) {
     auto const satProps = SaturatedProperties(pressure, SaturatedTemperature(pressure).calculate()).calculate();
@@ -177,4 +177,4 @@ SteamSystemModelerTool::SteamPropertiesOutput SteamProperties::waterPropertiesPr
 			satProps.gasSpecificEnthalpy * quality + satProps.liquidSpecificEnthalpy * (1 - quality),
 			satProps.gasSpecificEntropy * quality + satProps.liquidSpecificEntropy * (1 - quality)
 	};
-};
+}

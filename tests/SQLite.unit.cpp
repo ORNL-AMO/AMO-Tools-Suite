@@ -1302,7 +1302,7 @@ TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
 }
 
 TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][motor]" ) {
-    auto const compare = [](MotorData result, MotorData expected) {
+    /*auto const compare = [](MotorData result, MotorData expected) {
 		CHECK(result.getHp() == expected.getHp());
 		CHECK(result.getSynchronousSpeed() == expected.getSynchronousSpeed());
 		CHECK(result.getPoles() == expected.getPoles());
@@ -1314,7 +1314,7 @@ TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][moto
 		CHECK(result.getVoltageLimit() == expected.getVoltageLimit());
 		CHECK(result.getCatalog() == expected.getCatalog());
         //CHECK(result.getId() == expected.getId());
-    };
+    };*/
 
      auto sqlite = SQLite(":memory:", true);
     /*
@@ -1358,10 +1358,10 @@ TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][moto
 }
 
 TEST_CASE( "SQLite - Calculate nominal efficiency from data", "[sqlite][motor]" ) {
-    auto const calculateNominalEfficiency = [](const MotorData &inp) {
+    /*auto const calculateNominalEfficiency = [](const MotorData &inp) {
 		double nominalEfficiency = MotorEfficiency(inp.getLineFrequency(), inp.getSynchronousSpeed(), inp.getEfficiencyClass(), inp.getHp()).calculate(1) * 100;
         return nominalEfficiency;
-    };
+    };*/
 
     auto sqlite = SQLite(":memory:", true);
 

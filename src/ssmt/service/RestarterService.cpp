@@ -56,6 +56,7 @@ void RestarterService::restartIfNotEnoughSteam(const double additionalSteamNeede
 }
 
 void RestarterService::logMessage(const std::string &message) const {
+    std::string message_ = message; message_ = message_;//keep this or fix unused variable
     const std::string delimeter = "======== ";
     // std::cout << delimeter << std::endl;
     // std::cout << delimeter << message << std::endl;

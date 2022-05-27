@@ -84,9 +84,7 @@ double SolidLiquidFlueGasMaterial::calculateHeatingValueFuel(double carbon, doub
 	return carbonBar * 14100 + hydrogenBar * 61100 + sulphurBar * 3980;
 }
 
-double SolidLiquidFlueGasMaterial::calculateStoichAirFuel(double carbon, double hydrogen, double sulphur,
-                                                             double inertAsh, double o2, double moisture,
-                                                             double nitrogen)
+double SolidLiquidFlueGasMaterial::calculateStoichAirFuel()
 {
     return 333.333;//Placeholder
 }

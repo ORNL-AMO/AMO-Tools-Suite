@@ -166,7 +166,7 @@ std::array<double, 6> EstimateFLA::calculate() {
     };
 
     // used to calculate FLA
-    auto const adjustForVoltage = [this] (double plVal, double effVal = 0) {
+    auto const adjustForVoltage = [this] (double plVal, double effVal) {
         auto const estimate = plVal * 460 / ratedVoltage;
         if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
             return effVal * estimate * 100 / specifiedEfficiency;
@@ -180,7 +180,7 @@ std::array<double, 6> EstimateFLA::calculate() {
                                     + (peFlaMultipliers[3][pole] * std::exp(-peFlaMultipliers[4][pole] * motorRatedPower));
 
         double const peFLAValue = peMultiplier * basicFLAValue;
-        estimatedFLA = adjustForVoltage(peFLAValue * plMultiplier[4]);
+        estimatedFLA = adjustForVoltage(peFLAValue * plMultiplier[4], 0);
         return {
                 {
                         peFLAValue * plMultiplier[0], peFLAValue * plMultiplier[1], peFLAValue * plMultiplier[2],
@@ -204,7 +204,7 @@ std::array<double, 6> EstimateFLA::calculate() {
 
 
     if (efficiencyClass == Motor::EfficiencyClass::ENERGY_EFFICIENT) {
-        estimatedFLA = adjustForVoltage(eeFLAValue * plMultiplier[4]);
+        estimatedFLA = adjustForVoltage(eeFLAValue * plMultiplier[4], 0);
         return {
                 {
                         eeFLAValue * plMultiplier[0], eeFLAValue * plMultiplier[1], eeFLAValue * plMultiplier[2],
@@ -212,7 +212,7 @@ std::array<double, 6> EstimateFLA::calculate() {
                 }
         };
     } else if (efficiencyClass == Motor::EfficiencyClass::STANDARD) {
-        estimatedFLA = adjustForVoltage(seFLAValue * plMultiplier[4]);
+        estimatedFLA = adjustForVoltage(seFLAValue * plMultiplier[4], 0);
         return {
                 {
                         seFLAValue * plMultiplier[0], seFLAValue * plMultiplier[1], seFLAValue * plMultiplier[2],

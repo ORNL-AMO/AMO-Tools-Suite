@@ -120,9 +120,9 @@ public:
 private:
     double specificGravity = 0, head = 0;
     double flowRate, moverShaftPower;
-    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0, velocityPressure = 0;
-
+    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
     const bool isPump;
+    double velocityPressure = 0;
 };
 
 

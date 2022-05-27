@@ -115,9 +115,11 @@ public:
 private:
     double flowRate, head = 0, specificGravity = 0, efficiency = 0;
 
-    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0, velocityPressure = 0;
+    double inletPressure = 0, outletPressure = 0, compressibilityFactor = 0;
 
     bool isPump;
+
+    double velocityPressure = 0;
 };
 
 
