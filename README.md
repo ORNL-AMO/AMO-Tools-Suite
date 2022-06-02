@@ -52,4 +52,4 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - To make package on Linux or Mac, run `ccmake.` and set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
 
 ### Documentation
-- To generate documentation: `doxygen Doxyfile.in`
+- To generate documentation: `doxygen Doxyfile`
