@@ -1963,7 +1963,7 @@ bool SQLite::updateWallLossesSurface(WallLosses const &material)
 //motor helpers
 int getMotorEfficiencyClassNum(Motor::EfficiencyClass efficiencyClass)
 {
-    int motorEfficiencyClass;
+    int motorEfficiencyClass = 0;
     if (efficiencyClass == Motor::EfficiencyClass::STANDARD)
     {
         motorEfficiencyClass = 0;
@@ -1985,7 +1985,7 @@ int getMotorEfficiencyClassNum(Motor::EfficiencyClass efficiencyClass)
 
 int getMotorLineFrequencyNum(Motor::LineFrequency lineFrequency)
 {
-    int lineFrequencyNum;
+    int lineFrequencyNum = 60;
     if (lineFrequency == Motor::LineFrequency::FREQ60)
     {
         lineFrequencyNum = 60;
