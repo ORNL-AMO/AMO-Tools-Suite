@@ -545,7 +545,7 @@ if( BUILD_TESTING )
     # Create unit testing executable
     add_executable(amo_tools_suite_tests tests/main.unit.cpp ${TEST_FILES})
     target_link_libraries( amo_tools_suite_tests Catch amo_tools_suite )
-else (BUILD_WASM)
+elseif ( BUILD_WASM )
     add_executable(client ${SOURCE_FILES} ${SOURCE_FILES_WASM})
 endif()
 
