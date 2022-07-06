@@ -1037,7 +1037,7 @@ class Compressor_VFD : public CompressorsBase
 {
     public:
     Compressor_VFD(const double fullLoadPower, const double midTurndownPower, const double turndownPower, const double noLoadPower,
-                   const double capacityFullFload, const double midTurndownAirflow, const double turndownAirflow) : CompressorsBase(fullLoadPower, capacityFullFload)
+                   const double capacityFullFload, const double midTurndownAirflow, const double turndownAirflow) : CompressorsBase(fullLoadPower, capacityFullFload), noLoadPower(noLoadPower)
     {
         turndownPercentPower =  turndownPower / fullLoadPower;
         noLoadPercentPower = noLoadPower / fullLoadPower;
@@ -1121,6 +1121,7 @@ class Compressor_VFD : public CompressorsBase
         double midTurndownPercentPower;
         double turndownPercentCapacity;
         double midTurndownPercentCapacity;
+        double noLoadPower;
 };
 
 class CompressorEEMs

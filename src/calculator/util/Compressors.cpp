@@ -130,7 +130,7 @@ CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerkW(doubl
 {
     double C_Calc = 1;
     if (PerkW < lf_nl)
-        C_Calc = 0;
+        return Output(0, 0, 0, 0);
     else if (PerkW >= 1)
         C_Calc = C_fl;
     else
@@ -194,8 +194,13 @@ CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromVIPFMeasure
 
 CompressorsBase::Output Compressors_StartStop::calculateFromPerkW(double PerkW)
 {
-    double C_Calc = C_fl * PerkW / ((kWPer_fl + kW_max / kW_fl) / 2);
+    //StartStop no load power = 0;
+    if (PerkW == 0)
+    {
+        return Output(0, 0, 0, 0);
+    }
 
+    double C_Calc = C_fl * PerkW / ((kWPer_fl + kW_max / kW_fl) / 2);
     return Output(PerkW * kW_fl, C_Calc, (PerkW), (C_Calc / C_fl));
 }
 
@@ -350,7 +355,12 @@ double Compressors_LoadUnload::CurveFit(double value, bool capacityVPower) const
 CompressorsBase::Output Compressors_LoadUnload::calculateFromPerkW(double PerkW)
 {
     if (PerkW == 1)
-        return Output(PerkW * kW_fl, C_fl, PerkW, 1);
+        return Output(kW_fl, C_fl, 1, 1);
+
+    if (PerkW < lf_nl)
+    {
+        return Output(0, 0, 0, 0);
+    }
 
     if (CntrlType == ControlType::ModulationUnload || CntrlType == ControlType::VariableDisplacementUnload)
     {
@@ -515,7 +525,7 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerC(double CPer)
     else
     {
         // if CPer > % turndown
-        //curve fit turndown, midturndown and full load
+        // curve fit turndown, midturndown and full load
         std::vector<double> PerCapacity;
         PerCapacity.push_back(turndownPercentCapacity);
         PerCapacity.push_back(midTurndownPercentCapacity);
@@ -533,6 +543,18 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerC(double CPer)
 
 CompressorsBase::Output Compressor_VFD::calculateFromPerkW(double PerkW)
 {
+
+    if (PerkW == 1)
+        return Output(kW_fl, C_fl, 1, 1);
+
+
+    double power = PerkW * kW_fl;
+
+    if (power < noLoadPower)
+    {
+        return Output(0, 0, 0, 0);
+    }
+
     double CPer;
     if (PerkW < turndownPercentPower)
     {
@@ -548,7 +570,7 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerkW(double PerkW)
     else
     {
         // if PerKw > % turndown
-        //curve fit turndown, midturndown and full load
+        // curve fit turndown, midturndown and full load
         std::vector<double> PerPower;
         PerPower.push_back(turndownPercentPower);
         PerPower.push_back(midTurndownPercentPower);
