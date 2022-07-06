@@ -534,7 +534,7 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerC(double CPer)
         PerPower.push_back(turndownPercentPower);
         PerPower.push_back(midTurndownPercentPower);
         PerPower.push_back(1);
-        CurveFitVal curveFitValCap(PerCapacity, PerPower, 4);
+        CurveFitVal curveFitValCap(PerCapacity, PerPower, 2);
         PerkW = curveFitValCap.calculate(CPer);
     }
 
@@ -579,7 +579,7 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerkW(double PerkW)
         PerCapacity.push_back(turndownPercentCapacity);
         PerCapacity.push_back(midTurndownPercentCapacity);
         PerCapacity.push_back(1);
-        CurveFitVal curveFitValCap(PerPower, PerCapacity, 4);
+        CurveFitVal curveFitValCap(PerPower, PerCapacity, 2);
         CPer = curveFitValCap.calculate(PerkW);
     }
 
