@@ -1042,14 +1042,9 @@ class Compressor_VFD : public CompressorsBase
         turndownPercentPower =  turndownPower / fullLoadPower;
         noLoadPercentPower = noLoadPower / fullLoadPower;
         midTurndownPercentPower = midTurndownPower / fullLoadPower;
+        
         turndownPercentCapacity = turndownAirflow / capacityFullFload;
         midTurndownPercentCapacity = midTurndownAirflow / capacityFullFload;
-        noLoadPercentCapacity = 0;
-        // double turndownPercentPower = turndownPower / fullLoadPower;
-        // std::cout << "turndownPercentPower: " << turndownPercentPower << std::endl;
-        // double midTurndownPercentPower = midTurndownPower / fullLoadPower;
-        // std::cout << "midTurndownPercentPower: " << midTurndownPercentPower << std::endl;
-        // double noLoadPercentPower
     }
 
     
@@ -1125,7 +1120,6 @@ class Compressor_VFD : public CompressorsBase
         double noLoadPercentPower;
         double midTurndownPercentPower;
         double turndownPercentCapacity;
-        double noLoadPercentCapacity;
         double midTurndownPercentCapacity;
 };
 

@@ -636,80 +636,114 @@ function rnd(value) {
 
 
 //ID: ...VFD
+// test('COMP ID: VFD', function (t) {
+//     t.plan(3);
+//     var input = {
+//         adjustForDischargePressure: false,
+//         applyPressureInletCorrection: false,
+//         atmosphericPsi: 14.7,
+//         blowdownTime: 40,
+//         capacityAtFullLoad: 1009,
+//         capacityAtMaxFullFlow: undefined,
+//         capacityAtUnload: undefined,
+//         compressorType: 1,
+//         computeFrom: 1,
+//         computeFromPFAmps: 0,
+//         computeFromPFVoltage: 0,
+//         computeFromVal: 0,
+//         controlType: 7,
+//         dischargePsiFullLoad: 100,
+//         dischargePsiMax: undefined,
+//         loadFactorUnloaded: 0.06422018348623852,
+//         lubricantType: 0,
+//         midTurndownAirflow: 605,
+//         midTurndownDischargePressure: 102.4,
+//         midTurndownPower: 115,
+//         modulatingPsi: 20,
+//         noLoadDischargePressure: 15,
+//         noLoadPowerFM: 0.65,
+//         powerAtFullLoad: 174.4,
+//         powerAtFullLoadPercentage: 1,
+//         powerAtNoLoad: 11.2,
+//         powerAtNolLoad: 11.2,
+//         powerAtUnload: undefined,
+//         powerMax: undefined,
+//         powerMaxPercentage: NaN,
+//         pressureAtUnload: undefined,
+//         receiverVolume: 401.04187336685095,
+//         stageType: 0,
+//         turndownAirflow: 202,
+//         turndownDischargePressure: 104.8,
+//         turndownPower: 55.8,
+//         unloadPointCapacity: 20,
+//         unloadSumpPressure: 15
+//     }
+//     input.computeFromVal = .3;
+//     //1 = % Airflow
+//     input.computeFrom = 1;
+//     var results = bindings.CompressorsCalc(input);
+//     results.percentagePower = results.percentagePower * 100;
+//     t.equal(rnd(results.percentagePower), rnd(39), "% Power 1");
+//     // t.equal(rnd(results.powerCalculated), rnd(26.1), "Power Calculated 1");
+//     //Test Doc has 24.48 % power
+
+
+//     input.computeFromVal = .10;
+//     //0 = Percent Power
+//     input.computeFrom = 0;
+//     var results = bindings.CompressorsCalc(input);
+//     results.percentageCapacity = results.percentageCapacity * 100;
+//     t.equal(rnd(results.percentageCapacity), rnd(3), "% Capacity 1");
+
+//     input.computeFromVal = .456
+
+//     var results = bindings.CompressorsCalc(input);
+//     results.percentageCapacity = results.percentageCapacity * 100;
+//     t.equal(rnd(results.percentageCapacity), rnd(36), "% Capacity 2");
+//     // t.equal(rnd(results.powerCalculated), rnd(26.1), "Power Calculated 2");
+// });
+
 test('COMP ID: VFD', function (t) {
-    t.plan(8);
+    t.plan(3);
     var input = {
+
         adjustForDischargePressure: false,
         applyPressureInletCorrection: false,
         atmosphericPsi: 14.7,
         blowdownTime: 40,
-        capacityAtFullLoad: 1009,
-        capacityAtMaxFullFlow: undefined,
+        capacityAtFullLoad: 851,
+        capacityAtMaxFullFlow: 845,
         capacityAtUnload: undefined,
         compressorType: 1,
-        computeFrom: 1,
+        computeFrom: 2,
         computeFromPFAmps: 0,
         computeFromPFVoltage: 0,
         computeFromVal: 0,
-        controlType: 7,
-        dischargePsiFullLoad: 100,
-        dischargePsiMax: undefined,
-        loadFactorUnloaded: 0.06422018348623852,
+        controlType: 0,
+        dischargePsiFullLoad: 99,
+        dischargePsiMax: 109,
+        loadFactorUnloaded: 0.31333333333333335,
         lubricantType: 0,
-        midTurndownAirflow: 605,
-        midTurndownDischargePressure: 102.4,
-        midTurndownPower: 115,
-        modulatingPsi: 20,
+        modulatingPsi: null,
         noLoadDischargePressure: 15,
-        noLoadPowerFM: 0.65,
-        powerAtFullLoad: 174.4,
+        noLoadPowerFM: 0,
+        powerAtFullLoad: 150,
         powerAtFullLoadPercentage: 1,
-        powerAtNoLoad: 11.2,
-        powerAtNolLoad: 11.2,
+        powerAtNoLoad: 47,
+        powerAtNolLoad: 47,
         powerAtUnload: undefined,
-        powerMax: undefined,
-        powerMaxPercentage: NaN,
+        powerMax: 155,
+        powerMaxPercentage: 1.0333333333333334,
         pressureAtUnload: undefined,
-        receiverVolume: 401.04187336685095,
+        receiverVolume: 1522.8896737983887,
         stageType: 0,
-        turndownAirflow: 202,
-        turndownDischargePressure: 104.8,
-        turndownPower: 55.8,
-        unloadPointCapacity: 20,
+        unloadPointCapacity: 100,
         unloadSumpPressure: 15
     }
-    input.computeFromVal = .10;
-    //1 = % Airflow
-    input.computeFrom = 1;
-    var results = bindings.CompressorsCalc(input);
-    results.percentagePower = results.percentagePower * 100;
-    t.equal(rnd(results.percentagePower), rnd(25), "% Power 1");
-    t.equal(rnd(results.powerCalculated), rnd(26.1), "Power Calculated 1");
-    //Test Doc has 24.48 % power
-
-
-    input.computeFromVal = .2448;
-    //0 = Percent Power
-    input.computeFrom = 0;
+    // input.computeFromVal = .3;
+    // //1 = % Airflow
+    // input.computeFrom = 1;
     var results = bindings.CompressorsCalc(input);
     results.percentageCapacity = results.percentageCapacity * 100;
-    t.equal(rnd(results.percentageCapacity), rnd(10), "% Capacity 1");
-    t.equal(rnd(results.powerCalculated), rnd(26.1), "Power Calculated 2");
-
-    input.computeFromVal = .90;
-    //1 = % Airflow
-    input.computeFrom = 1;
-    var results = bindings.CompressorsCalc(input);
-    results.percentagePower = results.percentagePower * 100;
-    t.equal(rnd(results.percentagePower), rnd(93.71), "% Power 2");
-    t.equal(rnd(results.powerCalculated), rnd(99.9), "Power Calculated 3");
-
-    input.computeFromVal = .9371;
-    //0 = Percent Power
-    input.computeFrom = 0;
-    var results = bindings.CompressorsCalc(input);
-    results.percentageCapacity = results.percentageCapacity * 100;
-    t.equal(rnd(results.percentageCapacity), rnd(90), "% Capacity 2");
-    t.equal(rnd(results.powerCalculated), rnd(99.9), "Power Calculated 4");
+    t.equal(rnd(results.percentageCapacity), rnd(0), "% Capacity 1");
 });
-

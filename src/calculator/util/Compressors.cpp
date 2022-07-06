@@ -500,16 +500,15 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromVIPFMeasured(double
 // VFD
 CompressorsBase::Output Compressor_VFD::calculateFromPerC(double CPer)
 {
-    std::cout << "VFD calculateFromPerC: " << CPer << std::endl;
     double PerkW;
     if (CPer < turndownPercentCapacity)
     {
         // if CPer < % turndown capacity
         // line from no load to turndown
         // slope = (turndown % power - no load % power) / (turndown % capacity - no load % capacity)
-        double slope = (turndownPercentPower - noLoadPercentPower) / (turndownPercentCapacity - noLoadPercentCapacity);
+        double slope = (turndownPercentPower - noLoadPercentPower) / (turndownPercentCapacity - 0);
         // b = no load % power - (slope) * (no load % capacity)
-        double b = noLoadPercentPower - (slope * noLoadPercentCapacity);
+        double b = noLoadPercentPower - (slope * 0);
         // PerkW = (slope)CPer + b
         PerkW = (slope * CPer) + b;
     }
@@ -525,27 +524,24 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerC(double CPer)
         PerPower.push_back(turndownPercentPower);
         PerPower.push_back(midTurndownPercentPower);
         PerPower.push_back(1);
-        CurveFitVal curveFitValCap(PerCapacity, PerPower, 6);
+        CurveFitVal curveFitValCap(PerCapacity, PerPower, 4);
         PerkW = curveFitValCap.calculate(CPer);
     }
-    std::cout << "PerkW: " << PerkW << std::endl;
 
     return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }
 
 CompressorsBase::Output Compressor_VFD::calculateFromPerkW(double PerkW)
 {
-    std::cout << "VFD calculateFromPerkW: " << PerkW << std::endl;
     double CPer;
     if (PerkW < turndownPercentPower)
     {
-        std::cout << "LINEEEE" << std::endl;
         // if PerkW < % turndown power
         // line from no load to turndown
-        // slope = (turndown % power - no load % power) / (turndown % capacity - no load % capacity)
-        double slope = (turndownPercentCapacity - noLoadPercentCapacity) / (turndownPercentPower - noLoadPercentPower);
+        // slope = (turndown % capacity - no load % capacity) / (turndown % power - no load % power)
+        double slope = (turndownPercentCapacity - 0) / (turndownPercentPower - noLoadPercentPower);
         // b = no load % capacity - (slope) * (no load % power)
-        double b = noLoadPercentCapacity - (slope * noLoadPercentPower);
+        double b = 0 - (slope * noLoadPercentPower);
         // CPer  = (slope)PerkW + b
         CPer = (slope * PerkW) + b;
     }
@@ -561,28 +557,24 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerkW(double PerkW)
         PerCapacity.push_back(turndownPercentCapacity);
         PerCapacity.push_back(midTurndownPercentCapacity);
         PerCapacity.push_back(1);
-        CurveFitVal curveFitValCap(PerPower, PerCapacity, 6);
+        CurveFitVal curveFitValCap(PerPower, PerCapacity, 4);
         CPer = curveFitValCap.calculate(PerkW);
     }
 
-    std::cout << "CPer: " << CPer << std::endl;
-    return Output(PerkW * kW_fl, C_fl, PerkW, 1);
+    return Output(PerkW * kW_fl, C_fl * CPer, PerkW, CPer);
 }
 
 CompressorsBase::Output Compressor_VFD::calculateFromkWMeasured(double kW)
 {
-    std::cout << "VFD calculateFromkWMeasured: " << kW << std::endl;
     return Compressor_VFD::calculateFromPerkW(kW / kW_fl);
 }
 
 CompressorsBase::Output Compressor_VFD::calculateFromCMeasured(double C)
 {
-    std::cout << "VFD calculateFromCMeasured: " << C << std::endl;
     return Compressor_VFD::calculateFromPerC(C / C_fl);
 }
 
 CompressorsBase::Output Compressor_VFD::calculateFromVIPFMeasured(double V, double I, double PF)
 {
-    std::cout << "VFD calculateFromVIPFMeasured: " << std::endl;
     return Compressor_VFD::calculateFromkWMeasured(V * I * PF * 1.732 / 1000);
 }

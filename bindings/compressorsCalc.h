@@ -420,7 +420,6 @@ void compressorMultiStepUnloading(Compressors::CompressorType compressorType, Co
 
 void compressorVFD(Compressors::CompressorType compressorType, Compressors::ControlType controlType, Compressors::Stage stageType, Compressors::Lubricant lubricantType)
 {
-    std::cout << "COMPRESSOR VFD" << std::endl;
     const double fullLoadPower = getDouble("powerAtFullLoad", inp);
     const double midTurndownPower = getDouble("midTurndownPower", inp);
     const double turndownPower = getDouble("turndownPower", inp);
@@ -428,7 +427,6 @@ void compressorVFD(Compressors::CompressorType compressorType, Compressors::Cont
     const double capacityFullFload = getDouble("capacityAtFullLoad", inp);
     const double midTurndownAirflow = getDouble("midTurndownAirflow", inp);
     const double turndownAirflow = getDouble("turndownAirflow", inp);
-    // const double noLoadCapacity = getDouble("noLoadCapacity", inp);
 
     auto compMethod = Compressor_VFD(fullLoadPower, midTurndownPower, turndownPower, noLoadPower, capacityFullFload,
                                      midTurndownAirflow, turndownAirflow);
@@ -455,10 +453,10 @@ void compressorVFD(Compressors::CompressorType compressorType, Compressors::Cont
     else
         ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
 
-    // setR("reRatedFlow", compMethod.C_fl_Adjusted);
-    // setR("reRatedPower", compMethod.kW_fl_Adjusted);
-    // setR("reRatedFlowMax", compMethod.C_max_Adjusted);
-    // setR("reRatedPowerMax", compMethod.kW_max_Adjusted);
+    setR("reRatedFlow", compMethod.C_fl_Adjusted);
+    setR("reRatedPower", compMethod.kW_fl_Adjusted);
+    setR("reRatedFlowMax", compMethod.C_max_Adjusted);
+    setR("reRatedPowerMax", compMethod.kW_max_Adjusted);
 
     setR("powerCalculated", output.kW_Calc);
     setR("capacityCalculated", output.C_Calc);
