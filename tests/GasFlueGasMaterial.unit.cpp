@@ -31,6 +31,11 @@ TEST_CASE( "Calculate Heat Loss for flue gas Losses", "[Heat Loss]" ) {
 	CHECK(composition.getHeatingValueVolume() == Approx(83.605));
 	CHECK(composition.getSpecificGravity() == Approx(1.0870540901007706));
 
+	composition = GasCompositions("Hydrogen", 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0);
+	CHECK(composition.getHeatingValue() == Approx(61095.0));
+	CHECK(composition.getHeatingValueVolume() == Approx(325));
+	CHECK(composition.getSpecificGravity() == Approx(0.0746887967));
+
 	composition = GasCompositions("", 94.1, 2.4, 1.41, 0.03, 0.49, 0.29, 0, 0.42, 0.71, 0, 0);
 	CHECK(composition.getHeatingValue() == Approx(22630.345));
 	CHECK(composition.getSpecificGravity() == Approx(0.631782959));

@@ -223,7 +223,7 @@ test('dbGasFlueGasMaterial select', function (t) {
         specificGravity: 1.0870540901007706
     };
 
-    t.equal(res.length, 3, "array is not of size 3");
+    t.equal(res.length, 4, "array is not of size 4");
     t.equal(res[2].id, obj2.id, res[2].id + " != " + obj2.id);
     t.equal(res[2].substance, obj2.substance, res[2].substance + " != " + obj2.substance);
     t.equal(res[2].CH4, obj2.CH4, res[2].CH4 + " != " + obj2.CH4);
@@ -240,6 +240,66 @@ test('dbGasFlueGasMaterial select', function (t) {
     t.equal(res[2].heatingValue, obj2.heatingValue, res[2].heatingValue + " != " + obj2.heatingValue);
     t.equal(res[2].heatingValueVolume, obj2.heatingValueVolume, res[2].heatingValueVolume + " != " + obj2.heatingValueVolume);
     t.equal(res[2].specificGravity, obj2.specificGravity, res[2].specificGravity + " != " + obj2.specificGravity);
+});
+
+test('dbGasFlueGasMaterial Hydrogen select', function (t) {
+    t.plan(29);
+    bindings.startup();
+
+    t.type(bindings.selectGasFlueGasMaterialById, 'function');
+    var res = bindings.selectGasFlueGasMaterialById(4);
+
+    var obj = {
+        id: 4,
+        substance: 'Hydrogen',
+        CH4: 0,
+        C2H6: 0,
+        N2: 0,
+        H2: 100,
+        C3H8: 0,
+        C4H10_CnH2n: 0,
+        H2O: 0,
+        CO: 0,
+        CO2: 0,
+        SO2: 0,
+        O2: 0,
+        heatingValue: 61095.0,
+        heatingValueVolume: 325,
+        specificGravity: .0746887967
+    };
+
+    t.equal(res.id, obj.id, res.id + " != " + obj.id);
+    t.equal(res.substance, obj.substance, res.substance + " != " + obj.substance);
+    t.equal(res.CH4, obj.CH4, res.CH4 + " != " + obj.CH4);
+    t.equal(res.C2H6, obj.C2H6, res.C2H6 + " != " + obj.C2H6);
+    t.equal(res.N2, obj.N2, res.N2 + " != " + obj.N2);
+    t.equal(res.H2, obj.H2, res.H2 + " != " + obj.H2);
+    t.equal(res.O2, obj.O2, res.O2 + " != " + obj.O2);
+    t.equal(res.heatingValue, obj.heatingValue, res.heatingValue + " != " + obj.heatingValue);
+    t.equal(res.heatingValueVolume, obj.heatingValueVolume, res.heatingValueVolume + " != " + obj.heatingValueVolume);
+    t.equal(res.specificGravity, obj.specificGravity, res.specificGravity + " != " + obj.specificGravity);
+
+    t.type(bindings.selectGasFlueGasMaterials, 'function');
+    res = bindings.selectGasFlueGasMaterials();
+
+
+    t.equal(res.length, 4, "array is not of size 4");
+    t.equal(res[3].id, obj.id, res[3].id + " != " + obj.id);
+    t.equal(res[3].substance, obj.substance, res[3].substance + " != " + obj.substance);
+    t.equal(res[3].CH4, obj.CH4, res[3].CH4 + " != " + obj.CH4);
+    t.equal(res[3].C2H6, obj.C2H6, res[3].C2H6 + " != " + obj.C2H6);
+    t.equal(res[3].N2, obj.N2, res[3].N2 + " != " + obj.N2);
+    t.equal(res[3].H2, obj.H2, res[3].H2 + " != " + obj.H2);
+    t.equal(res[3].C3H8, obj.C3H8, res[3].C3H8 + " != " + obj.C3H8);
+    t.equal(res[3].C4H10_CnH2n, obj.C4H10_CnH2n, res[3].C4H10_CnH2n + " != " + obj.C4H10_CnH2n);
+    t.equal(res[3].H2O, obj.H2O, res[3].H2O + " != " + obj.H2O);
+    t.equal(res[3].CO, obj.CO, res[3].CO + " != " + obj.CO);
+    t.equal(res[3].CO2, obj.CO2, res[3].CO2 + " != " + obj.CO2);
+    t.equal(res[3].SO2, obj.SO2, res[3].SO2 + " != " + obj.SO2);
+    t.equal(res[3].O2, obj.O2, res[3].O2 + " != " + obj.O2);
+    t.equal(res[3].heatingValue, obj.heatingValue, res[3].heatingValue + " != " + obj.heatingValue);
+    t.equal(res[3].heatingValueVolume, obj.heatingValueVolume, res[3].heatingValueVolume + " != " + obj.heatingValueVolume);
+    t.equal(res[3].specificGravity, obj.specificGravity, res[3].specificGravity + " != " + obj.specificGravity);
 });
 
 test('dbGasFlueGasMaterial insert', function (t) {
