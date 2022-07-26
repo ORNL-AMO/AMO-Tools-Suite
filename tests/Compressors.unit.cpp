@@ -330,8 +330,8 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(resMUL.C_Calc == Approx(937));
     CHECK(resMUL.C_Per == Approx(0.89408));
     resMUL = cMUL.calculateFromVIPFMeasured(440, 2.467, 50);
-    CHECK(resMUL.kW_Calc == Approx(94.002568));
-    CHECK(resMUL.PerkW == Approx(0.56458));
+    CHECK(resMUL.kW_Calc == Approx(0));
+    CHECK(resMUL.PerkW == Approx(0));
 
     resMUL = cMUL.calculateFromPerC(0.97);
     CHECK(resMUL.C_Calc == Approx(1016.56));
