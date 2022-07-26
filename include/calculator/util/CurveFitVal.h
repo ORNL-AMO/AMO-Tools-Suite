@@ -5,6 +5,7 @@
  *
  * @author Subhankar Mishra (mishras)
  * @author Gina Accawi (accawigk)
+ * @author Mark Root (mroot)
  * @bug No known bugs.
  *
  */
@@ -15,8 +16,9 @@
 #include <vector>
 #include <exception>
 #include <stdexcept>
-
-class CurveFitVal {
+#include <iostream>
+class CurveFitVal
+{
 public:
     /**
      * Constructor
@@ -29,14 +31,13 @@ public:
         std::vector<double> xcoord,
         std::vector<double> ycoord,
         const std::size_t pdegree,
-        const double loadFactor = 0
-    ) :
-        pdegree(pdegree),
-        xcoord(std::move(xcoord)),
-        ycoord(std::move(ycoord)),
-        loadFactor(loadFactor)
+        const double loadFactor = 0) : pdegree(pdegree),
+                                       xcoord(std::move(xcoord)),
+                                       ycoord(std::move(ycoord)),
+                                       loadFactor(loadFactor)
     {
-        if (this->xcoord.size() != this->ycoord.size()) {
+        if (this->xcoord.size() != this->ycoord.size())
+        {
             throw std::runtime_error("X and Y coordinate vectors must be the same size");
         }
 
@@ -49,6 +50,10 @@ public:
      */
     double calculate() const;
     double calculate(double) const;
+
+public:
+    // coeff public so quadratic equation can be used
+    std::vector<double> coeff;
 
 private:
     /**
@@ -67,9 +72,7 @@ private:
     /**
      * Array to store the coefficients of the curve.
      */
-    std::vector<double> coeff;
     std::vector<double> Fit_Coefficients();
 };
 
-
-#endif //AMO_LIBRARY_CURVEFITVAL_H
+#endif // AMO_LIBRARY_CURVEFITVAL_H
