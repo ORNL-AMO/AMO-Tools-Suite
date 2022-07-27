@@ -1,5 +1,11 @@
 function validateCompressorsCalc(headerMsg, input, output){
     let validate = function(results, expected, blowOff) {
+        console.log('============ expected', expected)
+        console.log('============ results', results)
+        if (input.controlType == Module.ControlType.VFD) {
+            logMessage('======= VFD ======', true);
+                    debugger;
+        }
         testNumberValue(rnd(results.kW_Calc), rnd(expected[0]), "powerCalculated kW_Calc");
         testNumberValue(rnd(results.C_Calc), rnd(expected[1]), "capacityCalculated C_Calc");
         testNumberValue(rnd(results.PerkW), rnd(expected[2]), "percentagePower PerkW");
@@ -29,6 +35,7 @@ function validateCompressorsCalc(headerMsg, input, output){
                 }
                 else if(input.controlType == Module.ControlType.VFD) {
                     res = compressorsCalcVFD(input);
+                    logMessage('======= VFD ======' + res, true);
                 }
             }
             else if (input.lubricantType == Module.Lubricant.Free && input.stageType == Module.Stage.Two) {
@@ -40,6 +47,7 @@ function validateCompressorsCalc(headerMsg, input, output){
                 }
                 else if(input.controlType == Module.ControlType.VFD) {
                     res = compressorsCalcVFD(input);
+                    logMessage('======= VFD ======' + res, true);
                 }
             }
         }
@@ -57,7 +65,7 @@ function validateCompressorsCalc(headerMsg, input, output){
             }
         }
     }
-
+    
     validate(res, output);
 }
 
@@ -189,9 +197,43 @@ function compressorsCalcMultiStepUnloading(input){
 }
 
 function compressorsCalcVFD(input){
-
+    console.log('input', input)
+    logMessage('======= VFD input' + input, true);
+    debugger;
+    let compMethod = new Module.Compressor_VFD(
+        input.powerAtFullLoad, 
+        input.midTurndownPower, 
+        input.turndownPower, 
+        input.powerAtNoLoad, 
+        input.capacityAtFullLoad, 
+        input.midTurndownAirflow,
+        input.turndownAirflow
+        );
+    let output = compressorsCalc(input,  compMethod);
+    console.log('output', output)
+    compMethod.delete();
+    return output;
 }
 
+function compressorsVFDTest() {
+
+    let input = {
+        compressorType : Module.CompressorType.Screw,
+        lubricantType: Module.Lubricant.Injected, 
+        controlType: Module.ControlType.VFD,
+        stageType: Module.Stage.Single,
+        powerAtFullLoad: 450,
+        midTurndownPower: 300,
+        turndownPower: 300,
+        powerAtNoLoad: 200,
+        capacityAtMaxFullLoadPressure: 2885,
+        midTurndownAirflow: 300,
+        turndownAirflow: 300,
+    };
+
+    validateCompressorsCalc('Compressors VFD', input, [162.828, 753.84, 0.36, 0.24]);
+
+}
 
 function compressorsCentrifugalLoadUnload(){
     let input = {
@@ -805,6 +847,7 @@ function kW_adjusted(){
 compressorsCentrifugalLoadUnload();
 compressorsCentrifugalModulationUnload();
 compressorsCentrifugalBlowOff();
+compressorsVFDTest();
 
 // compressorsModulationWOUnload();
 // compressorsStartStop();
