@@ -5,7 +5,7 @@
   "directories": {
     "test": "tests"
   },
-  "gypfile": true,
+  "gypfile": false,
   "dependencies": {
     "assert": "^2.0.0",
     "d3": "^4.13.0",

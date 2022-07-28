@@ -1,11 +1,5 @@
 function validateCompressorsCalc(headerMsg, input, output){
     let validate = function(results, expected, blowOff) {
-        console.log('============ expected', expected)
-        console.log('============ results', results)
-        if (input.controlType == Module.ControlType.VFD) {
-            logMessage('======= VFD ======', true);
-                    debugger;
-        }
         testNumberValue(rnd(results.kW_Calc), rnd(expected[0]), "powerCalculated kW_Calc");
         testNumberValue(rnd(results.C_Calc), rnd(expected[1]), "capacityCalculated C_Calc");
         testNumberValue(rnd(results.PerkW), rnd(expected[2]), "percentagePower PerkW");
@@ -35,7 +29,6 @@ function validateCompressorsCalc(headerMsg, input, output){
                 }
                 else if(input.controlType == Module.ControlType.VFD) {
                     res = compressorsCalcVFD(input);
-                    logMessage('======= VFD ======' + res, true);
                 }
             }
             else if (input.lubricantType == Module.Lubricant.Free && input.stageType == Module.Stage.Two) {
@@ -47,7 +40,6 @@ function validateCompressorsCalc(headerMsg, input, output){
                 }
                 else if(input.controlType == Module.ControlType.VFD) {
                     res = compressorsCalcVFD(input);
-                    logMessage('======= VFD ======' + res, true);
                 }
             }
         }
@@ -197,9 +189,6 @@ function compressorsCalcMultiStepUnloading(input){
 }
 
 function compressorsCalcVFD(input){
-    console.log('input', input)
-    logMessage('======= VFD input' + input, true);
-    debugger;
     let compMethod = new Module.Compressor_VFD(
         input.powerAtFullLoad, 
         input.midTurndownPower, 
@@ -209,8 +198,7 @@ function compressorsCalcVFD(input){
         input.midTurndownAirflow,
         input.turndownAirflow
         );
-    let output = compressorsCalc(input,  compMethod);
-    console.log('output', output)
+    let output = compressorsCalc(input, compMethod);
     compMethod.delete();
     return output;
 }
@@ -222,17 +210,39 @@ function compressorsVFDTest() {
         lubricantType: Module.Lubricant.Injected, 
         controlType: Module.ControlType.VFD,
         stageType: Module.Stage.Single,
-        powerAtFullLoad: 450,
-        midTurndownPower: 300,
-        turndownPower: 300,
-        powerAtNoLoad: 200,
-        capacityAtMaxFullLoadPressure: 2885,
-        midTurndownAirflow: 300,
-        turndownAirflow: 300,
+
+        dischargePsiFullLoad: 100,
+        dischargePsiMax: undefined,
+        loadFactorUnloaded: 0.06422018348623852,
+        lubricantType: 0,
+        midTurndownAirflow: 605,
+        midTurndownDischargePressure: 102.4,
+        midTurndownPower: 115,
+        modulatingPsi: 20,
+        noLoadDischargePressure: 15,
+        noLoadPowerFM: 0.65,
+        powerAtFullLoad: 174.4,
+        powerAtFullLoadPercentage: 1,
+        powerAtNoLoad: 11.2,
+        powerAtNolLoad: 11.2,
+        powerAtUnload: undefined,
+        powerMax: undefined,
+        powerMaxPercentage: NaN,
+        pressureAtUnload: undefined,
+        receiverVolume: 401.04187336685095,
+        stageType: 0,
+        turndownAirflow: 202,
+        turndownDischargePressure: 104.8,
+        turndownPower: 55.8,
+        unloadPointCapacity: 20,
+        unloadSumpPressure: 15,
+        atmosphericPsi: 14.7,
+        blowdownTime: 40,
+        capacityAtFullLoad: 1009,
+        computeFrom: Module.ComputeFrom.PercentageCapacity,
+        computeFromVal: .31
     };
-
-    validateCompressorsCalc('Compressors VFD', input, [162.828, 753.84, 0.36, 0.24]);
-
+    validateCompressorsCalc('Compressors VFD', input, [72.0695, 312.79, 0.4132, 0.31]);
 }
 
 function compressorsCentrifugalLoadUnload(){
@@ -849,10 +859,10 @@ compressorsCentrifugalModulationUnload();
 compressorsCentrifugalBlowOff();
 compressorsVFDTest();
 
-// compressorsModulationWOUnload();
-// compressorsStartStop();
-// compressorsLoadUnload();
-// compressorsModulationWithUnload();
+compressorsModulationWOUnload();
+compressorsStartStop();
+compressorsLoadUnload();
+compressorsModulationWithUnload();
 
 reduceAirLeaks();
 improveEndUseEfficiency();
