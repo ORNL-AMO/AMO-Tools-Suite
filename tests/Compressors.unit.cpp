@@ -193,9 +193,9 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(resMWOuL.PerkW == Approx(0.89));
     CHECK(resMWOuL.C_Per == Approx(0.6879));
     resMWOuL = cMWOuL.calculateFromPerC(1.66173);
-    CHECK(resMWOuL.kW_Calc == Approx(105.31807));
+    CHECK(resMWOuL.kW_Calc == Approx(85.4));
     CHECK(resMWOuL.C_Calc == Approx(786));
-    CHECK(resMWOuL.PerkW == Approx(1.2332327));
+    CHECK(resMWOuL.PerkW == Approx(1));
     CHECK(resMWOuL.C_Per == Approx(1.66173));
     resMWOuL = cMWOuL.calculateFromkWMeasured(75.9);
     CHECK(resMWOuL.kW_Calc == Approx(75.9));
@@ -203,9 +203,9 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(resMWOuL.PerkW == Approx(0.88875));
     CHECK(resMWOuL.C_Per == Approx(0.68438));
     resMWOuL = cMWOuL.calculateFromCMeasured(786);
-    CHECK(resMWOuL.kW_Calc == Approx(105.31818));
+    CHECK(resMWOuL.kW_Calc == Approx(85.4));
     CHECK(resMWOuL.C_Calc == Approx(786));
-    CHECK(resMWOuL.PerkW == Approx(1.23326));
+    CHECK(resMWOuL.PerkW == Approx(1));
     CHECK(resMWOuL.C_Per == Approx(1.66173));
     resMWOuL = cMWOuL.calculateFromVIPFMeasured(440, 2.467, 50);
     CHECK(resMWOuL.kW_Calc == Approx(94.0026));
@@ -221,9 +221,9 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(resMWOuL.PerkW == Approx(0.89));
     CHECK(resMWOuL.C_Per == Approx(0.71506));
     resMWOuL = cMWOuL.calculateFromPerC(1.66173);
-    CHECK(resMWOuL.kW_Calc == Approx(113.0843));
+    CHECK(resMWOuL.kW_Calc == Approx(90.0736));
     CHECK(resMWOuL.C_Calc == Approx(780.116));
-    CHECK(resMWOuL.PerkW == Approx(1.25547));
+    CHECK(resMWOuL.PerkW == Approx(1));
     CHECK(resMWOuL.C_Per == Approx(1.66173));
     resMWOuL = cMWOuL.calculateFromkWMeasured(75.9);
     CHECK(resMWOuL.kW_Calc == Approx(75.9));
@@ -231,9 +231,9 @@ TEST_CASE("Calculate estimated power(kW) consumption and air flow(acfm) for a Co
     CHECK(resMWOuL.PerkW == Approx(0.8426441883));
     CHECK(resMWOuL.C_Per == Approx(0.5924));
     resMWOuL = cMWOuL.calculateFromCMeasured(786);
-    CHECK(resMWOuL.kW_Calc == Approx(113.52002));
+    CHECK(resMWOuL.kW_Calc == Approx(90.0736));
     CHECK(resMWOuL.C_Calc == Approx(786));
-    CHECK(resMWOuL.PerkW == Approx(1.260302));
+    CHECK(resMWOuL.PerkW == Approx(1));
     CHECK(resMWOuL.C_Per == Approx(1.67426));
     resMWOuL = cMWOuL.calculateFromVIPFMeasured(440, 2.467, 50);
     CHECK(resMWOuL.kW_Calc == Approx(94.00257));
