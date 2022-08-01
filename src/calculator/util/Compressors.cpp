@@ -162,6 +162,10 @@ CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerkW(doubl
 CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromPerC(double CPer)
 {
 
+    if (CPer > 1){
+        return Output(kW_fl, C_fl * CPer, 1, CPer);
+    }
+
     double kW_Calc;
     if (woUnload)
     {
@@ -194,7 +198,7 @@ CompressorsBase::Output Compressors_ModulationWOUnload::calculateFromVIPFMeasure
 
 CompressorsBase::Output Compressors_StartStop::calculateFromPerkW(double PerkW)
 {
-    //StartStop no load power = 0;
+    // StartStop no load power = 0;
     if (PerkW == 0)
     {
         return Output(0, 0, 0, 0);
@@ -206,6 +210,10 @@ CompressorsBase::Output Compressors_StartStop::calculateFromPerkW(double PerkW)
 
 CompressorsBase::Output Compressors_StartStop::calculateFromPerC(double CPer)
 {
+    if (CPer > 1){
+        return Output(kW_fl, C_fl * CPer, 1, CPer);
+    }
+
     const double kW_Calc = (((kWPer_fl + kW_max / kW_fl) / 2) * CPer * kW_fl);
     return Output(kW_Calc, C_fl * CPer, kW_Calc / kW_fl, CPer);
 }
@@ -377,8 +385,9 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromPerkW(double PerkW)
 
 CompressorsBase::Output Compressors_LoadUnload::calculateFromPerC(double CPer)
 {
-    if (CPer == 1)
+    if (CPer == 1 || CPer > 1){
         return Output(kW_fl, C_fl * CPer, 1, CPer);
+    }
 
     // if modulation or variable displacement
     if (CntrlType == ControlType::ModulationUnload || CntrlType == ControlType::VariableDisplacementUnload)
@@ -511,7 +520,11 @@ CompressorsBase::Output Compressors_LoadUnload::calculateFromVIPFMeasured(double
 CompressorsBase::Output Compressor_VFD::calculateFromPerC(double CPer)
 {
     double PerkW;
-    if (CPer < turndownPercentCapacity)
+    if (CPer > 1)
+    {
+        PerkW = 1;
+    }
+    else if (CPer < turndownPercentCapacity)
     {
         // if CPer < % turndown capacity
         // line from no load to turndown
@@ -547,7 +560,6 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerkW(double PerkW)
     if (PerkW == 1)
         return Output(kW_fl, C_fl, 1, 1);
 
-
     double power = PerkW * kW_fl;
 
     if (power < noLoadPower)
@@ -580,10 +592,10 @@ CompressorsBase::Output Compressor_VFD::calculateFromPerkW(double PerkW)
         PerCapacity.push_back(midTurndownPercentCapacity);
         PerCapacity.push_back(1);
 
-        //get coefficients for x:per capacity, y: per KW
+        // get coefficients for x:per capacity, y: per KW
         CurveFitVal curveFitValCap(PerCapacity, PerPower, 2);
 
-        //use quadratic formula for find CPer
+        // use quadratic formula for find CPer
         double a = curveFitValCap.coeff.at(2);
         double b = curveFitValCap.coeff.at(1);
         double c = curveFitValCap.coeff.at(0);
