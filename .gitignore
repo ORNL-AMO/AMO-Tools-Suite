@@ -21,7 +21,6 @@ tags
 ### Eclipse template
 
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak
@@ -126,7 +125,6 @@ CTestTestfile.cmake
 x64/
 x86/
 bld/
-[Bb]in/
 [Oo]bj/
 [Ll]og/
 
