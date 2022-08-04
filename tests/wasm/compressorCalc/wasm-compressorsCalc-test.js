@@ -57,7 +57,7 @@ function validateCompressorsCalc(headerMsg, input, output){
             }
         }
     }
-
+    
     validate(res, output);
 }
 
@@ -189,9 +189,61 @@ function compressorsCalcMultiStepUnloading(input){
 }
 
 function compressorsCalcVFD(input){
-
+    let compMethod = new Module.Compressor_VFD(
+        input.powerAtFullLoad, 
+        input.midTurndownPower, 
+        input.turndownPower, 
+        input.powerAtNoLoad, 
+        input.capacityAtFullLoad, 
+        input.midTurndownAirflow,
+        input.turndownAirflow
+        );
+    let output = compressorsCalc(input, compMethod);
+    compMethod.delete();
+    return output;
 }
 
+function compressorsVFDTest() {
+
+    let input = {
+        compressorType : Module.CompressorType.Screw,
+        lubricantType: Module.Lubricant.Injected, 
+        controlType: Module.ControlType.VFD,
+        stageType: Module.Stage.Single,
+
+        dischargePsiFullLoad: 100,
+        dischargePsiMax: undefined,
+        loadFactorUnloaded: 0.06422018348623852,
+        lubricantType: 0,
+        midTurndownAirflow: 605,
+        midTurndownDischargePressure: 102.4,
+        midTurndownPower: 115,
+        modulatingPsi: 20,
+        noLoadDischargePressure: 15,
+        noLoadPowerFM: 0.65,
+        powerAtFullLoad: 174.4,
+        powerAtFullLoadPercentage: 1,
+        powerAtNoLoad: 11.2,
+        powerAtNolLoad: 11.2,
+        powerAtUnload: undefined,
+        powerMax: undefined,
+        powerMaxPercentage: NaN,
+        pressureAtUnload: undefined,
+        receiverVolume: 401.04187336685095,
+        stageType: 0,
+        turndownAirflow: 202,
+        turndownDischargePressure: 104.8,
+        turndownPower: 55.8,
+        unloadPointCapacity: 20,
+        unloadSumpPressure: 15,
+        atmosphericPsi: 14.7,
+        blowdownTime: 40,
+        capacityAtFullLoad: 1009,
+        computeFrom: Module.ComputeFrom.PercentageCapacity,
+        computeFromVal: .31
+    };
+    validateCompressorsCalc('Compressors VFD', input, [72.0695, 312.79, 0.4132, 0.31]);
+}
 
 function compressorsCentrifugalLoadUnload(){
     let input = {
@@ -805,6 +857,7 @@ function kW_adjusted(){
 compressorsCentrifugalLoadUnload();
 compressorsCentrifugalModulationUnload();
 compressorsCentrifugalBlowOff();
+compressorsVFDTest();
 
 // compressorsModulationWOUnload();
 // compressorsStartStop();

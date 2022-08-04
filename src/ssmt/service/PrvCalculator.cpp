@@ -65,6 +65,7 @@ double PrvCalculator::calcPrvMassFlow(const SteamSystemModelerTool::FluidPropert
 
 double
 PrvCalculator::getTurbineMassFlow(const std::shared_ptr<Turbine> &turbine, const std::string &turbineName) const {
+    std::string turbineName_ = turbineName; turbineName_ = turbineName_;//keep this or fix unused variable
     double massFlow = 0;
 
     if (turbine == nullptr) {

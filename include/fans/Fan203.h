@@ -391,13 +391,14 @@ private:
 
 	// dry bulb temp, reference static pressure, reference barometric pressure, gas density respectively
 	const double tdo, pso, pbo;
+    double wetBulbTemp = 0;
 
 	// gasDensity, specificGravity
 	/**
 	 * @param gasDensity double, GasDensity, density of a gas in pounds per sqft, lb/scf
 	 * @param g double, Specific Gravity, unitless
 	 */
-	double gasDensity, g;
+	double gasDensity = 0, g = 0;
 	const GasType gasType;
 
 	/**
@@ -412,7 +413,8 @@ private:
 	 * @param saturationPressure double, Saturation Pressure, in Hg
 	 * @param wetBulbTemp double, Wet Bulb Temperature, deg F
 	 */
-	double absolutePressure, saturatedHumidity, saturationDegree, humidityRatio, specificVolume, enthalpy, dewPoint, relativeHumidity, saturationPressure, wetBulbTemp;
+	double absolutePressure = 0, saturatedHumidity = 0, saturationDegree = 0, humidityRatio = 0,
+    specificVolume = 0, enthalpy = 0, dewPoint = 0, relativeHumidity = 0, saturationPressure = 0;
 
 	friend class PlaneData;
 	friend class Fan203;

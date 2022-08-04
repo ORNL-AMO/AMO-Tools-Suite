@@ -8,6 +8,7 @@ SteamBalanceCheckerService::check(const std::string &itemName, const PressureTur
                                   const std::shared_ptr<Turbine> &highToLowPressureTurbineIdeal,
                                   const SteamSystemModelerTool::FluidProperties &highPressureHeaderOutput,
                                   const double neededMassFlow, const double availableMassFlow) const {
+    Boiler boiler_ = boiler; boiler_ = boiler_;//keep this or fix unused variable
     const std::string methodName = std::string("SteamBalanceCheckerService::") + std::string(__func__) + ": ";
 
     //calculate additional steam needed to meet minimum requirement
@@ -50,6 +51,7 @@ SteamBalanceCheckerService::check(const std::string &itemName, const PressureTur
                                   const std::shared_ptr<Turbine> &highToMediumPressureTurbine,
                                   const SteamSystemModelerTool::FluidProperties &highPressureHeaderOutput,
                                   const double availableMassFlow) const {
+    std::string itemName_ = itemName; itemName_ = itemName_;//keep this or fix unused variable
     const std::string methodName = std::string("SteamBalanceCheckerService::") + std::string(__func__) + ": ";
 
     //calculate additional steam needed to meet minimum requirement

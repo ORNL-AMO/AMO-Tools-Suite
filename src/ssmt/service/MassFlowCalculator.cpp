@@ -11,26 +11,21 @@ double MassFlowCalculator::calcInitialMassFlow(const HeaderInput &headerInput) c
     const std::shared_ptr<HeaderNotHighestPressure> &lowPressureHeaderInput = headerInput.getLowPressureHeader();
 
     const int headerCount = headerInput.getHeaderCount();
-    switch (headerCount) {
-        case 3: {
-            const double mediumProcessSteamUsage = mediumPressureHeaderInput->getProcessSteamUsage();
-            massFlow = addToMassFlow("mediumPressureHeaderInput", mediumProcessSteamUsage, massFlow);
-        }
-//            [[fallthrough]];
-        case 2: {
-            const double lowProcessSteamUsage = lowPressureHeaderInput->getProcessSteamUsage();
-            massFlow = addToMassFlow("lowProcessSteamUsage", lowProcessSteamUsage, massFlow);
-        }
-//            [[fallthrough]];
-        case 1: {
-            const double highProcessSteamUsage = highPressureHeaderInput.getProcessSteamUsage();
-            massFlow = addToMassFlow("highProcessSteamUsage", highProcessSteamUsage, massFlow);
-        }
-            break;
-        default:
-            std::string msg = methodName + "headerCount=" + std::to_string(headerCount) + " not handled";
-            // std::cout << msg << std::endl;
-            throw std::out_of_range(msg);
+    if(headerCount > 2){
+        const double mediumProcessSteamUsage = mediumPressureHeaderInput->getProcessSteamUsage();
+        massFlow = addToMassFlow("mediumPressureHeaderInput", mediumProcessSteamUsage, massFlow);
+    }
+    if(headerCount > 1){
+        const double lowProcessSteamUsage = lowPressureHeaderInput->getProcessSteamUsage();
+        massFlow = addToMassFlow("lowProcessSteamUsage", lowProcessSteamUsage, massFlow);
+    }
+    if(headerCount > 0){
+        const double highProcessSteamUsage = highPressureHeaderInput.getProcessSteamUsage();
+        massFlow = addToMassFlow("highProcessSteamUsage", highProcessSteamUsage, massFlow);
+    }else{
+        std::string msg = methodName + "headerCount=" + std::to_string(headerCount) + " not handled";
+        // std::cout << msg << std::endl;
+        throw std::out_of_range(msg);
     }
 
     //std::cout << methodName << "massFlow=" << massFlow << std::endl;
@@ -41,6 +36,7 @@ double MassFlowCalculator::calcInitialMassFlow(const HeaderInput &headerInput) c
 double
 MassFlowCalculator::addToMassFlow(const std::string &objectName, const double processSteamUsage,
                                   const double massFlow) const {
+    std::string objectName_ = objectName;//keep or fix unused variable
     const std::string methodName = std::string("MassFlowCalculator::") + std::string(__func__) + ": ";
 
     double massFlowUpdated = massFlow;

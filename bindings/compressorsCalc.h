@@ -355,7 +355,7 @@ void compressorsModulationWithUnload(Compressors::CompressorType compressorType,
     double powerAtUnload = 0;
     double pressureAtUnload = 0;
     double capacityAtUnload = 0;
-    //compressorsModulationWithUnload also called for Variable Displacement but does not have these performance points data
+    // compressorsModulationWithUnload also called for Variable Displacement but does not have these performance points data
     if (controlType == Compressors::ControlType::ModulationUnload)
     {
         powerAtUnload = getDouble("powerAtUnload", inp);
@@ -420,6 +420,48 @@ void compressorMultiStepUnloading(Compressors::CompressorType compressorType, Co
 
 void compressorVFD(Compressors::CompressorType compressorType, Compressors::ControlType controlType, Compressors::Stage stageType, Compressors::Lubricant lubricantType)
 {
+    const double fullLoadPower = getDouble("powerAtFullLoad", inp);
+    const double midTurndownPower = getDouble("midTurndownPower", inp);
+    const double turndownPower = getDouble("turndownPower", inp);
+    const double noLoadPower = getDouble("powerAtNoLoad", inp);
+    const double capacityFullFload = getDouble("capacityAtFullLoad", inp);
+    const double midTurndownAirflow = getDouble("midTurndownAirflow", inp);
+    const double turndownAirflow = getDouble("turndownAirflow", inp);
+
+    auto compMethod = Compressor_VFD(fullLoadPower, midTurndownPower, turndownPower, noLoadPower, capacityFullFload,
+                                     midTurndownAirflow, turndownAirflow);
+
+    const int computeFrom = getInteger("computeFrom");
+    const double computeFromVal = getDouble("computeFromVal", inp);
+    Compressors::Output output;
+    if (computeFrom == Compressors::ComputeFrom::PercentagePower)
+        output = compMethod.calculateFromPerkW(computeFromVal);
+    else if (computeFrom == Compressors::ComputeFrom::PercentageCapacity)
+    {
+        output = compMethod.calculateFromPerC(computeFromVal);
+    }
+    else if (computeFrom == Compressors::ComputeFrom::PowerMeasured)
+        output = compMethod.calculateFromkWMeasured(computeFromVal);
+    else if (computeFrom == Compressors::ComputeFrom::CapacityMeasured)
+        output = compMethod.calculateFromCMeasured(computeFromVal);
+    else if (computeFrom == Compressors::ComputeFrom::PowerFactor)
+    {
+        const double computeFromPFVoltage = getDouble("computeFromPFVoltage", inp);
+        const double computeFromPFAmps = getDouble("computeFromPFAmps", inp);
+        output = compMethod.calculateFromVIPFMeasured(computeFromVal, computeFromPFVoltage, computeFromPFAmps);
+    }
+    else
+        ThrowTypeError(std::string("Compressors Centrifugal: calculator : Invalid Compute Method in input").c_str());
+
+    setR("reRatedFlow", compMethod.C_fl_Adjusted);
+    setR("reRatedPower", compMethod.kW_fl_Adjusted);
+    setR("reRatedFlowMax", compMethod.C_max_Adjusted);
+    setR("reRatedPowerMax", compMethod.kW_max_Adjusted);
+
+    setR("powerCalculated", output.kW_Calc);
+    setR("capacityCalculated", output.C_Calc);
+    setR("percentagePower", output.PerkW);
+    setR("percentageCapacity", output.C_Per);
 }
 
 NAN_METHOD(CompressorsCalc)
@@ -490,8 +532,8 @@ NAN_METHOD(CompressorsCalc)
             {
                 if (stageType == Compressors::Stage::Two && controlType == Compressors::ControlType::MultiStepUnloading)
                 {
-                    //Per Alex Botts: "multi step unloading is identical to LoadUnload"
-                    // compressorMultiStepUnloading(CompressorType, ControlType, StageType, LubricantType);
+                    // Per Alex Botts: "multi step unloading is identical to LoadUnload"
+                    //  compressorMultiStepUnloading(CompressorType, ControlType, StageType, LubricantType);
                     compressorsLoadUnload(CompressorType, ControlType, StageType, LubricantType);
                 }
                 else if (stageType == Compressors::Stage::Single || stageType == Compressors::Stage::Two)
@@ -503,6 +545,10 @@ NAN_METHOD(CompressorsCalc)
                     else if (controlType == Compressors::ControlType::StartStop)
                     {
                         compressorsStartStop(CompressorType, ControlType, StageType, LubricantType);
+                    }
+                    else if (controlType == Compressors::ControlType::VFD)
+                    {
+                        compressorVFD(CompressorType, ControlType, StageType, LubricantType);
                     }
                 }
             }

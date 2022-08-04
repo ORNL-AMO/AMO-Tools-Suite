@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-suite",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
   "directories": {
     "test": "tests"
@@ -30,7 +30,8 @@
     "test-waste-water": "tap tests/js/wasteWater.js",
     "test-wasm": "node tests/wasm/wasm-express.js",
     "test-CA": "tap tests/js/compressorsCalcScrewReciprocating.js",
-    "test-calculator": "tap tests/js/calculator.js"
+    "test-calculator": "tap tests/js/calculator.js",
+    "test-db": "tap tests/js/dbBindingsTest.js"
   },
   "repository": {
     "type": "git",

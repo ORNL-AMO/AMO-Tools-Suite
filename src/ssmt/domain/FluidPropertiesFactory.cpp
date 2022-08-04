@@ -52,10 +52,11 @@ FluidPropertiesFactory::makeWithVentedSteamAmount(const SteamSystemModelerTool::
     const std::string methodName = "FluidPropertiesFactory::" + std::string(__func__) + ": ";
 
     SteamSystemModelerTool::FluidProperties properties = make(makeupWater);
-    const double massFlowOriginal = properties.massFlow;
-    const double energyFlowOriginal = properties.energyFlow;
     properties.massFlow += ventedSteamAmount;
     properties.energyFlow = energyFlowCalculator.calc(properties.massFlow, properties);
+
+    //const double massFlowOriginal = properties.massFlow;
+    //const double energyFlowOriginal = properties.energyFlow;
     //std::cout << methodName << "adding ventedSteamAmount=" << ventedSteamAmount << " to massFlowOriginal=" << massFlowOriginal << "; energyFlowOriginal=" << energyFlowOriginal << "; result=" << properties << std::endl;
 
     return properties;

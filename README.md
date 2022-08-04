@@ -8,7 +8,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 #### C++
 - make
 - CMake (cmake-curses to use the ccmake gui)
-- GCC 4.8.5 or later 
+- GCC 4.8.5 or later
   - Windows: Visual Studio Build Tools or Cygwin with other C++ compiler
 - Doxygen (only for building documentation)
 
@@ -24,7 +24,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - Install node_modules dependencies: `cd` into AMO-Tools-Suite directory and run  
 	 `npm install`
 - `cd` into the emsdk directory: 
-	- run `emsdk activate 2.0.16` (Build must target this version)
+	- run `emsdk activate latest` (Build must target this version, if trouble try version 2.0.16)
 - `cd` into AMO-Tools-Suite directory:  
     -  run `emcmake cmake -DBUILD_WASM=ON -G "MinGW Makefiles"` 
         -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
@@ -52,4 +52,4 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - To make package on Linux or Mac, run `ccmake.` and set BUILD_TESTING OFF, BUILD_PACKAGE ON, then configure and generate. Then `make package`.
 
 ### Documentation
-- To generate documentation: `doxygen Doxyfile.in`
+- To generate documentation: `doxygen Doxyfile`

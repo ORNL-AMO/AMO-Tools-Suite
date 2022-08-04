@@ -24,8 +24,9 @@ public:
                 energySavedDWH(energySavedDWH), energySavedBoiler(energySavedBoiler), waterSaved(waterSaved), heatGainRate(heatGainRate){}
 
         Output() = default;
+        double tempWaterOut = 0, bpTempWaterOut = 0;
         bool bpTempWarningFlag = false;
-        double tempWaterOut = 0, bpTempWaterOut = 0, flowByPassSteam = 0,
+        double flowByPassSteam = 0,
                 enthalpySteamIn = 0, enthalpySteamOut = 0, enthalpyMakeUpWater = 0,
                 energySavedDWH = 0, energySavedBoiler = 0, waterSaved = 0, heatGainRate = 0;
 

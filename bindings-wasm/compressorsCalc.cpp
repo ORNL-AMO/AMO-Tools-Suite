@@ -151,6 +151,14 @@ EMSCRIPTEN_BINDINGS(compressors_class)
         .property("C_max_Adjusted", &Compressors_LoadUnload::getC_max_Adjusted)
         .property("kW_fl_Adjusted", &Compressors_LoadUnload::getkW_fl_Adjusted)
         .property("kW_max_Adjusted", &Compressors_LoadUnload::getkW_max_Adjusted);
+    
+    class_<Compressor_VFD>("Compressor_VFD")
+        .constructor<double, double, double, double, double, double, double>()
+        .function("calculateFromPerkW", &Compressor_VFD::calculateFromPerkW)
+        .function("calculateFromPerC", &Compressor_VFD::calculateFromPerC)
+        .function("calculateFromkWMeasured", &Compressor_VFD::calculateFromkWMeasured)
+        .function("calculateFromCMeasured", &Compressor_VFD::calculateFromCMeasured)
+        .function("calculateFromVIPFMeasured", &Compressor_VFD::calculateFromVIPFMeasured);
 
     class_<Compressors_ModulationWithUnload, base<Compressors_LoadUnload>>("Compressors_ModulationWithUnload")
         .constructor<double, double, double, double, double, double, double, double, double, double, Compressors::ControlType,

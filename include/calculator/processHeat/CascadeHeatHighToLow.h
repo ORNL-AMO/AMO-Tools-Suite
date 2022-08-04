@@ -107,9 +107,9 @@ public:
 
 private:
     double stoichAirVolume = 0, priExcessAir = 0, secExcessAir = 0, priAvailableHeat = 0, secAvailableHeat = 0, priFlueSpecHeat = 0, priFlueDensity = 0;
+    double fuelHV = 0, fuelCost = 0;
     double priFiringRate = 0, priExhaustTemperature = 0, priExhaustO2 = 0, priCombAirTemperature = 0, priOpHours = 0;
     double secFiringRate = 0, secExhaustTemperature = 0, secExhaustO2 = 0, secCombAirTemperature = 0, secOpHours = 0;
-    double fuelHV = 0, fuelCost = 0;
 };
 
 #endif //AMO_TOOLS_SUITE_CASCADEHEATHIGHTOLOW_H
