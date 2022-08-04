@@ -546,6 +546,10 @@ NAN_METHOD(CompressorsCalc)
                     {
                         compressorsStartStop(CompressorType, ControlType, StageType, LubricantType);
                     }
+                    else if (controlType == Compressors::ControlType::VFD)
+                    {
+                        compressorVFD(CompressorType, ControlType, StageType, LubricantType);
+                    }
                 }
             }
         }
