@@ -20,7 +20,7 @@ public:
                    const std::shared_ptr<HeaderNotHighestPressure> &headerNotHighestPressure) const;
 
     FlashTank
-    make(const BoilerInput &boilerInput, const SteamSystemModelerTool::FluidProperties &properties) const;
+    make(const SteamSystemModelerTool::FluidProperties &properties) const;
 };
 
 #endif //AMO_TOOLS_SUITE_FLASHTANKFACTORY_H
