@@ -107,7 +107,7 @@ GasCompositions::ProcessHeatPropertiesResults GasCompositions::getProcessHeatPro
     CO2GeneratedWt *= 0.0026365;
     O2GeneratedWt /= 32;
     const double stoichAir = O2GeneratedWt * (1 + (1 - 0.209) / 0.209);
-    const double combAirMoisture = combAirMoisturePerc == 0 ? 0 : ((combAirMoisturePerc - 0.009) * (stoichAir * (1 + exsAir)) * 0.0763);
+    const double combAirMoisture = combAirMoisturePerc <= 0.009 ? 0 : ((combAirMoisturePerc - 0.009) * (stoichAir * (1 + exsAir)) * 0.0763);
     H20GeneratedWt *= 0.0026365;
     H20GeneratedWt += combAirMoisture;
 
