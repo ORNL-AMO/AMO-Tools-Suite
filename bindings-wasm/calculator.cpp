@@ -241,7 +241,7 @@ EMSCRIPTEN_BINDINGS(insulatedPipeCalculator_class)
 EMSCRIPTEN_BINDINGS(insulatedTankCalculator_class)
 {
     class_<InsulatedTankInput>("InsulatedTankInput")
-        .constructor<int, double, double, double, double, double, double, double, double, double, double, double>();
+        .constructor<int, double, double, double, double, double, double, double, double, double, double, double, double>();
 
     class_<InsulatedTankOutput>("InsulatedTankOutput")
         .function("getHeatLoss", &InsulatedTankOutput::getHeatLoss)

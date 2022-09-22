@@ -18,7 +18,8 @@ public:
         double systemEfficiency,
         double insulationThickness,
         double insulationConductivity,
-        double jacketEmissivity)
+        double jacketEmissivity,
+        double surfaceTemperature)
         : _operatingHours(operatingHours),
           _tankHeight(tankHeight),
           _tankDiameter(tankDiameter),
@@ -30,7 +31,8 @@ public:
           _systemEfficiency(systemEfficiency),
           _insulationThickness(insulationThickness),
           _insulationConductivity(insulationConductivity),
-          _jacketEmissivity(jacketEmissivity)
+          _jacketEmissivity(jacketEmissivity),
+          _surfaceTemperature(surfaceTemperature)
     {
     }
 
@@ -46,6 +48,7 @@ public:
     double getInsulationThickness();
     double getInsulationConductivity();
     double getJacketEmissivity();
+    double getSurfaceTemperature();
 
 private:
     // AirProperties _airProperties;
@@ -61,6 +64,7 @@ private:
     double _insulationThickness;
     double _insulationConductivity;
     double _jacketEmissivity;
+    double _surfaceTemperature;
 };
 
 #endif

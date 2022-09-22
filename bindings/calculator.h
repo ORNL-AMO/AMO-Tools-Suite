@@ -995,6 +995,7 @@ NAN_METHOD(tankInsulationReduction)
     double insulationThickness = GetDouble("insulationThickness", inp);
     double insulationConductivity = GetDouble("insulationConductivity", inp);
     double jacketEmissivity = GetDouble("jacketEmissivity", inp);
+    double surfaceTemperature = GetDouble("surfaceTemperature", inp);
 
     InsulatedTankInput input(
         operatingHours,
@@ -1008,7 +1009,8 @@ NAN_METHOD(tankInsulationReduction)
         systemEfficiency,
         insulationThickness,
         insulationConductivity,
-        jacketEmissivity);
+        jacketEmissivity,
+        surfaceTemperature);
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
 
