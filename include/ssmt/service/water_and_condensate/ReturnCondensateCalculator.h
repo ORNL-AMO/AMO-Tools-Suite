@@ -15,7 +15,7 @@ public:
     calc(const HeaderWithHighestPressure &highPressureHeaderInput, const Header &combinedCondensateHeader) const;
 
     ReturnCondensateCalculationsDomain
-    flash(const HeaderWithHighestPressure &highPressureHeaderInput, const BoilerInput &boilerInput,
+    flash(const HeaderWithHighestPressure &highPressureHeaderInput,
           const SteamSystemModelerTool::FluidProperties &returnCondensate) const;
 
 private:

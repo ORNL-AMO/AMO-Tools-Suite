@@ -36,7 +36,7 @@ MakeupWaterAndCondensateHeaderModeler::model(const int headerCountInput,
     //5C. Flash return condensate if selected
 //     std::cout << methodName << "calculating flash returnCondensate" << std::endl;
     const ReturnCondensateCalculationsDomain &returnCondensateCalculationsDomain =
-            returnCondensateCalculator.flash(highPressureHeaderInput, boilerInput, returnCondensate);
+            returnCondensateCalculator.flash(highPressureHeaderInput, returnCondensate);
     const SteamSystemModelerTool::FluidProperties returnCondensateFlashed =
             returnCondensateCalculationsDomain.returnCondensateFlashed;
 //     std::cout << methodName << "returnCondensateCalculationsDomain=" << returnCondensateCalculationsDomain << std::endl;
