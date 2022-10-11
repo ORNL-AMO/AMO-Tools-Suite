@@ -8,12 +8,12 @@
   "gypfile": true,
   "dependencies": {
     "assert": "^2.0.0",
-    "d3": "^4.13.0",
+    "d3-dsv": "^3.0.1",
     "esm": "^3.2.25",
-    "nan": "2.15.0",
-    "node-gyp": "9.0.0",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
+    "nan": "2.15.0",
+    "node-gyp": "9.0.0",
     "utf-8-validate": "5.0.2"
   },
   "devDependencies": {
