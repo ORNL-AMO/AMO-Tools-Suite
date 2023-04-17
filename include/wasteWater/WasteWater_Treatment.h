@@ -54,6 +54,7 @@ public:
                           MLSS(MLSS),
                           BiomassProd(BiomassProd),
                           SludgeProd(SludgeProd),
+                          SolidProd(SolidProd),
                           Effluent(Effluent),
                           IntentWaste(IntentWaste),
                           OxygenRqd(OxygenRqd),

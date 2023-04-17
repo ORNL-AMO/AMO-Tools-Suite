@@ -1963,7 +1963,7 @@ bool SQLite::updateWallLossesSurface(WallLosses const &material)
 //motor helpers
 int getMotorEfficiencyClassNum(Motor::EfficiencyClass efficiencyClass)
 {
-    int motorEfficiencyClass;
+    int motorEfficiencyClass = 0;
     if (efficiencyClass == Motor::EfficiencyClass::STANDARD)
     {
         motorEfficiencyClass = 0;
@@ -1985,7 +1985,7 @@ int getMotorEfficiencyClassNum(Motor::EfficiencyClass efficiencyClass)
 
 int getMotorLineFrequencyNum(Motor::LineFrequency lineFrequency)
 {
-    int lineFrequencyNum;
+    int lineFrequencyNum = 60;
     if (lineFrequency == Motor::LineFrequency::FREQ60)
     {
         lineFrequencyNum = 60;
@@ -2239,7 +2239,7 @@ bool SQLite::updatePumpData(PumpData const &pump)
 
 bool SQLite::insert_pump_data(PumpData const &pump)
 {
-    if (isDefaultMaterial(pump.id, get_default_pump_data().size()))
+    if (pump.id && isDefaultMaterial(pump.id, get_default_pump_data().size()))
     {
         return false;
     }

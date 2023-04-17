@@ -808,7 +808,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
     //Typical Natural Gas - US
     {
         auto outputs = sqlite.getGasFlueGasMaterials();
-        CHECK( outputs.size() == 3 );
+        CHECK( outputs.size() == 4 );
         GasCompositions expected("Typical Natural Gas - US", 87, 8.5, 3.6, 0.4, 0, 0, 0, 0, 0.4, 0, 0.1);
         expected.setID(1);
         CHECK( expected.getID() == outputs[0].getID() );
@@ -852,7 +852,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
     //Coke Oven Gas
     {
         auto outputs = sqlite.getGasFlueGasMaterials();
-        CHECK( outputs.size() == 3 );
+        CHECK( outputs.size() == 4 );
         GasCompositions expected("Coke Oven Gas", 33.9, 5.2, 3.7, 47.9, 0, 0, 0, 6.1, 2.6, 0, 0.6);
         expected.setID(2);
         CHECK( expected.getID() == outputs[1].getID() );
@@ -897,7 +897,7 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
     //Blast Furnace
     {
         auto outputs = sqlite.getGasFlueGasMaterials();
-        CHECK( outputs.size() == 3 );
+        CHECK( outputs.size() == 4 );
         GasCompositions expected("Blast Furnace Gas", 0.1, 0, 56.4, 2.4, 0, 0, 3.4, 23.3, 14.4, 0, 0);
         expected.setID(3);
         CHECK( expected.getID() == outputs[2].getID() );
@@ -936,6 +936,50 @@ TEST_CASE( "SQLite - getGasFlueGasMaterials", "[sqlite]" ) {
         CHECK( output.getHeatingValue() == 1080.6848266529887 );
         CHECK( output.getHeatingValueVolume() == 83.605 );
         CHECK( output.getSpecificGravity() == 1.0870540901007706 );
+    }
+
+     //Hydrogen
+    {
+        auto outputs = sqlite.getGasFlueGasMaterials();
+        CHECK( outputs.size() == 4 );
+        GasCompositions expected("Hydrogen", 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0);
+        expected.setID(4);
+        CHECK( expected.getID() == outputs[3].getID() );
+        CHECK( expected.getSubstance() == outputs[3].getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == outputs[3].getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == outputs[3].getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == outputs[3].getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == outputs[3].getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == outputs[3].getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == outputs[3].getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == outputs[3].getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == outputs[3].getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == outputs[3].getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == outputs[3].getGasByVol("O2") );
+        CHECK( outputs[3].getHeatingValue() == 61095.0 );
+        CHECK( outputs[3].getHeatingValueVolume() == 325 );
+        CHECK( outputs[3].getSpecificGravity() == 0.0746887967 );
+    }
+
+    {
+        auto output = sqlite.getGasFlueGasMaterialById(4);
+        GasCompositions expected("Hydrogen", 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0);
+        expected.setID(4);
+        CHECK( expected.getID() == output.getID() );
+        CHECK( expected.getSubstance() == output.getSubstance() );
+        CHECK( expected.getGasByVol("C2H6") == output.getGasByVol("C2H6") );
+        CHECK( expected.getGasByVol("N2") == output.getGasByVol("N2") );
+        CHECK( expected.getGasByVol("H2") == output.getGasByVol("H2") );
+        CHECK( expected.getGasByVol("C3H8") == output.getGasByVol("C3H8") );
+        CHECK( expected.getGasByVol("C4H10_CnH2n") == output.getGasByVol("C4H10_CnH2n") );
+        CHECK( expected.getGasByVol("H2O") == output.getGasByVol("H2O") );
+        CHECK( expected.getGasByVol("CO") == output.getGasByVol("CO") );
+        CHECK( expected.getGasByVol("CO2") == output.getGasByVol("CO2") );
+        CHECK( expected.getGasByVol("SO2") == output.getGasByVol("SO2") );
+        CHECK( expected.getGasByVol("O2") == output.getGasByVol("O2") );
+        CHECK( output.getHeatingValue() == 61095.0 );
+        CHECK( output.getHeatingValueVolume() == 325 );
+        CHECK( output.getSpecificGravity() == .0746887967 );
     }
 }
 
@@ -1302,7 +1346,7 @@ TEST_CASE( "SQLite - CustomWallLossesSurface", "[sqlite]" ) {
 }
 
 TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][motor]" ) {
-    auto const compare = [](MotorData result, MotorData expected) {
+    /*auto const compare = [](MotorData result, MotorData expected) {
 		CHECK(result.getHp() == expected.getHp());
 		CHECK(result.getSynchronousSpeed() == expected.getSynchronousSpeed());
 		CHECK(result.getPoles() == expected.getPoles());
@@ -1314,7 +1358,7 @@ TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][moto
 		CHECK(result.getVoltageLimit() == expected.getVoltageLimit());
 		CHECK(result.getCatalog() == expected.getCatalog());
         //CHECK(result.getId() == expected.getId());
-    };
+    };*/
 
      auto sqlite = SQLite(":memory:", true);
     /*
@@ -1358,10 +1402,10 @@ TEST_CASE( "SQLite - Motor Data inserts and updates and selects", "[sqlite][moto
 }
 
 TEST_CASE( "SQLite - Calculate nominal efficiency from data", "[sqlite][motor]" ) {
-    auto const calculateNominalEfficiency = [](const MotorData &inp) {
+    /*auto const calculateNominalEfficiency = [](const MotorData &inp) {
 		double nominalEfficiency = MotorEfficiency(inp.getLineFrequency(), inp.getSynchronousSpeed(), inp.getEfficiencyClass(), inp.getHp()).calculate(1) * 100;
         return nominalEfficiency;
-    };
+    };*/
 
     auto sqlite = SQLite(":memory:", true);
 

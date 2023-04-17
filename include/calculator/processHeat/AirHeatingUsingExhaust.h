@@ -67,6 +67,7 @@ public:
 	 *
      */
     AirHeatingUsingExhaust(SolidLiquidFlueGasMaterial solidLiquidFlueGasMaterial, bool solids = true) {
+        solids = solids;//keep or fix unused variable
         fuelHeatingValue = solidLiquidFlueGasMaterial.getHeatingValueFuel();
         stoichAir = solidLiquidFlueGasMaterial.getStoichAirFuel();
     }

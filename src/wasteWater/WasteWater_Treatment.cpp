@@ -476,7 +476,7 @@ WasteWater_Treatment::OutputWithoutTable WasteWater_Treatment::calculateGivenSRT
     double BiomassProd = calculateBiomassProd(HeterBio, CellDeb, Volume, DefinedSRT);
     double BiomassProdSRT1 = calculateBiomassProd(HeterBioSRT1, CellDebSRT1, Volume, 1);
     //Compute SludgeProd
-    double SludgeProd = calculateSludgeProd(MLVSS, Volume, DefinedSRT);
+    //double SludgeProd = calculateSludgeProd(MLVSS, Volume, DefinedSRT);
     //Compute SolidProd
     double SolidProd = calculateSolidProd(MLSS, Volume, DefinedSRT);
     //Compute Effluent
@@ -486,7 +486,7 @@ WasteWater_Treatment::OutputWithoutTable WasteWater_Treatment::calculateGivenSRT
     //Compute OxygenRqd
     double OxygenRqd = calculateOxygenRqd(FlowRate, So, Se, BiomassProd);
     //Compute FlowMgd
-    double FlowMgd = calculateFlowMgd(IntentWaste, RASTSS);
+    //double FlowMgd = calculateFlowMgd(IntentWaste, RASTSS);
     //Compute NRemoved
     double NRemoved = calculateNRemoved(DefinedSRT, BiomassProd, FlowRate, OxidizableN);
     double NRemovedSRT1 = calculateNRemoved(1, BiomassProdSRT1, FlowRate, OxidizableN);

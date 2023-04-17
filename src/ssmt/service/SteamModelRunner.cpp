@@ -32,6 +32,8 @@ SteamModelRunner::run(const bool isBaselineCalc, const double baselinePowerDeman
 
 double SteamModelRunner::handleSteamBalanceException(const SteamBalanceException &e, const int iterationCount,
                                                      const double initialMassFlow) const {
+    int iterationCount_ =iterationCount; iterationCount_ = iterationCount_;//keep this or fix unused variable
+    double initialMassFlow_ = initialMassFlow; initialMassFlow_= initialMassFlow_;//keep this or fix unused variable
     const std::string methodName = std::string("SteamModelRunner::") + std::string(__func__) + ": ";
 
     const double adjustedInitialSteam = e.getAdjustedInitialSteam();
@@ -45,6 +47,7 @@ double SteamModelRunner::handleSteamBalanceException(const SteamBalanceException
 
 
 void SteamModelRunner::logSection(const std::string &message) const {
+    std::string message_ = message; message_ = message_;//keep this or fix unused variable
     // std::cout << "-------- " << std::endl;
     // std::cout << "-------- " << message << std::endl;
     // std::cout << "-------- " << std::endl;

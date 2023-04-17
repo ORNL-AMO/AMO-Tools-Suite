@@ -23,7 +23,7 @@ std::map<double, std::size_t>::const_iterator CHP::findNearest(const double val,
 	if (nearest != chpSystemByKey[index].begin())
 		return std::prev(nearest);
 	return nearest;
-};
+}
 
 void CHP::calculate()
 {

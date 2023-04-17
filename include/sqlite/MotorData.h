@@ -88,7 +88,7 @@ std::vector<MotorData> getStandardEfficiencyData()
 			double hp = std::get<0>(dataRow);
 			double synchronousSpeed = std::get<1>(dataRow);
 			//int poles = std::get<2>(dataRow);
-			int poles;
+			int poles = 2;
 			double nominalEfficiency = std::get<2>(dataRow);
 			Motor::EfficiencyClass efficiencyClass = std::get<3>(dataRow);
 			std::string nemaTable = "N/A";

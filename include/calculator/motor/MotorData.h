@@ -18,11 +18,11 @@ public:
 	MotorData(double hp, int synchronousSpeed, int poles, double nominalEfficiency, Motor::EfficiencyClass efficiencyClass, std::string nemaTable,
 			  std::string enclosureType, Motor::LineFrequency lineFrequency, int voltageLimit, std::string catalog);
 
-	const Motor::EfficiencyClass getEfficiencyClass() const;
+	Motor::EfficiencyClass getEfficiencyClass() const;
 
-	const std::string getNemaTable() const;
-	const std::string getEnclosureType() const;
-	const std::string getCatalog() const;
+	std::string getNemaTable() const;
+	std::string getEnclosureType() const;
+	std::string getCatalog() const;
 
 	int getSynchronousSpeed() const;
 	int getPoles() const;
@@ -51,16 +51,15 @@ public:
 	void setId(int id);
 
 private:
-	std::string nemaTable, enclosureType, catalog;
-
-	Motor::EfficiencyClass efficiencyClass;
-	Motor::LineFrequency lineFrequency;
-
-	int synchronousSpeed, poles, voltageLimit;
-
-	double hp, nominalEfficiency;
-
-	int id; // used for the database
+	double hp;
+	int synchronousSpeed, poles;
+	double nominalEfficiency;
+    Motor::EfficiencyClass efficiencyClass;
+    std::string nemaTable, enclosureType;
+    Motor::LineFrequency lineFrequency;
+    int voltageLimit;
+    std::string catalog;
+    int id; // used for the database
 
 	friend class SQLite;
 };

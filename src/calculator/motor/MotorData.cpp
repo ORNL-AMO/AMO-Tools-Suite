@@ -18,16 +18,16 @@ MotorData::MotorData(double hp, int synchronousSpeed, int poles, double nominalE
 					 lineFrequency(lineFrequency), voltageLimit(voltageLimit), catalog(std::move(catalog))
 {}
 
-const Motor::EfficiencyClass MotorData::getEfficiencyClass() const {
+Motor::EfficiencyClass MotorData::getEfficiencyClass() const {
 	return efficiencyClass;
 }
-const std::string MotorData::getNemaTable() const {
+std::string MotorData::getNemaTable() const {
 	return nemaTable;
 }
-const std::string MotorData::getEnclosureType() const {
+std::string MotorData::getEnclosureType() const {
 	return enclosureType;
 }
-const std::string MotorData::getCatalog() const {
+std::string MotorData::getCatalog() const {
 	return catalog;
 }
 

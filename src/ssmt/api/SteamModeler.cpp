@@ -37,6 +37,15 @@ void
 SteamModeler::logInputData(const bool isBaselineCalc, const double baselinePowerDemand, const HeaderInput &headerInput,
                            const BoilerInput &boilerInput, const TurbineInput &turbineInput,
                            const OperationsInput &operationsInput) {
+    //keep this block or fix unused variable
+    bool isBaselineCalc_ = isBaselineCalc; isBaselineCalc_ = isBaselineCalc_;
+    double baselinePowerDemand_ = baselinePowerDemand; baselinePowerDemand_ = baselinePowerDemand_;
+    HeaderInput headerInput_ = headerInput; headerInput_ =headerInput_;
+    BoilerInput boilerInput_ = boilerInput; boilerInput_ = boilerInput_;
+    TurbineInput turbineInput_ = turbineInput; turbineInput_ = turbineInput_;
+    OperationsInput operationsInput_ = operationsInput; operationsInput_ = operationsInput_;
+    //keep this block or fix unused variable
+
     logSection("SteamModeler::logInputData:");
 
     // std::cout
@@ -72,12 +81,15 @@ SteamModelerOutput SteamModeler::makeOutput(const SteamModelCalculationsDomain &
 }
 
 void SteamModeler::logSection(const std::string &message) const {
+    std::string message_ = message; message_ = message_;//keep this or fix unused variable
     // std::cout << "======== " << std::endl;
     // std::cout << "======== " << message << std::endl;
     // std::cout << "======== " << std::endl;
 }
 
 void SteamModeler::logException(const std::exception &e, const std::string &message) const {
+    std::string message_ = message; message_ = message_;//keep this or fix unused variable
+    std::exception e_ = e; e_ = e_;//keep this or fix unused variable
     // std::cout << "================================ " << std::endl;
     // std::cout << message << std::endl;
     // std::cout << e.what() << std::endl;

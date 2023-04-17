@@ -56,7 +56,7 @@ public:
             ambientAirTempF(ambientAirTempF)
     {
         heatingValueFuel = calculateHeatingValueFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
-        stoichometricAir = calculateStoichAirFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
+        stoichometricAir = calculateStoichAirFuel();
 	}
 
     SolidLiquidFlueGasMaterial(
@@ -78,7 +78,7 @@ public:
             nitrogen(nitrogen / 100)
     {
         heatingValueFuel = calculateHeatingValueFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
-        stoichometricAir = calculateStoichAirFuel(carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen);
+        stoichometricAir = calculateStoichAirFuel();
     }
 
 	SolidLiquidFlueGasMaterial() = default;
@@ -275,8 +275,7 @@ public:
 	double calculateHeatingValueFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
 	                                        double moisture, double nitrogen);
 
-    double calculateStoichAirFuel(double carbon, double hydrogen, double sulphur, double inertAsh, double o2,
-                                            double moisture, double nitrogen);
+    double calculateStoichAirFuel();
 
     double getStoichAirFuel() const { return stoichometricAir; };
     double getHeatingValueFuel() const { return heatingValueFuel; };

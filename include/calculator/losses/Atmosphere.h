@@ -188,18 +188,18 @@ public:
 
 private:
     // In values
-    double inletTemperature;
-    double outletTemperature;
-    double flowRate;
-    double correctionFactor;
-    double specificHeat;
+    double inletTemperature = 0;
+    double outletTemperature = 0;
+    double flowRate = 0;
+    double correctionFactor = 0;
+    double specificHeat = 0;
 
     std::string substance = "Unknown";
     int id = 0;
     // Out value
 
     /// Total heat loss measured in btu/hr
-    double totalHeat;
+    double totalHeat = 0;
 
     friend class SQLite;
 

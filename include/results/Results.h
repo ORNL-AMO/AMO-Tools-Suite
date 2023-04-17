@@ -46,8 +46,10 @@ public:
 
     double fanEfficiency;
     const double motorRatedPower, motorShaftPower, fanShaftPower;
-    double motorEfficiency, motorPowerFactor, annualCost;
-    const double motorCurrent, motorPower, annualEnergy, fanEnergyIndex, loadFactor;
+    double motorEfficiency, motorPowerFactor;
+    const double motorCurrent, motorPower, annualEnergy;
+    double annualCost;
+    const double fanEnergyIndex, loadFactor;
     double driveEfficiency;
     const double estimatedFLA;
 

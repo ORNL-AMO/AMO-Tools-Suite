@@ -11,7 +11,7 @@ CompressedAirLeakSurvey::Output CompressedAirLeakSurvey::calculate()
 
     for (auto &compressedAirLeakSurveyInput : compressedAirLeakSurveyInputVec)
     {
-        double tmpAnnualTotalElectricity = 0, tmpAnnualTotalElectricityCost = 0, tmpTotalFlowRate = 0, tmpSingleNozzleFlowRate = 0, tmpAnnualTotalFlowRate = 0;
+        double tmpAnnualTotalElectricity = 0, tmpAnnualTotalElectricityCost = 0, tmpTotalFlowRate = 0, tmpAnnualTotalFlowRate = 0;
 
         // estimate method
         if (compressedAirLeakSurveyInput.getMeasurementMethod() == 0)

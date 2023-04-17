@@ -59,3 +59,8 @@ double InsulatedTankInput::getJacketEmissivity()
 {
     return this->_jacketEmissivity;
 }
+
+double InsulatedTankInput::getSurfaceTemperature()
+{
+    return this->_surfaceTemperature;
+}

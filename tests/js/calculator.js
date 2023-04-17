@@ -1119,7 +1119,8 @@ test('Tank Insulation Reduction - Insulated', function (t) {
         systemEfficiency: 90,
         insulationThickness: 0.5,
         insulationConductivity: 0.0191,
-        jacketEmissivity: 0.9
+        jacketEmissivity: 0.9,
+        surfaceTemperature: 959.67
     };
     var res = bindings.tankInsulationReduction(inp);
     t.equal(rnd(res.heatLoss), rnd(0.044464), 'res.heatLoss is ' + res.heatLoss);
@@ -1142,7 +1143,8 @@ test('Tank Insulation Reduction - Insulated 2', function (t) {
         systemEfficiency: 90,
         insulationThickness: 0.5,
         insulationConductivity: 0.0231,
-        jacketEmissivity: 0.1
+        jacketEmissivity: 0.1,
+        surfaceTemperature: 759.67
     };
     var res = bindings.tankInsulationReduction(inp);
     t.equal(rnd(res.heatLoss), rnd(0.030515), 'res.heatLoss is ' + res.heatLoss);
@@ -1166,6 +1168,7 @@ test('Tank Insulation Reduction - No Insulation', function (t) {
         insulationThickness: 0,
         insulationConductivity: 0,
         jacketEmissivity: 0.9,
+        surfaceTemperature: 959.67
     };
     var res = bindings.tankInsulationReduction(inp);
     t.equal(rnd(res.heatLoss), rnd(1.1112001223), 'res.heatLoss is ' + res.heatLoss);
