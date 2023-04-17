@@ -1,5 +1,5 @@
 const fs = require('fs');
-const d3 = require('d3');
+const d3 = require('d3-dsv');
 const test = require('tap').test
     , testRoot = require('path').resolve(__dirname, '../../../')
     , bindings = require('bindings')({module_root: testRoot, bindings: 'ssmt'});
