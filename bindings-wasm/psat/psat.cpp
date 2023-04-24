@@ -24,8 +24,8 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             std::string, 
             std::string, 
             std::string, 
-            std::string, 
-            std::string, 
+            std::string,
+            std::string,
             std::string,
             std::string,
             std::string,
@@ -59,10 +59,10 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             double, 
             double, 
             double, 
-            bool,
-            bool>()
+            double, 
+            double,
+            double>()
             .function("getId", &PumpData::getId)
-            .function("getOutOfService", &PumpData::getOutOfService)
             .function("getInletDiameter", &PumpData::getInletDiameter)
             .function("getOutletDiameter", &PumpData::getOutletDiameter)
             .function("getStaticSuctionHead", &PumpData::getStaticSuctionHead)
@@ -86,8 +86,6 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             .function("getSerialNumber", &PumpData::getSerialNumber)
             .function("getStatus", &PumpData::getStatus)
             .function("getPumpType", &PumpData::getPumpType)
-            .function("getRadialBearingType", &PumpData::getRadialBearingType)
-            .function("getThrustBearingType", &PumpData::getThrustBearingType)
             .function("getShaftOrientation", &PumpData::getShaftOrientation)
             .function("getShaftSealType", &PumpData::getShaftSealType)
             .function("getFluidType", &PumpData::getFluidType)
@@ -98,20 +96,23 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             .function("getMotorFullLoadAmps", &PumpData::getMotorFullLoadAmps)
             .function("getOperatingFlowRate", &PumpData::getOperatingFlowRate)
             .function("getOperatingHead", &PumpData::getOperatingHead)
+            .function("getMeasuredCurrent", &PumpData::getMeasuredCurrent)
+            .function("getMeasuredPower", &PumpData::getMeasuredPower)
+            .function("getMeasuredVoltage", &PumpData::getMeasuredVoltage)
             .function("getMotorEfficiency", &PumpData::getMotorEfficiency)
-            .function("getSpare", &PumpData::getSpare)
             .function("getDriveType", &PumpData::getDriveType)
             .function("getFlangeConnectionClass", &PumpData::getFlangeConnectionClass)
             .function("getFlangeConnectionSize", &PumpData::getFlangeConnectionSize)
             .function("getManufacturer", &PumpData::getManufacturer)
             .function("getComponentId", &PumpData::getComponentId)
+            .function("getSystem", &PumpData::getSystem)
+            .function("getLocation", &PumpData::getLocation)
             .function("getMotorEfficiencyClass", &PumpData::getMotorEfficiencyClass)
             .function("getModel", &PumpData::getModel)
             .function("getPriority", &PumpData::getPriority)
             .function("getFinalMotorRpm", &PumpData::getFinalMotorRpm)
             .function("getMotorRatedVoltage", &PumpData::getMotorRatedVoltage)
             .function("setId", &PumpData::setId)
-            .function("setOutOfService", &PumpData::setOutOfService)
             .function("setInletDiameter", &PumpData::setInletDiameter)
             .function("setOutletDiameter", &PumpData::setOutletDiameter)
             .function("setStaticSuctionHead", &PumpData::setStaticSuctionHead)
@@ -134,8 +135,6 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             .function("setSerialNumber", &PumpData::setSerialNumber)
             .function("setStatus", &PumpData::setStatus)
             .function("setPumpType", &PumpData::setPumpType)
-            .function("setRadialBearingType", &PumpData::setRadialBearingType)
-            .function("setThrustBearingType", &PumpData::setThrustBearingType)
             .function("setShaftOrientation", &PumpData::setShaftOrientation)
             .function("setShaftSealType", &PumpData::setShaftSealType)
             .function("setFluidType", &PumpData::setFluidType)
@@ -149,7 +148,6 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             .function("setPriority", &PumpData::setPriority)
             .function("setFinalMotorRpm", &PumpData::setFinalMotorRpm)
             .function("setMotorRatedVoltage", &PumpData::setMotorRatedVoltage)
-            .function("setSpare", &PumpData::setSpare)
             .function("setDesignHead", &PumpData::setDesignHead)
             .function("setDesignFlow", &PumpData::setDesignFlow)
             .function("setDesignEfficiency", &PumpData::setDesignEfficiency)
@@ -157,6 +155,9 @@ EMSCRIPTEN_BINDINGS(pumpData_class)
             .function("setMotorFullLoadAmps", &PumpData::setMotorFullLoadAmps)
             .function("setOperatingFlowRate", &PumpData::setOperatingFlowRate)
             .function("setOperatingHead", &PumpData::setOperatingHead)
+            .function("setMeasuredCurrent", &PumpData::setMeasuredCurrent)
+            .function("setMeasuredPower", &PumpData::setMeasuredPower)
+            .function("setMeasuredVoltage", &PumpData::setMeasuredVoltage)
             .function("setMotorEfficiency", &PumpData::setMotorEfficiency);
 
     register_vector<PumpData>("PumpDataV");

@@ -9,8 +9,6 @@ PumpData::PumpData(std::string manufacturer,
              std::string serialNumber,
              std::string status, 
              std::string pumpType, 
-             std::string radialBearingType,  
-             std::string thrustBearingType,
              std::string shaftOrientation, 
              std::string shaftSealType, 
              std::string fluidType, 
@@ -19,6 +17,8 @@ PumpData::PumpData(std::string manufacturer,
              std::string flangeConnectionClass, 
              std::string flangeConnectionSize,
              std::string componentId,
+             std::string system,
+             std::string location,
              std::string motorEfficiencyClass,
              int speed, 
              int numStages,  
@@ -49,16 +49,15 @@ PumpData::PumpData(std::string manufacturer,
              double motorFullLoadAmps,
              double operatingFlowRate,
              double operatingHead,
-             double motorEfficiency,
-             bool outOfService,
-             bool spare)
+             double measuredCurrent,
+             double measuredPower,
+             double measuredVoltage,
+             double motorEfficiency)
         : manufacturer(std::move(manufacturer)), 
           model(std::move(model)), 
           serialNumber(std::move(serialNumber)),
           status(std::move(status)),  
           pumpType(std::move(pumpType)), 
-          radialBearingType(std::move(radialBearingType)),
-          thrustBearingType(std::move(thrustBearingType)), 
           shaftOrientation(std::move(shaftOrientation)), 
           shaftSealType(std::move(shaftSealType)),
           fluidType(std::move(fluidType)), 
@@ -67,6 +66,8 @@ PumpData::PumpData(std::string manufacturer,
           flangeConnectionClass(std::move(flangeConnectionClass)),
           flangeConnectionSize(std::move(flangeConnectionSize)), 
           componentId(std::move(componentId)), 
+          system(std::move(system)), 
+          location(std::move(location)), 
           motorEfficiencyClass(std::move(motorEfficiencyClass)), 
           speed(speed), 
           numStages(numStages),
@@ -97,28 +98,13 @@ PumpData::PumpData(std::string manufacturer,
           motorFullLoadAmps(motorFullLoadAmps), 
           operatingFlowRate(operatingFlowRate), 
           operatingHead(operatingHead), 
+          measuredCurrent(measuredCurrent), 
+          measuredPower(measuredPower), 
+          measuredVoltage(measuredVoltage), 
           motorEfficiency(motorEfficiency), 
-          outOfService(outOfService),
-          spare(spare),
           id(-1)
 {}
 
-
-bool PumpData::getOutOfService() const {
-    return outOfService;
-}
-
-void PumpData::setOutOfService(const bool &outOfService)  {
-    PumpData::outOfService = outOfService;
-}
-
-bool PumpData::getSpare() const {
-    return spare;
-}
-
-void PumpData::setSpare(const bool &spare)  {
-    PumpData::spare = spare;
-}
 
 double PumpData::getInletDiameter() const {
     return inletDiameter;
@@ -312,7 +298,32 @@ void PumpData::setOperatingHead(const double &operatingHead)  {
 	PumpData::operatingHead = operatingHead;
 }
 
-double PumpData::getMotorEfficiency() const {
+const double PumpData::getMeasuredCurrent() const {
+    return measuredCurrent;
+}
+
+void PumpData::setMeasuredCurrent(const double &measuredCurrent)  {
+	PumpData::measuredCurrent = measuredCurrent;
+}
+
+const double PumpData::getMeasuredPower() const {
+    return measuredPower;
+}
+
+void PumpData::setMeasuredPower(const double &measuredPower)  {
+	PumpData::measuredPower = measuredPower;
+}
+
+const double PumpData::getMeasuredVoltage() const {
+    return measuredVoltage;
+}
+
+void PumpData::setMeasuredVoltage(const double &measuredVoltage)  {
+	PumpData::measuredVoltage = measuredVoltage;
+}
+
+
+const double PumpData::getMotorEfficiency() const {
     return motorEfficiency;
 }
 
@@ -375,22 +386,6 @@ std::string PumpData::getPumpType() const {
 
 void PumpData::setPumpType(const std::string &pumpType)  {
 	PumpData::pumpType = pumpType;
-}
-
-std::string PumpData::getRadialBearingType() const {
-    return radialBearingType;
-}
-
-void PumpData::setRadialBearingType(const std::string &radialBearingType)  {
-	PumpData::radialBearingType = radialBearingType;
-}
-
-std::string PumpData::getThrustBearingType() const {
-    return thrustBearingType;
-}
-
-void PumpData::setThrustBearingType(const std::string &thrustBearingType)  {
-	PumpData::thrustBearingType = thrustBearingType;
 }
 
 std::string PumpData::getShaftOrientation() const {
@@ -475,6 +470,27 @@ void PumpData::setComponentId(const std::string &componentId)  {
 	PumpData::componentId = componentId;
 }
 
+
+
+std::string PumpData::getSystem() const {
+    return system;
+}
+
+void PumpData::setSystem(const std::string &system)  {
+	PumpData::system = system;
+}
+
+
+std::string PumpData::getLocation() const {
+    return location;
+}
+
+void PumpData::setLocation(const std::string &location)  {
+	PumpData::location = location;
+}
+
+
+
 int PumpData::getMotorRatedVoltage() const {
     return motorRatedVoltage;
 }
@@ -500,9 +516,6 @@ void PumpData::setFinalMotorRpm(int finalMotorRpm)  {
 }
 
 
-bool PumpData::isOutOfService() const {
-    return outOfService;
-}
 
 int PumpData::getId() const {
     return id;

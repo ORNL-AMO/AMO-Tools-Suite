@@ -15,8 +15,6 @@ public:
              std::string serialNumber,
              std::string status, 
              std::string pumpType, 
-             std::string radialBearingType,  
-             std::string thrustBearingType,
              std::string shaftOrientation, 
              std::string shaftSealType, 
              std::string fluidType, 
@@ -25,6 +23,8 @@ public:
              std::string flangeConnectionClass, 
              std::string flangeConnectionSize,
              std::string componentId,
+             std::string system,
+             std::string location,
              std::string motorEfficiencyClass,
              int speed, 
              int numStages,  
@@ -55,14 +55,11 @@ public:
              double motorFullLoadAmps,
              double operatingFlowRate,
              double operatingHead,
-             double motorEfficiency,
-             bool outOfService,
-             bool spare
-             );
+             double measuredCurrent,
+             double measuredPower,
+             double measuredVoltage,
+             double motorEfficiency);
 
-    bool getOutOfService() const;
-
-    void setOutOfService(const bool &outOfService);
 
     double getInletDiameter() const;
 
@@ -156,17 +153,17 @@ public:
 
     void setPumpType(const std::string &pumpType);
 
-    std::string getRadialBearingType() const;
-
-    void setRadialBearingType(const std::string &radialBearingType);
-
-    std::string getThrustBearingType() const;
-
-    void setThrustBearingType(const std::string &thrustBearingType);
-
     std::string getShaftOrientation() const;
 
     void setShaftOrientation(const std::string &shaftOrientation);
+
+    std::string getSystem() const;
+
+    void setSystem(const std::string &system);
+
+    std::string getLocation() const;
+
+    void setLocation(const std::string &location);
 
     std::string getShaftSealType() const;
 
@@ -232,7 +229,19 @@ public:
 
     void setOperatingHead(const double &operatingHead);
 
-    double getMotorEfficiency() const;
+    const double getMeasuredCurrent() const;
+
+    void setMeasuredCurrent(const double &measuredCurrent);
+
+    const double getMeasuredPower() const;
+
+    void setMeasuredPower(const double &measuredPower);
+
+    const double getMeasuredVoltage() const;
+
+    void setMeasuredVoltage(const double &measuredVoltage);
+
+    const double getMotorEfficiency() const;
 
     void setMotorEfficiency(const double &motorEfficiency);
 
@@ -248,32 +257,22 @@ public:
 
     void setMotorRatedVoltage(const int &motorRatedVoltage);
 
-    bool getSpare() const;
-
-    void setSpare(const bool &spare);
-
-
-    bool isOutOfService() const;
-
     int getId() const;
 
     void setId(int id);
 
 
 private:
-    std::string manufacturer, model, serialNumber, status, pumpType, radialBearingType, thrustBearingType;
+    std::string manufacturer, model, serialNumber, status, pumpType;
     std::string shaftOrientation, shaftSealType, fluidType, priority, driveType, flangeConnectionClass;
-    std::string flangeConnectionSize, componentId, motorEfficiencyClass;
+    std::string flangeConnectionSize, componentId, system, location, motorEfficiencyClass;
 
     int speed, numStages, yearlyOperatingHours, yearInstalled, finalMotorRpm, motorRatedVoltage;
 
-    double inletDiameter, outletDiameter;
+    double inletDiameter, outletDiameter, designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency;
     double staticSuctionHead, staticDischargeHead, fluidDensity, maxWorkingPressure;
     double maxAmbientTemperature, maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter;
     double efficiency, lineFrequency, minFlowSize, pumpSize;
-    double designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, operatingFlowRate, operatingHead, motorEfficiency;
-
-    bool outOfService, spare;
 
     int id; // used for the database
 

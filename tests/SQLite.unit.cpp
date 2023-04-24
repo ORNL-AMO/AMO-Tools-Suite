@@ -320,8 +320,6 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
             "serialNumberCustom1", 
             "statusCustom1", 
             "pumpTypeCustom1",
-            "radialBearingTypeCustom1", 
-            "thrustBearingTypeCustom1", 
             "shaftOrientationCustom1", 
             "shaftSealTypeCustom1", 
             "fluidTypeCustom1",
@@ -329,8 +327,10 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
             "driveTypeCustom1", 
             "flangeConnectionClassCustom1", 
             "flangeConnectionSizeCustom1",
-            "motorEfficiencyClassCustom1",
 			"componentIdCustom1", 
+            "system1", 
+            "location1",
+            "motorEfficiencyClassCustom1",
             2, 
 			1, 
 			9000, 
@@ -361,8 +361,9 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 			33,
 			33,
 			33,
-			1,
-			1);
+            33,
+            33,
+            33);
 
 
         PumpData pump2(
@@ -371,8 +372,6 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
             "serialNumberCustom2", 
             "statusCustom2", 
             "pumpTypeCustom2",
-            "radialBearingTypeCustom2", 
-            "thrustBearingTypeCustom2", 
             "shaftOrientationCustom2", 
             "shaftSealTypeCustom2", 
             "fluidTypeCustom2",
@@ -380,8 +379,10 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
             "driveTypeCustom2", 
             "flangeConnectionClassCustom2", 
             "flangeConnectionSizeCustom2", 
-            "motorEfficiencyClassCustom2",
 			"componentIdCustom2", 
+            "system2",
+            "location2",
+            "motorEfficiencyClassCustom2",
             2, 
 			1, 
 			9000, 
@@ -412,8 +413,9 @@ TEST_CASE( "SQLite - update all materials", "[sqlite]" ) {
 			33,
 			33,
 			33,
-			1,
-			1);
+            33,
+            33,
+            33);
 
 		sqlite.insertPumpData(pump1);
         sqlite.insertPumpData(pump2);
@@ -549,10 +551,10 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
         auto const output = sqlite.getPumpData();
         auto const last = output.back().getManufacturer();
         PumpData pump(
-            "throw this pump away delete", "model","serialNumber", "status", "pumpType", "radial",
-            "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
+            "throw this pump away delete", "model","serialNumber", "status", "pumpType",
+            "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
             "flangeConnectionClass", "flangeConnectionSize",
-			"componentId", 
+			"componentId", "system", "location",
             "motorEfficiencyClass",
             2, 
 			1, 
@@ -584,8 +586,9 @@ TEST_CASE( "SQLite - deleteMaterials", "[sqlite]" ) {
 			33,
 			33,
 			33,
-			1,
-			1);
+            33,
+            33,
+            33);
 
         sqlite.insertPumpData(pump);
         sqlite.deletePumpData(sqlite.getPumpData().back().getId());
@@ -1428,8 +1431,6 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         CHECK(result.getSerialNumber() == expected.getSerialNumber());
         CHECK(result.getStatus() == expected.getStatus());
         CHECK(result.getPumpType() == expected.getPumpType());
-        CHECK(result.getRadialBearingType() == expected.getRadialBearingType());
-        CHECK(result.getThrustBearingType() == expected.getThrustBearingType());
         CHECK(result.getShaftOrientation() == expected.getShaftOrientation());
         CHECK(result.getShaftSealType() == expected.getShaftSealType());
         CHECK(result.getFluidType() == expected.getFluidType());
@@ -1438,6 +1439,8 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         CHECK(result.getFlangeConnectionClass() == expected.getFlangeConnectionClass());
         CHECK(result.getFlangeConnectionSize() == expected.getFlangeConnectionSize());
         CHECK(result.getComponentId() == expected.getComponentId());
+        CHECK(result.getSystem() == expected.getSystem());
+        CHECK(result.getLocation() == expected.getLocation());
         CHECK(result.getMotorEfficiencyClass() == expected.getMotorEfficiencyClass());
         CHECK(result.getSpeed() == expected.getSpeed());
         CHECK(result.getNumStages() == expected.getNumStages());
@@ -1468,9 +1471,10 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         CHECK(result.getMotorFullLoadAmps() == expected.getMotorFullLoadAmps());
         CHECK(result.getOperatingFlowRate() == expected.getOperatingFlowRate());
         CHECK(result.getOperatingHead() == expected.getOperatingHead());
+        CHECK(result.getMeasuredCurrent() == expected.getMeasuredCurrent());
+        CHECK(result.getMeasuredPower() == expected.getMeasuredPower());
+        CHECK(result.getMeasuredVoltage() == expected.getMeasuredVoltage());
         CHECK(result.getMotorEfficiency() == expected.getMotorEfficiency());
-        CHECK(result.getOutOfService() == expected.getOutOfService());
-        CHECK(result.getSpare() == expected.getSpare());
         CHECK(result.getId() == expected.getId());
     };
 
@@ -1487,8 +1491,6 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
                 "serialNumber", 
                 "status", 
                 "pumpType", 
-                "radialBearingType",
-                "thrustBearingType", 
                 "shaftOrientation", 
                 "shaftSealType", 
                 "fluidType", 
@@ -1497,6 +1499,8 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
                 "flangeConnectionClass", 
                 "flangeConnectionSize", 
                 "componentId", 
+                "system",
+                "location",
 			    "motorEfficiencyClass",
 			    2, 
 			    1, 
@@ -1528,8 +1532,9 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
 			    33,
 			    33,
 			    33,
-			    1,
-			    1
+                33,
+                33,
+                33
                 );
                 
         expected.setId(1);
@@ -1537,10 +1542,10 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
         compare(pumps.at(0), expected);
 
         auto pump = PumpData(
-                "test-manufacturer", "test-model", "test-serialNumber", "status", "pumpType", "radialBearingType",
-                "thrustBearingType", "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
+                "test-manufacturer", "test-model", "test-serialNumber", "status", "pumpType",
+                "shaftOrientation", "shaftSealType", "fluidType", "priority", "driveType",
                 "flangeConnectionClass", "flangeConnectionSize",
-                "componentId", "motorEfficiencyClass", 
+                "componentId", "system", "location", "motorEfficiencyClass", 
                 2, 
 			    1, 
 			    9000, 
@@ -1571,8 +1576,9 @@ TEST_CASE( "SQLite - Pump Data inserts and updates and selects", "[sqlite][pump]
 			    33,
 			    33,
 			    33,
-			    1,
-			    1);
+                33,
+                33,
+                33);
 
         sqlite.insertPumpData(pump);
         pump.setId(2);
