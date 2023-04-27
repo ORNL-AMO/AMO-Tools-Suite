@@ -616,7 +616,7 @@ test('dbInsertMotor', function (t) {
 });
 
 test('dbSelectPumpData', function (t) {
-    t.plan(101); //2
+    t.plan(103); //2
     bindings.startup();
 
     t.type(bindings.selectPumpById, 'function');
@@ -628,8 +628,6 @@ test('dbSelectPumpData', function (t) {
         serialNumber: "serialNumber",
         status: "status",  
         pumpType: "pumpType", 
-        radialBearingType: "radialBearingType", 
-        thrustBearingType: "thrustBearingType",
         shaftOrientation: "shaftOrientation", 
         shaftSealType: "shaftSealType", 
         fluidType: "fluidType", 
@@ -638,6 +636,8 @@ test('dbSelectPumpData', function (t) {
         flangeConnectionClass: "flangeConnectionClass", 
         flangeConnectionSize: "flangeConnectionSize",
         componentId: "componentId",
+        system: "system",
+        location: "location",
         motorEfficiencyClass: "motorEfficiencyClass",
         speed: 2, 
         numStages: 1,  
@@ -668,9 +668,10 @@ test('dbSelectPumpData', function (t) {
         motorFullLoadAmps: 33,
         operatingFlowRate: 33,
         operatingHead: 33,
+        measuredCurrent: 33,
+        measuredPower: 33,
+        measuredVoltage: 33,
         motorEfficiency: 33,
-        outOfService: 1,
-        spare: 1,
     };
 
     //t.equal(res, obj, res.toString() + " != " + obj.toString());
@@ -680,8 +681,6 @@ test('dbSelectPumpData', function (t) {
     t.equal(res.serialNumber, obj.serialNumber, res.serialNumber + " != " + obj.serialNumber);
     t.equal(res.status, obj.status, res.status + " != " + obj.status);
     t.equal(res.pumpType, obj.pumpType, res.pumpType + " != " + obj.pumpType);
-    t.equal(res.radialBearingType, obj.radialBearingType, res.radialBearingType + " != " + obj.radialBearingType);
-    t.equal(res.thrustBearingType, obj.thrustBearingType, res.thrustBearingType + " != " + obj.thrustBearingType);
     t.equal(res.shaftOrientation, obj.shaftOrientation, res.shaftOrientation + " != " + obj.shaftOrientation);
     t.equal(res.shaftSealType, obj.shaftSealType, res.shaftSealType + " != " + obj.shaftSealType);
     t.equal(res.fluidType, obj.fluidType, res.fluidType + " != " + obj.fluidType);
@@ -690,6 +689,8 @@ test('dbSelectPumpData', function (t) {
     t.equal(res.flangeConnectionClass, obj.flangeConnectionClass, res.flangeConnectionClass + " != " + obj.flangeConnectionClass);
     t.equal(res.flangeConnectionSize, obj.flangeConnectionSize, res.flangeConnectionSize + " != " + obj.flangeConnectionSize);
     t.equal(res.componentId, obj.componentId, res.componentId + " != " + obj.componentId);
+    t.equal(res.system, obj.system, res.system + " != " + obj.system);
+    t.equal(res.location, obj.location, res.location + " != " + obj.location);
     t.equal(res.motorEfficiencyClass, obj.motorEfficiencyClass, res.motorEfficiencyClass + " != " + obj.motorEfficiencyClass);
     t.equal(res.speed, obj.speed, res.speed + " != " + obj.speed);
     t.equal(res.numStages, obj.numStages, res.numStages + " != " + obj.numStages);
@@ -720,10 +721,12 @@ test('dbSelectPumpData', function (t) {
     t.equal(res.motorFullLoadAmps, obj.motorFullLoadAmps, res.motorFullLoadAmps + " != " + obj.motorFullLoadAmps);
     t.equal(res.operatingFlowRate, obj.operatingFlowRate, res.operatingFlowRate + " != " + obj.operatingFlowRate);
     t.equal(res.operatingHead, obj.operatingHead, res.operatingHead + " != " + obj.operatingHead);
+    t.equal(res.measuredCurrent, obj.measuredCurrent, res.measuredCurrent + " != " + obj.measuredCurrent);
+    t.equal(res.measuredPower, obj.measuredPower, res.measuredPower + " != " + obj.measuredPower);
+    t.equal(res.measuredVoltage, obj.measuredVoltage, res.measuredVoltage + " != " + obj.measuredVoltage);
     t.equal(res.motorEfficiency, obj.motorEfficiency, res.motorEfficiency + " != " + obj.motorEfficiency);
-    t.equal(res.outOfService, obj.outOfService, res.outOfService + " != " + obj.outOfService);
-    t.equal(res.spare, obj.spare, res.spare + " != " + obj.spare);
-
+    // 50
+    
     t.type(bindings.selectPumps, 'function');
     res = bindings.selectPumps();
 
@@ -734,8 +737,6 @@ test('dbSelectPumpData', function (t) {
     t.equal(res[0].serialNumber, obj.serialNumber, res[0].serialNumber + " != " + obj.serialNumber);
     t.equal(res[0].status, obj.status, res[0].status + " != " + obj.status);
     t.equal(res[0].pumpType, obj.pumpType, res[0].pumpType + " != " + obj.pumpType);
-    t.equal(res[0].radialBearingType, obj.radialBearingType, res[0].radialBearingType + " != " + obj.radialBearingType);
-    t.equal(res[0].thrustBearingType, obj.thrustBearingType, res[0].thrustBearingType + " != " + obj.thrustBearingType);
     t.equal(res[0].shaftOrientation, obj.shaftOrientation, res[0].shaftOrientation + " != " + obj.shaftOrientation);
     t.equal(res[0].shaftSealType, obj.shaftSealType, res[0].shaftSealType + " != " + obj.shaftSealType);
     t.equal(res[0].fluidType, obj.fluidType, res[0].fluidType + " != " + obj.fluidType);
@@ -744,6 +745,8 @@ test('dbSelectPumpData', function (t) {
     t.equal(res[0].flangeConnectionClass, obj.flangeConnectionClass, res[0].flangeConnectionClass + " != " + obj.flangeConnectionClass);
     t.equal(res[0].flangeConnectionSize, obj.flangeConnectionSize, res[0].flangeConnectionSize + " != " + obj.flangeConnectionSize);
     t.equal(res[0].componentId, obj.componentId, res[0].componentId + " != " + obj.componentId);
+    t.equal(res[0].system, obj.system, res[0].system + " != " + obj.system);
+    t.equal(res[0].location, obj.location, res[0].location + " != " + obj.location);
     t.equal(res[0].motorEfficiencyClass, obj.motorEfficiencyClass, res[0].motorEfficiencyClass + " != " + obj.motorEfficiencyClass);
     t.equal(res[0].speed, obj.speed, res[0].speed + " != " + obj.speed);
     t.equal(res[0].numStages, obj.numStages, res[0].numStages + " != " + obj.numStages);
@@ -774,13 +777,16 @@ test('dbSelectPumpData', function (t) {
     t.equal(res[0].motorFullLoadAmps, obj.motorFullLoadAmps, res[0].motorFullLoadAmps + " != " + obj.motorFullLoadAmps);
     t.equal(res[0].operatingFlowRate, obj.operatingFlowRate, res[0].operatingFlowRate + " != " + obj.operatingFlowRate);
     t.equal(res[0].operatingHead, obj.operatingHead, res[0].operatingHead + " != " + obj.operatingHead);
+    t.equal(res[0].measuredCurrent, obj.measuredCurrent, res[0].measuredCurrent + " != " + obj.measuredCurrent);
+    t.equal(res[0].measuredPower, obj.measuredPower, res[0].measuredPower + " != " + obj.measuredPower);
+    t.equal(res[0].measuredVoltage, obj.measuredVoltage, res[0].measuredVoltage + " != " + obj.measuredVoltage);
     t.equal(res[0].motorEfficiency, obj.motorEfficiency, res[0].motorEfficiency + " != " + obj.motorEfficiency);
-    t.equal(res[0].outOfService, obj.outOfService, res[0].outOfService + " != " + obj.outOfService);
-    t.equal(res[0].spare, obj.spare, res[0].spare + " != " + obj.spare);
+    // 51
 });
 
+
 test('dbInsertPump', function (t) {
-    t.plan(51);
+    t.plan(52);
     bindings.startup();
 
     t.type(bindings.insertPump, 'function');
@@ -791,8 +797,6 @@ test('dbInsertPump', function (t) {
         serialNumber: "serialNumber2",
         status: "status2",  
         pumpType: "pumpType2", 
-        radialBearingType: "radialBearingType2", 
-        thrustBearingType: "thrustBearingType2",
         shaftOrientation: "shaftOrientation2", 
         shaftSealType: "shaftSealType2", 
         fluidType: "fluidType2", 
@@ -801,6 +805,8 @@ test('dbInsertPump', function (t) {
         flangeConnectionClass: "flangeConnectionClass2", 
         flangeConnectionSize: "flangeConnectionSize2",
         componentId: "componentId2",
+        system: "system2",
+        location: "location2",
         motorEfficiencyClass: "motorEfficiencyClass2",
         speed: 2, 
         numStages: 1,  
@@ -831,14 +837,15 @@ test('dbInsertPump', function (t) {
         motorFullLoadAmps: 33,
         operatingFlowRate: 33,
         operatingHead: 33,
+        measuredCurrent: 22,
+        measuredPower: 22,
+        measuredVoltage: 22,
         motorEfficiency: 33,
-        outOfService: 1,
-        spare: 1,
     };
 
     var res = bindings.selectPumps();
     var size = res.length;
-    bindings.insertPump(obj);
+    var inserted = bindings.insertPump(obj);
     res = bindings.selectPumps();
 
 
@@ -849,8 +856,6 @@ test('dbInsertPump', function (t) {
     t.equal(res[size].serialNumber, obj.serialNumber, res[size].serialNumber + " != " + obj.serialNumber);
     t.equal(res[size].status, obj.status, res[size].status + " != " + obj.status);
     t.equal(res[size].pumpType, obj.pumpType, res[size].pumpType + " != " + obj.pumpType);
-    t.equal(res[size].radialBearingType, obj.radialBearingType, res[size].radialBearingType + " != " + obj.radialBearingType);
-    t.equal(res[size].thrustBearingType, obj.thrustBearingType, res[size].thrustBearingType + " != " + obj.thrustBearingType);
     t.equal(res[size].shaftOrientation, obj.shaftOrientation, res[size].shaftOrientation + " != " + obj.shaftOrientation);
     t.equal(res[size].shaftSealType, obj.shaftSealType, res[size].shaftSealType + " != " + obj.shaftSealType);
     t.equal(res[size].fluidType, obj.fluidType, res[size].fluidType + " != " + obj.fluidType);
@@ -859,6 +864,8 @@ test('dbInsertPump', function (t) {
     t.equal(res[size].flangeConnectionClass, obj.flangeConnectionClass, res[size].flangeConnectionClass + " != " + obj.flangeConnectionClass);
     t.equal(res[size].flangeConnectionSize, obj.flangeConnectionSize, res[size].flangeConnectionSize + " != " + obj.flangeConnectionSize);
     t.equal(res[size].componentId, obj.componentId, res[size].componentId + " != " + obj.componentId);
+    t.equal(res[size].system, obj.system, res[size].system + " != " + obj.system);
+    t.equal(res[size].location, obj.location, res[size].location + " != " + obj.location);
     t.equal(res[size].motorEfficiencyClass, obj.motorEfficiencyClass, res[size].motorEfficiencyClass + " != " + obj.motorEfficiencyClass);
     t.equal(res[size].speed, obj.speed, res[size].speed + " != " + obj.speed);
     t.equal(res[size].numStages, obj.numStages, res[size].numStages + " != " + obj.numStages);
@@ -889,9 +896,11 @@ test('dbInsertPump', function (t) {
     t.equal(res[size].motorFullLoadAmps, obj.motorFullLoadAmps, res[size].motorFullLoadAmps + " != " + obj.motorFullLoadAmps);
     t.equal(res[size].operatingFlowRate, obj.operatingFlowRate, res[size].operatingFlowRate + " != " + obj.operatingFlowRate);
     t.equal(res[size].operatingHead, obj.operatingHead, res[size].operatingHead + " != " + obj.operatingHead);
+    t.equal(res[size].measuredCurrent, obj.measuredCurrent, res[size].measuredCurrent + " != " + obj.measuredCurrent);
+    t.equal(res[size].measuredPower, obj.measuredPower, res[size].measuredPower + " != " + obj.measuredPower);
+    t.equal(res[size].measuredVoltage, obj.measuredVoltage, res[size].measuredVoltage + " != " + obj.measuredVoltage);
     t.equal(res[size].motorEfficiency, obj.motorEfficiency, res[size].motorEfficiency + " != " + obj.motorEfficiency);
-    t.equal(res[size].outOfService, obj.outOfService, res[size].outOfService + " != " + obj.outOfService);
-    t.equal(res[size].spare, obj.spare, res[size].spare + " != " + obj.spare);
+    // 51
 });
 
 test('dbDeletions', function (t) {
@@ -1005,10 +1014,13 @@ test('dbDeletions', function (t) {
     last = res[res.length - 1].id;
     obj = {
         id: 2, manufacturer: "manufacturer2", model: "model2", serialNumber: "serialNumber2",
-        status: "status2",  pumpType: "pumpType2", radialBearingType: "radialBearingType2", thrustBearingType: "thrustBearingType2",
+        status: "status2",  pumpType: "pumpType2",
         shaftOrientation: "shaftOrientation2", shaftSealType: "shaftSealType2", fluidType: "fluidType2", priority: "priority2",
         driveType: "driveType2", flangeConnectionClass: "flangeConnectionClass2", flangeConnectionSize: "flangeConnectionSize2",
-        componentId: "componentId2", motorEfficiencyClass: "motorEfficiencyClass2",
+        componentId: "componentId2", 
+        system: "system2",
+        location: "location2",
+        motorEfficiencyClass: "motorEfficiencyClass2",
         speed: 2, 
         numStages: 1,  
         yearlyOperatingHours: 9000, 
@@ -1038,9 +1050,10 @@ test('dbDeletions', function (t) {
         motorFullLoadAmps: 33,
         operatingFlowRate: 33,
         operatingHead: 33,
+        measuredCurrent: 44,
+        measuredPower: 44,
+        measuredVoltage: 44,
         motorEfficiency: 33,
-        outOfService: 1,
-        spare: 1,
     };
     bindings.insertPump(obj);
     bindings.deletePump(bindings.selectPumps().length);
@@ -1162,10 +1175,13 @@ test('dbUpdates', function (t) {
 
     obj = {
         id: 2, manufacturer: "manufacturer2", model: "model2", serialNumber: "serialNumber2",
-        status: "status2",  pumpType: "pumpType2", radialBearingType: "radialBearingType2", thrustBearingType: "thrustBearingType2",
+        status: "status2",  pumpType: "pumpType2",
         shaftOrientation: "shaftOrientation2", shaftSealType: "shaftSealType2", fluidType: "fluidType2", priority: "priority2",
         driveType: "driveType2", flangeConnectionClass: "flangeConnectionClass2", flangeConnectionSize: "flangeConnectionSize2",
-        componentId: "componentId2", motorEfficiencyClass: "motorEfficiencyClass2",
+        componentId: "componentId2",
+        system: "system2",
+        location: "location2",
+        motorEfficiencyClass: "motorEfficiencyClass2",
         speed: 2, 
         numStages: 1,  
         yearlyOperatingHours: 9000, 
@@ -1195,9 +1211,10 @@ test('dbUpdates', function (t) {
         motorFullLoadAmps: 33,
         operatingFlowRate: 33,
         operatingHead: 33,
+        measuredCurrent: 33,
+        measuredPower: 33,
+        measuredVoltage: 33,
         motorEfficiency: 33,
-        outOfService: 1,
-        spare: 1,
     };
     bindings.insertPump(obj);
     pump = bindings.selectPumpById(bindings.selectPumps().length);

@@ -296,8 +296,6 @@ function pumpDataLog(item){
         item.getModel() + ', ' +
         item.getSerialNumber() + ', ' +
         item.getStatus() + ', ' +
-        item.getRadialBearingType() + ', ' +
-        item.getThrustBearingType() + ', ' +
         item.getShaftOrientation() + ', ' +
         item.getShaftSealType() + ', ' +
         item.getFluidType() + ', ' +
@@ -306,6 +304,8 @@ function pumpDataLog(item){
         item.getFlangeConnectionClass() + ', ' +
         item.getFlangeConnectionSize() + ', ' +
         item.getComponentId() + ', ' +
+        item.getSystem() + ', ' +
+        item.getLocation() + ', ' +
         item.getMotorEfficiencyClass() + ', ' +
         item.getSpeed() + ', ' +
         item.getNumStages() + ', ' +
@@ -336,20 +336,33 @@ function pumpDataLog(item){
         item.getMotorFullLoadAmps() + ', ' +
         item.getOperatingFlowRate() + ', ' +
         item.getOperatingHead() + ', ' +
-        item.getMotorEfficiency() + ', ' +
-        item.getOutOfService() + ', ' +
-        item.getSpare());
+        item.getMeasuredCurrent() + ', ' +
+        item.getMeasuredPower() + ', ' +
+        item.getMeasuredVoltage() + ', ' +
+        item.getMotorEfficiency());
 }
 
 function pumpData(sql){
     logMessage('Pump Data', true);
 
     let pump = {
-        id: 2, manufacturer: "manufacturer2", model: "model2", serialNumber: "serialNumber2",
-        status: "status2",  pumpType: "pumpType2", radialBearingType: "radialBearingType2", thrustBearingType: "thrustBearingType2",
-        shaftOrientation: "shaftOrientation2", shaftSealType: "shaftSealType2", fluidType: "fluidType2", priority: "priority2",
-        driveType: "driveType2", flangeConnectionClass: "flangeConnectionClass2", flangeConnectionSize: "flangeConnectionSize2",
-        componentId: "componentId2", motorEfficiencyClass: "motorEfficiencyClass2",
+        id: 2, 
+        manufacturer: "manufacturer2", 
+        model: "model2", 
+        serialNumber: "serialNumber2",
+        status: "status2",  
+        pumpType: "pumpType2",
+        shaftOrientation: "shaftOrientation2", 
+        shaftSealType: "shaftSealType2", 
+        fluidType: "fluidType2", 
+        priority: "priority2",
+        driveType: "driveType2", 
+        flangeConnectionClass: "flangeConnectionClass2", 
+        flangeConnectionSize: "flangeConnectionSize2",
+        componentId: "componentId2", 
+        system: "system2", 
+        location: "location2", 
+        motorEfficiencyClass: "motorEfficiencyClass2",
         speed: 2, 
         numStages: 1,  
         yearlyOperatingHours: 9000, 
@@ -379,23 +392,49 @@ function pumpData(sql){
         motorFullLoadAmps: 33,
         operatingFlowRate: 33,
         operatingHead: 33,
+        measuredCurrent: 33,
+        measuredPower: 33,
+        measuredVoltage: 33,
         motorEfficiency: 33,
-        outOfService: 1,
-        spare: 1,
     };
 
-    let item = new Module.PumpData(pump.manufacturer, pump.model, pump.serialNumber,
-        pump.status, pump.pumpType, pump.radialBearingType,  pump.thrustBearingType,
-        pump.shaftOrientation, pump.shaftSealType, pump.fluidType, pump.priority,
-        pump.driveType, pump.flangeConnectionClass, pump.flangeConnectionSize,
-        pump.componentId, pump.motorEfficiencyClass,
-        pump.speed, pump.numStages,  pump.yearlyOperatingHours, pump.yearInstalled, pump.finalMotorRpm, pump.motorRatedVoltage,
-        pump.inletDiameter, pump.outletDiameter,
+    let item = new Module.PumpData(pump.manufacturer, 
+        pump.model, 
+        pump.serialNumber,
+        pump.status, 
+        pump.pumpType,
+        pump.shaftOrientation, 
+        pump.shaftSealType, 
+        pump.fluidType, 
+        pump.priority,
+        pump.driveType, 
+        pump.flangeConnectionClass, 
+        pump.flangeConnectionSize,
+        pump.componentId,
+        pump.system,
+        pump.location,
+        pump.motorEfficiencyClass,
+        pump.speed, 
+        pump.numStages,  
+        pump.yearlyOperatingHours, 
+        pump.yearInstalled, 
+        pump.finalMotorRpm, 
+        pump.motorRatedVoltage,
+        pump.inletDiameter, 
+        pump.outletDiameter,
         pump.staticSuctionHead,
-        pump.staticDischargeHead, pump.fluidDensity, 
-        pump.maxWorkingPressure, pump.maxAmbientTemperature,
-        pump.maxSuctionLift,  pump.displacement, pump.startingTorque, pump.ratedSpeed,
-        pump.impellerDiameter, pump.efficiency, pump.lineFrequency, pump.minFlowSize,
+        pump.staticDischargeHead, 
+        pump.fluidDensity, 
+        pump.maxWorkingPressure, 
+        pump.maxAmbientTemperature,
+        pump.maxSuctionLift,  
+        pump.displacement, 
+        pump.startingTorque, 
+        pump.ratedSpeed,
+        pump.impellerDiameter, 
+        pump.efficiency, 
+        pump.lineFrequency, 
+        pump.minFlowSize,
         pump.pumpSize,  
         pump.designHead,
         pump.designFlow,
@@ -404,9 +443,10 @@ function pumpData(sql){
         pump.motorFullLoadAmps,
         pump.operatingFlowRate,
         pump.operatingHead,
-        pump.motorEfficiency,
-        pump.outOfService,
-        pump.spare);
+        pump.measuredCurrent,
+        pump.measuredPower,
+        pump.measuredVoltage,
+        pump.motorEfficiency);
     item.setId(pump.id);
     testNumberValue(sql.insertPumpData(item), true, "Insert");
 

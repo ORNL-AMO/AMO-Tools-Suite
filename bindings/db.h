@@ -120,8 +120,6 @@ void SetPumpData(Local<Object> &obj, const PumpData &pump)
     SetObj(obj, "serialNumber", pump.getSerialNumber());
     SetObj(obj, "status", pump.getStatus());
     SetObj(obj, "pumpType", pump.getPumpType());
-    SetObj(obj, "radialBearingType", pump.getRadialBearingType());
-    SetObj(obj, "thrustBearingType", pump.getThrustBearingType());
     SetObj(obj, "shaftOrientation", pump.getShaftOrientation());
     SetObj(obj, "shaftSealType", pump.getShaftSealType());
     SetObj(obj, "fluidType", pump.getFluidType());
@@ -130,6 +128,8 @@ void SetPumpData(Local<Object> &obj, const PumpData &pump)
     SetObj(obj, "flangeConnectionClass", pump.getFlangeConnectionClass());
     SetObj(obj, "flangeConnectionSize", pump.getFlangeConnectionSize());
     SetObj(obj, "componentId", pump.getComponentId());
+    SetObj(obj, "system", pump.getSystem());
+    SetObj(obj, "location", pump.getLocation());
     SetObj(obj, "motorEfficiencyClass", pump.getMotorEfficiencyClass());
     SetObj(obj, "speed", pump.getSpeed());
     SetObj(obj, "numStages", pump.getNumStages());
@@ -160,9 +160,10 @@ void SetPumpData(Local<Object> &obj, const PumpData &pump)
     SetObj(obj, "motorFullLoadAmps", pump.getMotorFullLoadAmps());
     SetObj(obj, "operatingFlowRate", pump.getOperatingFlowRate());
     SetObj(obj, "operatingHead", pump.getOperatingHead());
+    SetObj(obj, "measuredCurrent", pump.getMeasuredCurrent());
+    SetObj(obj, "measuredPower", pump.getMeasuredPower());
+    SetObj(obj, "measuredVoltage", pump.getMeasuredVoltage());
     SetObj(obj, "motorEfficiency", pump.getMotorEfficiency());
-    SetObj(obj, "outOfService", pump.getOutOfService());
-    SetObj(obj, "spare", pump.getSpare());
 }
 
 // when creating sqlite, add table that has history, put in tools-suite number and the date so that we know where db's came from
@@ -1075,10 +1076,13 @@ NAN_METHOD(insertPump)
 
     PumpData pump(
         GetStr("manufacturer"), GetStr("model"), GetStr("serialNumber"), GetStr("status"),
-        GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"), GetStr("shaftOrientation"),
+        GetStr("pumpType"), GetStr("shaftOrientation"),
         GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"), GetStr("driveType"),
         GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"),
-        GetStr("componentId"), GetStr("motorEfficiencyClass"),
+        GetStr("componentId"), 
+        GetStr("system"),
+        GetStr("location"),
+        GetStr("motorEfficiencyClass"),
         Get("speed"),
         Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), 
         Get("finalMotorRpm"),
@@ -1096,9 +1100,10 @@ NAN_METHOD(insertPump)
         Get("motorFullLoadAmps"),
         Get("operatingFlowRate"),
         Get("operatingHead"),
-        Get("motorEfficiency"),
-        Get("outOfService"),
-        Get("spare")
+        Get("measuredCurrent"),
+        Get("measuredPower"),
+        Get("measuredVoltage"),
+        Get("motorEfficiency")
         );
     bool success = sql->insertPumpData(pump);
     info.GetReturnValue().Set(success);
@@ -1118,10 +1123,13 @@ NAN_METHOD(updatePump)
 
     PumpData pump(
         GetStr("manufacturer"), GetStr("model"), GetStr("serialNumber"), GetStr("status"),
-        GetStr("pumpType"), GetStr("radialBearingType"), GetStr("thrustBearingType"),
+        GetStr("pumpType"),
         GetStr("shaftOrientation"), GetStr("shaftSealType"), GetStr("fluidType"), GetStr("priority"),
         GetStr("driveType"), GetStr("flangeConnectionClass"), GetStr("flangeConnectionSize"),
-        GetStr("componentId"), GetStr("motorEfficiencyClass"),
+        GetStr("componentId"),
+        GetStr("system"),
+        GetStr("location"),
+         GetStr("motorEfficiencyClass"),
         Get("speed"), Get("numStages"), Get("yearlyOperatingHours"), Get("yearInstalled"), Get("finalMotorRpm"),
         Get("motorRatedVoltage"),
         Get("inletDiameter"), Get("outletDiameter"),
@@ -1137,9 +1145,11 @@ NAN_METHOD(updatePump)
         Get("motorFullLoadAmps"),
         Get("operatingFlowRate"),
         Get("operatingHead"),
-        Get("motorEfficiency"),
-        Get("outOfService"),
-        Get("spare"));
+        Get("measuredCurrent"),
+        Get("measuredPower"),
+        Get("measuredVoltage"),
+        Get("motorEfficiency")
+    );
 
     pump.setId(Get("id"));
     bool success = sql->updatePumpData(pump);
