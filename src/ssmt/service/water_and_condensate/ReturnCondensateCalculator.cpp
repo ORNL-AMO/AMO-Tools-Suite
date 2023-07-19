@@ -8,7 +8,7 @@ ReturnCondensateCalculator::calc(const HeaderWithHighestPressure &highPressureHe
 }
 
 ReturnCondensateCalculationsDomain
-ReturnCondensateCalculator::flash(const HeaderWithHighestPressure &highPressureHeaderInput, const BoilerInput &boilerInput,
+ReturnCondensateCalculator::flash(const HeaderWithHighestPressure &highPressureHeaderInput,
       const SteamSystemModelerTool::FluidProperties &returnCondensate) const {
     const std::string methodName = std::string("ReturnCondensateCalculator::") + std::string(__func__) + ": ";
 
@@ -19,7 +19,7 @@ ReturnCondensateCalculator::flash(const HeaderWithHighestPressure &highPressureH
         // std::cout << methodName
         //           << "highPressureHeaderInput isFlashCondensate, calculating condensateFlashTank & returnCondensate"
         //           << std::endl;
-        const FlashTank &condensateFlashTank = flashTankFactory.make(boilerInput, returnCondensate);
+        const FlashTank &condensateFlashTank = flashTankFactory.make(returnCondensate);
         condensateFlashTankPtr = std::make_shared<FlashTank>(condensateFlashTank);
         returnCondensateFlashed = condensateFlashTank.getOutletLiquidSaturatedProperties();
     } else {

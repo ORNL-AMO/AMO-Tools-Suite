@@ -52,7 +52,7 @@ InsulatedTankOutput InsulatedTankCalculator::calculateInsulation(InsulatedTankIn
     AirProperties airProperties = InsulatedTankCalculator::calculateAirProperties(input.getAmbientTemperature());
     thermalDiffusivity = airProperties.getConductivity() / (airProperties.getDensity() * airProperties.getSpecificHeat());
     thermalExpansionCoefficient = 1.0 / input.getAmbientTemperature();
-    airRayleigh = (32.174 * thermalExpansionCoefficient * std::fabs(input.getTankTemperature() - input.getAmbientTemperature()) * std::pow(input.getTankDiameter(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
+    airRayleigh = (32.174 * thermalExpansionCoefficient * std::fabs(input.getSurfaceTemperature() - input.getAmbientTemperature()) * std::pow(input.getTankDiameter(), 3)) / (airProperties.getKinViscosity() * thermalDiffusivity);
     airProperties.setRayleigh(airRayleigh);
     naturalConvectionCoefficient = 0.125 * std::pow(airProperties.getRayleigh(), 1.0 / 3.0) * airProperties.getConductivity() / input.getTankDiameter();
     innerTankRadius = input.getTankDiameter() / 2.0;
@@ -60,8 +60,8 @@ InsulatedTankOutput InsulatedTankCalculator::calculateInsulation(InsulatedTankIn
     outerInsulationRadius = outerTankRadius + input.getInsulationThickness();
     tankArea = input.getTankDiameter() * input.getTankHeight() * M_PI;
     insulationOverallCoefficient = 1.0 / (innerTankRadius / outerInsulationRadius * 1.0 / naturalConvectionCoefficient + innerTankRadius / input.getInsulationConductivity() * std::log(outerInsulationRadius / outerTankRadius) + innerTankRadius / input.getTankConductivity() * std::log(outerTankRadius / innerTankRadius) + 1.0 / 10.0);
-    insulationConvCondHeatLoss = insulationOverallCoefficient * tankArea * (input.getTankTemperature() - input.getAmbientTemperature()) / 1e5;
-    insulationRadiativeHeatLoss = 0.1713e-8 * input.getJacketEmissivity() * (std::pow(input.getTankTemperature(), 4) - std::pow(input.getAmbientTemperature(), 4)) / 1e5;
+    insulationConvCondHeatLoss = insulationOverallCoefficient * tankArea * (input.getSurfaceTemperature() - input.getAmbientTemperature()) / 1e5;
+    insulationRadiativeHeatLoss = 0.1713e-8 * input.getJacketEmissivity() * (std::pow(input.getSurfaceTemperature(), 4) - std::pow(input.getAmbientTemperature(), 4)) / 1e5;
     insulationHeatLoss = insulationConvCondHeatLoss + insulationRadiativeHeatLoss;
     annualHeatLoss = (insulationHeatLoss * (double)input.getOperatingHours() / 10.0) / input.getSystemEfficiency();
     return InsulatedTankOutput(insulationHeatLoss, annualHeatLoss);

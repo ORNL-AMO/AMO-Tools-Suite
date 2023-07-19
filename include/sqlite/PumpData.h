@@ -9,8 +9,6 @@ std::vector<PumpData> SQLite::get_default_pump_data() {
 				"serialNumber", 
 				"status", 
 				"pumpType", 
-				"radialBearingType",
-				"thrustBearingType", 
 				"shaftOrientation", 
 				"shaftSealType", 
 				"fluidType", 
@@ -19,6 +17,8 @@ std::vector<PumpData> SQLite::get_default_pump_data() {
 				"flangeConnectionClass", 
 				"flangeConnectionSize",
 				"componentId", 
+				"system",
+				"location",
 				"motorEfficiencyClass",
 				2, 
 				1, 
@@ -50,8 +50,9 @@ std::vector<PumpData> SQLite::get_default_pump_data() {
 				33,
 				33,
 				33,
-				1,
-				1
+				33,
+				33,
+				33
 		      }	/*
 			{
 					"manufacturer2", "model2", "type2", "serialNumber2", "status2", "pumpType2", "radialBearingType2",

@@ -51,13 +51,12 @@ FlashTank FlashTankFactory::make(const std::shared_ptr<Header> &header,
     return {inletWaterPressure, quantityType, quantityValue, inletWaterMassFlow, tankPressure};
 }
 
-FlashTank FlashTankFactory::make(const BoilerInput &boilerInput,
-                                 const SteamSystemModelerTool::FluidProperties &properties) const {
+FlashTank FlashTankFactory::make(const SteamSystemModelerTool::FluidProperties &properties) const {
     double inletWaterPressure = properties.pressure;
     SteamProperties::ThermodynamicQuantity quantityType = SteamProperties::ThermodynamicQuantity::ENTHALPY;
     double quantityValue = properties.specificEnthalpy;
     double inletWaterMassFlow = properties.massFlow;
-    double tankPressure = boilerInput.getDeaeratorPressure();
+    double tankPressure = .101325;
 
     return {inletWaterPressure, quantityType, quantityValue, inletWaterMassFlow, tankPressure};
 }

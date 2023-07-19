@@ -20,6 +20,7 @@ TEST_CASE("Insulated Tank", "[InsulatedTankReduction][util]")
     double insulationThickness = 0.5;
     double insulationConductivity = 0.0191;
     double jacketEmissivity = 0.9;
+    double surfaceTemperature = 959.67;
 
     InsulatedTankInput input(
         operatingHours,
@@ -33,7 +34,8 @@ TEST_CASE("Insulated Tank", "[InsulatedTankReduction][util]")
         systemEfficiency,
         insulationThickness,
         insulationConductivity,
-        jacketEmissivity);
+        jacketEmissivity,
+        surfaceTemperature);
 
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
@@ -55,6 +57,7 @@ TEST_CASE("Insulated Tank 2", "[InsulatedTankReduction][util]")
     double insulationThickness = 0.5;
     double insulationConductivity = 0.0231;
     double jacketEmissivity = 0.1;
+    double surfaceTemperature = 759.67;
 
     InsulatedTankInput input(
         operatingHours,
@@ -68,7 +71,8 @@ TEST_CASE("Insulated Tank 2", "[InsulatedTankReduction][util]")
         systemEfficiency,
         insulationThickness,
         insulationConductivity,
-        jacketEmissivity);
+        jacketEmissivity,
+        surfaceTemperature);
 
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
@@ -92,6 +96,7 @@ TEST_CASE("No Insulation Tank", "[InsulatedTankReduction][util]")
     double insulationThickness = 0;
     double insulationConductivity = 0;
     double jacketEmissivity = 0.9;
+    double surfaceTemperature = 959.67;
 
     InsulatedTankInput input(
         operatingHours,
@@ -105,7 +110,8 @@ TEST_CASE("No Insulation Tank", "[InsulatedTankReduction][util]")
         systemEfficiency,
         insulationThickness,
         insulationConductivity,
-        jacketEmissivity);
+        jacketEmissivity,
+        surfaceTemperature);
 
     InsulatedTankCalculator calculator(input);
     InsulatedTankOutput output = calculator.calculate();
