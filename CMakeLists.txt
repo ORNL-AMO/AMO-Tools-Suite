@@ -10,7 +10,8 @@ set( CMAKE_VERSION_PATCH 1 )
 set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
 
 option( BUILD_PACKAGE "Build package" OFF )
-option( BUILD_TESTING "Build testing targets" OFF )
+option( BUILD_TESTING "Build testing targets" ON )
+option( BUILD_WASM "Build wasm" OFF )
 
 # Build C++ documentation using Doxygen
 # Requires: doxygen
@@ -27,15 +28,15 @@ endif()
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(cmake/ProjectMacros.cmake)
 
-message(STATUS "====== BUILDING WASM =====")
-set(BUILD_TESTING false)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "-fexceptions -O3 -std=c++11")
-set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0")
-
-# ? This results in error while building wasm
-# ? can or should this run anymore?
-# include(cmake/CompilerFlags.cmake)
+if(BUILD_WASM)
+  set(BUILD_PACKAGE false)
+  set(BUILD_TESTING false)
+  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_FLAGS "-fexceptions -O3 -std=c++11")
+  set(CMAKE_EXE_LINKER_FLAGS "--no-entry --bind -s WASM=1 -s ASSERTIONS=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0")
+else ()
+  include(cmake/CompilerFlags.cmake)
+endif ()
 
 # On Windows, things end up under Debug/ or Release/.
 if (WIN32)
@@ -210,31 +211,32 @@ set(SOURCE_FILES
         src/chillers/CoolingTower.cpp
         src/wasteWater/WasteWater_Treatment.cpp)
 
-
-set(SOURCE_FILES_WASM
-      src/calculator/motor/MotorPerformance.cpp
-      src/calculator/pump/PumpEfficiency.cpp
-      ${CMAKE_SOURCE_DIR}/third_party/sqlite/sqlite3.c
-      bindings-wasm/psat/psat.cpp
-      bindings-wasm/motor/motor.cpp
-      bindings-wasm/motor/motorEnum.cpp
-      bindings-wasm/psat/psatEnum.cpp
-      bindings-wasm/fan/fan.cpp
-      bindings-wasm/fan/fanEnum.cpp
-      bindings-wasm/phast/phast.cpp
-      bindings-wasm/phast/phastEnum.cpp
-      bindings-wasm/standalone/standalone.cpp
-      bindings-wasm/standalone/standaloneEnum.cpp
-      bindings-wasm/ssmt/ssmt.cpp
-      bindings-wasm/ssmt/ssmtEnum.cpp
-      bindings-wasm/ssmt/ssmtModeler.cpp
-      bindings-wasm/processHeat.cpp
-      bindings-wasm/chillers.cpp
-      bindings-wasm/compressorsCalc.cpp
-      bindings-wasm/svi.cpp
-      bindings-wasm/wasteWater.cpp
-      bindings-wasm/calculator.cpp
-      bindings-wasm/db.cpp)
+if(BUILD_WASM)
+    set(SOURCE_FILES_WASM
+        src/calculator/motor/MotorPerformance.cpp
+        src/calculator/pump/PumpEfficiency.cpp
+        ${CMAKE_SOURCE_DIR}/third_party/sqlite/sqlite3.c
+          bindings-wasm/psat/psat.cpp
+          bindings-wasm/motor/motor.cpp
+          bindings-wasm/motor/motorEnum.cpp
+          bindings-wasm/psat/psatEnum.cpp
+          bindings-wasm/fan/fan.cpp
+          bindings-wasm/fan/fanEnum.cpp
+          bindings-wasm/phast/phast.cpp
+          bindings-wasm/phast/phastEnum.cpp
+          bindings-wasm/standalone/standalone.cpp
+          bindings-wasm/standalone/standaloneEnum.cpp
+          bindings-wasm/ssmt/ssmt.cpp
+          bindings-wasm/ssmt/ssmtEnum.cpp
+          bindings-wasm/ssmt/ssmtModeler.cpp
+          bindings-wasm/processHeat.cpp
+          bindings-wasm/chillers.cpp
+          bindings-wasm/compressorsCalc.cpp
+          bindings-wasm/svi.cpp
+          bindings-wasm/wasteWater.cpp
+          bindings-wasm/calculator.cpp
+          bindings-wasm/db.cpp)
+endif ()
 
 set(INCLUDE_FILES
         include/results/Results.h
@@ -526,18 +528,16 @@ add_executable(amo_tools_suite_main main.cpp)
 set_target_properties(amo_tools_suite_main PROPERTIES OUTPUT_NAME "amo_tools_suite")
 target_link_libraries( amo_tools_suite_main amo_tools_suite )
 
-
 if( BUILD_TESTING )
     add_library(Catch INTERFACE)
     target_include_directories(Catch INTERFACE third_party/catch/)
 
     # Create unit testing executable
-    message(STATUS "====== BUILDING TEST EXE =====")
     add_executable(amo_tools_suite_tests tests/main.unit.cpp ${TEST_FILES})
     target_link_libraries( amo_tools_suite_tests Catch amo_tools_suite )
+elseif ( BUILD_WASM )
+    add_executable(client ${SOURCE_FILES} ${SOURCE_FILES_WASM})
 endif()
-
-add_executable(client ${SOURCE_FILES} ${SOURCE_FILES_WASM})
 
 #if(BUILD_DOCUMENTATION)
 #    find_package(Doxygen REQUIRED)
