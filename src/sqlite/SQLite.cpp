@@ -806,7 +806,6 @@ PumpData SQLite::getPumpDataById(int id) const
         pump.setId(dbId);
         return pump;
     };
-    std::cout << "========= getPumpDataById id: " << id << std::endl;
     return get_object<PumpData>(m_pump_data_select_single_stmt, id, cb);
 }
 
@@ -2170,7 +2169,6 @@ bool SQLite::insertPumpData(PumpData const &pump)
 
 bool SQLite::deletePumpData(int id)
 {
-    std::cout << "===== deletePumpData id: " << id << std::endl;
     if (isDefaultMaterial(id, get_default_pump_data().size()))
     {
         return false;
@@ -2184,7 +2182,6 @@ bool SQLite::deletePumpData(int id)
 
 bool SQLite::updatePumpData(PumpData const &pump)
 {
-    std::cout << "========= updatePumpData id: " << pump.id << std::endl;
     if (isDefaultMaterial(pump.id, get_default_pump_data().size()))
     {
         return false;
@@ -2249,7 +2246,6 @@ bool SQLite::updatePumpData(PumpData const &pump)
 
 bool SQLite::insert_pump_data(PumpData const &pump)
 {
-    std::cout << "========== insert_pump_data id: " << pump.id << std::endl;
     if (pump.id && isDefaultMaterial(pump.id, get_default_pump_data().size()))
     {
         return false;

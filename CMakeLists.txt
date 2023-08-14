@@ -8,23 +8,14 @@ set( CMAKE_VERSION_MINOR 3 )
 set( CMAKE_VERSION_PATCH 1 )
 
 set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
-INCLUDE_DIRECTORIES (node_modules/nan)
 
-# Build package
-# Requires:
-option( BUILD_PACKAGE "Build package" ON )
-
-# Build testing
-# Requires:
+option( BUILD_PACKAGE "Build package" OFF )
 option( BUILD_TESTING "Build testing targets" ON )
-
-# Build WASM
-# Requires:
 option( BUILD_WASM "Build wasm" OFF )
 
 # Build C++ documentation using Doxygen
 # Requires: doxygen
-# option( BUILD_DOCUMENTATION "Build Documentation" ON )
+option( BUILD_DOCUMENTATION "Build Documentation" OFF )
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -66,7 +57,6 @@ else (WIN32)
 endif (WIN32)
 
 # set (CMAKE_CXX_FLAGS "-Wall")
-
 #file(MAKE_DIRECTORY ${CMAKE_DATABASE_OUTPUT_DIRECTORY})
 
 set(SOURCE_FILES
@@ -222,30 +212,30 @@ set(SOURCE_FILES
         src/wasteWater/WasteWater_Treatment.cpp)
 
 if(BUILD_WASM)
-  set(SOURCE_FILES_WASM
+    set(SOURCE_FILES_WASM
         src/calculator/motor/MotorPerformance.cpp
         src/calculator/pump/PumpEfficiency.cpp
         ${CMAKE_SOURCE_DIR}/third_party/sqlite/sqlite3.c
-        bindings-wasm/psat/psat.cpp
-        bindings-wasm/motor/motor.cpp
-        bindings-wasm/motor/motorEnum.cpp
-        bindings-wasm/psat/psatEnum.cpp
-        bindings-wasm/fan/fan.cpp
-        bindings-wasm/fan/fanEnum.cpp
-        bindings-wasm/phast/phast.cpp
-        bindings-wasm/phast/phastEnum.cpp
-        bindings-wasm/standalone/standalone.cpp
-        bindings-wasm/standalone/standaloneEnum.cpp
-        bindings-wasm/ssmt/ssmt.cpp
-        bindings-wasm/ssmt/ssmtEnum.cpp
-        bindings-wasm/ssmt/ssmtModeler.cpp
-        bindings-wasm/processHeat.cpp
-        bindings-wasm/chillers.cpp
-        bindings-wasm/compressorsCalc.cpp
-        bindings-wasm/svi.cpp
-        bindings-wasm/wasteWater.cpp
-        bindings-wasm/calculator.cpp
-        bindings-wasm/db.cpp)
+          bindings-wasm/psat/psat.cpp
+          bindings-wasm/motor/motor.cpp
+          bindings-wasm/motor/motorEnum.cpp
+          bindings-wasm/psat/psatEnum.cpp
+          bindings-wasm/fan/fan.cpp
+          bindings-wasm/fan/fanEnum.cpp
+          bindings-wasm/phast/phast.cpp
+          bindings-wasm/phast/phastEnum.cpp
+          bindings-wasm/standalone/standalone.cpp
+          bindings-wasm/standalone/standaloneEnum.cpp
+          bindings-wasm/ssmt/ssmt.cpp
+          bindings-wasm/ssmt/ssmtEnum.cpp
+          bindings-wasm/ssmt/ssmtModeler.cpp
+          bindings-wasm/processHeat.cpp
+          bindings-wasm/chillers.cpp
+          bindings-wasm/compressorsCalc.cpp
+          bindings-wasm/svi.cpp
+          bindings-wasm/wasteWater.cpp
+          bindings-wasm/calculator.cpp
+          bindings-wasm/db.cpp)
 endif ()
 
 set(INCLUDE_FILES
