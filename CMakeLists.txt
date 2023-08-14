@@ -9,7 +9,7 @@ set( CMAKE_VERSION_PATCH 1 )
 
 set(AMO_SUITE_VERSION "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}")
 
-option( BUILD_PACKAGE "Build package" OFF )
+option( BUILD_PACKAGE "Build package" ON )
 option( BUILD_TESTING "Build testing targets" ON )
 option( BUILD_WASM "Build wasm" OFF )
 
