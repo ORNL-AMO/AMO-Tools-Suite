@@ -13,7 +13,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - Doxygen (only for building documentation)
 
 #### Web Assembly Compilation SDK
-- Emscripten (emsdk) - Follow instructions for install, using '2.0.16' in place of 'latest' https://emscripten.org/docs/getting_started/downloads.html
+- Emscripten (emsdk) - Follow instructions for install https://emscripten.org/docs/getting_started/downloads.html
 
 #### Node
 - Node LTS [https://nodejs.org/en/](https://nodejs.org/en/) 
@@ -24,10 +24,10 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - `cd` into the emsdk directory: 
 	- run `emsdk activate latest` (Build must target this version, if trouble try version 2.0.16)
 - `cd` into AMO-Tools-Suite directory:  
-    -  run `emcmake cmake -DBUILD_WASM=ON -G "MinGW Makefiles"` 
+    -  run `emcmake cmake -DBUILD_WASM=ON` 
         -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
-        example for windows => `emcmake cmake -D BUILD_WASM=ON -G "MinGW Makefiles"`  
-    - run `emmake mingw32-make` (or other make-file)
+        example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON -G "MinGW Makefiles"`  
+    - run `emmake make` (or `emmake` and specify makefile related to above note)
 
 ### Unit Tests
 - To run the WASM unit tests use: `npm run test-wasm`
