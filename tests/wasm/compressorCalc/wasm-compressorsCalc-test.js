@@ -3,9 +3,9 @@ function validateCompressorsCalc(headerMsg, input, output){
         testNumberValue(rnd(results.kW_Calc), rnd(expected[0]), "powerCalculated kW_Calc");
         testNumberValue(rnd(results.C_Calc), rnd(expected[1]), "capacityCalculated C_Calc");
         testNumberValue(rnd(results.PerkW), rnd(expected[2]), "percentagePower PerkW");
-        testNumberValue(rnd(results.C_Per), rnd(expected[3]),"percentageCapacity C_Per");
+        testNumberValue(rnd(results.C_Per), rnd(expected[3]), "percentageCapacity C_Per");
 
-        if(input.controlType == Module.ControlType.BlowOff) {
+        if (input.controlType == Module.ControlType.BlowOff) {
             testNumberValue(rnd(results.C_blow), rnd(expected[4]), "surgeFlow C_blow");
             testNumberValue(rnd(results.blowPer), rnd(expected[5]), "percentageBlowOff blowPer");
         }
@@ -14,8 +14,9 @@ function validateCompressorsCalc(headerMsg, input, output){
     logMessage(headerMsg, true);
 
     let res;
-    if(input.compressorType == Module.CompressorType.Centrifugal) res = compressorsCalcCentrifugal(input);
-    else{
+    if(input.compressorType == Module.CompressorType.Centrifugal) {
+        res = compressorsCalcCentrifugal(input);
+    } else{
         if(input.compressorType == Module.CompressorType.Screw) {
             if (input.lubricantType == Module.Lubricant.Injected && (input.stageType == Module.Stage.Single || input.stageType == Module.Stage.Two)){
                 if(input.controlType == Module.ControlType.LoadUnload) {
@@ -57,7 +58,7 @@ function validateCompressorsCalc(headerMsg, input, output){
             }
         }
     }
-    
+
     validate(res, output);
 }
 
@@ -206,15 +207,23 @@ function compressorsCalcVFD(input){
 function compressorsVFDTest() {
 
     let input = {
+        adjustForDischargePressure: false,
+        applyPressureInletCorrection: false,
+        atmosphericPsi: 14.7,
+        blowdownTime: 40,
+        capacityAtFullLoad: 1009,
+        capacityAtMaxFullFlow: undefined,
+        capacityAtUnload: undefined,
         compressorType : Module.CompressorType.Screw,
-        lubricantType: Module.Lubricant.Injected, 
+        computeFrom: Module.ComputeFrom.PercentageCapacity,
+        computeFromPFAmps: 0,
+        computeFromPFVoltage: 0,
+        computeFromVal: .31,
         controlType: Module.ControlType.VFD,
-        stageType: Module.Stage.Single,
-
         dischargePsiFullLoad: 100,
         dischargePsiMax: undefined,
         loadFactorUnloaded: 0.06422018348623852,
-        lubricantType: 0,
+        lubricantType: Module.Lubricant.Injected, 
         midTurndownAirflow: 605,
         midTurndownDischargePressure: 102.4,
         midTurndownPower: 115,
@@ -230,17 +239,13 @@ function compressorsVFDTest() {
         powerMaxPercentage: NaN,
         pressureAtUnload: undefined,
         receiverVolume: 401.04187336685095,
-        stageType: 0,
+        stageType: Module.Stage.Single,
         turndownAirflow: 202,
         turndownDischargePressure: 104.8,
         turndownPower: 55.8,
         unloadPointCapacity: 20,
         unloadSumpPressure: 15,
-        atmosphericPsi: 14.7,
-        blowdownTime: 40,
-        capacityAtFullLoad: 1009,
-        computeFrom: Module.ComputeFrom.PercentageCapacity,
-        computeFromVal: .31
+      
     };
     validateCompressorsCalc('Compressors VFD', input, [72.0695, 312.79, 0.4132, 0.31]);
 }
@@ -858,7 +863,6 @@ compressorsCentrifugalLoadUnload();
 compressorsCentrifugalModulationUnload();
 compressorsCentrifugalBlowOff();
 compressorsVFDTest();
-
 // compressorsModulationWOUnload();
 // compressorsStartStop();
 // compressorsLoadUnload();

@@ -650,7 +650,7 @@ test('COMP ID: VFD', function (t) {
         computeFrom: 1,
         computeFromPFAmps: 0,
         computeFromPFVoltage: 0,
-        computeFromVal: 0,
+        computeFromVal: .31,
         controlType: 7,
         dischargePsiFullLoad: 100,
         dischargePsiMax: undefined,
@@ -678,9 +678,7 @@ test('COMP ID: VFD', function (t) {
         unloadPointCapacity: 20,
         unloadSumpPressure: 15
     }
-    input.computeFromVal = .31;
     //1 = % Airflow
-    input.computeFrom = 1;
     var results = bindings.CompressorsCalc(input);
     results.percentagePower = results.percentagePower * 100;
     t.equal(rnd(results.percentagePower), rnd(41.35), "% Power 1");
