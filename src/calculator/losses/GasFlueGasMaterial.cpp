@@ -34,7 +34,7 @@ double GasCompositions::calculateExcessAir(const double flueGasO2) {
 	return excessAir;
 }
 
-double GasCompositions::getExcessAir(const double flueGasO2) const { return (8.52381 * flueGasO2) / (2 - (9.52381 * flueGasO2)); }
+double GasCompositions::getExcessAir(const double flueGasO2) const { return ((stoichometricAir / 32 - 1) * flueGasO2) / (2 - (stoichometricAir / 32 * flueGasO2)); }
 
 double GasCompositions::getEnthalpyAtSaturation(const double ppH2O) const { return 1096.7 * pow(ppH2O * 29.926, 0.013); }
 
