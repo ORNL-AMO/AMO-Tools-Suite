@@ -1510,9 +1510,20 @@ function validateInsulatedTankCalculator(testName, inp, expected){
 
     logMessage('Calculator - Tank Insulation Reduction: Test# ' + testName, true);
 
-    let input = new Module.InsulatedTankInput(inp.operatingHours, inp.tankHeight, inp.tankDiameter, inp.tankThickness,
-        inp.tankEmissivity, inp.tankConductivity, inp.tankTemperature, inp.ambientTemperature, inp.systemEfficiency,
-        inp.insulationThickness, inp.insulationConductivity, inp.jacketEmissivity);
+    let input = new Module.InsulatedTankInput(
+        inp.operatingHours, 
+        inp.tankHeight, 
+        inp.tankDiameter, 
+        inp.tankThickness,
+        inp.tankEmissivity, 
+        inp.tankConductivity, 
+        inp.tankTemperature, 
+        inp.ambientTemperature, 
+        inp.systemEfficiency,
+        inp.insulationThickness, 
+        inp.insulationConductivity, 
+        inp.jacketEmissivity,
+        inp.surfaceTemperature);
     let instance = new Module.InsulatedTankCalculator(input);
     validate(instance.calculate());
 
@@ -1533,7 +1544,8 @@ function insulatedTankCalculator(){
         systemEfficiency: 90,
         insulationThickness: 0.5,
         insulationConductivity: 0.0191,
-        jacketEmissivity: 0.9
+        jacketEmissivity: 0.9,
+        surfaceTemperature: 959.67
     };
     validateInsulatedTankCalculator('1 - Insulated', inp, [0.044464, 0.43278176]);
 
@@ -1549,7 +1561,8 @@ function insulatedTankCalculator(){
         systemEfficiency: 90,
         insulationThickness: 0.5,
         insulationConductivity: 0.0231,
-        jacketEmissivity: 0.1
+        jacketEmissivity: 0.1,
+        surfaceTemperature: 759.67
     };
     validateInsulatedTankCalculator('2 - Insulated', inp, [0.030515, 0.29701354]);
 
@@ -1566,6 +1579,7 @@ function insulatedTankCalculator(){
         insulationThickness: 0,
         insulationConductivity: 0,
         jacketEmissivity: 0.9,
+        surfaceTemperature: 959.67
     };
     validateInsulatedTankCalculator('3 - No Insulation', inp, [1.1112001223, 10.81568119]);
 }

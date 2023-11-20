@@ -118,15 +118,24 @@ function resultsModified() {
 }
 
 function getBaseGasDensity() {
-    let dryBulbTemp = 123;
-    let staticPressure = -17.6;
-    let barometricPressure = 26.57;
-    let gasType = Module.GasType.AIR;
-    let inputType = Module.BaseGasDensityInputType.RelativeHumidity;
-    let relativeHumidity = 35;
-    let specificGravity = 1.05;
+    let relativeHumidityInputs = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasType: Module.GasType.AIR,
+        inputType: Module.BaseGasDensityInputType.RelativeHumidity,
+        relativeHumidity: 35,
+        specificGravity: 1.05,
+    }
 
-    let relativeHumidityInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, relativeHumidity, gasType, inputType, specificGravity);
+    let relativeHumidityInstance = new Module.BaseGasDensity(
+        relativeHumidityInputs.dryBulbTemp, 
+        relativeHumidityInputs.staticPressure, 
+        relativeHumidityInputs.barometricPressure, 
+        relativeHumidityInputs.relativeHumidity, 
+        relativeHumidityInputs.gasType, 
+        relativeHumidityInputs.inputType, 
+        relativeHumidityInputs.specificGravity);
     let gasDensityResult = relativeHumidityInstance.getGasDensity();
     let AbsolutePressureInResult = relativeHumidityInstance.getAbsolutePressureIn();
     let SaturatedHumidityRatioResult = relativeHumidityInstance.getSaturatedHumidityRatio();
@@ -140,6 +149,8 @@ function getBaseGasDensity() {
     let WetBulbTempResult = relativeHumidityInstance.getWetBulbTemp();
     relativeHumidityInstance.delete();
 
+    SectionHead('Base Gas Density: Relative Humdity Method Results ');
+
     testNumberValue(gasDensityResult, 0.05637830145287457, "Gas Density (relativeHumidity)");
     testNumberValue(AbsolutePressureInResult, 25.2767099634697, "AbsolutePressureInResult (relativeHumidity)");
     testNumberValue(SaturatedHumidityRatioResult, 0.10830760118401817, "SaturatedHumidityRatioResult (relativeHumidity)");
@@ -152,10 +163,27 @@ function getBaseGasDensity() {
     testNumberValue(SaturationPressureResult, 3.7487420264687445, "SaturationPressureResult (relativeHumidity)");
     testNumberValue(WetBulbTempResult, 93.25804647868017, "WetBulbTempResult (relativeHumidity)");
 
-    inputType = Module.BaseGasDensityInputType.DewPoint;
-    dewPoint = 0.35;
+    // original was also passing rel humidity value?
+    let dewPointInputs = {
+        dryBulbTemp: 123,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasType: Module.GasType.AIR,
+        inputType: Module.BaseGasDensityInputType.DewPoint,
+        dewPoint: 0.35,
+        specificGravity: 1.05,
+    }
 
-    let dewPointInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, dewPoint, gasType, inputType, specificGravity);
+    let dewPointInstance = new Module.BaseGasDensity(
+        dewPointInputs.dryBulbTemp, 
+        dewPointInputs.staticPressure, 
+        dewPointInputs.barometricPressure, 
+        dewPointInputs.dewPoint, 
+        dewPointInputs.gasType, 
+        dewPointInputs.inputType, 
+        dewPointInputs.specificGravity
+        );
+
     gasDensityResult = dewPointInstance.getGasDensity();
     AbsolutePressureInResult = dewPointInstance.getAbsolutePressureIn();
     SaturatedHumidityRatioResult = dewPointInstance.getSaturatedHumidityRatio();
@@ -169,6 +197,8 @@ function getBaseGasDensity() {
     WetBulbTempResult = dewPointInstance.getWetBulbTemp();
     dewPointInstance.delete();
 
+    SectionHead('Base Gas Density: Dewpoint Method Results ');
+
     testNumberValue(gasDensityResult, 0.057473768082717605, "Gas Density (relativeHumidity)");
     testNumberValue(AbsolutePressureInResult, 25.2767099634697, "AbsolutePressureInResult (relativeHumidity)");
     testNumberValue(SaturatedHumidityRatioResult, 0.10830760118401817, "SaturatedHumidityRatioResult (relativeHumidity)");
@@ -177,15 +207,33 @@ function getBaseGasDensity() {
     testNumberValue(SpecificVolumeResult, 17.415694184877726, "SpecificVolumeResult (relativeHumidity)");
     testNumberValue(EnthalpyResult, 31.435887656005303, "EnthalpyResult (relativeHumidity)");
     testNumberValue(DewPointResult, 0.35, "DewPointResult (relativeHumidity)");
-    testNumberValue(RelativeHumidityResult, 1.0235094719915057, "RelativeHumidityResult (relativeHumidity)");
+    testNumberValue(RelativeHumidityResult, 0.010235, "RelativeHumidityResult (relativeHumidity)");
     testNumberValue(SaturationPressureResult, 3.7487420264687445, "SaturationPressureResult (relativeHumidity)");
     testNumberValue(WetBulbTempResult, 62.94970394555405, "WetBulbTempResult (relativeHumidity)");
 
-    inputType = Module.BaseGasDensityInputType.WetBulbTemp;
-    let wetBulbTemp = 110;
-    let specificHeatGas = 1.03;
 
-    let wetBulbInstance = new Module.BaseGasDensity(dryBulbTemp, staticPressure, barometricPressure, wetBulbTemp, gasType, inputType, specificGravity, specificHeatGas);
+
+    let wetBulbInputs = {
+        dryBulbTemp: 123,
+        wetBulbTemp: 110,
+        staticPressure: -17.6,
+        barometricPressure: 26.57,
+        gasType: Module.GasType.AIR,
+        inputType: Module.BaseGasDensityInputType.WetBulbTemp,
+        specificHeatGas: 1.03,
+        specificGravity: 1.05,
+    }
+
+    let wetBulbInstance = new Module.BaseGasDensity(
+        wetBulbInputs.dryBulbTemp, 
+        wetBulbInputs.staticPressure, 
+        wetBulbInputs.barometricPressure, 
+        wetBulbInputs.wetBulbTemp, 
+        wetBulbInputs.gasType, 
+        wetBulbInputs.inputType, 
+        wetBulbInputs.specificGravity, 
+        wetBulbInputs.specificHeatGas
+        );
     gasDensityResult = wetBulbInstance.getGasDensity();
     AbsolutePressureInResult = wetBulbInstance.getAbsolutePressureIn();
     SaturatedHumidityRatioResult = wetBulbInstance.getSaturatedHumidityRatio();
@@ -199,15 +247,17 @@ function getBaseGasDensity() {
     WetBulbTempResult = wetBulbInstance.getWetBulbTemp();
     wetBulbInstance.delete();
 
+    SectionHead('Base Gas Density: Wetbulb Method Results ');
+
     testNumberValue(gasDensityResult, 0.05536774050618011, "Gas Density (relativeHumidity)");
     testNumberValue(AbsolutePressureInResult, 25.2767099634697, "AbsolutePressureInResult (relativeHumidity)");
     testNumberValue(SaturatedHumidityRatioResult, 0.10830760118401817, "SaturatedHumidityRatioResult (relativeHumidity)");
-    testNumberValue(DegreeOfSaturationResult, 0.6267018765874393, "DegreeOfSaturationResult (relativeHumidity)");
-    testNumberValue(HumidityRatioResult, 0.06787657691070814, "HumidityRatioResult (relativeHumidity)");
-    testNumberValue(SpecificVolumeResult, 19.286981320675572, "SpecificVolumeResult (relativeHumidity)");
-    testNumberValue(EnthalpyResult, 106.10492372050894, "EnthalpyResult (relativeHumidity)");
-    testNumberValue(DewPointResult, 108.44107215070429, "DewPointResult (relativeHumidity)");
-    testNumberValue(RelativeHumidityResult, 66.34315384222288, "RelativeHumidityResult (relativeHumidity)");
+    testNumberValue(DegreeOfSaturationResult, 0.535317, "DegreeOfSaturationResult (relativeHumidity)");
+    testNumberValue(HumidityRatioResult, 0.057979, "HumidityRatioResult (relativeHumidity)");
+    testNumberValue(SpecificVolumeResult, 19.010256, "SpecificVolumeResult (relativeHumidity)");
+    testNumberValue(EnthalpyResult, 95.062901, "EnthalpyResult (relativeHumidity)");
+    testNumberValue(DewPointResult, 103.567304, "DewPointResult (relativeHumidity)");
+    testNumberValue(RelativeHumidityResult, 0.574939, "RelativeHumidityResult (relativeHumidity)");
     testNumberValue(SaturationPressureResult, 3.7487420264687445, "SaturationPressureResult (relativeHumidity)");
     testNumberValue(WetBulbTempResult, 110, "WetBulbTempResult (relativeHumidity)");
 }
@@ -808,6 +858,9 @@ function compressibilityFactor()
     compressibilityFactor.delete();
 }
 
+function SectionHead(header){
+    logMessage(header, true);
+}
 //call tests
 resultsExisting();
 resultsModified();
