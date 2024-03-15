@@ -16,8 +16,8 @@
     "tap": "^16.3.7"
   },
   "engines": {
-    "node": "18.17.0",
-    "npm": "9.6.7"
+    "node": "20.11.1",
+    "npm": "10.2.4"
   },
   "scripts": {
     "test": "tap tests/js/*.js",
