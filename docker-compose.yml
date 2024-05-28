@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  amo-tools-suite:
+    build: .
+    container_name: amo-tools-suite-build
+    restart: always
+    command:
+      - /bin/sh
+      - -c
+      - |
+        cd /home/AMO-Tools-Suite/
+        npm run test-wasm-stop
+        npm run test-wasm
+    volumes:
+      - ../AMO-Tools-Suite:/AMO-Tools-Suite
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - ts-net
+
+networks:
+  ts-net:
+    name: ts-build-network
