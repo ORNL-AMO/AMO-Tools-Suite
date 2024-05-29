@@ -54,6 +54,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 To make it easy for developers local building and testing, it is dockerized. To run it in docker follow this steps.
 - Download the repository
 - Open command line tool, change directory to the repository run `docker-compose up -d`
+- To stop the running container run `docker-compose down`
 - Running Unit Tests
   - WASM: in a browser, launch [http://localhost:3000/](http://localhost:3000/)
   - C++: run `docker exec -it amo-tools-suite-build /bin/bash` and run the executable `/home/AMO-Tools-Suite/build-cpp/bin/cpp_tests`
