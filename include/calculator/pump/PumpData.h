@@ -229,19 +229,19 @@ public:
 
     void setOperatingHead(const double &operatingHead);
 
-    const double getMeasuredCurrent() const;
+    double getMeasuredCurrent() const;
 
     void setMeasuredCurrent(const double &measuredCurrent);
 
-    const double getMeasuredPower() const;
+    double getMeasuredPower() const;
 
     void setMeasuredPower(const double &measuredPower);
 
-    const double getMeasuredVoltage() const;
+    double getMeasuredVoltage() const;
 
     void setMeasuredVoltage(const double &measuredVoltage);
 
-    const double getMotorEfficiency() const;
+    double getMotorEfficiency() const;
 
     void setMotorEfficiency(const double &motorEfficiency);
 
@@ -269,10 +269,10 @@ private:
 
     int speed, numStages, yearlyOperatingHours, yearInstalled, finalMotorRpm, motorRatedVoltage;
 
-    double inletDiameter, outletDiameter, designHead, designFlow, designEfficiency, motorRatedPower, motorFullLoadAmps, operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency;
-    double staticSuctionHead, staticDischargeHead, fluidDensity, maxWorkingPressure;
-    double maxAmbientTemperature, maxSuctionLift, displacement, startingTorque, ratedSpeed, impellerDiameter;
-    double efficiency, lineFrequency, minFlowSize, pumpSize;
+    double inletDiameter, outletDiameter, staticSuctionHead, staticDischargeHead, fluidDensity;
+    double maxWorkingPressure, maxAmbientTemperature, maxSuctionLift, displacement, startingTorque, ratedSpeed;
+    double impellerDiameter, efficiency, lineFrequency, minFlowSize, pumpSize, designHead, designFlow, designEfficiency;
+    double motorRatedPower, motorFullLoadAmps, operatingFlowRate, operatingHead, measuredCurrent, measuredPower, measuredVoltage, motorEfficiency;
 
     int id; // used for the database
 

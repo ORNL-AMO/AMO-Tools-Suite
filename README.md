@@ -9,7 +9,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - make
 - CMake (cmake-curses to use the ccmake gui)
 - GCC 4.8.5 or later
-  - Windows: Visual Studio Build Tools or Cygwin with other C++ compiler
+  - Windows: MinGW or Cygwin or Visual Studio Build Tools or with other C++ compiler
 - Doxygen (only for building documentation)
 
 #### Web Assembly Compilation SDK
@@ -19,19 +19,27 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 - Node LTS [https://nodejs.org/en/](https://nodejs.org/en/) 
 
 ### Building
-- Install node_modules dependencies: `cd` into AMO-Tools-Suite directory and run  
-	 `npm install`
 - `cd` into the emsdk directory: 
-	- run `emsdk activate latest` (Build must target this version, if trouble try version 2.0.16)
+    - run `emsdk install latest` followed by `emsdk activate latest`
+    - Activate PATH and other environment variables by running `source emsdk_env.sh` or on Windows run `emsdk_env.bat`
 - `cd` into AMO-Tools-Suite directory:  
-    -  run `emcmake cmake -DBUILD_WASM=ON` 
+    - create directory `buildwasm` and cd into it 
+    - run `'emcmake cmake -DBUILD_WASM=ON ..'` 
         -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
-        example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON -G "MinGW Makefiles"`  
-    - run `emmake make` (or `emmake` and specify makefile related to above note)
+        example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`  
+    - run `emmake make`
 
 ### Unit Tests
-- To run the WASM unit tests use: `npm run test-wasm`
-- To build C++ unit tests directly, ensure the `BUILD_TESTING` flag is set then: `cmake --build . --target amo_tools_suite_tests`
+- To run the WASM unit tests:
+  - Install node_modules dependencies: `cd` into AMO-Tools-Suite directory and  
+    run `npm install` followed by `npm run test-wasm`
+- To build C++ unit tests, ensure the `BUILD_TESTING` flag is set (which is default) then: 
+  - create directory `buildcpp` and cd into it
+  - run `'cmake ..'`  
+    -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
+    example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`
+  - run `'cmake --build .'`
+  - execute `cpp_tests.exe`
 - On MacOS or Linux, the test executable can be found under the `bin` directory. On Windows, the executable can be found under either the `Debug` or `Release` directories, depending on CMake configuration
 
 ### Packaging
@@ -41,3 +49,15 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
 
 ### Documentation
 - To generate documentation: `doxygen Doxyfile`
+
+### Dockerizing 
+To make it easy for developers local building and testing, it is dockerized. To run it in docker follow this steps.
+- Download the repository
+- Open command line tool, change directory to the repository run `docker-compose up -d`
+- To stop the running container run `docker-compose down`
+- Running Unit Tests
+  - WASM: in a browser, launch [http://localhost:3000/](http://localhost:3000/)
+  - C++: run `docker exec -it amo-tools-suite-build /bin/bash` and run the executable `/home/AMO-Tools-Suite/build-cpp/bin/cpp_tests`
+    - Note: 
+      - Every time the container is started it will rebuild the application, to check status run `docker-compose logs --tail 5` 
+      - **_This is not a tutorial for docker, assumption is made the user is knowledgeable.**_
