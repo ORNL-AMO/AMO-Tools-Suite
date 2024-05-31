@@ -58,4 +58,6 @@ To make it easy for developers local building and testing, it is dockerized. To 
 - Running Unit Tests
   - WASM: in a browser, launch [http://localhost:3000/](http://localhost:3000/)
   - C++: run `docker exec -it amo-tools-suite-build /bin/bash` and run the executable `/home/AMO-Tools-Suite/build-cpp/bin/cpp_tests`
-    - _**Note: This is not a tutorial for docker, assumption is made the user is knowledgeable.**_
+    - Note: 
+      - Every time the container is started it will rebuild the application, to check status run `docker-compose logs --tail 5` 
+      - **_This is not a tutorial for docker, assumption is made the user is knowledgeable.**_
