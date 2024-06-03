@@ -60,4 +60,4 @@ To make it easy for developers local building and testing, it is dockerized. To 
   - C++: run `docker exec -it amo-tools-suite-build /bin/bash` and run the executable `/home/AMO-Tools-Suite/build-cpp/bin/cpp_tests`
     - Note: 
       - Every time the container is started it will rebuild the application, to check status run `docker-compose logs --tail 5` 
-      - **This is not a tutorial for docker, assumption is made the user is knowledgeable.**_
+      - **This is not a tutorial for docker, assumption is made the user is knowledgeable.**
