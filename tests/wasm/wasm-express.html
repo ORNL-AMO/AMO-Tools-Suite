@@ -21,16 +21,19 @@
                                             $.getScript('tests/wasm-ssmt-test.js').then(() => {
                                                 $.getScript('tests/wasm-processHeat-test.js').then(() => {
                                                     $.getScript('tests/wasm-chillers-test.js').then(() => {
-                                                        $.getScript('tests/wasm-compressorsCalc-test.js').then(() => {
-                                                            $.getScript('tests/wasm-svi-test.js').then(() => {
-                                                                $.getScript('tests/wasm-wasteWater-test.js').then(() => {
-                                                                    $.getScript('tests/wasm-calculator-test.js').then(() => {
-                                                                        $.getScript('tests/wasm-db-test.js').then(() => {
+                                                        $.getScript('tests/wasm-powerFactor-test.js').then(() => {
+                                                            $.getScript('tests/wasm-compressorsCalc-test.js').then(() => {
+                                                                $.getScript('tests/wasm-svi-test.js').then(() => {
+                                                                    $.getScript('tests/wasm-wasteWater-test.js').then(() => {
+                                                                        $.getScript('tests/wasm-calculator-test.js').then(() => {
+                                                                            $.getScript('tests/wasm-db-test.js').then(() => {
 
-                                                                            $.getScript('tests/wasm-compressorCalc-helpers.js').then(() => {
-                                                                                $.getScript('tests/wasm-compressorCalc-reciprocatingScrew-test.js').then(() => {
-                                                                                    $.getScript('tests/finish-testing.js');
+                                                                                $.getScript('tests/wasm-compressorCalc-helpers.js').then(() => {
+                                                                                    $.getScript('tests/wasm-compressorCalc-reciprocatingScrew-test.js').then(() => {
+                                                                                        $.getScript('tests/finish-testing.js');
+                                                                                    });
                                                                                 });
+
                                                                             });
                                                                         });
                                                                     });
