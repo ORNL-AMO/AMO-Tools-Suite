@@ -17,9 +17,13 @@ EMSCRIPTEN_BINDINGS(powerFactor_class)
             .value("ReactivePower_PowerFactor", PowerFactor::Mode::ReactivePower_PowerFactor);
 
     class_<PowerFactor::Output>("PowerFactorOutput")
+        .property("realPower", &PowerFactor::Output::realPower)
+        .property("reactivePower", &PowerFactor::Output::reactivePower)
+        .property("apparentPower", &PowerFactor::Output::apparentPower)
+        .property("powerFactor", &PowerFactor::Output::powerFactor)
+        .property("phaseAngle", &PowerFactor::Output::phaseAngle)
         .property("realDemand", &PowerFactor::Output::realDemand)
         .property("demandPenalty", &PowerFactor::Output::demandPenalty)
-        .property("reactivePower", &PowerFactor::Output::reactivePower)
         .property("proposedReactivePower", &PowerFactor::Output::proposedReactivePower)
         .property("proposedCapacitance", &PowerFactor::Output::proposedCapacitance);
 

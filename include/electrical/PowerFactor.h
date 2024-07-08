@@ -41,13 +41,16 @@ public:
         ReactivePower_PowerFactor,
     };
     struct Output {
-        Output(double realDemand, double demandPenalty, double reactivePower,
-               double proposedReactivePower, double proposedCapacitance) :
-        realDemand(realDemand), demandPenalty(demandPenalty), reactivePower(reactivePower),
-        proposedReactivePower(proposedReactivePower), proposedCapacitance(proposedCapacitance) {}
+        Output(double realPower, double reactivePower, double apparentPower, double powerFactor, double phaseAngle,
+               double realDemand, double demandPenalty, double proposedReactivePower, double proposedCapacitance) :
+               realPower(realPower), reactivePower(reactivePower), apparentPower(apparentPower),
+               powerFactor(powerFactor), phaseAngle(phaseAngle),
+               realDemand(realDemand), demandPenalty(demandPenalty),
+               proposedReactivePower(proposedReactivePower), proposedCapacitance(proposedCapacitance) {}
 
         Output() = default;
-        double realDemand = 0, demandPenalty = 0, reactivePower = 0, proposedReactivePower = 0, proposedCapacitance = 0;
+        double realPower = 0, reactivePower = 0, apparentPower = 0, powerFactor = 0, phaseAngle = 0,
+        realDemand = 0, demandPenalty = 0, proposedReactivePower = 0, proposedCapacitance = 0;
     };
 
     /**

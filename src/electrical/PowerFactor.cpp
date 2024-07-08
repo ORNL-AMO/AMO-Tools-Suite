@@ -88,6 +88,7 @@ PowerFactor::Output PowerFactor::calculate(const Mode mode, const double input1,
     const double realDemand = realPower / inputPowerFactor;
     const double proposedReactivePower = realPower * tan(acos(inputPowerFactor));
 
-    return {realDemand, fabs(realDemand - apparentPower), reactivePower,
-                               proposedReactivePower, reactivePower - proposedReactivePower};
+    return {realPower, reactivePower, apparentPower, powerFactor, phaseAngle,
+            realDemand, fabs(realDemand - apparentPower),
+            proposedReactivePower, reactivePower - proposedReactivePower};
 }
