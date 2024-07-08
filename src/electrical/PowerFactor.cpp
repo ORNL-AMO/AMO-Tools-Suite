@@ -15,7 +15,6 @@ PowerFactor::Output PowerFactor::calculate(const Mode mode, const double input1,
 
             powerFactor = realPower / apparentPower;
             reactivePower = apparentPower * sin(acos(powerFactor));
-            phaseAngle = acos(powerFactor) * 180 / PI;
             break;
         case ApparentPower_ReactivePower:
             apparentPower = input1;
@@ -23,7 +22,6 @@ PowerFactor::Output PowerFactor::calculate(const Mode mode, const double input1,
 
             powerFactor = cos(asin(reactivePower/apparentPower));
             realPower = apparentPower * powerFactor;
-            phaseAngle = acos(powerFactor) * 180 / PI;
             break;
         case ApparentPower_PhaseAngle:
             apparentPower = input1;
@@ -39,7 +37,6 @@ PowerFactor::Output PowerFactor::calculate(const Mode mode, const double input1,
 
             realPower = apparentPower * powerFactor;
             reactivePower = apparentPower * sin(acos(powerFactor));
-            phaseAngle = acos(powerFactor) * 180 / PI;
             break;
 
         case RealPower_ReactivePower:
@@ -48,7 +45,6 @@ PowerFactor::Output PowerFactor::calculate(const Mode mode, const double input1,
 
             powerFactor = cos(atan(reactivePower / realPower));
             apparentPower = realPower / powerFactor;
-            phaseAngle = acos(powerFactor) * 180 / PI;
             break;
         case RealPower_PhaseAngle:
             realPower = input1;
@@ -64,7 +60,6 @@ PowerFactor::Output PowerFactor::calculate(const Mode mode, const double input1,
 
             apparentPower = realPower / powerFactor;
             reactivePower = realPower * tan(acos(powerFactor));
-            phaseAngle = acos(powerFactor) * 180 / PI;
             break;
 
         case ReactivePower_PhaseAngle:
@@ -81,9 +76,9 @@ PowerFactor::Output PowerFactor::calculate(const Mode mode, const double input1,
 
             apparentPower = reactivePower / sin(acos(powerFactor));
             realPower = apparentPower * powerFactor;
-            phaseAngle = acos(powerFactor) * 180 / PI;
             break;
     }
+    phaseAngle = acos(powerFactor) * 180 / PI;
 
     const double realDemand = realPower / inputPowerFactor;
     const double proposedReactivePower = realPower * tan(acos(inputPowerFactor));

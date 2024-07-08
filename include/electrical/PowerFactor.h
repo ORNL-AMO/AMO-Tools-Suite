@@ -73,9 +73,13 @@ public:
      * @param inputPowerFactor, based on mode parameter supplied is either Minimum Required / Target Power Factor
      *
      * @return Output
+     *  @param realPower double, units kW
+     *  @param reactivePower double, units kVAr
+     *  @param apparentPower double, units kW
+     *  @param powerFactor double, units % as decimal value
+     *  @param phaseAngle double, units deg
      *  @param realDemand double, units kW
      *  @param demandPenalty double, units kW
-     *  @param reactivePower double, units kVAr
      *  @param proposedReactivePower double, units kVAr
      *  @param proposedCapacitance double, units kVAr
      */
