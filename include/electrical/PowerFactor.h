@@ -40,6 +40,7 @@ public:
         ReactivePower_PhaseAngle,
         ReactivePower_PowerFactor,
     };
+
     struct Output {
         Output(double realPower, double reactivePower, double apparentPower, double powerFactor, double phaseAngle,
                double realDemand, double demandPenalty, double proposedReactivePower, double proposedCapacitance) :
