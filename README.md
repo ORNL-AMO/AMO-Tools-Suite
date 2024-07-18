@@ -23,7 +23,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
     - run `emsdk install latest` followed by `emsdk activate latest`
     - Activate PATH and other environment variables by running `source emsdk_env.sh` or on Windows run `emsdk_env.bat`
 - `cd` into AMO-Tools-Suite directory:  
-    - create directory `buildwasm` and cd into it 
+    - create directory `build-wasm` and cd into it 
     - run `'emcmake cmake -DBUILD_WASM=ON ..'` 
         -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
         example for windows using MinGW => `emcmake cmake -D BUILD_WASM=ON .. -G "MinGW Makefiles"`  
@@ -34,7 +34,7 @@ See our hosted documentation for the latest release at [ornl-amo.github.io](http
   - Install node_modules dependencies: `cd` into AMO-Tools-Suite directory and  
     run `npm install` followed by `npm run test-wasm`
 - To build C++ unit tests, ensure the `BUILD_TESTING` flag is set (which is default) then: 
-  - create directory `buildcpp` and cd into it
+  - create directory `build-cpp` and cd into it
   - run `'cmake ..'`  
     -   Note: If multiple compilers are present and default environment is not used, use -G "XXX Makefiles",
     example for windows using MinGW => `cmake .. -G "MinGW Makefiles"`

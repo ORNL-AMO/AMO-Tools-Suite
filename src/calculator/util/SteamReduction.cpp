@@ -1,8 +1,9 @@
-#include <iostream>
-#include <cmath>
+/**
+ * @file Implementation of Steam Reduction Calculations
+ * @author Updated by Omer Aziz (omerb).
+ */
+
 #include "calculator/util/SteamReduction.h"
-#include "ssmt/SteamSystemModelerTool.h"
-#include "ssmt/SaturatedProperties.h"
 
 SteamReduction::Output SteamReduction::calculate()
 {
@@ -12,20 +13,18 @@ SteamReduction::Output SteamReduction::calculate()
     for (auto &steamReductionInput : steamReductionInputVec)
     {
         double tmpSteamUse = 0, tmpEnergyUse = 0, tmpEnergyCost = 0;
-        double specificEnthalpy = 0;
+        double steamEnthalpy = SteamProperties(steamReductionInput.getPressure(), steamReductionInput.getSteamVariableOption(),
+                                               steamReductionInput.getSteamVariable()).calculate().specificEnthalpy;
+        double feedEnthalpy = SteamProperties(0.101325, SteamProperties::ThermodynamicQuantity::TEMPERATURE,
+                                              steamReductionInput.getFeedWaterTemperature()).calculate().specificEnthalpy;
+        double changeEnthalpy = steamEnthalpy - feedEnthalpy;
 
         //flow meter method
         if (steamReductionInput.getMeasurementMethod() == 0)
         {
             SteamFlowMeterMethodData flowMeterMethodData = steamReductionInput.getFlowMeterMethodData();
             tmpSteamUse = flowMeterMethodData.getFlowRate() * steamReductionInput.getHoursPerYear() * (steamReductionInput.getUnits() / steamReductionInput.getSystemEfficiency());
-
-            double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
-            SteamSystemModelerTool::SaturatedPropertiesOutput saturatedPropertiesOutput = SaturatedProperties(steamReductionInput.getPressure(), saturatedTemperature).calculate();
-
-            double evaporationSpecificEnthalpy = saturatedPropertiesOutput.evaporationSpecificEnthalpy;
-            specificEnthalpy = evaporationSpecificEnthalpy * (1.0 / 2.326);
-            tmpEnergyUse = specificEnthalpy * tmpSteamUse / 1000000.0;
+            tmpEnergyUse = changeEnthalpy * tmpSteamUse * 1 / steamReductionInput.getBoilerEfficiency();
         }
         //air mass flow
         else if (steamReductionInput.getMeasurementMethod() == 1)
@@ -42,15 +41,10 @@ SteamReduction::Output SteamReduction::calculate()
                 SteamMassFlowMeasuredData massFlowMeasuredData = massFlowMethodData.getMassFlowMeasuredData();
                 airFlowRate = massFlowMeasuredData.getAirVelocity() * massFlowMeasuredData.getAreaOfDuct();
             }
-            double heatFlowRate = (1.08 * airFlowRate * (massFlowMethodData.getOutletTemperature() - massFlowMethodData.getInletTemperature())) / 1000000.0;
-            tmpEnergyUse = (steamReductionInput.getUnits() * heatFlowRate * steamReductionInput.getHoursPerYear()) / steamReductionInput.getSystemEfficiency();
-
-            double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
-            SteamSystemModelerTool::SaturatedPropertiesOutput saturatedPropertiesOutput = SaturatedProperties(steamReductionInput.getPressure(), saturatedTemperature).calculate();
-
-            double evaporationSpecificEnthalpy = saturatedPropertiesOutput.evaporationSpecificEnthalpy;
-            specificEnthalpy = evaporationSpecificEnthalpy * (1.0 / 2.326);
-            tmpSteamUse = tmpEnergyUse * (1000000.0 / specificEnthalpy);
+            // 0.072381 is air Cp in kJ-min/(m3-hr-K) (from 1.08  btu-hr/(scf-hr-R))
+            double heatFlowRate = (0.072381 * airFlowRate * (massFlowMethodData.getOutletTemperature() - massFlowMethodData.getInletTemperature()));
+            tmpEnergyUse = (steamReductionInput.getUnits() * (heatFlowRate) * steamReductionInput.getHoursPerYear()) / (steamReductionInput.getSystemEfficiency() * steamReductionInput.getBoilerEfficiency());
+            tmpSteamUse = (tmpEnergyUse / changeEnthalpy) * steamReductionInput.getBoilerEfficiency();
         }
         //water mass flow
         else if (steamReductionInput.getMeasurementMethod() == 2)
@@ -58,37 +52,25 @@ SteamReduction::Output SteamReduction::calculate()
             SteamMassFlowMethodData massFlowMethodData = steamReductionInput.getWaterMassFlowMethodData();
             SteamMassFlowNameplateData massFlowNameplateData = massFlowMethodData.getMassFlowNameplateData();
             double waterFlowRate = massFlowNameplateData.getFlowRate();
-            double heatFlowRate = (500.0 * waterFlowRate * (massFlowMethodData.getOutletTemperature() - massFlowMethodData.getInletTemperature())) / 1000000.0;
-            tmpEnergyUse = (steamReductionInput.getUnits() * heatFlowRate * steamReductionInput.getHoursPerYear()) / steamReductionInput.getSystemEfficiency();
-
-            double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
-            SteamSystemModelerTool::SaturatedPropertiesOutput saturatedPropertiesOutput = SaturatedProperties(steamReductionInput.getPressure(), saturatedTemperature).calculate();
-
-            double evaporationSpecificEnthalpy = saturatedPropertiesOutput.evaporationSpecificEnthalpy;
-            specificEnthalpy = evaporationSpecificEnthalpy * (1.0 / 2.326);
-            tmpSteamUse = tmpEnergyUse * (1000000.0 / specificEnthalpy);
+            // 251045 (kJ/m3K)*(min/hr) from (8.34 lb/gal * 1 btu/lbF * 60 min/hr)
+            double heatFlowRate = (251045 * waterFlowRate * (massFlowMethodData.getOutletTemperature() - massFlowMethodData.getInletTemperature()));
+            tmpEnergyUse = (steamReductionInput.getUnits() * heatFlowRate * steamReductionInput.getHoursPerYear()) / (steamReductionInput.getSystemEfficiency() * steamReductionInput.getBoilerEfficiency());
+            tmpSteamUse = (tmpEnergyUse / changeEnthalpy) * steamReductionInput.getBoilerEfficiency();
         }
-        //other/offsheet method
+        //Offsheet method
         else if (steamReductionInput.getMeasurementMethod() == 3)
         {
-            SteamOtherMethodData otherMethodData = steamReductionInput.getOtherMethodData();
-            tmpEnergyUse = otherMethodData.getConsumption();
-
-            double saturatedTemperature = SaturatedTemperature(steamReductionInput.getPressure()).calculate();
-            SteamSystemModelerTool::SaturatedPropertiesOutput saturatedPropertiesOutput = SaturatedProperties(steamReductionInput.getPressure(), saturatedTemperature).calculate();
-
-            double evaporationSpecificEnthalpy = saturatedPropertiesOutput.evaporationSpecificEnthalpy;
-            specificEnthalpy = evaporationSpecificEnthalpy * (1.0 / 2.326);
-            tmpSteamUse = otherMethodData.getConsumption() * (1000000.0 / specificEnthalpy);
+            SteamOffsheetMethodData offsheetMethodData = steamReductionInput.getOffsheetMethodData();
+            tmpEnergyUse = offsheetMethodData.getConsumption();
+            tmpSteamUse = (tmpEnergyUse / changeEnthalpy) * steamReductionInput.getBoilerEfficiency();
         }
 
         //steam
         if (steamReductionInput.getUtilityType() == 0)
         {
-            double massResult = tmpEnergyUse * (1.0 / specificEnthalpy);
-            tmpEnergyCost = massResult * steamReductionInput.getUtilityCost();
+            tmpEnergyCost = tmpSteamUse * steamReductionInput.getUtilityCost();
         }
-        //natural gas || other
+        //natural gas || Offsheet Method
         else if (steamReductionInput.getUtilityType() == 1 || steamReductionInput.getUtilityType() == 2)
         {
             tmpEnergyCost = tmpEnergyUse * steamReductionInput.getUtilityCost();
@@ -98,10 +80,6 @@ SteamReduction::Output SteamReduction::calculate()
         energyUse += tmpEnergyUse;
         energyCost += tmpEnergyCost;
     }
-    return SteamReduction::Output(steamUse, energyUse, energyCost);
-}
 
-void SteamReduction::setSteamReductionInputVec(std::vector<SteamReductionInput> &steamReductionInputVec)
-{
-    this->steamReductionInputVec = std::move(steamReductionInputVec);
+    return {steamUse, energyUse, energyCost};
 }
