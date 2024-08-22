@@ -1192,15 +1192,16 @@ function validateSteamReduction(testName, inp, expected) {
             massFlowMeasuredData, massFlowNameplateData,
             inpElem.waterMassFlowMethodData.inletTemperature, inpElem.waterMassFlowMethodData.outletTemperature);
 
-        let otherMethodData = new Module.SteamOtherMethodData(inpElem.otherMethodData.consumption);
+        let offsheetMethodData = new Module.SteamOffsheetMethodData(inpElem.offsheetMethodData.consumption);
 
         let input = new Module.SteamReductionInput(inpElem.hoursPerYear, inpElem.utilityType, inpElem.utilityCost,
             inpElem.measurementMethod, inpElem.systemEfficiency, inpElem.pressure,
-            flowMeterMethodData, airMassFlowMethodData, waterMassFlowMethodData, otherMethodData, inpElem.units);
+            flowMeterMethodData, airMassFlowMethodData, waterMassFlowMethodData, offsheetMethodData, inpElem.units,
+            inpElem.boilerEfficiency, inpElem.steamVariableOption, inpElem.steamVariable, inpElem.feedWaterTemperature);
         inputList.push_back(input);
 
         input.delete();
-        otherMethodData.delete();
+        offsheetMethodData.delete();
         waterMassFlowMethodData.delete();
         airMassFlowMethodData.delete();
         massFlowNameplateData.delete();
@@ -1219,149 +1220,161 @@ function steamReduction(){
     let inp = {
         steamReductionInputVec: [
             {
-                hoursPerYear: 8760,
+                hoursPerYear: 8000,
                 utilityType: 1,
                 utilityCost: 5.5,
                 measurementMethod: 0,
-                systemEfficiency: 100,
-                pressure: 0.790800732,
+                systemEfficiency: 0.8,
+                pressure: 3.5,
                 flowMeterMethodData: {
-                    flowRate: 50000
+                    flowRate: 1000
                 },
                 airMassFlowMethodData: {
                     isNameplate: false,
                     massFlowMeasuredData: {
-                        areaOfDuct: 100,
-                        airVelocity: 5
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
-                        flowRate: 400
+                        flowRate: 4000
                     },
-                    inletTemperature: 75,
-                    outletTemperature: 500
+                    inletTemperature: 25,
+                    outletTemperature: 425
                 },
                 waterMassFlowMethodData: {
                     isNameplate: true,
                     massFlowMeasuredData: {
-                        areaOfDuct: 50,
-                        airVelocity: 1000
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
                         flowRate: 40000
                     },
-                    inletTemperature: 75,
-                    outletTemperature: 500
+                    inletTemperature: 25,
+                    outletTemperature: 425
                 },
-                otherMethodData: {
-                    consumption: 400000
+                offsheetMethodData: {
+                    consumption: 13000000
                 },
-                units: 1
+                units: 1,
+                boilerEfficiency: 0.75,
+                steamVariableOption: Module.ThermodynamicQuantity.TEMPERATURE,
+                steamVariable: 560,
+                feedWaterTemperature: 283.15
             }
         ]
     };
-    validateSteamReduction('1 - Flow Meter Method Data', inp, [4380000, 3858.22092201, 21220.21507107]);
+    validateSteamReduction('1 - Flow Meter Method Data', inp, [10000000.0, 38671503020.03, 212693266610.1651]);
 
     inp = {
         steamReductionInputVec: [
             {
-                hoursPerYear: 8760,
+                hoursPerYear: 8000,
                 utilityType: 1,
                 utilityCost: 5.5,
                 measurementMethod: 1,
-                systemEfficiency: 100,
-                pressure: 0.790800732,
+                systemEfficiency: 0.8,
+                pressure: 3.5,
                 flowMeterMethodData: {
-                    flowRate: 50000
+                    flowRate: 1000
                 },
                 airMassFlowMethodData: {
                     isNameplate: false,
                     massFlowMeasuredData: {
-                        areaOfDuct: 100,
-                        airVelocity: 5
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
-                        flowRate: 400
+                        flowRate: 4000
                     },
-                    inletTemperature: 70,
-                    outletTemperature: 200
+                    inletTemperature: 25,
+                    outletTemperature: 425
                 },
                 waterMassFlowMethodData: {
                     isNameplate: true,
                     massFlowMeasuredData: {
-                        areaOfDuct: 50,
-                        airVelocity: 1000
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
                         flowRate: 40000
                     },
-                    inletTemperature: 75,
-                    outletTemperature: 500
+                    inletTemperature: 25,
+                    outletTemperature: 425
                 },
-                otherMethodData: {
-                    consumption: 400000
+                offsheetMethodData: {
+                    consumption: 13000000
                 },
-                units: 1
+                units: 1,
+                boilerEfficiency: 0.75,
+                steamVariableOption: Module.ThermodynamicQuantity.TEMPERATURE,
+                steamVariable: 560,
+                feedWaterTemperature: 283.15
             }
         ]
     };
-    validateSteamReduction('2 - Air Mass Flow - Measured', inp, [6981.17037475, 6.14952, 33.82236]);
+    validateSteamReduction('2 - Air Mass Flow - Measured', inp, [9982.3376, 38603200.0, 212317600.0]);
 
     inp = {
         steamReductionInputVec: [
             {
-                hoursPerYear: 8760,
+                hoursPerYear: 8000,
                 utilityType: 1,
                 utilityCost: 5.5,
                 measurementMethod: 1,
-                systemEfficiency: 100,
-                pressure: 0.790800732,
+                systemEfficiency: 0.8,
+                pressure: 3.5,
                 flowMeterMethodData: {
-                    flowRate: 50000
+                    flowRate: 1000
                 },
                 airMassFlowMethodData: {
                     isNameplate: true,
                     massFlowMeasuredData: {
-                        areaOfDuct: 100,
-                        airVelocity: 5
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
-                        flowRate: 400
+                        flowRate: 4000
                     },
-                    inletTemperature: 70,
-                    outletTemperature: 200
+                    inletTemperature: 25,
+                    outletTemperature: 425
                 },
                 waterMassFlowMethodData: {
                     isNameplate: true,
                     massFlowMeasuredData: {
-                        areaOfDuct: 50,
-                        airVelocity: 1000
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
                         flowRate: 40000
                     },
-                    inletTemperature: 75,
-                    outletTemperature: 500
+                    inletTemperature: 25,
+                    outletTemperature: 425
                 },
-                otherMethodData: {
-                    consumption: 400000
+                offsheetMethodData: {
+                    consumption: 13000000
                 },
-                units: 1
+                units: 1,
+                boilerEfficiency: 0.75,
+                steamVariableOption: Module.ThermodynamicQuantity.TEMPERATURE,
+                steamVariable: 560,
+                feedWaterTemperature: 283.15
             }
         ]
     };
-    validateSteamReduction('3 - Air Mass Flow - Nameplate', inp, [5584.9362998, 4.919616, 27.057888]);
+    validateSteamReduction('3 - Air Mass Flow - Nameplate', inp, [399293.5054, 1544127999.9999, 8492703999.9999]);
 
     inp = {
         steamReductionInputVec: [
             {
-                hoursPerYear: 8760,
+                hoursPerYear: 8000,
                 utilityType: 1,
                 utilityCost: 5.5,
                 measurementMethod: 2,
-                systemEfficiency: 100,
-                pressure: 0.790800732,
+                systemEfficiency: 0.8,
+                pressure: 3.5,
                 flowMeterMethodData: {
-                    flowRate: 50000
+                    flowRate: 1000
                 },
                 airMassFlowMethodData: {
                     isNameplate: true,
@@ -1378,68 +1391,76 @@ function steamReduction(){
                 waterMassFlowMethodData: {
                     isNameplate: true,
                     massFlowMeasuredData: {
-                        areaOfDuct: 50,
-                        airVelocity: 1000
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
-                        flowRate: 8.0
+                        flowRate: 1
                     },
-                    inletTemperature: 70,
-                    outletTemperature: 100
+                    inletTemperature: 25,
+                    outletTemperature: 225
                 },
-                otherMethodData: {
-                    consumption: 400000
+                offsheetMethodData: {
+                    consumption: 13000000
                 },
-                units: 1
+                units: 1,
+                boilerEfficiency: 0.75,
+                steamVariableOption: Module.ThermodynamicQuantity.TEMPERATURE,
+                steamVariable: 560,
+                feedWaterTemperature: 283.15
             }
         ]
     };
-    validateSteamReduction('4 - Water Mass Flow - Nameplate', inp, [11933.62457222, 10.512, 57.816]);
+    validateSteamReduction('4 - Water Mass Flow - Nameplate', inp, [173112830.1340, 669453333333.3332, 3681993333333.3330]);
 
     inp = {
         steamReductionInputVec: [
             {
-                hoursPerYear: 8760,
+                hoursPerYear: 8000,
                 utilityType: 0,
-                utilityCost: 1.5,
+                utilityCost: 5.5,
                 measurementMethod: 3,
-                systemEfficiency: 100,
-                pressure: 0.790800732,
+                systemEfficiency: 0.8,
+                pressure: 3.5,
                 flowMeterMethodData: {
                     flowRate: 50000
                 },
                 airMassFlowMethodData: {
-                    isNameplate: true,
+                    isNameplate: false,
                     massFlowMeasuredData: {
-                        areaOfDuct: 100,
-                        airVelocity: 5
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
-                        flowRate: 400
+                        flowRate: 4000
                     },
-                    inletTemperature: 70,
-                    outletTemperature: 200
+                    inletTemperature: 25,
+                    outletTemperature: 425
                 },
                 waterMassFlowMethodData: {
                     isNameplate: true,
                     massFlowMeasuredData: {
-                        areaOfDuct: 50,
-                        airVelocity: 1000
+                        areaOfDuct: 1,
+                        airVelocity: 100
                     },
                     massFlowNameplateData: {
-                        flowRate: 8.0
+                        flowRate: 4000
                     },
-                    inletTemperature: 70,
-                    outletTemperature: 100
+                    inletTemperature: 25,
+                    outletTemperature: 425
                 },
-                otherMethodData: {
-                    consumption: 400000
+                offsheetMethodData: {
+                    consumption: 13000000
                 },
-                units: 1
+                units: 1,
+                boilerEfficiency: 0.75,
+                steamVariableOption: Module.ThermodynamicQuantity.TEMPERATURE,
+                steamVariable: 560,
+                feedWaterTemperature: 283.15
             }
         ]
     };
-    validateSteamReduction('5 - Other Method', inp, [454095303.357088, 400000.0, 681.142955]);
+    validateSteamReduction('5 - Offsheet Method', inp, [3361.6485, 13000000.0, 18489.0667]);
 }
 
 function validateInsulatedPipeCalculator(testName, inp, expected){
