@@ -23,6 +23,7 @@
 #include "calculator/furnace/O2Enrichment.h"
 #include "calculator/furnace/HumidityRatio.h"
 #include <emscripten/bind.h>
+
 using namespace emscripten;
 
 //atmosphere

@@ -30,7 +30,9 @@
                                                                                     $.getScript('tests/wasm-compressorCalc-helpers.js').then(() => {
                                                                                         $.getScript('tests/wasm-compressorCalc-reciprocatingScrew-test.js').then(() => {
                                                                                             $.getScript('tests/wasm-ssmt-modeler-bug-696-test.js').then(() => {
-                                                                                                $.getScript('tests/finish-testing.js');
+                                                                                                $.getScript('tests/wasm-waterAssessment-test.js').then(() => {
+                                                                                                    $.getScript('tests/finish-testing.js');
+                                                                                                });
                                                                                             });
                                                                                         });
 
