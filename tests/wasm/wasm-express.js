@@ -15,6 +15,7 @@ app.get('/', function(req, res) {
 });
 
 app.use('/assets', express.static('build-wasm/bin'));
+app.use('/tests', express.static('tests/wasm/electrical/'));
 app.use('/tests', express.static('tests/wasm/test-helpers/'));
 app.use('/tests', express.static('tests/wasm/psat/'));
 app.use('/tests', express.static('tests/wasm/motor/'));
