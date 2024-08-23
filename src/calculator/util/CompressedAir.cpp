@@ -112,7 +112,7 @@ Compressor::AirSystemCapacity::Output Compressor::AirSystemCapacity::calculate()
 
 	auto totalReceiverVol = 0.0;
 	for (auto & gallons : receivers) {
-		gallons /= 7.48;
+		gallons /= 7.480515625;
 		totalReceiverVol += gallons;
 	}
 
