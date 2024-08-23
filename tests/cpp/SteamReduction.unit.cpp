@@ -4,83 +4,83 @@
 TEST_CASE("Steam Reduction Flow Meter Method", "[SteamReduction][Util]")
 {
     std::vector<SteamReductionInput> steamReductionInputVec = {
-        SteamReductionInput(8760, 1, 5.5, 0, 1.0, 0.790800732,
-                            SteamFlowMeterMethodData(50000.0),
+        SteamReductionInput(8000, 1, 5.5, 0, 0.8, 3.5,
+                            SteamFlowMeterMethodData(1000),
                             SteamMassFlowMethodData(
                                 false,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
+                                SteamMassFlowMeasuredData(1, 100),
                                 SteamMassFlowNameplateData(40000.0),
-                                75.0, 500.0),
+                                25, 425),
                             SteamMassFlowMethodData(
                                 true,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
+                                SteamMassFlowMeasuredData(1, 100),
                                 SteamMassFlowNameplateData(40000.0),
-                                75.0, 500.0),
-                            SteamOtherMethodData(400000.0),
-                            1)};
+                                25, 425),
+                            SteamOffsheetMethodData(13000000),
+                            1, 0.75, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 560, 283.15)};
 
     auto steamReduction = SteamReduction(steamReductionInputVec);
     auto testOutput = steamReduction.calculate();
-    CHECK(testOutput.steamUse == Approx(438000000.0));
-    CHECK(testOutput.energyUse == Approx(385822.0922));
-    CHECK(testOutput.energyCost == Approx(2122021.5071));
+    CHECK(testOutput.steamUse == Approx(10000000.0));
+    CHECK(testOutput.energyUse == Approx(38671503020.03));
+    CHECK(testOutput.energyCost == Approx(212693266610.1651));
 }
 
 TEST_CASE("Steam Reduction Air Mass Flow - Measured", "[SteamReduction][Util]")
 {
     std::vector<SteamReductionInput> steamReductionInputVec = {
-        SteamReductionInput(8760, 1, 5.5, 1, 1.0, 0.790800732,
-                            SteamFlowMeterMethodData(50000.0),
+        SteamReductionInput(8000, 1, 5.5, 1, 0.8, 3.5,
+                            SteamFlowMeterMethodData(1000),
                             SteamMassFlowMethodData(
                                 false,
-                                SteamMassFlowMeasuredData(100.0, 5.0),
-                                SteamMassFlowNameplateData(400.0),
-                                70.0, 200.0),
+                                SteamMassFlowMeasuredData(1.0, 100.0),
+                                SteamMassFlowNameplateData(4000.0),
+                                25.0, 425.0),
                             SteamMassFlowMethodData(
                                 true,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
+                                SteamMassFlowMeasuredData(1, 100),
                                 SteamMassFlowNameplateData(40000.0),
-                                75.0, 500.0),
-                            SteamOtherMethodData(400000.0),
-                            1)};
+                                25, 425),
+                            SteamOffsheetMethodData(13000000),
+                            1, 0.75, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 560, 283.15)};
 
     auto steamReduction = SteamReduction(steamReductionInputVec);
     auto testOutput = steamReduction.calculate();
-    CHECK(testOutput.steamUse == Approx(698117.037));
-    CHECK(testOutput.energyUse == Approx(614.950));
-    CHECK(testOutput.energyCost == Approx(3382.225));
+    CHECK(testOutput.steamUse == Approx(9982.3376));
+    CHECK(testOutput.energyUse == Approx(38603200.0));
+    CHECK(testOutput.energyCost == Approx(212317600.0));
 }
 
 TEST_CASE("Steam Reduction Air Mass Flow - Nameplate", "[SteamReduction][Util]")
 {
     std::vector<SteamReductionInput> steamReductionInputVec = {
-        SteamReductionInput(8760, 1, 5.5, 1, 1.0, 0.790800732,
-                            SteamFlowMeterMethodData(50000.0),
+        SteamReductionInput(8000, 1, 5.5, 1, 0.8, 3.5,
+                            SteamFlowMeterMethodData(1000),
                             SteamMassFlowMethodData(
                                 true,
-                                SteamMassFlowMeasuredData(100.0, 5.0),
-                                SteamMassFlowNameplateData(400.0),
-                                70.0, 200.0),
+                                SteamMassFlowMeasuredData(1.0, 100.0),
+                                SteamMassFlowNameplateData(4000.0),
+                                25.0, 425.0),
                             SteamMassFlowMethodData(
                                 true,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
+                                SteamMassFlowMeasuredData(1, 100),
                                 SteamMassFlowNameplateData(40000.0),
-                                75.0, 500.0),
-                            SteamOtherMethodData(400000.0),
-                            1)};
+                                25, 425),
+                            SteamOffsheetMethodData(13000000),
+                            1, 0.75, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 560, 283.15)};
 
     auto steamReduction = SteamReduction(steamReductionInputVec);
     auto testOutput = steamReduction.calculate();
-    CHECK(testOutput.steamUse == Approx(558493.63));
-    CHECK(testOutput.energyUse == Approx(491.96));
-    CHECK(testOutput.energyCost == Approx(2705.78));
+    CHECK(testOutput.steamUse == Approx(399293.5054));
+    CHECK(testOutput.energyUse == Approx(1544127999.9999));
+    CHECK(testOutput.energyCost == Approx(8492703999.9999));
 }
 
 TEST_CASE("Steam Reduction Water Mass Flow - Nameplate", "[SteamReduction][Util]")
 {
     std::vector<SteamReductionInput> steamReductionInputVec = {
-        SteamReductionInput(8760, 1, 5.5, 2, 1.0, 0.790800732,
-                            SteamFlowMeterMethodData(50000.0),
+        SteamReductionInput(8000, 1, 5.5, 2, 0.8, 3.5,
+                            SteamFlowMeterMethodData(1000),
                             SteamMassFlowMethodData(
                                 true,
                                 SteamMassFlowMeasuredData(100.0, 5.0),
@@ -88,65 +88,65 @@ TEST_CASE("Steam Reduction Water Mass Flow - Nameplate", "[SteamReduction][Util]
                                 70.0, 200.0),
                             SteamMassFlowMethodData(
                                 true,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
-                                SteamMassFlowNameplateData(8.0),
-                                70.0, 100.0),
-                            SteamOtherMethodData(400000.0),
-                            1)};
+                                SteamMassFlowMeasuredData(1, 100),
+                                SteamMassFlowNameplateData(1),
+                                25.0, 225.0),
+                            SteamOffsheetMethodData(13000000),
+                            1, 0.75, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 560, 283.15)};
 
     auto steamReduction = SteamReduction(steamReductionInputVec);
     auto testOutput = steamReduction.calculate();
-    CHECK(testOutput.steamUse == Approx(1193362.457));
-    CHECK(testOutput.energyUse == Approx(1051.2));
-    CHECK(testOutput.energyCost == Approx(5781.6));
+    CHECK(testOutput.steamUse == Approx(173112830.1340));
+    CHECK(testOutput.energyUse == Approx(669453333333.3332));
+    CHECK(testOutput.energyCost == Approx(3681993333333.3330));
 }
 
-TEST_CASE("Steam Reduction Other Method", "[SteamReduction][Util]")
+TEST_CASE("Steam Reduction Offsheet Method", "[SteamReduction][Util]")
 {
     std::vector<SteamReductionInput> steamReductionInputVec = {
-        SteamReductionInput(8760, 0, 1.5, 3, 1.0, 0.790800732,
-                            SteamFlowMeterMethodData(50000.0),
+        SteamReductionInput(8000, 0, 5.5, 3, 0.8, 3.5,
+                            SteamFlowMeterMethodData(5000),
                             SteamMassFlowMethodData(
-                                true,
-                                SteamMassFlowMeasuredData(100.0, 5.0),
-                                SteamMassFlowNameplateData(400.0),
-                                70.0, 200.0),
+                                    false,
+                                    SteamMassFlowMeasuredData(1, 100),
+                                    SteamMassFlowNameplateData(40000.0),
+                                    25, 425),
                             SteamMassFlowMethodData(
-                                true,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
-                                SteamMassFlowNameplateData(8.0),
-                                70.0, 100.0),
-                            SteamOtherMethodData(400000.0),
-                            1)};
+                                    true,
+                                    SteamMassFlowMeasuredData(1, 100),
+                                    SteamMassFlowNameplateData(40000.0),
+                                    25, 425),
+                            SteamOffsheetMethodData(13000000),
+                            1, 0.75, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 560, 283.15)};
 
     auto steamReduction = SteamReduction(steamReductionInputVec);
     auto testOutput = steamReduction.calculate();
-    CHECK(testOutput.steamUse == Approx(454095303.357));
-    CHECK(testOutput.energyUse == Approx(400000.0));
-    CHECK(testOutput.energyCost == Approx(681.143));
+    CHECK(testOutput.steamUse == Approx(3361.6485));
+    CHECK(testOutput.energyUse == Approx(13000000.0));
+    CHECK(testOutput.energyCost == Approx(18489.0667));
 }
 
 TEST_CASE("Steam Reduction Multi Method", "[SteamReduction][Util]")
 {
     std::vector<SteamReductionInput> steamReductionInputVec = {
         //flow meter method
-        SteamReductionInput(8760, 1, 5.5, 0, 1.0, 0.790800732,
-                            SteamFlowMeterMethodData(50000.0),
+        SteamReductionInput(8000, 1, 5.5, 0, 0.8, 3.5,
+                            SteamFlowMeterMethodData(1000),
                             SteamMassFlowMethodData(
                                 false,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
+                                SteamMassFlowMeasuredData(1, 100),
                                 SteamMassFlowNameplateData(40000.0),
-                                75.0, 500.0),
+                                25, 425),
                             SteamMassFlowMethodData(
                                 true,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
+                                SteamMassFlowMeasuredData(1, 100),
                                 SteamMassFlowNameplateData(40000.0),
-                                75.0, 500.0),
-                            SteamOtherMethodData(400000.0),
-                            1),
+                                25, 425),
+                            SteamOffsheetMethodData(13000000 ),
+                            1, 0.75, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 560, 283.15),
         //water mass
-        SteamReductionInput(8760, 1, 5.5, 2, 1.0, 0.790800732,
-                            SteamFlowMeterMethodData(50000.0),
+        SteamReductionInput(8000, 1, 5.5, 2, 0.8, 3.5,
+                            SteamFlowMeterMethodData(1000),
                             SteamMassFlowMethodData(
                                 true,
                                 SteamMassFlowMeasuredData(100.0, 5.0),
@@ -154,32 +154,32 @@ TEST_CASE("Steam Reduction Multi Method", "[SteamReduction][Util]")
                                 70.0, 200.0),
                             SteamMassFlowMethodData(
                                 true,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
-                                SteamMassFlowNameplateData(8.0),
-                                70.0, 100.0),
-                            SteamOtherMethodData(400000.0),
-                            1),
-        //other method
-        SteamReductionInput(8760, 0, 1.5, 3, 1.0, 0.790800732,
-                            SteamFlowMeterMethodData(50000.0),
+                                SteamMassFlowMeasuredData(1, 100),
+                                SteamMassFlowNameplateData(1),
+                                25.0, 225.0),
+                            SteamOffsheetMethodData(13000000 ),
+                            1, 0.75, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 560, 283.15),
+        //Offsheet method
+        SteamReductionInput(8000, 0, 5.5, 3, 0.8, 3.5,
+                            SteamFlowMeterMethodData(1000),
                             SteamMassFlowMethodData(
-                                true,
-                                SteamMassFlowMeasuredData(100.0, 5.0),
-                                SteamMassFlowNameplateData(400.0),
-                                70.0, 200.0),
+                                    false,
+                                    SteamMassFlowMeasuredData(1, 100),
+                                    SteamMassFlowNameplateData(40000.0),
+                                    25, 425),
                             SteamMassFlowMethodData(
-                                true,
-                                SteamMassFlowMeasuredData(50.0, 1000.0),
-                                SteamMassFlowNameplateData(8.0),
-                                70.0, 100.0),
-                            SteamOtherMethodData(400000.0),
-                            1)
+                                    true,
+                                    SteamMassFlowMeasuredData(1, 100),
+                                    SteamMassFlowNameplateData(40000.0),
+                                    25, 425),
+                            SteamOffsheetMethodData(13000000 ),
+                            1, 0.75, SteamProperties::ThermodynamicQuantity::TEMPERATURE, 560, 283.15)
 
     };
 
     auto steamReduction = SteamReduction(steamReductionInputVec);
     auto testOutput = steamReduction.calculate();
-    CHECK(testOutput.steamUse == Approx(893288665.814));
-    CHECK(testOutput.energyUse == Approx(786873.2922));
-    CHECK(testOutput.energyCost == Approx(2128484.2501));
+    CHECK(testOutput.steamUse == Approx( 183116191.7825));
+    CHECK(testOutput.energyUse == Approx(708137836353.3633));
+    CHECK(testOutput.energyCost == Approx(3894686618432.565));
 }

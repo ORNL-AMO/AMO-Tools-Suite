@@ -13,6 +13,8 @@
 #include "calculator/util/insulation/tanks/InsulatedTankInput.h"
 #include "calculator/util/insulation/tanks/InsulatedTankCalculator.h"
 #include "calculator/util/insulation/tanks/InsulatedTankOutput.h"
+#include "ssmt/SteamProperties.h"
+
 #include <emscripten/bind.h>
 
 using namespace emscripten;
@@ -205,12 +207,13 @@ EMSCRIPTEN_BINDINGS(steamReduction_class)
     class_<SteamMassFlowMethodData>("SteamMassFlowMethodData")
         .constructor<bool, SteamMassFlowMeasuredData, SteamMassFlowNameplateData, double, double>();
 
-    class_<SteamOtherMethodData>("SteamOtherMethodData")
+    class_<SteamOffsheetMethodData>("SteamOffsheetMethodData")
         .constructor<double>();
 
     class_<SteamReductionInput>("SteamReductionInput")
         .constructor<int, int, double, int, double, double,
-        SteamFlowMeterMethodData, SteamMassFlowMethodData, SteamMassFlowMethodData, SteamOtherMethodData, int>();
+        SteamFlowMeterMethodData, SteamMassFlowMethodData, SteamMassFlowMethodData, SteamOffsheetMethodData, int,
+        double, SteamProperties::ThermodynamicQuantity, double, double>();
 
     register_vector<SteamReductionInput>("SteamReductionInputV");
 
