@@ -14,3 +14,17 @@ cmake-build-debug/
 cmake-build-minsizerel/
 cmake-build-release/
 cmake-build-relwithdebinfo/
+bindings-wasm/
+buildcpp/
+emsdk/
+include/
+lib/
+src/
+third_party/
+travis_scripts/
+/.travis.yml
+/Dockerfile
+/Doxyfile
+/docker-compose.yml
+/main.cpp
+/package.json
