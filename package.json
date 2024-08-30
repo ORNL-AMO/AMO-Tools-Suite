@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-suite",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "engines": {
     "node": "20.16.0",
     "npm": "10.8.1"
