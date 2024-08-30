@@ -1,42 +1,29 @@
 {
   "name": "amo-tools-suite",
-  "version": "1.0.4",
-  "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
-  "directories": {
-    "test": "tests"
+  "version": "1.0.6",
+  "engines": {
+    "node": "20.16.0",
+    "npm": "10.8.1"
   },
   "dependencies": {
-    "assert": "^2.0.0",
-    "d3-dsv": "^3.0.1",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
-    "utf-8-validate": "5.0.2"
-  },
-  "devDependencies": {
-    "tap": "^16.3.7"
-  },
-  "engines": {
-    "node": "18.17.0",
-    "npm": "9.6.7"
+    "request": "^2.88.2"
   },
   "scripts": {
-    "test": "tap tests/js/*.js",
-    "at": "tap tests/at/js/*.js",
-    "test-waste-water": "tap tests/js/wasteWater.js",
     "test-wasm": "node tests/wasm/wasm-express.js",
-    "test-CA": "tap tests/js/compressorsCalcScrewReciprocating.js",
-    "test-calculator": "tap tests/js/calculator.js",
-    "test-db": "tap tests/js/dbBindingsTest.js"
+    "test-wasm-stop": "node tests/wasm/wasm-express-stop.js"
   },
+
+  "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
+  "author": "Gina Accawi <accawigk@ornl.gov>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ORNL-AMO/AMO-Tools-Suite.git#node-addon"
   },
-  "author": "Gina Accawi <accawigk@ornl.gov>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ORNL-AMO/AMO-Tools-Suite/issues"
   },
-  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme",
-  "main": "index.js"
+  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme"
 }

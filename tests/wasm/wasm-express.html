@@ -9,27 +9,34 @@
 
     <script src="/jquery/jquery.js"></script>
     <script>
-        var Module = {
-            onRuntimeInitialized: function () {
-                $.getScript('tests/test-value.js').then(() => {
-                    $.getScript('tests/wasm-psat-test.js').then(() => {
-                        $.getScript('tests/wasm-motor-test.js').then(() => {
-                            $.getScript('tests/wasm-fan-test.js').then(() => {
-                                $.getScript('tests/wasm-phast-test.js').then(() => {
-                                    $.getScript('tests/wasm-standalone-test.js').then(() => {
-                                        $.getScript('tests/wasm-ssmt-modeler-test.js').then(() => {
-                                            $.getScript('tests/wasm-ssmt-test.js').then(() => {
-                                                $.getScript('tests/wasm-processHeat-test.js').then(() => {
-                                                    $.getScript('tests/wasm-chillers-test.js').then(() => {
-                                                        $.getScript('tests/wasm-compressorsCalc-test.js').then(() => {
-                                                            $.getScript('tests/wasm-svi-test.js').then(() => {
-                                                                $.getScript('tests/wasm-wasteWater-test.js').then(() => {
-                                                                    $.getScript('tests/wasm-calculator-test.js').then(() => {
-                                                                        $.getScript('tests/wasm-db-test.js').then(() => {
+            var Module = {
+                onRuntimeInitialized: function () {
+                    $.getScript('tests/test-value.js').then(() => {
+                        $.getScript('tests/wasm-psat-test.js').then(() => {
+                            $.getScript('tests/wasm-motor-test.js').then(() => {
+                                $.getScript('tests/wasm-fan-test.js').then(() => {
+                                    $.getScript('tests/wasm-phast-test.js').then(() => {
+                                        $.getScript('tests/wasm-standalone-test.js').then(() => {
+                                            $.getScript('tests/wasm-ssmt-modeler-test.js').then(() => {
+                                                $.getScript('tests/wasm-ssmt-test.js').then(() => {
+                                                    $.getScript('tests/wasm-processHeat-test.js').then(() => {
+                                                        $.getScript('tests/wasm-chillers-test.js').then(() => {
+                                                            $.getScript('tests/wasm-powerFactor-test.js').then(() => {
+                                                                $.getScript('tests/wasm-compressorsCalc-test.js').then(() => {
+                                                                    $.getScript('tests/wasm-svi-test.js').then(() => {
+                                                                        $.getScript('tests/wasm-wasteWater-test.js').then(() => {
+                                                                            $.getScript('tests/wasm-calculator-test.js').then(() => {
+                                                                                $.getScript('tests/wasm-db-test.js').then(() => {
+                                                                                    $.getScript('tests/wasm-compressorCalc-helpers.js').then(() => {
+                                                                                        $.getScript('tests/wasm-compressorCalc-reciprocatingScrew-test.js').then(() => {
+                                                                                            $.getScript('tests/wasm-ssmt-modeler-bug-696-test.js').then(() => {
+                                                                                                $.getScript('tests/wasm-waterAssessment-test.js').then(() => {
+                                                                                                    $.getScript('tests/finish-testing.js');
+                                                                                                });
+                                                                                            });
+                                                                                        });
 
-                                                                            $.getScript('tests/wasm-compressorCalc-helpers.js').then(() => {
-                                                                                $.getScript('tests/wasm-compressorCalc-reciprocatingScrew-test.js').then(() => {
-                                                                                    $.getScript('tests/finish-testing.js');
+                                                                                    });
                                                                                 });
                                                                             });
                                                                         });
@@ -46,9 +53,8 @@
                             });
                         });
                     });
-                });
+                }
             }
-        }
     </script>
     <script src="assets/client.js"></script>
     <style>

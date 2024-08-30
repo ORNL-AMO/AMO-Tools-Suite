@@ -298,7 +298,7 @@ void PumpData::setOperatingHead(const double &operatingHead)  {
 	PumpData::operatingHead = operatingHead;
 }
 
-const double PumpData::getMeasuredCurrent() const {
+double PumpData::getMeasuredCurrent() const {
     return measuredCurrent;
 }
 
@@ -306,7 +306,7 @@ void PumpData::setMeasuredCurrent(const double &measuredCurrent)  {
 	PumpData::measuredCurrent = measuredCurrent;
 }
 
-const double PumpData::getMeasuredPower() const {
+double PumpData::getMeasuredPower() const {
     return measuredPower;
 }
 
@@ -314,7 +314,7 @@ void PumpData::setMeasuredPower(const double &measuredPower)  {
 	PumpData::measuredPower = measuredPower;
 }
 
-const double PumpData::getMeasuredVoltage() const {
+double PumpData::getMeasuredVoltage() const {
     return measuredVoltage;
 }
 
@@ -323,7 +323,7 @@ void PumpData::setMeasuredVoltage(const double &measuredVoltage)  {
 }
 
 
-const double PumpData::getMotorEfficiency() const {
+double PumpData::getMotorEfficiency() const {
     return motorEfficiency;
 }
 
