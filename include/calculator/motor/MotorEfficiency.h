@@ -40,7 +40,7 @@ public:
     /**
      * Calculates the motor efficiency
      * @param loadFactor double, load factor - unitless ratio
-     * @param specifiedEfficiency, efficiency of SPECIFIED efficiency class motor (optional)
+     * @param specifiedEfficiency, efficiency of SPECIFIED efficiency class motor (optional) as defined by fraction
      * @return double, motor efficiency as %
      */
     double calculate(double loadFactor, double specifiedEfficiency = -1);
