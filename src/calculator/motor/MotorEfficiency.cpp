@@ -42,7 +42,6 @@ double MotorEfficiency::calculate(double loadFactor, double specifiedEfficiency)
 			        }
 	        };
         } else { // EE chosen
-            specifiedEfficiency = specifiedEfficiency / 100;
             const double C = specifiedEfficiency / motorEfficiency[3];
 
             for (std::size_t i = 0; i < 5; ++i) {

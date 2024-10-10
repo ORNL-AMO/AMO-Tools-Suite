@@ -169,7 +169,7 @@ std::array<double, 6> EstimateFLA::calculate() {
     auto const adjustForVoltage = [this] (double plVal, double effVal) {
         auto const estimate = plVal * 460 / ratedVoltage;
         if (efficiencyClass == Motor::EfficiencyClass::SPECIFIED) {
-            return effVal * estimate * 100 / specifiedEfficiency;
+            return effVal * estimate / specifiedEfficiency;
         }
         return estimate;
     };
@@ -233,7 +233,7 @@ std::array<double, 6> EstimateFLA::calculate() {
         auto const eeeffVal = MotorEfficiency(lineFrequency, motorRPM, Motor::EfficiencyClass::ENERGY_EFFICIENT,
                                             motorRatedPower).calculate(1, specifiedEfficiency);
 
-        if (std::fabs(seeffVal - (specifiedEfficiency / 100)) < std::fabs(eeeffVal - (specifiedEfficiency / 100)))
+        if (std::fabs(seeffVal - (specifiedEfficiency)) < std::fabs(eeeffVal - (specifiedEfficiency)))
         {
                 // SE is the nominal efficiency
              estimatedFLA = adjustForVoltage(seFLAValue * plMultiplier[4], seeffVal);

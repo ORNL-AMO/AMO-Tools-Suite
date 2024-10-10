@@ -79,7 +79,7 @@ function resultsExisting() {
     let motorRatedPower = 300;
     let motorRpm = 1780;
     let efficiencyClass = Module.MotorEfficiencyClass.STANDARD;
-    let specifiedMotorEfficiency = 95;
+    let specifiedMotorEfficiency = .95;
     let motorRatedVoltage = 460;
     let fullLoadAmps = 337.3;
     let sizeMargin = 0;
@@ -121,7 +121,7 @@ function resultsModified() {
     let motorRatedPower = 100;
     let motorRpm = 1780;
     let efficiencyClass = Module.MotorEfficiencyClass.SPECIFIED;
-    let specifiedMotorEfficiency = 95;
+    let specifiedMotorEfficiency = .95;
     let motorRatedVoltage = 460;
     let fullLoadAmps = 225;
     let sizeMargin = 0;
