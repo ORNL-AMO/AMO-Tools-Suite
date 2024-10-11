@@ -85,7 +85,7 @@ TEST_CASE( "PSATResultsPremium existing", "[PSAT results]" ) {
 
 TEST_CASE( "PSATResults existing and modified", "[PSAT results]" ) {
 	double pumpEfficiency = 0.80, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
-	double stages = 2.0, motor_rated_power = 200, motor_rated_speed = 1780, efficiency = 95, motor_rated_voltage = 460;
+	double stages = 2.0, motor_rated_power = 200, motor_rated_speed = 1780, efficiency = .95, motor_rated_voltage = 460;
 	double motor_rated_fla = 225.0, margin = 0, operating_hours = 8760, cost_kw_hour = 0.05, flow_rate = 1840;
 	double head = 174.85, motor_field_power = 80, motor_field_current = 125.857, motor_field_voltage = 480;
 	double specified_efficiency = 1.0;
@@ -225,7 +225,7 @@ TEST_CASE( "PSATResults - specified drive", "[PSAT results]" ) {
 
 TEST_CASE( "PSATResults - existing and modified", "[PSAT results]" ) {
 	double pumpEfficiency = 0.382, pump_rated_speed = 1780, kinematic_viscosity = 1.0, specific_gravity = 1.0;
-	double stages = 1.0, motor_rated_power = 200, motor_rated_speed = 1780, efficiency = 95, motor_rated_voltage = 460;
+	double stages = 1.0, motor_rated_power = 200, motor_rated_speed = 1780, efficiency = .95, motor_rated_voltage = 460;
 	double motor_rated_fla = 227.29, margin = 0, operating_hours = 8760, cost_kw_hour = 0.06, flow_rate = 1000;
 	double head = 277.0, motor_field_power = 150.0, motor_field_current = 125.857, motor_field_voltage = 480;
 	double specified_efficiency = 1.0;
@@ -492,8 +492,8 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	compare(EstimateFLA(100, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
 	compare(EstimateFLA(100, 2900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::STANDARD, 0, 100).calculate());
 
-	compare(EstimateFLA(200, 2200, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 96.5, 100).calculate());
-	compare(EstimateFLA(250, 2800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 98.5, 110).calculate());
+	compare(EstimateFLA(200, 2200, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .965, 100).calculate());
+	compare(EstimateFLA(250, 2800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .985, 110).calculate());
 
 	compare(EstimateFLA(250, 2800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 98.5, 110).calculate());
 	compare(EstimateFLA(290, 1800, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::ENERGY_EFFICIENT, 93.5, 110).calculate());
@@ -516,27 +516,27 @@ TEST_CASE( "EstimateFLA", "[EstimateFLA]" ) {
 	t.calculate();
 	CHECK(t.getEstimatedFLA() ==  Approx(460.3700518143));
 
-	t = EstimateFLA(100, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 80, 220);
+	t = EstimateFLA(100, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .80, 220);
 	t.calculate();
 	CHECK(t.getEstimatedFLA() ==  Approx(312.5479443728)); //311.3720600292
 
-	t = EstimateFLA(125, 1900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 90, 220); // 120 -> 125, 
+	t = EstimateFLA(125, 1900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .90, 220); // 120 -> 125, 
 	t.calculate();
 	CHECK(t.getEstimatedFLA() ==  Approx(302.2156478756)); //291.0633925033
 
-	t = EstimateFLA(90, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 95, 120);
+	t = EstimateFLA(90, 900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .95, 120);
 	t.calculate();
 	CHECK(t.getEstimatedFLA() ==  Approx(432.5925070407));
 
-	t = EstimateFLA(150, 2900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 55, 600); // 90 -> 600
+	t = EstimateFLA(150, 2900, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .55, 600); // 90 -> 600
 	t.calculate();
 	CHECK(t.getEstimatedFLA() ==  Approx(218.1935995715)); //1457.2693184418
 
-	t = EstimateFLA(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 94, 460);
+	t = EstimateFLA(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .94, 460);
 	t.calculate();
 	CHECK(t.getEstimatedFLA() == Approx(228.3902237064));
 
-	t = EstimateFLA(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, 95, 460);
+	t = EstimateFLA(200, 1780, Motor::LineFrequency::FREQ60, Motor::EfficiencyClass::SPECIFIED, .95, 460);
 	t.calculate();
 	CHECK(t.getEstimatedFLA() == Approx(227.288340026));
 }

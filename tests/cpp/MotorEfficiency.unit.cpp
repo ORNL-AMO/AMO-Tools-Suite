@@ -35,21 +35,21 @@ TEST_CASE( "Calculate Motor Efficiencies", "[MotorEfficiency]" ) {
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::STANDARD, 150).calculate(0.2) == Approx(0.8671487126));
     CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::STANDARD, 150).calculate(0.25) == Approx(0.8867837736));
 
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, 25) == Approx(0.2427959928));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, 35) == Approx(0.3399143899));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, 55) == Approx(0.5341511841));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, 75) == Approx(0.7283879783));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, 85) == Approx(0.8255063754));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, 95) == Approx(0.9226247725));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, .25) == Approx(0.2371623657));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, .35) == Approx(0.332027312));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, .55) == Approx(0.5217572046));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, .75) == Approx(0.7114870972));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, .85) == Approx(0.8063520435));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.25, .95) == Approx(0.9226247725));
 
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.05, 25) == Approx(0.0709296658));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.15, 35) == Approx(0.25140747859));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.35, 55) == Approx(0.5403781513));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.55, 85) == Approx(0.84636808254));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.75, 95) == Approx(0.95082302895));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(1, 95) == Approx(0.95));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(1.25, 95) == Approx(0.9405));
-    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(1.5, 95) == Approx(0.9223230289));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.05, .25) == Approx(0.0689209016));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.15, .35) == Approx(0.2448123855));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.35, .55) == Approx(0.53252116));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.55, .85) == Approx(0.8441439051));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(0.75, .95) == Approx(0.95082302895));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(1, .95) == Approx(0.95));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(1.25, .95) == Approx(0.9405));
+    CHECK(MotorEfficiency(Motor::LineFrequency::FREQ60, 1600, Motor::EfficiencyClass::SPECIFIED, 150).calculate(1.5, .95) == Approx(0.9223230289));
 }
 
 TEST_CASE( "Calculate Motor25 Efficiencies", "[MotorEfficiency25]" ) {

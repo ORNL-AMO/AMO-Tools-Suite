@@ -43,7 +43,7 @@ public:
      * @param lineFrequency Motor::LineFrequency, classification of line frequency in Hz
      * @param motorRpm double, RPM of motor
      * @param efficiencyClass Motor::EfficiencyClass, efficiency class of motor
-     * @param specifiedEfficiency double, specified efficiency as %
+     * @param specifiedEfficiency double, specified efficiency as defined by fraction
      * @param motorRatedPower Rated Power of motor in hp
      * @param loadFactor double, load factor - unitless
      * @param motorCurrent double, motor current in A

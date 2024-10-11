@@ -21,7 +21,7 @@ public:
      * @param motorRPM double, RPM of motor
      * @param lineFrequency Motor::LineFrequency, line frequency of motor in 50Hz or 60Hz
      * @param efficiencyClass Motor::EfficiencyClass, Efficiency class of motor
-     * @param specifiedEfficiency double, specified efficiency of motor as defined by %
+     * @param specifiedEfficiency double, specified efficiency of motor as defined by fraction
      * @param ratedVoltage double, rated voltage of motor in volts
      */
     EstimateFLA(
