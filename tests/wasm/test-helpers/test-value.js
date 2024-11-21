@@ -18,6 +18,10 @@ function logMessage(msg, header){
 }
 
 function testNumberValue(testVal, expectedValue, testName){
+    testNumberValue(testVal, expectedValue, testName, '');
+}
+
+function testNumberValue(testVal, expectedValue, testName, prefix){
     const testElement = document.createElement('div');
     let testBool = assertNumber(testVal, expectedValue);
     if(testBool == true){
@@ -27,10 +31,10 @@ function testNumberValue(testVal, expectedValue, testName){
         testElement.className = 'invalid';
         invalidTests++;
     }
-    testElement.innerHTML = testName + ": " + testBool;
+    testElement.innerHTML = prefix + testName + ": " + testBool;
     document.body.appendChild(testElement);
     const resultsElement = document.createElement('div');
-    resultsElement.innerHTML = 'Expected: ' + expectedValue + ', Actual: ' + testVal;
+    resultsElement.innerHTML = prefix + 'Expected: ' + expectedValue + ', Actual: ' + testVal;
     resultsElement.className = 'expected-div';
     document.body.appendChild(resultsElement);
 }
