@@ -5,16 +5,10 @@
     "node": "20.16.0",
     "npm": "10.8.1"
   },
-  "dependencies": {
-    "express": "^4.17.1",
-    "jquery": "^3.4.1",
-    "request": "^2.88.2"
-  },
   "scripts": {
     "test-wasm": "node tests/wasm/wasm-express.js",
     "test-wasm-stop": "node tests/wasm/wasm-express-stop.js"
   },
-
   "description": "Calculation library for the Department of Energy Advanced Manufacturing Office (DOE AMO) suite of tools",
   "author": "Gina Accawi <accawigk@ornl.gov>",
   "license": "MIT",
@@ -25,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/ORNL-AMO/AMO-Tools-Suite/issues"
   },
-  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme"
+  "homepage": "https://github.com/ORNL-AMO/AMO-Tools-Suite#readme",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "jquery": "^3.4.1"
+  }
 }
