@@ -46,10 +46,8 @@ SteamBalanceCheckerService::check(const std::string &itemName, const PressureTur
             // return {remainingAdditionalSteamNeeded, highToLowPressureTurbine, highToLowPressureTurbineIdeal};
         }
     }
-    else
-    {
-        return {0, highToLowPressureTurbine, highToLowPressureTurbineIdeal};
-    }
+
+    return {0, highToLowPressureTurbine, highToLowPressureTurbineIdeal};
 }
 
 SteamReducerOutput
