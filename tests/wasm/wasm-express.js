@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const path = require('path');
+const process = require('process');
 
 app.get('/stop', (req, res) => {
   console.log('Stopping..');
@@ -30,3 +31,20 @@ app.use('/jquery', express.static('node_modules/jquery/dist/'));
 app.use('/assert', express.static('node_modules/assert-plus'));
 
 let server = app.listen(port, () => console.log(`Wasm Testing Served on: localhost:${port}`));
+
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received: closing server...');
+  server.close(() => {
+      console.log('Server closed');
+      process.exit(0); 
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received: closing server...');
+  server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+  });
+});

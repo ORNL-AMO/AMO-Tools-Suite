@@ -25,7 +25,6 @@ services:
         
         cd /home/AMO-Tools-Suite/
         npm install
-        npm run test-wasm-stop
         npm run test-wasm
     volumes:
       - ../AMO-Tools-Suite:/AMO-Tools-Suite
